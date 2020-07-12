@@ -1,0 +1,19 @@
+"prop_hunt"
+{
+	"base"		"base"
+	"title"		"Prop Hunt X"
+	"maps"      "^ph_"
+
+	"fretta_maps"
+        {
+    "1"	  "ph_"
+        }
+        "selectable"            "1"
+        
+	"menusystem"	"1"
+	"workshopid"	""
+	"settings"
+	{
+	}
+
+}

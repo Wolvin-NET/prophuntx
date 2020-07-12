@@ -1,0 +1,6 @@
+"UnlitGeneric"
+{
+	"$basetexture" "prophunt_enhanced/sprites/luckyball"
+	"$translucent" 1
+	"$vertexcolor" 1
+}

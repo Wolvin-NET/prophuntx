@@ -1,0 +1,6 @@
+"UnlitGeneric"
+{
+	"$basetexture" "vgui\phehud\hud_topbar"
+	"$vertexcolor" "1"
+	"$translucent" "1"
+}

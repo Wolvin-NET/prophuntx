@@ -1,0 +1,6 @@
+"UnlitGeneric"
+{
+	"$basetexture" "prophunt_enhanced/sprites/devilball_pointer"
+	"$translucent" 1
+	"$vertexcolor" 1
+}

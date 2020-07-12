@@ -1,0 +1,5 @@
+"UnlitGeneric"
+{
+	"$basetexture" "vgui\phehud\btn_playx"
+	"$translucent" "1"
+}

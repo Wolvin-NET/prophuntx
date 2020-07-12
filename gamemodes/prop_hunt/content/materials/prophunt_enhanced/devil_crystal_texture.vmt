@@ -1,0 +1,10 @@
+"VertexLitGeneric"
+{
+	"$basetexture" "prophunt_enhanced/devil"
+	"$surfaceprop" "Glass"
+	"$envmap" 	   "env_cubemap"
+	"$envmapsaturation" "[.75 .75 .75]"
+	// Don't this may get confused?
+	"$translucent"	"1"
+	"$nocull"		"1"
+}

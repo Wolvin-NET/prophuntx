@@ -1,0 +1,9 @@
+"UnlitGeneric"
+{
+	"$basetexture"	"prophunt_enhanced/box/box"
+	"$translucent"	"1"
+	"$alphatest"	"1"
+	
+	"$nodraw"	"1"
+	"$no_draw" 	"1"
+}
