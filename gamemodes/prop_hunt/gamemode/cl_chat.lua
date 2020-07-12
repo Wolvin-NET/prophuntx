@@ -17,21 +17,51 @@ end
 net.Receive("PHX.ChatPrint", function()
 	local msg	= net.ReadString()
 	local color	= net.ReadColor()
+	local bShouldTranslated = net.ReadBool()
 	
-	PHX:AddChat(msg, color)
+	local text = ""
+	
+	if bShouldTranslated then
+		text = PHX:Translate( msg )
+	else
+		text = msg
+	end
+	
+	PHX:AddChat(text, color)
 end)
 
 net.Receive("PHX.bubbleNotify", function()
 	local msg	= net.ReadString()
 	local kind	= net.ReadUInt(3)
 	local time	= net.ReadUInt(5)
+	local bShouldTranslated = net.ReadBool()
 	
-	PHX:Notify(msg, kind, time)
+	if bShouldTranslated then
+		PHX:Notify(PHX:Translate( msg ), kind, time)
+	else
+		PHX:Notify(msg, kind, time)
+	end
 end)
 
 net.Receive("PHX.ChatInfo", function()
 	local msg	= net.ReadString()
 	local kind	= net.ReadString()
+	local t 	= net.ReadTable()
 	
-	PHX:ChatInfo(msg, kind)
+	local text = "ERROR"
+	
+	PrintTable(t)
+	
+	if (!t["ARG1"] or t["ARG1"] == false) then
+		text = PHX:Translate( msg )
+	else
+		local sortedArguments = {}
+		for _,args in SortedPairs(t) do
+			table.insert(sortedArguments, args)
+		end
+		
+		text = PHX:Translate( msg, unpack(sortedArguments) )
+	end
+	
+	PHX:ChatInfo(text, kind)
 end)

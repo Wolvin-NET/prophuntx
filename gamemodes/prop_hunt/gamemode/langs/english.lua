@@ -41,6 +41,9 @@ LANG.RANDOM_SPECTATORS = {
 
 LANG["HELP_F1"] 			= PHX.F1DefaultHelp or [[Todo: please enter a nicely described Game Help text message here]];
 
+LANG["EV_PLAYER_CONNECT"]	= "%s has connected to the server."
+LANG["EV_PLAYER_DISCONNECT"] = "%s has disconnected from the server (Reason: %s)."
+
 -- HUD elements
 LANG["HUD_HP"]				= "HEALTH"
 LANG["HUD_AMMO"] 			= "AMMO"
@@ -57,6 +60,9 @@ LANG["HUD_LOSE"]			= "Draw, everyone loses!"
 
 LANG["HUD_BLINDED"]			= "Hunters will be unblinded and released in %s"
 LANG["HUD_UNBLINDED"]		= "Ready or not, here we come!"
+
+LANG["BLIND_RESPAWN_TEAM"]	= "You were respawned only on %s team in %d seconds during blind time."
+LANG["BLIND_RESPAWN"]		= "You were respawned in %d seconds during blind time."
 
 --  Kill text (X killed Y)
 LANG["HUD_KILLED"]			= "killed"

@@ -91,10 +91,17 @@ function Player:AddHealthProp( num )
 end
 
 if SERVER then
-	function Player:ChatPrintX( msg, color )
+	-- bShouldUseTheirOwnLang: Unless if you have your own language SET in your /langs/<language>.lua, Force this to TRUE.
+	-- Example: msg = "MY_CUSTOM_TEXT" will be translated if bShouldUseTheirOwnLang = true. If you want regular message, just put normal text on <msg> argument.
+	
+	function Player:PHXChatPrint( msg, color, bShouldUseTheirOwnLang )
+		
+		if bShouldUseTheirOwnLang == nil then bShouldUseTheirOwnLang = false end
+	
 		net.Start("PHX.ChatPrint")
 			net.WriteString(msg)
 			net.WriteColor(color)
+			net.WriteBool(bShouldUseTheirOwnLang)
 		net.Send(self)
 	end
 	
@@ -106,7 +113,9 @@ if SERVER then
 		["CLEANUP"] = 4
 	}
 	
-	function Player:PHXNotify( msg, kind, time )
+	function Player:PHXNotify( msg, kind, time, bShouldUseTheirOwnLang )
+		
+		if bShouldUseTheirOwnLang == nil then bShouldUseTheirOwnLang = false end
 		if !time then time = 8 end
 		if time > 30 then time = 30 end
 		
@@ -114,14 +123,29 @@ if SERVER then
 			net.WriteString(msg)
 			net.WriteUInt(kinds[kind], 3)
 			net.WriteUInt(time, 5)
+			net.WriteBool(bShouldUseTheirOwnLang)
 		net.Send(self)
 	end
 	
-	function Player:ChatInfo( msg, kind )
+	-- NOTE: DUE TO NET LIBRARY LIMITATIONS
+	-- ARGUMENTS CANNOT CONTAIN OBJECT/USERDATA. See: https://wiki.facepunch.com/gmod/net.ReadTable
+	function Player:PHXChatInfo( kind, msg , ... )
 		if !kind then kind = "PRIMARY" end
+		if !msg then msg = "<NO_MESSAGE>" end
+		local args = {...}
+		if !args then args = { false } end
+		
+		local t = {}
+		for i=1,#args do
+			t["ARG"..i] = args[i]
+		end
+		
+		if !t then t = { ["ARG1"] = false } end
+		
 		net.Start("PHX.ChatInfo")
 			net.WriteString(msg)
 			net.WriteString(kind)
+			net.WriteTable(t)
 		net.Send(self)
 	end
 

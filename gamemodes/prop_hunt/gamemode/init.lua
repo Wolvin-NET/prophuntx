@@ -49,16 +49,14 @@ PHX.SPECTATOR_CHECK = 0
 gameevent.Listen( "player_connect" )
 hook.Add( "player_connect", "AnnouncePLJoin", function( data )
 	for k, v in pairs( player.GetAll() ) do
-		--v:ChatInfo( data.name .. " has connected to the server.", "NOTICE" )
-		v:ChatInfo( PHX:Translate( "EV_PLAYER_CONNECT", data.name ), "NOTICE" )
+		v:PHXChatInfo( "NOTICE", "EV_PLAYER_CONNECT", data.name )
 	end
 end )
 
 gameevent.Listen( "player_disconnect" )
 hook.Add( "player_disconnect", "AnnouncePLLeave", function( data )
 	for k,v in pairs( player.GetAll() ) do
-		--v:ChatInfo( data.name .. " has left the server (Reason: " .. data.reason ..")", "NOTICE" )
-		v:ChatInfo( PHX:Translate( "EV_PLAYER_DISCONNECT", data.name, data.reason ), "NOTICE" )
+		v:PHXChatInfo( "NOTICE", "EV_PLAYER_DISCONNECT", data.name, data.reason )
 	end
 end )
 
@@ -235,6 +233,7 @@ function EntityTakeDamage(ent, dmginfo)
 			att:SetHealth(att:Health() - PHX.CVAR.HunterPenalty:GetInt())
 		end
 		if att:Health() <= 0 then
+			-- this is debug console, no need to be translated.
 			MsgAll(att:Name() .. " felt guilty for hurting so many innocent props and committed suicide\n")
 			att:Kill()
 			
@@ -267,12 +266,10 @@ local function AutoRespawnCheck(ply)
 					local tim = PHX.CVAR.AllowRespawnOnBlindTeam:GetInt()
 					if tim > 0 and ply:Team() == tim then
 						ply:Spawn()
-						--ply:ChatInfo("You were respawned only on ".. team.GetName(tim) .." team in ".. math.Round(phx_blind_unlocktime - CurTime()).." during blind time.")
-						ply:ChatInfo( PHX:Translate( "BLIND_RESPAWN_TEAM", team.GetName( tim ), tostring( math.Round(phx_blind_unlocktime - CurTime()) ) ) )
+						ply:PHXChatInfo( "NOTICE", "BLIND_RESPAWN_TEAM", team.GetName( tim ), math.Round(phx_blind_unlocktime - CurTime()) )
 					elseif tim == 0 then
 						ply:Spawn()
-						--ply:ChatInfo("You were respawned in ".. math.Round(phx_blind_unlocktime - CurTime()).." seconds during blind time.")
-						ply:ChatInfo( PHX:Translate( "BLIND_RESPAWN" ) )
+						ply:PHXChatInfo( "NOTICE", "BLIND_RESPAWN", math.Round(phx_blind_unlocktime - CurTime()) )
 					end
 				end 
 			end)
