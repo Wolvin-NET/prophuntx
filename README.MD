@@ -1,11 +1,22 @@
 ## Warning - This is Nightly Build / Development Branch. This branch may incomplete or unstable. Use at your own risk.
-There may be also contains alot of commit changes. Be sure to stay up to date on what's currently working on.
+
+### This branch may contains alot of commit changes. Be sure to stay up to date & checkout regularly.
+
 ---
 
 # Prop Hunt X
 
 ### Versioning
 Version: X, Revision: 12/07/2020
+
+### Public Beta Test
+Public Prop Hunt X: Live Testing is available. You can join to the IP below:
+
+#### 103.62.48.129:27400
+
+### Donate
+Please help support the project by donating:  
+https://prophunt.wolvindra.net/donate
 
 ### About this Gamemode
 Currently under set up.  
