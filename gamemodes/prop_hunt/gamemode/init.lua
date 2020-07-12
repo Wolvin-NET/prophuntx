@@ -1,5 +1,9 @@
 -- WARNING: THIS CODE IS UNFINISHED!!!!
 
+------------------------------------------------------------
+-- There are only few modifications made on Line: @49, @57, @266, @271
+------------------------------------------------------------
+
 -- Send required file to clients
 AddCSLuaFile("sh_init.lua")
 AddCSLuaFile("cl_init.lua")
@@ -46,7 +50,7 @@ gameevent.Listen( "player_connect" )
 hook.Add( "player_connect", "AnnouncePLJoin", function( data )
 	for k, v in pairs( player.GetAll() ) do
 		--v:ChatInfo( data.name .. " has connected to the server.", "NOTICE" )
-		v:ChatInfo( PHX:Translate( "EV_PLAYER_CONNECT", true, data.name ), "NOTICE" )
+		v:ChatInfo( PHX:Translate( "EV_PLAYER_CONNECT", data.name ), "NOTICE" )
 	end
 end )
 
@@ -54,7 +58,7 @@ gameevent.Listen( "player_disconnect" )
 hook.Add( "player_disconnect", "AnnouncePLLeave", function( data )
 	for k,v in pairs( player.GetAll() ) do
 		--v:ChatInfo( data.name .. " has left the server (Reason: " .. data.reason ..")", "NOTICE" )
-		v:ChatInfo( PHX:Translate( "EV_PLAYER_DISCONNECT", true, data.name, data.reason ), "NOTICE" )
+		v:ChatInfo( PHX:Translate( "EV_PLAYER_DISCONNECT", data.name, data.reason ), "NOTICE" )
 	end
 end )
 
@@ -264,7 +268,7 @@ local function AutoRespawnCheck(ply)
 					if tim > 0 and ply:Team() == tim then
 						ply:Spawn()
 						--ply:ChatInfo("You were respawned only on ".. team.GetName(tim) .." team in ".. math.Round(phx_blind_unlocktime - CurTime()).." during blind time.")
-						ply:ChatInfo( PHX:Translate( "BLIND_RESPAWN_TEAM", team.GetName( tim ), tostring( math.Round(phx_blind_unlocktime - CurTime()) ) )
+						ply:ChatInfo( PHX:Translate( "BLIND_RESPAWN_TEAM", team.GetName( tim ), tostring( math.Round(phx_blind_unlocktime - CurTime()) ) ) )
 					elseif tim == 0 then
 						ply:Spawn()
 						--ply:ChatInfo("You were respawned in ".. math.Round(phx_blind_unlocktime - CurTime()).." seconds during blind time.")

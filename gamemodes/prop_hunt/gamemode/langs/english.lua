@@ -1,5 +1,8 @@
 -- WARNING: THIS CODE IS UNFINISHED!!!!
 
+-- The main core files aren't translated yet.
+-- THERE ARE ALOT OF TEXT NEED TO RE-LANGUAGE.
+
 -- Originally written by: Fafy
 -- Improved by Wolvindra-Vinzuerio more simpler.
 

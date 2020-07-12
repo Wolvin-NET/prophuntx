@@ -87,12 +87,14 @@ AddCSLuaFile("config/sh_init.lua")
 AddCSLuaFile("sh_drive_prop.lua")
 AddCSLuaFile("ulx/modules/sh/sh_phe_mapvote.lua")
 AddCSLuaFile("sh_config.lua")
+AddCSLuaFile("sh_lang.lua")
 AddCSLuaFile("sh_player.lua")
 
 include("config/sh_init.lua")
 include("sh_drive_prop.lua")
 include("ulx/modules/sh/sh_phe_mapvote.lua")
 include("sh_config.lua")
+include("sh_lang.lua")
 include("sh_player.lua")
 
 -- MapVote
