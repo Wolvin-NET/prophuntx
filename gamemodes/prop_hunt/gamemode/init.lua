@@ -101,23 +101,27 @@ function GM:CheckPlayerDeathRoundEnd()
 	if table.Count(Teams) == 1 then
 		local TeamID = table.GetKeys(Teams)[1]
 		
-		-- debug
-		PHX.VerboseMsg("Round Result: "..team.GetName(TeamID).." ("..TeamID..") Wins!")
+		if (TeamID == TEAM_PROPS or TeamID == TEAM_HUNTERS) then
 		
-		-- End Round
-		GAMEMODE:RoundEndWithResult(TeamID, team.GetName(TeamID).." win!")
-		PHX.VOICE_IS_END_ROUND = 1
-		ForceCloseTauntWindow(1)
-		
-		-- send the win notification
-		net.Start("PH_TeamWinning_Snd")
-			net.WriteString(PHX.WINNINGSOUNDS[TeamID])
-		net.Broadcast()
-		
-		hook.Call("PH_OnRoundWinTeam", nil, TeamID)
-		
-		ClearTimer()
-		return
+			-- debug
+			PHX.VerboseMsg("Round Result: "..team.GetName(TeamID).." ("..TeamID..") Wins!")
+			
+			-- End Round
+			GAMEMODE:RoundEndWithResult(TeamID, team.GetName(TeamID).." win!")
+			PHX.VOICE_IS_END_ROUND = 1
+			ForceCloseTauntWindow(1)
+			
+			-- send the win notification
+			net.Start("PH_TeamWinning_Snd")
+				net.WriteString(PHX.WINNINGSOUNDS[TeamID])
+			net.Broadcast()
+			
+			hook.Call("PH_OnRoundWinTeam", nil, TeamID)
+			
+			ClearTimer()
+			return
+			
+		end
 
 	end
 	
