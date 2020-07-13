@@ -90,6 +90,13 @@ function Player:AddHealthProp( num )
 	self:SetHealth( self:Health() + num )
 end
 
+function Player:CheckUserGroup()
+	if table.HasValue( PHX.SVAdmins, string.lower( self:GetUserGroup() ) ) then
+		return true
+	end
+	return false
+end
+
 if SERVER then
 	-- bShouldUseTheirOwnLang: Unless if you have your own language SET in your /langs/<language>.lua, Force this to TRUE.
 	-- Example: msg = "MY_CUSTOM_TEXT" will be translated if bShouldUseTheirOwnLang = true. If you want regular message, just put normal text on <msg> argument.

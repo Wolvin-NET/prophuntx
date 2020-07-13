@@ -204,6 +204,7 @@ end,
 		
 		button.DoClick = function()
 			if not IsValid(ply) then return end
+			if ply:IsAdmin() or table.HasValue(PHX.IgnoreMutedUserGroup, string.lower(ply:GetUserGroup())) then return end
 			
 			local mute = ply:IsMuted()
 			ply:SetMuted(not mute)
@@ -214,6 +215,10 @@ end,
 			button:SetVisible(false)
 		else
 			button:SetVisible(true)
+		end
+		
+		if ply:IsAdmin() or table.HasValue( PHX.IgnoreMutedUserGroup, string.lower(ply:GetUserGroup()) ) then
+			button:SetVisible(false)
 		end
 		
 		imagebtn = vgui.Create("DImage",button)

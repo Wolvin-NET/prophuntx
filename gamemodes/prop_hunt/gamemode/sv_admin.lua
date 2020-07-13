@@ -1,6 +1,6 @@
 
 local function doAdminStrictCheck(ply)
-	if (ply:IsAdmin() or table.HasValue(PHX.SVAdmins, string.lower( ply:GetUserGroup() ))) then
+	if (ply:IsAdmin() or ply:CheckUserGroup()) then
 		return true
 	else
 		return false
@@ -20,7 +20,7 @@ end
 -- man I wish lua has some-sort of switch/case .
 local net_functions = {
 	["CheckAdminFirst"] = function(ply)
-		if ( ply and IsValid(ply) and (ply:IsAdmin() or table.HasValue(PHX.SVAdmins, string.lower( ply:GetUserGroup() ))) ) then
+		if ( ply and IsValid(ply) and (ply:IsAdmin() or ply:CheckUserGroup()) ) then
 			net.Start("CheckAdminResult")
 			net.Send(ply)
 		end

@@ -99,30 +99,26 @@ function GM:CheckPlayerDeathRoundEnd()
 		return
 	end
 	if table.Count(Teams) == 1 then
-		local TeamID = Teams[1]
+		local TeamID = table.GetKeys(Teams)[1]
 		
-		-- make sure that only these teams can have notifications.
-		if (TeamID == TEAM_HUNTERS or TeamID == TEAM_PROPS) then
+		-- debug
+		PHX.VerboseMsg("Round Result: "..team.GetName(TeamID).." ("..TeamID..") Wins!")
 		
-			-- debug
-			PHX.VerboseMsg("Round Result: "..team.GetName(TeamID).." ("..TeamID..") Wins!")
-			
-			-- End Round
-			GAMEMODE:RoundEndWithResult(TeamID, team.GetName(TeamID).." win!")
-			PHX.VOICE_IS_END_ROUND = 1
-			ForceCloseTauntWindow(1)
-			
-			-- send the win notification
-			net.Start("PH_TeamWinning_Snd")
-				net.WriteString(PHX.WINNINGSOUNDS[TeamID])
-			net.Broadcast()
-			
-			hook.Call("PH_OnRoundWinTeam", nil, TeamID)
-			
-			ClearTimer()
-			return
+		-- End Round
+		GAMEMODE:RoundEndWithResult(TeamID, team.GetName(TeamID).." win!")
+		PHX.VOICE_IS_END_ROUND = 1
+		ForceCloseTauntWindow(1)
 		
-		end
+		-- send the win notification
+		net.Start("PH_TeamWinning_Snd")
+			net.WriteString(PHX.WINNINGSOUNDS[TeamID])
+		net.Broadcast()
+		
+		hook.Call("PH_OnRoundWinTeam", nil, TeamID)
+		
+		ClearTimer()
+		return
+
 	end
 	
 end
@@ -298,7 +294,7 @@ end
 hook.Add("OnPlayerChangedTeam", "TeamChange_switchLimitter", function(ply, old, new)
 	local MAX_TEAMCHANGE_LIMIT = PHX.CVAR.ChangeTeamLimit:GetInt()
 
-	if MAX_TEAMCHANGE_LIMIT ~= -1 and (not ply:IsBot()) and !table.HasValue(PHX.SVAdmins, ply:GetUserGroup()) then
+	if MAX_TEAMCHANGE_LIMIT ~= -1 and (not ply:IsBot()) and !ply:CheckUserGroup() then
 		if new ~= TEAM_SPECTATOR then
 			ply.ChangeLimit = ply.ChangeLimit + 1
 			ply:ChatPrint("[PHX] You're switching teams "..ply.ChangeLimit.."x (".. tostring(MAX_TEAMCHANGE_LIMIT) .."x MAX). After that, You can no longer switch to opposite team.")
@@ -545,7 +541,7 @@ function PlayerDisconnected(ply)
 	ply:RemoveProp()
 	
 	-- Save player Change Team info -- this will reset after map has been changed
-	if PHX.CVAR.ChangeTeamLimit:GetInt() ~= -1 and !table.HasValue(PHX.SVAdmins, ply:GetUserGroup()) and (not ply:IsBot()) then
+	if PHX.CVAR.ChangeTeamLimit:GetInt() ~= -1 and !ply:CheckUserGroup() and (not ply:IsBot()) then
 	
 		local id = ply:SteamID()
 		PHX.CurPlys[id] = ply.ChangeLimit
@@ -564,7 +560,7 @@ hook.Add("PlayerInitialSpawn", "PHX.SetupInitData", function(ply)
 	ply.ChangeLimit		= 0
 	
 	-- Player Switch Teams Initialisations	
-	if IsValid(ply) && PHX.CVAR.ChangeTeamLimit:GetInt() ~= -1 && !table.HasValue(PHX.SVAdmins, ply:GetUserGroup()) && !ply:IsBot() then
+	if IsValid(ply) && PHX.CVAR.ChangeTeamLimit:GetInt() ~= -1 && !ply:CheckUserGroup() && !ply:IsBot() then
 		
 		local id = ply:SteamID()
 		PHX.CurPlys[id] = PHX.CurPlys[id] or 0

@@ -16,7 +16,7 @@ window.CurrentlyOpen = false
 
 net.Receive("PH_ForceCloseTauntWindow", function()
 	if window.CurrentlyOpen then
-		window:Close()
+		window.frame:Close()
 	end
 	window.state = false
 end)

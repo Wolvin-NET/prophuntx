@@ -284,7 +284,7 @@ if CLIENT then
 				
 				pVgui("","label","Trebuchet24",section.grid, Data.name.."| v."..Data.version )
 				pVgui("","label",false,section.grid, "Description: "..Data.info )
-				if (LocalPlayer():IsSuperAdmin() || table.HasValue(PHX.SVAdmins, LocalPlayer():GetUserGroup())) then
+				if (LocalPlayer():IsSuperAdmin() or ply:CheckUserGroup()) then
 					if !table.IsEmpty(Data.settings) then
 						pVgui("","label",false,section.grid, "-- Server Settings --" )
 						for _,val in pairs(Data.settings) do

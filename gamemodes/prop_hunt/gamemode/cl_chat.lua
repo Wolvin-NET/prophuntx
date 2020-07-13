@@ -50,8 +50,6 @@ net.Receive("PHX.ChatInfo", function()
 	
 	local text = "ERROR"
 	
-	PrintTable(t)
-	
 	if (!t["ARG1"] or t["ARG1"] == false) then
 		text = PHX:Translate( msg )
 	else
