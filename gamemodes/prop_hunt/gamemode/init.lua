@@ -541,8 +541,8 @@ function GM:PlayerUse(pl, ent)
 end
 
 -- Called when a player leaves
-function PlayerDisconnected(pl)
-	pl:RemoveProp()
+function PlayerDisconnected(ply)
+	ply:RemoveProp()
 	
 	-- Save player Change Team info -- this will reset after map has been changed
 	if PHX.CVAR.ChangeTeamLimit:GetInt() ~= -1 and !table.HasValue(PHX.SVAdmins, ply:GetUserGroup()) and (not ply:IsBot()) then
