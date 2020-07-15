@@ -72,8 +72,10 @@ PHX.CVAR.CameraCollision	= CreateConVar("ph_prop_camera_collisions", "0", CVAR_S
 PHX.CVAR.PropCollide		= CreateConVar("ph_prop_collision", "0", CVAR_SERVER_ONLY, "Should Team Props collide with each other?", 0, 1)
 PHX.CVAR.HLACombine			= CreateConVar("ph_add_hla_combine", "1", CVAR_SERVER_ONLY, "Add HLA Combine to default combine models? [REQUIRE MAP RESTART!]", 0, 1)
 PHX.CVAR.SwapTeam			= CreateConVar("ph_swap_teams_every_round", "1", CVAR_SERVER_ONLY, "Should teams swapped on every round?", 0, 1)
-PHX.CVAR.ChangeTeamLimit	= CreateConVar("ph_max_teamchange_limit", "5", {FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE, FCVAR_ARCHIVE}, "Define how many times player can assign to their team. Default is 5. -1 means disable it.")
-PHX.CVAR.EnableTeamBalance	= CreateConVar("ph_enable_teambalance", "1", {FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE, FCVAR_ARCHIVE}, "Enable Team Balance during round restart?")
+PHX.CVAR.ChangeTeamLimit	= CreateConVar("ph_max_teamchange_limit", "5", CVAR_SERVER_ONLY_NO_NOTIFY, "Define how many times player can assign to their team. Default is 5. -1 means disable it.")
+PHX.CVAR.EnableTeamBalance	= CreateConVar("ph_enable_teambalance", "1", CVAR_SERVER_ONLY_NO_NOTIFY, "Enable Team Balance during round restart?")
+PHX.CVAR.EnableNewChat		= CreateConVar("ph_use_new_chat", "0", CVAR_SERVER_ONLY, "REQUIRE MAP RESTART!\nUse new (temporary) chat box? This will replace default chatbox and prevent new HUD overlap.",0,1)
+PHX.CVAR.NewChatPosSubstract = CreateConVar("ph_new_chat_pos_sub", "50", CVAR_SERVER_ONLY_NO_NOTIFY, "Move by substracting chat position Y pixels high. Use (-) to move lower.")
 
 PHX.CVAR.AllowRespawnOnBlind			= CreateConVar("ph_allow_respawnonblind", "1", CVAR_SERVER_ONLY, "Allow fast respawn during blind time?")
 PHX.CVAR.AllowRespawnOnBlindTeam		= CreateConVar("ph_allow_respawnonblind_team_only", "0", CVAR_SERVER_ONLY, "If specified, what team should be allowed to respawn? 0 = ALL TEAMS, 1 = HUNTERS, 2 = PROPS", 0, 2 )
@@ -81,6 +83,10 @@ PHX.CVAR.AllowSpectatorRespawnOnBlind	= CreateConVar("ph_allow_respawn_from_spec
 PHX.CVAR.BlindRespawnTimePercent		= CreateConVar("ph_blindtime_respawn_percent", "0.75", CVAR_SERVER_ONLY, "How much time percentage to allow player Respawn during Blind time? Default is 0.75 (75%)", 0.30, 1.00)
 PHX.CVAR.AllowRespawnOnBlindBetweenTeams = CreateConVar("ph_allow_respawnonblind_teamchange", "0", CVAR_SERVER_ONLY, "Not recommended if allowed: Allow respawn during blind time FROM team changes (from props to hunters, vice versa).\nI don't recommend enabling this because players may able to use this to take advantage by sitting on Prop team everytime. Enable this ONLY if you know what you're doing.", 0, 1 )
 PHX.CVAR.AllowPickupProp	= CreateConVar("ph_allow_pickup_object", "3", CVAR_SERVER_ONLY, "Allow pickup objects? 0=No, 1=Hunters Only, 2=Props Only, 3=Everyone", 0, 3)
+
+cvars.AddChangeCallback("ph_use_new_chat", function(cvar,old,new)
+	print(cvar .. " -> has changed. Please be sure to Restart the map to take effect.")
+end, "ph_usenewchatsystem")
 
 -- Inclusions! yay...
 AddCSLuaFile("config/sh_init.lua")
@@ -97,6 +103,12 @@ include("sh_config.lua")
 include("sh_lang.lua")
 include("sh_player.lua")
 
+-- Special Inclusion: ChatBox.
+if PHX.CVAR.EnableNewChat:GetBool() then 
+	AddCSLuaFile("sh_chatbox.lua")
+	include("sh_chatbox.lua")
+end
+
 -- MapVote
 if SERVER then
     AddCSLuaFile("sh_mapvote.lua")
@@ -110,9 +122,9 @@ else
     include("mapvote/cl_mapvote.lua")
 end
 
--- Update //Disabled Temporary, need improve.
-//AddCSLuaFile("sh_httpupdates.lua")
-//include("sh_httpupdates.lua")
+-- Update
+AddCSLuaFile("sh_httpupdates.lua")
+include("sh_httpupdates.lua")
 
 -- Fretta!
 DeriveGamemode("fretta")
@@ -126,7 +138,7 @@ GM.Author	= "Wolvindra-Vinzuerio & D4UNKN0WNM4N"
 GM._VERSION		= "X"
 GM.REVISION		= "14.07.20" //dd.mm.yy.
 GM.DONATEURL 	= "https://prophunt.wolvindra.net/donate"
-GM.UPDATEURL 	= "https://www.wolvindra.net/ph_update_check.php" --return json only
+GM.UPDATEURL 	= "https://prophunt.wolvindra.net/ph_update_check.php" --return json only
 
 -- Help info
 GM.Help = [[A Prop Hunt (Codename) X Project.
@@ -204,26 +216,25 @@ PHX.PLUGINS = {}
 
 function PHX:InitializePlugin()
 
-	for name,plugin in pairs(list.Get("PHX.Plugins")) do
-		PHX.VerboseMsg("[PHX Plugin] Adding Plugin: "..name)
-		PHX.PLUGINS[name] = plugin
+	for name,plugin in pairs(list.Get("PHE.Plugins")) do
+		self.VerboseMsg("[PHX Plugin] Adding Plugin: "..name)
+		self.PLUGINS[name] = plugin
 	end
 	
-	if !table.IsEmpty(PHX.PLUGINS) then
-		for pName,pData in pairs(PHX.PLUGINS) do
-			PHX.VerboseMsg("[PHX Plugin] Loading Plugin "..pName)
-			PHX.VerboseMsg("--> Loaded Plugins: "..pData.name.."\n--> Version: "..pData.version.."\n--> Info: "..pData.info)
+	if !table.IsEmpty(self.PLUGINS) then
+		for pName,pData in pairs(self.PLUGINS) do
+			self.VerboseMsg("[PHX Plugin] Loading Plugin "..pName)
+			self.VerboseMsg("--> Loaded Plugins: "..pData.name.."\n--> Version: "..pData.version.."\n--> Info: "..pData.info)
 		end
 	else
-		PHX.VerboseMsg("[PHX Plugin] No plugins detected, skipping...")
+		self.VerboseMsg("[PHX Plugin] No plugins detected, skipping...")
 	end
 end
-hook.Add("Initialize", "PHX.InitPlugins", function()
+hook.Add("PostGamemodeLoaded", "PHX.LoadPlugins", function()
 	PHX:InitializePlugin()
 end)
 
-if CLIENT then
-
+if CLIENT then	
 	hook.Add("PH_CustomTabMenu", "PHX.NewPlugins", function(tab, pVgui, paintPanelFunc)
 	
 		local main = {}
@@ -242,8 +253,8 @@ if CLIENT then
 		main.grid:SetColWide(tab:GetWide()-100)
 		main.grid:SetRowHeight(300)
 		
-		if table.Count(PHX.PLUGINS) < 1 then
-			if LocalPlayer():IsSuperAdmin() then
+		if table.IsEmpty(PHX.PLUGINS) then
+			if (LocalPlayer():IsSuperAdmin() or LocalPlayer():CheckUserGroup()) then
 				local lbl = vgui.Create("DLabel",main.panel)
 				lbl:SetPos(40,60)
 				lbl:SetText("No plugins installed. Browse more plugins here!")
@@ -284,7 +295,7 @@ if CLIENT then
 				
 				pVgui("","label","Trebuchet24",section.grid, Data.name.."| v."..Data.version )
 				pVgui("","label",false,section.grid, "Description: "..Data.info )
-				if (LocalPlayer():IsSuperAdmin() or ply:CheckUserGroup()) then
+				if (LocalPlayer():IsSuperAdmin() or LocalPlayer():CheckUserGroup()) then
 					if !table.IsEmpty(Data.settings) then
 						pVgui("","label",false,section.grid, "-- Server Settings --" )
 						for _,val in pairs(Data.settings) do

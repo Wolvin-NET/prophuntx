@@ -513,7 +513,7 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 	
 	-- Custom Hook Menu here. Give 1 second for better "safe-calling"...
 	timer.Simple(1, function() 
-		local hooksPanel = hook.Call("PH_CustomTabMenu", nil, PHX.UI.PnlTab, 
+		hook.Call("PH_CustomTabMenu", nil, PHX.UI.PnlTab, 
 		function(cmd,typ,data,panel,text) 
 			PHX.UI:CreateVGUIType(cmd,typ,data,panel,text)
 		end,

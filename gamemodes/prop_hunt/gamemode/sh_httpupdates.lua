@@ -1,87 +1,99 @@
-PHX.Messagedata = nil
+PHX.Messagedata = {}
 
 local function UPDATE_DO_FETCH()
-	local state = false
 
 	http.Fetch(
 		GAMEMODE.UPDATEURL,
 		function(body,len,head,code)
-			if tonumber(code) >= 300 then
-				state = false
-			elseif (not body) or (body == "") then
-				state = false
+			if tonumber(code) < 400 and (body ~= "") then
+				PHX:NotifyUpdate( body )
+				return true
 			else
-				PHX:NotifyUpdate(false, body)
-				state = true
+				print("[!PH:X Update] Error retreiving update. Reason: Data is Empty or Unknown Error.")
 			end
 		end,
 		function(err)
-			print("[!PH: X Update] Error retreiving update. Reason: " .. err)
+			print("[!PH:X Update] Error retreiving update. Reason: " .. err)
 		end
 	)
 
-	return state;
+	return false
 end
 
-local function NotifyMessage(result)
-		print( "~[ Prop Hunt X - Updates Info ]~" )
+function PHX:PrintUpdateConsole()
+	MsgC( color_white, "[ Prop Hunt X - Update Info ]\n" )
 	
-		local version,rev,changelog = result
-
-		if ((not version) or (not rev) or (not changelog)) then
-			MsgC(Color(230,20,20), "[!!] Error Retreiving updates info")
-			return
-		end
-		
-		MsgC(Color(181,230,30),"[+] Current Version : "..version.."\n")
-		MsgC(Color(175,245,15),"[+] Current Revision: "..rev.."\n")
-		MsgC(Color(247,211,13),"[!] See ChangeLog   : "..changelog.."\n\n")
+	if (!self.Messagedata) then
+		MsgC(Color(230,20,20), "[!!] Error: Update message data is empty")
+		return
+	end
+	
+	if (!self.Messagedata.version or !self.Messagedata.revision or !self.Messagedata.url) then
+		MsgC(Color(230,20,20), "[!!] Error Retreiving updates info - some update elements contains nothing.")
+		return
+	end
+	
+	MsgC(Color(181,230, 30), "[+] Current Version : "..self.Messagedata.version.."\n")
+	MsgC(Color(175,245, 15), "[+] Current Revision: "..self.Messagedata.revision.."\n")
+	MsgC(Color(247,211, 13), "[!] See ChangeLog   : "..self.Messagedata.url.."\n")
+	MsgC(Color(220,220,220), "[*] Full Description update: \n" .. self.Messagedata.info .. "\n")
 end
 
-function PHX:NotifyUpdate(bool, result)
+function PHX:NotifyUpdate(result)
 	
-	if (!result || result == "") then
-		print("[!PH: X Update] Unknown Error while receiving an update.")
+	if (!result or result == "") then
+		print("[!PH:X Update] Warning: Data contains nothing.")
 		return false,false,false
 	end
 	
-	PHX.VerboseMsg("[*PH: X Update] Incoming update result data, parsing infos...")
+	self.VerboseMsg("[*PH: X Update] Incoming update result data, parsing infos...")
 	local data = util.JSONToTable(result)
 	
 	local ver = data.version
 	local rev = data.revision
+	local url = data.url
 	local log = data.notice
 
-	self.Messagedata = log
+	-- somehow this gets unreliable?
+	PHX.Messagedata = {
+		version 	= data.version,
+		revision 	= data.revision,
+		url		= data.url,
+		info	= data.notice
+	}
+	
+	-- write data instead. CLIENT SIDE ONLY.
+	if CLIENT then
+		file.Write(PHX.ConfigPath .. "/phx_update_info.txt", result)
+	end
 	
 	local text
-	if tonumber(GAMEMODE._VERSION) > ver then
-		text = "[!PH: X Update] New version of "..ver.." is available. To update, please procceed to this link: \n --> https://prophunt.wolvindra.net/?go=download \n --> Changelog: "..log
-		MsgC(Color(0,160,230), text.."\n")
-	elseif string.lower(GAMEMODE.REVISION) != rev then
-		text = "[!PH: X Update] New Revision of "..rev.." is available. To update, please procceed with this revision, visit this link: \n --> https://prophunt.wolvindra.net/?go=download&rev="..rev.." \n --> Changelog: "..log
-		MsgC(Color(0,160,230), text.."\n")
-	elseif tonumber(GAMEMODE._VERSION) == ver && string.lower(GAMEMODE.REVISION) == rev then
-		text = "[*PH: X Update] Your gamemode is up to date. (Version "..ver.." - Revision "..string.upper(rev)..")"
-		MsgC(Color(0,200,40), text.."\n")
+	local color = Color(0,160,230)
+	local isNew = false
+	if GAMEMODE._VERSION ~= ver then
+		text = "[!PH: X Update] New version of "..ver.." is available."
+		isNew = true
+	elseif string.lower(GAMEMODE.REVISION) ~= rev then
+		text = "[!PH: X Update] New Revision of "..rev.." is available."
+		isNew = true
+	elseif GAMEMODE._VERSION == ver && string.lower(GAMEMODE.REVISION) == rev then
+		text = "[*PH: X Update] Your gamemode is up to date."
+		color = Color(0,200,40)
 	end
 	
-	if bool then
-		return ver,rev,log
+	MsgC(color, text .. "\n")
+	
+	if isNew then
+		self:PrintUpdateConsole()
 	end
 end
 
-local function CheckUpdate()
-	PHX.VerboseMsg("[PH: X] - Checking Update Notification... Please Wait!")
-	local r = UPDATE_DO_FETCH()
-	if (r) then
-		PHX.VerboseMsg("[PH: X] Update check success.")
-	else
-		PHX.VerboseMsg("[PH: X] Update check failed.")
-	end
+function PHX:CheckUpdate()
+	PHX.VerboseMsg("[PHX] - Checking Update Notification... Please Wait!")
+	UPDATE_DO_FETCH()
 end
 
-concommand.Add("ph_check_update", CheckUpdate , nil, "Force Check Update Prop Hunt: X.")
+concommand.Add("ph_check_update", function() PHX:CheckUpdate() end , nil, "Force Check Update Prop Hunt: X.")
 
 local cooldown	= 86400
 hook.Add("Initialize", "PHX.CheckUpdateInit", function()
@@ -90,17 +102,58 @@ hook.Add("Initialize", "PHX.CheckUpdateInit", function()
 	local time		 = os.time()
 	
 	if time < nextUpdate then
-		print("[PH: X] - Update has been checked. Will Re-check the update on "..os.date("%Y/%m/%d - %H:%M:%S", nextUpdate))
+		print("[PHX] Skipping update check. Will recheck on "..os.date("%Y/%m/%d - %H:%M:%S", nextUpdate))
 	else	
-		print("[PH: X] - Checking Update...")
-		UPDATE_DO_FETCH()
-		print("[PH: X] - Retreiving Update Info...")
+		print("[PHX] Checking Update...")
+		PHX:CheckUpdate()
 		cookie.Set("nextUpdate", time + cooldown)
-		
-		timer.Simple(5, function()
-			PHX:CheckUpdate(false)
-			print("[PH: X] - Update has been checked. Your next update notice will be displayed on "..os.date("%Y/%m/%d - %H:%M:%S",nextUpdate))
-		end)
+		print("[PHX] Update has been checked. Your next update notice will be displayed on "..os.date("%Y/%m/%d - %H:%M:%S", cookie.GetNumber("nextUpdate",0)) )
 	end
 	
 end)
+
+if CLIENT then
+	-- if cvar then
+	local w = {}
+	
+	function PHX:notifyUser()
+		local data = {}
+	
+		if (file.Exists(PHX.ConfigPath .. "/phx_update_info.txt", "DATA")) then
+			local json = file.Read(PHX.ConfigPath .. "/phx_update_info.txt", "DATA")
+			data = util.JSONToTable(json)
+			PrintTable(data)
+		else
+			chat.AddText(Color(230,80,20), "Error loading update info.")
+			return
+		end
+	
+		w.frame = vgui.Create("DFrame")
+		w.frame:SetTitle("Update Notice")
+		w.frame:SetSize(640, ScrH() * 0.75)
+		w.frame:Center()
+		
+		w.richtext = vgui.Create("RichText", w.frame)
+		w.richtext:Dock(FILL)
+		w.richtext:DockMargin(4,8,4,8)
+		w.richtext:InsertColorChange(255,205, 50,255)
+		w.richtext:AppendText(data.notice)
+		function w.richtext:PerformLayout()
+			self:SetFontInternal("PHX.TopBarFont")
+		end
+		w.richtext:InsertColorChange(220,220,220,255)
+		w.richtext:AppendText("\n\nFor your information:\nCurrently you are using version: "..GAMEMODE._VERSION.." with Revision: "..GAMEMODE.REVISION)
+		
+		w.button = vgui.Create("DButton", w.frame)
+		w.button:Dock(BOTTOM)
+		w.button:DockMargin(4,8,4,8)
+		w.button:SetSize(0,48)
+		w.button:SetText("See Full Changes")
+		function w.button:DoClick()
+			gui.OpenURL(data.url)
+		end
+		
+		w.frame:MakePopup()
+	end
+	
+end

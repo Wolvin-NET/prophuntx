@@ -33,11 +33,11 @@ hook.Add("PH_CustomTabMenu", "PHX.About", function(tab, pVgui, paintPanelFunc)
 		version = GAMEMODE._VERSION,
 		rev 	= GAMEMODE.REVISION,
 		credits	= "Godfather ♥, Yam, adk, Lucas2107, Jonpopnycorn, Thundernerd",
-		lgit	= "https://www.google.com",
+		lgit	= "https://github.com/Wolvin-NET/prophuntx/",
 		lhome	= "https://www.wolvindra.net/prophuntx",
 		ldonate = GAMEMODE.DONATEURL,
-		lwiki	= "https://www.google.com",
-		lklog	= "https://www.google.com",
+		--lwiki	= "https://www.google.com",
+		lklog	= "https://prophunt.wolvindra.net/changelogs.php",
 		lplugins = "https://prophunt.wolvindra.net/plugins"
 	}
 	
@@ -45,25 +45,24 @@ hook.Add("PH_CustomTabMenu", "PHX.About", function(tab, pVgui, paintPanelFunc)
 	pVgui("","label","Trebuchet24",grid, "Current Version: "..label.version.." | Current Revision: "..label.rev)
 	pVgui("","label","Trebuchet24",grid, "If you are enjoyed with the gamemode, Please support by Donating!" )
 	pVgui("spacer0","spacer",nil,grid,"" )
-	--pVgui("","label",false,grid, "Changelog & Updates" )
-	--[[ pVgui("","btn",{max = 2,textdata = {
-		[1] = {"See Changelog", 	  function() gui.OpenURL(label.lklog); tab:GetParent():Close() end},
+	pVgui("","label",false,grid, "Prop Hunt X Update" )
+	pVgui("","btn",{max = 2,textdata = {
+		[1] = {"View update info", function() PHX:notifyUser() end},
 		[2] = {"Check for Updates", 
 			function()
-				LocalPlayer():ConCommand("ph_check_update")
-				Derma_Message("Check on your console by pressing [~] or F10 key!","Checking Updates","OK, Got it!")
+				PHX:CheckUpdate()
 			end},
-	}},grid,"") ]]
+	}},grid,"")
 	pVgui("spacer1","spacer",nil,grid,"" )
 	pVgui("","label",false,grid, "Helpful External Links & Credits" )
 	pVgui("","btn",{max = 2,textdata = {
-		[1] = {"Support the Project by Donating!", 	  				  function() gui.OpenURL(label.ldonate) end},
-		--[2] = {"PHX Official Homepage", 	  function() gui.OpenURL(label.lhome) end},
-		--[3] = {"GitHub Repository", 	  	  function() gui.OpenURL(label.lgit) end},
-		--[4] = {"PHX Manuals & Wiki", 		  function() gui.OpenURL(label.lwiki) end},
-		[2] = {"PHX Addons/Plugins", 		  function() gui.OpenURL(label.lplugins) end}
+		[1] = {"Support PH:X by Donating!",		function() gui.OpenURL(label.ldonate) end},
+		[2] = {"PHX Homepage", 	  				function() gui.OpenURL(label.lhome) end},
+		[3] = {"GitHub Repo", 	  	  			function() gui.OpenURL(label.lgit) end},
+		[4] = {"PHX Addons/Plugins", 		  	function() gui.OpenURL(label.lplugins) end}
+		[5] = {"PHX Change Logs", 		  		function() gui.OpenURL(label.lklog) end},
 	}},grid,"")
-	pVgui("spacer1","spacer",nil,grid,"" )
+	pVgui("spacer2","spacer",nil,grid,"" )
 	pVgui("","label","Trebuchet24",grid, "Special Thanks for the support, suggestion & contributing:\n"..label.credits )
 	
 	local PanelModify = tab:AddSheet("", panel, "vgui/ph_iconmenu/m_info.png")
