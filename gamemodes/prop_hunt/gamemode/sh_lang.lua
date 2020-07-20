@@ -9,7 +9,7 @@ PHX.CVAR.ForcedLanguage	= CreateConVar("ph_force_lang", "en_us", {FCVAR_SERVER_C
 
 PHX.CVAR.DefaultLang	= CreateConVar("ph_default_lang", "en_us", {FCVAR_SERVER_CAN_EXECUTE}, "First-time player joined default language to show.")
 
-PHX.CVAR.Language		= CreateConVar("ph_language", "en_us", {FCVAR_ARCHIVE}, "User language to display.")
+PHX.CVAR.Language		= CreateConVar("ph_cl_language", "en_us", {FCVAR_ARCHIVE}, "User language to display.")
 
 local f = file.Find(engine.ActiveGamemode() .. "/gamemode/langs/*.lua", "LUA")
 for _,lgfile in SortedPairs(f) do

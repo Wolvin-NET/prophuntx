@@ -6,6 +6,10 @@ local function ThrowError ( ErrMode, strCommand, strNeeded, strData )
 	end
 end
 
+local function CvarChangedMessage( ... )
+	PHX:AddChat( PHX:Translate("PHXM_CVAR_CHANGED", ... ), Color(255, 194, 14) )
+end
+
 PHX.CLUI = {
 ["check"]	= function( c, d, p, l )
 	if !d then
@@ -39,7 +43,7 @@ PHX.CLUI = {
 				net.SendToServer()
 			elseif d == "CLIENT" then
 				RunConsoleCommand(c, v)
-				chat.AddText(Color(200,0,0),"[Settings]", color_white, " Cvar '"..c.."' has been changed to "..v)
+				CvarChangedMessage(tostring(c), tostring(v))
 				if v == 1 then
 					surface.PlaySound("buttons/button9.wav")
 				else
@@ -253,11 +257,112 @@ end,
 	function bind:OnChange( num )	
 		RunConsoleCommand(c, tostring(num))
 		local tkeyName = input.GetKeyName(num)
-		chat.AddText(Color(200,0,0),"[Settings]", color_white, " CVar '"..c.."' has been changed to ["..tostring(tkeyName).."]")
+		CvarChangedMessage(tostring(c), tostring(tkeyName))
 		surface.PlaySound("buttons/button9.wav")
 	end
 	return pnl
 end,
 
+["langcombobox"] = function( _, _, p, _ )	
+	local pnl = vgui.Create("DPanel")
+	pnl:SetSize(p:GetColWide(),p:GetRowHeight())
+	pnl:SetBackgroundColor( Color(0,0,0,0) )
+	
+	local label = vgui.Create("DLabel", pnl)
+	label:Dock(LEFT)
+	label:SetSize(150,0)
+	label:DockMargin(2,0,0,0)
+	label:SetFont("HudHintTextLarge")
+	label:SetText("Prefered Language") --PHX:FTranslate
+	
+	local cbox = vgui.Create("DComboBox", pnl)
+	cbox:Dock(LEFT)
+	cbox:SetSize(180 , 0)
+	cbox:DockMargin(4,2,0,2)
+	
+	local btn = vgui.Create("DButton", pnl)
+	btn:Dock(LEFT)
+	btn:SetSize(64,0)
+	btn:DockMargin(4,2,0,2)
+	btn:SetText("Apply")
+	btn:SetDisabled(true)
+	
+	function btn:DoClick()
+		if cbox.selLang ~= "" and cbox.selLangName ~= "" then
+			RunConsoleCommand("ph_cl_language", cbox.selLang)
+			chat.AddText( Color(220,120,30), PHX:Translate( "LANGUAGE_CHANGED", cbox.selLangName ) )
+			if PHX.UI.MainForm:IsValid() then
+				PHX.UI.MainForm:Close()
+			end
+		end
+	end
+	
+	cbox.selLang = ""
+	cbox.selLangName = ""
+	
+	local langCode = PHX.CVAR.Language:GetString() or "en_us"
+	local langList = PHX.LANGUAGES
+	
+	cbox:SetValue( langList[langCode].Name )
+	
+	for code,_ in pairs(langList) do
+		cbox:AddChoice(langList[code].Name, langList[code].code)
+	end
+	
+	function cbox:OnSelect(index, value, data)
+		btn:SetDisabled(false)
+		self.selLang = data
+		self.selLangName = value
+	end
+	
+	return pnl
+end,
+-- Do not use, need improvements.
+--[[ ["textentry"] = function( c, d, p, l )
+	local pnl = vgui.Create("DPanel")
+	pnl:SetSize(p:GetColWide(),p:GetRowHeight())
+	pnl:SetBackgroundColor( Color(0,0,0,0) )
+	
+	local label = vgui.Create("DLabel", pnl)
+	label:Dock(LEFT)
+	label:SetSize(200,0)
+	label:DockMargin(2,0,0,0)
+	label:SetFont("HudHintTextLarge")
+	label:SetText(l)
+	
+	local textEntry = vgui.Create("DTextEntry", pnl)
+	textEntry:Dock(LEFT)
+	textEntry:SetSize(128, 0)
+	textEntry:DockMargin(4,2,0,2)
+	textEntry:SetValue( GetConVar(c):GetString() )
+	
+	textEntry.EnteredText = ""
+	
+	function textEntry:OnEnter()
+		self.EnteredText = self:GetValue()
+	end
+	
+	local btn = vgui.Create("DButton", pnl)
+	btn:Dock(LEFT)
+	btn:SetSize(64,0)
+	btn:DockMargin(4,2,0,2)
+	
+	function btn:DoClick()
+		if textEntry.EnteredText ~= "" then
+			if d == "SERVER" then
+				net.Start("SvCommandTextEntry")
+				net.WriteString(textEntry.EnteredText)
+				net.SendToServer()
+			else
+				RunConsoleCommand(c, textEntry.SelectedText)
+				CvarChangedMessage(tostring(c), tostring(textEntry.EnteredText))
+			end
+		end
+	end
+	
+	return pnl
+end, ]]
+
+-- todo: Add Customisable Combo Box
 -- Add More here :)
 }

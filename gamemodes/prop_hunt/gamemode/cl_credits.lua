@@ -59,8 +59,8 @@ hook.Add("PH_CustomTabMenu", "PHX.About", function(tab, pVgui, paintPanelFunc)
 		[1] = {"Support PH:X by Donating!",		function() gui.OpenURL(label.ldonate) end},
 		[2] = {"PHX Homepage", 	  				function() gui.OpenURL(label.lhome) end},
 		[3] = {"GitHub Repo", 	  	  			function() gui.OpenURL(label.lgit) end},
-		[4] = {"PHX Addons/Plugins", 		  	function() gui.OpenURL(label.lplugins) end}
-		[5] = {"PHX Change Logs", 		  		function() gui.OpenURL(label.lklog) end},
+		[4] = {"PHX Addons/Plugins", 		  	function() gui.OpenURL(label.lplugins) end},
+		[5] = {"PHX Change Logs", 		  		function() gui.OpenURL(label.lklog) end}
 	}},grid,"")
 	pVgui("spacer2","spacer",nil,grid,"" )
 	pVgui("","label","Trebuchet24",grid, "Special Thanks for the support, suggestion & contributing:\n"..label.credits )

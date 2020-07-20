@@ -348,6 +348,11 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 	function PHX.UI:PlayerOption()
 		local panel,gridpl = PHX.UI:CreateBasicLayout(Color(40,40,40,180),PHX.UI.PnlTab)
 
+		PHX.UI:CreateVGUIType("", "label", false, gridpl, "Languages")
+		PHX.UI:CreateVGUIType(nil, "langcombobox", nil, gridpl, nil)
+		PHX.UI:CreateVGUIType("", "label", false, gridpl, "Binds")
+		PHX.UI:CreateVGUIType("ph_default_taunt_key", "binder", false, gridpl, "Random Taunt key")
+		PHX.UI:CreateVGUIType("ph_default_customtaunt_key", "binder", false, gridpl, "Taunt Menu key")
 		PHX.UI:CreateVGUIType("", "label", false, gridpl, "Player Options:")
 		PHX.UI:CreateVGUIType("ph_cl_halos", "check", "CLIENT", gridpl, "Toggle Halo effect when choosing a prop" )
 		PHX.UI:CreateVGUIType("ph_cl_pltext", "check", "CLIENT", gridpl, "Show Team player names above their heads instead (and appear through wall too)")
@@ -362,9 +367,6 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 		PHX.UI:CreateVGUIType("ph_show_tutor_control", "check", "CLIENT", gridpl, "Show Tutorial Pop-up (Shown only 2x on each prop spawns)")
 		PHX.UI:CreateVGUIType("ph_show_custom_crosshair", "check", "CLIENT", gridpl, "Enable Custom Crosshair")
 		PHX.UI:CreateVGUIType("ph_show_team_topbar", "check", "CLIENT", gridpl, "Show total alive team players bar on the top left (At least 4 Players will be shown)")
-		PHX.UI:CreateVGUIType("", "label", false, gridpl, "Binds")
-		PHX.UI:CreateVGUIType("ph_default_taunt_key", "binder", false, gridpl, "Random Taunt key")
-		PHX.UI:CreateVGUIType("ph_default_customtaunt_key", "binder", false, gridpl, "Taunt Menu key")
 		
 		local PanelModify = PHX.UI.PnlTab:AddSheet("", panel, "vgui/ph_iconmenu/m_player.png")
 		PHX.UI.PaintTabButton(PanelModify, "Player Settings")
@@ -467,6 +469,58 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 		PHX.UI:CreateVGUIType("ph_prop_jumppower", "slider", {min = 1, max = 3, init = PHX.CVAR.PropJumpPower:GetFloat(), dec = 2, float = true, kind = "SERVER"}, grid, "Additional Jump Power multiplier for Props")
 		PHX.UI:CreateVGUIType("ph_sv_enable_obb_modifier","check","SERVER",grid, "Developer: Enable Customized Prop Entity OBB Model Data Modifier")
 		PHX.UI:CreateVGUIType("ph_reload_obb_setting_everyround","check","SERVER",grid, "Developer: Reload Customized Prop Entity OBB Model Data Modifier every round restarts")
+		
+		-- new cvar additions
+		PHX.UI:CreateVGUIType("","spacer",nil,grid,"" )
+		PHX.UI:CreateVGUIType("", "label", false, grid, "Experimental Sections")
+
+		PHX.UI:CreateVGUIType("ph_add_hla_combine", "check", "SERVER", grid, PHX:FTranslate("PHXM_ADMIN_HLA_COMBINE"))
+		PHX.UI:CreateVGUIType("ph_enable_teambalance", "check", "SERVER", grid, PHX:FTranslate("PHXM_ADMIN_TEAMBALANCE"))
+		PHX.UI:CreateVGUIType("ph_max_teamchange_limit", "slider", {min = 3, max = 50, init = PHX.CVAR.ChangeTeamLimit:GetInt(), dec = 0, kind = "SERVER"}, grid, PHX:FTranslate("PHXM_ADMIN_CHANGETEAM_LIMIT"))
+		PHX.UI:CreateVGUIType("ph_use_new_chat", "check", "SERVER", grid, PHX:FTranslate("PHXM_ADMIN_USENEWCHAT"))
+		PHX.UI:CreateVGUIType("ph_new_chat_pos_sub", "slider", {min = 45, max = 1500, init = PHX.CVAR.NewChatPosSubstract:GetInt(), dec = 0, kind = "SERVER"}, grid, PHX:FTranslate("PHXM_ADMIN_NEWCHATPOS"))
+
+		PHX.UI:CreateVGUIType("ph_allow_respawnonblind", "check", "SERVER", grid, PHX:FTranslate("PHXM_ADMIN_RESPAWNONBLIND"))
+		PHX.UI:CreateVGUIType("ph_allow_respawnonblind_team_only", "check", "SERVER", grid, PHX:FTranslate("PHXM_ADMIN_RESPAWNONBLIND_TEAM"))
+		PHX.UI:CreateVGUIType("ph_allow_respawn_from_spectator", "check", "SERVER", grid, PHX:FTranslate("PHXM_ADMIN_ALLOWRESPAWN_SPECTATOR"))
+		PHX.UI:CreateVGUIType("ph_blindtime_respawn_percent", "slider", {min = 0, max = 1, init = PHX.CVAR.BlindRespawnTimePercent:GetFloat(), dec = 2, float = true, kind = "SERVER"}, grid, PHX:FTranslate("PHXM_ADMIN_REWSPANTIMEPERCENT"))
+		PHX.UI:CreateVGUIType("ph_allow_respawnonblind_teamchange", "check", "SERVER", grid, PHX:FTranslate("PHXM_ADMIN_ALLOWRESPAWN_TEAMCHANGE"))
+
+		-- ph_allow_pickup_object
+		PHX.UI:CreateVGUIType("", "btn", {max = 1, textdata = {
+			[1] = {"--[ Pickup Mode is set to "..PHX.CVAR.AllowPickupProp:GetInt().." ] --", 
+			function(self)
+				local modes = {
+					[0] = "Mode [0]: Don't Allow",
+					[1] = "Mode [1]: Hunters Only",
+					[2] = "Mode [2]: Props Only",
+					[3] = "Mode [3]: Allow Pickup"
+				}
+				local function SendPickupCmdState(state)
+					net.Start("PHXPickupCmdState")
+					net.WriteUInt(state,3)
+					net.SendToServer()
+				end
+				
+				local function apply(panel, state)
+					SendPickupCmdState(state)
+					panel:SetText(modes[state])
+				end
+				
+				self:SetText(modes[PHX.CVAR.AllowPickupProp:GetInt()])
+				local state = 0
+				if PHX.CVAR.AllowPickupProp:GetInt() == 0 then
+					state = 1
+				elseif PHX.CVAR.AllowPickupProp:GetInt() == 1 then
+					state = 2
+				elseif PHX.CVAR.AllowPickupProp:GetInt() == 2 then
+					state = 3
+				elseif PHX.CVAR.AllowPickupProp:GetInt() == 3 then
+					state = 0
+				end
+				apply(self,state)
+			end}
+		}}, grid ,"")
 		
 	local PanelModify = PHX.UI.PnlTab:AddSheet("", panel, "vgui/ph_iconmenu/m_admin.png")
 	PHX.UI.PaintTabButton(PanelModify, "Admin Panel")

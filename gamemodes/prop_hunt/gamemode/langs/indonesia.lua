@@ -1,19 +1,13 @@
--- WARNING: THIS CODE IS UNFINISHED!!!!
-
--- The main core files aren't translated yet.
--- THERE ARE ALOT OF TEXT NEED TO RE-LANGUAGE.
-
--- Originally written by: Fafy
--- Improved by Wolvindra-Vinzuerio more simpler.
+-- not yet implemented.
 
 local LANG = {}
 
-LANG.code = "en_us"
+LANG.code = "id"
 
-LANG.Name 		 	= "English" -- example: "Bahasa Indonesia"
-LANG.NameEnglish	= "English" -- Your Language but spoken in English, example: "Indonesian"
-LANG.Author			= "placeholder"
-LANG.AuthorURL		= "" -- Value must only contain Steam Profile with SteamID64 format: https://steamcommunity.com/profiles/761123456xxxxx.
+LANG.Name 		 	= "Bahasa Indonesia"
+LANG.NameEnglish	= "Bahasa Indonesia"
+LANG.Author			= "Wolvindra-Vinzuerio & KamfretoZ"
+LANG.AuthorURL		= "https://"
 
 -- Special Section that isn't String-based
 LANG.SUICIDEMSG = {
@@ -42,17 +36,17 @@ LANG.RANDOM_SPECTATORS = {
 LANG["HELP_F1"] 			= PHX.F1DefaultHelp or [[Todo: please enter a nicely described Game Help text message here]];
 
 -- Important!
-LANG["LANGUAGE_CHANGED"]	= "Prefered Language has been changed to %s"
+LANG["LANGUAGE_CHANGED"]	= "Preferensi Bahasa telah terpilih sebagai %s"
 
-LANG["EV_PLAYER_CONNECT"]	= "%s has connected to the server."
-LANG["EV_PLAYER_JOINED"]	= "%s has joined to the server."
-LANG["EV_PLAYER_DISCONNECT"] = "%s has disconnected from the server (Reason: %s)."
+LANG["EV_PLAYER_CONNECT"]	= "%s telah tersambung ke server."
+LANG["EV_PLAYER_JOINED"]	= "%s telah bergabung ke server."
+LANG["EV_PLAYER_DISCONNECT"] = "%s telah keluar dari server (Alasan: %s)."
 
 -- HUD elements
-LANG["HUD_HP"]				= "HEALTH"
-LANG["HUD_AMMO"] 			= "AMMO"
-LANG["HUD_TIME"] 			= "TIME"
-LANG["HUD_ROUND"]			= "ROUND"
+LANG["HUD_HP"]				= "NYAWA"
+LANG["HUD_AMMO"] 			= "PELURU"
+LANG["HUD_TIME"] 			= "WAKTU"
+LANG["HUD_ROUND"]			= "RONDE"
 
 LANG["HUD_ROTLOCK"]			= "Prop Rotation: Locked"
 LANG["HUD_ROTFREE"]			= "Prop Rotation: Free"
@@ -65,19 +59,19 @@ LANG["HUD_LOSE"]			= "Draw, everyone loses!"
 LANG["HUD_BLINDED"]			= "Hunters will be unblinded and released in %s"
 LANG["HUD_UNBLINDED"]		= "Ready or not, here we come!"
 
-LANG["BLIND_RESPAWN_TEAM"]	= "You were respawned only on %s team in %d seconds during blind time."
-LANG["BLIND_RESPAWN"]		= "You were respawned in %d seconds during blind time."
+LANG["BLIND_RESPAWN_TEAM"]	= "Kamu baru saja dihidupkan kembali di team %s dalam %d detik dalam periode 'Hunter Blind'."
+LANG["BLIND_RESPAWN"]		= "Kamu baru saja dihidupkan kembali dalam %d detik dalam periode 'Hunter Blind'."
 
 --  Kill text (X killed Y)
-LANG["HUD_KILLED"]			= "killed"
+LANG["HUD_KILLED"]			= "dibunuh sama"
 
-LANG["MISC_ACCEPT"]			= "Accept"
-LANG["MISC_CLOSE"]			= "Close"
-LANG["MISC_TIMELEFT"]		= "Time Left: %s"
-LANG["MISC_GAMEEND"] 		= "Game will end after this round"
+LANG["MISC_ACCEPT"]			= "Oke"
+LANG["MISC_CLOSE"]			= "Tutup"
+LANG["MISC_TIMELEFT"]		= "Waktu Tersisa: %s"
+LANG["MISC_GAMEEND"] 		= "Permainan akan berakhir setelah ronde ini berlangsung."
 
 -- Team selection screen (F2)
-LANG["DERMA_TEAMSELECT"]	= "Choose Team"
+LANG["DERMA_TEAMSELECT"]	= "Pilih Tim"
 
 -- F1 screeen
 LANG["DERMA_RTV"] 			= "Vote For Change (RTV)"
@@ -111,8 +105,6 @@ LANG["PHXM_ADMINS_TAB"]		= "Admins Settings"
 LANG["PHXM_ABOUT_TAB"]		= "About Prop Hunt X"
 LANG["PHXM_MAPVOTE_TAB"]		= "MapVote Settings"
 
-LANG["PHXM_CVAR_CHANGED"]	= "[Settings] CVar %s has been changed to %s"
-
 LANG["PHXM_MUTE_SELECT"]		= "Select one player that you wish to mute."
 
 LANG["PHXM_PLAYER_OPTIONS"]		= "Player Options:"
@@ -138,17 +130,6 @@ LANG["PHXM_PLAYERMODEL_SETFOV"]		= "Set Model FOV"
 
 LANG["PHXM_ADMINS_OPTIONS"]		= "Serverside gamemode Options (Only visible for Admins/Owner)"
 
-LANG["PHXM_ADMINS_ph_language"]		= "Gamemode language (requires map change)"
-LANG["PHXM_ADMINS_ph_use_custom_plmodel"]		= "Enable custom models for Hunters"
-LANG["PHXM_ADMINS_ph_use_custom_plmodel_for_prop"]		= "Enable custom models for Props - Make sure to enable for Hunter too."
-LANG["PHXM_ADMINS_ph_customtaunts_delay"]		= "Custom Taunts Delay (Seconds)"
-LANG["PHXM_ADMINS_ph_normal_taunt_delay"]		= "Normal Taunts Delay (Seconds)"
-LANG["PHXM_ADMINS_ph_autotaunt_enabled"]		= "Enable Auto Taunt Features"
-LANG["PHXM_ADMINS_ph_autotaunt_delay"]		= "Auto Taunts Delay (Seconds)"
-LANG["PHXM_ADMINS_ph_forcejoinbalancedteams"]		= "Force players to even out teams upon joining"
-LANG["PHXM_ADMINS_ph_autoteambalance"]		= "Automatically even out teams at the start of a round"
-LANG["PHXM_ADMINS_ph_allow_prop_pickup"] = "Allow pick up of small props (0 = No; 1 = Yes; 2 = Only Hunters)"
-
 LANG["PHXM_ADMIN_HLA_COMBINE"]				= "Add HLA Combine model support"
 LANG["PHXM_ADMIN_TEAMBALANCE"]				= "Enable Team Balance feature"
 LANG["PHXM_ADMIN_CHANGETEAM_LIMIT"]			= "Use Team Switch limitter. Set -1 to disable. "
@@ -159,6 +140,17 @@ LANG["PHXM_ADMIN_RESPAWNONBLIND_TEAM"]		= "Allow Respawn on Blind Time specific 
 LANG["PHXM_ADMIN_REWSPANTIMEPERCENT"]		= "Percentage of Blind Time which allows you to respawn. Default is 0.75 (means 75% * Max Blind Time)"
 LANG["PHXM_ADMIN_ALLOWRESPAWN_SPECTATOR"]	= "Allow Respawn on Blind Time when Assigning to Spectator Team"
 LANG["PHXM_ADMIN_ALLOWRESPAWN_TEAMCHANGE"]	= "Allow Respawn on Blind Time when Assigning to Different Team (Enabling this may not recommended)"
+
+LANG["PHXM_ADMINS_ph_language"]		= "Gamemode language (requires map change)"
+LANG["PHXM_ADMINS_ph_use_custom_plmodel"]		= "Enable custom models for Hunters"
+LANG["PHXM_ADMINS_ph_use_custom_plmodel_for_prop"]		= "Enable custom models for Props - Make sure to enable for Hunter too."
+LANG["PHXM_ADMINS_ph_customtaunts_delay"]		= "Custom Taunts Delay (Seconds)"
+LANG["PHXM_ADMINS_ph_normal_taunt_delay"]		= "Normal Taunts Delay (Seconds)"
+LANG["PHXM_ADMINS_ph_autotaunt_enabled"]		= "Enable Auto Taunt Features"
+LANG["PHXM_ADMINS_ph_autotaunt_delay"]		= "Auto Taunts Delay (Seconds)"
+LANG["PHXM_ADMINS_ph_forcejoinbalancedteams"]		= "Force players to even out teams upon joining"
+LANG["PHXM_ADMINS_ph_autoteambalance"]		= "Automatically even out teams at the start of a round"
+LANG["PHXM_ADMINS_ph_allow_prop_pickup"] = "Allow pick up of small props (0 = No; 1 = Yes; 2 = Only Hunters)"
 
 LANG["PHXM_ADMINS_ph_notice_prop_rotation"]		= "Display 'Prop Rotation' notification on every Prop Spawns"
 LANG["PHXM_ADMINS_ph_prop_camera_collisions"]		= "Enable Prop Camera collision to the wall"

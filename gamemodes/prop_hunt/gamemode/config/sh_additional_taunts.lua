@@ -1,4 +1,3 @@
--- In here you can add two team taunts without seperating them.
 local taunts = {}
 
 TEAM_HUNTERS = TEAM_HUNTERS or 1
@@ -18,14 +17,4 @@ taunts[TEAM_PROPS] = {
 	-- Add more Props Taunt here...
 }
 
-local test={
-	[TEAM_HUNTERS] = { 
-		["test"] = "vo/k_lab/ba_gah.wav",
-	},
-	[TEAM_PROPS] = { 
-		["test2"] = "vo/k_lab/ba_guh.wav",
-	}
-}
-
 list.Set("PHX.CustomTaunts", "PHX Custom Taunt Examples", taunts)
-list.Set("PHX.CustomTaunts", "Taunt Test", test)

@@ -111,6 +111,17 @@ LANG["PHXM_MUTE_SELECT"]		= "Sélectionne un joueur que tu veux rendre muet."
 
 LANG["PHXM_PLAYER_OPTIONS"]		= "Options du joueur:"
 
+LANG["PHXM_ADMIN_HLA_COMBINE"]				= "Add HLA Combine model support"
+LANG["PHXM_ADMIN_TEAMBALANCE"]				= "Enable Team Balance feature"
+LANG["PHXM_ADMIN_CHANGETEAM_LIMIT"]			= "Use Team Switch limitter. Set -1 to disable. "
+LANG["PHXM_ADMIN_USENEWCHAT"]				= "Use new Chat Box"
+LANG["PHXM_ADMIN_NEWCHATPOS"]				= "Chat Box Substract Height Position"
+LANG["PHXM_ADMIN_RESPAWNONBLIND"]			= "Allow Respawn on Blind Time"
+LANG["PHXM_ADMIN_RESPAWNONBLIND_TEAM"]		= "Allow Respawn on Blind Time specific Team Only"
+LANG["PHXM_ADMIN_REWSPANTIMEPERCENT"]		= "Percentage of Blind Time which allows you to respawn. Default is 0.75 (means 75% * Max Blind Time)"
+LANG["PHXM_ADMIN_ALLOWRESPAWN_SPECTATOR"]	= "Allow Respawn on Blind Time when Assigning to Spectator Team"
+LANG["PHXM_ADMIN_ALLOWRESPAWN_TEAMCHANGE"]	= "Allow Respawn on Blind Time when Assigning to Different Team (Enabling this may not recommended)"
+
 LANG["PHXM_PLAYER_ph_cl_halos"]		= "Activer l'effet Halo lors du choix d'un Prop"
 LANG["PHXM_PLAYER_ph_cl_pltext"]		= "Voir l'équipe du joueur au dessus de la tête (apparaît à travers les murs)"
 LANG["PHXM_PLAYER_ph_cl_endround_sound"]		= "Jouer la musique à la fin de la manche"
