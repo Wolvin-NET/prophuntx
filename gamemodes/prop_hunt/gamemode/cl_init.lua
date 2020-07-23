@@ -165,7 +165,7 @@ function HUDPaint()
 			if pl != LocalPlayer() && (pl && pl:IsValid() && pl:Alive() && pl:Team() == LocalPlayer():Team()) then
 				local addvector = Vector(0, 0, math.Clamp(pl:EyePos():Distance(LocalPlayer():EyePos())*0.04, 16, 64))
 				-- todo: text will disappear in a specified distance.
-				draw.DrawText(pl:Name().." ("..pl:Health().."%)", "TargetIDSmall", (pl:EyePos() + addvector):ToScreen().x, (pl:EyePos() + addvector):ToScreen().y, team.GetColor(pl:Team()), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.DrawText(PHX:FTranslate("HUD_TargetID", pl:Name(), pl:Health()), "TargetIDSmall", (pl:EyePos() + addvector):ToScreen().x, (pl:EyePos() + addvector):ToScreen().y, team.GetColor(pl:Team()), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
 		end
 	end
@@ -175,9 +175,9 @@ function HUDPaint()
 		local blindlock_time_left = (PHX.CVAR.BlindTime:GetInt() - (CurTime() - GetGlobalFloat("RoundStartTime", 0))) + 1
 		
 		if blindlock_time_left < 1 && blindlock_time_left > -6 then
-			blindlock_time_left_msg = "Ready or not, here we come!"
+			blindlock_time_left_msg = PHX:FTranslate("HUD_UNBLINDED")
 		elseif blindlock_time_left > 0 then
-			blindlock_time_left_msg = "Hunters will be unblinded and released in "..string.ToMinutesSeconds(blindlock_time_left)
+			blindlock_time_left_msg = PHX:FTranslate("HUD_BLINDED", string.ToMinutesSeconds(blindlock_time_left))
 		else
 			blindlock_time_left_msg = nil
 		end
@@ -263,17 +263,27 @@ function HUDPaint()
 	if PHX.CLCVAR.CustomCrosshair:GetBool() && LocalPlayer():Team() == TEAM_PROPS && LocalPlayer():Alive() then
 		local color
 		local trace = {}
-		if cHullz < 24 then
-			trace.start = LocalPlayer():EyePos() + Vector(0, 0, cHullz + (24-cHullz))
-			trace.endpos = LocalPlayer():EyePos() + Vector(0, 0, cHullz + (24-cHullz)) + LocalPlayer():EyeAngles():Forward() * 100
-		elseif cHullz > 84 then
-			trace.start = LocalPlayer():EyePos() + Vector(0, 0, cHullz - 84)
-			trace.endpos = LocalPlayer():EyePos() + Vector(0, 0, cHullz - 84) + LocalPlayer():EyeAngles():Forward() * 300
+		if cHullz < cHullz_Min then
+			trace.start = LocalPlayer():EyePos() + Vector(0, 0, cHullz + (cHullz_Min-cHullz))
+			trace.endpos = LocalPlayer():EyePos() + Vector(0, 0, cHullz + (cHullz_Min-cHullz)) + LocalPlayer():EyeAngles():Forward() * 100
+		elseif cHullz > cHullz_Max then
+			trace.start = LocalPlayer():EyePos() + Vector(0, 0, cHullz - cHullz_Max)
+			trace.endpos = LocalPlayer():EyePos() + Vector(0, 0, cHullz - cHullz_Max) + LocalPlayer():EyeAngles():Forward() * 300
 		else
 			trace.start = LocalPlayer():EyePos() + Vector(0, 0, 8)
 			trace.endpos = LocalPlayer():EyePos() + Vector(0, 0, 8) + LocalPlayer():EyeAngles():Forward() * 100
 		end
-		trace.filter = ents.FindByClass("ph_prop")
+		--trace.filter = ents.FindByClass("ph_prop")
+		--Fix by Codingale: https://github.com/Codingale , https://github.com/prop-hunt-enhanced/prop-hunt-enhanced/pull/11
+		local filter = {} -- We need to filter out players and the ph_prop.
+
+		for k,v in pairs(ents.GetAll()) do
+			if v:GetClass() == "ph_prop" or string.lower(v:GetClass()) == "player" then
+				table.insert(filter, v)
+			end
+		end
+
+		trace.filter = filter
 		
 		local trace2 = util.TraceLine(trace)
 		if trace2.Entity && trace2.Entity:IsValid() && table.HasValue(PHX.USABLE_PROP_ENTITIES, trace2.Entity:GetClass()) then
@@ -288,10 +298,12 @@ function HUDPaint()
 	
 	-- The 'You were Killed By' text, or the Freeze Cam text.
 	if LocalPlayer():GetNWBool("InFreezeCam", false) then
-		local w1, h1 = surface.GetTextSize("You were killed by "..LocalPlayer():GetNWEntity("PlayerKilledByPlayerEntity", nil):Name() );
+		local transtext = PHX:FTranslate("HUD_KILLEDBY", LocalPlayer():GetNWEntity("PlayerKilledByPlayerEntity", nil):Name())
+		
+		local w1, h1 = surface.GetTextSize( transtext );
 		local textx = ScrW()/2
 		local steamx = (ScrW()/2) - 32
-		draw.SimpleTextOutlined("You were killed by "..LocalPlayer():GetNWEntity("PlayerKilledByPlayerEntity", nil):Name(), "TrebuchetBig", textx, ScrH()*0.75, Color(255, 10, 10, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1.5, Color(0, 0, 0, 255))
+		draw.SimpleTextOutlined(transtext , "TrebuchetBig", textx, ScrH()*0.75, Color(255, 10, 10, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1.5, Color(0, 0, 0, 255))
 	end
 end
 hook.Add("HUDPaint", "PH_HUDPaint", HUDPaint)
@@ -322,12 +334,12 @@ function drawPropSelectHalos()
 		if LocalPlayer():Team() == TEAM_PROPS && LocalPlayer():Alive() then
 			local trace = {}
 			-- fix for smaller prop size. They should stay horizontal rather than looking straight down.
-			if cHullz < 24 then
-				trace.start = LocalPlayer():EyePos() + Vector(0, 0, cHullz + (24-cHullz))
-				trace.endpos = LocalPlayer():EyePos() + Vector(0, 0, cHullz + (24-cHullz)) + LocalPlayer():EyeAngles():Forward() * 100
-			elseif cHullz > 84 then
-				trace.start = LocalPlayer():EyePos() + Vector(0, 0, cHullz - 84)
-				trace.endpos = LocalPlayer():EyePos() + Vector(0, 0, cHullz - 84) + LocalPlayer():EyeAngles():Forward() * 300
+			if cHullz < cHullz_Min then
+				trace.start = LocalPlayer():EyePos() + Vector(0, 0, cHullz + (cHullz_Min-cHullz))
+				trace.endpos = LocalPlayer():EyePos() + Vector(0, 0, cHullz + (cHullz_Min-cHullz)) + LocalPlayer():EyeAngles():Forward() * 100
+			elseif cHullz > cHullz_Max then
+				trace.start = LocalPlayer():EyePos() + Vector(0, 0, cHullz - cHullz_Max)
+				trace.endpos = LocalPlayer():EyePos() + Vector(0, 0, cHullz - cHullz_Max) + LocalPlayer():EyeAngles():Forward() * 300
 			else
 				trace.start = LocalPlayer():EyePos() + Vector(0, 0, 8)
 				trace.endpos = LocalPlayer():EyePos() + Vector(0, 0, 8) + LocalPlayer():EyeAngles():Forward() * 100
@@ -462,3 +474,81 @@ net.Receive("DisableDynamicLight", function()
 		client_prop_light = false
 	end
 end)
+
+local lgWind = {}
+-- Language Preview Window
+function PHX:showLangPreview()
+	
+	lgWind.frame = vgui.Create("DFrame")
+	lgWind.frame:SetSize(600, ScrH()-200)
+	lgWind.frame:SetTitle("Language List & Preview")
+	lgWind.frame:Center()
+	lgWind.frame:MakePopup()
+	
+	lgWind.panel = vgui.Create("DPanel", lgWind.frame)
+	lgWind.panel:Dock(FILL)
+	lgWind.panel:DockMargin(6,6,6,6)
+	lgWind.panel:SetBackgroundColor(Color(90,90,90,200))
+	
+	lgWind.scroll = vgui.Create("DScrollPanel", lgWind.panel)
+	lgWind.scroll:Dock(FILL)
+	lgWind.scroll:DockMargin(4,4,4,4)
+	
+	local langList = PHX.LANGUAGES
+	for code, data in pairs(langList) do
+		local Name = data.Name
+		local NameEnglish = data.NameEnglish
+		local Author = data.Author
+		local URLs = data.AuthorURL
+		
+		local dPanel = lgWind.scroll:Add("DPanel")
+		dPanel:Dock(TOP)
+		dPanel:SetSize(0,128)
+		dPanel:DockMargin( 0, 0, 0, 4 )
+		dPanel:SetBackgroundColor(Color(64,64,64,180))
+		
+		local title = vgui.Create("DLabel", dPanel)
+		title:Dock(TOP)
+		title:SetSize(0,28)
+		title:DockMargin( 6, 4, 6, 1 )
+		title:SetText( Name .. " (".. NameEnglish ..")" )
+		title:SetTextColor(color_white)
+		title:SetFont("Trebuchet24")
+		
+		local PreviewText = vgui.Create("DLabel", dPanel)
+		PreviewText:Dock(TOP)
+		PreviewText:DockMargin( 6, 0, 6, 5 )
+		PreviewText:SetSize(0,25)
+		PreviewText:SetText( string.format("Example: %q, %q", langList[code]["MISC_GAMEEND"], langList[code]["HUD_HP"] ) )
+		PreviewText:SetTextColor(Color(150,210,235))
+		PreviewText:SetFont("PHX.TopBarFont")
+		
+		local function createURLLabel(textUrl, pParent)
+			local url = vgui.Create("DLabelURL", pParent)
+			url:Dock(TOP)
+			url:DockMargin( 6, 0, 6, 3 )
+			url:SetSize(0,10)
+			url:SetColor(Color(255,255,0))
+			url:SetText(textUrl)
+			url:SetURL(textUrl)
+		end
+		
+		local lbl = vgui.Create("DLabel", dPanel)
+		lbl:Dock(TOP)
+		lbl:DockMargin( 6, 0, 6, 4 )
+		lbl:SetSize(0,12)
+		lbl:SetText( "Author(s): " .. Author )
+		lbl:SetTextColor(color_white)
+		lbl:SetFont("PHX.AmmoFont")
+		
+		if type(URLs) == "string" then
+			createURLLabel(URLs, dPanel)
+		elseif type(URLs) == "table" then
+			for _,url in pairs(URLs) do
+				createURLLabel(url, dPanel)
+			end
+		end
+		
+	end
+	
+end

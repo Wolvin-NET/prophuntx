@@ -104,8 +104,10 @@ function PANEL:AddColumn( col )
 	end
 
 	-- Credits to dhantasmic on GitHub for this fix
-	pnlCol:GetChildren()[1]:SetVisible( false )
-	pnlCol:GetChildren()[2]:SetVisible( false )
+	local header1 = pnlCol:GetChildren()[1] --DLabel
+	local header2 = pnlCol:GetChildren()[2] --DListView_DraggerBar, the [ | ] or seperator drag
+	header1:SetVisible( true )
+	header2:SetVisible( false )
 	
 	Derma_Hook( pnlCol, 	"Paint", 				"Paint", 	"ScorePanelHeader" )
 	

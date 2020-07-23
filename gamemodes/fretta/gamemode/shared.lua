@@ -12,6 +12,8 @@ include( "player_colours.lua" )
 
 fretta_voting = CreateConVar( "fretta_voting", "1", { FCVAR_REPLICATED, FCVAR_NOTIFY, FCVAR_ARCHIVE }, "Allow/Dissallow voting" )
 
+SetGlobalBool("bJoinBalancedTeam", GetConVar("ph_forcejoinbalancedteams"):GetBool() or false)
+
 GM.Name 	= "Simple Game Base"
 GM.Author 	= "Anonymous"
 GM.Email 	= ""
@@ -40,7 +42,7 @@ GM.TakeFragOnSuicide = false		// -1 frag on suicide
 GM.MaximumDeathLength = 0			// Player will repspawn if death length > this (can be 0 to disable)
 GM.MinimumDeathLength = 2			// Player has to be dead for at least this long
 GM.AutomaticTeamBalance = false     // Teams will be periodically balanced 
-GM.ForceJoinBalancedTeams = true	// Players won't be allowed to join a team if it has more players than another team
+GM.ForceJoinBalancedTeams = GetGlobalBool("bJoinBalancedTeam", false)	// Players won't be allowed to join a team if it has more players than another team
 GM.RealisticFallDamage = false		// Set to true if you want realistic fall damage instead of the fix 10 damage.
 GM.AddFragsToTeamScore = false		// Adds player's individual kills to team score (must be team based)
 
@@ -114,7 +116,7 @@ function GM:TeamHasEnoughPlayers( teamid )
 	local PlayerCount = team.NumPlayers( teamid )
 
 	// Don't let them join a team if it has more players than another team
-	if ( GAMEMODE.ForceJoinBalancedTeams ) then
+	if ( GetGlobalBool("bJoinBalancedTeam", false) ) then
 	
 		for id, tm in pairs( team.GetAllTeams() ) do
 			if ( id > 0 && id < 1000 && team.NumPlayers( id ) < PlayerCount && team.Joinable(id) ) then return true end

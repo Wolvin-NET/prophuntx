@@ -3,15 +3,21 @@ function PHX:AddChat(msg, color)
 	chat.AddText(color, msg)
 end
 
-function PHX:Notify(msg, kind, time)
+function PHX:Notify(msg, kind, time, snd)
 	notification.AddLegacy(msg, kind, time)
+	
+	if ( !snd or snd == nil ) then
+		surface.PlaySound("garrysmod/content_downloaded.wav")
+	else
+		surface.PlaySound( snd )
+	end
 end
 
 function PHX:ChatInfo(msg, kind)
 	local color = PHX.info[kind][1]
 	local text  = PHX.info[kind][2]
 	
-	chat.AddText(color, "[PHX " .. text .." ", color_white, msg)
+	chat.AddText(color, "[PHX: " .. text .."] ", color_white, msg)
 end
 
 net.Receive("PHX.ChatPrint", function()

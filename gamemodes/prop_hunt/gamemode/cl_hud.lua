@@ -131,6 +131,10 @@ local armx	= 0
 
 local GUICondition = false
 
+local function TranslateMe(text, ...)
+	return PHX:FTranslate(text, ...)
+end
+
 -- Hook sections
 hook.Add("HUDShouldDraw", "PHX.ShouldHideHUD", function(hudname)
 	-- make sure matw is already installed, otherwise don't use new HUD.
@@ -216,7 +220,7 @@ hook.Add("HUDPaint", "PHX.MainHUD", function()
 		tbl.Armor[4].x = armorpct - 10
 		surface.DrawPoly( tbl.Armor )
 		
-		draw.DrawText( "HEALTH", "Trebuchet24", pos.x + 215, pos.y + 110, color_white, TEXT_ALIGN_LEFT )
+		draw.DrawText( TranslateMe("HUD_HP"), "Trebuchet24", pos.x + 215, pos.y + 110, color_white, TEXT_ALIGN_LEFT )
 		draw.DrawText( hp, "PHX.HealthFont", pos.x + 370, pos.y + 86, hpcolor, TEXT_ALIGN_RIGHT )
 		draw.DrawText( " / "..armor, "PHX.ArmorFont", pos.x + 370, pos.y + 104, Color( 255,255,255,255 ), TEXT_ALIGN_LEFT )
 		
@@ -322,7 +326,7 @@ hook.Add("HUDPaint", "PHX.MainHUD", function()
 			draw.Circle( ScrW()-58, posw.y + 60, percent * 45, 24 )
 			
 			-- PHX.AmmoFont -- deprecated
-			draw.DrawText( "MAG. / SEC.", "PHX.AmmoFont", posw.x + 70, posw.y + 5, color_white, TEXT_ALIGN_LEFT )
+			draw.DrawText( TranslateMe("HUD_MAGSEC"), "PHX.AmmoFont", posw.x + 70, posw.y + 5, color_white, TEXT_ALIGN_LEFT )
 			draw.DrawText( LiteralStringSec, "PHX.TopBarFont", posw.x + 94, posw.y + 28, color_white, TEXT_ALIGN_LEFT )
 			draw.DrawText( mag2, "PHX.ArmorFont", posw.x + 175, posw.y + 22, color_white, TEXT_ALIGN_LEFT )
 			draw.DrawText( LiteralString, "PHX.HealthFont", ScrW()-195, posw.y + 2, Color( 255,255,180,255 ), TEXT_ALIGN_RIGHT )
@@ -352,12 +356,12 @@ hook.Add("HUDPaint", "PHX.MainHUD", function()
 			surface.DrawTexturedRect( hudtopbar.x, hudtopbar.y, 400, 50 )
 			
 			-- Draw Props
-			draw.DrawText( "Props", "PHX.TopBarFont", 4, hudtopbar.y + 2, Color(255,255,255,255), TEXT_ALIGN_LEFT )
-			draw.DrawText( tostring(PopulateAliveTeam(TEAM_PROPS)), "PHX.TopBarFontTeam", 96, hudtopbar.y - 8, Color(255,255,255,255), TEXT_ALIGN_LEFT )
+			draw.DrawText( TranslateMe("TEAM_PROPS"), "PHX.TopBarFont", 4, hudtopbar.y + 2, Color(255,255,255,255), TEXT_ALIGN_LEFT )
+			draw.DrawText( tostring(PopulateAliveTeam(TEAM_PROPS)), "PHX.TopBarFontTeam", 120, hudtopbar.y - 7, Color(255,255,255,255), TEXT_ALIGN_LEFT )
 			
 			-- Draw Hunters
-			draw.DrawText( "Hunter", "PHX.TopBarFont", 300, hudtopbar.y + 22, Color(255,255,255,255), TEXT_ALIGN_LEFT )
-			draw.DrawText( tostring(PopulateAliveTeam(TEAM_HUNTERS)), "PHX.TopBarFontTeam", 220, hudtopbar.y - 8, Color(255,255,255,255), TEXT_ALIGN_LEFT )
+			draw.DrawText( TranslateMe("TEAM_HUNTERS"), "PHX.TopBarFont", 350, hudtopbar.y + 22, Color(255,255,255,255), TEXT_ALIGN_RIGHT )
+			draw.DrawText( tostring(PopulateAliveTeam(TEAM_HUNTERS)), "PHX.TopBarFontTeam", 210, hudtopbar.y - 7, Color(255,255,255,255), TEXT_ALIGN_LEFT )
 		end
 	end
 end)

@@ -34,7 +34,8 @@ function GM:AddScoreboardAvatar( ScoreBoard )
 			av:SetSize( 32, 32 )
 			av:SetPlayer( ply )
 			av.Click = function()
-				print( "LOL" )
+				--print( "LOL" )
+				-- todo: Let's add something here in future. Hopefully...
 			end
 			return av
 	end
@@ -50,28 +51,28 @@ end
 function GM:AddScoreboardName( ScoreBoard )
 
 	local f = function( ply ) return ply:Name() end
-	ScoreBoard:AddColumn( "Name", nil, f, 10, nil, 4, 4 )
+	ScoreBoard:AddColumn( PHX:FTranslate("DERMA_NAME") or "Name", nil, f, 10, nil, 4, 4 )
 
 end
 
 function GM:AddScoreboardKills( ScoreBoard )
 
 	local f = function( ply ) return ply:Frags() end
-	ScoreBoard:AddColumn( "Kills", 40, f, 0.5, nil, 6, 6 )
+	ScoreBoard:AddColumn( PHX:FTranslate("DERMA_KILLS") or "Kills", 40, f, 0.5, nil, 6, 6 )
 
 end
 
 function GM:AddScoreboardDeaths( ScoreBoard )
 
 	local f = function( ply ) return ply:Deaths() end
-	ScoreBoard:AddColumn( "Deaths", 60, f, 0.5, nil, 6, 6 )
+	ScoreBoard:AddColumn( PHX:FTranslate("DERMA_DEATHS") or "Deaths", 60, f, 0.5, nil, 6, 6 )
 
 end
 
 function GM:AddScoreboardPing( ScoreBoard )
 
 	local f = function( ply ) return ply:ScoreboardPing() end
-	ScoreBoard:AddColumn( "Ping", 40, f, 0.1, nil, 6, 6 )
+	ScoreBoard:AddColumn( PHX:FTranslate("DERMA_PING") or "Ping", 40, f, 0.1, nil, 6, 6 )
 
 end
 

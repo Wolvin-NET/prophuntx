@@ -1,15 +1,4 @@
--- WARNING: THIS CODE IS UNFINISHED!!!!
-
 PHX.LANGUAGES = {}
-
--- Todo: Move convars to sh_init.lua in future to prevent Replication Problem. Garry's Mod has broken FCVAR_REPLICATED flag.
-
-PHX.CVAR.UseForceLang	= CreateConVar("ph_use_lang", "0", {FCVAR_SERVER_CAN_EXECUTE}, "Enable forced-language display. THIS WILL BYPASS USER-SELECTED LANGUAGE!", 0, 1)
-PHX.CVAR.ForcedLanguage	= CreateConVar("ph_force_lang", "en_us", {FCVAR_SERVER_CAN_EXECUTE}, "Default language to force.")
-
-PHX.CVAR.DefaultLang	= CreateConVar("ph_default_lang", "en_us", {FCVAR_SERVER_CAN_EXECUTE}, "First-time player joined default language to show.")
-
-PHX.CVAR.Language		= CreateConVar("ph_cl_language", "en_us", {FCVAR_ARCHIVE}, "User language to display.")
 
 local f = file.Find(engine.ActiveGamemode() .. "/gamemode/langs/*.lua", "LUA")
 for _,lgfile in SortedPairs(f) do
@@ -18,11 +7,36 @@ for _,lgfile in SortedPairs(f) do
 	include("langs/" .. lgfile)
 end
 
+-- Language Addition Helper.
+function PHX:AddLanguage( tbl )
+	if (tbl and type(tbl) == "table" and tbl ~= nil) then
+		local code = tbl.code
+		local name = tbl.Name
+		
+		if PHX.LANGUAGES[code] ~= nil or (not table.IsEmpty(PHX.LANGUAGES[code])) then
+			PHX:VerboseMsg("[PHX] It appears that Language " .. name .. " ("..code..") already exist. Ignoring...")
+		else
+			PHX:VerboseMsg("[PHX] Adding External custom language from " .. name .. "(".. code ..")")
+			PHX.LANGUAGES[code] = tbl
+		end
+	end
+end
+
+-- Let's add language from list.Get, if any.
+for langName,tblLangExt in pairs(list.Get("PHX.CustomExternalLanguage")) do
+	if (not table.IsEmpty(tblLangExt)) or tblLangExt ~= nil then
+		PHX.VerboseMsg("[PHX External Language] Ignoring " .. langName .. " because it's contains nothing.")
+	else
+		PHX.VerboseMsg("[PHX External Language] Adding " .. langName .."...")
+		PHX:AddLanguage( tblLangExt )
+	end
+end
+
 -- Check
 if table.IsEmpty(PHX.LANGUAGES) then
-	print("language table: Empty, is there anything wrong?")
+	print("[PHX] Language Table: Empty... something's wrong?")
 else
-	print("language table: OK.")
+	print("[PHX] Language Table: OK, got " .. table.Count(PHX.LANGUAGES) .. " total lang codes.")
 end
 
 -- Normal Translation. This will output error and does not return original text from textToFind.
@@ -34,7 +48,7 @@ function PHX:Translate( textToFind, ... )
 	
 	-- if this was forced by server, we'll use that instead.
 	if PHX.CVAR.UseForceLang:GetBool() then
-		lg = PHX.CVAR.UseForceLang:GetString()
+		lg = PHX.CVAR.ForcedLanguage:GetString()
 	end
 	
 	local code = self.LANGUAGES[lg]
@@ -56,8 +70,9 @@ function PHX:Translate( textToFind, ... )
 	return code[textToFind]
 end
 
--- Fallback Translate: A quick version, used to revert translation to textToFind args if translation wasnt found.
--- This commonly used for VGUI or Fretta's component to avoid Informational Not Found texts.
+-- Fallback Translate: A quick version, used to revert translation to textToFind if translation was nothing found.
+-- This commonly used for VGUI or Fretta's component to avoid Informational "Not Found" texts.
+-- USE THIS ONLY FOR VGUI ELEMENTS. If you want to use for Chat/Notification System, Consider use PHX:Translate() instead!
 function PHX:FTranslate( textToFind, ... )
 	
 	local args = {...}
@@ -65,7 +80,7 @@ function PHX:FTranslate( textToFind, ... )
 	
 	-- if this was forced by server, we'll use that instead.
 	if PHX.CVAR.UseForceLang:GetBool() then
-		lg = PHX.CVAR.UseForceLang:GetString()
+		lg = PHX.CVAR.ForcedLanguage:GetString()
 	end
 	
 	local code = self.LANGUAGES[lg]
@@ -92,6 +107,20 @@ function PHX:FTranslate( textToFind, ... )
 	return code[textToFind]
 end
 
+-- Usage: tblKey = String
+--[[
+	Example: if there is something in your language that contains:
+	
+	LANG.RANDOM_DEATHNOTICE_MESSAGE = { ... } 
+	
+	then it should capture a value from:
+	
+	PHX.LANGUAGES[<lang code>]["RANDOM_DEATHNOTICE_MESSAGE"]
+	
+	Therefore, you should only call:
+	
+	PHX:GetRandomTranslated( "RANDOM_DEATHNOTICE_MESSAGE" )
+]]
 function PHX:GetRandomTranslated( tblKey )
 
 	if type(tblKey) ~= "string" then return "Argument must contain string only!" end
@@ -101,18 +130,12 @@ function PHX:GetRandomTranslated( tblKey )
 	
 	-- if this was forced by server, we'll use that instead.
 	if PHX.CVAR.UseForceLang:GetBool() then
-		lg = PHX.CVAR.UseForceLang:GetString()
+		lg = PHX.CVAR.ForcedLanguage:GetString()
 	end
 	
 	local code = self.LANGUAGES[lg]
 	if !code or code == nil then return "Cannot find random table [" .. tblKey .. "], Language " .. lg .. " not found." end
 	
-	--[[
-		Example: if there is in your language contains:
-		LANG.RANDOM_DEATHNOTICE_MESSAGE = { ... } then it should capture a value from:
-		
-		PHX.LANGUAGES[<lang code>]["RANDOM_DEATHNOTICE_MESSAGE"]
-	]]
 	local tbl = code[tblKey]
 	if !tbl then return "cannot find "..tblKey.." table." end
 	
@@ -120,8 +143,6 @@ function PHX:GetRandomTranslated( tblKey )
 		local result = table.Random( tbl )
 		return result
 	else
-		return "cannot get translation because table argument is not a table type."
+		return "cannot get translation because table argument is not a table value."
 	end
 end
-
--- Todo: Other helper functions

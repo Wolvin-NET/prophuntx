@@ -27,7 +27,7 @@ end)
 
 local function MainFrame()
 	if PHX.CVAR.CustomTauntMode:GetInt() < 1 then
-		chat.AddText(Color(220,0,0),"[PHX - Taunts] Warning: This server has custom taunts disabled.")
+		PHX:ChatInfo(PHX:Translate("TM_WARNING_CT_DISABLE"), "WARNING")
 		return
 	end
 	
@@ -35,7 +35,7 @@ local function MainFrame()
 
 	window.frame = vgui.Create("DFrame")
 	window.frame:SetSize(490,600)
-	window.frame:SetTitle("Prop Hunt Custom Taunt Window")
+	window.frame:SetTitle( PHX:FTranslate("TM_WINDOW_TITLE") )
 	window.frame:SetVisible(true)
 	window.frame:ShowCloseButton(true)
 	window.frame:Center()
@@ -122,7 +122,7 @@ local function MainFrame()
 					window.list:AddLine( name )
 				end
 			else
-				window.list:AddLine("Warning: No taunts detected in this category.")
+				window.list:AddLine( PHX:FTranslate("TM_NO_TAUNTS") )
 			end
 		
 		self:SortAndStyle(window.list)
@@ -174,24 +174,24 @@ local function MainFrame()
 			net.Start("CL2SV_PlayThisTaunt"); net.WriteString(tostring(snd)); net.SendToServer();
 			LocalPlayer():SetNWFloat( "localLastTauntTime", CurTime() + PHX.CVAR.CustomTauntDelay:GetInt() )
 		else
-			chat.AddText(Color(220,40,0),"[PHX - Taunts] Warning: ",Color(220,220,220), "Please wait in " .. tostring(math.Round(delay - CurTime())) .. " second(s)!")
+			PHX:ChatInfo( PHX:Translate("TM_NOTICE_PLSWAIT", tostring(math.Round(delay - CurTime()))) , "WARNING" )
 		end
 	end
 	
-	CreateStyledButton(LEFT,86,"Play Taunt",{5,5,5,5},"vgui/phehud/btn_playpub.vmt",FILL, function()
+	CreateStyledButton(LEFT,86,PHX:FTranslate("TM_TOOLTIP_PLAYTAUNT"),{5,5,5,5},"vgui/phehud/btn_playpub.vmt",FILL, function()
 		if hastaunt then
 			local getline = TranslateTaunt(window.CurrentCategory, window.list:GetLine(window.list:GetSelectedLine()):GetValue(1))
 			SendToServer(getline)
 		end
 	end)
-	CreateStyledButton(LEFT,86,"Preview Taunt",{5,5,5,5}, "vgui/phehud/btn_play.vmt",FILL, function()
+	CreateStyledButton(LEFT,86,PHX:FTranslate("TM_TOOLTIP_PREVIEW"),{5,5,5,5}, "vgui/phehud/btn_play.vmt",FILL, function()
 		if hastaunt then
 			local getline = TranslateTaunt(window.CurrentCategory, window.list:GetLine(window.list:GetSelectedLine()):GetValue(1))
 			surface.PlaySound(getline)
-			chat.AddText(Color(20,220,0), "[PH] Playing taunt: ".. window.list:GetLine(window.list:GetSelectedLine()):GetValue(1) )
+			PHX:AddChat(PHX:Translate("TM_NOTICE_PLAYPREVIEW", getline), Color(20,220,0))
 		end
 	end)
-	CreateStyledButton(LEFT,86,"Play Taunt and Close",{5,5,5,5},"vgui/phehud/btn_playx.vmt",FILL, function()
+	CreateStyledButton(LEFT,86,PHX:FTranslate("TM_TOOLTIP_PLAYCLOSE"),{5,5,5,5},"vgui/phehud/btn_playx.vmt",FILL, function()
 		if hastaunt then
 			local getline = TranslateTaunt(window.CurrentCategory, window.list:GetLine(window.list:GetSelectedLine()):GetValue(1))
 		
@@ -199,12 +199,12 @@ local function MainFrame()
 			window.frame:Close()
 		end
 	end)
-	CreateStyledButton(LEFT,86,"Play Random Taunt",{5,5,5,5},"vgui/phehud/btn_playrandom.vmt",FILL, function()
+	CreateStyledButton(LEFT,86,PHX:FTranslate("TM_TOOLTIP_PLAYRANDOM"),{5,5,5,5},"vgui/phehud/btn_playrandom.vmt",FILL, function()
 		local getRandom = table.Random(window.list:GetLines())
 		local getline = TranslateTaunt(window.CurrentCategory, getRandom:GetValue(1))
 		SendToServer(getline)
 	end)
-	CreateStyledButton(FILL,86,"Close the Window",{5,5,5,5},"vgui/phehud/btn_close.vmt",FILL, function()
+	CreateStyledButton(FILL,86,PHX:FTranslate("TM_TOOLTIP_CLOSE"),{5,5,5,5},"vgui/phehud/btn_close.vmt",FILL, function()
 		window.frame:Close()
 	end)
 	
@@ -213,11 +213,11 @@ local function MainFrame()
 		local getline = TranslateTaunt(window.CurrentCategory, window.list:GetLine(window.list:GetSelectedLine()):GetValue(1))
 		
 		local menu = DermaMenu()
-		menu:AddOption("Preview Taunt", function() surface.PlaySound(getline); print("Playing: "..getline); end):SetIcon("icon16/control_play.png")
-		menu:AddOption("Play Taunt", function() SendToServer(getline); end):SetIcon("icon16/sound.png")
-		menu:AddOption("Play and Close", function() SendToServer(getline); window.frame:Close(); end):SetIcon("icon16/sound_delete.png")
+		menu:AddOption(PHX:FTranslate("TM_TOOLTIP_PREVIEW"), function() surface.PlaySound(getline); PHX:AddChat(PHX:Translate("TM_NOTICE_PLAYPREVIEW", getline), Color(20,220,0)); end):SetIcon("icon16/control_play.png")
+		menu:AddOption(PHX:FTranslate("TM_TOOLTIP_PLAYTAUNT"), function() SendToServer(getline); end):SetIcon("icon16/sound.png")
+		menu:AddOption(PHX:FTranslate("TM_TOOLTIP_PLAYCLOSE"), function() SendToServer(getline); window.frame:Close(); end):SetIcon("icon16/sound_delete.png")
 		menu:AddSpacer()
-		menu:AddOption("Close Menu", function() window.frame:Close(); end):SetIcon("icon16/cross.png")
+		menu:AddOption(PHX:FTranslate("TM_MENU_CLOSE"), function() window.frame:Close(); end):SetIcon("icon16/cross.png")
 		menu:Open()
 	end
 	
@@ -243,6 +243,6 @@ if ply:Alive() and window.state and ply:GetObserverMode() == OBS_MODE_NONE then
 		MainFrame()
 	end
 else
-	chat.AddText(Color(220,40,0),"[PHX Taunts] Notice: ",Color(220,220,220), "You can only play custom taunts when you\'re alive as prop/hunter!")
+	PHX:ChatInfo( PHX:Translate("TM_PLAY_ONLY_ALIVE"), "WARNING" )
 end
 end, nil, "Show Prop Hunt taunt menu")

@@ -78,7 +78,7 @@ local function AutoTauntPaint()
 	local timeLeft = math.ceil(TimeLeft())
 	local percentage = timeLeft / delay
 
-	local txt = "Auto taunting in " .. timeLeft
+	local txt = PHX:FTranslate("HUD_AUTOTAUNT_ALT", timeLeft)
 
 	draw.RoundedBox(5, x, y, w, h, Color(0, 0, 0, 200))
 	draw.RoundedBox(5, x + 5, y + 5, (w - 10) * percentage, h - 10, Color(200, 0, 0, 200))
@@ -120,7 +120,7 @@ local function AutoTauntPaint_phx()
 		draw.NoTexture()
 		draw.Circle( ScrW()-58, posw.y + 60, percentage * 45, 24 )
 		
-		draw.DrawText("Auto Taunting in " .. timeLeft .. " second(s)", "PHX.TopBarFont", ScrW() - 164, posw.y + 83, color_white, TEXT_ALIGN_RIGHT)
+		draw.DrawText( PHX:FTranslate("HUD_AUTOTAUNT", timeLeft) , "PHX.TopBarFont", ScrW() - 164, posw.y + 83, color_white, TEXT_ALIGN_RIGHT )
 		
 		CreateTauntIndicators(indic.auto, Color(255,255,255,180), ScrW()-88, posw.y + 28, 64, 64)
 		
@@ -142,8 +142,8 @@ local function AutoTauntPaint_phx()
 			colC = Color(20,230,230,220)
 		end
 		
-		draw.DrawText("F3 Taunt", 	 "PHX.AmmoFont", posw.x + 96, posw.y + 50, color_white, TEXT_ALIGN_CENTER)
-		draw.DrawText("Cust. Taunt", "PHX.AmmoFont", posw.x + 212, posw.y + 50, color_white, TEXT_ALIGN_CENTER)
+		draw.DrawText(PHX:FTranslate("HUD_PROP_TAUNT_TIME"), "PHX.AmmoFont", posw.x + 96, posw.y + 50, color_white, TEXT_ALIGN_CENTER)
+		draw.DrawText(PHX:FTranslate("HUD_PROP_CTAUNT_TIME"), "PHX.AmmoFont", posw.x + 212, posw.y + 50, color_white, TEXT_ALIGN_CENTER)
 		
 		draw.DrawText(literalR, "PHX.TopBarFont", posw.x + 96 + 50, posw.y + 18, color_white, TEXT_ALIGN_CENTER)
 		draw.DrawText(literalC, "PHX.TopBarFont", posw.x + 212 + 50, posw.y + 19, color_white, TEXT_ALIGN_CENTER)

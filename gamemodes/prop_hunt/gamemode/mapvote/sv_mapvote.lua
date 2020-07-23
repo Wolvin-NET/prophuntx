@@ -109,14 +109,12 @@ function CoolDownDoStuff()
 end
 
 function MapVote.GetFromULX()
-	if (ulx == nil) then
-		print("[!PHX] Warning: ULX is not installed!")
+	if (ulx == nil or ulx.votemaps == nil) then
+		print("[!PHX] Warning: ULX is not installed, can't get any votemap information!")
 		return false
 	end
 
-	if (ulx.votemaps) then
-		return ulx.votemaps
-	end
+	return ulx.votemaps
 end
 
 function MapVote.Start(length, current, limit, prefix)
@@ -148,7 +146,7 @@ function MapVote.Start(length, current, limit, prefix)
     
 	local maps = {}
 	
-	if GetConVar("mv_use_ulx_votemaps"):GetBool() && ulxmap ~= false then
+	if GetConVar("mv_use_ulx_votemaps"):GetBool() and (ulxmap ~= false or ulxmap ~= nil) then
 		for _,map in pairs(ulxmap) do
 			table.insert(maps, map..".bsp")
 		end

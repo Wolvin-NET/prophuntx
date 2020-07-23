@@ -271,7 +271,7 @@ function GM:ShowTeam()
 	if ( !IsValid( TeamPanel ) ) then 
 	
 		TeamPanel = vgui.CreateFromTable( vgui_Splash )
-		TeamPanel:SetHeaderText( "Choose Team" )
+		TeamPanel:SetHeaderText( PHX:FTranslate("DERMA_TEAMSELECT") or "Choose Team" )
 
 		local AllTeams = team.GetAllTeams()
 		for ID, TeamInfo in SortedPairs ( AllTeams ) do
@@ -289,7 +289,9 @@ function GM:ShowTeam()
 				btn.m_colBackground = TeamInfo.Color
 				btn.Think = function( self ) 
 								self:SetText( Format( "%s (%i)", strName, team.NumPlayers( ID ) ))
-								self:SetDisabled( GAMEMODE:TeamHasEnoughPlayers( ID ) ) 
+								if ID ~= TEAM_SPECTATOR then -- skip player ammount check
+									self:SetDisabled( GAMEMODE:TeamHasEnoughPlayers( ID ) ) 
+								end
 							end
 				
 				if (  IsValid( LocalPlayer() ) && LocalPlayer():Team() == ID ) then

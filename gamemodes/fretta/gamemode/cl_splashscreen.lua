@@ -55,7 +55,6 @@ function PANEL:PerformLayout()
 	self.lblServerName:SizeToContents()
 	self.lblServerName:SetPos( 100, CenterY + 200 )
 	
-	--self.lblIP:SetText( GetConVarString( "ip" )  )
 	self.lblIP:SetText( tostring(game.GetIPAddress()) )
 	self.lblIP:SizeToContents()
 	self.lblIP:SetPos( self:GetWide() - 100 - self.lblIP:GetWide(), CenterY + 200 )

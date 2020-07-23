@@ -446,9 +446,17 @@ function GM:CheckTeamBalance( bDontKillPlayer )
 					
 					ply:SetTeam( id )
 
-					// Todo: Notify player 'you have been swapped'
-					// This is a placeholder
-					PrintMessage(HUD_PRINTTALK, ply:Name().." has been changed to "..team.GetName( id ).." for team balance." )
+					--PrintMessage(HUD_PRINTTALK, ply:Name().." has been changed to "..team.GetName( id ).." for team balance." )
+					
+					if (PHX and PHX ~= nil) then
+						for _, listener in ipairs(player.GetAll()) do
+							if listener == ply then
+								listener:PHXChatInfo("NOTICE", "CHAT_SWAPBALANCEYOU")
+							else
+								listener:PHXChatInfo("NOTICE", "CHAT_SWAPBALANCE", ply:Name(), team.GetName( id ))
+							end
+						end
+					end
 					
 				end
 			end
@@ -510,9 +518,23 @@ function GM:EndOfGame( bGamemodeVote )
 	
 	if ( bGamemodeVote ) then
 	
-		MsgN( "Starting gamemode voting..." )
-		PrintMessage( HUD_PRINTTALK, "Starting gamemode voting..." );
-		timer.Simple( GAMEMODE.VotingDelay, function() MapVote.Start() end )
+		local startingMsg = PHX:FTranslate()
+	
+		--MsgN( "Starting gamemode voting..." )
+		--PrintMessage( HUD_PRINTTALK, "Starting gamemode voting..." );
+		
+		for _,ply in pairs(player.GetAll()) do
+			ply:PHXChatInfo("NOTICE", "CHAT_STARTING_MAPVOTE")
+		end
+		
+		timer.Simple( GAMEMODE.VotingDelay, function()
+			if PHX.CVAR.UseCustomMapVote:GetBool() then
+				local f = PHX.CVAR.CustomMapVoteCall:GetString()
+				RunString(f, "MapVote_CVAR")
+			else
+				MapVote.Start()
+			end
+		end )
 		
 	end
 

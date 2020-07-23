@@ -1,5 +1,3 @@
--- WARNING: THIS CODE IS UNFINISHED!!!!
-
 -- Finds the player Player/Entities table
 local Player = FindMetaTable("Player")
 local Entity = FindMetaTable("Entity")
@@ -101,6 +99,7 @@ if SERVER then
 	-- bShouldUseTheirOwnLang: Unless if you have your own language SET in your /langs/<language>.lua, Force this to TRUE.
 	-- Example: msg = "MY_CUSTOM_TEXT" will be translated if bShouldUseTheirOwnLang = true. If you want regular message, just put normal text on <msg> argument.
 	
+	-- Todo: Add Var Args
 	function Player:PHXChatPrint( msg, color, bShouldUseTheirOwnLang )
 		
 		if bShouldUseTheirOwnLang == nil then bShouldUseTheirOwnLang = false end
@@ -120,6 +119,7 @@ if SERVER then
 		["CLEANUP"] = 4
 	}
 	
+	-- Todo: Add Var Args
 	function Player:PHXNotify( msg, kind, time, bShouldUseTheirOwnLang )
 		
 		if bShouldUseTheirOwnLang == nil then bShouldUseTheirOwnLang = false end
@@ -134,8 +134,8 @@ if SERVER then
 		net.Send(self)
 	end
 	
-	-- NOTE: DUE TO NET LIBRARY LIMITATIONS
-	-- ARGUMENTS CANNOT CONTAIN OBJECT/USERDATA. See: https://wiki.facepunch.com/gmod/net.ReadTable
+	-- NOTE: DUE TO NET LIBRARY LIMITATIONS,
+	-- VAR ARGS CANNOT CONTAIN OBJECT/USERDATA. See: https://wiki.facepunch.com/gmod/net.ReadTable
 	function Player:PHXChatInfo( kind, msg , ... )
 		if !kind then kind = "PRIMARY" end
 		if !msg then msg = "<NO_MESSAGE>" end

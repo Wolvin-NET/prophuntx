@@ -10,7 +10,7 @@ local function FixTallModelHulls()
 
 	if (not GetConVar("ph_sv_enable_obb_modifier"):GetBool()) then
 	  for i=1,3 do
-		print("Warning: ph_sv_enable_obb_modifier is not enabled by default. This wont fix the collission issue for taller props in this map!")
+		print("Warning: ConVar 'ph_sv_enable_obb_modifier' is not enabled by default. This wont fix the collission issue for taller props in this map!")
 	  end
 	end
 

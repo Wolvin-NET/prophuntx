@@ -20,8 +20,11 @@ function CLASS:Loadout(pl)
     pl:Give("weapon_crowbar")
     pl:Give("weapon_shotgun")
     pl:Give("weapon_smg1")
-	pl:Give("item_ar2_grenade")
     pl:Give("weapon_357")
+	
+	--pl:Give("item_ar2_grenade")
+	local numGrenade = PHX.CVAR.SMGGrenadeCounts:GetInt() or 1
+	pl:SetAmmo(numGrenade, "SMG1_Grenade")
 	
 	local cl_defaultweapon = pl:GetInfo("cl_defaultweapon") 
  	 
@@ -96,7 +99,7 @@ function CLASS:OnDeath(pl, attacker, dmginfo)
 	if PHX.CVAR.UseDevilCrystal:GetBool() then
 		if math.random() < 0.7 then --70% chance.
 			local dropent = ents.Create("ph_devilball")
-			dropent:SetPos(Vector(pos.x, pos.y, pos.z + 16)) -- to make sure the Devil Ball didn't fall underground.
+			dropent:SetPos(Vector(pos.x, pos.y, pos.z + 16)) -- to make sure the Devil Ball didn't spawn underground.
 			dropent:SetAngles(Angle(0,0,0))
 			dropent:Spawn()
 		end

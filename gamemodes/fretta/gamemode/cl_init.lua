@@ -165,23 +165,19 @@ end
 
 function GM:TeamChangeNotification( ply, oldteam, newteam )
 
-	local random_spectator_text = {
-		"to watch and chill.",
-		"to see them hanging around.",
-		" ", -- you serious?
-		"to see the things."
-	}
-
 	if( ply && ply:IsValid() ) then
 		local nick = ply:Nick();
 		local oldTeamColor = team.GetColor( oldteam );
 		local newTeamName = team.GetName( newteam );
 		local newTeamColor = team.GetColor( newteam );
 		
+		local txtjoinedTo	= PHX:FTranslate("CHAT_JOINEDTHE") or " joined the "
+		local txtjoined 	= PHX:FTranslate("CHAT_JOINED") or " joined "
+		
 		if( newteam == TEAM_SPECTATOR ) then
-			chat.AddText( oldTeamColor, nick, color_white, " joined the ", newTeamColor, newTeamName , color_white, " "..table.Random(random_spectator_text));
+			chat.AddText( oldTeamColor, nick, color_white, txtjoinedTo, newTeamColor, newTeamName , color_white, " "..PHX:GetRandomTranslated("RANDOM_SPECTATORS"));
 		else
-			chat.AddText( oldTeamColor, nick, color_white, " joined ", newTeamColor, newTeamName );
+			chat.AddText( oldTeamColor, nick, color_white, txtjoined, newTeamColor, newTeamName );
 		end
 		
 		surface.PlaySound("buttons/button17.wav")

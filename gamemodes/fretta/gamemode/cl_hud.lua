@@ -96,7 +96,7 @@ function GM:UpdateHUD_WaitForPlayers( InRound )
 	
 		local WaitText = vgui.Create( "DHudElement" );
 			WaitText:SizeToContents()
-			WaitText:SetText( "Waiting for players..." )
+			WaitText:SetText( PHX:FTranslate("HUD_WAITPLY") or "Waiting for players..." )
 		GAMEMODE:AddHUDItem( WaitText, 8 )
 	
 	end
@@ -107,6 +107,9 @@ function GM:UpdateHUD_RoundResult( RoundResult, Alive )
 
 	local txt = GetGlobalString( "RRText" )
 	
+	--hax
+	local propTeam = GetGlobalInt( "RoundResult", 0 )
+	
 	if ( type( RoundResult ) == "number" ) && ( team.GetAllTeams()[ RoundResult ] && txt == "" ) then
 		local TeamName = team.GetName( RoundResult )
 		if ( TeamName ) then txt = TeamName .. " Wins!" end
@@ -116,7 +119,8 @@ function GM:UpdateHUD_RoundResult( RoundResult, Alive )
 
 	local RespawnText = vgui.Create( "DHudElement" );
 		RespawnText:SizeToContents()
-		RespawnText:SetText( txt )
+		-- i swear this may fucked up for some reason;
+		RespawnText:SetText( PHX:FTranslate(txt, team.GetName(propTeam)) or txt )
 	GAMEMODE:AddHUDItem( RespawnText, 8 )
 
 end
@@ -128,13 +132,13 @@ function GM:UpdateHUD_Observer( bWaitingToSpawn, InRound, ObserveMode, ObserveTa
 	local col = Color( 255, 255, 255 );
 
 	if ( IsValid( ObserveTarget ) && ObserveTarget:IsPlayer() && ObserveTarget != LocalPlayer() && ObserveMode != OBS_MODE_ROAMING ) then
-		lbl = "SPECTATING"
+		lbl = PHX:FTranslate("HUD_SPECTATING") or "SPECTATING"
 		txt = ObserveTarget:Nick()
 		col = team.GetColor( ObserveTarget:Team() );
 	end
 	
 	if ( ObserveMode == OBS_MODE_DEATHCAM || ObserveMode == OBS_MODE_FREEZECAM ) then
-		txt = "You Died!" // were killed by?
+		txt = PHX:FTranslate("HUD_YOUDIED") or "You Died!"
 	end
 	
 	if ( txt ) then
@@ -196,7 +200,7 @@ function GM:UpdateHUD_Dead( bWaitingToSpawn, InRound )
 	
 	if ( InRound ) then 
 	
-		local TeamIndicator_Name_AddString = "(DEAD) "
+		local TeamIndicator_Name_AddString = PHX:FTranslate("HUD_DEAD") or "(DEAD) "
 		if ( LocalPlayer():Team() == TEAM_SPECTATOR ) then TeamIndicator_Name_AddString = "" end
 	
 		local TeamIndicator = vgui.Create( "DHudUpdater" );
@@ -213,7 +217,7 @@ function GM:UpdateHUD_Dead( bWaitingToSpawn, InRound )
 		local RoundNumber = vgui.Create( "DHudUpdater" );
 			RoundNumber:SizeToContents()
 			RoundNumber:SetValueFunction( function() return GetGlobalInt( "RoundNumber", 0 ) end )
-			RoundNumber:SetLabel( "ROUND" )
+			RoundNumber:SetLabel( PHX:FTranslate("HUD_ROUND") or "ROUND" )
 		Bar:AddItem( RoundNumber )
 		
 		local RoundTimer = vgui.Create( "DHudCountdown" );
@@ -221,7 +225,7 @@ function GM:UpdateHUD_Dead( bWaitingToSpawn, InRound )
 			RoundTimer:SetValueFunction( function() 
 											if ( GetGlobalFloat( "RoundStartTime", 0 ) > CurTime() ) then return GetGlobalFloat( "RoundStartTime", 0 )  end 
 											return GetGlobalFloat( "RoundEndTime" ) end )
-			RoundTimer:SetLabel( "TIME" )
+			RoundTimer:SetLabel( PHX:FTranslate("HUD_TIME") or "TIME" )
 		Bar:AddItem( RoundTimer )
 
 	end
@@ -264,7 +268,7 @@ function GM:UpdateHUD_Alive( InRound )
 			local RoundNumber = vgui.Create( "DHudUpdater" );
 				RoundNumber:SizeToContents()
 				RoundNumber:SetValueFunction( function() return GetGlobalInt( "RoundNumber", 0 ) end )
-				RoundNumber:SetLabel( "ROUND" )
+				RoundNumber:SetLabel( PHX:FTranslate("HUD_ROUND") or "ROUND" )
 			Bar:AddItem( RoundNumber )
 			
 			local RoundTimer = vgui.Create( "DHudCountdown" );
@@ -272,7 +276,7 @@ function GM:UpdateHUD_Alive( InRound )
 				RoundTimer:SetValueFunction( function() 
 												if ( GetGlobalFloat( "RoundStartTime", 0 ) > CurTime() ) then return GetGlobalFloat( "RoundStartTime", 0 )  end 
 												return GetGlobalFloat( "RoundEndTime" ) end )
-				RoundTimer:SetLabel( "TIME" )
+				RoundTimer:SetLabel( PHX:FTranslate("HUD_TIME") or "TIME" )
 			Bar:AddItem( RoundTimer )
 
 		end

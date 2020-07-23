@@ -2,17 +2,24 @@
 PHX = {}
 PHX.__index = PHX
 
-PHX.ConfigPath = "phx_data"
+PHX.ConfigPath 	= "phx_data"
+PHX.VERSION		= "X"
+PHX.REVISION	= "24.07.20" --Format: dd/mm/yy.
 
 -- Convars. Moved to sh_init instead because of FCVAR_REPLICATION problem.
 PHX.CVAR = PHX.CVAR or {}
 local CVAR_SERVER_ONLY = { FCVAR_SERVER_CAN_EXECUTE, FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY }
 local CVAR_SERVER_ONLY_NO_ARCHIVE = { FCVAR_SERVER_CAN_EXECUTE, FCVAR_REPLICATED, FCVAR_NOTIFY }
 local CVAR_SERVER_ONLY_NO_NOTIFY = { FCVAR_SERVER_CAN_EXECUTE, FCVAR_REPLICATED, FCVAR_ARCHIVE }
---[[
-	local CVAR_SERVER_HIDDEN = { FCVAR_SERVER_CAN_EXECUTE, FCVAR_REPLICATED, FCVAR_ARCHIVE, 0x10 } -- hidden
-	local CVAR_SERVER_DONT_RECORD = { FCVAR_SERVER_CAN_EXECUTE, FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_DONT_RECORD }
-]]
+local CVAR_CLIENT_ARCHIVE = {FCVAR_USERINFO, FCVAR_ARCHIVE}
+local CVAR_SERVER_HIDDEN = { FCVAR_SERVER_CAN_EXECUTE, FCVAR_ARCHIVE, 0x10, FCVAR_DONTRECORD }
+
+-- Language
+PHX.CVAR.UseForceLang	= CreateConVar("ph_use_lang", "0", CVAR_SERVER_ONLY, "Enable forced-language display. THIS WILL BYPASS USER-PREFERED LANGUAGE!", 0, 1)
+PHX.CVAR.ForcedLanguage	= CreateConVar("ph_force_lang", "en_us", CVAR_SERVER_ONLY, "Default language to force.")
+PHX.CVAR.DefaultLang	= CreateConVar("ph_default_lang", "en_us", CVAR_SERVER_ONLY, "This is their first time join to set which language should be set. You should always leave this as 'en_us'.")
+
+PHX.CVAR.Language		= CreateConVar("ph_cl_language", PHX.CVAR.DefaultLang:GetString() or "en_us", CVAR_CLIENT_ARCHIVE, "Prefered language to use.")
 
 PHX.CVAR.UseCustomMdlProp	= CreateConVar("ph_use_custom_plmodel_for_prop", "0", CVAR_SERVER_ONLY, "Should use a custom Player's Model for Props when the round begins?", 0, 1)
 PHX.CVAR.UseCustomModel 	= CreateConVar("ph_use_custom_plmodel", "0", CVAR_SERVER_ONLY, "Should use a custom player model available for Hunters?\nPlease note that you must have to activate \'ph_use_custom_plmodel_for_prop\' too!", 0, 1)
@@ -23,8 +30,9 @@ PHX.CVAR.AutoTauntDelay		= CreateConVar("ph_autotaunt_delay", "45", CVAR_SERVER_
 PHX.CVAR.CustomTauntMode	= CreateConVar("ph_custom_taunt_mode", "0", CVAR_SERVER_ONLY, "Enable custom taunts for prop teams by pressing C? (Default 0)\n  You must have a list of custom taunts to enable this.", 0, 2)
 PHX.CVAR.CustomTauntDelay	= CreateConVar("ph_customtaunts_delay", "6", CVAR_SERVER_ONLY, "How many in seconds delay for props to play custom taunt again? (Default is 6)")
 PHX.CVAR.NormalTauntDelay	= CreateConVar("ph_normal_taunt_delay", "2", CVAR_SERVER_ONLY, "How many in seconds delay for props to play normal [F3] taunt again? (Default is 2)")
-PHX.CVAR.DefaultTauntKey	= CreateConVar("ph_default_taunt_key", KEY_F3, {FCVAR_USERINFO, FCVAR_ARCHIVE}, "Default random taunt key to be used. Default is F3.")
-PHX.CVAR.DefaultCustomTauntKey = CreateConVar("ph_default_customtaunt_key", KEY_C, {FCVAR_USERINFO, FCVAR_ARCHIVE}, "Default custom taunt key to be used. Default is C.")
+PHX.CVAR.DefaultTauntKey	= CreateConVar("ph_default_taunt_key", KEY_F3, CVAR_CLIENT_ARCHIVE, "Default random taunt key to be used. Default is F3 ("..tostring(KEY_F3)..")")
+PHX.CVAR.DefaultCustomTauntKey = CreateConVar("ph_default_customtaunt_key", KEY_C, CVAR_CLIENT_ARCHIVE, "Default custom taunt key to be used. Default is C ("..tostring(KEY_C)..")")
+PHX.CVAR.RotationLockKey	= CreateConVar("ph_default_rotation_lock_key", KEY_R, CVAR_CLIENT_ARCHIVE, "Default Rotation lock key to be used. Default is R ("..tostring(KEY_R)..")")
 
 PHX.CVAR.PropJumpPower		= CreateConVar("ph_prop_jumppower", "1.4", CVAR_SERVER_ONLY, "Multipliers for Prop Jump Power (Do not confused with Prop's Gravity!). Default is 1.4. Min. 1.")
 PHX.CVAR.PropNotifyRotation	= CreateConVar("ph_notice_prop_rotation", "1", CVAR_SERVER_ONLY, "Enable Prop Rotation notification on every time Prop Spawns.", 0, 1)
@@ -55,13 +63,6 @@ PHX.CVAR.TotalRounds		= CreateConVar("ph_rounds_per_map", "10", CVAR_SERVER_ONLY
 PHX.CVAR.WaitForPlayers		= CreateConVar("ph_waitforplayers", "1", CVAR_SERVER_ONLY, "Should we wait for players for proper round?", 0, 1 )
 PHX.CVAR.MinWaitForPlayers	= CreateConVar("ph_min_waitforplayers", "1", CVAR_SERVER_ONLY_NO_NOTIFY, "Numbers of mininum players that we should wait for round start. Value must not contain less than 1.", 1, game.MaxPlayers())
 
-PHX.CVAR.BeVerbose			= CreateConVar("ph_print_verbose", "0", CVAR_SERVER_ONLY_NO_NOTIFY, "Developer Verbose. Some printed messages will only appear if this is enabled.", 0, 1)
-function PHX.VerboseMsg(text)
-	if ( PHX.CVAR.BeVerbose:GetBool() and text ) then
-		print( tostring(text) )
-	end
-end
-
 PHX.CVAR.EnableOBBMod		= CreateConVar("ph_sv_enable_obb_modifier", "1",CVAR_SERVER_ONLY_NO_NOTIFY, "Developer: Enable OBB Model Data Modifier", 0, 1)
 PHX.CVAR.ApplyOBBonRound	= CreateConVar("ph_reload_obb_setting_everyround", "1",CVAR_SERVER_ONLY_NO_NOTIFY, "Developer: Reload OBB Model Data Modifier Every round Restarts", 0, 1)
 
@@ -84,21 +85,41 @@ PHX.CVAR.BlindRespawnTimePercent		= CreateConVar("ph_blindtime_respawn_percent",
 PHX.CVAR.AllowRespawnOnBlindBetweenTeams = CreateConVar("ph_allow_respawnonblind_teamchange", "0", CVAR_SERVER_ONLY, "Not recommended if allowed: Allow respawn during blind time FROM team changes (from props to hunters, vice versa).\nI don't recommend enabling this because players may able to use this to take advantage by sitting on Prop team everytime. Enable this ONLY if you know what you're doing.", 0, 1 )
 PHX.CVAR.AllowPickupProp	= CreateConVar("ph_allow_pickup_object", "3", CVAR_SERVER_ONLY, "Allow pickup objects? 0=No, 1=Hunters Only, 2=Props Only, 3=Everyone", 0, 3)
 
+PHX.CVAR.UseCustomMapVote	= CreateConVar("ph_use_custom_mapvote", "0", CVAR_SERVER_ONLY_NO_NOTIFY, "Use custom external Map votes system?", 0, 1)
+PHX.CVAR.CustomMapVoteCall	= CreateConVar("ph_custom_mv_func", "MapVote.Start()", CVAR_SERVER_HIDDEN, "If specified, what's the command? NOTE: Case Sensitive. Local variable will not passed to the given code.")
+
+-- Taken from PH:E v16. This addition was made by Fafy
+PHX.CVAR.ForceJoinBalancedTeams = CreateConVar("ph_forcejoinbalancedteams", "0", CVAR_SERVER_ONLY, "Force players to even out teams upon joining? Setting 0 means do not force to join in balanced teams.", 0, 1)
+PHX.CVAR.SMGGrenadeCounts		= CreateConVar("ph_smggrenadecounts", "1", CVAR_SERVER_ONLY, "How many grenades for SMG1 served on spawn?", 1, 50)
+
+-- Verbosity
+PHX.CVAR.BeVerbose			= CreateConVar("ph_print_verbose", "0", CVAR_SERVER_ONLY_NO_NOTIFY, "Developer Verbose. Some printed messages will only appear if this is enabled.", 0, 1)
+function PHX.VerboseMsg(text)
+	if ( PHX.CVAR.BeVerbose:GetBool() and text ) then
+		print( tostring(text) )
+	end
+end
+
+-- Callbacks
 cvars.AddChangeCallback("ph_use_new_chat", function(cvar,old,new)
 	print(cvar .. " -> has changed. Please be sure to Restart the map to take effect.")
 end, "ph_usenewchatsystem")
 
+cvars.AddChangeCallback("ph_forcejoinbalancedteams", function(cvar,old,new)
+	SetGlobalBool("bJoinBalancedTeam", tobool(new))
+end, "ph_joinbalanceteam")
+
 -- Inclusions! yay...
 AddCSLuaFile("config/sh_init.lua")
 AddCSLuaFile("sh_drive_prop.lua")
-AddCSLuaFile("ulx/modules/sh/sh_phe_mapvote.lua")
+AddCSLuaFile("ulx/modules/sh/sh_phx_mapvote.lua")
 AddCSLuaFile("sh_config.lua")
 AddCSLuaFile("sh_lang.lua")
 AddCSLuaFile("sh_player.lua")
 
 include("config/sh_init.lua")
 include("sh_drive_prop.lua")
-include("ulx/modules/sh/sh_phe_mapvote.lua")
+include("ulx/modules/sh/sh_phx_mapvote.lua")
 include("sh_config.lua")
 include("sh_lang.lua")
 include("sh_player.lua")
@@ -135,30 +156,13 @@ GM.Name		= "Prop Hunt X"
 GM.Author	= "Wolvindra-Vinzuerio & D4UNKN0WNM4N"
 
 -- Versioning
-GM._VERSION		= "X"
-GM.REVISION		= "14.07.20" //dd.mm.yy.
+GM._VERSION		= PHX.VERSION
+GM.REVISION		= PHX.REVISION --dd/mm/yy.
 GM.DONATEURL 	= "https://prophunt.wolvindra.net/donate"
 GM.UPDATEURL 	= "https://prophunt.wolvindra.net/ph_update_check.php" --return json only
 
 -- Help info
-GM.Help = [[A Prop Hunt (Codename) X Project.
-
-This gamemode is aimed for public development test purposes, with
-new exiting improvement and making it to stay classic but compatible, 
-customisable, and modern.
-
-https://www.wolvindra.net/prophuntx
-
-To See more info & help, Press [F1] key and click [Prop Hunt Menu] button.
-
-Version: ]].. GM._VERSION ..[[ Revision: ]].. GM.REVISION ..[[
-
-What's New:
-- Using version from fork base 15 rev I
-- Updated HUD
-- (TBA)
-
-Have Fun!]]
+GM.Help = PHX:FTranslate("HELP_F1") or PHX.DefaultHelp
 
 -- Fretta configuration
 GM.GameLength				= PHX.CVAR.GameTime:GetInt()
@@ -177,8 +181,8 @@ GM.RoundPreStartTime		= 0
 GM.SuicideString			= "dead" -- obsolete
 GM.TeamBased 				= true
 
-GM.AutomaticTeamBalance 	= false -- Please leave this option always set to false
-GM.ForceJoinBalancedTeams 	= true  -- Please leave this option always set to true
+--GM.AutomaticTeamBalance 		= false -- Do not edit.
+GM.ForceJoinBalancedTeams 	= GetGlobalBool("bJoinBalancedTeam", false)
 
 -- Called on gamemdoe initialization to create teams
 function GM:CreateTeams()
@@ -257,7 +261,7 @@ if CLIENT then
 			if (LocalPlayer():IsSuperAdmin() or LocalPlayer():CheckUserGroup()) then
 				local lbl = vgui.Create("DLabel",main.panel)
 				lbl:SetPos(40,60)
-				lbl:SetText("No plugins installed. Browse more plugins here!")
+				lbl:SetText(PHX:FTranslate("PLUGINS_NO_PLUGINS"))
 				lbl:SetFont("Trebuchet24")
 				lbl:SetTextColor(color_white)
 				lbl:SizeToContents()
@@ -265,13 +269,13 @@ if CLIENT then
 				local but = vgui.Create("DButton",main.panel)
 				but:SetPos(40,96)
 				but:SetSize(256,40)
-				but:SetText("Browse more plugins")
+				but:SetText(PHX:FTranslate("PLUGINS_BROWSE_MORE"))
 				but.DoClick = function() gui.OpenURL("https://prophunt.wolvindra.net/plugins") end
 				but:SetIcon("icon16/bricks.png")
 			else
 				local lbl = vgui.Create("DLabel",main.panel)
 				lbl:SetPos(40,60)
-				lbl:SetText("Sorry, This server has no custom addons/plugins installed.")
+				lbl:SetText(PHX:FTranslate("PLUGINS_SERVER_HAS_NO_PLUGINS"))
 				lbl:SetFont("Trebuchet24")
 				lbl:SetTextColor(color_white)
 				lbl:SizeToContents()
@@ -294,17 +298,17 @@ if CLIENT then
 				section.grid:SetRowHeight(40)
 				
 				pVgui("","label","Trebuchet24",section.grid, Data.name.."| v."..Data.version )
-				pVgui("","label",false,section.grid, "Description: "..Data.info )
+				pVgui("","label",false,section.grid, "INFO: "..Data.info )
 				if (LocalPlayer():IsSuperAdmin() or LocalPlayer():CheckUserGroup()) then
 					if !table.IsEmpty(Data.settings) then
-						pVgui("","label",false,section.grid, "-- Server Settings --" )
+						pVgui("","label",false,section.grid, PHX:FTranslate("PLUGINS_SERVER_SETTINGS") )
 						for _,val in pairs(Data.settings) do
 							pVgui(val[1],val[2],val[3],section.grid,val[4])
 						end
 					end
 				end
 				if !table.IsEmpty(Data.client) then
-					pVgui("","label",false,section.grid, "-- Client Settings --" )
+					pVgui("","label",false,section.grid, PHX:FTranslate("PLUGINS_CLIENT_SETTINGS") )
 					for _,val in pairs(Data.client) do
 						pVgui(val[1],val[2],val[3],section.grid,val[4])
 					end
@@ -314,7 +318,7 @@ if CLIENT then
 		end
 	
 	local PanelModify = tab:AddSheet("", main.panel, "vgui/ph_iconmenu/m_plugins.png")
-	paintPanelFunc(PanelModify, "Addons & Plugins")
+	paintPanelFunc(PanelModify, PHX:FTranslate("PHXM_TAB_PLUGINS"))
 	
 	end)
 end

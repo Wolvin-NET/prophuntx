@@ -12,19 +12,21 @@ function GM:ShowHelp()
 										local tl = GAMEMODE:GetGameTimeLeft()
 										if ( tl == -1 ) then return end
 										if( GetGlobalBool( "IsEndOfGame", false ) ) then panel:SetText( "Game has ended..." ) return end
-										if( GAMEMODE.RoundBased && CurTime() > GAMEMODE:GetTimeLimit() ) then panel:SetText( "Game will end after this round" ) return end
+										if( GAMEMODE.RoundBased && CurTime() > GAMEMODE:GetTimeLimit() ) then panel:SetText( PHX:FTranslate("MISC_GAMEEND") or "Game will end after this round" ) return end
 										
-										panel:SetText( "Time Left: " .. util.ToMinutesSeconds( tl ) ) 
+										local timeLeft = PHX:FTranslate("MISC_TIMELEFT", util.ToMinutesSeconds( tl )) or "Time Left: " .. util.ToMinutesSeconds( tl )
+										
+										panel:SetText( timeLeft )
 									end
 
 		if ( GetConVar( "fretta_voting" ):GetInt() ~= 0 ) then
-			local btn = Help:AddSelectButton( "Vote For Change", function() RunConsoleCommand( "say", "rtv" ) end )
+			local btn = Help:AddSelectButton( PHX:FTranslate("DERMA_RTV") or "Vote For Change", function() RunConsoleCommand( "say", "rtv" ) end )
 			btn.m_colBackground = Color( 255, 200, 100 )
 			btn:SetDisabled( LocalPlayer():GetNWBool( "WantsVote" ) ) 
 		end
 		
 		-- Internal Select buttons.
-		local btnadd = Help:AddSelectButton("Prop Hunt Menu", function()
+		local btnadd = Help:AddSelectButton(PHX:FTranslate("DERMA_PHMENU") or "Prop Hunt Menu", function()
 			LocalPlayer():ConCommand("ph_x_menu")
 		end)
 		btnadd.m_colBackground = Color(255,128,40)
@@ -33,7 +35,7 @@ function GM:ShowHelp()
 		hook.Call("PH_AddSplashHelpButton", nil, Help)
 		
 		if ( GAMEMODE.TeamBased ) then
-			local btn = Help:AddSelectButton( "Change Team", function() GAMEMODE:ShowTeam() end )
+			local btn = Help:AddSelectButton( PHX:FTranslate("DERMA_CHANGETEAM") or "Change Team", function() GAMEMODE:ShowTeam() end )
 			btn.m_colBackground = Color( 120, 255, 100 )
 		end
 		

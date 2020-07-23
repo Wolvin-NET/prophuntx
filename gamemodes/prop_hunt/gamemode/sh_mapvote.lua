@@ -46,3 +46,22 @@ MapVote.Allow = false
 
 MapVote.UPDATE_VOTE = 1
 MapVote.UPDATE_WIN = 3
+
+if SERVER then
+	concommand.Add("mv_start", function(ply, _, args)
+		if (ply:IsAdmin() or ply:CheckUserGroup()) then
+			local time = args[1] or 25
+			MapVote.Start(time, nil, nil, nil)
+		else
+			ply:PHXChatInfo("ERROR", "MISC_ACCESSDENIED")
+		end
+	end, nil, "Start MapVote (without ULX)")
+
+	concommand.Add("mv_stop", function(ply)
+		if (ply:IsAdmin() or ply:CheckUserGroup()) then
+			MapVote.Cancel()
+		else
+			ply:PHXChatInfo("ERROR", "MISC_ACCESSDENIED")
+		end
+	end, nil, "Stop MapVote (without ULX)")
+end

@@ -7,7 +7,6 @@ TEAM_PROPS	= TEAM_PROPS or 2
 taunts[TEAM_HUNTERS] = {
 	["Guuuh!"]						=	"vo/k_lab/ba_guh.wav",
 	["If you See Dr. Breen"]		= 	"vo/streetwar/rubble/ba_tellbreen.wav",
-	["test"] 						=	"vo/k_lab/ba_geh.wav",
 	-- Add more Hunters Taunt here...
 }
 -- Begin Table: Props

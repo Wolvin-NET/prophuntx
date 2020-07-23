@@ -1,9 +1,3 @@
--- WARNING: THIS CODE IS UNFINISHED!!!!
-
-------------------------------------------------------------
--- There are only few modifications made on Line: @49, @57, @266, @271
-------------------------------------------------------------
-
 -- Send required file to clients
 AddCSLuaFile("sh_init.lua")
 AddCSLuaFile("cl_init.lua")
@@ -86,7 +80,9 @@ function GM:CheckPlayerDeathRoundEnd()
 	local Teams = GAMEMODE:GetTeamAliveCounts()
 
 	if table.Count(Teams) == 0 then
-		GAMEMODE:RoundEndWithResult(1001, "Draw, everyone loses!")
+		
+		--GAMEMODE:RoundEndWithResult(1001, "Draw, everyone loses!")
+		GAMEMODE:RoundEndWithResult(1001, "HUD_LOSE")
 		PHX.VOICE_IS_END_ROUND = 1
 		ForceCloseTauntWindow(1)
 		
@@ -107,7 +103,9 @@ function GM:CheckPlayerDeathRoundEnd()
 			PHX.VerboseMsg("Round Result: "..team.GetName(TeamID).." ("..TeamID..") Wins!")
 			
 			-- End Round
-			GAMEMODE:RoundEndWithResult(TeamID, team.GetName(TeamID).." win!")
+			--GAMEMODE:RoundEndWithResult(TeamID, team.GetName(TeamID).." win!")
+			GAMEMODE:RoundEndWithResult(TeamID, "HUD_TEAMWIN")
+			
 			PHX.VOICE_IS_END_ROUND = 1
 			ForceCloseTauntWindow(1)
 			
@@ -301,7 +299,7 @@ hook.Add("OnPlayerChangedTeam", "TeamChange_switchLimitter", function(ply, old, 
 	if MAX_TEAMCHANGE_LIMIT ~= -1 and (not ply:IsBot()) and !ply:CheckUserGroup() then
 		if new ~= TEAM_SPECTATOR then
 			ply.ChangeLimit = ply.ChangeLimit + 1
-			ply:ChatPrint("[PHX] You're switching teams "..ply.ChangeLimit.."x (".. tostring(MAX_TEAMCHANGE_LIMIT) .."x MAX). After that, You can no longer switch to opposite team.")
+			ply:PHXChatInfo("WARNING", "CHAT_SWAPTEAM_WARNING", ply.ChangeLimit, MAX_TEAMCHANGE_LIMIT)
 			PHX.VerboseMsg("[PHX] "..ply:Nick().." has switched team "..ply.ChangeLimit.."x.")
 		end
 		
@@ -310,7 +308,7 @@ hook.Add("OnPlayerChangedTeam", "TeamChange_switchLimitter", function(ply, old, 
 			timer.Simple(0.3, function()
 				if old ~= TEAM_SPECTATOR then
 					ply:SetTeam(old)
-					ply:ChatPrint("[PHX] Cannot join to team ".. team.GetName(new) .." Because you have exceeded the number of team changes.")
+					ply:PHXChatInfo("ERROR", "CHAT_SWAPTEAM_REVERT", team.GetName(new))
 					PHX.VerboseMsg("[PHX] Reverting "..ply:Nick().."\'s team to "..team.GetName(old))
 				end
 			end)
@@ -510,7 +508,7 @@ function GM:PlayerUse(pl, ent)
 		
 		local hmx, hz = ent:GetPropSize()
 		if PHX.CVAR.CheckSpace:GetBool() && !pl:CheckHull(hmx, hmx, hz) then
-			pl:SendLua("chat.AddText(Color(235, 10, 15), \"[PHX]\", Color(220, 220, 220), \" There is no room to change that prop!\")")
+			pl:PHXChatInfo("WARNING", "CHAT_PROP_NO_ROOM")
 		else
 			self:PlayerExchangeProp(pl, ent)
 		end
@@ -675,13 +673,14 @@ function GM:OnPreRoundStart(num)
 				else
 					pl:SetTeam(TEAM_PROPS)
 					if PHX.CVAR.PropNotifyRotation:GetBool() then
-						timer.Simple(0.5, function() pl:SendLua( [[notification.AddLegacy("You are in Prop Team with Rotate support! You can rotate the prop around by moving your mouse.", NOTIFY_UNDO, 20 )]] ) end)
-						pl:SendLua( [[notification.AddLegacy("Additionally you can toggle lock rotation by pressing R key!", NOTIFY_GENERIC, 18 )]] )
-						pl:SendLua( [[surface.PlaySound("garrysmod/content_downloaded.wav")]] )
+						timer.Simple(0.5, function() 
+							pl:PHXNotify( "NOTIFY_IN_PROP_TEAM", "UNDO", 20, true )
+						end)
+						pl:PHXNotify( "NOTIFY_ROTATE_NOTICE", "GENERIC", 18, true ) -- the R key need to be added from binder.
 					end
 				end
 			
-			pl:ChatPrint("Teams have been swapped!")
+			pl:PHXChatInfo("NOTICE", "CHAT_SWAP")
 			end
 		end
 		
@@ -829,7 +828,9 @@ function GM:RoundStart()
 			
 				SetGlobalFloat( "RoundEndTime", -1 );
 			
-				PrintMessage( HUD_PRINTTALK, "There's not enough players to start the game!" )
+				for _,pl in pairs (player.GetAll()) do
+					pl:PHXChatInfo("ERROR", "CHAT_NOPLAYERS")
+				end
 				-- Reset the team score
 				team.SetScore(TEAM_PROPS, 0)
 				team.SetScore(TEAM_HUNTERS, 0)
@@ -856,6 +857,7 @@ function PlayerPressedKey(pl, key)
 	
 		if key == IN_ATTACK then
 			local trace = {}
+			-- Wolvin: careful and pay attention after modifying cl_init's cHullz min & max, where min = 24, max = 84 in here.
 			if plhullz < 24 then
 				trace.start = pl:EyePos() + Vector(0, 0, plhullz + (24-  plhullz))
 				trace.endpos = pl:EyePos() + Vector(0, 0, plhullz + (24 - plhullz)) + pl:EyeAngles():Forward() * 100
@@ -866,7 +868,17 @@ function PlayerPressedKey(pl, key)
 				trace.start = pl:EyePos() + Vector(0, 0, 8)
 				trace.endpos = pl:EyePos() + Vector(0, 0, 8) + pl:EyeAngles():Forward() * 100
 			end
-			trace.filter = ents.FindByClass("ph_prop")
+			--trace.filter = ents.FindByClass("ph_prop")
+			--Fix by Codingale: https://github.com/Codingale, https://github.com/prop-hunt-enhanced/prop-hunt-enhanced/pull/11
+			local filter = {} -- We need to filter out players and the ph_prop.
+
+			for k,v in pairs(ents.GetAll()) do
+				if v:GetClass() == "ph_prop" or string.lower(v:GetClass()) == "player" then
+					table.insert(filter, v)
+				end
+			end
+
+			trace.filter = filter
 			
 			local trace2 = util.TraceLine(trace) 
 			if trace2.Entity && trace2.Entity:IsValid() && table.HasValue(PHX.USABLE_PROP_ENTITIES, trace2.Entity:GetClass()) then
@@ -874,7 +886,7 @@ function PlayerPressedKey(pl, key)
 					if !pl:IsHoldingEntity() then
 						local hmx, hz = trace2.Entity:GetPropSize()
 						if PHX.CVAR.CheckSpace:GetBool() && !pl:CheckHull(hmx, hmx, hz) then
-							pl:SendLua("chat.AddText(Color(235, 10, 15), \"[PHX]\", Color(220, 220, 220), \" There is no room to change that prop!\")")
+							pl:PHXChatInfo("WARNING", "CHAT_PROP_NO_ROOM")
 						else
 							GAMEMODE:PlayerExchangeProp(pl, trace2.Entity)
 						end
@@ -885,30 +897,13 @@ function PlayerPressedKey(pl, key)
 		end
 	end
 	
-	-- Prop rotation lock key
-	if pl && pl:IsValid() && pl:Alive() && pl:Team() == TEAM_PROPS then
-		if key == IN_RELOAD then
-			if pl:GetPlayerLockedRot() then
-				pl:SetNWBool("PlayerLockedRotation", false)
-				pl:PrintMessage(HUD_PRINTCENTER, "Prop Rotation: Free")
-				net.Start("PHX.rotateState")
-					net.WriteInt(0, 2)
-				net.Send(pl)
-			else
-				pl:SetNWBool("PlayerLockedRotation", true)
-				pl:PrintMessage(HUD_PRINTCENTER, "Prop Rotation: Locked")
-				net.Start("PHX.rotateState")
-					net.WriteInt(1, 2)
-				net.Send(pl)
-			end
-		end
-	end
 end
 hook.Add("KeyPress", "PlayerPressedKey", PlayerPressedKey)
 
 hook.Add("PlayerButtonDown", "PlayerButton_ControlTaunts", function(pl, key)
 	local info 	 = pl:GetInfoNum("ph_default_taunt_key", 0)
 	local ctInfo = pl:GetInfoNum("ph_default_customtaunt_key", 0)
+	local lockInfo = pl:GetInfoNum("ph_default_rotation_lock_key", 0)
 	
 	if ((info == BUTTON_CODE_NONE or info == BUTTON_CODE_INVALID) or (ctInfo == BUTTON_CODE_NONE or ctInfo == BUTTON_CODE_INVALID)) then
 		pl:ChatPrint("[Prop Hunt] You haven't bound any keys to trigger Taunts. Please Navigate to '[F1] > Prop Hunt Menu > Player' to setup binds for taunts.")
@@ -946,5 +941,26 @@ hook.Add("PlayerButtonDown", "PlayerButton_ControlTaunts", function(pl, key)
 	
 	if pl and pl:IsValid() and pl:Alive() and (key == ctInfo) then
 		pl:ConCommand("ph_showtaunts")
+	end
+	
+	-- Prop rotation lock key
+	if pl && pl:IsValid() && pl:Alive() && pl:Team() == TEAM_PROPS then
+		if key == lockInfo then
+			if pl:GetPlayerLockedRot() then
+				pl:SetNWBool("PlayerLockedRotation", false)
+				--pl:PrintMessage(HUD_PRINTCENTER, "Prop Rotation: Free")
+				pl:PHXNotify( "HUD_ROTFREE", "UNDO", 3, true )
+				net.Start("PHX.rotateState")
+					net.WriteInt(0, 2)
+				net.Send(pl)
+			else
+				pl:SetNWBool("PlayerLockedRotation", true)
+				--pl:PrintMessage(HUD_PRINTCENTER, "Prop Rotation: Locked")
+				pl:PHXNotify( "HUD_ROTLOCK", "ERROR", 3, true )
+				net.Start("PHX.rotateState")
+					net.WriteInt(1, 2)
+				net.Send(pl)
+			end
+		end
 	end
 end)

@@ -8,6 +8,20 @@ PHX.USABLE_PROP_ENTITIES = {
 	"prop_physics_multiplayer"
 }
 
+-- This is default English as Fallback. DO NOT TRANSLATE HERE, USE YOUR TRANSLATED LANGUAGE FILE INSTEAD!
+PHX.DefaultHelp = [[A Prop Hunt (Codename) X Project.
+
+A project to make Prop Hunt X modern and customisable.
+
+More info can be found at:
+https://www.wolvindra.net/prophuntx
+
+To See more info, help and guide, Press [F1] key and then click [Prop Hunt Menu] button.
+
+Version: ]].. PHX.VERSION ..[[ Revision: ]].. PHX.REVISION ..[[
+
+Have Fun!]]
+
 -- This is stock configuration. Please do not modify or change!
 -- Use for External only.
 PHX.IgnoreMutedUserGroup = {
@@ -17,13 +31,13 @@ PHX.IgnoreMutedUserGroup = {
 PHX.SVAdmins = {
 	"admin", "superadmin", "owner"
 }
--- this only works on clientside only :(
+-- Bootstrap 4 colour base. This only works on clientside :(
 PHX.info = {
-	["PRIMARY"] = { Color(200,200,200), "INFO]"		},
-	["NOTICE"]	= { Color(40 ,150,255), "NOTICE]"	},
-	["ERROR"]	= { Color(250, 86, 46), "ALERT]"	},
-	["WARNING"] = { Color(252,221,  3), "WARNING]"	},
-	["GOOD"]	= { Color(34 ,177, 76), "INFO]"		}
+	["PRIMARY"] = { Color(200,200,200), "INFO"		},
+	["NOTICE"]	= { Color(40 ,150,255), "NOTICE"	},
+	["ERROR"]	= { Color(250, 86, 46), "ALERT"		},
+	["WARNING"] = { Color(252,221,  3), "WARNING"	},
+	["GOOD"]	= { Color(34 ,177, 76), "INFO"		}
 }
 -- End of Stock Config
 

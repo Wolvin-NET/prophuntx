@@ -10,6 +10,10 @@ local function CvarChangedMessage( ... )
 	PHX:AddChat( PHX:Translate("PHXM_CVAR_CHANGED", ... ), Color(255, 194, 14) )
 end
 
+local function ConfirmMessage( ... )
+	Derma_Message( PHX:Translate("PHXM_CVAR_CHANGED", ... ), "INFO", "OK" )
+end
+
 PHX.CLUI = {
 ["check"]	= function( c, d, p, l )
 	if !d then
@@ -43,7 +47,7 @@ PHX.CLUI = {
 				net.SendToServer()
 			elseif d == "CLIENT" then
 				RunConsoleCommand(c, v)
-				CvarChangedMessage(tostring(c), tostring(v))
+				CvarChangedMessage(c, tostring(v))
 				if v == 1 then
 					surface.PlaySound("buttons/button9.wav")
 				else
@@ -242,7 +246,7 @@ end,
 	
 	local label = vgui.Create("DLabel", pnl)
 	label:Dock(LEFT)
-	label:SetSize(250,0)
+	label:SetSize(400,0)
 	label:DockMargin(2,0,0,0)
 	label:SetFont("HudHintTextLarge")
 	label:SetText(l)
@@ -257,23 +261,30 @@ end,
 	function bind:OnChange( num )	
 		RunConsoleCommand(c, tostring(num))
 		local tkeyName = input.GetKeyName(num)
-		CvarChangedMessage(tostring(c), tostring(tkeyName))
+		CvarChangedMessage(c, tostring(tkeyName))
 		surface.PlaySound("buttons/button9.wav")
 	end
 	return pnl
 end,
 
-["langcombobox"] = function( _, _, p, _ )	
+["langcombobox"] = function( c, d, p, l )
+	if !l or l == "" or l == nil then l = false end
+	if !d or d == false or d == nil then d = false end
+
 	local pnl = vgui.Create("DPanel")
 	pnl:SetSize(p:GetColWide(),p:GetRowHeight())
 	pnl:SetBackgroundColor( Color(0,0,0,0) )
 	
 	local label = vgui.Create("DLabel", pnl)
 	label:Dock(LEFT)
-	label:SetSize(150,0)
+	label:SetSize(400,0)
 	label:DockMargin(2,0,0,0)
 	label:SetFont("HudHintTextLarge")
-	label:SetText("Prefered Language") --PHX:FTranslate
+	if (!l) then
+		label:SetText(PHX:FTranslate("SUBTYPE_PREFERED_LANG"))
+	else
+		label:SetText(l)
+	end
 	
 	local cbox = vgui.Create("DComboBox", pnl)
 	cbox:Dock(LEFT)
@@ -289,24 +300,49 @@ end,
 	
 	function btn:DoClick()
 		if cbox.selLang ~= "" and cbox.selLangName ~= "" then
-			RunConsoleCommand("ph_cl_language", cbox.selLang)
-			chat.AddText( Color(220,120,30), PHX:Translate( "LANGUAGE_CHANGED", cbox.selLangName ) )
-			if PHX.UI.MainForm:IsValid() then
-				PHX.UI.MainForm:Close()
+			if (d) then
+				-- Is Serverside?
+				net.Start("SvCommandLang")
+				net.WriteString(cbox.selLang.code)
+				net.WriteString(c)
+				net.SendToServer()
+				CvarChangedMessage(c, cbox.selLang.code)
+				ConfirmMessage(c, cbox.selLang.code)
+			else
+				-- because this is for client, force this to use ph_cl_language.
+				RunConsoleCommand("ph_cl_language", cbox.selLang.code)
+				chat.AddText( Color(60,220,30), PHX:Translate( "LANGUAGE_CHANGED", cbox.selLang.name ) )
+				print("[PHX] Prefered Language has changed to " .. cbox.selLang.name .. " (".. cbox.selLangName ..")")
+				if PHX.UI.MainForm:IsValid() then PHX.UI.MainForm:Close() end
 			end
+			
 		end
 	end
 	
 	cbox.selLang = ""
 	cbox.selLangName = ""
 	
-	local langCode = PHX.CVAR.Language:GetString() or "en_us"
+	local cvlang = "en_us"
+	if (d) then
+		cvlang = GetConVar(c):GetString()
+	else
+		cvlang = PHX.CVAR.Language:GetString()
+	end
+	
+	local langCode = cvlang
 	local langList = PHX.LANGUAGES
 	
-	cbox:SetValue( langList[langCode].Name )
+	-- List by using English-written Language, to avoid user confusion.
+	-- Later when being applied, the Actual Language will be printed immediately (See line @312)
+	
+	if (!table.IsEmpty(langList[langCode])) then
+		cbox:SetValue( langList[langCode].NameEnglish )
+	else
+		cbox:SetValue( "Error: Language " .. langCode .. " doesn't exists." )
+	end
 	
 	for code,_ in pairs(langList) do
-		cbox:AddChoice(langList[code].Name, langList[code].code)
+		cbox:AddChoice(langList[code].NameEnglish, { code = langList[code].code, name = langList[code].Name })
 	end
 	
 	function cbox:OnSelect(index, value, data)
@@ -317,52 +353,61 @@ end,
 	
 	return pnl
 end,
--- Do not use, need improvements.
---[[ ["textentry"] = function( c, d, p, l )
+
+-- This will translated in future version.
+["textentry"] = function( c, d, p, l )
 	local pnl = vgui.Create("DPanel")
 	pnl:SetSize(p:GetColWide(),p:GetRowHeight())
 	pnl:SetBackgroundColor( Color(0,0,0,0) )
 	
 	local label = vgui.Create("DLabel", pnl)
 	label:Dock(LEFT)
-	label:SetSize(200,0)
+	label:SetSize(300,0)
 	label:DockMargin(2,0,0,0)
 	label:SetFont("HudHintTextLarge")
 	label:SetText(l)
 	
 	local textEntry = vgui.Create("DTextEntry", pnl)
 	textEntry:Dock(LEFT)
-	textEntry:SetSize(128, 0)
+	textEntry:SetSize(256, 0)
 	textEntry:DockMargin(4,2,0,2)
 	textEntry:SetValue( GetConVar(c):GetString() )
-	
-	textEntry.EnteredText = ""
-	
-	function textEntry:OnEnter()
-		self.EnteredText = self:GetValue()
-	end
 	
 	local btn = vgui.Create("DButton", pnl)
 	btn:Dock(LEFT)
 	btn:SetSize(64,0)
 	btn:DockMargin(4,2,0,2)
+	btn:SetText("Set")
+	
+	textEntry.EnteredText = ""
+	
+	function textEntry:OnEnter()
+		-- avoid using backslash for ph_fc_cue_path
+		local properText = string.Replace(self:GetValue(), "\\", "/")
+		self:SetText(properText)
+		self.EnteredText = properText
+	end
 	
 	function btn:DoClick()
 		if textEntry.EnteredText ~= "" then
 			if d == "SERVER" then
 				net.Start("SvCommandTextEntry")
 				net.WriteString(textEntry.EnteredText)
+				net.WriteString(c)
 				net.SendToServer()
 			else
 				RunConsoleCommand(c, textEntry.SelectedText)
-				CvarChangedMessage(tostring(c), tostring(textEntry.EnteredText))
 			end
+			CvarChangedMessage(c, textEntry.EnteredText)
+		else
+			Derma_Message("Text is empty or you didn't pressed ENTER key.", "Warning", "OK")
 		end
 	end
 	
 	return pnl
-end, ]]
+end,
 
--- todo: Add Customisable Combo Box
+-- todo: Add Customisable Combo Box in future version.
+
 -- Add More here :)
 }

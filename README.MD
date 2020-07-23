@@ -2,7 +2,9 @@
 This gamemode rework might bit slower without your help. This gamemode is reworked for a cause. If you kindly able to help or have a time to help me, please drop
 your donation below at **Donate** section. Thank you!
 
-### Please note: Language Implementation is not 100% ready.
+### Please note: 
+- Several language (excluding indonesian.lua) hasn't fully translated.
+- Looking for Translators: Russian, German, Japanese, Chinese - Feel free to pull request
 
 ### Warning: This is nightly build development branch which may incomplete or unstable. Use at your own risk! This branch may contains alot of commit changes. Be sure to stay up to date & checkout regularly.
 
@@ -11,7 +13,7 @@ your donation below at **Donate** section. Thank you!
 # Prop Hunt X
 
 ### Versioning
-Version: X, Revision: 21/07/2020
+Version: X, Revision: 24/07/2020 (dd/mm/yyyy)
 
 ### Public Beta Test
 Public Prop Hunt X: Live Testing is available. You can join to the IP below:

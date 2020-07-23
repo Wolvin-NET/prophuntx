@@ -20,10 +20,10 @@ net.Receive("CL2SV_PlayThisTaunt", function(len, ply)
 				ply:EmitSound(snd, 100)
 				ply:SetNWFloat("LastTauntTime", CurTime())
 			else
-				ply:ChatPrint("[PHX] - Warning: That taunt you selected does not exists on server!")
+				ply:PHXChatInfo( "WARNING", "TM_DELAYTAUNT_NOT_EXIST" )
 			end
 		else
-			ply:ChatPrint("[PHX] - Please wait in ".. tostring(math.Round(TauntTime)) .." second(s)!")
+			ply:PHXChatInfo( "NOTICE", "TM_DELAYTAUNT_PLSWAIT", tostring(math.Round(TauntTime)) )
 		end
 		
 	end
