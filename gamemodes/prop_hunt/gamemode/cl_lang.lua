@@ -1,12 +1,3 @@
-PHX.LANGUAGES = {}
-
-local f = file.Find(engine.ActiveGamemode() .. "/gamemode/langs/*.lua", "LUA")
-for _,lgfile in SortedPairs(f) do
-	PHX.VerboseMsg("[PHX] [LANGUAGE] Adding Language File -> ".. lgfile)
-	AddCSLuaFile("langs/" .. lgfile)
-	include("langs/" .. lgfile)
-end
-
 -- Language Addition Helper.
 function PHX:AddLanguage( tbl )
 	if (tbl and type(tbl) == "table" and tbl ~= nil) then

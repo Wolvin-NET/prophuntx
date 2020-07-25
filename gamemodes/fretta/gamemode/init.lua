@@ -517,11 +517,6 @@ function GM:EndOfGame( bGamemodeVote )
 	gamemode.Call("OnEndOfGame", bGamemodeVote);
 	
 	if ( bGamemodeVote ) then
-	
-		local startingMsg = PHX:FTranslate()
-	
-		--MsgN( "Starting gamemode voting..." )
-		--PrintMessage( HUD_PRINTTALK, "Starting gamemode voting..." );
 		
 		for _,ply in pairs(player.GetAll()) do
 			ply:PHXChatInfo("NOTICE", "CHAT_STARTING_MAPVOTE")

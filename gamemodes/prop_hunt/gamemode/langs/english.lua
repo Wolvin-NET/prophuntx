@@ -75,10 +75,18 @@ LANG["CHAT_SWAPBALANCE"]		= "%s has been changed to %s for team balance."
 LANG["CHAT_SWAPBALANCEYOU"]		= "You were swapped to achieve perfect balance." -- Smile... for even in death, you have become children of Thanos
 -- // END OF FRETTA SECTION \\
 
--- PLEASE DO NOT TRANSLATE FROM sh_config -> PHX.DefaultHelp. YOU NEED TO COPY AND TRANSLATE IT IN HERE.
-LANG["HELP_F1"] 				= PHX.DefaultHelp -- PLEASE THIS: [[ your translated language ]]
---	DELETE ^ ABOVE, USE THIS INSTEAD:
---	LANG["HELP_F1"]				= [[ My translated language in multi-lined here ]]
+LANG["HELP_F1"] 				= [[A Prop Hunt (Codename) X Project.
+
+A project to make Prop Hunt X modern and customisable.
+
+More info can be found at:
+https://www.wolvindra.net/prophuntx
+
+To See more info, help and guide, Press [F1] key and then click [Prop Hunt Menu] button.
+
+Version: ]].. PHX.VERSION ..[[ Revision: ]].. PHX.REVISION ..[[
+
+Have Fun!]]
 
 -- Important!
 LANG["LANGUAGE_CHANGED"]		= "Prefered Language has been changed to %s"
