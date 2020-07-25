@@ -1,12 +1,13 @@
 
-local Help = nil 
 function GM:ShowHelp()
 
-	if ( !IsValid( Help ) ) then
+	--if ( !IsValid( Help ) ) then
 	
-		Help = vgui.CreateFromTable( vgui_Splash )
+		local Help = vgui.CreateFromTable( vgui_Splash )
 		Help:SetHeaderText( GAMEMODE.Name or "Untitled Gamemode" )
-		Help:SetHoverText( GAMEMODE.Help or "No Help Avaliable" );
+		Help:SetForHelp( "HELP_F1" )
+		-- Help:SetHoverText( GAMEMODE.Help or "No Help Avaliable" );
+		-- Help:SetHoverText( "" );
 		
 		Help.lblFooterText.Think = function( panel ) 
 										local tl = GAMEMODE:GetGameTimeLeft()
@@ -130,7 +131,7 @@ function GM:ShowHelp()
 			
 		end
 
-	end
+	-- end
 	
 	Help:MakePopup()
 	Help:NoFadeIn()

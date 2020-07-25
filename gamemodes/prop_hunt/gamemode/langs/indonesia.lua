@@ -61,7 +61,7 @@ LANG["DERMA_CHANGETEAM"]		= "Ganti Tim"
 LANG["DERMA_PLAYER"]			= "(%d pemain)"
 LANG["DERMA_PLAYERS"]			= "(%d total pemain)"
 LANG["DERMA_NAME"]				= "Nama"
-LANG["DERMA_KILLS"]				= "Total Bunuh" -- Ada Saran? aslinya: "Kills"
+LANG["DERMA_KILLS"]				= "Skor"
 LANG["DERMA_DEATHS"]			= "Mati"
 LANG["DERMA_PING"]				= "Ping"
 

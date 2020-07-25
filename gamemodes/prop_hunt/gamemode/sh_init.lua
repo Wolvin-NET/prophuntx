@@ -4,22 +4,30 @@ PHX.__index = PHX
 
 PHX.ConfigPath 	= "phx_data"
 PHX.VERSION		= "X"
-PHX.REVISION	= "25.07.20" --Format: dd/mm/yy.
+PHX.REVISION	= "26.07.20" --Format: dd/mm/yy.
 
 -- Convars. Moved to sh_init instead because of FCVAR_REPLICATION problem.
 PHX.CVAR = PHX.CVAR or {}
-local CVAR_SERVER_ONLY = { FCVAR_SERVER_CAN_EXECUTE, FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY }
+local CVAR_SERVER_ONLY = { FCVAR_SERVER_CAN_EXECUTE, FCVAR_REPLICATED, FCVAR_NOTIFY }
 local CVAR_SERVER_ONLY_NO_ARCHIVE = { FCVAR_SERVER_CAN_EXECUTE, FCVAR_REPLICATED, FCVAR_NOTIFY }
-local CVAR_SERVER_ONLY_NO_NOTIFY = { FCVAR_SERVER_CAN_EXECUTE, FCVAR_REPLICATED, FCVAR_ARCHIVE }
-local CVAR_CLIENT_ARCHIVE = {FCVAR_USERINFO, FCVAR_ARCHIVE}
-local CVAR_SERVER_HIDDEN = { FCVAR_SERVER_CAN_EXECUTE, FCVAR_ARCHIVE, 0x10, FCVAR_DONTRECORD }
+local CVAR_SERVER_ONLY_NO_NOTIFY = { FCVAR_SERVER_CAN_EXECUTE, FCVAR_REPLICATED }
+--local CVAR_CLIENT_ARCHIVE = {FCVAR_USERINFO, FCVAR_ARCHIVE}
+local CVAR_SERVER_HIDDEN = { FCVAR_SERVER_CAN_EXECUTE, 0x10, FCVAR_DONTRECORD }
 
 -- Language
 PHX.CVAR.UseForceLang	= CreateConVar("ph_use_lang", "0", CVAR_SERVER_ONLY, "Enable forced-language display. THIS WILL BYPASS USER-PREFERED LANGUAGE!", 0, 1)
 PHX.CVAR.ForcedLanguage	= CreateConVar("ph_force_lang", "en_us", CVAR_SERVER_ONLY, "Default language to force.")
 PHX.CVAR.DefaultLang	= CreateConVar("ph_default_lang", "en_us", CVAR_SERVER_ONLY, "This is their first time join to set which language should be set. You should always leave this as 'en_us'.")
 
-PHX.CVAR.Language		= CreateConVar("ph_cl_language", PHX.CVAR.DefaultLang:GetString() or "en_us", CVAR_CLIENT_ARCHIVE, "Prefered language to use.")
+if CLIENT then
+
+	PHX.CVAR.Language = CreateClientConVar("ph_cl_language", PHX.CVAR.DefaultLang:GetString(), true, true, "Prefered language to use")
+	
+	PHX.CVAR.DefaultTauntKey		= CreateClientConVar("ph_default_taunt_key", KEY_F3, true, true, "Default random taunt key to be used. Default is F3 ("..tostring(KEY_F3)..")")
+	PHX.CVAR.DefaultCustomTauntKey	= CreateClientConVar("ph_default_customtaunt_key", KEY_C, true, true, "Default custom taunt key to be used. Default is C ("..tostring(KEY_C)..")")
+	PHX.CVAR.RotationLockKey		= CreateClientConVar("ph_default_rotation_lock_key", KEY_R, true, true, "Default Rotation lock key to be used. Default is R ("..tostring(KEY_R)..")")
+
+end
 
 PHX.CVAR.UseCustomMdlProp	= CreateConVar("ph_use_custom_plmodel_for_prop", "0", CVAR_SERVER_ONLY, "Should use a custom Player's Model for Props when the round begins?", 0, 1)
 PHX.CVAR.UseCustomModel 	= CreateConVar("ph_use_custom_plmodel", "0", CVAR_SERVER_ONLY, "Should use a custom player model available for Hunters?\nPlease note that you must have to activate \'ph_use_custom_plmodel_for_prop\' too!", 0, 1)
@@ -30,9 +38,6 @@ PHX.CVAR.AutoTauntDelay		= CreateConVar("ph_autotaunt_delay", "45", CVAR_SERVER_
 PHX.CVAR.CustomTauntMode	= CreateConVar("ph_custom_taunt_mode", "0", CVAR_SERVER_ONLY, "Enable custom taunts for prop teams by pressing C? (Default 0)\n  You must have a list of custom taunts to enable this.", 0, 2)
 PHX.CVAR.CustomTauntDelay	= CreateConVar("ph_customtaunts_delay", "6", CVAR_SERVER_ONLY, "How many in seconds delay for props to play custom taunt again? (Default is 6)")
 PHX.CVAR.NormalTauntDelay	= CreateConVar("ph_normal_taunt_delay", "2", CVAR_SERVER_ONLY, "How many in seconds delay for props to play normal [F3] taunt again? (Default is 2)")
-PHX.CVAR.DefaultTauntKey	= CreateConVar("ph_default_taunt_key", KEY_F3, CVAR_CLIENT_ARCHIVE, "Default random taunt key to be used. Default is F3 ("..tostring(KEY_F3)..")")
-PHX.CVAR.DefaultCustomTauntKey = CreateConVar("ph_default_customtaunt_key", KEY_C, CVAR_CLIENT_ARCHIVE, "Default custom taunt key to be used. Default is C ("..tostring(KEY_C)..")")
-PHX.CVAR.RotationLockKey	= CreateConVar("ph_default_rotation_lock_key", KEY_R, CVAR_CLIENT_ARCHIVE, "Default Rotation lock key to be used. Default is R ("..tostring(KEY_R)..")")
 
 PHX.CVAR.PropJumpPower		= CreateConVar("ph_prop_jumppower", "1.4", CVAR_SERVER_ONLY, "Multipliers for Prop Jump Power (Do not confused with Prop's Gravity!). Default is 1.4. Min. 1.")
 PHX.CVAR.PropNotifyRotation	= CreateConVar("ph_notice_prop_rotation", "1", CVAR_SERVER_ONLY, "Enable Prop Rotation notification on every time Prop Spawns.", 0, 1)
@@ -111,19 +116,31 @@ cvars.AddChangeCallback("ph_forcejoinbalancedteams", function(cvar,old,new)
 	SetGlobalBool("bJoinBalancedTeam", tobool(new))
 end, "ph_joinbalanceteam")
 
+--Include Languages
+PHX.LANGUAGES = {}
+
+local f = file.Find(engine.ActiveGamemode() .. "/gamemode/langs/*.lua", "LUA")
+for _,lgfile in SortedPairs(f) do
+	PHX.VerboseMsg("[PHX] [LANGUAGE] Adding Language File -> ".. lgfile)
+	AddCSLuaFile("langs/" .. lgfile)
+	include("langs/" .. lgfile)
+end
+
 -- Inclusions! yay...
+AddCSLuaFile("cl_lang.lua")
 AddCSLuaFile("config/sh_init.lua")
 AddCSLuaFile("sh_drive_prop.lua")
 AddCSLuaFile("ulx/modules/sh/sh_phx_mapvote.lua")
 AddCSLuaFile("sh_config.lua")
-AddCSLuaFile("sh_lang.lua")
 AddCSLuaFile("sh_player.lua")
 
+if CLIENT then
+	include("cl_lang.lua")
+end
 include("config/sh_init.lua")
 include("sh_drive_prop.lua")
 include("ulx/modules/sh/sh_phx_mapvote.lua")
 include("sh_config.lua")
-include("sh_lang.lua")
 include("sh_player.lua")
 
 -- Special Inclusion: ChatBox.
@@ -163,8 +180,13 @@ GM.REVISION		= PHX.REVISION --dd/mm/yy.
 GM.DONATEURL 	= "https://prophunt.wolvindra.net/donate"
 GM.UPDATEURL 	= "https://prophunt.wolvindra.net/ph_update_check.php" --return json only
 
--- Help info
-GM.Help = PHX:FTranslate("HELP_F1") or PHX.DefaultHelp
+--[[ if CLIENT then
+	GM.Help		= PHX:FTranslate( "HELP_F1" )
+else
+	GM.Help		= PHX.DefaultHelp
+end ]]
+
+GM.Help			= ""
 
 -- Fretta configuration
 GM.GameLength				= PHX.CVAR.GameTime:GetInt()

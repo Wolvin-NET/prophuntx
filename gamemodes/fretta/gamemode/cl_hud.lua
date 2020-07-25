@@ -96,7 +96,9 @@ function GM:UpdateHUD_WaitForPlayers( InRound )
 	
 		local WaitText = vgui.Create( "DHudElement" );
 			WaitText:SizeToContents()
-			WaitText:SetText( PHX:FTranslate("HUD_WAITPLY") or "Waiting for players..." )
+			WaitText.Think = function(self)
+				self:SetText( PHX:FTranslate("HUD_WAITPLY") or "Waiting for players..." )
+			end
 		GAMEMODE:AddHUDItem( WaitText, 8 )
 	
 	end
@@ -119,7 +121,6 @@ function GM:UpdateHUD_RoundResult( RoundResult, Alive )
 
 	local RespawnText = vgui.Create( "DHudElement" );
 		RespawnText:SizeToContents()
-		-- i swear this may fucked up for some reason;
 		RespawnText:SetText( PHX:FTranslate(txt, team.GetName(propTeam)) or txt )
 	GAMEMODE:AddHUDItem( RespawnText, 8 )
 
@@ -196,7 +197,7 @@ function GM:UpdateHUD_Dead( bWaitingToSpawn, InRound )
 	local Bar = vgui.Create( "DHudBar" )
 	GAMEMODE:AddHUDItem( Bar, 8 )
 	
-	-- This should show on dead players too
+	-- This should show on dead players too	
 	
 	if ( InRound ) then 
 	

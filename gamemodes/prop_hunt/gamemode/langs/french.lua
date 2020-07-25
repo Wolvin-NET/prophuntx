@@ -116,7 +116,7 @@ LANG["HUD_KILLEDBY"]		= "Vous avez été tué par %s"
 LANG["HUD_BLINDED"]			= "Les chasseurs seront libérez dans %s"
 LANG["HUD_UNBLINDED"]		= "Prêt ou non, nous arrivons !"
 
-LANG["HUD_AUTOTAUNT"]			= "Auto Taunt dans %d second(s)"
+LANG["HUD_AUTOTAUNT"]			= "Auto Taunt dans %d seconde(s)"
 LANG["HUD_AUTOTAUNT_ALT"]		= "Auto Taunt dans %d"
 
 LANG["HUD_TargetID"]			= "Joueur: %s (%d%%)" -- Player: <NAME> (<HEALTH>%)
