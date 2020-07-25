@@ -555,7 +555,7 @@ end
 
 local links = {
 	["github"] 		= "https://github.com/Wolvin-NET/prophuntx/issues",
-	["workshop"] 	= "https://www.google.com", -- TODO!!!
+	["workshop"] 	= "https://steamcommunity.com/sharedfiles/filedetails/discussions/2176546751",
 	["discord"] 	= "https://discord.gg/avaTPM7",
 	["donate"] 		= "https://prophunt.wolvindra.net/donate"
 }
