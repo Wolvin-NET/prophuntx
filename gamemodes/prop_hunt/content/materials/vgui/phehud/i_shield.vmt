@@ -1,0 +1,6 @@
+"UnlitGeneric"
+{
+	"$basetexture" "vgui\phehud\i_shield"
+	"$translucent" "1"
+	"$vertexcolor" "1"
+}

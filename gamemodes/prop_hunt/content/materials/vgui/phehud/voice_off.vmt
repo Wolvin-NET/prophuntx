@@ -1,0 +1,5 @@
+"UnlitGeneric"
+{
+	"$basetexture" 	"vgui\phehud\voice_off"
+	"$translucent"	"1"
+}

@@ -1,0 +1,6 @@
+"UnlitGeneric"
+{
+	"$basetexture" "vgui\phehud\i_rotate"
+	"$translucent" "1"
+	"$vertexcolor" "1"
+}
