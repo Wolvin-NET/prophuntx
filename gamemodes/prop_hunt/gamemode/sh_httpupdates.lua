@@ -54,7 +54,7 @@ function PHX:NotifyUpdate(result)
 	local url = data.url
 	local log = data.notice
 
-	-- somehow this gets unreliable?
+	-- Somehow this gets unreliable?
 	PHX.Messagedata = {
 		version 	= data.version,
 		revision 	= data.revision,
@@ -122,9 +122,8 @@ if CLIENT then
 		if (file.Exists(PHX.ConfigPath .. "/phx_update_info.txt", "DATA")) then
 			local json = file.Read(PHX.ConfigPath .. "/phx_update_info.txt", "DATA")
 			data = util.JSONToTable(json)
-			PrintTable(data)
 		else
-			chat.AddText(Color(230,80,20), "Error loading update info.")
+			Derma_Message("No update found. Please click on 'Check for Updates' button first!", "No update found", "OK")
 			return
 		end
 	

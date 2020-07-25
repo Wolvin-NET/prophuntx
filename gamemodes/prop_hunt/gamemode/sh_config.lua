@@ -115,7 +115,6 @@ PHX.TAUNTS[PHX.DEFAULT_CATEGORY][TEAM_HUNTERS] = {
 --[[ // DO NOT MODIFY! use from taunts/props_taunts.lua or hunters_taunts.lua instead! \\ ]]--
 PHX.TAUNTS[PHX.DEFAULT_CATEGORY][TEAM_PROPS] = {
 	["Run for your Life!"]					=	"vo/npc/male01/runforyourlife02.wav",
-	["Bad Boys"]							=	"taunts/props/bad_boys.wav",
 	["Not the Bees"]						=	"taunts/props/bees_fix.wav",
 	["BillyMays - Are you on the Balls"]	=	"taunts/props/billymays_areyouontheballs.wav",
 	["BillyMays - Get on the Balls"]		=	"taunts/props/billymays_getontheballs.wav",
@@ -139,11 +138,9 @@ PHX.TAUNTS[PHX.DEFAULT_CATEGORY][TEAM_PROPS] = {
 	["Nein Nein Nein"]						=	"taunts/props/nein.wav",
 	["Ill be back"]							=	"taunts/props/ill_be_back.wav",
 	["I am Corn Holio"]						=	"taunts/props/i_am_cornholio.wav",
-	["I Am the one and only"]				=	"taunts/props/i_am_the_one_and_only.wav",
 	["LEROY JENKINS"]						=	"taunts/props/leroy_jenkins.wav",
 	["Oh yeah he will pay"]					=	"taunts/props/oh_yea_he_will_pay.wav",
 	["Muffin Man"]							=	"taunts/props/ok_i_will_tell_you.wav",
-	["ON ME"]								=	"taunts/props/on_me.wav",
 	["Its over 9000"]						=	"taunts/props/over9000.wav",
 	["PINGAS"]								=	"taunts/props/pingas.wav",
 	["Please Come Again"]					=	"taunts/props/pls_come_again.wav",
@@ -173,7 +170,6 @@ PHX.TAUNTS[PHX.DEFAULT_CATEGORY][TEAM_PROPS] = {
 	["Knuckles: Do u know the wei"]			=	"taunts/ph_enhanced/ext_do_you_kno_de_wei.wav",
 	["Knuckles: kno the wei"]				=	"taunts/ph_enhanced/ext_uhaveebolatoknodewei.wav",
 	["Angry German Kid"]					=	"taunts/ph_enhanced/ext_angry_german_kid.wav",
-	["Vitas: 7th Elements"]					=	"taunts/ph_enhanced/ext_blablaahah.wav",
 	["CrackMod: I hate you"]				=	"taunts/ph_enhanced/ext_crackmod_ihateyou.wav",
 	["CrackMod: I watch your rear"]			=	"taunts/ph_enhanced/ext_crackmod_watchyourrear.wav",
 	["CrackMod: You damn Ugly"]				=	"taunts/ph_enhanced/ext_crackmod_youareugly.wav",
@@ -322,6 +318,7 @@ local function InitializeTaunts()
 	
 end
 hook.Add("Initialize", "PHX.InitializeTaunts", InitializeTaunts)
+--If you have problem taunts weren't properly added, uncomment this and COMMENT out the "Initialize" Hook!
 -- hook.Add("PostGamemodeLoaded", "PHX.InitializeTaunts", InitializeTaunts)
 
 -- Taunts Addition & Removal

@@ -4,7 +4,7 @@ PHX.__index = PHX
 
 PHX.ConfigPath 	= "phx_data"
 PHX.VERSION		= "X"
-PHX.REVISION	= "24.07.20" --Format: dd/mm/yy.
+PHX.REVISION	= "25.07.20" --Format: dd/mm/yy.
 
 -- Convars. Moved to sh_init instead because of FCVAR_REPLICATION problem.
 PHX.CVAR = PHX.CVAR or {}
@@ -41,6 +41,8 @@ PHX.CVAR.FreezeCamera		= CreateConVar("ph_freezecam", "1", CVAR_SERVER_ONLY, "Fr
 PHX.CVAR.FreezeCamUseSingle	= CreateConVar("ph_fc_use_single_sound", "0", CVAR_SERVER_ONLY, "Use single Freezecam sound instead of sound list?")
 PHX.CVAR.FreezeCamCue		= CreateConVar("ph_fc_cue_path", "misc/freeze_cam.wav", CVAR_SERVER_ONLY, "Path for single Freezecam sound.")
 
+PHX.CVAR.NotifyPlayerJoinLeaves = CreateConVar("ph_notify_player_join_leave", "1", CVAR_SERVER_ONLY, "Notify Player Join and Leave in the Chat?")
+
 PHX.LegalSoundPath			= PHX.CVAR.FreezeCamCue:GetString() or "misc/freeze_cam.wav"
 if SERVER then
 	cvars.AddChangeCallback("ph_fc_cue_path", function(cvar,old,new)
@@ -73,7 +75,7 @@ PHX.CVAR.CameraCollision	= CreateConVar("ph_prop_camera_collisions", "0", CVAR_S
 PHX.CVAR.PropCollide		= CreateConVar("ph_prop_collision", "0", CVAR_SERVER_ONLY, "Should Team Props collide with each other?", 0, 1)
 PHX.CVAR.HLACombine			= CreateConVar("ph_add_hla_combine", "1", CVAR_SERVER_ONLY, "Add HLA Combine to default combine models? [REQUIRE MAP RESTART!]", 0, 1)
 PHX.CVAR.SwapTeam			= CreateConVar("ph_swap_teams_every_round", "1", CVAR_SERVER_ONLY, "Should teams swapped on every round?", 0, 1)
-PHX.CVAR.ChangeTeamLimit	= CreateConVar("ph_max_teamchange_limit", "5", CVAR_SERVER_ONLY_NO_NOTIFY, "Define how many times player can assign to their team. Default is 5. -1 means disable it.")
+PHX.CVAR.ChangeTeamLimit	= CreateConVar("ph_max_teamchange_limit", "8", CVAR_SERVER_ONLY_NO_NOTIFY, "Define how many times player can assign to their team. Default is 5. -1 means disable it.")
 PHX.CVAR.EnableTeamBalance	= CreateConVar("ph_enable_teambalance", "1", CVAR_SERVER_ONLY_NO_NOTIFY, "Enable Team Balance during round restart?")
 PHX.CVAR.EnableNewChat		= CreateConVar("ph_use_new_chat", "0", CVAR_SERVER_ONLY, "REQUIRE MAP RESTART!\nUse new (temporary) chat box? This will replace default chatbox and prevent new HUD overlap.",0,1)
 PHX.CVAR.NewChatPosSubstract = CreateConVar("ph_new_chat_pos_sub", "50", CVAR_SERVER_ONLY_NO_NOTIFY, "Move by substracting chat position Y pixels high. Use (-) to move lower.")

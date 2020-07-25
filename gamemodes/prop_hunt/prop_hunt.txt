@@ -5,15 +5,274 @@
 	"maps"      "^ph_"
 
 	"fretta_maps"
-        {
-    "1"	  "ph_"
-        }
-        "selectable"            "1"
-        
+	{
+		"1"	  "ph_"
+	}
+    
+	"selectable"	"1"
 	"menusystem"	"1"
-	"workshopid"	""
+	"workshopid"	"2176546751"
 	"settings"
 	{
+		1
+		{
+			"name"		"ph_use_custom_plmodel"
+			"text"		"Use custom models"
+			"help"		"Use custom models or Combine Models"
+			"type"		"CheckBox"
+			"default"	"1"
+		}
+		
+		2
+		{
+			"name"		"ph_autotaunt_enabled"
+			"text"		"Enable Auto Taunt"
+			"help"		"Enable Auto Taunt on every N seconds"
+			"type"		"CheckBox"
+			"default"	"1"
+		}
+		
+		3
+		{
+			"name"		"ph_custom_taunt_mode"
+			"text"		"Custom Taunt Mode"
+			"help"		"Custom Taunt Mode. 0 = Normal, 1 = Custom only, 2 = Both"
+			"type"		"Numeric"
+			"default"	"2"
+		}
+		
+		4
+		{
+			"name"		"ph_prop_jumppower"
+			"text"		"Additional Jump Power"
+			"help"		"Multiplier for players to increase their jump height"
+			"type"		"Numeric"
+			"default"	"1.4"
+		}
+		
+		5
+		{
+			"name"		"ph_freezecam"
+			"text"		"Enable Freezecam"
+			"help"		"Enable Freezecam just like TF2/CSGO"
+			"type"		"CheckBox"
+			"default"	"1"
+		}
+		
+		6
+		{
+			"name"		"ph_enable_lucky_balls"
+			"text"		"Spawn Lucky Ball"
+			"help"		"Enable and Spawn lucky balls on breakable props"
+			"type"		"CheckBox"
+			"default"	"1"
+		}
+		
+		7
+		{
+			"name"		"ph_enable_devil_balls"
+			"text"		"Spawn Devil Crystal"
+			"help"		"Enable and Spawn Devil crystal on hunter's corpse"
+			"type"		"CheckBox"
+			"default"	"1"
+		}
+		
+		8
+		{
+			"name"		"ph_hunter_fire_penalty"
+			"text"		"Hunter Fire Penalty"
+			"help"		"Hunter Fire Penalty when shooting a wrong prop"
+			"type"		"Numeric"
+			"default"	"10"
+		}
+		
+		9
+		{
+			"name"		"ph_hunter_kill_bonus"
+			"text"		"Hunter Kill HP Rewards"
+			"help"		"How much health to be given after killing a prop"
+			"type"		"Numeric"
+			"default"	"75"
+		}
+		
+		10
+		{
+			"name"		"ph_game_time"
+			"text"		"Game Time"
+			"help"		"Maximum Time Left in Minutes"
+			"type"		"Numeric"
+			"default"	"30"
+		}
+		
+		11
+		{
+			"name"		"ph_hunter_blindlock_time"
+			"text"		"Hunter Blindlock Time"
+			"help"		"Hunter Blindlock Time in Seconds"
+			"type"		"Numeric"
+			"default"	"30"
+		}
+		
+		12
+		{
+			"name"		"ph_round_time"
+			"text"		"Round Time"
+			"help"		"How much in seconds for Round time"
+			"type"		"Numeric"
+			"default"	"300"
+		}
+		
+		13
+		{
+			"name"		"ph_rounds_per_map"
+			"text"		"Rounds per Map"
+			"help"		"Total Rounds per Game/Map"
+			"type"		"Numeric"
+			"default"	"10"
+		}
+		
+		14
+		{
+			"name"		"ph_waitforplayers"
+			"text"		"Wait for Players"
+			"help"		"Should we wait for Players?"
+			"type"		"CheckBox"
+			"default"	"1"
+		}
+		
+		15
+		{
+			"name"		"ph_check_props_boundaries"
+			"text"		"Check prop boundaries"
+			"help"		"Check prop for rooms to prevent getting stuck"
+			"type"		"CheckBox"
+			"default"	"0"
+		}
+		
+		16
+		{
+			"name"		"ph_enable_plnames"
+			"text"		"Show player Names"
+			"help"		"Show player Names above their heads?"
+			"type"		"CheckBox"
+			"default"	"1"
+		}
+		
+		17
+		{
+			"name"		"ph_prop_camera_collisions"
+			"text"		"Enable Prop Camera Collisions"
+			"help"		"Enable Prop Camera Collisions with Objects, wall, or others"
+			"type"		"CheckBox"
+			"default"	"1"
+		}
+		
+		18
+		{
+			"name"		"ph_prop_collision"
+			"text"		"Enable Prop Collisions with Others"
+			"help"		"Enable Prop Collisions with Each others props"
+			"type"		"CheckBox"
+			"default"	"1"
+		}
+		
+		19
+		{
+			"name"		"ph_add_hla_combine"
+			"text"		"HL:A Combine Additions"
+			"help"		"Allow HL:A Combine Additions?"
+			"type"		"CheckBox"
+			"default"	"1"
+		}
+		
+		20
+		{
+			"name"		"ph_max_teamchange_limit"
+			"text"		"Limit Team Switching"
+			"help"		"Limit Team Switching. -1 means disabled."
+			"type"		"Numeric"
+			"default"	"10"
+		}
+		
+		21
+		{
+			"name"		"ph_enable_teambalance"
+			"text"		"Enable Team Balance"
+			"help"		"Enable Team Balance and Even-out it?"
+			"type"		"CheckBox"
+			"default"	"1"
+		}
+		
+		22
+		{
+			"name"		"ph_allow_respawnonblind"
+			"text"		"Allow Respawn on Blind Time"
+			"help"		"Allow Respawn on Blind Time? To set specific team only, you need to go F1 - Prop Hunt Menu."
+			"type"		"CheckBox"
+			"default"	"1"
+		}
+		
+		23
+		{
+			"name"		"ph_allow_pickup_object"
+			"text"		"Allow Pickup Objects"
+			"help"		"Allow Pickup Objects? 0 = No, 1 = Hunter only, 2 = Prop Only, 3 = Allow All."
+			"type"		"Numeric"
+			"default"	"3"
+		}
+		
+		24
+		{
+			"name"		"ph_forcejoinbalancedteams"
+			"text"		"Force join to balanced teams"
+			"help"		"Force join to balanced team even though it's already full"
+			"type"		"CheckBox"
+			"default"	"1"
+		}
+		
+		25
+		{
+			"name"		"ph_smggrenadecounts"
+			"text"		"SMG Grenades Count"
+			"help"		"Amount of SMG Grenades to be equiped for Hunters"
+			"type"		"Numeric"
+			"default"	"1"
+		}
+		
+		26
+		{
+			"name"		"ph_print_verbose"
+			"text"		"Be Verbose"
+			"help"		"Developer: Print everything in the console that PH:X is currently running."
+			"type"		"CheckBox"
+			"default"	"0"
+		}
+		
+		27
+		{
+			"name"		"ph_use_new_chat"
+			"text"		"Use new ChatBox"
+			"help"		"Use temporary ChatBox?"
+			"type"		"CheckBox"
+			"default"	"1"
+		}
+		
+		28
+		{
+			"name"		"ph_new_chat_pos_sub"
+			"text"		"Chatbox height substract"
+			"help"		"Substract Y pixels tall to prevent HUD overlap. Default is somewhere about 50 pixels."
+			"type"		"Numeric"
+			"default"	"50"
+		}
+		
+		29
+		{
+			"name"		"ph_notify_player_join_leave"
+			"text"		"Notify Player Join and Leave"
+			"help"		"Notify Players about Connecting, Joined, and Leave events?"
+			"type"		"CheckBox"
+			"default"	"1"
+		}
 	}
-
 }

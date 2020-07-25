@@ -42,15 +42,19 @@ PHX.SPECTATOR_CHECK = 0
 -- Player Join/Leave message
 gameevent.Listen( "player_connect" )
 hook.Add( "player_connect", "AnnouncePLJoin", function( data )
-	for k, v in pairs( player.GetAll() ) do
-		v:PHXChatInfo( "NOTICE", "EV_PLAYER_CONNECT", data.name )
+	if PHX.CVAR.NotifyPlayerJoinLeaves:GetBool() then
+		for k, v in pairs( player.GetAll() ) do
+			v:PHXChatInfo( "NOTICE", "EV_PLAYER_CONNECT", data.name )
+		end
 	end
 end )
 
 gameevent.Listen( "player_disconnect" )
 hook.Add( "player_disconnect", "AnnouncePLLeave", function( data )
-	for k,v in pairs( player.GetAll() ) do
-		v:PHXChatInfo( "NOTICE", "EV_PLAYER_DISCONNECT", data.name, data.reason )
+	if PHX.CVAR.NotifyPlayerJoinLeaves:GetBool() then
+		for k,v in pairs( player.GetAll() ) do
+			v:PHXChatInfo( "NOTICE", "EV_PLAYER_DISCONNECT", data.name, data.reason )
+		end
 	end
 end )
 
@@ -555,6 +559,7 @@ end
 hook.Add("PlayerDisconnected", "PH_PlayerDisconnected", PlayerDisconnected)
 
 -- Set specific variable for checking in player initial spawn, then use Player:IsHoldingEntity()
+util.AddNetworkString("InitialPlayer_ShowWhatsNew")
 PHX.CurPlys = {}
 hook.Add("PlayerInitialSpawn", "PHX.SetupInitData", function(ply)
 	ply.LastPickupEnt	= NULL
@@ -576,6 +581,24 @@ hook.Add("PlayerInitialSpawn", "PHX.SetupInitData", function(ply)
 		end
 		
 	end
+	
+	ply.showNews = timer.Simple(6, function()
+		net.Start("InitialPlayer_ShowWhatsNew")
+			net.WriteString(ply:Nick())
+			net.WriteString(GAMEMODE.REVISION)
+		net.Send(ply)
+	end)
+	
+	-- Info Player Spawns
+	timer.Simple(3.5, function()
+		if PHX.CVAR.NotifyPlayerJoinLeaves:GetBool() then
+			for k,v in pairs( player.GetAll() ) do
+				if (IsValid(v) and IsValid(ply)) then
+					v:PHXChatInfo( "NOTICE", "EV_PLAYER_JOINED", ply:Nick() )
+				end
+			end
+		end
+	end)
 
 end)
 

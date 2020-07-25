@@ -54,6 +54,10 @@ hook.Add("PH_CustomTabMenu", "PHX.About", function(tab, pVgui, paintPanelFunc)
 		[2] = {"Check for Updates", 
 			function()
 				PHX:CheckUpdate()
+				Derma_Query("Update has been checked. Please check on the Console for more information.\n\nWould you like to view update what's new & info?","Update Info","View Update", function()
+					PHX:notifyUser()
+				end,
+				"No", function() end)
 			end},
 	}},grid,"")
 	pVgui("","label",false,grid, PHX:FTranslate("PHXM_ABOUT_LINKS") )

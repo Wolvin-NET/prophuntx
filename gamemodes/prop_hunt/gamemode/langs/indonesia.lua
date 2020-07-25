@@ -1,13 +1,11 @@
--- Language is Unfinished.
-
--- btw lanjutin di line @127 yah :'DD
+-- Language is WIP.
 
 local LANG = {}
 
 LANG.code = "id"
 
 LANG.Name 		 	= "Bahasa Indonesia"
-LANG.NameEnglish	= "Indonesian (Bahasa Indonesia)"
+LANG.NameEnglish	= "Indonesian Language" --Note: to prevent controversy, this should written "Indonesian Language" because Malay can often use "Bahasa Malay" too!
 LANG.Author			= "Wolvindra-Vinzuerio, KamFretoZ" -- Only accept STRINGS.
 -- Can Accept: String, and Table.
 LANG.AuthorURL		= "https://steamcommunity.com/profiles/76561198210777189"
@@ -49,14 +47,14 @@ LANG["HUD_DEAD"]				= "(MATI) "
 LANG["HUD_TEAMWIN"]				= "%s menang!"
 LANG["HUD_LOSE"]				= "Seri, semuanya kalah!"
 LANG["MISC_TIMELEFT"]			= "Waktu Tersisa: %s detik"
-LANG["MISC_GAMEEND"] 			= "Permainan akan berakhir setelah round ini."
+LANG["MISC_GAMEEND"] 			= "Permainan akan berakhir setelah ronde ini."
 
 -- FRETTA: Team selection screen (F2)
 LANG["DERMA_TEAMSELECT"]		= "Pilih Tim"
 
 -- FRETTA: F1 screeen
-LANG["DERMA_RTV"] 				= "Usulkan untuk Ganti (RTV/Vote)"
-LANG["DERMA_PHMENU"] 			= "Menu Prop Hunt"
+LANG["DERMA_RTV"] 				= "Usulkan Ganti Map/RTV"
+LANG["DERMA_PHMENU"] 			= "Menu Prop Hunt Lainnya"
 LANG["DERMA_CHANGETEAM"]		= "Ganti Tim"
 
 -- FRETTA: Scoreboard
@@ -126,214 +124,211 @@ LANG["HUD_UNBLINDED"]			= "Siap atau nggak, kami datang!"
 LANG["BLIND_RESPAWN_TEAM"]		= "Kamu telah ter-respawn pada tim %s dalam waktu %d detik ketika hunter memejamkan mata."
 LANG["BLIND_RESPAWN"]			= "Kamu telah ter-respawn dalam waktu %d detik ketika hunter memejamkan mata."
 
--- Btw Kam, lanjutin ya :'))
-
-LANG["MISC_ACCEPT"]				= "Accept"
+LANG["MISC_ACCEPT"]				= "Terima"
 LANG["MISC_OK"]					= "OK"
-LANG["MISC_CLOSE"]				= "Close"
-LANG["MISC_PREV"]				= "< PREVIOUS"
-LANG["MISC_NEXT"]				= "NEXT >"
-LANG["MISC_ACCESSDENIED"]		= "Access Denied"
+LANG["MISC_CLOSE"]				= "Tutup"
+LANG["MISC_PREV"]				= "< MUNDUR"
+LANG["MISC_NEXT"]				= "MAJU >"
+LANG["MISC_ACCESSDENIED"]		= "Akses Ditolak"
 
 -- Chat messages
-LANG["CHAT_NOPLAYERS"]			= "There's not enough players to start the game!"
-LANG["CHAT_SWAP"]				= "Teams have been swapped!"
+LANG["CHAT_NOPLAYERS"]			= "Tidak cukup player untuk memulai game!"
+LANG["CHAT_SWAP"]				= "Tim telah ditukar!"
 
-LANG["CHAT_SWAPTEAM_WARNING"]   = "You have switched teams %dx (%dx MAX). After that, You can no longer switch to opposite team."
-LANG["CHAT_SWAPTEAM_REVERT"]	= "Cannot switch to team %s because you have exceeded the number of team changes."
+LANG["CHAT_SWAPTEAM_WARNING"]   = "Kamu sudah berpindah tim sebanyak %dx (%dx Maksimal). Setelah itu kamu tidak dapat berpindah tim lagi."
+LANG["CHAT_SWAPTEAM_REVERT"]	= "Kamu tidak dapat pindah ke tim %s karena kamu sudah melebihi batas yang di izinkan untuk mengganti tim."
 
-LANG["CHAT_PROP_NO_ROOM"] 		= "There is no room to change for that prop!"
+LANG["CHAT_PROP_NO_ROOM"] 		= "Tidak ada tempat untuk berubah manjadi prop tersebut!"
 
 -- Notification
-LANG["NOTIFY_IN_PROP_TEAM"]		= "You are in Prop Team with Rotate support! You can rotate prop around by moving your mouse."
-LANG["NOTIFY_ROTATE_NOTICE"]	= "Additionally you can toggle lock rotation by pressing (by default) [R] key!"
+LANG["NOTIFY_IN_PROP_TEAM"]		= "Kamu sedang di tim prop! Sebagai prop, kamu dapat berputar dengan menggerakan mouse."
+LANG["NOTIFY_ROTATE_NOTICE"]	= "Kamu juga dapat mengunci rotasi dengan menekan tombol [R]!"
 
 -- Custom Taunt Window
-LANG["TM_WARNING_CT_DISABLE"]	= "[PHX - Taunts] Warning: This server has custom taunts disabled."
-LANG["TM_NO_TAUNTS"]			= "Warning: No taunts were detected in this category."
-LANG["TM_PLAY_ONLY_ALIVE"] 		= "You are only allowed to play Custom Taunts when you're alive."
+LANG["TM_WARNING_CT_DISABLE"]	= "[PHX - Taunts] Peringatan: Custom taunt tidak tersedia di server ini."
+LANG["TM_NO_TAUNTS"]			= "Peringatan: Tidak ada taunt yang terdeteksi di kategori ini."
+LANG["TM_PLAY_ONLY_ALIVE"] 		= "Kamu hanya dapat menggunakan Custom Taunt disaat kamu masih hidup."
 
-LANG["TM_WINDOW_TITLE"]			= "Prop Hunt Custom Taunt Window"
-LANG["TM_NOTICE_PLSWAIT"]		= "Please wait in %s second(s)!"
-LANG["TM_NOTICE_PLAYPREVIEW"]	= "Previewing Taunt: %s"
+LANG["TM_WINDOW_TITLE"]			= "Prop Hunt Custom Taunt"
+LANG["TM_NOTICE_PLSWAIT"]		= "Harap Menunggu %s detik!"
+LANG["TM_NOTICE_PLAYPREVIEW"]	= "Memainkan Taunt: %s"
 
-LANG["TM_TOOLTIP_PLAYTAUNT"] 	= "Play Taunt"
-LANG["TM_TOOLTIP_PREVIEW"]		= "Preview Taunt"
-LANG["TM_TOOLTIP_PLAYCLOSE"]	= "Play Taunt and Close"
-LANG["TM_TOOLTIP_PLAYRANDOM"]	= "Play Random Taunt"
-LANG["TM_TOOLTIP_CLOSE"]		= "Close"
-LANG["TM_MENU_CLOSE"]			= "Close Menu"
+LANG["TM_TOOLTIP_PLAYTAUNT"] 	= "Mainkan Taunt"
+LANG["TM_TOOLTIP_PREVIEW"]		= "Dengarkan Taunt"
+LANG["TM_TOOLTIP_PLAYCLOSE"]	= "Mainkan taunt dan tutup jendela"
+LANG["TM_TOOLTIP_PLAYRANDOM"]	= "Mainkan taunt secara acak"
+LANG["TM_TOOLTIP_CLOSE"]		= "Tutup"
+LANG["TM_MENU_CLOSE"]			= "Tutup Menu"
 
-LANG["TM_DELAYTAUNT_NOT_EXIST"] = "The taunt you were selected wasn't found in server!"
-LANG["TM_DELAYTAUNT_PLSWAIT"]	= "Please wait in %s second(s)!"
+LANG["TM_DELAYTAUNT_NOT_EXIST"] = "Taunt yang kamu pilih tidak dapat ditemukan di server ini!"
+LANG["TM_DELAYTAUNT_PLSWAIT"]	= "Harap tunggu %s detik!"
 
 --[[
 	PHX Menu window
 ]]
-LANG["PHXM_WINDOW_TITLE"]		= "Prop Hunt X - Advanced Setting & Menu"
-LANG["SERVER_INFO_MOTD"]		= "SERVER INFORMATION & RULES [MOTD]"
+LANG["PHXM_WINDOW_TITLE"]		= "Prop Hunt X - Menu & Pengaturan lebih lanjut"
+LANG["SERVER_INFO_MOTD"]		= "INFORMASI SERVER & PERATURAN [MOTD]"
 
-LANG["PHXM_TAB_HELP"]			= "Help & Guides"
-LANG["PHXM_TAB_MUTE"]			= "Player Un/Mute Voice"
-LANG["PHXM_TAB_PLAYER"]			= "Player Settings"
-LANG["PHXM_TAB_MODEL"] 			= "Player Model Browsers"
-LANG["PHXM_TAB_MODEL_DISABLED"]	= "Player Model Browsers (Disabled)"
-LANG["PHXM_TAB_ADMIN"]			= "Admin Settings"
-LANG["PHXM_TAB_ABOUT"]			= "About Prop Hunt X"
-LANG["PHXM_TAB_MAPVOTE"]		= "MapVote Settings"
+LANG["PHXM_TAB_HELP"]			= "Bantuan & Panduan"
+LANG["PHXM_TAB_MUTE"]			= "Mute Pemain"
+LANG["PHXM_TAB_PLAYER"]			= "Pengaturan Player"
+LANG["PHXM_TAB_MODEL"] 			= "Player Model"
+LANG["PHXM_TAB_MODEL_DISABLED"]	= "Player Model (Nonaktif)"
+LANG["PHXM_TAB_ADMIN"]			= "Pengaturan Admin"
+LANG["PHXM_TAB_ABOUT"]			= "Tentang Prop Hunt X"
+LANG["PHXM_TAB_MAPVOTE"]		= "Pengaturan MapVote"
 
-LANG["PHXM_CVAR_CHANGED"]		= "[Settings] CVar %s has been changed to %s"
+LANG["PHXM_CVAR_CHANGED"]		= "[Pengaturan] ConVar %q telah diganti %q"
 
 --[[
 	Player Mute Settings
 ]]
-LANG["PHXM_MUTE_SELECT"]		= "Select any player that you want to mute."
+LANG["PHXM_MUTE_SELECT"]		= "Pilih siapapun yang ingin kamu diamkan."
 
 --[[ 
 	Player Settings
 ]]
-LANG["PHXM_PLAYER_OPTIONS"]		= "Player Options"
-LANG["PHXM_PLAYER_LANG"]		= "Languages"
+LANG["PHXM_PLAYER_OPTIONS"]		= "Pengaturan Player"
+LANG["PHXM_PLAYER_LANG"]		= "Bahasa"
 LANG["PHXM_PLAYER_BIND"]		= "Binds"
-LANG["PHXM_PLAYER_HUDSETTINGS"]	= "HUD Settings"
+LANG["PHXM_PLAYER_HUDSETTINGS"]	= "Pengaturan HUD"
 
-LANG["PHXM_PLAYER_TAUNT_KEY"]			= "Random Taunt Key"
-LANG["PHXM_PLAYER_TAUNTWINDOW_KEY"]		= "Taunt Menu Key"
-LANG["PHXM_PLAYER_ROTATLOCK_KEY"]		= "Rotation Lock Key"
+LANG["PHXM_PLAYER_TAUNT_KEY"]			= "Tombol Taunt Sembarang"
+LANG["PHXM_PLAYER_TAUNTWINDOW_KEY"]		= "Tombol Taunt Menu"
+LANG["PHXM_PLAYER_ROTATLOCK_KEY"]		= "Tombol Kunci Rotasi"
 
-LANG["PHXM_PLAYER_TOGGLE_HALOS"]		= "Toggle Halo effect when choosing a prop"
-LANG["PHXM_PLAYER_IDNAMES"]				= "Show Team player names above their heads instead (and appear through wall too)"
-LANG["PHXM_PLAYER_ENDROUND_CUE"]		= "Play End round sound cue"
-LANG["PHXM_PLAYER_TAUNTMENU_AUTOCLOSE"]	= "Option for Auto closing for Taunt window when double-clicking them"
-LANG["PHXM_PLAYER_SEE_HUNTER_LINE"]		= "Draw a line on hunters so we can see their aim in spectator mode."
-LANG["PHXM_PLAYER_SEE_LBALL_ICONS"]		= "Enable 'Lucky ball' icon to be displayed once they are spawned"
-LANG["PHXM_PLAYER_SEE_CRYSTAL_ICONS"]	= "Enable 'Devil ball' icon to be displayed once they are spawned"
+LANG["PHXM_PLAYER_TOGGLE_HALOS"]		= "Alihkan efek 'Halo' saat memilih prop"
+LANG["PHXM_PLAYER_IDNAMES"]				= "Tampilkan nama player diatas kepala mereka (Tampil dibalik dinding juga)"
+LANG["PHXM_PLAYER_ENDROUND_CUE"]		= "Mainkan suara akhir ronde"
+LANG["PHXM_PLAYER_TAUNTMENU_AUTOCLOSE"]	= "Otomatis tutup setelah meng-dobel klik pada daftar Taunt Menu."
+LANG["PHXM_PLAYER_SEE_HUNTER_LINE"]		= "Tampilkan garis pada hunter sehingga kita bisa melihat arahan mereka."
+LANG["PHXM_PLAYER_SEE_LBALL_ICONS"]		= "Tampilkan 'Ikon Bola-Gaca' pada saat benda tersebut muncul"
+LANG["PHXM_PLAYER_SEE_CRYSTAL_ICONS"]	= "Tampilkan 'Ikon Kristal-Setan' pada saat benda tersebut muncul"
 
-LANG["PHXM_PLAYER_USE_NEW_HUD"]			= "Use New PH: Enhanced HUD"
-LANG["PHXM_PLAYER_SHOW_TUTOR"]			= "Show Tutorial Pop-up (Shown only 2x on each prop spawns)"
-LANG["PHXM_PLAYER_USE_NEW_CROSSHAIR"]	= "Enable Custom Crosshair"
-LANG["PHXM_PLAYER_SHOW_TEAM_TOPBAR"]	= "Show total alive team players bar on the top left (At least 4 Players will be shown)"
+LANG["PHXM_PLAYER_USE_NEW_HUD"]			= "Gunakan HUD Prop Hunt: X Baru"
+LANG["PHXM_PLAYER_SHOW_TUTOR"]			= "Tampilkan tutorial singkat (Hanya muncul 2x pada saat spawn)"
+LANG["PHXM_PLAYER_USE_NEW_CROSSHAIR"]	= "Tampilkan Crosshair Baru"
+LANG["PHXM_PLAYER_SHOW_TEAM_TOPBAR"]	= "Tampilkan jumlah player yang masih hidup (Setidaknya 4 pemain dibutuhkan)"
 
 --[[
 	Player model Browser Section
 ]]
-LANG["QUERY_MODEL_SELECTED"]	= "Model %s has been selected and it will be applied after respawn!"
-LANG["QUERY_MODEL_INFO"]		= "Model name: %s - Available for: Everyone"
+LANG["QUERY_MODEL_SELECTED"]	= "Skin %s telah terpilih dan akan digunakan setelah respawn."
+LANG["QUERY_MODEL_INFO"]		= "Nama skin: %s - Tersedia untuk: Semua Orang"
 
-LANG["MDL_MENU_REFRESH"] 		= "Refresh Icon"
-LANG["MDL_MENU_PREVIEW"] 		= "Preview Model"
-LANG["MDL_MENU_MODELINFO"] 		= "Model Information"
+LANG["MDL_MENU_REFRESH"] 		= "Muat ulang Ikon"
+LANG["MDL_MENU_PREVIEW"] 		= "Pratinjau Skin"
+LANG["MDL_MENU_MODELINFO"] 		= "Informasi Skin"
 
 
-LANG["MISC_APPLYMDL"] 			= "Apply Model"
+LANG["MISC_APPLYMDL"] 			= "Skin Diterapkan"
 
-LANG["PHXM_MODEL_DISABLED"] 	= "Sorry, Custom Player Model is disabled on this server!"
-LANG["PHXM_PLAYERMODEL_SETFOV"]	= "  Set Model FOV"
+LANG["PHXM_MODEL_DISABLED"] 	= "Skin kustom telah di non-aktifkan di server ini."
+LANG["PHXM_PLAYERMODEL_SETFOV"]	= "  Atur Kamera jarak/FOV"
 
 --[[
 	Server Settings
 ]]
-LANG["PHXM_ADMIN_OPTIONS"]		= "Serverside gamemode Options (Only visible for Admins/Owner)"
-LANG["PHXM_ADMIN_MUSTALIVE"]	= "You must in alive team in order to do this operation."
+LANG["PHXM_ADMIN_OPTIONS"]		= "Opsi-opsi Gamemode server (Hanya tampil jika kamu seorang Admin)"
+LANG["PHXM_ADMIN_MUSTALIVE"]	= "Kamu harus dalam keadaan hidup untuk menaktifkan mode ini."
 
 --[[
 	Language Override
 ]]
-LANG["PHXM_ADMIN_LANGOVERRIDE"]	= "Language Override"
+LANG["PHXM_ADMIN_LANGOVERRIDE"]	= "Kontrol Bahasa"
 
-LANG["PHXM_ADMIN_FORCELANG"] 				= "Use forced language? This will override client language to use Server's choosen language."
-LANG["PHXM_ADMIN_LANGTOUSE"]				= "Forced Language to use."
-LANG["PHXM_ADMIN_PLAYERDEFAULTLANG"] 		= "Default player language when joining on first time play."
+LANG["PHXM_ADMIN_FORCELANG"] 				= "Gunakan Satu Bahasa? Pengaturan ini akan mengabaikan bahasa user yang telah dipilih dan mengikuti bahasa dari server."
+LANG["PHXM_ADMIN_LANGTOUSE"]				= "Bahasa yang digunakan"
+LANG["PHXM_ADMIN_PLAYERDEFAULTLANG"] 		= "Bahasa utama ketika pemain baru pertama kali main"
 
 -- Gameplay settings
-LANG["PHXM_ADMIN_CUSTOM_MODEL"]				= "Enable custom models for Hunters"
-LANG["PHXM_ADMIN_CUSTOM_MODEL_PROP"]		= "Enable custom models for Props - Make sure to enable for Hunter too."
-LANG["PHXM_ADMIN_TAUNT_DELAY_CUSTOM"]		= "Custom Taunts Delay (Seconds)"
-LANG["PHXM_ADMIN_TAUNT_DELAY_RANDOM"]		= "Normal Taunts Delay (Seconds)"
-LANG["PHXM_ADMIN_TAUNT_DELAY_AUTO"]			= "Auto Taunts Delay (Seconds)"
-LANG["PHXM_ADMIN_AUTOTAUNT_ENABLE"]			= "Enable Auto Taunt Features"
+LANG["PHXM_ADMIN_CUSTOM_MODEL"]				= "Aktifkan kustom skin untuk Hunter"
+LANG["PHXM_ADMIN_CUSTOM_MODEL_PROP"]		= "Aktifkan kustom skin untuk Props - Pastikan hunter juga diaktifkan!"
+LANG["PHXM_ADMIN_TAUNT_DELAY_CUSTOM"]		= "Waktu tunda Taunt kustom (detik)"
+LANG["PHXM_ADMIN_TAUNT_DELAY_RANDOM"]		= "Waktu tunda Taunt sembarang (detik)"
+LANG["PHXM_ADMIN_TAUNT_DELAY_AUTO"]			= "Waktu tunda Taunt otomatis (detik)"
+LANG["PHXM_ADMIN_AUTOTAUNT_ENABLE"]			= "Aktifkan fitur Taunt otomatis"
 
-LANG["PHXM_ADMIN_NOTICE_ROTATION"]			= "Display 'Prop Rotation' notification on every Prop Spawns"
-LANG["PHXM_ADMIN_CAMERA_COLLIDE"]			= "Enable Prop Camera collision to the wall"
-LANG["PHXM_ADMIN_FREEZECAM"]				= "Enable Freecam features for team props"
-LANG["PHXM_ADMIN_PROP_COLLIDE"]				= "Enable Prop collide on each other prop players"
-LANG["PHXM_ADMIN_SWAP_TEAM"] 				= "Swap team every round - Disabling means team will stay forever."
-LANG["PHXM_ADMIN_HUNTER_PENALTY"]			= "Hunter health penalty"
-LANG["PHXM_ADMIN_HUNTER_KILL_BONUS"]		= "Hunter kill bonus"
-LANG["PHXM_ADMIN_HUNTER_SMG_GRENADES"]		= "Hunter SMG grenades"
-LANG["PHXM_ADMIN_GAME_TIME"]				= "Total Game time (Minutes)"
-LANG["PHXM_ADMIN_BLINDLOCK_TIME"]			= "Hunter blindlock time (Seconds)"
-LANG["PHXM_ADMIN_ROUND_TIME"]				= "Game round time (Seconds)"
-LANG["PHXM_ADMIN_ROUNDS_PER_MAP"]			= "Total game Rounds per Map"
-LANG["PHXM_ADMIN_ENABLE_LUCKYBALL"]			= "Allow Lucky Balls Features to be spawned on breakable props (Chance is 8%)"
-LANG["PHXM_ADMIN_ENABLE_CRYSTAL"]			= "Allow Devil Balls Features to be spawned when hunter dies (Chance is 70%)"
-LANG["PHXM_ADMIN_WAIT_PLAYERS"]				= "Wait for Players to begin the gameplay"
-LANG["PHXM_ADMIN_WAIT_MIN_PLAYERS"]			= "Mininum Players to Wait before the game starts (default: 1)"
+LANG["PHXM_ADMIN_NOTICE_ROTATION"]			= "Tampilkan notifikasi 'Rotasi Prop' setiap kamu spawn"
+LANG["PHXM_ADMIN_CAMERA_COLLIDE"]			= "Aktifkan Kamera agar tidak tembus dinding"
+LANG["PHXM_ADMIN_FREEZECAM"]				= "Aktifkan 'Freeze Cam' untuk tim Prop"
+LANG["PHXM_ADMIN_PROP_COLLIDE"]				= "Aktifkan prop bersentuhan dengan yang lainnya"
+LANG["PHXM_ADMIN_SWAP_TEAM"] 				= "Tukarkan team setiap round - Non-aktifkan fitur ini akan membuat tim untuk tidak berpindah."
+LANG["PHXM_ADMIN_HUNTER_PENALTY"]			= "Nyawa Pinalti untuk Hunter"
+LANG["PHXM_ADMIN_HUNTER_KILL_BONUS"]		= "Jumlah Tambahan Bonus ketika Hunter membunuh Prop"
+LANG["PHXM_ADMIN_HUNTER_SMG_GRENADES"]		= "Jumlah Granat Hunter SMG"
+LANG["PHXM_ADMIN_GAME_TIME"]				= "Total Game time (menit)"
+LANG["PHXM_ADMIN_BLINDLOCK_TIME"]			= "Waktu hunter memejamkan mata (detik)"
+LANG["PHXM_ADMIN_ROUND_TIME"]				= "Waktu ronde permainan (detik)"
+LANG["PHXM_ADMIN_ROUNDS_PER_MAP"]			= "Total ronde per satu Map"
+LANG["PHXM_ADMIN_ENABLE_LUCKYBALL"]			= "Perbolehkan 'Bola-Gaca' untuk muncul di setiap Prop yang mudah dihancurkan? (Kesempatan 8%)"
+LANG["PHXM_ADMIN_ENABLE_CRYSTAL"]			= "Perbolehkan 'Kristal-Setan' untuk muncul ketika Hunter mati? (Kesempatan 70%)"
+LANG["PHXM_ADMIN_WAIT_PLAYERS"]				= "Tunggu player lain untuk memulai permainan"
+LANG["PHXM_ADMIN_WAIT_MIN_PLAYERS"]			= "Minimal pemain untuk menunggu sebelum permainan dimulai (default: 1)"
+LANG["PHXM_ENABLE_PLAYER_JOIN_LEAVE"] 		= "Aktifkan notifikasi untuk Pemain Keluar Masuk? Ganti ke 0 jika kamu ingin menggunakan dari addon lain."
 
-LANG["PHXM_ADMIN_FORCEJOINBALANCE"]			= "Force players to even out teams upon joining"
-LANG["PHXM_ADMIN_ENABLETEAMBALANCE"]		= "Automatically even out teams at the start of a round"
+LANG["PHXM_ADMIN_FORCEJOINBALANCE"]			= "Perbolehkan player untuk masuk ke tim tertentu walaupun timnya sudah penuh?"
+LANG["PHXM_ADMIN_ENABLETEAMBALANCE"]		= "Otomatis genapkan tim ketika tim tidak sempurna/seimbang"
 
-LANG["PHXM_ADMIN_TAUNTMODES"]		= "Taunt Modes"
-LANG["PHXM_ADMIN_TAUNTMODE_MODE"]	= "--[Current Taunt Mode is: %d ]--"
-LANG["PHXM_ADMIN_TAUNTMODE0"]		= "Mode [0]: F3/Random Taunt"
-LANG["PHXM_ADMIN_TAUNTMODE1"]		= "Mode [1]: C/Custom Taunt"
-LANG["PHXM_ADMIN_TAUNTMODE2"]		= "Mode [2]: Both Modes"
-LANG["PHXM_ADMIN_TAUNTSOPEN"]		= "Open Taunt Window"
+LANG["PHXM_ADMIN_TAUNTMODES"]		= "Mode Taunt"
+LANG["PHXM_ADMIN_TAUNTMODE_MODE"]	= "--[Mode taunt saat ini: %d ]--"
+LANG["PHXM_ADMIN_TAUNTMODE0"]		= "Mode [0]: Taunt Sembarang"
+LANG["PHXM_ADMIN_TAUNTMODE1"]		= "Mode [1]: Taunt Kustom"
+LANG["PHXM_ADMIN_TAUNTMODE2"]		= "Mode [2]: Dua-duanya"
+LANG["PHXM_ADMIN_TAUNTSOPEN"]		= "Buka jendela Taunt"
 
-LANG["PHXM_ADMIN_PICKUP_PROPS"] 			= "Allow pick up of small props? 0: Dont Allow, 1: Hunters Only, 2: Props Only, 3: Allow Everyone."
-LANG["PHXM_MODE_DEFAULT"] 					= "--[ Pickup Mode is set to %d ]--"
-LANG["PHXM_MODE0"]							= "Mode [0]: Don't Allow"
-LANG["PHXM_MODE1"]							= "Mode [1]: Hunters Only"
-LANG["PHXM_MODE2"]							= "Mode [2]: Props Only"
-LANG["PHXM_MODE3"]							= "Mode [3]: Allow Pickup"
+LANG["PHXM_ADMIN_PICKUP_PROPS"] 			= "Perbolehkan untuk mengambil objek kecil? 0: Tidak boleh, 1: Hunters saja, 2: Props saja, 3: Bolehkan semuanya."
+LANG["PHXM_MODE_DEFAULT"] 					= "--[ Mode mengambil object saat ini: %d ]--"
+LANG["PHXM_MODE0"]							= "Mode [0]: Tidak boleh"
+LANG["PHXM_MODE1"]							= "Mode [1]: Hunters saja"
+LANG["PHXM_MODE2"]							= "Mode [2]: Props saja"
+LANG["PHXM_MODE3"]							= "Mode [3]: Bolehkan semuanya"
 
 -- Admin Developer Sections
-LANG["PHXM_ADMIN_DEVSECTION"]		= "Developer Options/Experimentals Features"
-LANG["PHXM_ADMIN_ROOMCHECK"]		= "Enable Boundaries Check? This prevents you to get stuck with objects/walls."
-LANG["PHXM_ADMIN_USENEWMKBREN"]		= "Use new model for Bren MK II bonus weapon (Require Map Restart)"
-LANG["PHXM_ADMIN_BEVERBOSE"]		= "Developer: Be Verbose - Enable PH:X to print all information and events verbosely?"
-LANG["PHXM_ADMIN_SHOWPLNAMEHEAD"]	= "Enable Player team names to be appear on their screen."
-LANG["PHXM_ADMIN_USESINGLE_FZCAM"]	= "Use single Freezecam sound instead of sound list (Use 'ph_fc_cue_path' to determine Freezecam sound path)"
-LANG["PHXM_ADMIN_MODELLISTINGTYPE"] = "Use Legacy Model List : 0 = All Playermodels (AddValidModel), 1 = Use Legacy: list.Get('PlayerOptionsModel')"
-LANG["PHXM_ADMIN_JUMPPOWER"]		= "Additional Jump Power multiplier for Props"
-LANG["PHXM_ADMIN_ENABLE_OBB"]		= "Developer: Enable Customized Prop Entities Model Boundaries (OBB) Modifier from config data"
-LANG["PHXM_ADMIN_RELOAD_OBB"]		= "Developer: Reload OBB Modifier data every round restarts"
+LANG["PHXM_ADMIN_DEVSECTION"]		= "Fitur Experimen / Developers"
+LANG["PHXM_ADMIN_ROOMCHECK"]		= "Aktifkan pengecekan batas-batas pada object? Ini mencegah agar prop tidak tersangkut."
+LANG["PHXM_ADMIN_USENEWMKBREN"]		= "Gunakan skin baru untuk senjata 'Bren MK II' (BUTUH MAP RESTART!)"
+LANG["PHXM_ADMIN_BEVERBOSE"]		= "Developer: Be Verbose - Aktifkan fitur 'verbose' sehingga akan meginformasikan segala hal event."
+LANG["PHXM_ADMIN_SHOWPLNAMEHEAD"]	= "Tampilkan nama player diatas kepala"
+LANG["PHXM_ADMIN_USESINGLE_FZCAM"]	= "Gunakan satu suara 'Freeze Cam'"
+LANG["PHXM_ADMIN_MODELLISTINGTYPE"] = "Tampilkan skin dalam mode : 0 = Semua Playermodel (AddValidModel), 1 = Gunakan metode Lawas: list.Get('PlayerOptionsModel')"
+LANG["PHXM_ADMIN_JUMPPOWER"]		= "Tambahan penggandaan tinggi lompat pada Prop"
+LANG["PHXM_ADMIN_ENABLE_OBB"]		= "Developer: Aktifkan Enable Customized Prop Entities Model Boundaries (OBB) Modifier from config data" --Untranslateable
+LANG["PHXM_ADMIN_RELOAD_OBB"]		= "Developer: Reload OBB Modifier data every round restarts" --Untranslateable
 
 -- Experimental & PH:X Features
-LANG["PHXM_ADMIN_EXPERIMENTALPHX"]			= "New PHX Experimental Sections"
+LANG["PHXM_ADMIN_EXPERIMENTALPHX"]			= "Seksi Fitur Experimen PH:X Baru"
 
-LANG["PHXM_ADMIN_HLA_COMBINE"]				= "Add HLA Combine model support"
-LANG["PHXM_ADMIN_TEAMBALANCE"]				= "Enable Team Balance feature"
-LANG["PHXM_ADMIN_CHANGETEAM_LIMIT"]			= "Use Team Switch limitter. Set -1 to disable. "
-LANG["PHXM_ADMIN_USENEWCHAT"]				= "Use new Chat Box (eChat) - This is temporary replacement. If you have one already, leave this unchecked."
-LANG["PHXM_ADMIN_NEWCHATPOS"]				= "Substract Height (Y) Position by N pixels. Default is 45 Pixels-up."
-LANG["PHXM_ADMIN_RESPAWNONBLIND"]			= "Allow Respawn on Blind Time - Prevent Prop being Suicide, or something else."
-LANG["PHXM_ADMIN_RESPAWNONBLIND_TEAM"]		= "Allow Respawn on Blind Time with specific Team Only: 0: All, 1: Hunters, 2: Props"
-LANG["PHXM_ADMIN_REWSPANTIMEPERCENT"]		= "Percentage of Blind Time which allows you to respawn. Default is 0.75 (means 75% * Max Blind Time)"
-LANG["PHXM_ADMIN_ALLOWRESPAWN_SPECTATOR"]	= "Allow Respawn on Blind Time when Assigning to Spectator Team"
-LANG["PHXM_ADMIN_ALLOWRESPAWN_TEAMCHANGE"]	= "Allow Respawn on Blind Time when Assigning to Different Team (Enabling this may not recommended)"
+LANG["PHXM_ADMIN_HLA_COMBINE"]				= "Tambahkan dukungan skin dari 'HL:Alyx Combine'"
+LANG["PHXM_ADMIN_TEAMBALANCE"]				= "Aktifkan Pengeimbang Tim"
+LANG["PHXM_ADMIN_CHANGETEAM_LIMIT"]			= "Aktifkan pembatasan tukar tim - Atur -1 untuk non-aktifkan. "
+LANG["PHXM_ADMIN_USENEWCHAT"]				= "Gunakan ChatBox baru (eChat) - Fitur ini sementara. Jika kamu sudah punya chat baru, jangan dicentang."
+LANG["PHXM_ADMIN_NEWCHATPOS"]				= "Kurangi berapa piksel untuk tinggi posisi chat Y. Default 45 piksel."
+LANG["PHXM_ADMIN_RESPAWNONBLIND"]			= "Perbolehkan respawn pada saat Memejamkan mata"
+LANG["PHXM_ADMIN_RESPAWNONBLIND_TEAM"]		= "Perbolehkan respawn pada saat Memejamkan mata untuk spesifik tim saja: 0: Semua, 1: Hunters, 2: Props"
+LANG["PHXM_ADMIN_REWSPANTIMEPERCENT"]		= "Persentase waktu untuk memperbolehkan pemain untuk respawn. Default 0.75 (artinya 75% x Maximal Waktu memejamkan mata)"
+LANG["PHXM_ADMIN_ALLOWRESPAWN_SPECTATOR"]	= "Perbolehkan respawn pada saat Memejamkan mata saat pindah dari tim Spektator"
+LANG["PHXM_ADMIN_ALLOWRESPAWN_TEAMCHANGE"]	= "Perbolehkan respawn pada saat Memejamkan mata saat pindah dari tim lain (Tidak disarankan untuk mengaktifkan fitur ini)"
 
 --[[
 	MapVote Settings
 ]]
-LANG["PHXM_MV_SETTINGS"]			= "MapVote Settings"
+LANG["PHXM_MV_SETTINGS"]			= "Pengaturan Map Usulan (Voting)"
 
-LANG["PHXM_MV_ALLOWCURMAP"]			= "Allow Current map to be Voted"
-LANG["PHXM_MV_COOLDOWN"]			= "Enable map Cooldown for voting"
-LANG["PHXM_MV_USE_ULX_VOTEMAPS"]	= "Use map listing from ULX Mapvote? If not, default maps/*.bsp will be used."
-LANG["PHXM_MV_MAPLIMIT"]			= "Number of Maps to be shown in MapVote."
-LANG["PHXM_MV_TIMELIMIT"]			= "Time in Seconds for default mapvote when voting."
-LANG["PHXM_MV_MAPBEFOREREVOTE"]		= "Map changes needed for a map to reappear"
-LANG["PHXM_MV_RTVCOUNT"]			= "How many players required to use RTV (Rock the Vote)"
+LANG["PHXM_MV_ALLOWCURMAP"]			= "Perbolehkan map sekarang untuk di voting?"
+LANG["PHXM_MV_COOLDOWN"]			= "Aktifkan map 'Cooldown' untuk voting."
+LANG["PHXM_MV_USE_ULX_VOTEMAPS"]	= "Gunakan daftar map dari ULX votemap? jika tidak akan menggunakan filter dari 'maps/*.bsp'."
+LANG["PHXM_MV_MAPLIMIT"]			= "Jumlah map yang akan tampil di daftar voting"
+LANG["PHXM_MV_TIMELIMIT"]			= "Waktu dalam detik untuk melakukan voting."
+LANG["PHXM_MV_MAPBEFOREREVOTE"]		= "Berapa kali 'ganti map' untuk map yang dipilih tampil kembali"
+LANG["PHXM_MV_RTVCOUNT"]			= "Berapa banyak pemain untuk bisa melakukan RTV ('Rock the Vote')"
 
-LANG["PHXM_MV_EXPLANATION1"]		= "To Setup which map should be listed, use (for example) [ mv_mapprefix 'ph_,cs_,de_' ] in the console."
-LANG["PHXM_MV_EXPLANATION2"]		= "If you are unable to do a MapVote, you NEED to install ULX Admin Mod!"
-LANG["PHXM_MV_EXPLANATION3"]		= "MapVote Action (To cancel, simply type !unmap_vote in the chat or type 'unmap_vote' in console)"
+LANG["PHXM_MV_EXPLANATION1"]		= "Untuk mengatur map apa yang akan dipilih, gunakan variable konsol 'mv_mapprefix' dengan mengisi: 'ph_,cs_,de_,'."
+LANG["PHXM_MV_EXPLANATION2"]		= "Jika kamu menggunakan ULX, gunakan 'map_vote'. Jika tidak, gunakan 'mv_start'"
+LANG["PHXM_MV_EXPLANATION3"]		= "Aksi MapVote"
 
-LANG["PHXM_MV_START"]		= "Start MapVote"
-LANG["PHXM_MV_STOP"]		= "Stop MapVote"
---                  			  ^YOU VIOLATED THE LAW!
-
+LANG["PHXM_MV_START"]		= "Mulai MapVote"
+LANG["PHXM_MV_STOP"]		= "Hentikan MapVote"
 
 --[[ 
 	Versioning, Credits or About section

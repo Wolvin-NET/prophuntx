@@ -1,17 +1,13 @@
--- Kindly free to improve the language.
-
--- Originally written by: Fafy
--- Improved by Wolvindra-Vinzuerio.
-
+-- Custom Language to be added outside of gamemode's core file.
 local LANG = {}
 
-LANG.code = "en_us"
+LANG.code = "en_??" -- your language id.
 
 LANG.Name 		 	= "English" -- example: "Bahasa Indonesia"
 LANG.NameEnglish	= "English" -- Your Language but spoken in English, example: "Indonesian"
-LANG.Author			= "Wolvindra-Vinzuerio, Fafy" -- Only accept STRINGS.
+LANG.Author			= "YOUR NAME" -- Only accept STRINGS.
 -- Can Accept: String, and Table.
-LANG.AuthorURL		= {"https://steamcommunity.com/profiles/76561198086789110", "https://steamcommunity.com/profiles/76561198016233242"}
+LANG.AuthorURL		= "https://steamcommunity.com/profiles/7656xxxxxxxxxxxx"
 
 -- Special Section that isn't String-based
 LANG.SUICIDEMSG = { --> FRETTA
@@ -370,5 +366,5 @@ LANG["PLUGINS_CLIENT_SETTINGS"]			= "-- Client Settings --"
 LANG["TEXTENTRY_FZ_SINGLE"] = "Freeze Cam Single Sound Path" -- this one is for ph_fc_cue_path command
 LANG["TEXTENTRY_MV_PREFIX"] = "MapVote Map Prefix"			 -- the map previx for mv_mapprefix
 
--- Add to Language Table.
-PHX.LANGUAGES[LANG.code] = LANG
+-- Add to List.
+list.Set("PHX.CustomExternalLanguage", LANG)

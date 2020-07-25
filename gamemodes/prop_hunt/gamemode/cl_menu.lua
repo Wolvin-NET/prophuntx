@@ -10,11 +10,18 @@ function PHX.UI:GetMutedStateIcon(bool)
 end
 
 function PHX.UI.BaseMainMenu(ply, cmd, args)
+	
+	if (PHX.LANGUAGES[PHX.CVAR.Language:GetString()] == nil or table.IsEmpty(PHX.LANGUAGES[PHX.CVAR.Language:GetString()])) then
+		PHX:AddChat("Error: Cannot open Prop Hunt X Menu because the language you're using is not available.", Color(255,0,0))
+		PHX:AddChat("Please revert to default language by typing 'ph_cl_language en_us' in the console!", Color(255,255,0))
+		return
+	end
+
 	local mdlName = ply:GetInfo("cl_playermodel")
 	local mdlPath = player_manager.TranslatePlayerModel(mdlName)
 	
 	PHX.UI.MainForm = vgui.Create("DFrame")
-	PHX.UI.MainForm:SetSize(ScrW()-96,ScrH()-128)
+	PHX.UI.MainForm:SetSize(ScrW()-96,ScrH()-80)
 	PHX.UI.MainForm:SetTitle( PHX:FTranslate("PHXM_WINDOW_TITLE") )
 	PHX.UI.MainForm.Paint = function(self,w,h)
 		surface.SetDrawColor(50,50,50,255)
@@ -155,8 +162,8 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 		end
 		bnext.DoClick = function(pnl)
 			helpImage.Count = helpImage.Count + 1
-			if helpImage.Count >= 6 then
-				helpImage.Count = 6
+			if helpImage.Count > 6 then
+				helpImage.Count = 1
 			end
 			helpImage:SetImage("vgui/phhelp"..helpImage.Count..".vmt")
 		end
@@ -184,8 +191,8 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 		end
 		bprev.DoClick = function(pnl)
 			helpImage.Count = helpImage.Count - 1
-			if helpImage.Count <= 1 then
-				helpImage.Count = 1
+			if helpImage.Count < 1 then
+				helpImage.Count = 6
 			end
 			helpImage:SetImage("vgui/phhelp"..helpImage.Count..".vmt")
 		end
@@ -414,6 +421,7 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 		PHX.UI:CreateVGUIType("ph_default_lang", "langcombobox", true, grid, PHX:FTranslate("PHXM_ADMIN_PLAYERDEFAULTLANG"))
 		
 		PHX.UI:CreateVGUIType("", "label", false, grid, PHX:FTranslate("PHXM_ADMIN_OPTIONS"))
+		PHX.UI:CreateVGUIType("ph_notify_player_join_leave", "check", "SERVER", grid, PHX:FTranslate("PHXM_ENABLE_PLAYER_JOIN_LEAVE"))
 		PHX.UI:CreateVGUIType("ph_use_custom_plmodel", "check", "SERVER", grid, PHX:FTranslate("PHXM_ADMIN_CUSTOM_MODEL"))
 		PHX.UI:CreateVGUIType("ph_use_custom_plmodel_for_prop", "check", "SERVER", grid, PHX:FTranslate("PHXM_ADMIN_CUSTOM_MODEL_PROP"))
 		PHX.UI:CreateVGUIType("ph_customtaunts_delay", "slider", {min = 2, max = 120, init = PHX.CVAR.CustomTauntDelay:GetInt(), dec = 0, kind = "SERVER"}, grid, PHX:FTranslate("PHXM_ADMIN_TAUNT_DELAY_CUSTOM"))

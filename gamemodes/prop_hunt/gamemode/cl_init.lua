@@ -552,3 +552,110 @@ function PHX:showLangPreview()
 	end
 	
 end
+
+local links = {
+	["github"] 		= "https://github.com/Wolvin-NET/prophuntx/issues",
+	["workshop"] 	= "https://www.google.com", -- TODO!!!
+	["discord"] 	= "https://discord.gg/avaTPM7",
+	["donate"] 		= "https://prophunt.wolvindra.net/donate"
+}
+
+local whtml = {}
+function PHX:CheckWhatsNew( playerName, gmRev )
+
+	local path = PHX.ConfigPath .. "/phx_version_check.txt"
+	local ignoreReOpen = false
+	
+	if (file.Exists(path, "DATA")) then
+		local check = file.Read(path, "DATA")
+		local tab = util.JSONToTable(check)
+		
+		if tab["Revision"] == gmRev and tonumber(tab["ReopenAfterNewUpdate"]) == 1 then
+			return
+		end
+	end
+
+	local CurBranch = string.lower(BRANCH)
+	local Name = playerName
+	local Rev  = gmRev
+	
+	local param = {}
+	
+	if (CurBranch == "unknown") then
+		table.insert(param, "isawesomium=1")
+	end
+	table.insert(param, "name=" .. Name)
+	table.insert(param, "rev=" .. Rev)
+	
+	whtml.window = vgui.Create("DFrame")
+	whtml.window:SetSize(ScrW() - 400, ScrH() - 120)
+	whtml.window:SetTitle("Prop Hunt X: What's New")
+	whtml.window:Center()
+	whtml.window:MakePopup()
+	
+	whtml.html = vgui.Create("DHTML", whtml.window)
+	whtml.html:Dock(TOP)
+	whtml.html:DockMargin(8,0,8,0)
+	whtml.html:SetSize(0, whtml.window:GetTall() - 80)
+	whtml.html:AddFunction("gmod", "phxFunc", function(str)
+		gui.OpenURL(links[str])
+	end)
+	local cparam = table.concat(param, "&")
+	whtml.html:OpenURL("https://prophunt.wolvindra.net/whatsnew.php?" .. cparam)
+	
+	local ReopenAfterNewUpdate = 0
+	local data = {
+		[ "ReopenAfterNewUpdate" ] 	= tostring( ReopenAfterNewUpdate ),
+		[ "Revision" ]				= gmRev
+	}
+	
+	
+	local function createButton( text, panel, f_doClick )
+		local btn = vgui.Create("DButton", panel )
+		btn:Dock(LEFT)
+		btn:DockMargin(4,8,0,8)
+		btn:SetSize(panel:GetWide() / 2 - 10, 0)
+		btn:SetText( text )
+		btn.DoClick = f_doClick
+	end
+	
+	createButton("Close this window", whtml.window, function(self)
+		ReopenAfterNewUpdate = 0
+		
+		data["ReopenAfterNewUpdate"] = tostring( ReopenAfterNewUpdate )
+		
+		local json = util.TableToJSON(data)
+		file.Write(path, json)
+	
+		whtml.window:Close()
+	end)
+	
+	createButton("Hide this window permanently", whtml.window, function(self)
+	
+		Derma_Message("This window will re-appear again once a new Prop Hunt: X update has been released!","Info","OK")
+	
+		ReopenAfterNewUpdate = 1
+		
+		data["ReopenAfterNewUpdate"] = tostring( ReopenAfterNewUpdate )
+		
+		local json = util.TableToJSON(data)
+		file.Write(path, json)
+		
+		whtml.window:Close()
+	end)
+	
+	function whtml:OnClose()
+		ReopenAfterNewUpdate = 0
+		
+		data["ReopenAfterNewUpdate"] = tostring( ReopenAfterNewUpdate )
+		
+		local json = util.TableToJSON(data)
+		file.Write(path, json)
+	end
+end
+
+net.Receive("InitialPlayer_ShowWhatsNew", function()
+	local name 		= net.ReadString()
+	local revision	= net.ReadString()
+	PHX:CheckWhatsNew(name, revision)
+end)

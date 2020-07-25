@@ -178,7 +178,7 @@ LANG["PHXM_TAB_ADMIN"]			= "Administration"
 LANG["PHXM_TAB_ABOUT"]			= "A propos de Prop Hunt X"
 LANG["PHXM_TAB_MAPVOTE"]		= "Paramètres de votes des maps"
 
-LANG["PHXM_CVAR_CHANGED"]		= "[Paramètres] CVar %s a été changé en %s" 
+LANG["PHXM_CVAR_CHANGED"]		= "[Paramètres] CVar %q a été changé en %q" 
 
 --[[
 	Player Mute Settings
@@ -262,6 +262,7 @@ LANG["PHXM_ADMIN_ENABLE_LUCKYBALL"]			= "Permettre aux Lucky Balls d'apparaître
 LANG["PHXM_ADMIN_ENABLE_CRYSTAL"]			= "Permettre aux Devil Balls d'apparaître lorsque le chasseur meurt (la chance est de 70%)"
 LANG["PHXM_ADMIN_WAIT_PLAYERS"]				= "Attendre que des joueurs soit présent pour commencé une manche"
 LANG["PHXM_ADMIN_WAIT_MIN_PLAYERS"]			= "Joueurs Mininum à attendre avant le début de la manche (par défaut: 1)"
+LANG["PHXM_ENABLE_PLAYER_JOIN_LEAVE"] 		= "Activer la notification pour rejoindre et quitter le joueur? Définissez 0 si vous souhaitez utiliser un module complémentaire de chat personnalisé." --Improve this.
 
 LANG["PHXM_ADMIN_FORCEJOINBALANCE"]			= "Forcer les joueurs à équilibré les équipes"
 LANG["PHXM_ADMIN_ENABLETEAMBALANCE"]		= "Équilibre automatiquement les équipes au début d'une manche"

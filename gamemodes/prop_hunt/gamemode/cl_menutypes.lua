@@ -303,16 +303,16 @@ end,
 			if (d) then
 				-- Is Serverside?
 				net.Start("SvCommandLang")
-				net.WriteString(cbox.selLang.code)
+				net.WriteString(cbox.selLang)
 				net.WriteString(c)
 				net.SendToServer()
-				CvarChangedMessage(c, cbox.selLang.code)
-				ConfirmMessage(c, cbox.selLang.code)
+				CvarChangedMessage(c, cbox.selLang)
+				ConfirmMessage(c, cbox.selLang)
 			else
 				-- because this is for client, force this to use ph_cl_language.
-				RunConsoleCommand("ph_cl_language", cbox.selLang.code)
-				chat.AddText( Color(60,220,30), PHX:Translate( "LANGUAGE_CHANGED", cbox.selLang.name ) )
-				print("[PHX] Prefered Language has changed to " .. cbox.selLang.name .. " (".. cbox.selLangName ..")")
+				RunConsoleCommand("ph_cl_language", cbox.selLang)
+				chat.AddText( Color(60,220,30), PHX:Translate( "LANGUAGE_CHANGED", cbox.selLangName ) )
+				print("[PHX] Prefered Language has changed to " .. cbox.selLangName )
 				if PHX.UI.MainForm:IsValid() then PHX.UI.MainForm:Close() end
 			end
 			
@@ -332,23 +332,20 @@ end,
 	local langCode = cvlang
 	local langList = PHX.LANGUAGES
 	
-	-- List by using English-written Language, to avoid user confusion.
-	-- Later when being applied, the Actual Language will be printed immediately (See line @312)
-	
 	if (!table.IsEmpty(langList[langCode])) then
-		cbox:SetValue( langList[langCode].NameEnglish )
+		cbox:SetValue( langList[langCode].Name )
 	else
 		cbox:SetValue( "Error: Language " .. langCode .. " doesn't exists." )
 	end
 	
 	for code,_ in pairs(langList) do
-		cbox:AddChoice(langList[code].NameEnglish, { code = langList[code].code, name = langList[code].Name })
+		cbox:AddChoice(langList[code].Name, langList[code].code)
 	end
 	
 	function cbox:OnSelect(index, value, data)
 		btn:SetDisabled(false)
-		self.selLang = data
 		self.selLangName = value
+		self.selLang 	 = data
 	end
 	
 	return pnl
@@ -396,8 +393,9 @@ end,
 				net.WriteString(c)
 				net.SendToServer()
 			else
-				RunConsoleCommand(c, textEntry.SelectedText)
+				RunConsoleCommand(c, textEntry.EnteredText)
 			end
+			ConfirmMessage(c, textEntry.EnteredText)
 			CvarChangedMessage(c, textEntry.EnteredText)
 		else
 			Derma_Message("Text is empty or you didn't pressed ENTER key.", "Warning", "OK")
