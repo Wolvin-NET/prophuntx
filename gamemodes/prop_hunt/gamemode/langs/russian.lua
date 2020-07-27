@@ -1,4 +1,4 @@
--- Thanks berry for contribution.
+-- Thank you for berry for contribution!
 
 local LANG = {}
 
@@ -8,7 +8,7 @@ LANG.Name 		 	= "Русский"
 LANG.NameEnglish	= "Russian"
 LANG.Author			= "berry" -- Only accept STRINGS.
 -- Can Accept: String, and Table.
-LANG.AuthorURL		= {"http://steamcommunity.com/profiles/76561198158864042"}
+LANG.AuthorURL		= "http://steamcommunity.com/profiles/76561198158864042"
 
 -- Special Section that isn't String-based
 LANG.SUICIDEMSG = { --> FRETTA
