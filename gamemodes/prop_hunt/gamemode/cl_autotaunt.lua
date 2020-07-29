@@ -108,7 +108,9 @@ local delayC = PHX.CVAR.CustomTauntDelay:GetInt()
 -- /!\ NOTICE: This is prototype, will improved or changed sometime in future.
 local function AutoTauntPaint_phx()
 
-	if IsValid(LocalPlayer()) && LocalPlayer():Alive() && LocalPlayer():Team() == TEAM_PROPS then
+	-- Thanks for Jay#8422 for reminiding lol
+	--if (not isEnabled or not started) then return; end
+	if IsValid(LocalPlayer()) && LocalPlayer():Alive() && LocalPlayer():Team() == TEAM_PROPS && isEnabled && started then
 		local timeLeft = math.ceil(TimeLeft())
 		local percentage = timeLeft / delay
 		
