@@ -3,7 +3,11 @@ This gamemode rework might bit slower without your help. This gamemode is rework
 your donation below at **Donate** section. Thank you!
 
 ### Please note: 
-- Looking for Translators: Russian, German, Japanese, Chinese - Feel free to pull request
+Looking for Translators! (Any language) for:
+- PHX
+- Prop Chooser
+- Snake MiniGame
+- And Possible any other PHX's Plugins...
 
 ### Warning: This is nightly build development branch which may incomplete or unstable. Use at your own risk! This branch may contains alot of commit changes. Be sure to stay up to date & checkout regularly.
 
@@ -12,7 +16,7 @@ your donation below at **Donate** section. Thank you!
 # Prop Hunt X
 
 ### Versioning
-Version: X, Revision: 25/07/2020 (dd/mm/yyyy)
+Version: X, Revision: XX/07/2020 (dd/mm/yyyy)
 
 ### Public Beta Test
 Public Prop Hunt X: Live Testing is available. You can join to the IP below:
