@@ -1,7 +1,7 @@
 -- Kindly free to improve the language.
 
 -- Originally written by: Fafy
--- Improved by Wolvindra-Vinzuerio.
+-- Improved by Wolvindra-Vinzuerio & Godfather
 
 local LANG = {}
 
@@ -9,9 +9,13 @@ LANG.code = "en_us"
 
 LANG.Name 		 	= "English" -- example: "Bahasa Indonesia"
 LANG.NameEnglish	= "English" -- Your Language but spoken in English, example: "Indonesian"
-LANG.Author			= "Wolvindra-Vinzuerio, Fafy" -- Only accept STRINGS.
+LANG.Author			= "Wolvindra-Vinzuerio, Godfather, Fafy" -- Only accept STRINGS.
 -- Can Accept: String, and Table.
-LANG.AuthorURL		= {"https://steamcommunity.com/profiles/76561198086789110", "https://steamcommunity.com/profiles/76561198016233242"}
+LANG.AuthorURL		= {	
+	"https://steamcommunity.com/profiles/76561198086789110", 
+	"https://steamcommunity.com/profiles/76561198283562416", 
+	"https://steamcommunity.com/profiles/76561198016233242"
+}
 
 -- Special Section that isn't String-based
 LANG.SUICIDEMSG = { --> FRETTA
@@ -199,7 +203,7 @@ LANG["PHXM_PLAYER_TAUNTWINDOW_KEY"]		= "Taunt Menu Key"
 LANG["PHXM_PLAYER_ROTATLOCK_KEY"]		= "Rotation Lock Key"
 
 LANG["PHXM_PLAYER_TOGGLE_HALOS"]		= "Toggle Halo effect when choosing a prop"
-LANG["PHXM_PLAYER_IDNAMES"]				= "Show Team player names above their heads instead (and appear through wall too)"
+LANG["PHXM_PLAYER_IDNAMES"]				= "Show Team players' names above their heads instead (and appear through wall too)"
 LANG["PHXM_PLAYER_ENDROUND_CUE"]		= "Play End round sound cue"
 LANG["PHXM_PLAYER_TAUNTMENU_AUTOCLOSE"]	= "Option for Auto closing for Taunt window when double-clicking them"
 LANG["PHXM_PLAYER_SEE_HUNTER_LINE"]		= "Draw a line on hunters so we can see their aim in spectator mode."
@@ -224,14 +228,14 @@ LANG["MDL_MENU_MODELINFO"] 		= "Model Information"
 
 LANG["MISC_APPLYMDL"] 			= "Apply Model"
 
-LANG["PHXM_MODEL_DISABLED"] 	= "Sorry, Custom Player Model is disabled on this server!"
+LANG["PHXM_MODEL_DISABLED"] 	= "Sorry, Custom Player Models are disabled on this server!"
 LANG["PHXM_PLAYERMODEL_SETFOV"]	= "  Set Model FOV"
 
 --[[
 	Server Settings
 ]]
 LANG["PHXM_ADMIN_OPTIONS"]		= "Serverside gamemode Options (Only visible for Admins/Owner)"
-LANG["PHXM_ADMIN_MUSTALIVE"]	= "You must in alive team in order to do this operation."
+LANG["PHXM_ADMIN_MUSTALIVE"]	= "You must be alive in order to do this operation."
 
 --[[
 	Language Override
@@ -289,10 +293,10 @@ LANG["PHXM_MODE3"]						= "Mode [3]: Allow Pickup"
 	Admin Developer Sections
 ]]
 LANG["PHXM_ADMIN_DEVSECTION"]		= "Developer Options/Experimentals Features"
-LANG["PHXM_ADMIN_ROOMCHECK"]		= "Enable Boundaries Check? This prevents you to get stuck with objects/walls."
+LANG["PHXM_ADMIN_ROOMCHECK"]		= "Enable Boundaries Check? This prevents you getting stuck with objects/walls."
 LANG["PHXM_ADMIN_USENEWMKBREN"]		= "Use new model for Bren MK II bonus weapon (Require Map Restart)"
 LANG["PHXM_ADMIN_BEVERBOSE"]		= "Developer: Be Verbose - Enable PH:X to print all information and events verbosely?"
-LANG["PHXM_ADMIN_SHOWPLNAMEHEAD"]	= "Enable Player team names to be appear on their screen."
+LANG["PHXM_ADMIN_SHOWPLNAMEHEAD"]	= "Enable Player team names to appear on their screen."
 LANG["PHXM_ADMIN_USESINGLE_FZCAM"]	= "Use single Freezecam sound instead of sound list (Use 'ph_fc_cue_path' to determine Freezecam sound path)"
 LANG["PHXM_ADMIN_MODELLISTINGTYPE"] = "Use Legacy Model List : 0 = All Playermodels (AddValidModel), 1 = Use Legacy: list.Get('PlayerOptionsModel')"
 LANG["PHXM_ADMIN_JUMPPOWER"]		= "Additional Jump Power multiplier for Props"
