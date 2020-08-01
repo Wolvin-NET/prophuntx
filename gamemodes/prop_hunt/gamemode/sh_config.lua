@@ -455,6 +455,7 @@ if SERVER then
 		
 		-- this is a stock template. DO NOT MODIFY.
 		local mdlpermabans = {
+			"models/props/ph_gas_stationrc7/piepan.mdl", -- This may cause unwanted server crash due to improper map-embedded pre-cache issues. We are still investigating.
 			"models/props/cs_assault/dollar.mdl",
 			"models/props/cs_assault/money.mdl",
 			"models/props/cs_office/snowman_arm.mdl",
