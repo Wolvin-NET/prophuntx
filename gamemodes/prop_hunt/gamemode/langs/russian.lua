@@ -237,7 +237,7 @@ LANG["PHXM_ADMIN_LANGOVERRIDE"]	= "Резервный язык"
 
 LANG["PHXM_ADMIN_FORCELANG"] 				= "Использовать принудительный язык? Это заменит язык клиента, чтобы использовать выбранный язык сервера."
 LANG["PHXM_ADMIN_LANGTOUSE"]				= "Принудительный язык для использования."
-LANG["PHXM_ADMIN_PLAYERDEFAULTLANG"] 		= "Язык игрока по умолчанию при присоединении к серверу в первый раз."
+LANG["PHXM_ADMIN_PLAYERDEFAULTLANG"] 		= "Язык игрока по умолчанию."
 
 -- Gameplay settings
 LANG["PHXM_ADMIN_CUSTOM_MODEL"]				= "Включить пользовательские модели для Охотников"
