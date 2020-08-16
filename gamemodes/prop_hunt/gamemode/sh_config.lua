@@ -8,6 +8,21 @@ PHX.USABLE_PROP_ENTITIES = {
 	"prop_physics_multiplayer"
 }
 
+-- Prohibitted models which can cause server/client crash or other issues.
+-- This will automatically gets deleted after round restart!
+PHX.PROHIBITTED_MDLS = {
+	["models/props_collectables/piepan.mdl"]	= true,
+	["models/foodnhouseholditems/egg.mdl"]		= true
+}
+hook.Add("PostCleanupMap", "PHX.RemoveProhibittedModels", function()
+	for _,ent in pairs(ents.FindByClass('prop_physics*')) do
+		if IsValid(ent) and PHX.PROHIBITTED_MDLS[ent:GetModel()] then
+			PHX.VerboseMsg("[PHX] Removing " .. ent:GetModel() .. " to prevent server crash or exploits.")
+			ent:Remove()
+		end
+	end
+end)
+
 -- This is default English as Fallback. DO NOT TRANSLATE HERE, USE YOUR TRANSLATED LANGUAGE FILE INSTEAD!
 PHX.DefaultHelp = [[A Prop Hunt (Codename) X Project.
 
@@ -455,6 +470,7 @@ if SERVER then
 		
 		-- this is a stock template. DO NOT MODIFY.
 		local mdlpermabans = {
+			"models/props_collectables/piepan.mdl", -- ph_gas_stationrc7's improper piepan.mdl model
 			"models/props/cs_assault/dollar.mdl",
 			"models/props/cs_assault/money.mdl",
 			"models/props/cs_office/snowman_arm.mdl",

@@ -13,13 +13,37 @@ function PHX:AddLanguage( tbl )
 	end
 end
 
+function PHX:InsertToLanguage( tbl, code )
+	if (tbl and type(tbl) == "table" and tbl ~= nil) and (code ~= nil or code ~= "") then		
+		PHX:VerboseMsg("[PHX] Adding External insertion language: (".. code ..")...")
+		
+		for STRINGCODE, TRANSLATION in pairs(tbl) do
+			if (PHX.LANGUAGES[code][STRINGCODE] ~= nil) then -- table.HasValue?
+				PHX:VerboseMsg("[PHX] Ignoring " .. STRINGCODE .. " because it was exist in the language table.")
+			else
+				PHX.LANGUAGES[code][STRINGCODE] = TRANSLATION
+			end
+		end
+	end
+end
+
 -- Let's add language from list.Get, if any.
 for langName,tblLangExt in pairs(list.Get("PHX.CustomExternalLanguage")) do
-	if (not table.IsEmpty(tblLangExt)) or tblLangExt ~= nil then
-		PHX.VerboseMsg("[PHX External Language] Ignoring " .. langName .. " because it's contains nothing.")
+	if table.IsEmpty(tblLangExt) or tblLangExt == nil then
+		PHX.VerboseMsg("[PHX External Language] Ignoring " .. langName .. " because it does contains nothing.")
 	else
 		PHX.VerboseMsg("[PHX External Language] Adding " .. langName .."...")
 		PHX:AddLanguage( tblLangExt )
+	end
+end
+
+-- Let's add external language insertion, if any.
+for langCode,tblLangIns in pairs(list.Get("PHX.LanguageInsertion")) do
+	if table.IsEmpty(tblLangIns) or tblLangIns == nil then
+		PHX.VerboseMsg("[PHX Insertion Language] Ignoring LangCode " .. langCode .. " because it does contains nothing.")
+	else
+		PHX.VerboseMsg("[PHX Insertion Language] Inserting LangCode " .. langCode .. "...")
+		PHX:InsertToLanguage( tblLangIns, langCode )
 	end
 end
 
