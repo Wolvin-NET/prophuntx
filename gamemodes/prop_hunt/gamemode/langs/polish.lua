@@ -34,7 +34,7 @@ LANG.RANDOM_SPECTATORS = { --> FRETTA
 
 -- // FRETTA SECTION \\
 --  FRETTA: Kill text (X killed Y)
-LANG["HUD_KILLED"]				= "zabił"
+LANG["HUD_KILLED"]				= "zabija"
 
 -- FRETTA: HUDs
 LANG["HUD_TIME"] 				= "CZAS"
@@ -52,7 +52,7 @@ LANG["DERMA_TEAMSELECT"]		= "Wybierz drużynę"
 
 -- FRETTA: F1 screeen
 LANG["DERMA_RTV"] 				= "Głosowanie Za Zmianą (RTV)"
-LANG["DERMA_PHMENU"] 			= "Prop Hunt Menu"
+LANG["DERMA_PHMENU"] 			= "Menu Prop Hunt"
 LANG["DERMA_CHANGETEAM"]		= "Wybierz drużynę"
 
 -- FRETTA: Scoreboard
@@ -70,14 +70,14 @@ LANG["CHAT_SWAPBALANCE"]		= "Przeniesiono gracza %s do %s w ramach autobalansowa
 LANG["CHAT_SWAPBALANCEYOU"]		= "Przeniesiono Cię w ramach autobalansowania drużyn. Miłej służby!" -- Smile... for even in death, you have become children of Thanos
 -- // END OF FRETTA SECTION \\
 
-LANG["HELP_F1"] 				= [[A Prop Hunt (Nazwa Kodowa) X Project.
+LANG["HELP_F1"] 				= [[Prop Hunt (Nazwa Kodowa) Projekt X.
 
 Projekt, który uczyni Prop Hunt X nowoczesnym i konfigurowalnym.
 
 Więcej informacji znajdziesz tutaj:
 https://www.wolvindra.net/prophuntx
 
-Aby zobaczyć więcej informacji, pomoc oraz poradniki, Wciśnij [F1], a następnie kliknij w przycisk [Prop Hunt Menu].
+Informacje, pomoc oraz poradniki znajdziesz, klikając przycisk [F1], a następnie przechodząc do [Menu Prop Hunt].
 
 Wersja: ]].. PHX.VERSION ..[[ Poprawka: ]].. PHX.REVISION ..[[
 
@@ -91,9 +91,9 @@ LANG["SUBTYPE_PREFERED_LANG"]	= "Preferowany język"
 --LANG["SUBTYPE_TEXTENTRY_?"]	= "???"
 
 -- Events
-LANG["EV_PLAYER_CONNECT"]		= "%s łączy się z serwerem."
-LANG["EV_PLAYER_JOINED"]		= "%s dołącza do serwera."
-LANG["EV_PLAYER_DISCONNECT"]	= "%s wychodzi z serwera (Powód: %s)"
+LANG["EV_PLAYER_CONNECT"]		= "%s rozpoczyna połączenie z serwerem."
+LANG["EV_PLAYER_JOINED"]		= "%s pojawia się na serwerze."
+LANG["EV_PLAYER_DISCONNECT"]	= "%s opuszcza grę (Powód: %s)"
 
 -- HUD elements
 LANG["HUD_HP"]					= "ZDROWIE"
@@ -107,7 +107,7 @@ LANG["TEAM_HUNTERS"]			= "Łowcy"
 
 LANG["HUD_ROTLOCK"]				= "Obracanie Przedmiotu: Zablokowane"
 LANG["HUD_ROTFREE"]				= "Obracanie Przedmiotu: Odblokowane"
-LANG["HUD_KILLEDBY"]			= "Zabity przez %s"
+LANG["HUD_KILLEDBY"]			= "%s likwiduje cię!"
 
 LANG["HUD_AUTOTAUNT"]			= "Auto-podpowiedź za %d sek."
 LANG["HUD_AUTOTAUNT_ALT"]		= "Auto-podpowiedź za %d"
@@ -117,8 +117,8 @@ LANG["HUD_TargetID"]			= "Gracz: %s (%d%%)" -- Player: <NAME> (<HEALTH>%)
 LANG["HUD_BLINDED"]				= "Łowcy zaczną poszukiwania za %s"
 LANG["HUD_UNBLINDED"]			= "Gotowi czy nie, nadchodzimy!"
 
-LANG["BLIND_RESPAWN_TEAM"]		= "Odrodzisz się w drużynie %s za %d sek. podczas czasu chowania."
-LANG["BLIND_RESPAWN"]			= "Odrodzisz się za %d sek. podczas czasu chowania."
+LANG["BLIND_RESPAWN_TEAM"]		= "Odradzasz się tylko w drużynie %s po %d sek. trwania czasu chowania."
+LANG["BLIND_RESPAWN"]			= "Odradzasz się po %d sek. trwania czasu chowania."
 
 LANG["MISC_ACCEPT"]				= "Akceptuj"
 LANG["MISC_OK"]					= "OK"
@@ -131,13 +131,13 @@ LANG["MISC_ACCESSDENIED"]		= "Dostęp Zabroniony"
 LANG["CHAT_NOPLAYERS"]			= "Zbyt mało graczy by rozpocząć grę!"
 LANG["CHAT_SWAP"]				= "Drużyny zostały zamienione!"
 
-LANG["CHAT_SWAPTEAM_WARNING"]   = "Zmieniono drużynę %d razy. Po przekroczeniu limitu (%d), nie będzie można zmienić drużyny."
+LANG["CHAT_SWAPTEAM_WARNING"]   = "Zmieniono drużynę %d razy. Po przekroczeniu limitu (%d), nie będzie już można zmienić drużyny."
 LANG["CHAT_SWAPTEAM_REVERT"]	= "Nie możesz dołączyć do drużyny %s, ponieważ osiągnięto już limit zmian drużyny."
 
 LANG["CHAT_PROP_NO_ROOM"] 		= "Zbyt mało miejsca, aby się zamienić!"
 
 -- Notification
-LANG["NOTIFY_IN_PROP_TEAM"]		= "Jesteś w drużynie Przedmiotów z możliwością obracania przedmiotu! Możesz się obracać poprzez ruszanie myszką."
+LANG["NOTIFY_IN_PROP_TEAM"]		= "Jesteś w drużynie Przedmiotów z możliwością obracania przedmiotu! Możesz to robić poprzez ruszanie myszką."
 LANG["NOTIFY_ROTATE_NOTICE"]	= "Dodatkowo, możesz zablokować obracanie się, klikając (domyślnie) przycisk [R]!"
 
 -- Custom Taunt Window
@@ -166,15 +166,15 @@ LANG["PHXM_WINDOW_TITLE"]		= "Prop Hunt X - Zaawansowane ustawienia"
 LANG["SERVER_INFO_MOTD"]		= "INFORMACJE I ZASADY [MOTD]"
 
 LANG["PHXM_TAB_HELP"]			= "Pomoc i poradniki"
-LANG["PHXM_TAB_MUTE"]			= "Wycisz/Odcisz graczy"
-LANG["PHXM_TAB_PLAYER"]			= "Ustawienia Gracza"
+LANG["PHXM_TAB_MUTE"]			= "Wycisz graczy"
+LANG["PHXM_TAB_PLAYER"]			= "Ustawienia gracza"
 LANG["PHXM_TAB_MODEL"] 			= "Modele gracza"
 LANG["PHXM_TAB_MODEL_DISABLED"]	= "Modele gracza (Wyłączono)"
 LANG["PHXM_TAB_ADMIN"]			= "Ustawienia Administratora"
-LANG["PHXM_TAB_ABOUT"]			= "O Prop Hunt X"
-LANG["PHXM_TAB_MAPVOTE"]		= "Ustawienia MapVote"
+LANG["PHXM_TAB_ABOUT"]			= "Informacje o Prop Hunt X"
+LANG["PHXM_TAB_MAPVOTE"]		= "Ustawienia Głosowania"
 
-LANG["PHXM_CVAR_CHANGED"]		= "[Ustawienia] Zmienna %q została zmieniona na %q"
+LANG["PHXM_CVAR_CHANGED"]		= "[Ustawienia] Wartość CVAR %q została zmieniona na %q"
 
 --[[
 	Player Mute Settings
@@ -204,7 +204,7 @@ LANG["PHXM_PLAYER_SEE_CRYSTAL_ICONS"]	= "Pokazuj ikonę 'Diabelskich kulek' kied
 LANG["PHXM_PLAYER_USE_NEW_HUD"]			= "Użyj nowego interfejsu PH:E"
 LANG["PHXM_PLAYER_SHOW_TUTOR"]			= "Pokaż okno poradnika (Tylko 2 razy za każdym odrodzeniem jako przedmiot)"
 LANG["PHXM_PLAYER_USE_NEW_CROSSHAIR"]	= "Włącz niestandardowy celownik"
-LANG["PHXM_PLAYER_SHOW_TEAM_TOPBAR"]	= "Pokazuj liczbę żywych graczy w lewym, górnym rogu (Przynajmniej 4 graczy zostanie pokazanych)"
+LANG["PHXM_PLAYER_SHOW_TEAM_TOPBAR"]	= "Pokazuj liczbę żywych graczy w lewym, górnym rogu (Wymaga przynajmniej 4 graczy na serwerze)"
 
 --[[
 	Player model Browser Section
@@ -231,7 +231,7 @@ LANG["PHXM_ADMIN_MUSTALIVE"]	= "Musisz być po stronie żywych, aby móc dokona�
 --[[
 	Language Override
 ]]
-LANG["PHXM_ADMIN_LANGOVERRIDE"]	= "Nadpisanie Języka"
+LANG["PHXM_ADMIN_LANGOVERRIDE"]	= "Wymuszenie Języka"
 
 LANG["PHXM_ADMIN_FORCELANG"] 				= "Wymusić język interfejsu? Spowoduje to zastosowanie okreslonego z góry języka u wszystkich graczy, mimo ich preferencji."
 LANG["PHXM_ADMIN_LANGTOUSE"]				= "Wymuszony język."
@@ -287,7 +287,7 @@ LANG["PHXM_ADMIN_DEVSECTION"]		= "Opcje Deweloperskie/Eksperymenty"
 LANG["PHXM_ADMIN_ROOMCHECK"]		= "Włączyć sprawdzanie rozmiaru przedmiotu? Ochroni to przed niechcianym zablokowaniem się w ścianie/innym przedmiocie."
 LANG["PHXM_ADMIN_USENEWMKBREN"]		= "Użyj nowego modelu broni Bren MK II (Wymaga Zmiany Mapy)"
 LANG["PHXM_ADMIN_BEVERBOSE"]		= "Developer: Zezwalaj PH:X na wyświetlanie wszystkich informacji deweloperskich (dosłownie)?"
-LANG["PHXM_ADMIN_SHOWPLNAMEHEAD"]	= "Zezwalaj na pokazywanie nazw graczy na ich ekranach."
+LANG["PHXM_ADMIN_SHOWPLNAMEHEAD"]	= "Zezwalaj na pokazywanie nazw graczy z drużyny przez ściany."
 LANG["PHXM_ADMIN_USESINGLE_FZCAM"]	= "Użyj jednego dźwięku Zamrożenia Kamery zamiast całej listy (Zobacz 'ph_fc_cue_path', aby odkryć ścieżkę dźwięku)"
 LANG["PHXM_ADMIN_MODELLISTINGTYPE"] = "Użyj starszej wersji listy modeli: 0 = Wszystkie modele gracza (AddValidModel), 1 = Użyj starszej wersji: list.Get('PlayerOptionsModel')"
 LANG["PHXM_ADMIN_JUMPPOWER"]		= "Mnożnik wysokości skoku w drużynie Przedmiotów"
@@ -316,7 +316,7 @@ LANG["PHXM_ADMIN_ALLOWRESPAWN_TEAMCHANGE"]	= "Zezwól na odrodzenie się podczas
 LANG["PHXM_MV_SETTINGS"]			= "Ustawienia Głosowań"
 
 LANG["PHXM_MV_ALLOWCURMAP"]			= "Zezwalaj, aby aktualna mapa była używana w głosowaniu"
-LANG["PHXM_MV_COOLDOWN"]			= "Włącz ograniczenie głosowania za mapą"
+LANG["PHXM_MV_COOLDOWN"]			= "Włącz ograniczenie przed rozpoczęciem głosowania"
 LANG["PHXM_MV_USE_ULX_VOTEMAPS"]	= "Użyć map określonych na liście ULX? Jeżeli nie, wszystkie mapy w ścieżce maps/*.bsp zostaną użyte."
 LANG["PHXM_MV_MAPLIMIT"]			= "Ilość map dostępnych w głosowaniu."
 LANG["PHXM_MV_TIMELIMIT"]			= "Czas na głosowanie"
@@ -363,7 +363,7 @@ LANG["HUD_PROP_CTAUNT_TIME"] = "Niest. podpowiedź"
 LANG["PHXM_TAB_PLUGINS"]				= "Dodatki i pluginy"
 
 -- Plugins Section
-LANG["PLUGINS_NO_PLUGINS"]				= "Nie zainstalowano dodatków! Przeglądaj tutaj."
+LANG["PLUGINS_NO_PLUGINS"]				= "Nie zainstalowano dodatków. Rozpocznij przeglądanie tutaj!"
 LANG["PLUGINS_BROWSE_MORE"]				= "Przeglądaj dodatki"
 LANG["PLUGINS_SERVER_HAS_NO_PLUGINS"]	= "A niech to! Ten serwer nie posiada żadnych dodatków ani pluginów"
 LANG["PLUGINS_SERVER_SETTINGS"]			= "-- Ustawienia Serwera --"
