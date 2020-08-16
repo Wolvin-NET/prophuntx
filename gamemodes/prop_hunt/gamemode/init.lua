@@ -820,6 +820,9 @@ function GM:OnRoundEnd( num )
 		end
 	end
 	
+	-- forgot to add this; Remove handleUnblindHook
+	ClearTimer()
+	
 	hook.Call("PH_OnRoundEnd", nil, num)
 	
 end
