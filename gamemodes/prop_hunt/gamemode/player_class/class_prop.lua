@@ -41,16 +41,19 @@ function CLASS:OnSpawn(pl)
 	pl.ph_prop:Spawn()
 	
 	if PHX.CVAR.UseCustomMdlProp:GetBool() then
-		if table.HasValue(PHX.PROP_PLMODEL_BANS, string.lower(player_manager.TranslatePlayerModel(pl:GetInfo("cl_playermodel")))) then
+		pl.m_shortHunterModel = player_manager.TranslatePlayerModel( pl:GetInfo("cl_playermodel") )
+		
+		if table.HasValue( PHX.PROP_PLMODEL_BANS, string.lower( pl.m_shortHunterModel ) ) then
 			pl.ph_prop:SetModel("models/player/kleiner.mdl")
-			pl:ChatPrint("Your custom playermodel was banned from Props.")
-		elseif table.HasValue(PHX.PROP_PLMODEL_BANS, string.lower(pl:GetInfo("cl_playermodel"))) then
+			pl:ChatPrint("[!PATH] Your custom playermodel was banned from Props.") --Todo: Translate this
+		elseif table.HasValue( PHX.PROP_PLMODEL_BANS, string.lower( pl:GetInfo("cl_playermodel") ) ) then
 			pl.ph_prop:SetModel("models/player/kleiner.mdl")
-			pl:ChatPrint("Your custom playermodel was banned from Props.")
+			pl:ChatPrint("[!NAME] Your custom playermodel was banned from Props.") --Todo: Translate this
 		else
-			pl.ph_prop:SetModel(player_manager.TranslatePlayerModel(pl:GetInfo("cl_playermodel")))
+			pl.ph_prop:SetModel( pl.m_shortHunterModel )
 		end
 	end
+	
 	pl.ph_prop:SetSolid(SOLID_BBOX)
 	pl.ph_prop:SetOwner(pl)
 	pl:SetNWEntity("PlayerPropEntity", pl.ph_prop)

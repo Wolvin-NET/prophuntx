@@ -244,9 +244,26 @@ PHX.PLUGINS = {}
 
 function PHX:InitializePlugin()
 
-	for name,plugin in pairs(list.Get("PHE.Plugins")) do
-		self.VerboseMsg("[PHX Plugin] Adding Plugin: "..name)
-		self.PLUGINS[name] = plugin
+	local _Plugins = {}
+	
+	function _Plugins:AddToList( name, data )
+		_Plugins[name] = data
+	end
+	
+	hook.Run("PHX_AddPlugin", _Plugins)
+	
+	table.sort(_Plugins)
+	-- for
+
+	-- backward compatibility
+	for name,plugin in pairs( list.Get("PHE.Plugins") ) do
+	
+		if (self.PLUGINS[name] ~= nil) then
+			self.VerboseMsg("[PHX Plugin] Not adding "..name.." because it was exists in table. Use different name instead!")
+		else
+			self.VerboseMsg("[PHX Plugin] Adding Plugin: "..name)
+			self.PLUGINS[name] = plugin
+		end
 	end
 	
 	if !table.IsEmpty(self.PLUGINS) then

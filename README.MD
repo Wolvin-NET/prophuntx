@@ -1,13 +1,14 @@
-## Please Help
-This gamemode rework might bit slower without your help. This gamemode is reworked for a cause. If you kindly able to help or have a time to help me, please drop
-your donation below at **Donate** section. Thank you!
+## Warning:
+This gamemode rework might be slower. There was connectivity issues to get all updates (Request-pull) to be merged.
+However If you'd like to help, please consider support donating below!
 
 ### Please note: 
-Looking for Translators! (Any language) for:
-- PHX
-- Prop Chooser
-- Snake MiniGame
-- And Possible any other PHX's Plugins...
+- PropChooser Plugin may have no backward compatibility
+- There will some changes for Plugins Additionals, which will changed into Hook instead of using `list.Set`!
+- This will changes the `GetConVar` behaviour on clients. We'll can no longer use Replicated ConVar as it seems to be not properly functional.  
+Be sure you made a backup before replacing!
+- There will be major changes available, mainly for HUD, Informational Chat System, Chatbox System, Main Core files and other Player's functions.
+- Changelogs may be less updated due to reason mentioned above.
 
 ### Warning: This is nightly build development branch which may incomplete or unstable. Use at your own risk! This branch may contains alot of commit changes. Be sure to stay up to date & checkout regularly.
 

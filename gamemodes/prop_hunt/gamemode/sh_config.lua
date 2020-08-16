@@ -428,7 +428,7 @@ if SERVER then
 
 		-- Create actual config
 		if ( !file.Exists( dir.."/bans.txt", "DATA" ) ) then
-			file.Write( dir.."/bans.txt", util.TableToJSON({"models/player.mdl"}, true) )
+			file.Write( dir.."/bans.txt", util.TableToJSON({"models/player.mdl", "CustomPlayerModelName"}, true) )
 		end
 		
 		if ( file.Exists( dir.."/bans.txt", "DATA" ) ) then
@@ -494,8 +494,8 @@ if SERVER then
 	end)	
 	
 	-- Add ConCommands.
-	concommand.Add("phe_refresh_plmodel_ban", AddBadPLModels, nil, "Refresh Server Playermodel Ban Lists, read from prop_plymodel_bans/bans.txt data.")
-	concommand.Add("phe_refresh_propmodel_ban", AddBannedPropModels, nil, "Refresh Server Prop Models Ban Lists, read from prop_model_bans/model_bans.txt data.")
+	concommand.Add("ph_refresh_plmodel_ban", AddBadPLModels, nil, "Refresh Server Playermodel Ban Lists, read from prop_plymodel_bans/bans.txt data.")
+	concommand.Add("ph_refresh_propmodel_ban", AddBannedPropModels, nil, "Refresh Server Prop Models Ban Lists, read from prop_model_bans/model_bans.txt data.")
 end
 
 -- AAAAAAARGGHHHHHH
