@@ -1,7 +1,7 @@
 # Prop Hunt X
 
 ### Versioning
-Version: X, Revision: 25/07/2020 (dd/mm/yyyy)  
+Version: X, Revision: 16/08/2020 (dd/mm/yyyy)  
 PUBLIC BETA
 
 ### Public Beta Test
