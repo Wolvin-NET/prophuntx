@@ -499,12 +499,14 @@ function GM:PlayerExchangeProp(pl, ent)
 				-- because we don't want to fuck up Prop's bbox which is copied from Ragdoll's dynamic collission bounds/BBOX.
 				-- Use Ragdolls at your own risk!
 				
-				pl:ResetHull()
+				pl:SetHull(Vector(-16, -16, 0), Vector(16, 16, 72))
+				pl:SetHullDuck(Vector(-16, -16, 0), Vector(16, 16, 36))
 				
 				pl:SetViewOffset(Vector(0,0,72))
 				pl:SetViewOffsetDucked(Vector(0,0,36))
 				
 				pl:SetHealth(100)
+				pl.ph_prop:SetSolid(SOLID_BBOX)
 				pl.ph_prop.health 		= 100
 				pl.ph_prop.max_health 	= 100
 				
