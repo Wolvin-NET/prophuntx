@@ -12,23 +12,23 @@ PHX.SPECTATOR_CHECK_ADD = 0.1
 PHX.CVARUseAbleEnts = {
 	-- Due to Performance issue, table must contains: [classname] = true. We'll starting to avoid table.HasValue for now.
 	[1]	= { 
-		-- DO NOT ADD OR CHANGE ANYTHING HERE, USE PHX.USABLE_PROP_CUSTOM_ENTS BELOW!
+		-- DO NOT ADD OR CHANGE ANYTHING HERE, USE [4] BELOW!
 		["prop_physics"]				= true,
 		["prop_physics_multiplayer"]	= true,
 		["prop_physics_override"]		= true
-		-- DO NOT ADD OR CHANGE ANYTHING HERE, USE PHX.USABLE_PROP_CUSTOM_ENTS BELOW!
+		-- DO NOT ADD OR CHANGE ANYTHING HERE, USE [4] BELOW!
 	},
 	[2]	= {
-		-- DO NOT ADD OR CHANGE ANYTHING HERE, USE PHX.USABLE_PROP_CUSTOM_ENTS BELOW!
+		-- DO NOT ADD OR CHANGE ANYTHING HERE, USE [4] BELOW!
 		["prop_physics"]				= true,
 		["prop_physics_multiplayer"]	= true,
 		["prop_physics_override"]		= true,
 		["prop_dynamic"] 				= true,
 		["prop_dynamic_override"] 		= true
-		-- DO NOT ADD OR CHANGE ANYTHING HERE, USE PHX.USABLE_PROP_CUSTOM_ENTS BELOW!
+		-- DO NOT ADD OR CHANGE ANYTHING HERE, USE [4] BELOW!
 	},
 	[3] = {
-		-- DO NOT ADD OR CHANGE ANYTHING HERE, USE PHX.USABLE_PROP_CUSTOM_ENTS BELOW!
+		-- DO NOT ADD OR CHANGE ANYTHING HERE, USE [4] BELOW!
 		["prop_physics"]				= true,
 		["prop_physics_multiplayer"]	= true,
 		["prop_physics_override"]		= true,
@@ -47,24 +47,22 @@ PHX.CVARUseAbleEnts = {
 		["prop_vehicle_airboat"]		= true,
 		["prop_thumper"]				= true, -- thumper is too big i guess. 
 		["combine_mine"]				= true
-		-- DO NOT ADD OR CHANGE ANYTHING HERE, USE PHX.USABLE_PROP_CUSTOM_ENTS BELOW!
+		-- DO NOT ADD OR CHANGE ANYTHING HERE, USE [4] BELOW!
 		
 		-- I'm not going to add any weapons or other item entities so it's up to you to add by using PHX.USABLE_PROP_CUSTOM_ENTS below.
 		-- These are recommended list and please do a copy paste to table below to modify. NOT inside this table!!!
 	},
-	[4] = function() return PHX.USABLE_PROP_CUSTOM_ENTS end
-}
-
--- Enter any custom entities here. Avoid adding dangerous entities which may cause your server/game to CRASH! 
--- See: https://wolvindra.xyz/wiki/prophuntx/#0_QuickFix/Dangerous_Entities+Dangerous_Entities
---====================================================================================--
--- RULES: MUST HAVE VPHSYICS, MUST HAVE PROPER COLLISION BOUNDS/BOUNDING BOX (BBOX).
--- NO VPHYSICS = IGNORED
---====================================================================================--
-PHX.USABLE_PROP_CUSTOM_ENTS	 = {
-	["prop_physics"]				= true,
-	["prop_physics_multiplayer"] 	= true,
-	["prop_physics_override"] 		= true
+	[4] = {
+		-- Enter any custom entities here. Avoid adding dangerous entities which may cause your server/game to CRASH! 
+		-- See: https://wolvindra.xyz/wiki/prophuntx/#0_QuickFix/Dangerous_Entities+Dangerous_Entities
+		--====================================================================================--
+		-- RULES: MUST HAVE VPHSYICS, MUST HAVE PROPER COLLISION BOUNDS/BOUNDING BOX (BBOX).
+		-- NO VPHYSICS = IGNORED
+		--====================================================================================--
+		["prop_physics"]				= true,
+		["prop_physics_multiplayer"] 	= true,
+		["prop_physics_override"] 		= true
+	}
 }
 
 -- Initialise
@@ -76,7 +74,6 @@ function PHX:IsUsablePropEntity( entClass )
 			return true
 		end
 	end
-	
 	return false
 end
 
@@ -84,12 +81,10 @@ end
 function PHX:SetUsableEntity( number )
 	if !number and !isnumber(number) then return end
 
-	if number >= 1 and number <= 3 then
+	if number >= 1 and number <= 4 then
 		self.USABLE_PROP_ENTITIES = self.CVARUseAbleEnts[number]
-	end
-	
-	if number == 4 then
-		self.USABLE_PROP_ENTITIES = self.CVARUseAbleEnts[4]()
+	else
+		ErrorNoHalt("Error: SetUsableEntity number argument is out of range! (min = 1, max = 4)")
 	end
 end
 
