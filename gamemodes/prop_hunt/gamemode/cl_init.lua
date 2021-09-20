@@ -30,6 +30,7 @@ end
 include("sh_init.lua")
 include("sh_config.lua")
 CL_GLOBAL_LIGHT_STATE	= 0
+include("cl_fb_core.lua")
 include("cl_chat.lua")
 include("cl_hud_mask.lua")
 include("cl_hud.lua")
@@ -41,6 +42,7 @@ include("cl_autotaunt.lua")
 
 include("cl_credits.lua")
 
+-- WARNING: DO NOT STORE YOUR CLIENTSIDE CONVARS HERE, THESE ARE DEPRECATED AND IT WILL BE MOVED IN "SH_CONVAR.LUA" IN FUTURE!!!
 PHX.CLCVAR = PHX.CLCVAR or {}
 
 PHX.CLCVAR.PropHalos		= CreateClientConVar("ph_cl_halos", "1", true, true, "Toggle Enable/Disable Halo effects when choosing a prop.")
@@ -89,7 +91,7 @@ function GM:CalcView(pl, origin, angles, fov)
  	
  	-- Give the active weapon a go at changing the viewmodel position 
 	if pl:Team() == TEAM_PROPS && pl:Alive() then
-		if PHX.CVAR.CameraCollision:GetBool() then
+		if PHX:GetCVar( "ph_prop_camera_collisions" ) then
 			local trace = {}
 
 			local filterent = ents.FindByClass("ph_prop")
@@ -160,7 +162,7 @@ local crosshair = Material("vgui/hud_crosshair")
 -- Draw round timeleft and hunter release timeleft
 function HUDPaint()
 	-- Draw player texts
-	if PHX.CVAR.SeePlayerNames:GetBool() && PHX.CLCVAR.PlayerText:GetBool() && LocalPlayer():Team() != TEAM_SPECTATOR then
+	if PHX:GetCVar( "ph_enable_plnames" ) && PHX.CLCVAR.PlayerText:GetBool() && LocalPlayer():Team() != TEAM_SPECTATOR then
 		for _, pl in pairs(player.GetAll()) do
 			if pl != LocalPlayer() && (pl && pl:IsValid() && pl:Alive() && pl:Team() == LocalPlayer():Team()) then
 				local addvector = Vector(0, 0, math.Clamp(pl:EyePos():Distance(LocalPlayer():EyePos())*0.04, 16, 64))
@@ -172,7 +174,7 @@ function HUDPaint()
 	
 	-- Hunter Blindlock Time
 	if GetGlobalBool("InRound", false) then
-		local blindlock_time_left = (PHX.CVAR.BlindTime:GetInt() - (CurTime() - GetGlobalFloat("RoundStartTime", 0))) + 1
+		local blindlock_time_left = (PHX:GetCVar( "ph_hunter_blindlock_time" ) - (CurTime() - GetGlobalFloat("RoundStartTime", 0))) + 1
 		
 		if blindlock_time_left < 1 && blindlock_time_left > -6 then
 			blindlock_time_left_msg = PHX:FTranslate("HUD_UNBLINDED")
@@ -202,22 +204,27 @@ function HUDPaint()
 		local cY = h/2
 		
 		for _,ent in pairs(ents.FindByClass('ph_luckyball')) do
-			local pos = ent:GetPos() + offset
-			local poscr = pos:ToScreen()
-			
-			if LocalPlayer():IsLineOfSightClear(ent) then
-			
-				if ((poscr.x > 32 && poscr.x < (w-43)) && (poscr.y > 32 && poscr.y < (h-38))) then
-					surface.SetDrawColor(255,255,255,255)
-					surface.SetTexture(surface.GetTextureID(mat))
-					surface.DrawTexturedRect( poscr.x-32, poscr.y, 64, 64 )
-				else
-					local r = math.Round(cX/2)
-					local rad = math.atan2(poscr.y-cY, poscr.x-cX)
-					local deg = 0 - math.Round(math.deg(rad))
-					surface.SetDrawColor(255,255,255,255)
-					surface.SetTexture(surface.GetTextureID(pointer))
-					surface.DrawTexturedRectRotated(math.cos(rad)*r+cX, math.sin(rad)*r+cY,64,64,deg+90)
+		
+			if IsValid(ent) then -- prevent icon stuck on new round
+		
+				local pos = ent:GetPos() + offset
+				local poscr = pos:ToScreen()
+				
+				if LocalPlayer():IsLineOfSightClear(ent) then
+				
+					if ((poscr.x > 32 && poscr.x < (w-43)) && (poscr.y > 32 && poscr.y < (h-38))) then
+						surface.SetDrawColor(255,255,255,255)
+						surface.SetTexture(surface.GetTextureID(mat))
+						surface.DrawTexturedRect( poscr.x-32, poscr.y, 64, 64 )
+					else
+						local r = math.Round(cX/2)
+						local rad = math.atan2(poscr.y-cY, poscr.x-cX)
+						local deg = 0 - math.Round(math.deg(rad))
+						surface.SetDrawColor(255,255,255,255)
+						surface.SetTexture(surface.GetTextureID(pointer))
+						surface.DrawTexturedRectRotated(math.cos(rad)*r+cX, math.sin(rad)*r+cY,64,64,deg+90)
+					end
+					
 				end
 				
 			end
@@ -236,24 +243,29 @@ function HUDPaint()
 		local cY = h/2
 		
 		for _,ent in pairs(ents.FindByClass('ph_devilball')) do
-			local pos = ent:GetPos() + offset
-			local poscr = pos:ToScreen()
 			
-			if LocalPlayer():IsLineOfSightClear(ent) then
-			
-				if ((poscr.x > 32 && poscr.x < (w-43)) && (poscr.y > 32 && poscr.y < (h-38))) then
-					surface.SetDrawColor(255,255,255,255)
-					surface.SetTexture(surface.GetTextureID(dmat))
-					surface.DrawTexturedRect( poscr.x-32, poscr.y, 64, 64 )
-				else
-					local r = math.Round(cX/2)
-					local rad = math.atan2(poscr.y-cY, poscr.x-cX)
-					local deg = 0 - math.Round(math.deg(rad))
-					surface.SetDrawColor(255,255,255,255)
-					surface.SetTexture(surface.GetTextureID(dpointer))
-					surface.DrawTexturedRectRotated(math.cos(rad)*r+cX, math.sin(rad)*r+cY,64,64,deg+90)
-				end
+			if IsValid(ent) then
+		
+				local pos = ent:GetPos() + offset
+				local poscr = pos:ToScreen()
 				
+				if LocalPlayer():IsLineOfSightClear(ent) then
+				
+					if ((poscr.x > 32 && poscr.x < (w-43)) && (poscr.y > 32 && poscr.y < (h-38))) then
+						surface.SetDrawColor(255,255,255,255)
+						surface.SetTexture(surface.GetTextureID(dmat))
+						surface.DrawTexturedRect( poscr.x-32, poscr.y, 64, 64 )
+					else
+						local r = math.Round(cX/2)
+						local rad = math.atan2(poscr.y-cY, poscr.x-cX)
+						local deg = 0 - math.Round(math.deg(rad))
+						surface.SetDrawColor(255,255,255,255)
+						surface.SetTexture(surface.GetTextureID(dpointer))
+						surface.DrawTexturedRectRotated(math.cos(rad)*r+cX, math.sin(rad)*r+cY,64,64,deg+90)
+					end
+					
+				end
+			
 			end
 		end
 		
@@ -276,7 +288,7 @@ function HUDPaint()
 		--trace.filter = ents.FindByClass("ph_prop")
 		--Fix by Codingale: https://github.com/Codingale , https://github.com/prop-hunt-enhanced/prop-hunt-enhanced/pull/11
 		local filter = {} -- We need to filter out players and the ph_prop.
-
+		
 		for k,v in pairs(ents.GetAll()) do
 			if v:GetClass() == "ph_prop" or string.lower(v:GetClass()) == "player" then
 				table.insert(filter, v)
@@ -286,7 +298,7 @@ function HUDPaint()
 		trace.filter = filter
 		
 		local trace2 = util.TraceLine(trace)
-		if trace2.Entity && trace2.Entity:IsValid() && table.HasValue(PHX.USABLE_PROP_ENTITIES, trace2.Entity:GetClass()) then
+		if trace2.Entity && trace2.Entity:IsValid() && PHX:IsUsablePropEntity( trace2.Entity:GetClass() ) then
 			color = Color(10,255,10,255)
 		else
 			color = Color(255,255,255,255)
@@ -347,7 +359,7 @@ function drawPropSelectHalos()
 			trace.filter = ents.FindByClass("ph_prop")
 			
 			local trace2 = util.TraceLine(trace) 
-			if trace2.Entity && trace2.Entity:IsValid() && table.HasValue(PHX.USABLE_PROP_ENTITIES, trace2.Entity:GetClass()) then
+			if trace2.Entity && trace2.Entity:IsValid() && PHX:IsUsablePropEntity(trace2.Entity:GetClass()) then
 				local ent_table = {}
 				table.insert(ent_table, trace2.Entity)
 				halo.Add(ent_table, Color(20, 250, 0), 1.2, 1.2, 1, true, true)
@@ -412,11 +424,14 @@ net.Receive("PH_ShowTutor", function()
 end)
 
 -- Receive the Winning Notification
+--[[
+// Obsolete.
 net.Receive("PH_RoundDraw_Snd", function(len)
 	if PHX.CLCVAR.EndCue:GetBool() then
 		surface.PlaySound(table.Random(PHX.WINNINGSOUNDS["Draw"]))
 	end
 end)
+]]--
 net.Receive("PH_TeamWinning_Snd", function(len)
 	local snd = net.ReadString()
 	if PHX.CLCVAR.EndCue:GetBool() then
@@ -436,10 +451,10 @@ end)
 -- PHX.FreezeCamSounds is moved to sh_config.lua!
 
 net.Receive("PlayFreezeCamSound", function()
-	if PHX.CVAR.FreezeCamUseSingle:GetBool() then
+	if PHX:GetCVar( "ph_fc_use_single_sound" ) then
 		surface.PlaySound( PHX.LegalSoundPath )
 	else
-		surface.PlaySound( table.Random(PHX.FreezeCamSounds) )
+		surface.PlaySound( PHX.FreezeCamSounds[math.random(1, #PHX.FreezeCamSounds)] )
 	end
 end)
 
@@ -552,110 +567,3 @@ function PHX:showLangPreview()
 	end
 	
 end
-
-local links = {
-	["github"] 		= "https://github.com/Wolvin-NET/prophuntx/issues",
-	["workshop"] 	= "https://steamcommunity.com/sharedfiles/filedetails/discussions/2176546751",
-	["discord"] 	= "https://discord.gg/avaTPM7",
-	["donate"] 		= "https://prophunt.wolvindra.net/donate"
-}
-
-local whtml = {}
-function PHX:CheckWhatsNew( playerName, gmRev )
-
-	local path = PHX.ConfigPath .. "/phx_version_check.txt"
-	local ignoreReOpen = false
-	
-	if (file.Exists(path, "DATA")) then
-		local check = file.Read(path, "DATA")
-		local tab = util.JSONToTable(check)
-		
-		if tab["Revision"] == gmRev and tonumber(tab["ReopenAfterNewUpdate"]) == 1 then
-			return
-		end
-	end
-
-	local CurBranch = string.lower(BRANCH)
-	local Name = playerName
-	local Rev  = gmRev
-	
-	local param = {}
-	
-	if (CurBranch == "unknown") then
-		table.insert(param, "isawesomium=1")
-	end
-	table.insert(param, "name=" .. Name)
-	table.insert(param, "rev=" .. Rev)
-	
-	whtml.window = vgui.Create("DFrame")
-	whtml.window:SetSize(ScrW() - 400, ScrH() - 120)
-	whtml.window:SetTitle("Prop Hunt X: What's New")
-	whtml.window:Center()
-	whtml.window:MakePopup()
-	
-	whtml.html = vgui.Create("DHTML", whtml.window)
-	whtml.html:Dock(TOP)
-	whtml.html:DockMargin(8,0,8,0)
-	whtml.html:SetSize(0, whtml.window:GetTall() - 80)
-	whtml.html:AddFunction("gmod", "phxFunc", function(str)
-		gui.OpenURL(links[str])
-	end)
-	local cparam = table.concat(param, "&")
-	whtml.html:OpenURL("https://prophunt.wolvindra.net/whatsnew.php?" .. cparam)
-	
-	local ReopenAfterNewUpdate = 0
-	local data = {
-		[ "ReopenAfterNewUpdate" ] 	= tostring( ReopenAfterNewUpdate ),
-		[ "Revision" ]				= gmRev
-	}
-	
-	
-	local function createButton( text, panel, f_doClick )
-		local btn = vgui.Create("DButton", panel )
-		btn:Dock(LEFT)
-		btn:DockMargin(4,8,0,8)
-		btn:SetSize(panel:GetWide() / 2 - 10, 0)
-		btn:SetText( text )
-		btn.DoClick = f_doClick
-	end
-	
-	createButton("Close this window", whtml.window, function(self)
-		ReopenAfterNewUpdate = 0
-		
-		data["ReopenAfterNewUpdate"] = tostring( ReopenAfterNewUpdate )
-		
-		local json = util.TableToJSON(data)
-		file.Write(path, json)
-	
-		whtml.window:Close()
-	end)
-	
-	createButton("Hide this window permanently", whtml.window, function(self)
-	
-		Derma_Message("This window will re-appear again once a new Prop Hunt: X update has been released!","Info","OK")
-	
-		ReopenAfterNewUpdate = 1
-		
-		data["ReopenAfterNewUpdate"] = tostring( ReopenAfterNewUpdate )
-		
-		local json = util.TableToJSON(data)
-		file.Write(path, json)
-		
-		whtml.window:Close()
-	end)
-	
-	function whtml:OnClose()
-		ReopenAfterNewUpdate = 0
-		
-		data["ReopenAfterNewUpdate"] = tostring( ReopenAfterNewUpdate )
-		
-		local json = util.TableToJSON(data)
-		file.Write(path, json)
-	end
-end
-
-net.Receive("InitialPlayer_ShowWhatsNew", function()
-	local name 		= net.ReadString()
-	local revision	= net.ReadString()
-	PHX:CheckWhatsNew(name, revision)
-end)

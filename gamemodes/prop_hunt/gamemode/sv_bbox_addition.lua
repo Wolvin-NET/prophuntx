@@ -83,7 +83,7 @@ hook.Add("Initialize", "PHX.InitOBBModelData", function()
 end)
 
 hook.Add("PostCleanupMap", "PHX.PostOBBModelData", function()
-	if PHX.CVAR.ApplyOBBonRound:GetBool() then
+	if PHX:GetCVar( "ph_reload_obb_setting_everyround" ) then
 		PHX.VerboseMsg("[PHX] PostCleanup OBB ModelData Config...")
 		
 		DoConfig()

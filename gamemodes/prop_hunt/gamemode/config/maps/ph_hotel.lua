@@ -1,5 +1,6 @@
 -- ph_hotel Configuration.
--- if you found this exploitable by Players, Adjust the Prop's bounding box to your appropriate settings.
+-- if you found this exploitable by Players, Adjust the Prop's bounding box to your appropriate setting.
+PHX.VerboseMsg("[PHX Map Config] Loaded.")
 
 local mdls = {
 	"models/props_debris/wood_board05a.mdl",
@@ -10,7 +11,7 @@ local function FixTallModelHulls()
 
 	if (not GetConVar("ph_sv_enable_obb_modifier"):GetBool()) then
 	  for i=1,3 do
-		print("Warning: ConVar 'ph_sv_enable_obb_modifier' is not enabled by default. This wont fix the collission issue for taller props in this map!")
+		print("Warning: ConVar 'ph_sv_enable_obb_modifier' is not enabled by default! This wont fix the collission issue for taller props in this map!")
 	  end
 	end
 
@@ -21,10 +22,10 @@ local function FixTallModelHulls()
 			if IsValid( ent ) and string.find(ent:GetClass(), "prop_physics") then
 				
 				local bounds = {
-					min = Vector(-1.3, -4.3, 0),
-					max = Vector(1.3, 4.3, 96),
-					dmin = Vector(-1.3, -4.3, 0),
-					dmax = Vector(1.3, 4.3, 32)
+					min 	= Vector(-1.3, -4.3, 0),
+					max 	= Vector(1.3, 4.3, 96),
+					dmin 	= Vector(-1.3, -4.3, 0),
+					dmax 	= Vector(1.3, 4.3, 32)
 				}
 	
 				ent:SetNWBool("hasCustomHull", true)
@@ -39,8 +40,6 @@ local function FixTallModelHulls()
 end
 
 local function PHX_phhotel_conf()
-	if string.find(game.GetMap(), "ph_hotel") and engine.ActiveGamemode() == "prop_hunt" then
-		FixTallModelHulls()
-	end
+	FixTallModelHulls()
 end
 hook.Add("PostCleanupMap", "PHX.ph_hotel.config", PHX_phhotel_conf)

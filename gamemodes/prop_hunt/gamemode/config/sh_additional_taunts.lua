@@ -1,7 +1,8 @@
 local taunts = {}
 
-TEAM_HUNTERS = TEAM_HUNTERS or 1
-TEAM_PROPS	= TEAM_PROPS or 2
+-- Keep this variable always available, to make sure it's valid one.
+TEAM_HUNTERS 	= TEAM_HUNTERS or 1
+TEAM_PROPS		= TEAM_PROPS or 2
 
 -- Begin Table: Hunters
 taunts[TEAM_HUNTERS] = {
@@ -12,7 +13,7 @@ taunts[TEAM_HUNTERS] = {
 -- Begin Table: Props
 taunts[TEAM_PROPS] = {
 	["Windows XP Shutdown"]			=	"taunts/ph_enhanced/ext_xp_off.wav",
-	["Windows XP Startup"]			=	"taunts/ph_enhanced/ext_xp_start.wav"
+	["Windows XP Startup"]			=	"taunts/ph_enhanced/ext_xp_start.wav",
 	-- Add more Props Taunt here...
 }
 

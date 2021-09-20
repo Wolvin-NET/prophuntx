@@ -3,33 +3,135 @@ PHX.DEFAULT_CATEGORY = "PHX Original"
 -- Time (in seconds) for spectator check (Default: 0.1)
 PHX.SPECTATOR_CHECK_ADD = 0.1
 
-PHX.USABLE_PROP_ENTITIES = {
-	"prop_physics",
-	"prop_physics_multiplayer"
+-- [ Usable Entities ]
+-- Do Not Use / Modify from THIS TABLE!
+--====================================================================================--
+-- RULES: MUST HAVE VPHSYICS, MUST HAVE PROPER BOUNDING BOX.
+-- NO VPHYSICS = IGNORED
+--====================================================================================--
+PHX.CVARUseAbleEnts = {
+	-- Due to Performance issue, table must contains: [classname] = true. We'll starting to avoid table.HasValue for now.
+	[1]	= { 
+		-- DO NOT ADD OR CHANGE ANYTHING HERE, USE PHX.USABLE_PROP_CUSTOM_ENTS BELOW!
+		["prop_physics"]				= true,
+		["prop_physics_multiplayer"]	= true,
+		["prop_physics_override"]		= true
+		-- DO NOT ADD OR CHANGE ANYTHING HERE, USE PHX.USABLE_PROP_CUSTOM_ENTS BELOW!
+	},
+	[2]	= {
+		-- DO NOT ADD OR CHANGE ANYTHING HERE, USE PHX.USABLE_PROP_CUSTOM_ENTS BELOW!
+		["prop_physics"]				= true,
+		["prop_physics_multiplayer"]	= true,
+		["prop_physics_override"]		= true,
+		["prop_dynamic"] 				= true,
+		["prop_dynamic_override"] 		= true
+		-- DO NOT ADD OR CHANGE ANYTHING HERE, USE PHX.USABLE_PROP_CUSTOM_ENTS BELOW!
+	},
+	[3] = {
+		-- DO NOT ADD OR CHANGE ANYTHING HERE, USE PHX.USABLE_PROP_CUSTOM_ENTS BELOW!
+		["prop_physics"]				= true,
+		["prop_physics_multiplayer"]	= true,
+		["prop_physics_override"]		= true,
+		["prop_dynamic"] 				= true,
+		["prop_dynamic_override"] 		= true,
+		["prop_ragdoll"]				= true,
+		["ph_luckyball"]				= true,
+		["item_healthkit"] 				= true,
+		["item_battery"] 				= true,
+		["item_item_crate"] 			= true,
+		["item_ammo_crate"] 			= true,
+		["prop_door_rotating"]			= true,
+		["prop_vehicle_jeep"]			= true,
+		["prop_vehicle_drivable"]		= true,
+		["prop_vehicle_apc"]			= true,
+		["prop_vehicle_airboat"]		= true,
+		["prop_thumper"]				= true, -- thumper is too big i guess. 
+		["combine_mine"]				= true
+		-- DO NOT ADD OR CHANGE ANYTHING HERE, USE PHX.USABLE_PROP_CUSTOM_ENTS BELOW!
+		
+		-- I'm not going to add any weapons or other item entities so it's up to you to add by using PHX.USABLE_PROP_CUSTOM_ENTS below.
+		-- These are recommended list and please do a copy paste to table below to modify. NOT inside this table!!!
+	},
+	[4] = function() return PHX.USABLE_PROP_CUSTOM_ENTS end
 }
 
+-- Enter any custom entities here. Avoid adding dangerous entities which may cause your server/game to CRASH! 
+-- See: https://wolvindra.xyz/wiki/prophuntx/#0_QuickFix/Dangerous_Entities+Dangerous_Entities
+--====================================================================================--
+-- RULES: MUST HAVE VPHSYICS, MUST HAVE PROPER COLLISION BOUNDS/BOUNDING BOX (BBOX).
+-- NO VPHYSICS = IGNORED
+--====================================================================================--
+PHX.USABLE_PROP_CUSTOM_ENTS	 = {
+	["prop_physics"]				= true,
+	["prop_physics_multiplayer"] 	= true,
+	["prop_physics_override"] 		= true
+}
+
+-- Initialise
+PHX.USABLE_PROP_ENTITIES = PHX.USABLE_PROP_ENTITIES or PHX.CVARUseAbleEnts[1]
+
+function PHX:IsUsablePropEntity( entClass )
+	if entClass and entClass ~= nil then
+		if self.USABLE_PROP_ENTITIES[entClass] then
+			return true
+		end
+	end
+	
+	return false
+end
+
+-- Called only from cvars.AddChangeCallback. Do Not use outside from cvar's callback function!
+function PHX:SetUsableEntity( number )
+	if !number and !isnumber(number) then return end
+
+	if number >= 1 and number <= 3 then
+		self.USABLE_PROP_ENTITIES = self.CVARUseAbleEnts[number]
+	end
+	
+	if number == 4 then
+		self.USABLE_PROP_ENTITIES = self.CVARUseAbleEnts[4]()
+	end
+end
+
+function PHX:GetUsableEntities()
+	return self.USABLE_PROP_ENTITIES
+end
+
+hook.Add("Initialize", "PHX.InitUsableEnt", function()
+	PHX.USABLE_PROP_ENTITIES = PHX.CVARUseAbleEnts[ PHX:QCVar( "ph_usable_prop_type" ) ]
+end)
+
+-- dirty hacks: Client and Server must update Usable Prop Entities settings every round restart!
+-- Also Addition: Prohibitted Props
 -- Prohibitted models which can cause server/client crash or other issues.
 -- This will automatically gets deleted after round restart!
 PHX.PROHIBITTED_MDLS = {
 	["models/props_collectables/piepan.mdl"]	= true,
 	["models/foodnhouseholditems/egg.mdl"]		= true
 }
-hook.Add("PostCleanupMap", "PHX.RemoveProhibittedModels", function()
-	for _,ent in pairs(ents.FindByClass('prop_physics*')) do
-		if IsValid(ent) and PHX.PROHIBITTED_MDLS[ent:GetModel()] then
-			PHX.VerboseMsg("[PHX] Removing " .. ent:GetModel() .. " to prevent server crash or exploits.")
-			ent:Remove()
-		end
+
+hook.Add("PostCleanupMap", "PHX.UpdateUsablePropEnt", function()
+	-- Update Prop Enttiies Type
+	PHX.USABLE_PROP_ENTITIES = PHX.CVARUseAbleEnts[ PHX:GetCVar( "ph_usable_prop_type" ) ]
+	
+	-- Prohibit specific prop from spawning
+	for _,ent in pairs(ents.GetAll()) do
+		timer.Simple(0.1, function()
+			if IsValid(ent) and PHX.PROHIBITTED_MDLS[ent:GetModel()] then
+				PHX.VerboseMsg("[PHX] Removing " .. ent:GetModel() .. " to prevent server crash or exploits.")
+				ent:Remove()
+			end
+		end)
 	end
 end)
 
 -- This is default English as Fallback. DO NOT TRANSLATE HERE, USE YOUR TRANSLATED LANGUAGE FILE INSTEAD!
-PHX.DefaultHelp = [[A Prop Hunt (Codename) X Project.
+PHX.DefaultHelp = [[A Prop Hunt: X Project.
 
 A project to make Prop Hunt X modern and customisable.
 
 More info can be found at:
-https://www.wolvindra.net/prophuntx
+https://wolvindra.xyz/prophuntx
 
 To See more info, help and guide, Press [F1] key and then click [Prop Hunt Menu] button.
 
@@ -44,6 +146,9 @@ PHX.IgnoreMutedUserGroup = {
 	"developer", "moderator", "donator", "vip"
 }
 PHX.SVAdmins = {
+	-- Admin/Superadmin level privileges only!
+	-- This will responsible to manage Prop Hunt: X's Configurations, Server Settings, Prop Menu Editor and others.
+	-- Put any staff you trust.
 	"admin", "superadmin", "owner"
 }
 -- Bootstrap 4 colour base. This only works on clientside :(
@@ -60,7 +165,7 @@ function PHX:AddAdminGroup( strGroup )
 	if !strGroup then return end
 	
 	if (table.HasValue(self.SVAdmins, strGroup)) then
-		print("[PH: X] The usergroup you entered '" .. strGroup .. "' was exist. Ignoring...")
+		PHX.VerboseMsg("[PHX] The usergroup you entered '" .. strGroup .. "' was exist. Ignoring...")
 	else
 		table.insert( self.SVAdmins, string.lower(strGroup) )
 	end
@@ -70,13 +175,13 @@ function PHX:AddWhitelistMuted( strGroup )
 	if !strGroup then return end
 	
 	if (table.HasValue(self.IgnoreMutedUserGroup, strGroup)) then
-		print("[PH: X] The whitelisted mute usergroup you entered '" .. strGroup .. "' was exist. Ignoring...")
+		PHX.VerboseMsg("[PHX] The whitelisted mute usergroup you entered '" .. strGroup .. "' was exist. Ignoring...")
 	else
 		table.insert( self.IgnoreMutedUserGroup, string.lower(strGroup) )
 	end
 end
 
--- Banned Props models
+-- Banned Props models. Stock, use external lua script to add and use Initialize hook to start adding items.
 PHX.BANNED_PROP_MODELS = {}
 
 -- Taunts are now moved here
@@ -94,11 +199,35 @@ PHX.FreezeCamSounds = {
 	"misc/freeze_cam_sad1.wav"
 }
 
-PHX.WINNINGSOUNDS = {
-	[TEAM_HUNTERS] 		= "misc/ph_hunterwin.mp3", 	-- hunter
-	[TEAM_PROPS]		= "misc/ph_propwin.mp3",	-- props
-	["Draw"]			= {"misc/ph_rounddraw_1.mp3", "misc/ph_rounddraw_2.mp3"}
+PHX.WINNINGSOUNDS = {	
+	-- Legends: [1] = Team Hunters, [2] = Team Props.
+	[1] = { "misc/ph_hunterwin.mp3", 	"misc/ph_hunterwin_new1.mp3" },
+	[2]	= { "misc/ph_propwin.mp3", 	 	"misc/ph_propwin_new1.mp3"	 },
+	[3]	= { "misc/ph_rounddraw_1.mp3", 	"misc/ph_rounddraw_2.mp3", "misc/ph_rounddraw_3.mp3" }
 }
+
+if SERVER then
+	function PHX:PlayWinningSound( teamid )
+		teamid = math.Clamp(teamid, 1, 3)
+	
+		if !teamid or teamid == nil or 
+			teamid == 0 or teamid == 1001 then
+			teamid = 3 -- make '3' as a default sound.
+		end
+		
+		local t = PHX.WINNINGSOUNDS[teamid]
+		local rand = t[math.random(1,#t)]
+		
+		if rand and rand ~= nil and isstring( rand ) then
+		net.Start("PH_TeamWinning_Snd")
+			net.WriteString(rand)
+		net.Broadcast()
+			
+		else
+			ErrorNoHalt("[PHX Win Sound] Cannot play win sound because it's appear to be invalid!")
+		end
+	end
+end
 
 --[[ // DO NOT MODIFY! These are stock taunts. Please add your custom taunt under /config/sh_ph_additional_taunts.lua. \\ ]]--
 PHX.TAUNTS[PHX.DEFAULT_CATEGORY][TEAM_HUNTERS] = {
@@ -297,19 +426,32 @@ function PHX:AddToCache( idTeam, tbl )
 end
 
 function PHX:ManageTaunt( category, tauntData )
+	if self.TAUNTS[category] ~= nil then -- if previous category exist, we'll gonna replace them. Give a fair warning.
+		print("[!PHX Taunt Manager] !!WARNING: Category '" .. category .. "' was EXIST in taunt table and this will be overwritten!!")
+	end
 	self.TAUNTS[category]	= tauntData
 	
-	local PROPS_TAUNT 		= tauntData[TEAM_PROPS]
-	local HUNTERS_TAUNT 	= tauntData[TEAM_HUNTERS]
+	local PROPS_TAUNT 		= {}
+	local HUNTERS_TAUNT 	= {}
 	
 	self.VerboseMsg("[PH Taunts] Precaching taunts from category [" .. category .. "]..." )
-	self:AddToCache( TEAM_PROPS, PROPS_TAUNT )
-	self:AddToCache( TEAM_HUNTERS, HUNTERS_TAUNT )
 	
-	if SERVER then
-		self.VerboseMsg("[PH Taunts] Adding taunts resources..." )
-		AddResources( PROPS_TAUNT )
-		AddResources( HUNTERS_TAUNT )
+	if tauntData[TEAM_PROPS] and tauntData[TEAM_PROPS] ~= nil then
+		PROPS_TAUNT = tauntData[TEAM_PROPS]
+		self:AddToCache( TEAM_PROPS, PROPS_TAUNT )
+		if SERVER then
+			self.VerboseMsg("[PH Taunts] Adding Prop taunts resources if any." )
+			AddResources( PROPS_TAUNT )
+		end
+	end
+	
+	if tauntData[TEAM_HUNTERS] and tauntData[TEAM_HUNTERS] ~= nil then
+		HUNTERS_TAUNT = tauntData[TEAM_HUNTERS]
+		self:AddToCache( TEAM_HUNTERS, HUNTERS_TAUNT )
+		if SERVER then
+			self.VerboseMsg("[PH Taunts] Adding Hunter taunts resources if any." )
+			AddResources( HUNTERS_TAUNT )
+		end
 	end
 end
 
@@ -355,9 +497,13 @@ function PHX:AddSingleTaunt(idTeam, category, name, path)
 		return
 	end
 	
+	if self.TAUNTS[category] == nil then
+		self.TAUNTS[category] = {}	-- create empty category table instead.
+	end
+	
 	-- Singular proccess.
 	self.TAUNTS[category][idTeam][name]	= path
-	self.CachedTaunts[idTeam][name] 		= path
+	self.CachedTaunts[idTeam][name] 	= path
 	if SERVER then
 		resource.AddFile("sound/"..path)
 	end
@@ -399,9 +545,8 @@ end
 -- Deprecated, This may no longer used, use with your own risk.
 function PHX:RefreshTauntList()
 	local t = table.Copy(PHX.TAUNTS)
-	table.Empty(PHX.TAUNTS)
-	-- make sure keys are also cleared
-	PHX.TAUNTS = nil
+	-- Empty Table
+	PHX.TAUNTS = {}
 	
 	local max = table.Count(t) -- note: they are not sequential, using # may not work (# must be numeric index)
 	for i=1,max do
@@ -412,17 +557,16 @@ function PHX:RefreshTauntList()
 	PHX.TAUNTS = t
 end
 
+-- if there was no  taunts loaded, uncomment these. For most cases, this almost never happened.
 --[[
--- if taunt list were messed up or nothing added, uncomment this!
-
-hook.Add("PostGamemodeLoaded","PHX.RefreshTaunts",function()
-	PHX:RefreshTauntList()
-end)
+	hook.Add("PostGamemodeLoaded", "PHX.RefreshTauntList", function()
+		PHX:RefreshTauntList() 
+	end)
 ]]
 
 concommand.Add("ph_refresh_taunt_list", function() 
 	PHX:RefreshTauntList() 
-end, nil, "(Deprecated) Refresh Taunt list and Sort them.")
+end, nil, "(Deprecated) Refresh Taunt List and Sort them.")
 
 -- Add the custom player model bans for props AND prop banned models
 local config_path = PHX.ConfigPath
@@ -443,7 +587,7 @@ if SERVER then
 
 		-- Create actual config
 		if ( !file.Exists( dir.."/bans.txt", "DATA" ) ) then
-			file.Write( dir.."/bans.txt", util.TableToJSON({"models/player.mdl", "CustomPlayerModelName"}, true) )
+			file.Write( dir.."/bans.txt", util.TableToJSON({"models/player.mdl", "custom_playermodel_name"}, true) )
 		end
 		
 		if ( file.Exists( dir.."/bans.txt", "DATA" ) ) then
@@ -451,7 +595,7 @@ if SERVER then
 			local PROP_PLMODEL_BANS_READ = util.JSONToTable( file.Read( dir.."/bans.txt", "DATA" ) )
 			
 			-- empty the table instead
-			table.Empty(PHX.PROP_PLMODEL_BANS)
+			PHX.PROP_PLMODEL_BANS = {}
 			
 			for _, v in pairs(PROP_PLMODEL_BANS_READ) do
 				PHX.VerboseMsg("[PHX PlayerModels] Adding custom prop player model ban --> "..string.lower(v))
@@ -470,7 +614,6 @@ if SERVER then
 		
 		-- this is a stock template. DO NOT MODIFY.
 		local mdlpermabans = {
-			"models/props_collectables/piepan.mdl", -- ph_gas_stationrc7's improper piepan.mdl model
 			"models/props/cs_assault/dollar.mdl",
 			"models/props/cs_assault/money.mdl",
 			"models/props/cs_office/snowman_arm.mdl",
@@ -491,7 +634,8 @@ if SERVER then
 		if ( file.Exists ( dir.."/model_bans.txt","DATA" ) ) then
 			local PROP_MODEL_BANS_READ = util.JSONToTable(file.Read(dir.."/model_bans.txt"))
 			-- empty the tables anyway.
-			table.Empty(PHX.BANNED_PROP_MODELS)	
+			PHX.BANNED_PROP_MODELS = {}
+			table.insert(PHX.BANNED_PROP_MODELS, "models/props/ph_gas_stationrc7/piepan.mdl") -- Added this permanently, reason: May cause server to crash.
 			for _,v in pairs(PROP_MODEL_BANS_READ) do
 				PHX.VerboseMsg("[PHX Model Bans] Adding entry of restricted model to be used --> "..string.lower(v))
 				table.insert(PHX.BANNED_PROP_MODELS, string.lower(v))
@@ -501,12 +645,9 @@ if SERVER then
 		end
 	end
 	
-	-- Initialize All Functions
-	hook.Add("Initialize", "PH.InitBaseConfigs", function()
-		AddBadPLModels()
-		AddBannedPropModels()
-		
-	end)	
+	-- Add Banned Models
+	AddBadPLModels()
+	AddBannedPropModels()
 	
 	-- Add ConCommands.
 	concommand.Add("ph_refresh_plmodel_ban", AddBadPLModels, nil, "Refresh Server Playermodel Ban Lists, read from prop_plymodel_bans/bans.txt data.")

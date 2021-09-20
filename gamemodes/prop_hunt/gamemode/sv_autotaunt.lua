@@ -4,14 +4,14 @@ local function TauntTimeLeft(ply)
 	if !IsValid(ply) || !ply:Alive() || ply:Team() != TEAM_PROPS then return 1; end
 	
 	local lastTauntTime = ply:GetNWFloat("LastTauntTime")
-	local nextTauntTime = lastTauntTime + PHX.CVAR.AutoTauntDelay:GetInt()
+	local nextTauntTime = lastTauntTime + PHX:GetCVar( "ph_autotaunt_delay" )
 	local currentTime = CurTime()
 	return nextTauntTime - currentTime
 end
 
 local function AutoTauntThink()
 
-	if PHX.CVAR.AutoTauntEnable:GetBool() then
+	if PHX:GetCVar( "ph_autotaunt_enabled" ) then
 		
 		for _, ply in ipairs(team.GetPlayers(TEAM_PROPS)) do
 			local timeLeft = TauntTimeLeft(ply)

@@ -30,17 +30,17 @@ hook.Add("PH_CustomTabMenu", "PHX.About", function(tab, pVgui, paintPanelFunc)
 	grid:SetRowHeight(50)
 	
 	local label = {
-		title 	= "Prop Hunt X",
+		title 	= "Prop Hunt: XIIZ",
 		author	= GAMEMODE.Author,
 		version = GAMEMODE._VERSION,
 		rev 	= GAMEMODE.REVISION,
-		credits	= "Godfather ♥, Yam, adk, Haeiven, Jonpopnycorn, Thundernerd, TR1NITY",
+		credits	= "Godfather ♥, Galaxio, Yam, adk, Haeiven, Jonpopnycorn, Thundernerd, TR1NITY",
 		lgit	= "https://github.com/Wolvin-NET/prophuntx/",
-		lhome	= "https://www.wolvindra.net/prophuntx",
+		lhome	= "https://wolvindra.xyz/prophuntx",
 		ldonate = GAMEMODE.DONATEURL,
-		--lwiki	= "https://www.google.com",
-		lklog	= "https://prophunt.wolvindra.net/changelogs.php",
-		lplugins = "https://prophunt.wolvindra.net/plugins"
+		lwiki	= "https://wolvindra.xyz/wiki/prophuntx",
+		lklog	= "https://wolvindra.xyz/phxchangelogs",
+		lplugins = "https://wolvindra.xyz/phxplugins"
 	}
 	
 	pVgui("","label","PHX.TitleFont",grid, label.title )
@@ -61,12 +61,13 @@ hook.Add("PH_CustomTabMenu", "PHX.About", function(tab, pVgui, paintPanelFunc)
 			end},
 	}},grid,"")
 	pVgui("","label",false,grid, PHX:FTranslate("PHXM_ABOUT_LINKS") )
-	pVgui("","btn",{max = 2,textdata = {
-		[1] = {PHX:FTranslate("PHXM_ABOUT_BTN_DONATE"),		function() gui.OpenURL(label.ldonate) end},
-		[2] = {PHX:FTranslate("PHXM_ABOUT_BTN_HOME"),		function() gui.OpenURL(label.lhome) end},
-		[3] = {PHX:FTranslate("PHXM_ABOUT_BTN_GITHUB"),		function() gui.OpenURL(label.lgit) end},
+	pVgui("","btn",{max = 6, textdata = {
+		[1] = {PHX:FTranslate("PHXM_ABOUT_BTN_DONATE"),		function() gui.OpenURL(label.ldonate)  end},
+		[2] = {PHX:FTranslate("PHXM_ABOUT_BTN_HOME"),		function() gui.OpenURL(label.lhome)    end},
+		[3] = {PHX:FTranslate("PHXM_ABOUT_BTN_GITHUB"),		function() gui.OpenURL(label.lgit)     end},
 		[4] = {PHX:FTranslate("PHXM_ABOUT_BTN_PLUGINS"),  	function() gui.OpenURL(label.lplugins) end},
-		[5] = {PHX:FTranslate("PHXM_ABOUT_BTN_CHANGELOGS"),	function() gui.OpenURL(label.lklog) end}
+		[5] = {PHX:FTranslate("PHXM_ABOUT_BTN_CHANGELOGS"),	function() gui.OpenURL(label.lklog)    end},
+		[6] = {PHX:FTranslate("PHXM_ABOUT_BTN_WIKI"),		function() gui.OpenURL(label.wiki)     end}
 	}},grid,"")
 	pVgui("spacer2","spacer",nil,grid,"" )
 	pVgui("","label","Trebuchet24",grid, PHX:FTranslate("PHXM_ABOUT_THANKS", label.credits) )

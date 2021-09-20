@@ -247,3 +247,13 @@ function ENT:Use(activator)
 		end
 	end
 end
+
+-- Destroy all lucky balls after Round End with Result. (New Hook)
+hook.Add("PH_RoundEndResult", "PHX.DestroyLuckys", function(r,rt)
+	timer.Simple(0.1, function()
+		for _,lb in pairs(ents.FindByClass("ph_luckyball")) do
+			lb:ShowEffects(lb, "cball_explode", lb:GetPos(), lb:GetPos())
+			lb:Remove()
+		end
+	end)
+end)

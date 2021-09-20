@@ -4,9 +4,14 @@
 
 list.Set("LuckyBallsAddition", "Give_Stunstick", function(pl)
 	
+	local stick = "weapon_stunstick"
 	-- give something to the player. for example: Stunstick
-
-	pl:ChatPrint("[Lucky Ball] Hello! Here is your free Stunstick! :p")
-	pl:Give("weapon_stunstick")
+	if !pl:HasWeapon(stick) then
+		pl:ChatPrint("[Lucky Ball] Here your free Stunstick!")
+		pl:Give(stick)
+	else
+		pl:ChatPrint("[Lucky Ball] You already have stunstick, let me switch to it!")
+		pl:SelectWeapon(stick)
+	end
 	
 end)

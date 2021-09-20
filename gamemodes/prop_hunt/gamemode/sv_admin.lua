@@ -9,7 +9,9 @@ local function doAdminStrictCheck(ply)
 end
 
 local function doCommand(ply, cmd, value, identifier)
-	RunConsoleCommand(cmd, value)
+	-- Bug: Float value, if you exceed less than 0.0001, will prints out "1e-05". I'm not sure if this valid value.
+	-- Also, while it will be printed like that, util.NiceFloat might help but it only cuts to 1e-07 (0.0000001)
+	RunConsoleCommand(cmd, tostring(value))	-- convert evertyhing into string because GetGlobalBool and other value don't like actual data type, they'll think as failed value. (e.g: GetGlobalBool 0 = ignored.)
 	PHX.VerboseMsg("[PHX ADMIN CVAR "..identifier.." NOTIFY] Command '".. cmd .. "' has changed to " .. value .. " (Player: " .. ply:Nick().. " (" ..ply:SteamID() ..") )")
 end
 
@@ -101,7 +103,7 @@ end)
 
 net.Receive("SvCommandReq", function(len, ply)
 	local cmd = net.ReadString()
-	local valbool = net.ReadInt(2)
+	local valbool = net.ReadString()
 	
 	ManageNetMessages(ply, "SvCommandReq", {cmd, valbool})
 end)

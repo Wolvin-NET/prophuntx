@@ -43,10 +43,10 @@ PHX.CLUI = {
 			if d == "SERVER" then
 				net.Start("SvCommandReq")
 				  net.WriteString(c)
-				  net.WriteInt(v,2)
+				  net.WriteString(tostring(v))	-- Changed to String because GetGlobalBool doesn't like actual type (0 = ignored).
 				net.SendToServer()
 			elseif d == "CLIENT" then
-				RunConsoleCommand(c, v)
+				RunConsoleCommand(c, tostring(v))
 				CvarChangedMessage(c, tostring(v))
 				if v == 1 then
 					surface.PlaySound("buttons/button9.wav")
@@ -137,13 +137,14 @@ end,
 		local float = d.float
 		
 		local pnl = vgui.Create("DPanel")
-		pnl:SetSize(p:GetColWide(),p:GetRowHeight()-6)
+		pnl:SetSize(p:GetColWide()*0.9,p:GetRowHeight()-6)
 		pnl:SetBackgroundColor(Color(120,120,120,200))
 		
 		local slider = vgui.Create("DNumSlider",pnl)
 		slider:SetPos(10,0)
-		slider:SetSize(p:GetColWide()-30,p:GetRowHeight()-6)
+		slider:SetSize(pnl:GetWide(),pnl:GetTall())
 		slider:SetText(l)
+		slider:SetToolTip(l)
 		slider:SetMin(min)
 		slider:SetMax(max)
 		slider:SetValue(dval)
@@ -162,9 +163,9 @@ end,
 				net.SendToServer()
 			elseif kind == "CLIENT" then
 				if float then
-					RunConsoleCommand(c, value)
+					RunConsoleCommand( c, tostring( value ) )
 				else
-					RunConsoleCommand(c, math.Round( value ))
+					RunConsoleCommand( c, tostring(math.Round( value )) )
 				end
 			end
 		end
@@ -183,7 +184,7 @@ end,
 	if ( d and type(d) == "Player" and IsValid(d) ) then
 		local ply = d
 		local pnl = vgui.Create("DPanel")
-		pnl:SetSize(p:GetColWide(),p:GetRowHeight()-6)
+		pnl:SetSize(p:GetColWide()*0.9,p:GetRowHeight()-6)
 		pnl:SetBackgroundColor(Color(20,20,20,150))
 		
 		local ava = vgui.Create("AvatarImage", pnl)
@@ -246,7 +247,7 @@ end,
 	
 	local label = vgui.Create("DLabel", pnl)
 	label:Dock(LEFT)
-	label:SetSize(400,0)
+	label:SetSize(pnl:GetWide()*0.75,0)
 	label:DockMargin(2,0,0,0)
 	label:SetFont("HudHintTextLarge")
 	label:SetText(l)
@@ -258,9 +259,9 @@ end,
 	
 	local keyNum = GetConVar(c):GetInt()
 	bind:SetValue(keyNum)
-	function bind:OnChange( num )	
+	function bind:OnChange( num )
 		RunConsoleCommand(c, tostring(num))
-		local tkeyName = input.GetKeyName(num)
+		local tkeyName =  input.GetKeyName(num):upper()
 		CvarChangedMessage(c, tostring(tkeyName))
 		surface.PlaySound("buttons/button9.wav")
 	end
@@ -326,7 +327,7 @@ end,
 	if (d) then
 		cvlang = GetConVar(c):GetString()
 	else
-		cvlang = PHX.CVAR.Language:GetString()
+		cvlang = PHX:GetCLCVar( "ph_cl_language" )
 	end
 	
 	local langCode = cvlang
