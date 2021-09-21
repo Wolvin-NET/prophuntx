@@ -21,6 +21,12 @@ end
 
 local Taunts = {}
 
+-- BUG: team.GetName isn't available at early moment, even though moving the inclusion after GM:CreateTeam() ...
+local TeamName = {
+	[1]	= "Hunters",
+	[2]	= "Props"
+}
+
 if SERVER then	
 	local function AddToTable( idTeam, tauntCat, data )
 		PHX.VerboseMsg("[PHX] Adding to Taunt Table: Team[" .. idTeam .. "], Category:" .. tauntCat .. ", Total Taunt Data: " .. tostring(table.Count(data)))
@@ -79,7 +85,7 @@ if SERVER then
 		  else
 			
 			err = err + 1
-			PHX.VerboseMsg("[PHX Taunt Scanner] " .. team.GetName(TEAM_ID) .. "'s taunt seems to be empty, nothing to add.")
+			PHX.VerboseMsg("[PHX Taunt Scanner] " .. TeamName[TEAM_ID] .. "'s taunt seems to be empty, nothing to add.")
 			
 		  end
 		  
