@@ -209,9 +209,7 @@ end
 
 local hunterdamagefix = {
 	["func_breakable"]		= true,
-	["func_physbox"]		= true,
-	["ph_luckyball"]		= true,
-	--["ph_devilball"]		= true
+	["func_physbox"]		= true
 }
 
 -- add damage return from prop to hunter
