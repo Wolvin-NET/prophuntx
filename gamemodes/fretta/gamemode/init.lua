@@ -656,12 +656,14 @@ function GM:DoPlayerDeath( ply, attacker, dmginfo )
 		
 	end
 	
+	--[[ 
+		-- See/Use: prop_hunt/gamemode/init.lua instead.
 	if ( GAMEMODE.EnableFreezeCam && IsValid( attacker ) && attacker != ply ) then
 	
 		ply:SpectateEntity( attacker )
 		ply:Spectate( OBS_MODE_FREEZECAM )
 		
-	end
+	end ]]
 	
 end
 

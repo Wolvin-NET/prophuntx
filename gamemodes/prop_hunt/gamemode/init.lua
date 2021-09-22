@@ -210,6 +210,8 @@ end
 local hunterdamagefix = {
 	["func_breakable"]		= true,
 	["func_physbox"]		= true,
+	["ph_luckyball"]		= true,
+	--["ph_devilball"]		= true
 }
 
 -- add damage return from prop to hunter
@@ -254,20 +256,22 @@ hook.Add("EntityTakeDamage", "PH_EntityTakeDamage", EntityTakeDamage)
 
 function GM:PlayerShouldTakeDamage(ply, attacker)
 	
-	if ( GAMEMODE.NoPlayerSelfDamage && IsValid( attacker ) && ply == attacker ) then return false end
+	-- Recheck: added :IsPlayer()
+	-- Recheck: are they still get killed after PH_EndRoundResult? - should not be happening because of EntityTakeDamage hook
+	if ( GAMEMODE.NoPlayerSelfDamage and IsValid( attacker ) and attacker:IsPlayer() and ply == attacker ) then return false end
 	if ( GAMEMODE.NoPlayerDamage ) then return false end
 	
-	if ( GAMEMODE.NoPlayerTeamDamage && IsValid( attacker ) ) then
-		if ( attacker.Team && ply:Team() == attacker:Team() && ply != attacker ) then return false end
+	if ( GAMEMODE.NoPlayerTeamDamage and IsValid( attacker ) and attacker:IsPlayer() ) then
+		if ( attacker.Team and ply:Team() == attacker:Team() and ply ~= attacker ) then return false end
 	end
 	
 	-- Allow only prop damage to hunters
-	if ply:Team() == TEAM_HUNTERS and (IsValid(attacker) and attacker:Team() == TEAM_PROPS) then
+	if GAMEMODE:InRound() and ply:Team() == TEAM_HUNTERS and (IsValid(attacker) and attacker:IsPlayer() and attacker:Team() == TEAM_PROPS) then
 		return true
 	end
 	
-	if ( IsValid( attacker ) && attacker:IsPlayer() && GAMEMODE.NoPlayerPlayerDamage ) then return false end
-	if ( IsValid( attacker ) && !attacker:IsPlayer() && GAMEMODE.NoNonPlayerPlayerDamage ) then return false end
+	if ( IsValid( attacker ) and attacker:IsPlayer() and GAMEMODE.NoPlayerPlayerDamage ) then return false end
+	if ( IsValid( attacker ) and !attacker:IsPlayer() and GAMEMODE.NoNonPlayerPlayerDamage ) then return false end
 	
 	return true
 	
@@ -281,6 +285,48 @@ function GM:PlayerCanPickupWeapon(pl, ent)
 	
 	return true
 end
+
+-- Don't use GM:DoPlayerDeath, we'll use hook instead.
+-- Freeze Cam Fix for Hunters
+hook.Add("DoPlayerDeath", "HunterFreezeCam", function(ply, attacker, dmginfo)
+	if ( PHX:GetCVar( "ph_freezecam_hunter" ) && 
+		ply:Team() == TEAM_HUNTERS && IsValid( attacker ) && 
+		attacker:IsPlayer() && attacker ~= ply && attacker:Team() == TEAM_PROPS ) then
+		
+		timer.Simple(0.5, function()
+			if ply and IsValid(ply) and !ply:GetNWBool("InFreezeCam", false) then
+				net.Start("PlayFreezeCamSound")
+				net.Send(ply)
+			
+				ply:SetNWEntity("PlayerKilledByPlayerEntity", attacker)
+				ply:SetNWBool("InFreezeCam", true)
+				ply:SpectateEntity( attacker )
+				ply:Spectate( OBS_MODE_FREEZECAM )
+			end
+		end)
+		
+		timer.Simple(4.5, function()
+			if ply and IsValid(ply) and ply:GetNWBool("InFreezeCam", false) then
+				local randHunter = {}
+				for _,v in pairs(team.GetPlayers(TEAM_HUNTERS)) do
+					if v:Alive() then
+						table.insert(randHunter, v)
+					end
+				end
+				
+				ply:SetNWBool("InFreezeCam", false)
+				ply:Spectate( OBS_MODE_CHASE )
+				if #randHunter > 0 then
+					local huntPly = randHunter[math.random(1,#randHunter)]
+					ply:SpectateEntity( huntPly )
+				else
+					ply:SpectateEntity( nil )
+				end
+			end
+		end)
+		
+	end
+end)
 
 local phx_blind_unlocktime = 0
 -- function to respawn players during blind mode.
