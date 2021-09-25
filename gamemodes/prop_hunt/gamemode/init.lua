@@ -86,7 +86,6 @@ function GM:CheckPlayerDeathRoundEnd()
 
 	if table.Count(Teams) == 0 then
 		
-		--GAMEMODE:RoundEndWithResult(1001, "Draw, everyone loses!")
 		GAMEMODE:RoundEndWithResult(1001, "HUD_LOSE")
 		PHX.VOICE_IS_END_ROUND = 1
 		ForceCloseTauntWindow(1)
@@ -107,7 +106,6 @@ function GM:CheckPlayerDeathRoundEnd()
 			PHX.VerboseMsg("Round Result: "..team.GetName(TeamID).." ("..TeamID..") Wins!")
 			
 			-- End Round
-			--GAMEMODE:RoundEndWithResult(TeamID, team.GetName(TeamID).." win!")
 			GAMEMODE:RoundEndWithResult(TeamID, "HUD_TEAMWIN")
 			
 			PHX.VOICE_IS_END_ROUND = 1
@@ -776,7 +774,7 @@ function GM:RoundTimerEnd()
 		return
 	end
 
-	GAMEMODE:RoundEndWithResult(TEAM_PROPS, "Props win!")
+	GAMEMODE:RoundEndWithResult(TEAM_PROPS, "HUD_TEAMWIN")
 	PHX.VOICE_IS_END_ROUND = 1
 	ForceCloseTauntWindow(1)
 	
