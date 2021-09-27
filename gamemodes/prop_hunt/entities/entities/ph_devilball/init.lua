@@ -185,8 +185,7 @@ ENT.funclists = {
 	end,
 	function(pl)
 		local rand = math.random(10,50)
-		pl:SetHealth(pl:Health() + rand)
-		pl.ph_prop.health = pl.ph_prop.health + rand
+		pl:AddHealthProp( rand )
 		pl:ChatPrint("[Devil Crystal] You got free +"..tostring(rand).." HP for your current Prop!")
 	end,
 	function(pl)

@@ -119,8 +119,12 @@ balls.funclists = {
 	end,
 	function(pl)
 		local rand = math.random(1,20)
-		pl:SetHealth(pl:Health() - rand)
-		pl:ChatPrint("[Lucky Ball] Aww Snap! Your health reduced by -"..rand.." HP, better luck next time!")
+		if pl:Health() > 1 then	-- prevent any substraction below 0.
+			pl:SetHealth(pl:Health() - rand)
+			pl:ChatPrint("[Lucky Ball] Aww Snap! Your health reduced by -"..rand.." HP. Better luck next time!")
+		else
+			pl:ChatPrint("[Lucky Ball] I'm was trying to reduce your health but it was already too low. Better luck next time :(")
+		end
 	end,
 	function(pl)
 		pl:Give("item_battery")
