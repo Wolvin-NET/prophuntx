@@ -153,6 +153,11 @@ function GM:CalcView(pl, origin, angles, fov)
  	return view 
 end
 
+local IndicatorColor = {
+	ok = Color(20, 250, 0, 255),
+	no = Color(250, 250, 0, 255)
+}
+
 local mat 		= "prophunt_enhanced/sprites/luckyball"
 local pointer 	= "prophunt_enhanced/sprites/luckyball_pointer"
 
@@ -299,7 +304,12 @@ function HUDPaint()
 		
 		local trace2 = util.TraceLine(trace)
 		if trace2.Entity && trace2.Entity:IsValid() && PHX:IsUsablePropEntity( trace2.Entity:GetClass() ) then
-			color = Color(10,255,10,255)
+			if (!LocalPlayer():IsOnGround() or LocalPlayer():Crouching()) then
+				color = IndicatorColor.no
+			else
+				color = IndicatorColor.ok
+			end
+			--color = Color(10,255,10,255)
 		else
 			color = Color(255,255,255,255)
 		end
@@ -340,10 +350,18 @@ end)
 
 -- Draws halos on team members
 function drawPropSelectHalos()
-
+	local halocol = IndicatorColor.ok
+	
 	if PHX.CLCVAR.PropHalos:GetBool() then
 		-- Something to tell if the prop is selectable
 		if LocalPlayer():Team() == TEAM_PROPS && LocalPlayer():Alive() then
+		
+			if (!LocalPlayer():IsOnGround() or LocalPlayer():Crouching()) then
+				halocol = IndicatorColor.no
+			else
+				halocol = IndicatorColor.ok
+			end
+		
 			local trace = {}
 			-- fix for smaller prop size. They should stay horizontal rather than looking straight down.
 			if cHullz < cHullz_Min then
@@ -362,7 +380,7 @@ function drawPropSelectHalos()
 			if trace2.Entity && trace2.Entity:IsValid() && PHX:IsUsablePropEntity(trace2.Entity:GetClass()) then
 				local ent_table = {}
 				table.insert(ent_table, trace2.Entity)
-				halo.Add(ent_table, Color(20, 250, 0), 1.2, 1.2, 1, true, true)
+				halo.Add(ent_table, halocol, 1.2, 1.2, 1, true, true)
 			end
 		end
 		
