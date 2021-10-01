@@ -10,7 +10,7 @@ local admins = {
 
 -- Custom Groups, for Prop Menu.
 local donator = {
-	"donator"
+	"donator",
 	"respected",
 	"vip",
 }
