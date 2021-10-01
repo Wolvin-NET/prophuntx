@@ -80,8 +80,6 @@ https://wolvindra.xyz/prophuntx
 
 To See more info, help and guide, Press [F1] key and then click [Prop Hunt Menu] button.
 
-Version: ]].. PHX.VERSION ..[[ Revision: ]].. PHX.REVISION ..[[
-
 Have Fun!]]
 
 -- Important!
