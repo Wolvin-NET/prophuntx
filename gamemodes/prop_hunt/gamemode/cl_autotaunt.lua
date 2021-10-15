@@ -1,8 +1,8 @@
--- For the love of furry heck, THIS PLACE NEEDS A CLEAN!
+-- For the love of furry heck, THIS PLACE NEEDS A CLEANING!
 -- Props will autotaunt at specified intervals
 local isEnabled = false
 local isProp = false
-local delay = PHX.CVAR.AutoTauntDelay:GetInt() or 6
+local delay = PHX:GetCVar( "ph_autotaunt_delay" )
 local started = false
 local timerID = "ph_autotaunt_timer"
 local teamCheckTimer = "ph_autotaunt_teamchecktimer"
@@ -28,7 +28,7 @@ end
 local function TimeleftRTaunt()
 	local ply = LocalPlayer()
 	local lastTauntTime = ply:GetNWFloat("LastTauntTime")
-	local nextRandomTime = lastTauntTime + PHX.CVAR.NormalTauntDelay:GetInt()
+	local nextRandomTime = lastTauntTime + PHX:GetCVar( "ph_normal_taunt_delay" )
 	local curTime = CurTime()
 	return nextRandomTime - curTime
 end
@@ -36,7 +36,7 @@ end
 local function TimeleftCTaunt()
 	local ply = LocalPlayer()
 	local lastTauntTime = ply:GetNWFloat("localLastTauntTime", 0)
-	local nextCustomTime = lastTauntTime + PHX.CVAR.CustomTauntDelay:GetInt()
+	local nextCustomTime = lastTauntTime + PHX:GetCVar( "ph_customtaunts_delay" )
 	local curTime = CurTime()
 	return nextCustomTime - curTime
 end
@@ -91,7 +91,8 @@ local posw = { x = ScrW() - 480, y = ScrH()-130 }
 local indic = {
 	auto = Material("vgui/phehud/ataunt_timer"),
 	cust = Material("vgui/phehud/ctaunt_timer"),
-	rand = Material("vgui/phehud/taunt_timer")
+	rand = Material("vgui/phehud/taunt_timer"),
+	cek  = Material("vgui/phehud/hud_check")
 }
 
 local function CreateTauntIndicators( material, color, tx, ty, w, h )
@@ -102,46 +103,61 @@ local function CreateTauntIndicators( material, color, tx, ty, w, h )
 	end
 end
 
-local delayR = PHX.CVAR.NormalTauntDelay:GetInt()
-local delayC = PHX.CVAR.CustomTauntDelay:GetInt()
+local delayR = PHX:GetCVar( "ph_normal_taunt_delay" )
+local delayC = PHX:GetCVar( "ph_customtaunts_delay" )
 
 -- /!\ NOTICE: This is prototype, will improved or changed sometime in future.
 local function AutoTauntPaint_phx()
 
-	-- Thanks for Jay#8422 for reminiding lol
-	--if (not isEnabled or not started) then return; end
-	if IsValid(LocalPlayer()) && LocalPlayer():Alive() && LocalPlayer():Team() == TEAM_PROPS && isEnabled && started then
+	if IsValid(LocalPlayer()) && LocalPlayer():Alive() && isProp && started then
 		local timeLeft = math.ceil(TimeLeft())
 		local percentage = timeLeft / delay
+		local taunttext = ""
 		
 		surface.SetDrawColor( 255, 255, 255, 255 )
 		surface.SetMaterial( matw )
 		surface.DrawTexturedRect( posw.x, posw.y, 480, 120 )
 		
-		surface.SetDrawColor( Color(200,40,40) )
-		draw.NoTexture()
-		draw.Circle( ScrW()-58, posw.y + 60, percentage * 45, 24 )
+		if PHX:GetCVar( "ph_autotaunt_enabled" ) then
+			taunttext = PHX:FTranslate("HUD_AUTOTAUNT", timeLeft)
+			
+			if timeLeft < 0 then
+				taunttext 	= PHX:FTranslate("HUD_AUTOTAUNT_WAITFORUPDATE")
+				timeLeft 	= 0	-- wait for synchronize
+				percentage 	= 0 -- fix draw.Circle overdrawn
+			end
+			
+			surface.SetDrawColor( Color(200,40,40) )
+			draw.NoTexture()
+			draw.Circle( ScrW()-58, posw.y + 60, percentage * 45, 24 )
+		else
+			taunttext = PHX:FTranslate("HUD_AUTOTAUNT_DISABLED")
+		end
 		
-		draw.DrawText( PHX:FTranslate("HUD_AUTOTAUNT", timeLeft) , "PHX.TopBarFont", ScrW() - 164, posw.y + 83, color_white, TEXT_ALIGN_RIGHT )
+		draw.DrawText( taunttext, "PHX.TopBarFont", ScrW() - 164, posw.y + 83, color_white, TEXT_ALIGN_RIGHT )
 		
-		CreateTauntIndicators(indic.auto, Color(255,255,255,180), ScrW()-88, posw.y + 28, 64, 64)
+		CreateTauntIndicators(indic.auto, Color(225,225,225,64), ScrW()-88, posw.y + 28, 64, 64)
 		
 		local r = math.Round(TimeleftRTaunt())
 		local c = math.Round(TimeleftCTaunt())
 		
 		local colR = Color(255,255,255,50)
 		local colC = Color(255,255,255,50)
+		local colCR = Color(200,200,200,30)
+		local colCC = Color(200,200,200,30)
 		
 		local literalR = r + 1 .."s"
 		local literalC = c .."s"
 		
 		if r < 0 then 
-			literalR = "(✓)"
+			literalR = ""
 			colR = Color(20,255,20,220)
+			colCR = colR
 		end
 		if c < 0 then 
-			literalC = "(✓)"
+			literalC = ""
 			colC = Color(20,230,230,220)
+			colCC = colC
 		end
 		
 		draw.DrawText(PHX:FTranslate("HUD_PROP_TAUNT_TIME"), "PHX.AmmoFont", posw.x + 96, posw.y + 50, color_white, TEXT_ALIGN_CENTER)
@@ -152,6 +168,12 @@ local function AutoTauntPaint_phx()
 		
 		CreateTauntIndicators(indic.rand, colR, posw.x + 72, posw.y + 2, 50, 50)
 		CreateTauntIndicators(indic.cust, colC, posw.x + 190, posw.y + 2, 50, 50)
+		
+		-- check list
+		if not indic.cek:IsError() then
+			CreateTauntIndicators(indic.cek, colCR, posw.x + 132, posw.y + 14, 32, 32)
+			CreateTauntIndicators(indic.cek, colCC, posw.x + 244, posw.y + 14, 32, 32)
+		end
 		
 	end
 
@@ -187,14 +209,14 @@ end
 local function Setup()
 	local ply = LocalPlayer()
 
-	isEnabled = PHX.CVAR.AutoTauntEnable:GetBool()
+	isEnabled = PHX:GetCVar( "ph_autotaunt_enabled" )
 	isProp = ply:Team() == TEAM_PROPS
 	started = true
 	previousTime = CurTime()
 	tweenTime = 0
 
 	if isEnabled && isProp then
-		delay = PHX.CVAR.AutoTauntDelay:GetInt()
+		delay = PHX:GetCVar( "ph_autotaunt_delay" )
 		timer.Create(timerID, 1, 0, CheckAutoTaunt)
 	end
 end

@@ -73,10 +73,10 @@ function PHX:NotifyUpdate(result)
 	if GAMEMODE._VERSION ~= ver then
 		text = "[!PH: X Update] New version of "..ver.." is available."
 		isNew = true
-	elseif string.lower(GAMEMODE.REVISION) ~= rev then
+	elseif GAMEMODE.REVISION ~= rev then
 		text = "[!PH: X Update] New Revision of "..rev.." is available."
 		isNew = true
-	elseif GAMEMODE._VERSION == ver && string.lower(GAMEMODE.REVISION) == rev then
+	elseif GAMEMODE._VERSION == ver && GAMEMODE.REVISION == rev then
 		text = "[*PH: X Update] Your gamemode is up to date."
 		color = Color(0,200,40)
 	end
@@ -98,6 +98,7 @@ concommand.Add("ph_check_update", function() PHX:CheckUpdate() end , nil, "Force
 local cooldown	= 86400
 hook.Add("Initialize", "PHX.CheckUpdateInit", function()
 
+timer.Simple(3, function()
 	local nextUpdate = cookie.GetNumber("nextUpdate",0)
 	local time		 = os.time()
 	
@@ -109,6 +110,7 @@ hook.Add("Initialize", "PHX.CheckUpdateInit", function()
 		cookie.Set("nextUpdate", time + cooldown)
 		print("[PHX] Update has been checked. Your next update notice will be displayed on "..os.date("%Y/%m/%d - %H:%M:%S", cookie.GetNumber("nextUpdate",0)) )
 	end
+end)
 	
 end)
 
@@ -123,7 +125,7 @@ if CLIENT then
 			local json = file.Read(PHX.ConfigPath .. "/phx_update_info.txt", "DATA")
 			data = util.JSONToTable(json)
 		else
-			Derma_Message("No update found. Please click on 'Check for Updates' button first!", "No update found", "OK")
+			Derma_Message("No update was found. Please click on 'Check for Updates' button first!", "No update found", "OK")
 			return
 		end
 	

@@ -1,6 +1,3 @@
--- di gamemodes\fretta\gamemode\cl_deathnotice.lua
--- Copy semuanya
-
 /*
 	Start of the death message stuff.
 */

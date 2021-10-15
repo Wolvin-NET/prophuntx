@@ -1,16 +1,26 @@
--- We will initialize the config stuff here
-
-
 -- Shared includes
 AddCSLuaFile("sh_additional_taunts.lua")
 include("sh_additional_taunts.lua")
 
-
 -- Server includes
 if SERVER then
-
-	include("server/sv_phkleiner_config.lua")
-	include("server/sv_phhotel_config.lua")
+	
+	function PHX:CreatePlayerClip( min, max )
+		local pc = ents.Create("brush_playerclip")
+		
+		pc.min = min
+		pc.max = max
+		pc.pos = pc.max - ((pc.max - pc.min) / 2)
+		
+		pc:SetPos(pc.pos)
+		pc:Spawn()
+	end
+	
+	local map	= game.GetMap()
+	if file.Exists(engine.ActiveGamemode() .. "/gamemode/config/maps/"..map..".lua", "LUA") then
+		PHX.VerboseMsg("[PHX Map Config] Adding map config of " .. map)
+		include("maps/"..map..".lua")
+	end
 	
 	include("server/sv_devilball_additions.lua")
 	include("server/sv_luckyball_additions.lua")

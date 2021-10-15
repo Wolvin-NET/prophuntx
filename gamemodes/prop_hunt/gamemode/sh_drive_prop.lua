@@ -1,3 +1,5 @@
+-- This will be improved on PH:CodenameZERO
+
 hook.Add("Move", "moveProp", function(ply,move)
 	if SERVER then
 		if ply:Alive() && ply:Team() == TEAM_PROPS then

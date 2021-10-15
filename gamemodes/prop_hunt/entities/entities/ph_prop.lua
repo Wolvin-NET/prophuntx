@@ -64,7 +64,7 @@ if SERVER then
 		local inflictor = dmg:GetInflictor()
 
 		-- Health
-		if GAMEMODE:InRound() && IsValid(pl) && pl:Alive() && pl:IsPlayer() && attacker:IsPlayer() && dmg:GetDamage() > 0 then
+		if GAMEMODE:InRound() && IsValid(pl) && pl:Alive() && pl:IsPlayer() && attacker:IsPlayer() && pl:Team() ~= attacker:Team() && dmg:GetDamage() > 0 then
 			if pl:Armor() >= 10 then
 				self.health = self.health - (math.Round(dmg:GetDamage()/2))
 				pl:SetArmor(pl:Armor() - 20)
@@ -93,7 +93,7 @@ if SERVER then
 		
 				MsgAll(attacker:Name() .. " found and killed " .. pl:Name() .. "\n") 
 
-				if PHX.CVAR.FreezeCamera:GetBool() then
+				if PHX:GetCVar( "ph_freezecam" ) then
 					if pl:GetNWBool("InFreezeCam", false) then
 						pl:PrintMessage(HUD_PRINTCONSOLE, "!! WARNING: Something went wrong with the Freeze Camera, but it's still enabled!")
 					else

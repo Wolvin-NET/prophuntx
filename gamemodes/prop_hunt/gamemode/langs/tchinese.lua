@@ -79,7 +79,7 @@ LANG["HELP_F1"] 				= [[物品獵殺 (代號) X 計畫.
 本計畫製作現代化與可定制的物品獵殺 X.
 
 更多訊息可在以下位置找到:
-https://www.wolvindra.net/prophuntx
+https://wolvindra.xyz/prophuntx
 
 要查看更多訊息、幫助和指南，請按[F1]鍵，然後點擊[物品獵殺選單]按鈕.
 
@@ -376,6 +376,109 @@ LANG["PLUGINS_CLIENT_SETTINGS"]			= "-- 客戶端設定 --"
 -- Text Entries
 LANG["TEXTENTRY_FZ_SINGLE"] = "死亡特寫獨一聲音路徑" -- this one is for ph_fc_cue_path command
 LANG["TEXTENTRY_MV_PREFIX"] = "地圖投票的地圖前綴"			 -- the map previx for mv_mapprefix
+
+--============= LATE ADDITION OF 16.09.21/X2Z. Please Improve your Language Here! =============--
+
+--[[
+	Credits: Late Addition: Revision: 16.09.21/X2Z
+]]
+
+LANG["PHXM_ABOUT_BTN_WIKI"]			= "PHX Wiki & Manuals"
+
+--[[
+	Auto Taunt: Late Addition: Revision: 16.09.21/X2Z
+]]
+
+LANG["HUD_AUTOTAUNT_DISABLED"]		= 	"Auto Taunting is disabled."
+LANG["HUD_AUTOTAUNT_WAITFORUPDATE"]	=	"Auto Taunt is Synchronizing..."
+
+--[[
+	MapVote: Late Addition: Revision: 16.09.21/X2Z
+]]
+LANG["PHXM_MV_VOTEROCKED"]				= " The vote has been rocked, map vote will begin on round end"
+LANG["PHXM_MV_VOTEROCKED_IMMINENT"]		= "The vote has been rocked, map vote imminent"
+LANG["PHXM_MV_VOTEROCKED_PLY_TOTAL"]	= "%s has voted to Rock the Vote. ( %d / %d )"
+
+LANG["PHXM_MV_MUST_WAIT"]				= "You must wait a bit before voting!"
+LANG["PHXM_MV_VOTEINPROG"]				= "There is currently a vote in progress!"
+LANG["PHXM_MV_HAS_VOTED"]				= "You have already voted to Rock the Vote!"
+LANG["PHXM_MV_ALR_IN_VOTE"]				= "There has already been a vote, the map is going to change!"
+LANG["PHXM_MV_NEED_MORE_PLY"]			= "You need more players before you can rock the vote!"
+
+--[[
+	Late Addition: Revision: 16.09.21/X2Z
+]]
+LANG["PROP_PLAYERMDL_BANNED"]	= "Your custom Prop Player Model was banned from the server."
+
+--[[
+	Prop Menu/Prop Chooser, Revision: 16.09.21/X2Z
+]]
+
+LANG["PCR_USAGE_UNLIMIT"]		= "[Prop Menu] You have **unlimitted** usage left!"
+LANG["PCR_USAGE_COUNT"]			= "[Prop Menu] You have %d usage left!"
+LANG["PCR_PLS_WAIT"]			= "[Prop Menu] Please wait in %d seconds."
+LANG["PCR_NOROOM"]				= "[Prop Menu] There is no room to change the prop!"
+LANG["PCR_PROPBANNED"]			= "[Prop Menu] This prop was banned by the server."
+LANG["PCR_PROPBANNED_BYPCR"]	= "[Prop Menu] You cannot use this prop because it was banned by Prop Menu."
+LANG["PCR_REACHED_LIMIT"]		= "[Prop Menu] You have reached the limit!"
+LANG["PCR_STAY_ON_GROUND"]		= "[Prop Menu] You need to stay on the ground and not crouching!"
+LANG["PCR_ONLY_GROUP"]			= "[Prop Menu] Only certain groups can open this menu!"
+LANG["PCR_NOT_EXIST_COUNT"]		= "That prop you have selected does not exists in this map! ( %s / 4 )"
+LANG["PCR_NOT_EXIST"]			= "That prop you have selected does not exists in this map!"
+
+-- PCR Client section, reason why there is a space because of chat.AddText between args.
+LANG["PCR_NOTIFY_1"]			= " This server use Prop Menu version %s! Type "
+LANG["PCR_NOTIFY_2"]			= " in console or use F1 -> [PropChooser Help] menu."
+LANG["PCR_CL_DISABLED"]			= " This feature is disabled."
+LANG["PCR_CL_GROUP"]			= " Only certain groups can open this menu!"
+LANG["PCR_CL_LIMIT"]			= " You have reached the limit!"
+LANG["PCR_UNLIMIT_TEXT"]		= "Unlimited"
+LANG["PCR_WINDOW_TITLE"]		= "PHX Prop Menu"
+LANG["PCR_HEADER_TOP"]			= "Choose any prop you want. You have"
+LANG["PCR_HEADER_MID"]			= "%s usage limit"
+LANG["PCR_HEADER_BOTTOM"]		= "to use this prop chooser!"
+LANG["PCR_CL_TOOLTIP_BANNED"]	= "You cannot use this model."
+LANG["PCR_CL_TOOLTIP_MODEL"]	= "Model: %s"
+LANG["PCR_CL_MENU_NOTREADY"]	= " This feature is not available at the moment."
+LANG["PCR_WINDOW_GUIDE_TTL"]	= "Quick Guide: Prop Menu 101"
+LANG["PCR_BTN_HELP_MENU"]		= "Prop Menu Help"
+
+LANG["PCR_CL_CMDUSEULX"]		= " This command is disabled. Use 'ulx propmenu' instead!"
+LANG["PCR_CMD_ULX_DISABLED"]	= "Command ulx propmenu is disabled. Press your [Prop Menu Bind] to open."	--input.GetKeyName is impossible to access.
+
+LANG["PCR_EDT_IN_USE"]			= "An admin is still editing the prop data. Please Wait!"
+LANG["PCR_EDT_ERROR_DISABLED"]	= "[Prop Menu] Error: Custom Prop Addition is Disabled!"
+LANG["PCR_EDT_NO_RIGHTS"]		= "You have no rights to access this feature."
+
+-- I'm actually exhausted and feel so burned out, but I'll update this in future, or in PH:Zero I guess.
+-- Section: Custom Prop Editor File Browser and stuff...
+-- LANG["PCR_EDT_XXX"] 	= "todo"
+-- LANG["PCR_FB_XXX"] 	= "todo"
+
+--[[
+	Admin Section, Revision: 16.09.21/X2Z
+]]
+LANG["PHXM_PLAYER_PROP_CHOOSER_KEY"]	= "Default Key to open Prop Menu (Prop Chooser)."
+LANG["PHXM_PROP_FREEZE_MIDAIR"]			= "Default Key to toogle Freeze movement during on midair as a Prop."
+LANG["PHXM_ADMIN_PROP_RIGHT_CLICK"]		= "Should Props also able to Taunt by pressing Right Click?"
+LANG["PHXM_ADMIN_TAUNT_SCANNER"]		= "(Require Map Restart) Enable Taunt Scanner?"
+LANG["PHXM_ADMLBL_USABLE_ENTS"]			= "Usable Prop Entities Types"
+LANG["PHXM_ADMLBL_USABLE_ENTS_REF"]		= "Types can be: 1: Physics Only, 2: Physics & Dynamics, 3: Almost Anything inc. Ragdolls, 4: Custom Entities."
+LANG["PHXM_ADMIN_USABLE_ENT_TYPE"]		= "Type of Entities to use for Prop to Replicate"
+LANG["PHXM_ADMIN_NOTIFY_ENT_TYPE"]		= "Notify Props about entities that cannot be replicated by pressing E. Only works if 'ph_usable_prop_type' is set to 3 or 4."
+LANG["NOTIFY_PROP_ENTTYPE"]				= "Press [E] to interact, [Click] to replicate object."
+LANG["NOTIFY_CUST_ENT_TYPE_IS_ON"]		= "[PHX] Notice: Press [E] to interact object, Press [Click] to Replicate the object."
+
+--[[
+	Custom Taunts, Revision: 16.09.21/X2Z
+]]
+LANG["TM_TAUNTS_SEARCH_NOTHING"]		= "Taunt containing '%s' was not found..."
+LANG["TM_SEARCH_PLACEHOLDER"]			= "Search in this category: Enter word, lowercase & no wildcards. Empty=Show All."
+
+--[[
+	Freeze Cam, Revision: 23.09.21/X2Z
+]]
+LANG["PHXM_ADMIN_FREEZECAM_HUNTER"]			= "Enable Freeze Cam features for team hunters"	-- Todo: Translate Me
 
 -- Add to Language Table.
 PHX.LANGUAGES[LANG.code] = LANG

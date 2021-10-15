@@ -1,7 +1,7 @@
 -- Validity check to prevent some sort of spam
 local function IsDelayed(ply)
 	local lastTauntTime = ply:GetNWFloat("LastTauntTime")
-	local delayedTauntTime = lastTauntTime + PHX.CVAR.CustomTauntDelay:GetInt()
+	local delayedTauntTime = lastTauntTime + PHX:GetCVar( "ph_customtaunts_delay" )
 	local currentTime = CurTime()
 	
 	return { delayedTauntTime > currentTime, delayedTauntTime - currentTime }

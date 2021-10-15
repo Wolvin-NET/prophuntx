@@ -1,0 +1,7 @@
+"UnlitGeneric"
+{
+	"$basetexture" "vgui\phehud\hud_check"
+	"$additive" "1"
+	"$vertexcolor" "1"
+	"$vertexalpha" "1"
+}

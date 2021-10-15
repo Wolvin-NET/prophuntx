@@ -1,17 +1,15 @@
-# Prop Hunt X
+# Prop Hunt: X
+## Road to Zero
 
 ### Versioning
-Version: X, Revision: 16/08/2020 (dd/mm/yyyy)  
-PUBLIC BETA
+Version: X, Revision: 16/09/2021 (dd/mm/yyyy) - X2Z  
 
 ### Public Beta Test
-Public Prop Hunt X: Live Testing is available. You can join to the IP below:
-
-#### 103.62.48.129:27400
+Public Prop Hunt X: Live Testing currently unavailable.
 
 ### Donate
 Please help support the project by donating:  
-https://prophunt.wolvindra.net/donate
+https://wolvindra.xyz/donate
 
 ### About this Gamemode
 This gamemode is similar to current Prop Hunt: Enhanced development lineup, but include several new features:
@@ -19,11 +17,15 @@ This gamemode is similar to current Prop Hunt: Enhanced development lineup, but 
 - Proper Prop Rotating Technique
 - Minor Game Mechanics changes
 - Feature-rich & customizable
-- More gamemode events (Coming Soon)
-- Prop-to-Hunter attack (Coming Soon)
+- More gamemode events
+- Prop-to-Hunter attack (Prop Revenge)
+- Integrated Prop Menu (Prop Chooser)
 - Tweaks and Optimisation
 - Team Balance and Team Switch Control
 - And many other implementations that currently still on progress...
+
+### Change Logs
+To see what things are changed, see: https://wolvindra.xyz/prophuntx?showlog=1
 
 However, there are several changes with codes structure which was cleaned-up, new HUD & user interface,
 mechanics and optimisation that should be (or already) included in future updates. This is may also a part of a continuation version 15 (rev. I) 
@@ -52,4 +54,4 @@ Please note that this gamemode you can/not:
 - Reuploading to workshop is limitted, unless permission was granted with any changes possible (e.g: Forked version).
 
 ### More info about this Gamemode
-https://www.wolvindra.net/prophuntx
+https://wolvindra.xyz/prophuntx

@@ -40,8 +40,10 @@ surface.CreateFont( "eChat_16", {
 if not GAMEMODE then
 	hook.Remove("Initialize", "echat_init")
 	hook.Add("Initialize", "echat_init", function()
-		include(engine.ActiveGamemode() .. "/gamemode/sh_chatbox.lua")
-		eChat.buildBox()
+		if PHX:QCVar("ph_use_new_chat") then
+			include(engine.ActiveGamemode() .. "/gamemode/sh_chatbox.lua")
+			eChat.buildBox()
+		end
 	end)
 	return
 end
@@ -54,7 +56,7 @@ function eChat.buildBox()
 	eChat.frame:ShowCloseButton( false )
 	eChat.frame:SetDraggable( true )
 	eChat.frame:SetSizable( true )
-	eChat.frame:SetPos( ScrW()*0.0116, (ScrH() - eChat.frame:GetTall()) - ScrH()*0.177 - PHX.CVAR.NewChatPosSubstract:GetInt())
+	eChat.frame:SetPos( ScrW()*0.0116, (ScrH() - eChat.frame:GetTall()) - ScrH()*0.177 - PHX:GetCVar( "ph_new_chat_pos_sub" ))
 	eChat.frame:SetMinWidth( 300 )
 	eChat.frame:SetMinHeight( 100 )
 	eChat.frame.Paint = function( self, w, h )
