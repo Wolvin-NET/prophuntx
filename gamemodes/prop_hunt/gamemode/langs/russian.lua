@@ -72,9 +72,9 @@ LANG["CHAT_SWAPBALANCE"]		= "%s переместили в команду %s дл
 LANG["CHAT_SWAPBALANCEYOU"]		= "Вы с другой командой поменялись местами, чтобы достичь идеального баланса." -- Smile... for even in death, you have become children of Thanos
 -- // END OF FRETTA SECTION \\
 
-LANG["HELP_F1"] 				= [[Prop Hunt (Кодовое имя) Проект X.
+LANG["HELP_F1"] 				= [[Prop Hunt проекта X.
 
-Проект X был создан для того, чтобы сделать Prop Hunt современным и настраиваемым.
+Проект, призванный сделать Prop Hunt более современным и настраиваемым.
 
 Более подробную информацию можно найти на:
 https://wolvindra.xyz/prophuntx
@@ -171,10 +171,11 @@ LANG["PHXM_TAB_HELP"]			= "Помощь и руководство"
 LANG["PHXM_TAB_MUTE"]			= "Заглушить игроков"
 LANG["PHXM_TAB_PLAYER"]			= "Настройки игрока"
 LANG["PHXM_TAB_MODEL"] 			= "Браузер модели игрока"
-LANG["PHXM_TAB_MODEL_DISABLED"]	= "Браузер модели игрока (Отключено)"
+LANG["PHXM_TAB_MODEL_DISABLED"]	= "Браузер модели игрока (Отключено)" -- Obsolete -- Revision Edit: 16.09.21/X2Z
 LANG["PHXM_TAB_ADMIN"]			= "Настройки администратора"
-LANG["PHXM_TAB_ABOUT"]			= "Об Prop Hunt X"
-LANG["PHXM_TAB_MAPVOTE"]		= "Настройки голосования за карту"
+LANG["PHXM_TAB_ABOUT"]			= "Об PH:X"
+LANG["PHXM_TAB_MAPVOTE"]		= "Голосование за карту"
+LANG["PHXM_TAB_PLUGINS"]		= "Дополнения/плагины"
 
 LANG["PHXM_CVAR_CHANGED"]		= "[Настройки] Переменная сервера %q изменена на %q"
 
@@ -221,14 +222,14 @@ LANG["MDL_MENU_MODELINFO"] 		= "Информация модели"
 
 LANG["MISC_APPLYMDL"] 			= "Применить модель"
 
-LANG["PHXM_MODEL_DISABLED"] 	= "Извините, пользовательская модель игрока отключена на этом сервере!"
+LANG["PHXM_MODEL_DISABLED"] 	= "Извините, пользовательские модели игрока отключены на этом сервере!"
 LANG["PHXM_PLAYERMODEL_SETFOV"]	= "  Поле зрения модели"
 
 --[[
 	Server Settings
 ]]
 LANG["PHXM_ADMIN_OPTIONS"]		= "Настройки режима игры на стороне сервера (Отображается только для администраторов / владельцев)"
-LANG["PHXM_ADMIN_MUSTALIVE"]	= "Вы должны быть в живой команде, чтобы сделать эту операцию."
+LANG["PHXM_ADMIN_MUSTALIVE"]	= "Вы должны быть живы, чтобы сделать эту операцию."
 
 --[[
 	Language Override
@@ -245,22 +246,22 @@ LANG["PHXM_ADMIN_CUSTOM_MODEL_PROP"]		= "Включить пользовател
 LANG["PHXM_ADMIN_TAUNT_DELAY_CUSTOM"]		= "Задержка пользовательской насмешки (Секунд)"
 LANG["PHXM_ADMIN_TAUNT_DELAY_RANDOM"]		= "Задержка обычной насмешки (Секунд)"
 LANG["PHXM_ADMIN_TAUNT_DELAY_AUTO"]			= "Задержка автонасмешки (Секунд)"
-LANG["PHXM_ADMIN_AUTOTAUNT_ENABLE"]			= "Включить автонасмешку"
+LANG["PHXM_ADMIN_AUTOTAUNT_ENABLE"]			= "Включить автонасмешку (Изменения таймера будут применены в следующем раунде)" -- Revision Edit: 16.09.21/X2Z
 
 LANG["PHXM_ADMIN_NOTICE_ROTATION"]			= "Показывать уведомление 'Вращение объекта' на экране при каждом появлении объекта"
 LANG["PHXM_ADMIN_CAMERA_COLLIDE"]			= "Включить камеру пропа при столкновении со стеной"
-LANG["PHXM_ADMIN_FREEZECAM"]				= "Включить функцию заморозки камеры для командных объектов"
-LANG["PHXM_ADMIN_PROP_COLLIDE"]				= "Включить столкновение друг с другом объектами-игроками"
+LANG["PHXM_ADMIN_FREEZECAM"]				= "Включить функцию заморозки камеры для команды объектов"
+LANG["PHXM_ADMIN_PROP_COLLIDE"]				= "Включить столкновение объектов с игроками"
 LANG["PHXM_ADMIN_SWAP_TEAM"] 				= "Менять команды каждый раунд - Отключение означает, что команда не будет меняться навсегда."
 LANG["PHXM_ADMIN_HUNTER_PENALTY"]			= "Штраф здоровья Охотнику"
 LANG["PHXM_ADMIN_HUNTER_KILL_BONUS"]		= "Бонус Охотнику за убийство"
-LANG["PHXM_ADMIN_HUNTER_SMG_GRENADES"]		= "SMG Гранат Охотнику"
-LANG["PHXM_ADMIN_GAME_TIME"]				= "Общее время игры (Минут)"
+LANG["PHXM_ADMIN_HUNTER_SMG_GRENADES"]		= "Подствольных гранат Охотнику"
+LANG["PHXM_ADMIN_GAME_TIME"]				= "(Требуется перезапуск карты) Общее время игры (Минут)"-- Revision Edit: 16.09.21/X2Z
 LANG["PHXM_ADMIN_BLINDLOCK_TIME"]			= "Время ослепления и освобождения Охотников (Секунд)"
-LANG["PHXM_ADMIN_ROUND_TIME"]				= "Общее время раунда (Секунд)"
-LANG["PHXM_ADMIN_ROUNDS_PER_MAP"]			= "Всего раундов на карту"
+LANG["PHXM_ADMIN_ROUND_TIME"]				= "(Требуется перезапуск карты) Общее время раунда (Секунд)"-- Revision Edit: 16.09.21/X2Z
+LANG["PHXM_ADMIN_ROUNDS_PER_MAP"]			= "(Требуется перезапуск карты) Всего раундов на карту"-- Revision Edit: 16.09.21/X2Z
 LANG["PHXM_ADMIN_ENABLE_LUCKYBALL"]			= "Разрешить создание 'Lucky ball' при разрушении объекта-игрока (Шанс 8%)"
-LANG["PHXM_ADMIN_ENABLE_CRYSTAL"]			= "Разрешить создание 'Devil ball' когда Охотник умирает (Шанс 70%)"
+LANG["PHXM_ADMIN_ENABLE_CRYSTAL"]			= "Разрешить создание 'Devil ball' когда Охотник умирает (Всегда)"
 LANG["PHXM_ADMIN_WAIT_PLAYERS"]				= "Подождите, пока игроки начнут играть"
 LANG["PHXM_ADMIN_WAIT_MIN_PLAYERS"]			= "Минимум игроков, чтобы ожидать начала игры (по умолчанию: 1)"
 LANG["PHXM_ENABLE_PLAYER_JOIN_LEAVE"] 		= "Включить уведомление в чат игрока, который присоединился или вышел? Поставьте 0, если Вы предпочитаете использовать собственное дополнение для чата."
@@ -301,8 +302,8 @@ LANG["PHXM_ADMIN_RELOAD_OBB"]		= "Разработчик: Перезагрузи
 ]]
 LANG["PHXM_ADMIN_EXPERIMENTALPHX"]			= "Новые экспериментальные разделы PHX"
 
-LANG["PHXM_ADMIN_HLA_COMBINE"]				= "Добавить поддержку модели солдата Комбайнов HLA"
-LANG["PHXM_ADMIN_TEAMBALANCE"]				= "Включить функцию баланса команд"
+LANG["PHXM_ADMIN_HLA_COMBINE"]				= "Добавить поддержку модели солдата Комбайнов из HL: Alyx"
+LANG["PHXM_ADMIN_TEAMBALANCE"]				= "Включить баланс команд"
 LANG["PHXM_ADMIN_CHANGETEAM_LIMIT"]			= "Использовать ограничитель смены команд. Установите -1 чтобы отключить. "
 LANG["PHXM_ADMIN_USENEWCHAT"]				= "Использовать новую окна чата (eChat) - Это временная замена. Если у вас уже есть, оставьте этот флажок."
 LANG["PHXM_ADMIN_NEWCHATPOS"]				= "Новая позиция окна чата: Вычитать высоту (Y) Положение по N пикселям."
@@ -362,8 +363,6 @@ LANG["CHAT_STARTING_MAPVOTE"] = "Раунд закончился. Начинае
 LANG["HUD_PROP_TAUNT_TIME"]	= "Случ. насмешка"
 LANG["HUD_PROP_CTAUNT_TIME"] = "Польз. насмешка"
 
-LANG["PHXM_TAB_PLUGINS"]				= "Дополнения и плагины"
-
 -- Plugins Section
 LANG["PLUGINS_NO_PLUGINS"]				= "Плагины не установлены. Найдите больше плагинов здесь!"
 LANG["PLUGINS_BROWSE_MORE"]				= "Просмотреть больше плагинов"
@@ -381,72 +380,72 @@ LANG["TEXTENTRY_MV_PREFIX"] = "Приставка к названию карты
 	Credits: Late Addition: Revision: 16.09.21/X2Z
 ]]
 
-LANG["PHXM_ABOUT_BTN_WIKI"]			= "PHX Wiki & Manuals"
+LANG["PHXM_ABOUT_BTN_WIKI"]			= "Вики и руководства PHX"
 
 --[[
 	Auto Taunt: Late Addition: Revision: 16.09.21/X2Z
 ]]
 
-LANG["HUD_AUTOTAUNT_DISABLED"]		= 	"Auto Taunting is disabled."
-LANG["HUD_AUTOTAUNT_WAITFORUPDATE"]	=	"Auto Taunt is Synchronizing..."
+LANG["HUD_AUTOTAUNT_DISABLED"]		= 	"Автонасмешка отключена."
+LANG["HUD_AUTOTAUNT_WAITFORUPDATE"]	=	"Автонасмешка синхронизируется..."
 
 --[[
 	MapVote: Late Addition: Revision: 16.09.21/X2Z
 ]]
-LANG["PHXM_MV_VOTEROCKED"]				= " The vote has been rocked, map vote will begin on round end"
-LANG["PHXM_MV_VOTEROCKED_IMMINENT"]		= "The vote has been rocked, map vote imminent"
-LANG["PHXM_MV_VOTEROCKED_PLY_TOTAL"]	= "%s has voted to Rock the Vote. ( %d / %d )"
+LANG["PHXM_MV_VOTEROCKED"]				= " Голосование по смене карты начнётся в конце раунда"
+LANG["PHXM_MV_VOTEROCKED_IMMINENT"]		= "Голосование по смене карты неизбежно"
+LANG["PHXM_MV_VOTEROCKED_PLY_TOTAL"]	= "%s проголосовал. ( %d / %d )"
 
-LANG["PHXM_MV_MUST_WAIT"]				= "You must wait a bit before voting!"
-LANG["PHXM_MV_VOTEINPROG"]				= "There is currently a vote in progress!"
-LANG["PHXM_MV_HAS_VOTED"]				= "You have already voted to Rock the Vote!"
-LANG["PHXM_MV_ALR_IN_VOTE"]				= "There has already been a vote, the map is going to change!"
-LANG["PHXM_MV_NEED_MORE_PLY"]			= "You need more players before you can rock the vote!"
+LANG["PHXM_MV_MUST_WAIT"]				= "Вы должны немного подождать перед голосованием!"
+LANG["PHXM_MV_VOTEINPROG"]				= "В настоящее время идёт голосование!"
+LANG["PHXM_MV_HAS_VOTED"]				= "Вы уже приняли участие в голосовании за смену карты!"
+LANG["PHXM_MV_ALR_IN_VOTE"]				= "Уже прошло голосование, карта будет изменена!"
+LANG["PHXM_MV_NEED_MORE_PLY"]			= "Вам нужно больше игроков, прежде чем вы сможете начать голосование!"
 
 --[[
 	Late Addition: Revision: 16.09.21/X2Z
 ]]
-LANG["PROP_PLAYERMDL_BANNED"]	= "Your custom Prop Player Model was banned from the server."
+LANG["PROP_PLAYERMDL_BANNED"]	= "Пользовательская модель игрока объекта была заблокирована на сервере."
 
 --[[
 	Prop Menu/Prop Chooser, Revision: 16.09.21/X2Z
 ]]
 
-LANG["PCR_USAGE_UNLIMIT"]		= "[Prop Menu] You have **unlimitted** usage left!"
-LANG["PCR_USAGE_COUNT"]			= "[Prop Menu] You have %d usage left!"
-LANG["PCR_PLS_WAIT"]			= "[Prop Menu] Please wait in %d seconds."
-LANG["PCR_NOROOM"]				= "[Prop Menu] There is no room to change the prop!"
-LANG["PCR_PROPBANNED"]			= "[Prop Menu] This prop was banned by the server."
-LANG["PCR_PROPBANNED_BYPCR"]	= "[Prop Menu] You cannot use this prop because it was banned by Prop Menu."
-LANG["PCR_REACHED_LIMIT"]		= "[Prop Menu] You have reached the limit!"
-LANG["PCR_STAY_ON_GROUND"]		= "[Prop Menu] You need to stay on the ground and not crouching!"
-LANG["PCR_ONLY_GROUP"]			= "[Prop Menu] Only certain groups can open this menu!"
-LANG["PCR_NOT_EXIST_COUNT"]		= "That prop you have selected does not exists in this map! ( %s / 4 )"
-LANG["PCR_NOT_EXIST"]			= "That prop you have selected does not exists in this map!"
+LANG["PCR_USAGE_UNLIMIT"]		= "[Меню объекта] У вас осталось **бесконечно** использований!"
+LANG["PCR_USAGE_COUNT"]			= "[Меню объекта] У вас осталось %d использований!"
+LANG["PCR_PLS_WAIT"]			= "[Меню объекта] Подождите %d сек."
+LANG["PCR_NOROOM"]				= "[Меню объекта] Нет места для перевоплащения!"
+LANG["PCR_PROPBANNED"]			= "[Меню объекта] Этот объект был заблокирован сервером."
+LANG["PCR_PROPBANNED_BYPCR"]	= "[Меню объекта] Меню заблокировало этот объект."
+LANG["PCR_REACHED_LIMIT"]		= "[Меню объекта] Вы достигли лимита!"
+LANG["PCR_STAY_ON_GROUND"]		= "[Меню объекта] Вы должны оставаться на земле и не приседать!"
+LANG["PCR_ONLY_GROUP"]			= "[Меню объекта] Только определённые группы могут открыть это меню!"
+LANG["PCR_NOT_EXIST_COUNT"]		= "Выбранный вами объект не существует в этой карте! ( %s / 4 )"
+LANG["PCR_NOT_EXIST"]			= "Выбранный вами объект не существует в этой карте!"
 
 -- PCR Client section, reason why there is a space because of chat.AddText between args.
-LANG["PCR_NOTIFY_1"]			= " This server use Prop Menu version %s! Type "
-LANG["PCR_NOTIFY_2"]			= " in console or use F1 -> [PropChooser Help] menu."
-LANG["PCR_CL_DISABLED"]			= " This feature is disabled."
-LANG["PCR_CL_GROUP"]			= " Only certain groups can open this menu!"
-LANG["PCR_CL_LIMIT"]			= " You have reached the limit!"
-LANG["PCR_UNLIMIT_TEXT"]		= "Unlimited"
-LANG["PCR_WINDOW_TITLE"]		= "PHX Prop Menu"
-LANG["PCR_HEADER_TOP"]			= "Choose any prop you want. You have"
-LANG["PCR_HEADER_MID"]			= "%s usage limit"
-LANG["PCR_HEADER_BOTTOM"]		= "to use this prop chooser!"
-LANG["PCR_CL_TOOLTIP_BANNED"]	= "You cannot use this model."
-LANG["PCR_CL_TOOLTIP_MODEL"]	= "Model: %s"
-LANG["PCR_CL_MENU_NOTREADY"]	= " This feature is not available at the moment."
-LANG["PCR_WINDOW_GUIDE_TTL"]	= "Quick Guide: Prop Menu 101"
-LANG["PCR_BTN_HELP_MENU"]		= "Prop Menu Help"
+LANG["PCR_NOTIFY_1"]			= " Этот сервер использует Меню объектов версии %s! Введите "
+LANG["PCR_NOTIFY_2"]			= " в консоли или используйте F1 -> меню [PropChooser Help]."
+LANG["PCR_CL_DISABLED"]			= " Эта функция отключена."
+LANG["PCR_CL_GROUP"]			= " Только определённые группы могут открыть это меню!"
+LANG["PCR_CL_LIMIT"]			= " Вы достигли лимита!"
+LANG["PCR_UNLIMIT_TEXT"]		= "Бесконечно"
+LANG["PCR_WINDOW_TITLE"]		= "Меню объектов PHX"
+LANG["PCR_HEADER_TOP"]			= "Выберите любой объект. У вас есть"
+LANG["PCR_HEADER_MID"]			= "%s использований"
+LANG["PCR_HEADER_BOTTOM"]		= "для использования выбора объекта!"
+LANG["PCR_CL_TOOLTIP_BANNED"]	= "Вы не можете использовать эту модель."
+LANG["PCR_CL_TOOLTIP_MODEL"]	= "Модель: %s"
+LANG["PCR_CL_MENU_NOTREADY"]	= " В настоящее время эта функция недоступна."
+LANG["PCR_WINDOW_GUIDE_TTL"]	= "Краткое руководство: Меню объекта 101"
+LANG["PCR_BTN_HELP_MENU"]		= "Справка по меню объектов"
 
-LANG["PCR_CL_CMDUSEULX"]		= " This command is disabled. Use 'ulx propmenu' instead!"
-LANG["PCR_CMD_ULX_DISABLED"]	= "Command ulx propmenu is disabled. Press your [Prop Menu Bind] to open."	--input.GetKeyName is impossible to access.
+LANG["PCR_CL_CMDUSEULX"]		= " Эта команда отключена. Вместо неё используйте 'ulx propmenu'!"
+LANG["PCR_CMD_ULX_DISABLED"]	= "Команда ulx propmenu отключена. Для открытия нажмите клавишу [Меню объекта]."	--input.GetKeyName is impossible to access.
 
-LANG["PCR_EDT_IN_USE"]			= "An admin is still editing the prop data. Please Wait!"
-LANG["PCR_EDT_ERROR_DISABLED"]	= "[Prop Menu] Error: Custom Prop Addition is Disabled!"
-LANG["PCR_EDT_NO_RIGHTS"]		= "You have no rights to access this feature."
+LANG["PCR_EDT_IN_USE"]			= "Администратор всё ещё редактирует данные объектов. Пожалуйста, подождите!"
+LANG["PCR_EDT_ERROR_DISABLED"]	= "[Меню объекта] Ошибка: Добавление пользовательских объектов отключено!"
+LANG["PCR_EDT_NO_RIGHTS"]		= "У вас нет прав на доступ к этой функции."
 
 -- I'm actually exhausted and feel so burned out, but I'll update this in future, or in PH:Zero I guess.
 -- Section: Custom Prop Editor File Browser and stuff...
@@ -456,27 +455,27 @@ LANG["PCR_EDT_NO_RIGHTS"]		= "You have no rights to access this feature."
 --[[
 	Admin Section, Revision: 16.09.21/X2Z
 ]]
-LANG["PHXM_PLAYER_PROP_CHOOSER_KEY"]	= "Default Key to open Prop Menu (Prop Chooser)."
-LANG["PHXM_PROP_FREEZE_MIDAIR"]			= "Default Key to toogle Freeze movement during on midair as a Prop."
-LANG["PHXM_ADMIN_PROP_RIGHT_CLICK"]		= "Should Props also able to Taunt by pressing Right Click?"
-LANG["PHXM_ADMIN_TAUNT_SCANNER"]		= "(Require Map Restart) Enable Taunt Scanner?"
-LANG["PHXM_ADMLBL_USABLE_ENTS"]			= "Usable Prop Entities Types"
-LANG["PHXM_ADMLBL_USABLE_ENTS_REF"]		= "Types can be: 1: Physics Only, 2: Physics & Dynamics, 3: Almost Anything inc. Ragdolls, 4: Custom Entities."
-LANG["PHXM_ADMIN_USABLE_ENT_TYPE"]		= "Type of Entities to use for Prop to Replicate"
-LANG["PHXM_ADMIN_NOTIFY_ENT_TYPE"]		= "Notify Props about entities that cannot be replicated by pressing E. Only works if 'ph_usable_prop_type' is set to 3 or 4."
-LANG["NOTIFY_PROP_ENTTYPE"]				= "Press [E] to interact, [Click] to replicate object."
-LANG["NOTIFY_CUST_ENT_TYPE_IS_ON"]		= "[PHX] Notice: Press [E] to interact object, Press [Click] to Replicate the object."
+LANG["PHXM_PLAYER_PROP_CHOOSER_KEY"]	= "Клавиша по умолчанию для открытия меню объектов (Выбор объектов)."
+LANG["PHXM_PROP_FREEZE_MIDAIR"]			= "Клавиша по умолчанию для переключения замораживание движения в воздухе в качестве объекта."
+LANG["PHXM_ADMIN_PROP_RIGHT_CLICK"]		= "Должны ли объекты также иметь возможность использовать насмешку при нажатии правой кнопки мыши?"
+LANG["PHXM_ADMIN_TAUNT_SCANNER"]		= "(Требуется перезапуск карты) Включить сканер насмешек?"
+LANG["PHXM_ADMLBL_USABLE_ENTS"]			= "Используемые типы объектов"
+LANG["PHXM_ADMLBL_USABLE_ENTS_REF"]		= "Типы могут быть: 1: Только физические, 2: Физические и динамические, 3: Почти все, включая. Рэгдоллы, 4: Пользовательские энтити."
+LANG["PHXM_ADMIN_USABLE_ENT_TYPE"]		= "Тип энтити для использования объектам для перевоплощения"
+LANG["PHXM_ADMIN_NOTIFY_ENT_TYPE"]		= "Уведомлять объекты об энтити, которые не могут быть использованы для перевоплощения, нажатием E. Работает, только если 'ph_usable_prop_type' установлен на 3 или 4."
+LANG["NOTIFY_PROP_ENTTYPE"]				= "Нажмите [E] для взаимодействия, [Клик] для копирования объекта."
+LANG["NOTIFY_CUST_ENT_TYPE_IS_ON"]		= "[PHX] Примечание: Нажмите [E] для взаимодействия с объектом, нажмите [Клик] для копирования объекта."
 
 --[[
 	Custom Taunts, Revision: 16.09.21/X2Z
 ]]
-LANG["TM_TAUNTS_SEARCH_NOTHING"]		= "Taunt containing '%s' was not found..."
-LANG["TM_SEARCH_PLACEHOLDER"]			= "Search in this category: Enter word, lowercase & no wildcards. Empty=Show All."
+LANG["TM_TAUNTS_SEARCH_NOTHING"]		= "Насмешка, содержащая '%s', не найдена..."
+LANG["TM_SEARCH_PLACEHOLDER"]			= "Поиск в этой категории: Введите слово, в нижнем регистре и без подстановочных знаков. Пусто=Показать все."
 
 --[[
 	Freeze Cam, Revision: 23.09.21/X2Z
 ]]
-LANG["PHXM_ADMIN_FREEZECAM_HUNTER"]			= "Enable Freeze Cam features for team hunters"	-- Todo: Translate Me
+LANG["PHXM_ADMIN_FREEZECAM_HUNTER"]			= "Включить функцию заморозки камеры для команды объектов"	-- Todo: Translate Me
 
 -- Add to Language Table.
 PHX.LANGUAGES[LANG.code] = LANG
