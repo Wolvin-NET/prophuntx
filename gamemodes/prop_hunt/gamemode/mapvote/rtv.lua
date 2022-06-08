@@ -14,6 +14,24 @@ RTV._ActualWait = CurTime() + RTV.Wait
 
 RTV.PlayerCount = MapVote.Config.RTVPlayerCount or 3
 
+function RTV.ChatPrint( mType, ply, bBroadcast, msg, ... )
+	
+	if !mType or mType == nil then mType = "PRIMARY" end
+	if bBroadcast == nil then bBroadcast = false end
+	
+	if !bBroadcast then
+		if ply and ply ~= nil and IsValid(ply) then
+			ply:PHXChatInfo( mType, msg, ... )
+		end
+	else
+		-- bBroadcast == true
+		for _,v in pairs(player.GetAll()) do
+			v:PHXChatInfo( mType, msg, ... )
+		end
+	end
+	
+end
+
 function RTV.ShouldChange()
 	return RTV.TotalVotes >= math.Round(#player.GetAll()*0.66)
 end
@@ -23,7 +41,7 @@ function RTV.RemoveVote()
 end
 
 function RTV.Start()
-	PrintMessage( HUD_PRINTTALK, "The vote has been rocked, map vote imminent")
+	RTV.ChatPrint( "NOTICE", nil, true, "PHXM_MV_VOTEROCKED_IMMINENT" )
 	timer.Simple(4, function()
 		MapVote.Start(nil, nil, nil, nil)
 	end)
@@ -36,8 +54,9 @@ function RTV.AddVote( ply )
 		RTV.TotalVotes = RTV.TotalVotes + 1
 		ply.RTVoted = true
 		MsgN( ply:Nick().." has voted to Rock the Vote." )
-		PrintMessage( HUD_PRINTTALK, ply:Nick().." has voted to Rock the Vote. ("..RTV.TotalVotes.."/"..math.Round(#player.GetAll()*0.66)..")" )
-
+		
+		RTV.ChatPrint( "NOTICE", nil, true, "PHXM_MV_VOTEROCKED_PLY_TOTAL", ply:Nick(), RTV.TotalVotes, math.Round(#player.GetAll()*0.66) )
+		
 		if RTV.ShouldChange() then
 			RTV.Start()
 		end
@@ -67,22 +86,22 @@ function RTV.CanVote( ply )
 	local plyCount = player.GetCount()
 	
 	if RTV._ActualWait >= CurTime() then
-		return false, "You must wait a bit before voting!"
+		return false, "PHXM_MV_MUST_WAIT"
 	end
 
 	if GetGlobalBool( "In_Voting" ) then
-		return false, "There is currently a vote in progress!"
+		return false, "PHXM_MV_VOTEINPROG"
 	end
 
 	if ply.RTVoted then
-		return false, "You have already voted to Rock the Vote!"
+		return false, "PHXM_MV_HAS_VOTED"
 	end
 
 	if RTV.ChangingMaps then
-		return false, "There has already been a vote, the map is going to change!"
+		return false, "PHXM_MV_ALR_IN_VOTE"
 	end
 	if plyCount < RTV.PlayerCount then
-        return false, "You need more players before you can rock the vote!"
+        return false, "PHXM_MV_NEED_MORE_PLY"
     end
 
 	return true
@@ -94,7 +113,7 @@ function RTV.StartVote( ply )
 	local can, err = RTV.CanVote(ply)
 
 	if not can then
-		ply:PrintMessage( HUD_PRINTTALK, err )
+		RTV.ChatPrint( "WARNING", ply, false, err )
 		return
 	end
 

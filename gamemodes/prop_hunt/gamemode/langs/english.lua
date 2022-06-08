@@ -1,7 +1,7 @@
 -- Kindly free to improve the language.
 
 -- Originally written by: Fafy
--- Improved by Wolvindra-Vinzuerio.
+-- Improved by Wolvindra-Vinzuerio & Godfather
 
 local LANG = {}
 
@@ -9,9 +9,13 @@ LANG.code = "en_us"
 
 LANG.Name 		 	= "English" -- example: "Bahasa Indonesia"
 LANG.NameEnglish	= "English" -- Your Language but spoken in English, example: "Indonesian"
-LANG.Author			= "Wolvindra-Vinzuerio, Fafy" -- Only accept STRINGS.
+LANG.Author			= "Wolvindra-Vinzuerio, Godfather, Fafy" -- Only accept STRINGS.
 -- Can Accept: String, and Table.
-LANG.AuthorURL		= {"https://steamcommunity.com/profiles/76561198086789110", "https://steamcommunity.com/profiles/76561198016233242"}
+LANG.AuthorURL		= {	
+	"https://steamcommunity.com/profiles/76561198086789110", 
+	"https://steamcommunity.com/profiles/76561198283562416", 
+	"https://steamcommunity.com/profiles/76561198016233242"
+}
 
 -- Special Section that isn't String-based
 LANG.SUICIDEMSG = { --> FRETTA
@@ -75,12 +79,12 @@ LANG["CHAT_SWAPBALANCE"]		= "%s has been changed to %s for team balance."
 LANG["CHAT_SWAPBALANCEYOU"]		= "You were swapped to achieve perfect balance." -- Smile... for even in death, you have become children of Thanos
 -- // END OF FRETTA SECTION \\
 
-LANG["HELP_F1"] 				= [[A Prop Hunt (Codename) X Project.
+LANG["HELP_F1"] 				= [[A Prop Hunt X Project.
 
-A project to make Prop Hunt X modern and customisable.
+A project to make Prop Hunt be more modern and customisable.
 
 More info can be found at:
-https://www.wolvindra.net/prophuntx
+https://wolvindra.xyz/prophuntx
 
 To See more info, help and guide, Press [F1] key and then click [Prop Hunt Menu] button.
 
@@ -170,14 +174,15 @@ LANG["TM_DELAYTAUNT_PLSWAIT"]	= "Please wait in %s second(s)!"
 LANG["PHXM_WINDOW_TITLE"]		= "Prop Hunt X - Advanced Setting & Menu"
 LANG["SERVER_INFO_MOTD"]		= "SERVER INFORMATION & RULES [MOTD]"
 
-LANG["PHXM_TAB_HELP"]			= "Help & Guides"
-LANG["PHXM_TAB_MUTE"]			= "Player Un/Mute Voice"
+LANG["PHXM_TAB_HELP"]			= "Help & Guide"
+LANG["PHXM_TAB_MUTE"]			= "Player Muting"
 LANG["PHXM_TAB_PLAYER"]			= "Player Settings"
-LANG["PHXM_TAB_MODEL"] 			= "Player Model Browsers"
-LANG["PHXM_TAB_MODEL_DISABLED"]	= "Player Model Browsers (Disabled)"
+LANG["PHXM_TAB_MODEL"] 			= "Model Browser"
+LANG["PHXM_TAB_MODEL_DISABLED"]	= "Model Browser (Disabled)" -- Obsolete -- Revision Edit: 16.09.21/X2Z
 LANG["PHXM_TAB_ADMIN"]			= "Admin Settings"
-LANG["PHXM_TAB_ABOUT"]			= "About Prop Hunt X"
-LANG["PHXM_TAB_MAPVOTE"]		= "MapVote Settings"
+LANG["PHXM_TAB_ABOUT"]			= "About PH:X"
+LANG["PHXM_TAB_MAPVOTE"]		= "MapVote"
+LANG["PHXM_TAB_PLUGINS"]		= "Addons/Plugins"
 
 LANG["PHXM_CVAR_CHANGED"]		= "[Settings] CVar %q has been changed to %q"
 
@@ -199,7 +204,7 @@ LANG["PHXM_PLAYER_TAUNTWINDOW_KEY"]		= "Taunt Menu Key"
 LANG["PHXM_PLAYER_ROTATLOCK_KEY"]		= "Rotation Lock Key"
 
 LANG["PHXM_PLAYER_TOGGLE_HALOS"]		= "Toggle Halo effect when choosing a prop"
-LANG["PHXM_PLAYER_IDNAMES"]				= "Show Team player names above their heads instead (and appear through wall too)"
+LANG["PHXM_PLAYER_IDNAMES"]				= "Show Team players names' above their heads instead (and appear through wall too)"
 LANG["PHXM_PLAYER_ENDROUND_CUE"]		= "Play End round sound cue"
 LANG["PHXM_PLAYER_TAUNTMENU_AUTOCLOSE"]	= "Option for Auto closing for Taunt window when double-clicking them"
 LANG["PHXM_PLAYER_SEE_HUNTER_LINE"]		= "Draw a line on hunters so we can see their aim in spectator mode."
@@ -224,14 +229,14 @@ LANG["MDL_MENU_MODELINFO"] 		= "Model Information"
 
 LANG["MISC_APPLYMDL"] 			= "Apply Model"
 
-LANG["PHXM_MODEL_DISABLED"] 	= "Sorry, Custom Player Model is disabled on this server!"
+LANG["PHXM_MODEL_DISABLED"] 	= "Sorry, Custom Player Models are disabled on this server!"
 LANG["PHXM_PLAYERMODEL_SETFOV"]	= "  Set Model FOV"
 
 --[[
 	Server Settings
 ]]
 LANG["PHXM_ADMIN_OPTIONS"]		= "Serverside gamemode Options (Only visible for Admins/Owner)"
-LANG["PHXM_ADMIN_MUSTALIVE"]	= "You must in alive team in order to do this operation."
+LANG["PHXM_ADMIN_MUSTALIVE"]	= "You must be alive in order to do this operation."
 
 --[[
 	Language Override
@@ -248,22 +253,23 @@ LANG["PHXM_ADMIN_CUSTOM_MODEL_PROP"]		= "Enable custom models for Props - Make s
 LANG["PHXM_ADMIN_TAUNT_DELAY_CUSTOM"]		= "Custom Taunts Delay (Seconds)"
 LANG["PHXM_ADMIN_TAUNT_DELAY_RANDOM"]		= "Normal Taunts Delay (Seconds)"
 LANG["PHXM_ADMIN_TAUNT_DELAY_AUTO"]			= "Auto Taunts Delay (Seconds)"
-LANG["PHXM_ADMIN_AUTOTAUNT_ENABLE"]			= "Enable Auto Taunt Features"
+LANG["PHXM_ADMIN_AUTOTAUNT_ENABLE"]			= "Enable Auto Taunt Features (Proper Timer will be fixed on next round)"	-- Revision Edit: 16.09.21/X2Z
 
 LANG["PHXM_ADMIN_NOTICE_ROTATION"]			= "Display 'Prop Rotation' notification on every Prop Spawns"
 LANG["PHXM_ADMIN_CAMERA_COLLIDE"]			= "Enable Prop Camera collision to the wall"
 LANG["PHXM_ADMIN_FREEZECAM"]				= "Enable Freeze Cam features for team props"
+LANG["PHXM_ADMIN_FREEZECAM_HUNTER"]			= "Enable Freeze Cam features for team hunters"
 LANG["PHXM_ADMIN_PROP_COLLIDE"]				= "Enable Prop collide on each other prop players"
 LANG["PHXM_ADMIN_SWAP_TEAM"] 				= "Swap team every round - Disabling means team will stay forever."
 LANG["PHXM_ADMIN_HUNTER_PENALTY"]			= "Hunter health penalty"
 LANG["PHXM_ADMIN_HUNTER_KILL_BONUS"]		= "Hunter kill bonus"
 LANG["PHXM_ADMIN_HUNTER_SMG_GRENADES"]		= "Hunter SMG grenades"
-LANG["PHXM_ADMIN_GAME_TIME"]				= "Total Game time (Minutes)"
+LANG["PHXM_ADMIN_GAME_TIME"]				= "(Require Map Restart) Total Game time (Minutes)"		-- Revision Edit: 16.09.21/X2Z
 LANG["PHXM_ADMIN_BLINDLOCK_TIME"]			= "Hunter blindlock time (Seconds)"
-LANG["PHXM_ADMIN_ROUND_TIME"]				= "Game round time (Seconds)"
-LANG["PHXM_ADMIN_ROUNDS_PER_MAP"]			= "Total game Rounds per Map"
+LANG["PHXM_ADMIN_ROUND_TIME"]				= "(Require Map Restart) Game round time (Seconds)"		-- Revision Edit: 16.09.21/X2Z
+LANG["PHXM_ADMIN_ROUNDS_PER_MAP"]			= "(Require Map Restart) Total game Rounds per Map"		-- Revision Edit: 16.09.21/X2Z
 LANG["PHXM_ADMIN_ENABLE_LUCKYBALL"]			= "Allow Lucky Balls Features to be spawned on breakable props (Chance is 8%)"
-LANG["PHXM_ADMIN_ENABLE_CRYSTAL"]			= "Allow Devil Balls Features to be spawned when hunter dies (Chance is 70%)"
+LANG["PHXM_ADMIN_ENABLE_CRYSTAL"]			= "Allow Devil Balls Features to be spawned when hunter dies (Always Spawn)"	-- Revision Edit: 16.09.21/X2Z
 LANG["PHXM_ADMIN_WAIT_PLAYERS"]				= "Wait for Players to begin the gameplay"
 LANG["PHXM_ADMIN_WAIT_MIN_PLAYERS"]			= "Mininum Players to Wait before the game starts (default: 1)"
 LANG["PHXM_ENABLE_PLAYER_JOIN_LEAVE"] 		= "Enable chat notification for player join and leave? Set this 0 if you prefer to use with your own Custom Chat addon."
@@ -289,10 +295,10 @@ LANG["PHXM_MODE3"]						= "Mode [3]: Allow Pickup"
 	Admin Developer Sections
 ]]
 LANG["PHXM_ADMIN_DEVSECTION"]		= "Developer Options/Experimentals Features"
-LANG["PHXM_ADMIN_ROOMCHECK"]		= "Enable Boundaries Check? This prevents you to get stuck with objects/walls."
+LANG["PHXM_ADMIN_ROOMCHECK"]		= "Enable Boundaries Check? This prevents you getting stuck with objects/walls."
 LANG["PHXM_ADMIN_USENEWMKBREN"]		= "Use new model for Bren MK II bonus weapon (Require Map Restart)"
 LANG["PHXM_ADMIN_BEVERBOSE"]		= "Developer: Be Verbose - Enable PH:X to print all information and events verbosely?"
-LANG["PHXM_ADMIN_SHOWPLNAMEHEAD"]	= "Enable Player team names to be appear on their screen."
+LANG["PHXM_ADMIN_SHOWPLNAMEHEAD"]	= "Enable Player team names to appear on their screen."
 LANG["PHXM_ADMIN_USESINGLE_FZCAM"]	= "Use single Freezecam sound instead of sound list (Use 'ph_fc_cue_path' to determine Freezecam sound path)"
 LANG["PHXM_ADMIN_MODELLISTINGTYPE"] = "Use Legacy Model List : 0 = All Playermodels (AddValidModel), 1 = Use Legacy: list.Get('PlayerOptionsModel')"
 LANG["PHXM_ADMIN_JUMPPOWER"]		= "Additional Jump Power multiplier for Props"
@@ -304,8 +310,8 @@ LANG["PHXM_ADMIN_RELOAD_OBB"]		= "Developer: Reload OBB Modifier data every roun
 ]]
 LANG["PHXM_ADMIN_EXPERIMENTALPHX"]			= "New PHX Experimental Sections"
 
-LANG["PHXM_ADMIN_HLA_COMBINE"]				= "Add HLA Combine model support"
-LANG["PHXM_ADMIN_TEAMBALANCE"]				= "Enable Team Balance feature"
+LANG["PHXM_ADMIN_HLA_COMBINE"]				= "Add HL: Alyx Combine model support"
+LANG["PHXM_ADMIN_TEAMBALANCE"]				= "Enable Team Balance"
 LANG["PHXM_ADMIN_CHANGETEAM_LIMIT"]			= "Use Team Switch limitter. Set -1 to disable. "
 LANG["PHXM_ADMIN_USENEWCHAT"]				= "Use new Chat Box (eChat) - This is temporary replacement. If you have one already, leave this unchecked."
 LANG["PHXM_ADMIN_NEWCHATPOS"]				= "New Chat Box Position: Substract Height (Y) Position by N pixels."
@@ -336,7 +342,6 @@ LANG["PHXM_MV_START"]		= "Start MapVote"
 LANG["PHXM_MV_STOP"]		= "Stop MapVote"
 --                  			  ^YOU VIOLATED THE LAW!
 
-
 --[[ 
 	Versioning, Credits or About section
 ]]
@@ -352,9 +357,6 @@ LANG["PHXM_ABOUT_BTN_GITHUB"]		= "PHX GitHub Repository"
 LANG["PHXM_ABOUT_BTN_PLUGINS"]		= "PHX Addons/Plugins"
 LANG["PHXM_ABOUT_BTN_CHANGELOGS"]	= "PHX Changelogs"
 
---[[
-	Late Additionals
-]]
 -- fretta
 LANG["HUD_SPECTATING"]	= "SPECTATING"
 LANG["HUD_YOUDIED"]		= "You Died!"
@@ -364,8 +366,6 @@ LANG["CHAT_STARTING_MAPVOTE"] = "Round has Ended. Starting map voting..."
 -- This used for HUD Taunt Timer
 LANG["HUD_PROP_TAUNT_TIME"]	= "Random Taunt"
 LANG["HUD_PROP_CTAUNT_TIME"] = "Cust. Taunt"
-
-LANG["PHXM_TAB_PLUGINS"]				= "Addons & Plugins"
 
 -- Plugins Section
 LANG["PLUGINS_NO_PLUGINS"]				= "No plugins installed. Browse more plugins here!"
@@ -377,6 +377,217 @@ LANG["PLUGINS_CLIENT_SETTINGS"]			= "-- Client Settings --"
 -- Text Entries
 LANG["TEXTENTRY_FZ_SINGLE"] = "Freeze Cam Single Sound Path" -- this one is for ph_fc_cue_path command
 LANG["TEXTENTRY_MV_PREFIX"] = "MapVote Map Prefix"			 -- the map previx for mv_mapprefix
+
+--============= LATE ADDITION OF 29.10.21/X2Z. =============--
+
+LANG["MISC_GAME_ENDED"]		= "Game has ended."
+
+--============= LATE ADDITION OF 16.09.21/X2Z. =============--
+
+--[[
+	Credits: Late Addition: Revision: 16.09.21/X2Z
+]]
+
+LANG["PHXM_ABOUT_BTN_WIKI"]			= "PHX Wiki & Manuals"
+
+--[[
+	Auto Taunt: Late Addition: Revision: 16.09.21/X2Z
+]]
+
+LANG["HUD_AUTOTAUNT_DISABLED"]		= 	"Auto Taunting is disabled."
+LANG["HUD_AUTOTAUNT_WAITFORUPDATE"]	=	"Auto Taunt is Synchronizing..."
+
+--[[
+	MapVote: Late Addition: Revision: 16.09.21/X2Z
+]]
+LANG["PHXM_MV_VOTEROCKED"]				= " The vote has been rocked, map vote will begin on round end"
+LANG["PHXM_MV_VOTEROCKED_IMMINENT"]		= "The vote has been rocked, map vote imminent"
+LANG["PHXM_MV_VOTEROCKED_PLY_TOTAL"]	= "%s has voted to Rock the Vote. ( %d / %d )"
+
+LANG["PHXM_MV_MUST_WAIT"]				= "You must wait a bit before voting!"
+LANG["PHXM_MV_VOTEINPROG"]				= "There is currently a vote in progress!"
+LANG["PHXM_MV_HAS_VOTED"]				= "You have already voted to Rock the Vote!"
+LANG["PHXM_MV_ALR_IN_VOTE"]				= "There has already been a vote, the map is going to change!"
+LANG["PHXM_MV_NEED_MORE_PLY"]			= "You need more players before you can rock the vote!"
+
+--[[
+	Late Addition: Revision: 16.09.21/X2Z
+]]
+LANG["PROP_PLAYERMDL_BANNED"]	= "Your custom Prop Player Model was banned from the server."
+
+--[[
+	Prop Menu/Prop Chooser, Revision: 16.09.21/X2Z
+]]
+
+LANG["PCR_USAGE_UNLIMIT"]		= "[Prop Menu] You have **unlimitted** usage left!"
+LANG["PCR_USAGE_COUNT"]			= "[Prop Menu] You have %d usage left!"
+LANG["PCR_PLS_WAIT"]			= "[Prop Menu] Please wait in %d seconds."
+LANG["PCR_NOROOM"]				= "[Prop Menu] There is no room to change the prop!"
+LANG["PCR_PROPBANNED"]			= "[Prop Menu] This prop was banned by the server."
+LANG["PCR_PROPBANNED_BYPCR"]	= "[Prop Menu] You cannot use this prop because it was banned by Prop Menu."
+LANG["PCR_REACHED_LIMIT"]		= "[Prop Menu] You have reached the limit!"
+LANG["PCR_STAY_ON_GROUND"]		= "[Prop Menu] You need to stay on the ground and not crouching!"
+LANG["PCR_ONLY_GROUP"]			= "[Prop Menu] Only certain groups can open this menu!"
+LANG["PCR_NOT_EXIST_COUNT"]		= "That prop you have selected does not exists in this map! ( %s / 4 )"
+LANG["PCR_NOT_EXIST"]			= "That prop you have selected does not exists in this map!"
+
+-- PCR Client section, reason why there is a space because of chat.AddText between args.
+LANG["PCR_NOTIFY_1"]			= " This server use Prop Menu version %s! Type "
+LANG["PCR_NOTIFY_2"]			= " in console or use F1 -> [PropChooser Help] menu."
+LANG["PCR_CL_DISABLED"]			= " This feature is disabled."
+LANG["PCR_CL_GROUP"]			= " Only certain groups can open this menu!"
+LANG["PCR_CL_LIMIT"]			= " You have reached the limit!"
+LANG["PCR_UNLIMIT_TEXT"]		= "Unlimited"
+LANG["PCR_WINDOW_TITLE"]		= "PH:X Prop Menu"
+LANG["PCR_HEADER_TOP"]			= "Choose any prop you want. You have"
+LANG["PCR_HEADER_MID"]			= "%s usage limit"
+LANG["PCR_HEADER_BOTTOM"]		= "to use this prop chooser!"
+LANG["PCR_CL_TOOLTIP_BANNED"]	= "You cannot use this model."
+LANG["PCR_CL_TOOLTIP_MODEL"]	= "Model: %s"
+LANG["PCR_CL_MENU_NOTREADY"]	= " This feature is not available at the moment."
+LANG["PCR_WINDOW_GUIDE_TTL"]	= "Quick Guide: Prop Menu 101"
+LANG["PCR_BTN_HELP_MENU"]		= "Prop Menu Help"
+
+LANG["PCR_CL_CMDUSEULX"]		= " This command is disabled. Use 'ulx propmenu' instead!"
+LANG["PCR_CMD_ULX_DISABLED"]	= "Command ulx propmenu is disabled. Press your [Prop Menu Bind] to open."	--input.GetKeyName is impossible to access.
+
+LANG["PCR_EDT_IN_USE"]			= "An admin is still editing the prop data. Please Wait!"
+LANG["PCR_EDT_ERROR_DISABLED"]	= "[Prop Menu] Error: Custom Prop Addition is Disabled!"
+LANG["PCR_EDT_NO_RIGHTS"]		= "You have no rights to access this feature."
+
+-- I'm actually exhausted and feel so burned out, but I'll update this in future, or in PH:Zero I guess.
+-- Section: Custom Prop Editor File Browser and stuff...
+-- LANG["PCR_EDT_XXX"] 	= "todo"
+-- LANG["PCR_FB_XXX"] 	= "todo"
+
+--[[
+	Admin Section, Revision: 16.09.21/X2Z
+]]
+LANG["PHXM_PLAYER_PROP_CHOOSER_KEY"]	= "Default Key to open Prop Menu (Prop Chooser)."
+LANG["PHXM_PROP_FREEZE_MIDAIR"]			= "Default Key to toogle Freeze movement during on midair as a Prop."
+LANG["PHXM_ADMIN_PROP_RIGHT_CLICK"]		= "Should Props also able to Taunt by pressing Right Click?"
+LANG["PHXM_ADMIN_TAUNT_SCANNER"]		= "(Require Map Restart) Enable Taunt Scanner?"
+LANG["PHXM_ADMLBL_USABLE_ENTS"]			= "Usable Prop Entities Types"
+LANG["PHXM_ADMLBL_USABLE_ENTS_REF"]		= "Types can be: 1: Physics Only, 2: Physics & Dynamics, 3: Almost Anything inc. Ragdolls, 4: Custom Entities."
+LANG["PHXM_ADMIN_USABLE_ENT_TYPE"]		= "Type of Entities to use for Prop to Replicate"
+LANG["PHXM_ADMIN_NOTIFY_ENT_TYPE"]		= "Notify Props about entities that cannot be replicated by pressing E. Only works if 'ph_usable_prop_type' is set to 3 or 4."
+LANG["NOTIFY_PROP_ENTTYPE"]				= "Press [E] to interact, [Click] to replicate object."
+LANG["NOTIFY_CUST_ENT_TYPE_IS_ON"]		= "[PHX] Notice: Press [E] to interact object, Press [Click] to Replicate the object."
+
+--[[
+	Custom Taunts, Revision: 16.09.21/X2Z
+]]
+LANG["TM_TAUNTS_SEARCH_NOTHING"]		= "Taunt containing '%s' was not found..."
+LANG["TM_SEARCH_PLACEHOLDER"]			= "Search in this category: Enter word, lowercase & no wildcards. Empty=Show All."
+LANG["PHXM_MSG_INPUT_IS_EMPTY"]			= "Text is empty or you didn't pressed ENTER key."
+
+--[[ Revision 07.06.2022/X2Z ]]
+--goto line: @132
+LANG["MISC_SET"]						= "Set"
+LANG["MISC_APPLY"]						= "Apply"
+LANG["MISC_NO"]							= "Yes"
+LANG["MISC_YES"]						= "No"
+LANG["MISC_WARN"]						= "Warning"
+LANG["MISC_ERROR"]						= "Error"
+LANG["MISC_INFO"]						= "Information"
+LANG["MISC_NOTICE"]						= "Notice"
+LANG["MISC_IDK"]						= "Unknown"
+LANG["MISC_NA"]							= "N/A"
+
+LANG["PHX_CTAUNT_USE_PITCH"]			= "Use pitch for custom taunts"
+LANG["PHX_CTAUNT_RANDOM_PITCH"]			= "Randomize pitch when playing taunt"
+LANG["PHX_RTAUNT_USE_PITCH"]			= "Use pitch for random taunts [%s] as well" -- input.GetKeyName( PHX:GetCVar( "ph_default_taunt_key" ) )
+
+LANG["PLUG_NAME_VER"]					= "Plugin: %s | v.%s"
+LANG["PLUG_DESCRIPTION"]				= "Description: %s"
+
+	-- Prop Chooser Plugin Section
+LANG["PCR_PLUG_WARN_MSG"]		= "Warning: Custom Prop Addition (pcr_allow_custom) is set to 0.\nYou Must Enable this feature in order to edit your custom prop!\nA Map change is required to change this setting."
+LANG["PCR_PLUG_LBL_BINDKEY"]	= "To change bind key, switch to '[Player] tab."
+LANG["PCR_PLUG_LBL_EDITOR"]		= "Custom Prop Menu Editor"
+LANG["PCR_PLUG_BTN_OPEN_EDT"]	= "Open Editor"
+LANG["PCR_PLUG_LBL_COMSET"]		= "Common Settings"
+LANG["PCR_PLUG_LBL_TECHSET"]	= "Technical Settings"
+LANG["PCR_PLUG_LBL_EXPSET"]		= "Experimentals"
+LANG["PCR_PLUG_LBL_PLAYERSET"]	= "Player Settings"
+
+LANG["PCR_PLUG_ENABLE"]			= "Enable 'Prop Menu' feature"
+LANG["PCR_PLUG_ALLOW_CUSTOM"]	= "(Require Map Restart) Allow custom props to be added in to the Prop Menu list?"
+LANG["PCR_PLUG_PROP_BAN"]		= "(Require Map Restart) Do not include banned props into Prop Menu list?"
+LANG["PCR_PLUG_USAGE_LIMIT"]	= "Maximum usage limit for player to use. -1 means unlimited."
+LANG["PCR_PLUG_PROP_LIMIT"]		= "(Require Map Restart) Limit amount of prop addition to Prop Menu list"
+LANG["PCR_PLUG_PROP_LIMITMAX"]	= "Maximum amount of props that will be added to Prop Menu list. Note: This will be randomly added!"
+LANG["PCR_PLUG_USE_ULXMENU"]	= "Should Prop Menu can be accessed by Console (0) or ULX (1)? Bound key will respect with this setting"
+LANG["PCR_PLUG_USE_DELAY"]		= "Delay in seconds before player to use another Prop in Prop Menu"
+LANG["PCR_PLUG_KICK_INVALID"]	= "Kick any user attempt to access Invalid Model (4x Max. threshold)"
+LANG["PCR_PLUG_SPACE_CHECK"]	= "Check for space for a room before player use another prop to prevent Stuck"
+LANG["PCR_PLUG_X_BBOX"]			= "(Require Map Restart) Check Entity BBox Limit before adding to Prop Menu list"
+LANG["PCR_PLUG_X_BBOX_MAX"]		= "BBox CollisionBound Maximum Height limit. Mins will be auto-calculated."
+LANG["PCR_PLUG_X_BBOX_MIN"]		= "BBox CollisionBound Maximum Width limit. ins will be auto-calculated."
+LANG["PCR_PLUG_ONLY_GROUPS"]	= "Should Prop Menu can only be accessed by certain groups e.g. Donator?"
+LANG["PCR_PLUG_NOTIFYMSG"]		= "Notify player on how to use Prop Menu on every round start"
+
+LANG["PCR_EDITOR_MSG_ERROR"]	= "Your changes hasn't been saved due to Errors.\nPlease check on your server console!"
+LANG["PCR_EDITOR_MSG_SUCC"]		= "Your changes and Custom Prop data has has been saved and updated successfully."
+
+	-- new feature: Play fake taunts on random props in the map (Not Players)
+LANG["PHX_CTAUNT_ON_RAND_PROPS"]		= "Play on random prop in this map (%ix Max)"
+LANG["PHX_CTAUNT_ON_RAND_PROPS_UNLI"]	= "Play on random prop in this map"
+LANG["PHX_CTAUNT_PLAYED_ON_RANDPROP"]	= "You played the taunt on a random prop."
+LANG["PHX_CTAUNT_RAND_PROPS_LIMIT"]		= "You have hit the limit."
+
+	-- File Browser for Custom 'Prop Menu' Editor
+LANG["PHZ_generic_title"]		= "Custom Prop Inclusion Editor"
+LANG["PHZ_generic_helptext"]	= [[[How To Use:
+[LEFT PANEL]
+← Choose a game content
+← Click on icons to add models to the right
+← Right Click to open context menu
+
+[RIGHT PANEL]
+→ Click to 'mark' any props before deleting
+→ Hit 'Remove Selected' to Remove Models
+→ Hit 'Apply Selection' to Make changes
+
+[INFO]
+- You can only add models up to 2048 entries.
+- All maps props will be included automatically, so you don't have to.
+- Pressing [Close] button will cancel the operation.
+- Not all models will have a valid VPhysics.
+- Not all Players (inc. Your Server) will have custom models. If they don't exists they will removed after Applying selections.
+- Your Server content might be different from you. If you see "<game> [Not Available]" on dropdown menu, it means that you haven't mounted/installed the game.
+- Addon folder browsing isn't implemented yet so You'll have to use 'All Contents' instead.
+]]
+LANG["PHZ_generic_mdlinfo"] = [[Model Info:
+%s
+Has Physics: %s]]
+LANG["PHZ_generic_mdlinfoStart"] = "(Select model first!)"
+--LANG["PHX_SELECT_LEFT"]		= "(Select Model on the Left)"
+
+LANG["PHZ_generic_no_ragdoll"]	= "No: Ragdoll"
+LANG["PHZ_generic_titlelabel"]	= "%s Preview :"
+
+LANG["PHZ_mount_game_sel"]		= "Select mounted game (Default: Garry's Mod)"
+LANG["PHZ_input_placeholder1"]	= "Folder to Search: <folder name> or '*', blank for all folders."
+LANG["PHZ_input_placeholder2"]  = "Addon to Search: <name> or '*', blank for all folders."
+LANG["PHZ_msg_warn_close"]		= "Are you sure you want to close this window? Any unsaved edits will be lost!"
+LANG["PHZ_msg_commit"] 			= "Are you sure you want to commig changes?"
+LANG["PHZ_msg_cant_empty"]		= "Prop List cannot be empty!"
+LANG["PHZ_msg_removesel"] 		= [[Remove selected props in the list. Legends:
+Red = Marked Selections
+Yellow: Prop don't exists in server AND should be Removed.]]
+LANG["PHZ_msg_warn_mdlinlist"]  = "WARNING: This Model is already in the list!"
+LANG["PHZ_msg_invalid_mdl"] 	= "Reason: This is invalid model"
+LANG["PHZ_apply_select"] 		= "Apply & Save Selections"
+LANG["PHZ_menu_copy"] 		= "Copy Model"
+LANG["PHZ_menu_refresh"] 	= "Refresh Model"
+LANG["PHZ_tooltip_removesel"]	= "Remove Selected"
+LANG["PHZ_tooltip_wasmarked"] = [[This prop was marked because it does't exist in the server.
+If you close this editor, this will automatically removed.]]
+
+LANG["PHZ_pcr_fb_allcontent"] = "All Contents (Not All Players/Server will have same contents as you)"
+LANG["PHZ_pcr_fb_notmounted"] = "%s [Not Mounted]"
+
 
 -- Add to Language Table.
 PHX.LANGUAGES[LANG.code] = LANG

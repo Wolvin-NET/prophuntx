@@ -5,7 +5,7 @@ function PHX:AddLanguage( tbl )
 		local name = tbl.Name
 		
 		if PHX.LANGUAGES[code] ~= nil or (not table.IsEmpty(PHX.LANGUAGES[code])) then
-			PHX:VerboseMsg("[PHX] It appears that Language " .. name .. " ("..code..") already exist. Ignoring...")
+			PHX:VerboseMsg("[PHX] It appears that Language " .. name .. " ("..code..") is already exist. Ignoring...")
 		else
 			PHX:VerboseMsg("[PHX] Adding External custom language from " .. name .. "(".. code ..")")
 			PHX.LANGUAGES[code] = tbl
@@ -14,11 +14,11 @@ function PHX:AddLanguage( tbl )
 end
 
 function PHX:InsertToLanguage( tbl, code )
-	if (tbl and type(tbl) == "table" and tbl ~= nil) and (code ~= nil or code ~= "") then		
+	if (tbl and type(tbl) == "table" and tbl ~= nil) and (code and (code ~= nil or code ~= "")) then		
 		PHX:VerboseMsg("[PHX] Adding External insertion language: (".. code ..")...")
 		
 		for STRINGCODE, TRANSLATION in pairs(tbl) do
-			if (PHX.LANGUAGES[code][STRINGCODE] ~= nil) then -- table.HasValue?
+			if (PHX.LANGUAGES[code][STRINGCODE] ~= nil) then -- don't use table.HasValue() because some values may contains table.
 				PHX:VerboseMsg("[PHX] Ignoring " .. STRINGCODE .. " because it was exist in the language table.")
 			else
 				PHX.LANGUAGES[code][STRINGCODE] = TRANSLATION
@@ -29,7 +29,7 @@ end
 
 -- Let's add language from list.Get, if any.
 for langName,tblLangExt in pairs(list.Get("PHX.CustomExternalLanguage")) do
-	if table.IsEmpty(tblLangExt) or tblLangExt == nil then
+	if !tblLangExt or tblLangExt == nil or table.IsEmpty(tblLangExt) then
 		PHX.VerboseMsg("[PHX External Language] Ignoring " .. langName .. " because it does contains nothing.")
 	else
 		PHX.VerboseMsg("[PHX External Language] Adding " .. langName .."...")
@@ -38,12 +38,15 @@ for langName,tblLangExt in pairs(list.Get("PHX.CustomExternalLanguage")) do
 end
 
 -- Let's add external language insertion, if any.
-for langCode,tblLangIns in pairs(list.Get("PHX.LanguageInsertion")) do
-	if table.IsEmpty(tblLangIns) or tblLangIns == nil then
-		PHX.VerboseMsg("[PHX Insertion Language] Ignoring LangCode " .. langCode .. " because it does contains nothing.")
+for name,tblLangIns in pairs(list.Get("PHX.LanguageInsertion")) do
+	if !tblLangIns or tblLangIns == nil or table.IsEmpty(tblLangIns) then
+		PHX.VerboseMsg("[PHX Insertion Language] Ignoring LangCode " .. name .. " because it does contains nothing.")
 	else
-		PHX.VerboseMsg("[PHX Insertion Language] Inserting LangCode " .. langCode .. "...")
-		PHX:InsertToLanguage( tblLangIns, langCode )
+		PHX.VerboseMsg("[PHX Insertion Language] Attempting to insert language: " .. name .. "...")
+		
+		for code,tbl in pairs(tblLangIns) do
+			PHX:InsertToLanguage( tbl, code )
+		end
 	end
 end
 
@@ -59,11 +62,11 @@ function PHX:Translate( textToFind, ... )
 	if !textToFind then textToFind = "ERROR" end
 
 	local args = {...}
-	local lg = self.CVAR.Language:GetString()
+	local lg = PHX:GetCLCVar( "ph_cl_language" )
 	
 	-- if this was forced by server, we'll use that instead.
-	if PHX.CVAR.UseForceLang:GetBool() then
-		lg = PHX.CVAR.ForcedLanguage:GetString()
+	if PHX:GetCVar( "ph_use_lang" ) then
+		lg = PHX:GetCVar( "ph_force_lang" )
 	end
 	
 	local code = self.LANGUAGES[lg]
@@ -91,11 +94,11 @@ end
 function PHX:FTranslate( textToFind, ... )
 	
 	local args = {...}
-	local lg = self.CVAR.Language:GetString()
+	local lg = PHX:GetCLCVar( "ph_cl_language" )
 	
 	-- if this was forced by server, we'll use that instead.
-	if PHX.CVAR.UseForceLang:GetBool() then
-		lg = PHX.CVAR.ForcedLanguage:GetString()
+	if PHX:GetCVar( "ph_use_lang" ) then
+		lg = PHX:GetCVar( "ph_force_lang" )
 	end
 	
 	local code = self.LANGUAGES[lg]
@@ -122,6 +125,21 @@ function PHX:FTranslate( textToFind, ... )
 	return code[textToFind]
 end
 
+-- used internally in `cl_menutypes.lua` and some other user interface elements
+-- should not be used elsewhere.
+function PHX:QTrans( data )
+
+	if istable(data) then
+		local text = data[1]
+		PHX:FTranslate( text, unpack(data, 2) ) -- we take 2nd index and onwards from table and become varargs
+	elseif isstring(data) then
+		PHX:FTranslate( data )
+	else
+		return "!ERROR_NOT_STRING_OR_TABLE"
+	end
+
+end
+
 -- Usage: tblKey = String
 --[[
 	Example: if there is something in your language that contains:
@@ -141,11 +159,11 @@ function PHX:GetRandomTranslated( tblKey )
 	if type(tblKey) ~= "string" then return "Argument must contain string only!" end
 	if !tblKey then return "Cannot find specified table key: "..tblKey end
 
-	local lg = self.CVAR.Language:GetString()
+	local lg = PHX:GetCLCVar( "ph_cl_language" )
 	
 	-- if this was forced by server, we'll use that instead.
-	if PHX.CVAR.UseForceLang:GetBool() then
-		lg = PHX.CVAR.ForcedLanguage:GetString()
+	if PHX:GetCVar( "ph_use_lang" ) then
+		lg = PHX:GetCVar( "ph_force_lang" )
 	end
 	
 	local code = self.LANGUAGES[lg]
@@ -160,4 +178,26 @@ function PHX:GetRandomTranslated( tblKey )
 	else
 		return "cannot get translation because table argument is not a table value."
 	end
+end
+
+function PHX:MsgBox( strText, strTitle, strButton )
+	strText 	= self:QTrans( strText )
+	strTitle 	= self:QTrans( strTitle )
+	strButton 	= self:QTrans( strButton )
+	
+	Derma_Message( strText, strTitle, strButton )
+end
+
+-- This is hideous
+function PHX:MsgBox_Query( body, title, b1, f1, b2, f2, b3, f3, b4, f4 )
+	
+	body 	= self:QTrans( body )
+	title 	= self:QTrans( title )
+	b1 		= self:QTrans( b1 )
+	b2 		= self:QTrans( b2 )
+	b3 		= self:QTrans( b3 )
+	b4 		= self:QTrans( b4 )
+	
+	Derma_Query( body, title, b1, f1, b2, f2, b3, f3, b4, f4 )
+	
 end

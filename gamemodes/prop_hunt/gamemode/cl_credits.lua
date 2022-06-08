@@ -1,7 +1,7 @@
 --[[
-////////////////////////////////////////////
-	PLEASE DO NOT MODIFY/EDIT THIS FILE.
-\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+//////////////////////////////////////////////////////////
+!!!!PLEASE DO NOT MODIFY, REMOVE OR EDIT THIS FILE!!!!!!!
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 ]]
 
 hook.Add("PH_CustomTabMenu", "PHX.About", function(tab, pVgui, paintPanelFunc)
@@ -30,17 +30,17 @@ hook.Add("PH_CustomTabMenu", "PHX.About", function(tab, pVgui, paintPanelFunc)
 	grid:SetRowHeight(50)
 	
 	local label = {
-		title 	= "Prop Hunt X",
+		title 	= "Prop Hunt: XIIZ",
 		author	= GAMEMODE.Author,
 		version = GAMEMODE._VERSION,
 		rev 	= GAMEMODE.REVISION,
-		credits	= "Godfather ♥, Yam, adk, Haeiven, Jonpopnycorn, Thundernerd, TR1NITY",
+		credits	= table.concat(GAMEMODE.PHXContributors, ","),
 		lgit	= "https://github.com/Wolvin-NET/prophuntx/",
-		lhome	= "https://www.wolvindra.net/prophuntx",
+		lhome	= "https://wolvindra.xyz/prophuntx",
 		ldonate = GAMEMODE.DONATEURL,
-		--lwiki	= "https://www.google.com",
-		lklog	= "https://prophunt.wolvindra.net/changelogs.php",
-		lplugins = "https://prophunt.wolvindra.net/plugins"
+		lwiki	= "https://wolvindra.xyz/wiki/prophuntx",
+		lklog	= "https://wolvindra.xyz/phxchangelogs",
+		lplugins = "https://wolvindra.xyz/phxplugins"
 	}
 	
 	pVgui("","label","PHX.TitleFont",grid, label.title )
@@ -48,7 +48,7 @@ hook.Add("PH_CustomTabMenu", "PHX.About", function(tab, pVgui, paintPanelFunc)
 	pVgui("","label","Trebuchet24",grid, PHX:FTranslate("PHXM_ABOUT_VERSIONING", label.version, label.rev) )
 	pVgui("","label",false,grid, PHX:FTranslate("PHXM_ABOUT_ENJOYING") )
 	pVgui("","label",false,grid, PHX:FTranslate("PHXM_ABOUT_UPDATE") )
-	pVgui("","btn",{max = 2,textdata = {
+	pVgui("","btn", {
 		-- This section isn't translated by intentionally. Because the response always returned to English anyway.
 		[1] = {"View update info", function() PHX:notifyUser() end},
 		[2] = {"Check for Updates", 
@@ -59,15 +59,16 @@ hook.Add("PH_CustomTabMenu", "PHX.About", function(tab, pVgui, paintPanelFunc)
 				end,
 				"No", function() end)
 			end},
-	}},grid,"")
+	},grid,"")
 	pVgui("","label",false,grid, PHX:FTranslate("PHXM_ABOUT_LINKS") )
-	pVgui("","btn",{max = 2,textdata = {
-		[1] = {PHX:FTranslate("PHXM_ABOUT_BTN_DONATE"),		function() gui.OpenURL(label.ldonate) end},
-		[2] = {PHX:FTranslate("PHXM_ABOUT_BTN_HOME"),		function() gui.OpenURL(label.lhome) end},
-		[3] = {PHX:FTranslate("PHXM_ABOUT_BTN_GITHUB"),		function() gui.OpenURL(label.lgit) end},
-		[4] = {PHX:FTranslate("PHXM_ABOUT_BTN_PLUGINS"),  	function() gui.OpenURL(label.lplugins) end},
-		[5] = {PHX:FTranslate("PHXM_ABOUT_BTN_CHANGELOGS"),	function() gui.OpenURL(label.lklog) end}
-	}},grid,"")
+	pVgui("","btn",{
+		[1] = {"PHXM_ABOUT_BTN_DONATE",		function() gui.OpenURL(label.ldonate)  end},
+		[2] = {"PHXM_ABOUT_BTN_HOME",		function() gui.OpenURL(label.lhome)    end},
+		[3] = {"PHXM_ABOUT_BTN_GITHUB",		function() gui.OpenURL(label.lgit)     end},
+		[4] = {"PHXM_ABOUT_BTN_PLUGINS",  	function() gui.OpenURL(label.lplugins) end},
+		[5] = {"PHXM_ABOUT_BTN_CHANGELOGS",	function() gui.OpenURL(label.lklog)    end},
+		[6] = {"PHXM_ABOUT_BTN_WIKI",		function() gui.OpenURL(label.wiki)     end}
+	},grid,"")
 	pVgui("spacer2","spacer",nil,grid,"" )
 	pVgui("","label","Trebuchet24",grid, PHX:FTranslate("PHXM_ABOUT_THANKS", label.credits) )
 	

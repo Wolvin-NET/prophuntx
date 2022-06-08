@@ -23,13 +23,18 @@ function CLASS:Loadout(pl)
     pl:Give("weapon_357")
 	
 	--pl:Give("item_ar2_grenade")
-	local numGrenade = PHX.CVAR.SMGGrenadeCounts:GetInt() or 1
+	local numGrenade = PHX:GetCVar( "ph_smggrenadecounts" ) or 1
 	pl:SetAmmo(numGrenade, "SMG1_Grenade")
 	
 	local cl_defaultweapon = pl:GetInfo("cl_defaultweapon") 
  	 
  	if pl:HasWeapon(cl_defaultweapon) then 
  		pl:SelectWeapon(cl_defaultweapon)
+	else
+		-- Return to weapon_smg1. For some reason like ph_underwataaa, weapon might be removed soo....
+		if pl:HasWeapon("weapon_smg1") then
+			pl:SelectWeapon("weapon_smg1")
+		end
  	end 
 end
 
@@ -45,7 +50,7 @@ function CLASS:OnSpawn(pl)
 	pl:SetViewOffset(Vector(0,0,64))
 	pl:SetViewOffsetDucked(Vector(0,0,28))
 
-	--local unlock_time = math.Clamp(PHX.CVAR.BlindTime:GetInt() - (CurTime() - GetGlobalFloat("RoundStartTime", 0)), 0, PHX.CVAR.BlindTime:GetInt())
+	--local unlock_time = math.Clamp(PHX:GetCVar( "ph_hunter_blindlock_time" ) - (CurTime() - GetGlobalFloat("RoundStartTime", 0)), 0, PHX:GetCVar( "ph_hunter_blindlock_time" ))
 	
 	local unlock_time = GetGlobalInt("unBlind_Time", 0)
 	
@@ -79,7 +84,7 @@ end
 
 -- Hands
 function CLASS:GetHandsModel()
-	if !PHX.CVAR.UseCustomModel:GetBool() then
+	if !PHX:GetCVar( "ph_use_custom_plmodel" ) then
 		return { model = "models/weapons/c_arms_combine.mdl", skin = 1, body = "0100000" }
 	end
 end
@@ -96,13 +101,13 @@ function CLASS:OnDeath(pl, attacker, dmginfo)
 	
 	-- Spawn Devil Ball
 	local pos = pl:GetPos()
-	if PHX.CVAR.UseDevilCrystal:GetBool() then
-		if math.random() < 0.7 then --70% chance.
+	if PHX:GetCVar( "ph_enable_devil_balls" ) then
+		--if math.random() < 0.7 then --70% chance.
 			local dropent = ents.Create("ph_devilball")
 			dropent:SetPos(Vector(pos.x, pos.y, pos.z + 16)) -- to make sure the Devil Ball didn't spawn underground.
 			dropent:SetAngles(Angle(0,0,0))
 			dropent:Spawn()
-		end
+		--end
 	end
 end
 

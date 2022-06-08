@@ -40,15 +40,15 @@ function CLASS:OnSpawn(pl)
 	pl.ph_prop:SetAngles(pl:GetAngles())	
 	pl.ph_prop:Spawn()
 	
-	if PHX.CVAR.UseCustomMdlProp:GetBool() then
+	if PHX:GetCVar( "ph_use_custom_plmodel_for_prop" ) then
 		pl.m_shortHunterModel = player_manager.TranslatePlayerModel( pl:GetInfo("cl_playermodel") )
 		
 		if table.HasValue( PHX.PROP_PLMODEL_BANS, string.lower( pl.m_shortHunterModel ) ) then
 			pl.ph_prop:SetModel("models/player/kleiner.mdl")
-			pl:ChatPrint("[!PATH] Your custom playermodel was banned from Props.") --Todo: Translate this
+			pl:PHXChatInfo("WARNING", "PROP_PLAYERMDL_BANNED")
 		elseif table.HasValue( PHX.PROP_PLMODEL_BANS, string.lower( pl:GetInfo("cl_playermodel") ) ) then
 			pl.ph_prop:SetModel("models/player/kleiner.mdl")
-			pl:ChatPrint("[!NAME] Your custom playermodel was banned from Props.") --Todo: Translate this
+			pl:PHXChatInfo("WARNING", "PROP_PLAYERMDL_BANNED")
 		else
 			pl.ph_prop:SetModel( pl.m_shortHunterModel )
 		end

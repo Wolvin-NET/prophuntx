@@ -1,4 +1,4 @@
--- Todo: need improvement
+-- This will be improved on PH:CodenameZERO
 
 hook.Add("Move", "moveProp", function(ply,move)
 	if SERVER then
@@ -7,6 +7,7 @@ hook.Add("Move", "moveProp", function(ply,move)
 			local ent = ply.ph_prop
 			-- Set position and angles
 			if IsValid(ent) && IsValid(ply) && ply:Alive() then
+				ent:SetPredictable(true)
 				-- Set position
 				if (ent:GetModel() == "models/player/kleiner.mdl" || ent:GetModel() == player_manager.TranslatePlayerModel(ply:GetInfo("cl_playermodel"))) then
 					ent:SetPos(move:GetOrigin())

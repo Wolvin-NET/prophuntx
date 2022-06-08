@@ -523,8 +523,8 @@ function GM:EndOfGame( bGamemodeVote )
 		end
 		
 		timer.Simple( GAMEMODE.VotingDelay, function()
-			if PHX.CVAR.UseCustomMapVote:GetBool() then
-				local f = PHX.CVAR.CustomMapVoteCall:GetString()
+			if GetConVar("ph_use_custom_mapvote"):GetBool() then
+				local f = GetConVar("ph_custom_mv_func"):GetString()
 				RunString(f, "MapVote_CVAR")
 			else
 				MapVote.Start()
@@ -656,12 +656,14 @@ function GM:DoPlayerDeath( ply, attacker, dmginfo )
 		
 	end
 	
+	--[[ 
+		-- See/Use: prop_hunt/gamemode/init.lua instead.
 	if ( GAMEMODE.EnableFreezeCam && IsValid( attacker ) && attacker != ply ) then
 	
 		ply:SpectateEntity( attacker )
 		ply:Spectate( OBS_MODE_FREEZECAM )
 		
-	end
+	end ]]
 	
 end
 

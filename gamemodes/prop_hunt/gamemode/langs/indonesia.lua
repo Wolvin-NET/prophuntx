@@ -1,5 +1,3 @@
--- Language is WIP.
-
 local LANG = {}
 
 LANG.code = "id"
@@ -12,23 +10,49 @@ LANG.AuthorURL		= "https://steamcommunity.com/profiles/76561198210777189"
 
 -- Special Section that isn't String-based
 LANG.SUICIDEMSG = { --> FRETTA
-	"suicided!", -- i believe this was from 9gag joke.
-	"died mysteriously.",
-	"died from magic.",
-	"no-scoped themself.",
-	"has just ragequit.",
-	"is drunk.",
-	"died... better luck next time!",
-	"slapped themself.",
-	"tripped on a stick.",
-	"died by the force.",
-	"ragdolled.",
+	"kesandung semut.",
+	"ditampol emak-emak kos.",
+	"kesantet.",
+	"kekurangan gizi.",
+	"diterkam sumanto.",
+	"ketemu kang bakso.",
+	"ditampol sama emak.",
+	"mabok minum aqua.",
+	"dihajar bang jaog.",
+	"kebanyakan micin.",
+	"kebanyakan nyemil baygon.",
+	"kesurupan.",
+	"ditampol setan.",
+	"ketampol sendiri.",
+	"abis nonton film Dora.",
+	"kejedot tiang.",
+	"kekurangan extrak manggis.",
+	"kena trap lengkuas di rendangnya nasi padang.",
+	"kaget ketemu astolfo.",
+	"diculik om om",
+	"diculik om igor orlov",
+	"kaget ketemu igor orlov",
+	"dicoret dari KK.",
+	"ketimpa Gaben.",
+	"lupa belom mandi.",
+	"menyadari besok senin.",
+	"lupa bernafas.",
+	"mau nyoba bernafas manual tapi malah dapet matic.",
+	"mau nyoba bernafas manual tapi ga jago.",
+	"kurang jaog.",
+	"terjatuh dalam luka dalam.",
+	"tertima kemiskinan.",
+	"ketahuan emak ke warnet.",
+	"di jewer emak.",
+	"udah ga kuat.",
+	"udah ga kuat merasakan penderitaan ini :(", -- sedih amat njir
 }
 
 LANG.RANDOM_SPECTATORS = { --> FRETTA
-	"to watch and chill.",
-	"to see them hanging around.",
-	"to see the things.",
+	"pengen nonton hiburan :)",
+	"cuman buat gabut.",
+	"cuman buat nonton.",
+	"pengen lihat-lihat.",
 	" ",
 }
 
@@ -77,7 +101,7 @@ LANG["HELP_F1"] 				= [[Project Prop Hunt X.
 Sebuah proyek mode permainan "Prop Hunt" untuk lebih modern dan optimal.
 
 Informasi lebih lanjut bisa kunjungi di:
-https://www.wolvindra.net/prophuntx
+https://wolvindra.xyz/prophuntx
 
 Untuk melihat tutorial, pengaturan, dan menu lainnya bisa diakses melalui:
 Tombol [F1], tekan menu 'Menu Prop Hunt'.
@@ -113,14 +137,15 @@ LANG["HUD_ROTLOCK"]				= "Rotasi: Terkunci"
 LANG["HUD_ROTFREE"]				= "Rotasi: Bebas"
 LANG["HUD_KILLEDBY"]			= "Kamu barusan dibunuh oleh %s"
 
-LANG["HUD_AUTOTAUNT"]			= "Taunt Otomatis dalam %d detik" -- Ejekan kayaknya kurang pas.
+LANG["HUD_AUTOTAUNT"]			= "Taunt Otomatis dalam %d detik"
 LANG["HUD_AUTOTAUNT_ALT"]		= "Taunt Otomatis dalam %d"
+LANG["HUD_AUTOTAUNT_DISABLED"]	= "Taunt Otomatis non-aktif."
 
 LANG["HUD_TargetID"]			= "Pemain: %s (%d%%)" -- Player: <NAME> (<HEALTH>%)
 
 LANG["HUD_BLINDED"]				= "Hunters akan dilepaskan dalam %s"
 LANG["HUD_UNBLINDED"]			= "Siap atau nggak, kami datang!"
-								
+
 LANG["BLIND_RESPAWN_TEAM"]		= "Kamu telah ter-respawn pada tim %s dalam waktu %d detik ketika hunter memejamkan mata."
 LANG["BLIND_RESPAWN"]			= "Kamu telah ter-respawn dalam waktu %d detik ketika hunter memejamkan mata."
 
@@ -169,13 +194,13 @@ LANG["TM_DELAYTAUNT_PLSWAIT"]	= "Harap tunggu %s detik!"
 LANG["PHXM_WINDOW_TITLE"]		= "Prop Hunt X - Menu & Pengaturan lebih lanjut"
 LANG["SERVER_INFO_MOTD"]		= "INFORMASI SERVER & PERATURAN [MOTD]"
 
-LANG["PHXM_TAB_HELP"]			= "Bantuan & Panduan"
-LANG["PHXM_TAB_MUTE"]			= "Mute Pemain"
-LANG["PHXM_TAB_PLAYER"]			= "Pengaturan Player"
+LANG["PHXM_TAB_HELP"]			= "Panduan"
+LANG["PHXM_TAB_MUTE"]			= "Bisukan Pemain"
+LANG["PHXM_TAB_PLAYER"]			= "Pengaturan Saya"
 LANG["PHXM_TAB_MODEL"] 			= "Player Model"
-LANG["PHXM_TAB_MODEL_DISABLED"]	= "Player Model (Nonaktif)"
+LANG["PHXM_TAB_MODEL_DISABLED"]	= "Player Model"
 LANG["PHXM_TAB_ADMIN"]			= "Pengaturan Admin"
-LANG["PHXM_TAB_ABOUT"]			= "Tentang Prop Hunt X"
+LANG["PHXM_TAB_ABOUT"]			= "Tentang PH:X"
 LANG["PHXM_TAB_MAPVOTE"]		= "Pengaturan MapVote"
 
 LANG["PHXM_CVAR_CHANGED"]		= "[Pengaturan] ConVar %q telah diganti %q"
@@ -247,22 +272,23 @@ LANG["PHXM_ADMIN_CUSTOM_MODEL_PROP"]		= "Aktifkan kustom skin untuk Props - Past
 LANG["PHXM_ADMIN_TAUNT_DELAY_CUSTOM"]		= "Waktu tunda Taunt kustom (detik)"
 LANG["PHXM_ADMIN_TAUNT_DELAY_RANDOM"]		= "Waktu tunda Taunt sembarang (detik)"
 LANG["PHXM_ADMIN_TAUNT_DELAY_AUTO"]			= "Waktu tunda Taunt otomatis (detik)"
-LANG["PHXM_ADMIN_AUTOTAUNT_ENABLE"]			= "Aktifkan fitur Taunt otomatis"
+LANG["PHXM_ADMIN_AUTOTAUNT_ENABLE"]			= "Aktifkan fitur Taunt otomatis (Timer akan berfungsi setelah ronde baru"
 
 LANG["PHXM_ADMIN_NOTICE_ROTATION"]			= "Tampilkan notifikasi 'Rotasi Prop' setiap kamu spawn"
 LANG["PHXM_ADMIN_CAMERA_COLLIDE"]			= "Aktifkan Kamera agar tidak tembus dinding"
 LANG["PHXM_ADMIN_FREEZECAM"]				= "Aktifkan 'Freeze Cam' untuk tim Prop"
+LANG["PHXM_ADMIN_FREEZECAM_HUNTER"]			= "Aktifkan 'Freeze Cam' untuk tim Hunter"
 LANG["PHXM_ADMIN_PROP_COLLIDE"]				= "Aktifkan prop bersentuhan dengan yang lainnya"
 LANG["PHXM_ADMIN_SWAP_TEAM"] 				= "Tukarkan team setiap round - Non-aktifkan fitur ini akan membuat tim untuk tidak berpindah."
 LANG["PHXM_ADMIN_HUNTER_PENALTY"]			= "Nyawa Pinalti untuk Hunter"
 LANG["PHXM_ADMIN_HUNTER_KILL_BONUS"]		= "Jumlah Tambahan Bonus ketika Hunter membunuh Prop"
 LANG["PHXM_ADMIN_HUNTER_SMG_GRENADES"]		= "Jumlah Granat Hunter SMG"
-LANG["PHXM_ADMIN_GAME_TIME"]				= "Total Game time (menit)"
+LANG["PHXM_ADMIN_GAME_TIME"]				= "(Butuh Map Restart) Total Game time (menit)"
 LANG["PHXM_ADMIN_BLINDLOCK_TIME"]			= "Waktu hunter memejamkan mata (detik)"
-LANG["PHXM_ADMIN_ROUND_TIME"]				= "Waktu ronde permainan (detik)"
-LANG["PHXM_ADMIN_ROUNDS_PER_MAP"]			= "Total ronde per satu Map"
-LANG["PHXM_ADMIN_ENABLE_LUCKYBALL"]			= "Perbolehkan 'Bola-Gaca' untuk muncul di setiap Prop yang mudah dihancurkan? (Kesempatan 8%)"
-LANG["PHXM_ADMIN_ENABLE_CRYSTAL"]			= "Perbolehkan 'Kristal-Setan' untuk muncul ketika Hunter mati? (Kesempatan 70%)"
+LANG["PHXM_ADMIN_ROUND_TIME"]				= "(Butuh Map Restart) Waktu ronde permainan (detik)"
+LANG["PHXM_ADMIN_ROUNDS_PER_MAP"]			= "(Butuh Map Restart) Total ronde per satu Map"
+LANG["PHXM_ADMIN_ENABLE_LUCKYBALL"]			= "Perbolehkan 'Bola-Ghaca' untuk muncul di setiap Prop yang mudah dihancurkan? (Kesempatan 10%)"
+LANG["PHXM_ADMIN_ENABLE_CRYSTAL"]			= "Perbolehkan 'Kristal-Setan' untuk muncul ketika Hunter mati?"
 LANG["PHXM_ADMIN_WAIT_PLAYERS"]				= "Tunggu player lain untuk memulai permainan"
 LANG["PHXM_ADMIN_WAIT_MIN_PLAYERS"]			= "Minimal pemain untuk menunggu sebelum permainan dimulai (default: 1)"
 LANG["PHXM_ENABLE_PLAYER_JOIN_LEAVE"] 		= "Aktifkan notifikasi untuk Pemain Keluar Masuk? Ganti ke 0 jika kamu ingin menggunakan dari addon lain."
@@ -339,15 +365,12 @@ LANG["PHXM_ABOUT_ENJOYING"]		= "Jika kamu senang bermain Prop Hunt X, jangan lup
 LANG["PHXM_ABOUT_UPDATE"]		= "Update untuk Prop Hunt X"
 LANG["PHXM_ABOUT_LINKS"]		= "Tautan dan Kredit"
 LANG["PHXM_ABOUT_THANKS"]		= "Terima kasih banyak untuk Bantuan, Sugesti & Kontribusi kepada:\n %s"
-LANG["PHXM_ABOUT_BTN_DONATE"]		= "Bantu PH:X dengan mengdonasi"
+LANG["PHXM_ABOUT_BTN_DONATE"]		= "Bantu PH:X dengan Donasi"
 LANG["PHXM_ABOUT_BTN_HOME"]			= "Halaman Utama PH:X"
 LANG["PHXM_ABOUT_BTN_GITHUB"]		= "GitHub Repository PH:X"
 LANG["PHXM_ABOUT_BTN_PLUGINS"]		= "Plugin PH:X"
 LANG["PHXM_ABOUT_BTN_CHANGELOGS"]	= "Catatan Riwayat PH:X"
 
---[[
-	Late Additionals
-]]
 -- fretta
 LANG["HUD_SPECTATING"]	= "MENONTON"
 LANG["HUD_YOUDIED"]		= "Kamu Mati!"
@@ -370,6 +393,106 @@ LANG["PLUGINS_CLIENT_SETTINGS"]			= "-- Pengaturan Pengguna --"
 -- Text Entries
 LANG["TEXTENTRY_FZ_SINGLE"] = "Rintis untuk suara Freeze Cam" -- this one is for ph_fc_cue_path command
 LANG["TEXTENTRY_MV_PREFIX"] = "Imbuhan untuk MapVote"			 -- the map previx for mv_mapprefix
+
+-- Late Addition: 29.10.21/X2Z.
+
+LANG["MISC_GAME_ENDED"]		= "Permainan telah berakhir."
+
+--[[
+	Credits: Late Addition: Revision: 16.09.21/X2Z
+]]
+
+LANG["PHXM_ABOUT_BTN_WIKI"]			= "Bantuan & Wiki PH:X"
+
+--[[
+	Auto Taunt: Late Addition: Revision: 16.09.21/X2Z
+]]
+
+LANG["HUD_AUTOTAUNT_DISABLED"]		= 	"Taunt Otomatis Non-aktif."
+LANG["HUD_AUTOTAUNT_WAITFORUPDATE"]	=	"Sedang sinkron taunt otomatis..."
+
+--[[
+	MapVote: Late Addition: Revision: 16.09.21/X2Z
+]]
+LANG["PHXM_MV_VOTEROCKED"]				= " Vote telah ditentukan, map vote akan dimulai setelah ronde berakhir"
+LANG["PHXM_MV_VOTEROCKED_IMMINENT"]		= "Vote telah ditentukan, map vote dimulai!"
+LANG["PHXM_MV_VOTEROCKED_PLY_TOTAL"]	= "%s telah menyuarakan map vote. ( %d / %d )"
+
+LANG["PHXM_MV_MUST_WAIT"]				= "Kamu harus menunggu sebentar sebelum voting!"
+LANG["PHXM_MV_VOTEINPROG"]				= "Proses vote sedang berlangsung!"
+LANG["PHXM_MV_HAS_VOTED"]				= "Kamu barusan sudah voting!"
+LANG["PHXM_MV_ALR_IN_VOTE"]				= "Sudah ada vote berlangsung, ini lagi ganti mapnya!"
+LANG["PHXM_MV_NEED_MORE_PLY"]			= "Kamu butuh banyak pemain sebelum melakukan voting!"
+
+--[[
+	Late Addition: Revision: 16.09.21/X2Z
+]]
+LANG["PROP_PLAYERMDL_BANNED"]	= "Kustom Prop Player Model kamu tidak bisa digunakan saat ini."
+
+--[[
+	Prop Menu/Prop Chooser, Revision: 16.09.21/X2Z
+]]
+
+LANG["PCR_USAGE_UNLIMIT"]		= "[Prop Menu] Kamu bisa gunakan menu ini **Sepuasnya**!"
+LANG["PCR_USAGE_COUNT"]			= "[Prop Menu] Kamu bisa gunakan %dx lagi!"
+LANG["PCR_PLS_WAIT"]			= "[Prop Menu] Mohon tunggu dalam %d detik."
+LANG["PCR_NOROOM"]				= "[Prop Menu] Tempatmu kurang luas untuk mengganti prop ini!"
+LANG["PCR_PROPBANNED"]			= "[Prop Menu] Prop ini telah dilarang dari server."
+LANG["PCR_PROPBANNED_BYPCR"]	= "[Prop Menu] Kamu tidak bisa menggunakan prop ini."
+LANG["PCR_REACHED_LIMIT"]		= "[Prop Menu] Kamu telah mencapai batas maksimal!"
+LANG["PCR_STAY_ON_GROUND"]		= "[Prop Menu] Kamu harus menyentuh tanah dan tidak melompat atau tidak sedang jongkok!"
+LANG["PCR_ONLY_GROUP"]			= "[Prop Menu] Hanya grup tertentu bisa menggunakan menu ini!"
+LANG["PCR_NOT_EXIST_COUNT"]		= "Prop yang kamu pilih tidak berlaku di map ini! ( %s / 4 )"
+LANG["PCR_NOT_EXIST"]			= "Prop yang kamu pilih tidak berlaku di map ini!"
+
+-- PCR Client section, reason why there is a space because of chat.AddText between args.
+LANG["PCR_NOTIFY_1"]			= " Server Ini menggunakan Prop Menu versi %s! Ketik "
+LANG["PCR_NOTIFY_2"]			= " di console atau tekan tombol [F1] -> [Bantuan Prop Menu]."
+LANG["PCR_CL_DISABLED"]			= " Kamu tidak bisa menggunakan fitur ini."
+LANG["PCR_CL_GROUP"]			= " Hanya grup tertentu bisa menggunakan menu ini!"
+LANG["PCR_CL_LIMIT"]			= " Kamu telah mencapai batas maksimal!"
+LANG["PCR_UNLIMIT_TEXT"]		= "Sepuasnya"
+LANG["PCR_WINDOW_TITLE"]		= "PHX Prop Menu"
+LANG["PCR_HEADER_TOP"]			= "Pilih prop sesukamu. Kamu punya"
+LANG["PCR_HEADER_MID"]			= "%sx batas"
+LANG["PCR_HEADER_BOTTOM"]		= "penggunaan untuk menggunakan fitur ini!"
+LANG["PCR_CL_TOOLTIP_BANNED"]	= "Kamu tidak bisa menggunakan model ini."
+LANG["PCR_CL_TOOLTIP_MODEL"]	= "Model: %s"
+LANG["PCR_CL_MENU_NOTREADY"]	= " Fitur ini sedang belum ada saat ini."
+LANG["PCR_WINDOW_GUIDE_TTL"]	= "Panduat Cepat: Prop Menu"
+LANG["PCR_BTN_HELP_MENU"]		= "Bantuan Prop Menu"
+
+LANG["PCR_CL_CMDUSEULX"]		= " Perintah ini di non-aktifkan. Gunakan 'ulx propmenu' atau '!propmenu' di chat!"
+LANG["PCR_CMD_ULX_DISABLED"]	= "Perintah 'ulx propmenu' di non-aktifkan. Tekan [Tombol Bind Prop Menu] untuk membuka menunya."
+
+LANG["PCR_EDT_IN_USE"]			= "Seorang admin sedang menyunting prop menu. Tunggu sebentar!"
+LANG["PCR_EDT_ERROR_DISABLED"]	= "[Prop Menu] Error: Tambahan Prop Kuston di non-aktifkan!"
+LANG["PCR_EDT_NO_RIGHTS"]		= "Kamu tidak mempunyai hak untuk mengakses ini."
+
+-- I'm actually exhausted and feel so burned out, but I'll update this in future, or in PH:Zero I guess.
+-- Section: Custom Prop Editor File Browser and stuff...
+-- LANG["PCR_EDT_XXX"] 	= "todo"
+-- LANG["PCR_FB_XXX"] 	= "todo"
+
+--[[
+	Admin Section, Revision: 16.09.21/X2Z
+]]
+LANG["PHXM_PLAYER_PROP_CHOOSER_KEY"]	= "Tombol Bawaan untuk membuka Prop Menu (Prop Chooser)."
+LANG["PHXM_PROP_FREEZE_MIDAIR"]			= "Tombol Bawaan untuk menggunakan fitur 'Diam Ditempat' pada saa di udara sebagai Prop."
+LANG["PHXM_ADMIN_PROP_RIGHT_CLICK"]		= "Haruskah prop juga bisa taunt pada saat menekan tombol mouse klik kanan?"
+LANG["PHXM_ADMIN_TAUNT_SCANNER"]		= "(Butuh Map Restart) Aktifkan Taunt Scanner? Sehingga taunt akan di scan otomatis melalui folder."
+LANG["PHXM_ADMLBL_USABLE_ENTS"]			= "Tipe Prop Entity yang bisa Digunakan"
+LANG["PHXM_ADMLBL_USABLE_ENTS_REF"]		= "Tipe-tipenya yaitu: 1: Hanya benda Fisik, 2: Fisik & Dinamik, 3: Hampir Semua termasuk Ragdoll, 4: Kustom."
+LANG["PHXM_ADMIN_USABLE_ENT_TYPE"]		= "Tipe Entity yang digunakan untuk Prop untuk menyamar"
+LANG["PHXM_ADMIN_NOTIFY_ENT_TYPE"]		= "Beri Tahu prop tentang beberapa entity tidak bisa disamar dengan menekan tombol E. Hanya berlaku jika 'ph_usable_prop_type' di-set ke 3 atau 4."
+LANG["NOTIFY_PROP_ENTTYPE"]				= "Tekan [E] untuk berinteraksi, [Klik] untuk menyamar obyek."
+LANG["NOTIFY_CUST_ENT_TYPE_IS_ON"]		= "[PHX] Peringatan: Tekan [E] untuk interaksi objek, Tekan [Klik] untuk Menyamar objek."
+
+--[[
+	Custom Taunts, Revision: 16.09.21/X2Z
+]]
+LANG["TM_TAUNTS_SEARCH_NOTHING"]		= "Kayaknya ga ada deh taunt '%s' disini :("
+LANG["TM_SEARCH_PLACEHOLDER"]			= "Cari di kategori ini: Ketik kata, huruf kecil & tanpa wildcard. Kosong=Semua."
 
 -- Add to Language Table.
 PHX.LANGUAGES[LANG.code] = LANG

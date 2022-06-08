@@ -10,8 +10,10 @@ local function CvarChangedMessage( ... )
 	PHX:AddChat( PHX:Translate("PHXM_CVAR_CHANGED", ... ), Color(255, 194, 14) )
 end
 
+-- [!] VarArgs as Table
 local function ConfirmMessage( ... )
-	Derma_Message( PHX:Translate("PHXM_CVAR_CHANGED", ... ), "INFO", "OK" )
+	--Derma_Message( PHX:Translate("PHXM_CVAR_CHANGED", ... ), "INFO", "OK" )
+	PHX:MsgBox( { ... }, "MISC_INFO", "MISC_OK" )
 end
 
 PHX.CLUI = {
@@ -25,7 +27,7 @@ PHX.CLUI = {
 		local chk = vgui.Create("DCheckBoxLabel")
 		chk:SetPos(0, p:GetRowHeight() / 2)
 		chk:SetSize(p:GetColWide(),p:GetRowHeight())
-		chk:SetText(l)
+		chk:SetText(PHX:QTrans(l))	--chk:SetText(l)
 		chk:SetFont("HudHintTextLarge")
 		local num = GetConVar(c):GetBool()
 		if num then 
@@ -43,10 +45,10 @@ PHX.CLUI = {
 			if d == "SERVER" then
 				net.Start("SvCommandReq")
 				  net.WriteString(c)
-				  net.WriteInt(v,2)
+				  net.WriteString(tostring(v))	-- Changed to String because GetGlobalBool doesn't like actual type (0 = ignored).
 				net.SendToServer()
 			elseif d == "CLIENT" then
-				RunConsoleCommand(c, v)
+				RunConsoleCommand(c, tostring(v))
 				CvarChangedMessage(c, tostring(v))
 				if v == 1 then
 					surface.PlaySound("buttons/button9.wav")
@@ -65,7 +67,7 @@ end,
 ["label"] = function( c, d, p, l )
 	local txt = vgui.Create("DLabel")
 	txt:SetSize(p:GetColWide(),p:GetRowHeight())
-	txt:SetText(l)
+	txt:SetText(PHX:QTrans(l)) --txt:SetText(l)
 	if !d then
 		txt:SetFont("HudHintTextLarge")
 	else
@@ -90,13 +92,8 @@ end,
 	end
 
 	if ( d and type(d) == "table" ) then
-		-- How many buttons do we need to make. 
-		-- Note: Currently, Maximum is 6 buttons per 1 panel segment.
-		
-		-- Legal Value. Override value if they are invalid or less then specific.
-		local legal = d.max
-		if d.max < 1 then legal = 1 end
-		if d.max > 6 then legal = 6 end
+
+		local legal = #d
 		
 		local pnl = vgui.Create("DPanel")
 		pnl:SetSize(p:GetColWide(),p:GetRowHeight())
@@ -104,7 +101,7 @@ end,
 		
 		local function m_btncreation( m_panel, m_panelText, m_func )
 			local btn = vgui.Create("DButton", m_panel)
-			btn:SetText(m_panelText)
+			btn:SetText(PHX:QTrans(m_panelText)) --btn:SetText(m_panelText)
 			btn:Dock(LEFT)
 			btn:DockMargin(0,2,8,2)
 			-- If this looks stupid, but it working, it ain't stupid!
@@ -114,7 +111,7 @@ end,
 		end
 		
 		for i=1,legal do
-			m_btncreation(pnl,d.textdata[i][1], d.textdata[i][2])
+			m_btncreation(pnl, d[i][1], d[i][2])	--1 = text string, 2 = function
 		end
 		return pnl
 	else
@@ -137,13 +134,14 @@ end,
 		local float = d.float
 		
 		local pnl = vgui.Create("DPanel")
-		pnl:SetSize(p:GetColWide(),p:GetRowHeight()-6)
+		pnl:SetSize(p:GetColWide()*0.9,p:GetRowHeight()-6)
 		pnl:SetBackgroundColor(Color(120,120,120,200))
 		
 		local slider = vgui.Create("DNumSlider",pnl)
 		slider:SetPos(10,0)
-		slider:SetSize(p:GetColWide()-30,p:GetRowHeight()-6)
-		slider:SetText(l)
+		slider:SetSize(pnl:GetWide(),pnl:GetTall())
+		slider:SetText(PHX:QTrans(l))		--slider:SetText(l)
+		slider:SetToolTip(PHX:QTrans(l))	--slider:SetToolTip(l)
 		slider:SetMin(min)
 		slider:SetMax(max)
 		slider:SetValue(dval)
@@ -162,9 +160,9 @@ end,
 				net.SendToServer()
 			elseif kind == "CLIENT" then
 				if float then
-					RunConsoleCommand(c, value)
+					RunConsoleCommand( c, tostring( value ) )
 				else
-					RunConsoleCommand(c, math.Round( value ))
+					RunConsoleCommand( c, tostring(math.Round( value )) )
 				end
 			end
 		end
@@ -183,7 +181,7 @@ end,
 	if ( d and type(d) == "Player" and IsValid(d) ) then
 		local ply = d
 		local pnl = vgui.Create("DPanel")
-		pnl:SetSize(p:GetColWide(),p:GetRowHeight()-6)
+		pnl:SetSize(p:GetColWide()*0.9,p:GetRowHeight()-6)
 		pnl:SetBackgroundColor(Color(20,20,20,150))
 		
 		local ava = vgui.Create("AvatarImage", pnl)
@@ -246,10 +244,10 @@ end,
 	
 	local label = vgui.Create("DLabel", pnl)
 	label:Dock(LEFT)
-	label:SetSize(400,0)
+	label:SetSize(pnl:GetWide()*0.75,0)
 	label:DockMargin(2,0,0,0)
 	label:SetFont("HudHintTextLarge")
-	label:SetText(l)
+	label:SetText(PHX:QTrans(l)) --label:SetText(l)
 	
 	local bind = vgui.Create("DBinder", pnl)
 	bind:Dock(LEFT)
@@ -258,9 +256,9 @@ end,
 	
 	local keyNum = GetConVar(c):GetInt()
 	bind:SetValue(keyNum)
-	function bind:OnChange( num )	
+	function bind:OnChange( num )
 		RunConsoleCommand(c, tostring(num))
-		local tkeyName = input.GetKeyName(num)
+		local tkeyName =  input.GetKeyName(num):upper()
 		CvarChangedMessage(c, tostring(tkeyName))
 		surface.PlaySound("buttons/button9.wav")
 	end
@@ -283,7 +281,7 @@ end,
 	if (!l) then
 		label:SetText(PHX:FTranslate("SUBTYPE_PREFERED_LANG"))
 	else
-		label:SetText(l)
+		label:SetText(PHX:QTrans(l))
 	end
 	
 	local cbox = vgui.Create("DComboBox", pnl)
@@ -326,7 +324,7 @@ end,
 	if (d) then
 		cvlang = GetConVar(c):GetString()
 	else
-		cvlang = PHX.CVAR.Language:GetString()
+		cvlang = PHX:GetCLCVar( "ph_cl_language" )
 	end
 	
 	local langCode = cvlang
@@ -374,7 +372,7 @@ end,
 	btn:Dock(LEFT)
 	btn:SetSize(64,0)
 	btn:DockMargin(4,2,0,2)
-	btn:SetText("Set")
+	btn:SetText(PHX:FTranslate("PHX_BTNTXTENTRY_Set")) --btn:SetText("Set")
 	
 	textEntry.EnteredText = ""
 	
@@ -398,7 +396,7 @@ end,
 			ConfirmMessage(c, textEntry.EnteredText)
 			CvarChangedMessage(c, textEntry.EnteredText)
 		else
-			Derma_Message("Text is empty or you didn't pressed ENTER key.", "Warning", "OK")
+			PHX:MsgBox("PHXM_MSG_INPUT_IS_EMPTY", "MISC_WARN", "MISC_OK")
 		end
 	end
 	

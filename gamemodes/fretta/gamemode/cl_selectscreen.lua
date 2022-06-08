@@ -44,12 +44,16 @@ function PANEL:Init()
 		Derma_Hook( self.btnCancel, "ApplySchemeSettings", 	"Scheme", 		"CancelButton" )
 		Derma_Hook( self.btnCancel, "PerformLayout", 		"Layout", 		"CancelButton" )
 		
-	self.lblHoverText = vgui.Create( "DLabel", self )
+		-- changed to RichText
+	--self.lblHoverText = vgui.Create( "DLabel", self )
+	self.lblHoverText = vgui.Create( "RichText", self )
 		self.lblHoverText:SetText( "" )
-		self.lblHoverText:SetFont( "FRETTA_MEDIUM" )
-		self.lblHoverText:SetColor( color_white )
+		self.lblHoverText:SetFGColor( color_white ) -- we don't need SetBGColor i guess.
 		self.lblHoverText:SetContentAlignment( 8 )
-		self.lblHoverText:SetWrap( true )
+		--self.lblHoverText:SetWrap( true )
+		-- function self.lblHoverText:PerformLayout()
+			self.lblHoverText:SetFontInternal( "FRETTA_MEDIUM" ) --:SetFont
+		-- end
 		
 	self.lblFooterText = vgui.Create( "DLabel", self )
 		self.lblFooterText:SetText( "" )
@@ -145,12 +149,24 @@ end
 
 function PANEL:SetForHelp( strHelpText )
 	
-	self.lblHoverText:SetText( PHX:FTranslate("HELP_F1") or "Error: No Help found." )
+	self.lblHoverText:SetText( PHX:FTranslate("HELP_F1")  or "Error: No Help found." )
+	
+	-- Contributors & Donators
+	if GAMEMODE.PHXContributors and GAMEMODE.PHXContributors ~= nil then
+		local c = table.concat(GAMEMODE.PHXContributors,"\n- ")
+	end
+	self.lblHoverText:AppendText("\n\nDonators & Contributors:\n" .. c)
+	timer.Simple(0, function()
+		--function self.lblHoverText:PerformLayout()
+			self.lblHoverText:SetToFullHeight()
+			--self.lblHoverText:SetFontInternal("FRETTA_MEDIUM")
+		--end
+	end)
 
 end
 
 /*---------------------------------------------------------
-   SetHeaderText
+   SetHeaderText	-- Wolvin: this is unused as we're now using 'PANEL:SetForHelp' instead.
 ---------------------------------------------------------*/
 function PANEL:SetHoverText( strName )
 
@@ -163,7 +179,8 @@ end
 ---------------------------------------------------------*/
 function PANEL:GetHoverText( strName )
 
-	return self.lblHoverText:GetValue()
+	return self.lblHoverText:GetValue()	-- do RichText support it ?
+	-- Limit: GetText only returns 1023 of strings.
 
 end
 

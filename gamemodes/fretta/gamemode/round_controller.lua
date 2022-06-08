@@ -258,6 +258,9 @@ function GM:RoundEndWithResult( result, resulttext )
 	
 	end
 	
+	-- PH:X2Z: Added RoundEndResult
+	hook.Call("PH_RoundEndResult", nil, result, resulttext)
+	
 end
 
 //

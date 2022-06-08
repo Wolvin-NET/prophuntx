@@ -1,10 +1,8 @@
--- Finds the player Player/Entities table
 local Player = FindMetaTable("Player")
 local Entity = FindMetaTable("Entity")
 if !Player then return end
 if !Entity then return end
 
--- Checks player hull to make sure it does not even stuck with the world/other objects.
 function Entity:GetPropSize()
 	local hullxymax = math.Round(math.Max(self:OBBMaxs().x-self:OBBMins().x, self:OBBMaxs().y-self:OBBMins().y))
 	local hullz = math.Round(self:OBBMaxs().z - self:OBBMins().z)
@@ -95,6 +93,21 @@ function Player:CheckUserGroup()
 	return false
 end
 
+function Player:GetTauntRandMapPropCount()
+	return self:GetNWInt("iRandMapPropCount", 0)
+end
+
+function Player:SubTauntRandMapPropCount()
+	local count = self:GetNWInt("iRandMapPropCount", 0)
+	count = count - 1
+	self:SetNWInt("iRandMapPropCount", count)
+end
+
+function Player:ResetTauntRandMapCount()
+	local maxCount = PHX:GetCVar( "ph_randtaunt_map_prop_max" )
+	self:SetNWInt("iRandMapPropCount", maxCount)
+end
+
 if SERVER then
 	-- bShouldUseTheirOwnLang: Unless if you have your own language SET in your /langs/<language>.lua, Force this to TRUE.
 	-- Example: msg = "MY_CUSTOM_TEXT" will be translated if bShouldUseTheirOwnLang = true. If you want regular message, just put normal text on <msg> argument.
@@ -103,11 +116,26 @@ if SERVER then
 	function Player:PHXChatPrint( msg, color, bShouldUseTheirOwnLang )
 		
 		if bShouldUseTheirOwnLang == nil then bShouldUseTheirOwnLang = false end
+		if !color or color == nil then color = color_white end
 	
 		net.Start("PHX.ChatPrint")
 			net.WriteString(msg)
 			net.WriteColor(color)
 			net.WriteBool(bShouldUseTheirOwnLang)
+		net.Send(self)
+	end
+	
+	function Player:PrintCenter( msg, color, bShowInput, nInputNum )
+		
+		if !color or color == nil then color = color_white end
+		if bShowInput == nil then bShowInput = false end
+		if !nInputNum or nInputNum == nil then nInputNum = 0 end
+	
+		net.Start("PHX.CenterPrint")
+			net.WriteString(msg)
+			net.WriteColor(color)
+			net.WriteBool(bShowInput)
+			net.WriteInt(nInputNum, 9)
 		net.Send(self)
 	end
 	
@@ -119,18 +147,31 @@ if SERVER then
 		["CLEANUP"] = 4
 	}
 	
-	-- Todo: Add Var Args
-	function Player:PHXNotify( msg, kind, time, bShouldUseTheirOwnLang )
+	-- NOTE: DUE TO NET LIBRARY LIMITATIONS,
+	-- VAR ARGS CANNOT CONTAIN OBJECT/USERDATA. See: https://wiki.facepunch.com/gmod/net.ReadTable
+	function Player:PHXNotify( msg, kind, time, bShouldUseTheirOwnLang, ... )
 		
+		if !kind then kind = "GENERIC" end
 		if bShouldUseTheirOwnLang == nil then bShouldUseTheirOwnLang = false end
 		if !time then time = 8 end
 		if time > 30 then time = 30 end
+		
+		local args = {...}
+		if !args then args = { false } end
+		
+		local t = {}
+		for i=1,#args do
+			t["ARG"..i] = args[i]
+		end
+		
+		if !t then t = { ["ARG1"] = false } end
 		
 		net.Start("PHX.bubbleNotify")
 			net.WriteString(msg)
 			net.WriteUInt(kinds[kind], 3)
 			net.WriteUInt(time, 5)
 			net.WriteBool(bShouldUseTheirOwnLang)
+			net.WriteTable(t)
 		net.Send(self)
 	end
 	
@@ -139,6 +180,7 @@ if SERVER then
 	function Player:PHXChatInfo( kind, msg , ... )
 		if !kind then kind = "PRIMARY" end
 		if !msg then msg = "<NO_MESSAGE>" end
+		
 		local args = {...}
 		if !args then args = { false } end
 		
@@ -172,4 +214,24 @@ if SERVER then
 		
 		return self.LastPickupEnt:IsPlayerHolding()
 	end
+	
+	function Player:FreezePropMidAir()
+		if !self.ispropfroze then
+			self.ispropfroze = false
+		end
+
+		if self:Team() == TEAM_PROPS and self:Alive() and not self:IsOnGround() then
+			
+			if !self.ispropfroze then
+				self:SetMoveType(MOVETYPE_NONE)
+				self.ispropfroze = true
+			else
+				self:SetMoveType(MOVETYPE_WALK)
+				self.ispropfroze = false
+			end
+			
+		end
+	end
+	hook.Add("PostPlayerDeath", "PHX.ResetMoveType", function( ply ) if ply.ispropfroze then ply.ispropfroze = false end end)
+	hook.Add("PlayerSpawn", "PHX.ResetMoveType_onSpawn", function( ply ) if ply.ispropfroze then ply.ispropfroze = false end end)
 end

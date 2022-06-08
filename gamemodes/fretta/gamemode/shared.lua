@@ -10,8 +10,6 @@ include( "player_extension.lua" )
 include( "class_default.lua" )
 include( "player_colours.lua" )
 
-fretta_voting = CreateConVar( "fretta_voting", "1", { FCVAR_REPLICATED, FCVAR_NOTIFY, FCVAR_ARCHIVE }, "Allow/Dissallow voting" )
-
 SetGlobalBool("bJoinBalancedTeam", GetConVar("ph_forcejoinbalancedteams"):GetBool() or false)
 
 GM.Name 	= "Simple Game Base"

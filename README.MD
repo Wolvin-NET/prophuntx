@@ -1,70 +1,25 @@
-## Warning:
-This gamemode rework might be slower. There was connectivity issues to get all updates (Request-pull) to be merged.
-However If you'd like to help, please consider support donating below!
+## !Unstable 08/06/2022
 
-### Please note: 
-- PropChooser Plugin may have no backward compatibility
-- There will some changes for Plugins Additionals, which will changed into Hook instead of using `list.Set`!
-- This will changes the `GetConVar` behaviour on clients. We'll can no longer use Replicated ConVar as it seems to be not properly functional.  
-Be sure you made a backup before replacing!
-- There will be major changes available, mainly for HUD, Informational Chat System, Chatbox System, Main Core files and other Player's functions.
-- Changelogs may be less updated due to reason mentioned above.
+### Warning: This is nightly build development branch which may incomplete or unstable. Use at your own risk! 
+### This branch may contains alot of commit changes. Be sure to stay up to date & checkout regularly.
 
-### Warning: This is nightly build development branch which may incomplete or unstable. Use at your own risk! This branch may contains alot of commit changes. Be sure to stay up to date & checkout regularly.
+If you are normal user, DO NOT use this version. Use `master` branch instead!
 
 ---
 
 # Prop Hunt X
 
 ### Versioning
-Version: X, Revision: XX/07/2020 (dd/mm/yyyy)
+Version: X2Z, Revision: ??/06/2022 (dd/mm/yyyy)
 
-### Public Beta Test
-Public Prop Hunt X: Live Testing is available. You can join to the IP below:
-
-#### 103.62.48.129:27400
+Purpose: Backup
 
 ### Donate
 Please help support the project by donating:  
-https://prophunt.wolvindra.net/donate
+https://www.buymeacoffee.com/wolvindra  
+https://ko-fi.com/wolvindra
 
-### About this Gamemode
-This gamemode is similar to current Prop Hunt: Enhanced development lineup, but include several new features:
-
-- Proper Prop Rotating Technique
-- Minor Game Mechanics changes
-- Feature-rich & customizable
-- More gamemode events (Coming Soon)
-- Prop-to-Hunter attack (Coming Soon)
-- Tweaks and Optimisation
-- Team Balance and Team Switch Control
-- And many other implementations that currently still on progress...
-
-However, there are several changes with codes structure which was cleaned-up, new HUD & user interface,
-mechanics and optimisation that should be (or already) included in future updates. This is may also a part of a continuation version 15 (rev. I) 
-which will be a finalized version and continue with revision changes.
-
-### The "X"
-Prop Hunt "X" is a temporal codename. We still not sure what should be named.
-
-However, this isn't a continuation or resurrected version of PH:E Post-v16 development lineup,  
-this is another standalone version made from Wolvin himself, using a fork from PH:E v15-Rev I which was intended for Project purposes.
-
-### License & Rules
-You are free to use, modify, contribute, distribute the Prop Hunt: X anytime you want. But you cannot use this as for Commercial Purpose. Simple as that.
-
-```
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-```
-
-Please note that this gamemode you can/not:
-- Use, Modify, and Redistribute for Commercial purposes.
-- Reselling the code with/without any modification.
-- May or Optionally contribute made changes that possible benefits for current or future version of gamemode.
-- Always include to original author & credits for modifying and distributing the gamemode.
-- "Prop Hunt" and other sub titles available on any platform **should not be trade-marked**.
-- Reuploading to workshop is limitted, unless permission was granted with any changes possible (e.g: Forked version).
-
-### More info about this Gamemode
-https://www.wolvindra.net/prophuntx
+Development Notes:
+- Incomplete feature addition
+- Need some optimization
+- Todo from: https://www.buymeacoffee.com/wolvindra/prop-hunt-x-upcoming-june-update-notice

@@ -1,10 +1,6 @@
 "fretta"
 {
 	"base"				"base"
-	"title"				"Fretta Gamemode Base"
+	"title"				"Modified Fretta for PH:X"
 	"menusystem"		"0"
-
-	"author_name"		"TEAM GARRY"
-	"author_email"		""
-	"author_url"		"http://www.garrysmod.com/"
 }
