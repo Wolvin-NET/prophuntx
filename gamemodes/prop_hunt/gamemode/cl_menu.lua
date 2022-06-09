@@ -460,9 +460,9 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 		PHX.UI:CreateVGUIType("ph_default_taunt_key", "binder", false, gridpl, "PHXM_PLAYER_TAUNT_KEY")
 		PHX.UI:CreateVGUIType("ph_default_customtaunt_key", "binder", false, gridpl, "PHXM_PLAYER_TAUNTWINDOW_KEY")
 		PHX.UI:CreateVGUIType("ph_default_rotation_lock_key", "binder", false, gridpl, "PHXM_PLAYER_ROTATLOCK_KEY")
-		
 		PHX.UI:CreateVGUIType("ph_prop_menu_key", "binder", false, gridpl, "PHXM_PLAYER_PROP_CHOOSER_KEY")
 		PHX.UI:CreateVGUIType("ph_prop_midair_freeze_key", "binder", false, gridpl, "PHXM_PROP_FREEZE_MIDAIR")
+		PHX.UI:CreateVGUIType("ph_cl_decoy_spawn_key", "binder", false, gridpl, "PHXM_CL_DECOY_KEYBIND")
 		
 		PHX.UI:CreateVGUIType("", "label", false, gridpl, "PHXM_PLAYER_OPTIONS")
 		PHX.UI:CreateVGUIType("ph_cl_halos", "check", "CLIENT", gridpl, "PHXM_PLAYER_TOGGLE_HALOS" )
@@ -516,36 +516,19 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 		PHX.UI:CreateVGUIType("ph_default_lang", "langcombobox", true, grid, "PHXM_ADMIN_PLAYERDEFAULTLANG")
 		
 		PHX.UI:CreateVGUIType("", "label", false, grid, "PHXM_ADMIN_OPTIONS")
-		PHX.UI:CreateVGUIType("ph_notify_player_join_leave", "check", "SERVER", grid, "PHXM_ENABLE_PLAYER_JOIN_LEAVE")
 		PHX.UI:CreateVGUIType("ph_use_custom_plmodel", "check", "SERVER", grid, "PHXM_ADMIN_CUSTOM_MODEL")
 		PHX.UI:CreateVGUIType("ph_use_custom_plmodel_for_prop", "check", "SERVER", grid, "PHXM_ADMIN_CUSTOM_MODEL_PROP")
+		
+		PHX.UI:CreateVGUIType("", "label", false, grid, "PHXM_TAUNT_SETTINGS")
+		
 		PHX.UI:CreateVGUIType("ph_customtaunts_delay", "slider", {min = 2, max = 120, init = PHX:GetCVar( "ph_customtaunts_delay" ), dec = 0, kind = "SERVER"}, grid, "PHXM_ADMIN_TAUNT_DELAY_CUSTOM")
 		PHX.UI:CreateVGUIType("ph_normal_taunt_delay", "slider", {min = 2, max = 120, init = PHX:GetCVar( "ph_normal_taunt_delay" ), dec = 0, kind = "SERVER"}, grid, "PHXM_ADMIN_TAUNT_DELAY_RANDOM")
 		PHX.UI:CreateVGUIType("ph_autotaunt_enabled", "check", "SERVER", grid, "PHXM_ADMIN_AUTOTAUNT_ENABLE")
 		PHX.UI:CreateVGUIType("ph_autotaunt_delay", "slider", {min = 30, max = 180, init = PHX:GetCVar( "ph_autotaunt_delay" ), dec = 0, kind = "SERVER"}, grid, "PHXM_ADMIN_TAUNT_DELAY_AUTO")
 		PHX.UI:CreateVGUIType("ph_enable_taunt_scanner", "check", "SERVER", grid, "PHXM_ADMIN_TAUNT_SCANNER")
 		PHX.UI:CreateVGUIType("ph_prop_right_mouse_taunt", "check", "SERVER", grid, "PHXM_ADMIN_PROP_RIGHT_CLICK")
-		PHX.UI:CreateVGUIType("","spacer",nil,grid,"" )
-		PHX.UI:CreateVGUIType("ph_forcejoinbalancedteams", "check", "SERVER", grid, "PHXM_ADMIN_FORCEJOINBALANCE")
-		PHX.UI:CreateVGUIType("ph_enable_teambalance", "check", "SERVER", grid, "PHXM_ADMIN_ENABLETEAMBALANCE")
-		PHX.UI:CreateVGUIType("","spacer",nil,grid,"" )
-		PHX.UI:CreateVGUIType("ph_notice_prop_rotation", "check", "SERVER", grid, "PHXM_ADMIN_NOTICE_ROTATION")
-		PHX.UI:CreateVGUIType("ph_prop_camera_collisions", "check", "SERVER", grid, "PHXM_ADMIN_CAMERA_COLLIDE")
-		PHX.UI:CreateVGUIType("ph_freezecam", "check", "SERVER", grid, "PHXM_ADMIN_FREEZECAM")
-		PHX.UI:CreateVGUIType("ph_freezecam_hunter", "check", "SERVER", grid, "PHXM_ADMIN_FREEZECAM_HUNTER")
-		PHX.UI:CreateVGUIType("ph_prop_collision", "check", "SERVER", grid, "PHXM_ADMIN_PROP_COLLIDE")
-		PHX.UI:CreateVGUIType("ph_swap_teams_every_round", "check", "SERVER", grid, "PHXM_ADMIN_SWAP_TEAM")
-		PHX.UI:CreateVGUIType("ph_hunter_fire_penalty", "slider", 	{min = 2, max = 80, init = PHX:GetCVar( "ph_hunter_fire_penalty" ), dec = 0, kind = "SERVER"}, grid, "PHXM_ADMIN_HUNTER_PENALTY")
-		PHX.UI:CreateVGUIType("ph_hunter_kill_bonus", "slider", 	{min = 5, max = 100, init = PHX:GetCVar( "ph_hunter_kill_bonus" ), dec = 0, kind = "SERVER"}, grid, "PHXM_ADMIN_HUNTER_KILL_BONUS")
-		PHX.UI:CreateVGUIType("ph_smggrenadecounts",  "slider", 	{min = 1, max = 50, init = PHX:GetCVar( "ph_smggrenadecounts" ), dec = 0, kind = "SERVER"}, grid, "PHXM_ADMIN_HUNTER_SMG_GRENADES")
-		PHX.UI:CreateVGUIType("ph_game_time", "slider", 			{min = 20, max = 300, init = PHX:GetCVar( "ph_game_time" ), dec = 0, kind = "SERVER"}, grid, "PHXM_ADMIN_GAME_TIME")
-		PHX.UI:CreateVGUIType("ph_hunter_blindlock_time", "slider", {min = 15, max = 60, init = PHX:GetCVar( "ph_hunter_blindlock_time" ), dec = 0, kind = "SERVER"}, grid, "PHXM_ADMIN_BLINDLOCK_TIME")
-		PHX.UI:CreateVGUIType("ph_round_time", "slider", 			{min = 120, max = 600, init = PHX:GetCVar( "ph_round_time" ), dec = 0, kind = "SERVER"}, grid, "PHXM_ADMIN_ROUND_TIME")
-		PHX.UI:CreateVGUIType("ph_rounds_per_map", "slider", 		{min = 5, max = 30, init = PHX:GetCVar( "ph_rounds_per_map" ), dec = 0, kind = "SERVER"}, grid, "PHXM_ADMIN_ROUNDS_PER_MAP")
-		PHX.UI:CreateVGUIType("ph_enable_lucky_balls", "check", "SERVER", grid, "PHXM_ADMIN_ENABLE_LUCKYBALL")
-		PHX.UI:CreateVGUIType("ph_enable_devil_balls", "check", "SERVER", grid, "PHXM_ADMIN_ENABLE_CRYSTAL")
-		PHX.UI:CreateVGUIType("ph_waitforplayers", "check", "SERVER", grid, "PHXM_ADMIN_WAIT_PLAYERS")
-		PHX.UI:CreateVGUIType("ph_min_waitforplayers", "slider", { min = 1, max = game.MaxPlayers(), init = PHX:GetCVar( "ph_min_waitforplayers" ), dec = 0, kind = "SERVER" }, grid, "PHXM_ADMIN_WAIT_MIN_PLAYERS")
+		
+		-- taunt modes
 		PHX.UI:CreateVGUIType("", "label", false, grid, "PHXM_ADMIN_TAUNTMODES")
 		PHX.UI:CreateVGUIType("", "btn", {
 			[1] = { { "PHXM_ADMIN_TAUNTMODE_MODE", PHX:GetCVar( "ph_custom_taunt_mode" ) },
@@ -592,6 +575,41 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 				end
 			end}
 			}, grid ,"")
+		
+		PHX.UI:CreateVGUIType("", "label", false, grid, "PHXM_TAUNT_PITCH_SETTINGS")
+		PHX.UI:CreateVGUIType("ph_taunt_pitch_enable", "check", "SERVER", grid, "PHXM_TAUNT_PITCH_ENABLE")
+		PHX.UI:CreateVGUIType("ph_taunt_pitch_range_min", "slider", {min = 1, max = 99, init = PHX:GetCVar( "ph_taunt_pitch_range_min" ), dec = 0, kind = "SERVER"}, grid, "PHXM_TAUNT_PITCH_RANGE_MIN")
+		PHX.UI:CreateVGUIType("ph_taunt_pitch_range_max", "slider", {min = 100, max = 255, init = PHX:GetCVar( "ph_taunt_pitch_range_max" ), dec = 0, kind = "SERVER"}, grid, "PHXM_TAUNT_PITCH_RANGE_MAX")
+		
+		PHX.UI:CreateVGUIType("", "label", false, grid, "PHXM_FAKE_TAUNT_SETTINGS")
+		PHX.UI:CreateVGUIType("ph_randtaunt_map_prop_enable", "check", "SERVER", grid, "PHXM_FAKE_TAUNT_ENABLE")
+		PHX.UI:CreateVGUIType("ph_randtaunt_map_prop_max", "slider", {min = -1, max = 100, init = PHX:GetCVar( "ph_randtaunt_map_prop_max" ), dec = 0, kind = "SERVER"}, grid, "PHXM_FAKE_TAUNT_MAXUSAGE")
+		
+		PHX.UI:CreateVGUIType("", "label", false, grid, "PHXM_DECOY_SETTINGS")
+		PHX.UI:CreateVGUIType("ph_enable_decoy_reward", "check", "SERVER", grid, "PHXM_DECOY_ENABLE")
+		
+		PHX.UI:CreateVGUIType("","spacer",nil,grid,"" )
+		PHX.UI:CreateVGUIType("", "label", false, grid, "PHXM_GENERAL_SETTINGS")
+		PHX.UI:CreateVGUIType("ph_notify_player_join_leave", "check", "SERVER", grid, "PHXM_ENABLE_PLAYER_JOIN_LEAVE")
+		
+		PHX.UI:CreateVGUIType("ph_notice_prop_rotation", "check", "SERVER", grid, "PHXM_ADMIN_NOTICE_ROTATION")
+		PHX.UI:CreateVGUIType("ph_prop_camera_collisions", "check", "SERVER", grid, "PHXM_ADMIN_CAMERA_COLLIDE")
+		PHX.UI:CreateVGUIType("ph_freezecam", "check", "SERVER", grid, "PHXM_ADMIN_FREEZECAM")
+		PHX.UI:CreateVGUIType("ph_freezecam_hunter", "check", "SERVER", grid, "PHXM_ADMIN_FREEZECAM_HUNTER")
+		PHX.UI:CreateVGUIType("ph_prop_collision", "check", "SERVER", grid, "PHXM_ADMIN_PROP_COLLIDE")
+		PHX.UI:CreateVGUIType("ph_swap_teams_every_round", "check", "SERVER", grid, "PHXM_ADMIN_SWAP_TEAM")
+		PHX.UI:CreateVGUIType("ph_hunter_fire_penalty", "slider", 	{min = 2, max = 80, init = PHX:GetCVar( "ph_hunter_fire_penalty" ), dec = 0, kind = "SERVER"}, grid, "PHXM_ADMIN_HUNTER_PENALTY")
+		PHX.UI:CreateVGUIType("ph_hunter_kill_bonus", "slider", 	{min = 5, max = 100, init = PHX:GetCVar( "ph_hunter_kill_bonus" ), dec = 0, kind = "SERVER"}, grid, "PHXM_ADMIN_HUNTER_KILL_BONUS")
+		PHX.UI:CreateVGUIType("ph_smggrenadecounts",  "slider", 	{min = 1, max = 50, init = PHX:GetCVar( "ph_smggrenadecounts" ), dec = 0, kind = "SERVER"}, grid, "PHXM_ADMIN_HUNTER_SMG_GRENADES")
+		PHX.UI:CreateVGUIType("ph_game_time", "slider", 			{min = 20, max = 300, init = PHX:GetCVar( "ph_game_time" ), dec = 0, kind = "SERVER"}, grid, "PHXM_ADMIN_GAME_TIME")
+		PHX.UI:CreateVGUIType("ph_hunter_blindlock_time", "slider", {min = 15, max = 60, init = PHX:GetCVar( "ph_hunter_blindlock_time" ), dec = 0, kind = "SERVER"}, grid, "PHXM_ADMIN_BLINDLOCK_TIME")
+		PHX.UI:CreateVGUIType("ph_round_time", "slider", 			{min = 120, max = 600, init = PHX:GetCVar( "ph_round_time" ), dec = 0, kind = "SERVER"}, grid, "PHXM_ADMIN_ROUND_TIME")
+		PHX.UI:CreateVGUIType("ph_rounds_per_map", "slider", 		{min = 5, max = 30, init = PHX:GetCVar( "ph_rounds_per_map" ), dec = 0, kind = "SERVER"}, grid, "PHXM_ADMIN_ROUNDS_PER_MAP")
+		PHX.UI:CreateVGUIType("ph_enable_lucky_balls", "check", "SERVER", grid, "PHXM_ADMIN_ENABLE_LUCKYBALL")
+		PHX.UI:CreateVGUIType("ph_enable_devil_balls", "check", "SERVER", grid, "PHXM_ADMIN_ENABLE_CRYSTAL")
+		PHX.UI:CreateVGUIType("ph_waitforplayers", "check", "SERVER", grid, "PHXM_ADMIN_WAIT_PLAYERS")
+		PHX.UI:CreateVGUIType("ph_min_waitforplayers", "slider", { min = 1, max = game.MaxPlayers(), init = PHX:GetCVar( "ph_min_waitforplayers" ), dec = 0, kind = "SERVER" }, grid, "PHXM_ADMIN_WAIT_MIN_PLAYERS")
+		
 		PHX.UI:CreateVGUIType("devspacer","spacer",nil,grid,"" )
 		PHX.UI:CreateVGUIType("", "label", false, grid, "PHXM_ADMIN_DEVSECTION")
 		PHX.UI:CreateVGUIType("ph_check_props_boundaries", "check", "SERVER", grid, "PHXM_ADMIN_ROOMCHECK")
@@ -613,22 +631,27 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 		PHX.UI:CreateVGUIType("ph_usable_prop_type_notice", "check", "SERVER", grid, "PHXM_ADMIN_NOTIFY_ENT_TYPE")
 		
 		PHX.UI:CreateVGUIType("","spacer",nil,grid,"" )
+		
 		PHX.UI:CreateVGUIType("", "label", false, grid, "PHXM_ADMIN_EXPERIMENTALPHX")
-
 		PHX.UI:CreateVGUIType("ph_add_hla_combine", "check", "SERVER", grid, "PHXM_ADMIN_HLA_COMBINE")
-		PHX.UI:CreateVGUIType("ph_enable_teambalance", "check", "SERVER", grid, "PHXM_ADMIN_TEAMBALANCE")
-		PHX.UI:CreateVGUIType("ph_max_teamchange_limit", "slider", {min = 3, max = 50, init = PHX:GetCVar( "ph_max_teamchange_limit" ), dec = 0, kind = "SERVER"}, grid, "PHXM_ADMIN_CHANGETEAM_LIMIT")
+		
+		PHX.UI:CreateVGUIType("", "label", false, grid, "PHXM_ADMIN_CHATSETTING")
 		PHX.UI:CreateVGUIType("ph_use_new_chat", "check", "SERVER", grid, "PHXM_ADMIN_USENEWCHAT")
 		PHX.UI:CreateVGUIType("ph_new_chat_pos_sub", "slider", {min = 45, max = 1500, init = PHX:GetCVar( "ph_new_chat_pos_sub" ), dec = 0, kind = "SERVER"}, grid, "PHXM_ADMIN_NEWCHATPOS")
 
+		PHX.UI:CreateVGUIType("", "label", false, grid, "PHXM_ADMIN_HUNTERBLIND")
 		PHX.UI:CreateVGUIType("ph_allow_respawnonblind", "check", "SERVER", grid, "PHXM_ADMIN_RESPAWNONBLIND")
 		PHX.UI:CreateVGUIType("ph_allow_respawnonblind_team_only", "slider", {min = 0, max = 2, init = PHX:GetCVar( "ph_allow_respawnonblind_team_only" ), dec = 0, kind = "SERVER"}, grid, "PHXM_ADMIN_RESPAWNONBLIND_TEAM")
 		PHX.UI:CreateVGUIType("ph_allow_respawn_from_spectator", "check", "SERVER", grid, "PHXM_ADMIN_ALLOWRESPAWN_SPECTATOR")
 		PHX.UI:CreateVGUIType("ph_blindtime_respawn_percent", "slider", {min = 0, max = 1, init = PHX:GetCVar( "ph_blindtime_respawn_percent" ), dec = 2, float = true, kind = "SERVER"}, grid, "PHXM_ADMIN_REWSPANTIMEPERCENT")
+		
+		PHX.UI:CreateVGUIType("", "label", false, grid, "PHXM_ADMIN_TEAMBALANCE")
+		PHX.UI:CreateVGUIType("ph_forcejoinbalancedteams", "check", "SERVER", grid, "PHXM_ADMIN_FORCEJOINBALANCE")
+		PHX.UI:CreateVGUIType("ph_enable_teambalance", "check", "SERVER", grid, "PHXM_ADMIN_ENABLETEAMBALANCE")
+		PHX.UI:CreateVGUIType("ph_max_teamchange_limit", "slider", {min = 3, max = 50, init = PHX:GetCVar( "ph_max_teamchange_limit" ), dec = 0, kind = "SERVER"}, grid, "PHXM_ADMIN_CHANGETEAM_LIMIT")
 		PHX.UI:CreateVGUIType("ph_allow_respawnonblind_teamchange", "check", "SERVER", grid, "PHXM_ADMIN_ALLOWRESPAWN_TEAMCHANGE")
 		
 		PHX.UI:CreateVGUIType("", "label", false, grid, "PHXM_ADMIN_PICKUP_PROPS")
-		
 		PHX.UI:CreateVGUIType("", "btn", {
 			[1] = { { "PHXM_MODE_DEFAULT", PHX:GetCVar( "ph_allow_pickup_object" ) },
 			function(self)
@@ -668,11 +691,6 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 		}, grid ,"")
 		
 		PHX.UI:CreateVGUIType("","spacer",nil,grid,"" )
-		
-		-- new cvar PH:X June update additions
-		
-		-- "ph_randtaunt_map_prop_enable"
-		-- "ph_randtaunt_map_prop_max"
 		
 		
 	local PanelModify = PHX.UI.PnlTab:AddSheet("", panel, "vgui/ph_iconmenu/m_admin.png")

@@ -391,16 +391,16 @@ hook.Add("OnPlayerChangedTeam", "TeamChange_switchLimitter", function(ply, old, 
 	end
 end)
 
-function PHX.ResetStuffs()
+function PHX.ResetStuffs(self)
 	-- Force close any taunt menu windows
 	ForceCloseTauntWindow(0)
 	-- Extra additional
-	PHX.VOICE_IS_END_ROUND = 0
+	self.VOICE_IS_END_ROUND = 0
 	
 	-- Called every round restart: make sure this was set publicly and make it synced accross clients.
-	SetGlobalInt("unBlind_Time", math.Clamp(PHX:GetCVar( "ph_hunter_blindlock_time" ) - (CurTime() - GetGlobalFloat("RoundStartTime", 0)), 0, PHX:GetCVar( "ph_hunter_blindlock_time" )) )
+	SetGlobalInt("unBlind_Time", math.Clamp(self:GetCVar( "ph_hunter_blindlock_time" ) - (CurTime() - GetGlobalFloat("RoundStartTime", 0)), 0, self:GetCVar( "ph_hunter_blindlock_time" )) )
 	
-	local cvarPercent	= PHX:GetCVar( "ph_blindtime_respawn_percent" )
+	local cvarPercent	= self:GetCVar( "ph_blindtime_respawn_percent" )
 	local blindTime		= GetGlobalInt("unBlind_Time", 0)
 	local percent		= blindTime * cvarPercent
 	phx_blind_unlocktime = CurTime() + percent
@@ -667,7 +667,6 @@ end
 hook.Add("PlayerDisconnected", "PH_PlayerDisconnected", PlayerDisconnected)
 
 -- Set specific variable for checking in player initial spawn, then use Player:IsHoldingEntity()
-util.AddNetworkString("InitialPlayer_ShowWhatsNew")
 PHX.CurPlys = {}
 hook.Add("PlayerInitialSpawn", "PHX.SetupInitData", function(ply)
 	if not PHX.cvarsynced then PHX:InitCVar() end
@@ -762,11 +761,19 @@ function RoundEnd()
 		pl:UnLock()
 	end
 	
+	-- Give rewards for living props for a decoy
+	for _, pl in pairs(team.GetPlayers(TEAM_PROPS)) do
+		if PHX:GetCVar( "ph_enable_decoy_reward" ) and pl:Alive() and pl:Health() > 0 and (not pl:HasFakePropEntity()) then
+			pl:SetFakePropEntity(1)
+			pl:PHXChatPrint( "DECOY_GET_REWARD", Color(153,217,234), true )
+		end
+	end
+	
 	-- Stop autotaunting
 	net.Start("AutoTauntRoundEnd")
 	net.Broadcast()
 end
-hook.Add("PH_RoundEnd", "PH.ForceHuntersUnblind", RoundEnd)
+hook.Add("PH_RoundEnd", "PHX.RoundIsEnd", RoundEnd)
 
 
 -- This is called when the round time ends (props win)
@@ -796,6 +803,8 @@ function GM:OnPreRoundStart(num)
 			pl:ResetTauntRandMapCount()
 		
 			if pl:Team() == TEAM_PROPS || pl:Team() == TEAM_HUNTERS then
+			
+				-- todo: Inform if they have decoy reward
 			
 				if pl:Team() == TEAM_PROPS then
 					pl:SetTeam(TEAM_HUNTERS)
@@ -1001,7 +1010,7 @@ function PlayerPressedKey(pl, key)
 			local trace = {}
 			-- Wolvin: careful and pay attention after modifying cl_init's cHullz min & max, where min = 24, max = 84 in here.
 			if plhullz < 24 then
-				trace.start = pl:EyePos() + Vector(0, 0, plhullz + (24-  plhullz))
+				trace.start = pl:EyePos() + Vector(0, 0, plhullz + (24 -  plhullz))
 				trace.endpos = pl:EyePos() + Vector(0, 0, plhullz + (24 - plhullz)) + pl:EyeAngles():Forward() * 100
 			elseif plhullz > 84 then
 				trace.start = pl:EyePos() + Vector(0, 0, plhullz - 84)
@@ -1048,7 +1057,12 @@ hook.Add("PlayerButtonDown", "PlayerButton_ControlTaunts", function(pl, key)
 	local lockInfo 		= pl:GetInfoNum("ph_default_rotation_lock_key", 0)
 	local freezePropKey = pl:GetInfoNum("ph_prop_midair_freeze_key", 0)
 	
-	local isRandomPitch = pl:GetInfoNum("ph_cl_use_random_prop_pitch", 0)
+	local pitchApplyRand = pl:GetInfoNum("ph_cl_pitch_apply_random", 0)		-- Also applies for random taunt, specified with pitch level
+	local plPitchLevel	= pl:GetInfoNum("ph_cl_pitch_level", 100)			-- Pitch level to use
+	
+	local isRandomPitch = pl:GetInfoNum("ph_cl_pitch_randomized_random", 0)	-- Use Randomized pitch for Random Taunts instead of specified level
+	
+	local decoyKey		= pl:GetInfoNum("ph_cl_decoy_spawn_key", 0)			-- Used for spawning decoy
 	
 	-- Freeze Prop while midair
 	if pl:Alive() and pl:Team() == TEAM_PROPS and (key == freezePropKey) then
@@ -1079,10 +1093,14 @@ hook.Add("PlayerButtonDown", "PlayerButton_ControlTaunts", function(pl, key)
 			pl.last_taunt = rand_taunt
 			
 			local pitch = 100
-			if tobool(isRandomPitch) then
-				pitch = math.random(PHX:GetCVar('ph_taunt_pitch_min'), PHX:GetCVar('ph_taunt_pitch_max'))
+			if PHX:GetCVar("ph_taunt_pitch_enable") then
+				if tobool( isRandomPitch ) then 	-- is it Randomized?
+					pitch = math.random(PHX:GetCVar("ph_taunt_pitch_min"), PHX:GetCVar("ph_taunt_pitch_max"))
+				elseif tobool(pitchApplyRand) then	-- is it Specified?
+					pitch = plPitchLevel
+				end
 			end
-			pl:EmitSound(rand_taunt, 100, pitch) -- TODO: Recheck argument
+			pl:EmitSound(rand_taunt, 100, pitch)
 			pl:SetNWFloat("LastTauntTime", CurTime())
 			
 		end
@@ -1092,22 +1110,30 @@ hook.Add("PlayerButtonDown", "PlayerButton_ControlTaunts", function(pl, key)
 		pl:ConCommand("ph_showtaunts")
 	end
 	
-	-- Prop rotation lock key
+	-- Prop rotation lock key, and spawn decoy key
 	if pl && pl:IsValid() && pl:Alive() && pl:Team() == TEAM_PROPS then
+		-- Lock rotation
 		if key == lockInfo then
 			if pl:GetPlayerLockedRot() then
 				pl:SetNWBool("PlayerLockedRotation", false)
-				pl:PHXNotify( "HUD_ROTFREE", "UNDO", 3, true )
+				--pl:PHXNotify( "HUD_ROTFREE", "UNDO", 3, true )
+				pl:PrintCenter( "HUD_ROTFREE", Color(34,177,76) )
 				net.Start("PHX.rotateState")
 					net.WriteInt(0, 2)
 				net.Send(pl)
 			else
 				pl:SetNWBool("PlayerLockedRotation", true)
-				pl:PHXNotify( "HUD_ROTLOCK", "ERROR", 3, true )
+				--pl:PHXNotify( "HUD_ROTLOCK", "ERROR", 3, true )
+				pl:PrintCenter( "HUD_ROTLOCK", Color(255,128,40) )
 				net.Start("PHX.rotateState")
 					net.WriteInt(1, 2)
 				net.Send(pl)
 			end
+		end
+		
+		-- Spawn Decoy
+		if GAMEMODE:InRound() and pl:HasFakePropEntity() and key == decoyKey then
+			pl:PlaceDecoyProp()
 		end
 	end
 end)

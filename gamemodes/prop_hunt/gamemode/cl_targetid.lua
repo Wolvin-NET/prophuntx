@@ -3,7 +3,7 @@ function GM:HUDDrawTargetID()
 	local trace = util.TraceLine(tr)
 	
 	-- Don't show if 'Player Names above their head' is enabled.
-	if PHX:GetCVar( "ph_enable_plnames" ) && PHX.CLCVAR.PlayerText:GetBool() then return end
+	if PHX:GetCVar( "ph_enable_plnames" ) && PHX:GetCLCVar( "ph_cl_pltext" ) then return end
 	
 	if (!trace.Hit) then return end
 	if (!trace.HitNonWorld) then return end

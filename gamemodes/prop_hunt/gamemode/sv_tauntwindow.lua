@@ -12,8 +12,9 @@ local function CheckValidity( sndFile, plyTeam )
 end
 
 net.Receive("CL2SV_PlayThisTaunt", function(len, ply)
-	local snd = net.ReadString()
-	local bool = net.ReadBool()
+	local snd 		= net.ReadString()
+	local bool 		= net.ReadBool()	-- enable fake taunt
+	local randPitch = net.ReadBool()	-- enable randomized pitch
 	
 	if (ply and IsValid(ply)) then
 	
@@ -21,19 +22,28 @@ net.Receive("CL2SV_PlayThisTaunt", function(len, ply)
 		local isDelay 		= delay[1]
 		local TauntTime 	= delay[2]
 		local playerTeam	= ply:Team()
+		local plApplyOnFake = ply:GetInfoNum( "ph_cl_pitch_apply_fake_prop", 0 )
+		local desiredPitch	= ply:GetInfoNum( "ph_cl_pitch_level", 100 )
+		local pitch			= 100
 	
 		if !isDelay then
 			if bool then
 				if PHX:GetCVar( "ph_randtaunt_map_prop_enable" ) then
 					local Count = ply:GetTauntRandMapPropCount()
 					
-					if Count >= 0 or Count == -1 then
+					if Count >= 0 or PHX:GetCVar( "ph_randtaunt_map_prop_max" ) == -1 then
 						
 						if CheckValidity( snd, playerTeam ) then --Extra Checks
 							local props = ents.FindByClass("prop_physics*")
 							local randomprop = props[math.random(1, #props)]
 							
-							randomprop:EmitSound(snd, 100)
+							if tobool( plApplyOnFake ) then
+								pitch = desiredPitch
+							elseif ( randPitch ) then
+								pitch = math.random(PHX:GetCVar("ph_taunt_pitch_min"), PHX:GetCVar("ph_taunt_pitch_max"))
+							end
+							
+							randomprop:EmitSound(snd, 100, pitch)
 							ply:SubTauntRandMapPropCount()
 							ply:SetNWFloat("LastTauntTime", CurTime())
 						else
@@ -46,7 +56,14 @@ net.Receive("CL2SV_PlayThisTaunt", function(len, ply)
 				end
 			else
 				if CheckValidity( snd, playerTeam ) then --Extra Checks
-					ply:EmitSound(snd, 100)
+				
+					if tobool( plApplyOnFake ) then
+						pitch = desiredPitch
+					elseif ( randPitch ) then
+						pitch = math.random(PHX:GetCVar("ph_taunt_pitch_min"), PHX:GetCVar("ph_taunt_pitch_max"))
+					end
+				
+					ply:EmitSound(snd, 100, pitch)
 					ply:SetNWFloat("LastTauntTime", CurTime())
 				else
 					ply:PHXChatInfo( "WARNING", "TM_DELAYTAUNT_NOT_EXIST" )

@@ -23,12 +23,19 @@ LANG.SUICIDEMSG = { --> FRETTA
 	"died mysteriously.",
 	"died from magic.",
 	"no-scoped themself.",
-	"has just ragequit.",
+	"ragequited.",
 	"is drunk.",
-	"died... better luck next time!",
+	"died. Better luck next time!",
 	"slapped themself.",
 	"tripped on a stick.",
 	"died by the force.",
+	"died. pls press F.",
+	"feeling regret after killing some innocent props.",
+	"is noclipped to backroom.",
+	"is trying to extinct.",
+	"dieded.",
+	"is panicked therefore trying to kill all props instead.",
+	"stop it, get some help.",
 	"ragdolled.",
 }
 
@@ -311,7 +318,7 @@ LANG["PHXM_ADMIN_RELOAD_OBB"]		= "Developer: Reload OBB Modifier data every roun
 LANG["PHXM_ADMIN_EXPERIMENTALPHX"]			= "New PHX Experimental Sections"
 
 LANG["PHXM_ADMIN_HLA_COMBINE"]				= "Add HL: Alyx Combine model support"
-LANG["PHXM_ADMIN_TEAMBALANCE"]				= "Enable Team Balance"
+LANG["PHXM_ADMIN_TEAMBALANCE"]				= "Team Balance Settings"
 LANG["PHXM_ADMIN_CHANGETEAM_LIMIT"]			= "Use Team Switch limitter. Set -1 to disable. "
 LANG["PHXM_ADMIN_USENEWCHAT"]				= "Use new Chat Box (eChat) - This is temporary replacement. If you have one already, leave this unchecked."
 LANG["PHXM_ADMIN_NEWCHATPOS"]				= "New Chat Box Position: Substract Height (Y) Position by N pixels."
@@ -481,7 +488,9 @@ LANG["TM_TAUNTS_SEARCH_NOTHING"]		= "Taunt containing '%s' was not found..."
 LANG["TM_SEARCH_PLACEHOLDER"]			= "Search in this category: Enter word, lowercase & no wildcards. Empty=Show All."
 LANG["PHXM_MSG_INPUT_IS_EMPTY"]			= "Text is empty or you didn't pressed ENTER key."
 
---[[ Revision 07.06.2022/X2Z ]]
+--[[
+	LANGUAGE UPDATE: Revision 10.06.2022/X2Z
+]]
 --goto line: @132
 LANG["MISC_SET"]						= "Set"
 LANG["MISC_APPLY"]						= "Apply"
@@ -494,14 +503,81 @@ LANG["MISC_NOTICE"]						= "Notice"
 LANG["MISC_IDK"]						= "Unknown"
 LANG["MISC_NA"]							= "N/A"
 
-LANG["PHX_CTAUNT_USE_PITCH"]			= "Use pitch for custom taunts"
-LANG["PHX_CTAUNT_RANDOM_PITCH"]			= "Randomize pitch when playing taunt"
-LANG["PHX_RTAUNT_USE_PITCH"]			= "Use pitch for random taunts [%s] as well" -- input.GetKeyName( PHX:GetCVar( "ph_default_taunt_key" ) )
+--[[
+	ADMIN PANEL, Revision 10.06/2022/X2Z
+]]--
+LANG["PHXM_TAUNT_SETTINGS"]				= "Taunt Settings"
+LANG["PHXM_GENERAL_SETTINGS"]			= "General Settings"
+LANG["PHXM_FAKE_TAUNT_SETTINGS"]		= "Fake Taunt Settings"
+LANG["PHXM_FAKE_TAUNT_ENABLE"]			= "Allow fake taunts to be played on random props in the map. Can be accessed only through Custom Taunt menu."
+LANG["PHXM_FAKE_TAUNT_MAXUSAGE"]		= "Maximum usage for fake taunts to be used; -1 is unlimited."
 
+LANG["PHXM_TAUNT_PITCH_SETTINGS"]		= "Taunt Pitch Settings"
+LANG["PHXM_TAUNT_PITCH_ENABLE"]			= "Enable Taunt Pitch"
+LANG["PHXM_TAUNT_PITCH_RANGE_MIN"]		= "Minimum threshold/acceptable pitch range for a taunt. 1 to 99."
+LANG["PHXM_TAUNT_PITCH_RANGE_MAX"]		= "Maximum threshold/acceptable pitch range for a taunt. 100 to 255."
+
+LANG["PHXM_DECOY_SETTINGS"]				= "Decoy Settings"
+LANG["PHXM_DECOY_ENABLE"]				= "Enable Decoy reward? Reward will be given ONLY ONCE for alive props until the round ends. They don't add and only substract once they're placed."
+
+LANG["PHXM_ADMIN_CHATSETTING"]			= "Chat Window Settings"
+LANG["PHXM_ADMIN_HUNTERBLIND"]			= "Hunter Blind Control"
+
+--[[
+	Plugins in sh_init.lua, Revision 10.06/2022/X2Z
+]]--
 LANG["PLUG_NAME_VER"]					= "Plugin: %s | v.%s"
 LANG["PLUG_DESCRIPTION"]				= "Description: %s"
 
-	-- Prop Chooser Plugin Section
+--[[
+	Taunt Pitch, Revision 10.06/2022/X2Z
+]]--
+LANG["PHX_CTAUNT_USE_PITCH"]			= "Use pitch for custom taunts"
+LANG["PHX_CTAUNT_RANDOM_PITCH"]			= "Randomize pitch when playing taunt"
+LANG["PHX_RTAUNT_USE_PITCH"]			= "Use pitch for random taunts [%s]" -- input.GetKeyName( PHX:GetCVar( "ph_default_taunt_key" ) )
+LANG["PHX_RTAUNT_RANDOMIZE"]			= "Randomize pitch for random taunts [%s]"
+LANG["PHX_CTAUNT_PITCH_FOR_FAKE"]		= "Use pitch for fake taunts"
+LANG["PHX_CTAUNT_RANDPITCH_FOR_FAKE"]	= "Randomize pitch for fake taunts"
+LANG["PHX_CTAUNT_SLIDER_PITCH"]			= "Taunt pitch slider."
+LANG["TM_TOOLTIP_FAKETAUNT"]			= "Play a Fake Taunt on random prop"
+
+--[[
+	FAKE TAUNT, Revision 10.06/2022/X2Z
+	Description: Play fake taunts on random props in the map (Not Players)
+]]--
+LANG["PHX_CTAUNT_ON_RAND_PROPS"]		= "Play on random props (%ix)"
+LANG["PHX_CTAUNT_ON_RAND_PROPS_UNLI"]	= "Play on random props"
+LANG["PHX_CTAUNT_PLAYED_ON_RANDPROP"]	= "You played a taunt on a random prop."
+LANG["PHX_CTAUNT_RAND_PROPS_LIMIT"]		= "You have hit the limit!"
+LANG["PHX_CTAUNT_RANDPROP_DISABLED"]	= "Fake taunt is currently disabled."
+
+--[[
+	DECOY, Revision 10.06/2022/X2Z
+	Borrowed feature from Prop Hunt: (codename) Z
+]]--
+LANG.DECOY_PROP	= {
+	"killed the dummy!",
+	"feel regret after killing a dummy.",
+	"killed a decoy.",
+	"killed an innocent dummy.",
+	"feel embarrased after killing a dummy."
+}
+
+LANG["DECOY_PUT_SUCC"]					= "Decoy successfully placed."
+LANG["DECOY_CANT_PUT_HERE"]				= "Cannot put decoy here."
+LANG["DECOY_GET_REWARD"]				= "Congrats! You're now own a Prop Decoy for suviving this round!"
+--LANG["DECOY_FRAGS_STOLEN"]				= "Uh oh, you just killed a decoy!" -- let the hunter confused.
+LANG["DECOY_FRAGS_RECEIVED"]			= "Decoy successfully baited: You receive 1 score from %s!"
+LANG["DECOY_DISABLED"]					= "Currently, decoy is unavailable."
+LANG["PHXM_CL_DECOY_KEYBIND"]			= "Default key to place a decoy prop. Default is 1 (not keypad 1)."
+
+--[[
+	Revision 10.06/2022/X2Z
+	PROP MENU:
+	- Plugins Menu 
+	- Prop Menu Editor
+	- File Browser for Prop Menu core file (lang is borrowed from PH:Z)
+]]--
 LANG["PCR_PLUG_WARN_MSG"]		= "Warning: Custom Prop Addition (pcr_allow_custom) is set to 0.\nYou Must Enable this feature in order to edit your custom prop!\nA Map change is required to change this setting."
 LANG["PCR_PLUG_LBL_BINDKEY"]	= "To change bind key, switch to '[Player] tab."
 LANG["PCR_PLUG_LBL_EDITOR"]		= "Custom Prop Menu Editor"
@@ -530,13 +606,6 @@ LANG["PCR_PLUG_NOTIFYMSG"]		= "Notify player on how to use Prop Menu on every ro
 LANG["PCR_EDITOR_MSG_ERROR"]	= "Your changes hasn't been saved due to Errors.\nPlease check on your server console!"
 LANG["PCR_EDITOR_MSG_SUCC"]		= "Your changes and Custom Prop data has has been saved and updated successfully."
 
-	-- new feature: Play fake taunts on random props in the map (Not Players)
-LANG["PHX_CTAUNT_ON_RAND_PROPS"]		= "Play on random prop in this map (%ix Max)"
-LANG["PHX_CTAUNT_ON_RAND_PROPS_UNLI"]	= "Play on random prop in this map"
-LANG["PHX_CTAUNT_PLAYED_ON_RANDPROP"]	= "You played the taunt on a random prop."
-LANG["PHX_CTAUNT_RAND_PROPS_LIMIT"]		= "You have hit the limit."
-
-	-- File Browser for Custom 'Prop Menu' Editor
 LANG["PHZ_generic_title"]		= "Custom Prop Inclusion Editor"
 LANG["PHZ_generic_helptext"]	= [[[How To Use:
 [LEFT PANEL]

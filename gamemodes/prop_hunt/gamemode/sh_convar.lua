@@ -188,11 +188,6 @@ CVAR["ph_prop_right_mouse_taunt"]			=	{ CTYPE_BOOL,	"1", CVAR_SERVER_ONLY_NO_NOT
 
 CVAR["ph_print_verbose"]					=	{ CTYPE_BOOL,	"0", CVAR_SERVER_ONLY_NO_NOTIFY, "Developer Verbose. Some printed messages will only appear if this is enabled." }
 
-CVAR["ph_randtaunt_map_prop_enable"]		=	{ CTYPE_BOOL,	"1", CVAR_SERVER_ONLY, "Allow fake taunts to be played on random props in the maps. Can be accessed only through Custom Taunt menu." }
-CVAR["ph_randtaunt_map_prop_max"]			=	{ CTYPE_NUMBER, "6", CVAR_SERVER_ONLY, "Maximum usage for fake taunts to be used. -1 is unlimited (Be warned though,I don't recommend to set this as unlimited!)" }
-
--- todo: Pitch convar for server, and 1 client (to store their setting.)
-
 -- Prop Chooser / Prop Menu
 CVAR["pcr_enable"]							=	{ CTYPE_BOOL, "1", CVAR_SERVER_ONLY, "Enable Prop Chooser Feature?"}
 CVAR["pcr_allow_custom"]					=	{ CTYPE_BOOL, "0", CVAR_SERVER_ONLY, "Allow custom prop to be added in the lists?"}
@@ -211,6 +206,15 @@ CVAR["pcr_bbox_max_width"]					=	{ CTYPE_NUMBER, "72", CVAR_SERVER_ONLY_NO_NOTIF
 
 CVAR["pcr_only_allow_certain_groups"]		=	{ CTYPE_BOOL, "0", CVAR_SERVER_ONLY_NO_NOTIFY, "Should Prop Menu can only accessed by certain groups? (e.g: Donator, etc...)"}
 CVAR["pcr_use_ulx_menu"]					=	{ CTYPE_BOOL, "0", CVAR_SERVER_ONLY_NO_NOTIFY, "Should Prop Menu can be accessed by Console command (0) or ULX command (1)?"}
+
+-- New convar
+CVAR["ph_randtaunt_map_prop_enable"]		=	{ CTYPE_BOOL,	"1", CVAR_SERVER_ONLY, "Allow fake taunts to be played on random props in the maps. Can be accessed only through Custom Taunt menu." }
+CVAR["ph_randtaunt_map_prop_max"]			=	{ CTYPE_NUMBER, "6", CVAR_SERVER_ONLY, "Maximum usage for fake taunts to be used. -1 is unlimited (Be warned though,I don't recommend to set this as unlimited!)" }
+
+CVAR["ph_taunt_pitch_enable"]				=	{ CTYPE_BOOL, "1", CVAR_SERVER_ONLY, "Enable or Disable Taunt Pitch" }
+CVAR["ph_taunt_pitch_range_min"]			=	{ CTYPE_FLOAT, "50.0", CVAR_SERVER_ONLY, "Minimum threshold/acceptable pitch range for taunt", {min = 1, max = 99} }
+CVAR["ph_taunt_pitch_range_max"]			=	{ CTYPE_FLOAT, "200.0", CVAR_SERVER_ONLY, "Maximum threshold/acceptable pitch range for taunt", {min = 100, max = 255} }
+CVAR["ph_enable_decoy_reward"]				=	{ CTYPE_BOOL,	"1", CVAR_SERVER_ONLY_NO_NOTIFY, "Enable a decoy reward? Reward will be given if any prop player is alive on every round ends." }
 
 -- Load & init
 
@@ -322,13 +326,37 @@ if CLIENT then
 	local CLCVAR = {}
 
 	CLCVAR["ph_cl_language"]				=	{ CTYPE_STRING, GetGlobalString("ph_default_lang", "en_us"), true, true, "Prefered language to use" }
+	
+	-- Old convars that previously placed in cl_init.lua is moved HERE.
+	CLCVAR["ph_cl_halos"]					=	{ CTYPE_BOOL, 	"1",	 true, true,  "Toggle Enable/Disable Halo effects when choosing a prop.", {min=0,max=1} }
+	CLCVAR["ph_cl_pltext"] 					=	{ CTYPE_BOOL, 	"1",	 true, false, "Options for Text above players. 0 = Disable. 1 = Enable.", {min=0,max=1} }
+	CLCVAR["ph_cl_endround_sound"] 			=	{ CTYPE_BOOL, 	"1",	 true, false, "Play a sound when round ends? 0 to disable.", {min=0,max=1} }
+	CLCVAR["ph_cl_autoclose_taunt"] 		=	{ CTYPE_BOOL, 	"1",	 true, false, "Auto close the taunt window (When Double Clicking on them)?", {min=0,max=1} }
+	CLCVAR["ph_cl_spec_hunter_line"] 		=	{ CTYPE_BOOL, 	"1",	 true, false, "Draw a line on hunters so we can see their aim in spectator mode.", {min=0,max=1} }
+	CLCVAR["cl_enable_luckyballs_icon"] 	=	{ CTYPE_BOOL, 	"1",	 true, false, "Enable 'Lucky ball' icon to be displayed once they spawned", {min=0,max=1} }
+	CLCVAR["cl_enable_devilballs_icon"] 	=	{ CTYPE_BOOL, 	"1",	 true, false, "Enable 'Devil ball' icon to be displayed once they spawned", {min=0,max=1} }
+	CLCVAR["ph_hud_use_new"]				=	{ CTYPE_BOOL, 	"1",	 true, false, "Use new PHX HUD", {min=0,max=1} }
+	CLCVAR["ph_show_team_topbar"] 			=	{ CTYPE_BOOL, 	"1",	 true, false, "Show total alive team players bar on the top left", {min=0,max=1} }
+	CLCVAR["ph_show_custom_crosshair"]		=	{ CTYPE_BOOL, 	"1",	 true, false, "Show custom crosshair for props", {min=0,max=1} }
+	CLCVAR["ph_show_tutor_control"]			=	{ CTYPE_BOOL, 	"1",	 true, false, "Show 'Prop Gameplay Control' hud on each prop spawns. This only show twice and reset until map changes/user disconnect.", {min=0,max=1} }
 
-	CLCVAR["ph_default_taunt_key"]			=	{ CTYPE_NUMBER,  KEY_F3, true, true, "Default random taunt key to be used. Default is F3 ("..tostring(KEY_F3)..")" }
-	CLCVAR["ph_default_customtaunt_key"]	=	{ CTYPE_NUMBER,  KEY_C,  true, true, "Default custom taunt key to be used. Default is C ("..tostring(KEY_C)..")" }
-	CLCVAR["ph_default_rotation_lock_key"]	=	{ CTYPE_NUMBER,  KEY_R,  true, true, "Default Rotation lock key to be used. Default is R ("..tostring(KEY_R)..")" }
+	CLCVAR["ph_default_taunt_key"]			=	{ CTYPE_NUMBER,  KEY_F3, true, true,  "Default random taunt key to be used. Default is F3 ("..tostring(KEY_F3)..")" }
+	CLCVAR["ph_default_customtaunt_key"]	=	{ CTYPE_NUMBER,  KEY_C,  true, true,  "Default custom taunt key to be used. Default is C ("..tostring(KEY_C)..")" }
+	CLCVAR["ph_default_rotation_lock_key"]	=	{ CTYPE_NUMBER,  KEY_R,  true, true,  "Default Rotation lock key to be used. Default is R ("..tostring(KEY_R)..")" }
 
-	CLCVAR["ph_prop_menu_key"]				=	{ CTYPE_NUMBER,  KEY_F8, true, true, "Default key to open Prop Menu. Default is F8 ("..tostring(KEY_F8)..")" }
-	CLCVAR["ph_prop_midair_freeze_key"]		=	{ CTYPE_NUMBER,  KEY_M,  true, true, "Default key to freeze your prop while in mid-air. Default is M ("..tostring(KEY_M)..")" }
+	CLCVAR["ph_prop_menu_key"]				=	{ CTYPE_NUMBER,  KEY_F8, true, true,  "Default key to open Prop Menu. Default is F8 ("..tostring(KEY_F8)..")" }
+	CLCVAR["ph_prop_midair_freeze_key"]		=	{ CTYPE_NUMBER,  KEY_M,  true, true,  "Default key to freeze your prop while in mid-air. Default is M ("..tostring(KEY_M)..")" }
+	
+	-- New ClientConvar
+	CLCVAR["ph_cl_pitch_taunt_enable"]		=	{ CTYPE_BOOL,	"1",	 true, true,  "Enable pitch level for custom taunts?"}
+	CLCVAR["ph_cl_pitch_level"]				=	{ CTYPE_FLOAT,	"100.0", true, true,  "Current pitch level used for.", { min = 1, max = 255 } }
+	CLCVAR["ph_cl_pitch_apply_random"]		=	{ CTYPE_BOOL,	"0",	 true, true,  "Apply for random taunts as well."}
+	CLCVAR["ph_cl_pitch_randomized"]		=	{ CTYPE_BOOL,	"0",	 true, true,  "Enable randomized taunt pitch for CUSTOM taunt regardless from the preferred pitch level."}
+	CLCVAR["ph_cl_pitch_randomized_random"]	=	{ CTYPE_BOOL,	"0", 	 true, true,  "Enable randomized taunt pitch for RANDOM taunt regardless from the preferred pitch level." }
+	
+	CLCVAR["ph_cl_pitch_apply_fake_prop"]	=	{ CTYPE_BOOL,	"0", 	 true, true,  "Also applies for fake prop taunt regardless it's randomized or preferred pitch level." }
+	
+	CLCVAR["ph_cl_decoy_spawn_key"]			=	{ CTYPE_NUMBER, KEY_1,	 true, true,  "What key should we use to spawn 'Decoy' prop? Default is Key number 1 ("..tostring(KEY_1)..")" }
 
 	local cTranslate = {}
 
@@ -339,7 +367,7 @@ if CLIENT then
 	
 	local function SetClientConVar (name, value, shouldSave, isUserInfo, help, data, func)
 		if (data and data ~= nil) then
-			-- Note: String wouldn't work if data.min and data.max is present. You've been warned!
+			-- Note: if value contains String, it wouldn't work if data.min and data.max is present. You've been warned!
 			if type(data) == "table" and (not table.IsEmpty(data)) then
 				CreateClientConVar(name, value, shouldSave, isUserInfo, help, data.min, data.max)
 			end

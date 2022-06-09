@@ -29,19 +29,11 @@ PHX.CLUI = {
 		chk:SetSize(p:GetColWide(),p:GetRowHeight())
 		chk:SetText(PHX:QTrans(l))	--chk:SetText(l)
 		chk:SetFont("HudHintTextLarge")
-		local num = GetConVar(c):GetBool()
-		if num then 
-			chk:SetChecked(true); chk:SetValue(1);
-		else
-			chk:SetChecked(false); chk:SetValue(0);
-		end
+		chk:SetConVar(c)
+		chk:SetValue( GetConVar(c):GetBool() ) -- forcebool, don't use PHX:CLCVar()
 		function chk:OnChange(bool)
 			local v = 0
-			if bool then
-				v = 1
-			else
-				v = 0
-			end
+			v = (bool and 1 or 0)
 			if d == "SERVER" then
 				net.Start("SvCommandReq")
 				  net.WriteString(c)
@@ -128,10 +120,18 @@ end,
 	if ( d and type(d) == "table" ) then
 		local min = d.min
 		local max = d.max
-		local dval = d.init
+		local dval = 0 -- this is fail-safe value, we can't guarantee the value of `d.init` yet.
 		local dec = d.dec
 		local kind = d.kind
 		local float = d.float
+		
+		if d.init == nil then
+			dval = c	-- use from 'c' instead.
+		elseif isstring(dval) or d.init == "DEF_CONVAR" then
+			dval = PHX:QCVar(c)	-- we can now enable default initialization value from the 'ConVar' (c) argument. See sh_propchooser.lua at ADDON_INFO.
+		else
+			dval = d.init -- assume it's correct number value. We keep this because there are still GetCVar() being used in cl_menu.lua
+		end
 		
 		local pnl = vgui.Create("DPanel")
 		pnl:SetSize(p:GetColWide()*0.9,p:GetRowHeight()-6)

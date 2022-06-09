@@ -1,18 +1,18 @@
 PHX 		 = PHX or {}
 
-TEAM_HUNTERS = 1
-TEAM_PROPS 	 = 2
-IS_PHX		 = true	-- an easy check if PHX is installed.
+TEAM_HUNTERS 	= 1
+TEAM_PROPS 	 	= 2
+IS_PHX		 	= true	-- an easy check if PHX is installed.
 
 PHX.ConfigPath 	= "phx_data"
 PHX.VERSION		= "X"
-PHX.REVISION	= "29.10.21/X2Z" --Format: dd/mm/yy.
+PHX.REVISION	= "10.09.22/X2Z" --Format: dd/mm/yy.
 
 -- Init Convars first!
 AddCSLuaFile("sh_convar.lua")
 include("sh_convar.lua")
 
-function PHX.VerboseMsg( text )
+function PHX.VerboseMsg( self, text )
 	-- Very stupid checks: PHX:GetCVar() will only sets after 1st player is joined. This is intentional
 	-- because Loading PHX:GetCVar() too early (outside initialization hook) will only load it's default value
 	-- followed by GetGlobal* value. This problem was noticed on TTT here: 
@@ -24,7 +24,7 @@ function PHX.VerboseMsg( text )
 	else
 		-- BUGS: This somehow works on client *AFTER* map changes, but occasionally not working in some cases (e.g: Early Hook Calls)
 		-- Can't do anything about this atm...
-		if PHX:GetCVar( "ph_print_verbose" ) and text then
+		if self:GetCVar( "ph_print_verbose" ) and text then
 			print( text )
 		end
 	end
@@ -49,9 +49,6 @@ AddCSLuaFile("sh_config.lua")
 AddCSLuaFile("sh_player.lua")
 AddCSLuaFile("sh_chatbox.lua")
 AddCSLuaFile("sh_tauntscanner.lua")
-if CLIENT then
-	include("cl_lang.lua")	-- todo: move to cl_init.lua ?
-end
 include("config/sh_init.lua")
 include("sh_drive_prop.lua")
 include("ulx/modules/sh/sh_phx_mapvote.lua")

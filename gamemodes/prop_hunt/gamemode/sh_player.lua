@@ -97,18 +97,80 @@ function Player:GetTauntRandMapPropCount()
 	return self:GetNWInt("iRandMapPropCount", 0)
 end
 
-function Player:SubTauntRandMapPropCount()
-	local count = self:GetNWInt("iRandMapPropCount", 0)
-	count = count - 1
-	self:SetNWInt("iRandMapPropCount", count)
-end
-
-function Player:ResetTauntRandMapCount()
-	local maxCount = PHX:GetCVar( "ph_randtaunt_map_prop_max" )
-	self:SetNWInt("iRandMapPropCount", maxCount)
+function Player:HasFakePropEntity()
+	return self:GetNWBool("PlayerFakePropEnt",false)
 end
 
 if SERVER then
+	function Player:SubTauntRandMapPropCount()
+		local count = self:GetNWInt("iRandMapPropCount", 0)
+		if count < 0 then return end
+		
+		count = count - 1
+		self:SetNWInt("iRandMapPropCount", count)
+	end
+
+	function Player:ResetTauntRandMapCount()
+		local maxCount = PHX:GetCVar( "ph_randtaunt_map_prop_max" )
+		self:SetNWInt("iRandMapPropCount", maxCount)
+	end
+
+	function Player:SetFakePropEntity( bool )
+		if bool == nil then bool = false end
+		self:SetNWBool("PlayerFakePropEnt", bool)
+	end
+
+	function Player:PlaceDecoyProp()
+	
+		if (not PHX:GetCVar( "ph_enable_decoy_reward" )) then
+			self:PHXChatInfo( "ERROR", "DECOY_DISABLED" )
+			return
+		end
+	
+		if self:HasFakePropEntity() and self:Alive() and self:Team() == TEAM_PROPS then
+			-- todo: See cl_init.lua @ 394, values must be match!
+			local trace = {}
+			local dist = 200
+			
+			local trace.start = vector_origin
+			local trace.endpos = vector_origin
+			
+			local propent = self:GetPlayerPropEntity()
+			if IsValid(propent) then -- prevent from dying/removed
+								-- todo: :EyePos() // if this method fails
+				trace.start 	= propent:GetPos() + Vector(0,0,16)
+				trace.endpos 	= propent:GetPos() + Vector(0,0,16) + self:EyeAngles():Forward() * dist
+				trace.mask		= MASK_SOLID + MASK_PLAYERSOLID
+				trace.filter	= ents.FindByClass('ph_prop')
+			end
+			
+			local tr = util.TraceLine( trace )
+			if (tr.Hit) then
+				local pos = tr.HitPos
+				
+				local decoy = ents.Create("ph_fake_prop")
+				decoy:SetPos( pos )
+				decoy:SetAngles( Angle( 0, math.random(0,359), 0 ) )
+				decoy:Spawn()
+				decoy:SetOwner( self )
+				
+				timer.Simple(0, function() 
+					--decoy:TakeModelFromMap()
+					self:SendSurfaceSound('buttons/lever4.wav')
+				end)
+				
+				self:SetFakePropEntity(0)
+				self:PHXChatInfo( "PRIMARY", "DECOY_PUT_SUCC" )
+			else
+				self:PHXChatInfo( "WARNING", "DECOY_CANT_PUT_HERE" )
+			end
+		end
+	end
+	
+	function Player:SendSurfaceSound( strSnd )
+		self:SendLua( 'surface.PlaySound("'..strSnd..'")' )
+	end
+
 	-- bShouldUseTheirOwnLang: Unless if you have your own language SET in your /langs/<language>.lua, Force this to TRUE.
 	-- Example: msg = "MY_CUSTOM_TEXT" will be translated if bShouldUseTheirOwnLang = true. If you want regular message, just put normal text on <msg> argument.
 	

@@ -179,7 +179,7 @@ local function AutoTauntPaint_phx()
 
 end
 hook.Add("HUDPaint", "PH_AutoTauntPaint", function()
-	state = PHX.CLCVAR.NewHUD:GetBool()
+	state = PHX:GetCLCVar( "ph_hud_use_new" )
 	if state and (not matw:IsError()) then
 		AutoTauntPaint_phx()
 	else

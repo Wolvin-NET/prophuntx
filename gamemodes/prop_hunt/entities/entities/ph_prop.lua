@@ -74,6 +74,8 @@ if SERVER then
 			pl:SetHealth(self.health)
 			
 			if self.health <= 0 then
+				hook.Call("PH_OnPropKilled", nil, pl, attacker)	-- temporarily moved, to make sure it's get called first.
+			
 				pl:KillSilent()
 				pl:SetArmor(0)
 				
@@ -123,8 +125,7 @@ if SERVER then
 				attacker:AddFrags(1)
 				pl:AddDeaths(1)
 				attacker:SetHealth(math.Clamp(attacker:Health() + GetConVarNumber("ph_hunter_kill_bonus"), 1, 100))
-				
-				hook.Call("PH_OnPropKilled", nil, pl, attacker)			
+
 				pl:RemoveProp()
 			end
 		end

@@ -1,3 +1,6 @@
+language.Add("ph_fake_prop", "Prop Decoy")
+killicon.Add("ph_fake_prop", "vgui/hud/killicon_decoy", Color(248,200,0,255))
+
 surface.CreateFont( "HunterBlindLockFont", {
 	font	= "Arial",
 	size	= 14,
@@ -28,9 +31,9 @@ function draw.Circle( x, y, radius, seg )
 end
 
 include("sh_init.lua")
-include("sh_config.lua") -- wait, do this really required? it's already mentioned under sh_init.lua ...
+--include("sh_config.lua")
 CL_GLOBAL_LIGHT_STATE	= 0
--- cl_lang.lua here
+include("cl_lang.lua")
 include("cl_fb_core.lua")
 include("cl_chat.lua")
 include("cl_hud_mask.lua")
@@ -40,40 +43,127 @@ include("cl_menu.lua")
 include("cl_tauntwindow.lua")
 include("cl_targetid.lua")
 include("cl_autotaunt.lua")
-
+-- Credits and Contributors message
 include("cl_credits.lua")
 
--- WARNING: DO NOT STORE YOUR CLIENTSIDE CONVARS HERE, THESE ARE DEPRECATED AND IT WILL BE MOVED IN "SH_CONVAR.LUA" IN FUTURE!!!
+-- /!\ Convars are now moved on sh_convars.lua.
 
+-- Local Functions & Variables collection
+local IndicatorColor = {
+  ok = Color(20, 250, 0, 255),
+  no = Color(250, 250, 0, 255)
+}
 
--- Change: PHX:AddCLCVar(cType, cName, cValue, cSave, cUserInfo, cHelp, cData, cFunc)
-PHX.CLCVAR = PHX.CLCVAR or {}
+local mat 		= "prophunt_enhanced/sprites/luckyball"
+local pointer 	= "prophunt_enhanced/sprites/luckyball_pointer"
+local dmat		= "prophunt_enhanced/sprites/devilball"
+local dpointer	= "prophunt_enhanced/sprites/devilball_pointer"
+local tutormat 	= "vgui/hud_control_help.png"
+local matHasDecoy = ""
+local crosshair = Material("vgui/hud_crosshair")
+local lgWind 	= {}
+local curshow 	= 0
 
--- PHX:AddCLCVar(CTYPE_NUMBER, "ph_cl_halos", "1", true, true, "Toggle Enable/Disable Halo effects when choosing a prop.", {min=0,max=1})
+-- // local functions \\
+local function DrawWaypointMarker( pl, mat, pointer, entToFind, offset )
 
-PHX.CLCVAR.PropHalos		= CreateClientConVar("ph_cl_halos", "1", true, true, "Toggle Enable/Disable Halo effects when choosing a prop.")
-PHX.CLCVAR.PlayerText		= CreateClientConVar("ph_cl_pltext", "1", true, false, "Options for Text above players. 0 = Disable. 1 = Enable.")
-PHX.CLCVAR.EndCue			= CreateClientConVar("ph_cl_endround_sound", "1", true, false, "Play a sound when round ends? 0 to disable.")
-PHX.CLCVAR.AutoCloseTaunt	= CreateClientConVar("ph_cl_autoclose_taunt", "1", true, false, "Auto close the taunt window (When Double Clicking on them)?")
-PHX.CLCVAR.HunterEyeLine	= CreateClientConVar("ph_cl_spec_hunter_line", "1", true, false, "Draw a line on hunters so we can see their aim in spectator mode.")
-PHX.CLCVAR.IconLuckyBall	= CreateClientConVar("cl_enable_luckyballs_icon", "1", true,false, "Enable 'Lucky ball' icon to be displayed once they spawned")
-PHX.CLCVAR.IconDevilCrystal	= CreateClientConVar("cl_enable_devilballs_icon", "1", true,false, "Enable 'Devil ball' icon to be displayed once they spawned")
-PHX.CLCVAR.NewHUD			= CreateClientConVar("ph_hud_use_new", "1", true, false, "Use new PHX HUD")
-PHX.CLCVAR.TeamTopBar		= CreateClientConVar("ph_show_team_topbar", "1", true, false, "Show total alive team players bar on the top left (Experimental)")
-PHX.CLCVAR.CustomCrosshair	= CreateClientConVar("ph_show_custom_crosshair","1",true,false,"Show custom crosshair for props")
-PHX.CLCVAR.ControlTutorial	= CreateClientConVar("ph_show_tutor_control","1",true,false,"Show 'Prop Gameplay Control' hud on each prop spawns. This only show twice and reset until map changes/user disconnect.")
+	local offset = Vector( 0, 0, offset ) --45
+	local ang = pl:EyeAngles()
+	
+	local w = ScrW()
+	local h = ScrH()
+	local cX = w/2
+	local cY = h/2
+	
+	for _,ent in pairs(ents.FindByClass( entToFind )) do
+	
+		if IsValid(ent) then -- prevent icon stuck on new round
+	
+			local pos = ent:GetPos() + offset
+			local poscr = pos:ToScreen()
+			
+			if pl:IsLineOfSightClear( ent ) then
+			
+				if ((poscr.x > 32 && poscr.x < (w-43)) && (poscr.y > 32 && poscr.y < (h-38))) then
+					surface.SetDrawColor(255,255,255,255)
+					surface.SetTexture(surface.GetTextureID( mat ))
+					surface.DrawTexturedRect( poscr.x-32, poscr.y, 64, 64 )
+				else
+					local r = math.Round(cX/2)
+					local rad = math.atan2(poscr.y-cY, poscr.x-cX)
+					local deg = 0 - math.Round(math.deg( rad ))
+					surface.SetDrawColor(255,255,255,255)
+					surface.SetTexture(surface.GetTextureID( pointer ))
+					surface.DrawTexturedRectRotated(math.cos(rad)*r+cX, math.sin(rad)*r+cY,64,64,deg+90)
+				end
+				
+			end
+			
+		end
+	end
+
+end
+
+local function DrawLine( pl, mat, forTeam, ZEnabled, bShouldClamp, dist, bUseIndicator, colorHit, colorNoHit )
+
+	if IsValid(pl) && pl:Alive() && pl:Team() == forTeam then
+	
+		local trace = {}
+		
+		local trace.start = vector_origin
+		local trace.endpos = vector_origin
+		
+		if (bShouldClamp) and dist and dist ~= nil then
+			local propent = pl:GetPlayerPropEntity()
+			if IsValid(propent) then -- prevent from dying/removed
+								-- todo: :EyePos() // if this method fails
+				trace.start 	= propent:GetPos() + Vector(0,0,16)
+				trace.endpos 	= propent:GetPos() + Vector(0,0,16) + pl:EyeAngles():Forward() * dist
+				-- anything that are clamped, this must be also needed!
+				trace.mask		= MASK_SOLID + MASK_PLAYERSOLID
+				trace.filter	= ents.FindByClass('ph_prop') -- todo: pl ?
+			end
+		else
+			--default pos if there is no clamp set.
+			trace.start = pl:GetShootPos()
+			trace.endpos = pl:GetEyeTrace().HitPos
+		end
+		
+		local lineColor = team.GetColor( pl:Team() )
+		if ZEnabled == nil then ZEnabled = false end
+		
+		if (bUseIndicator) and colorHit and colorHit ~= nil and colorNoHit and colorNoHit ~= nil then
+			local c
+			
+			local tr = util.TraceLine( trace )
+			if (tr.Hit) then
+				c = colorHit
+			else
+				c = colorNoHit
+			end
+			
+			lineColor = c
+		end
+		
+		render.DrawLine(trace.start, trace.endpos, lineColor, ZEnabled)
+		render.SetMaterial(mat)
+		render.DrawSprite(trace.endpos, 8, 8, team.GetColor(pl:Team()))
+		
+	end
+
+end
 
 -- Called immediately after starting the gamemode 
 function Initialize()
-	cHullz 	= 64
-	client_prop_light = false
-	blind = false
+	cHullz 				= 64
+	client_prop_light 	= false
+	blind 				= false
 	
-	cHullz_Min = 24	-- desired hull.z to modify.
-	cHullz_Max = 84	-- desired hull.z to modify.
+	cHullz_Min 			= 24 -- desired amount of hull.z to modify.
+	cHullz_Max 			= 84 -- desired amount of hull.z to modify.
 	
-	CL_GLIMPCAM 	= 0
-	MAT_LASERDOT 	= Material("sprites/glow04_noz")
+	CL_GLIMPCAM 		= 0
+	MAT_LASERDOT 		= Material("sprites/glow04_noz")
 	
 	LocalPlayer():SetNWFloat("localLastTauntTime", 0)
 end
@@ -127,6 +217,34 @@ function GM:ShowHelp()
 	
 end
 
+GM.ViewCam = {}
+function GM.ViewCam.CamColEnabled( self, origin, Endpos, trace, traceStart, traceEnd, distMin, distMax, distNorm )
+	
+	if cHullz < cHullz_Min then
+		trace[traceStart] 	= origin + Vector(0, 0, cHullz + (cHullz_Min-cHullz))
+		trace[traceEnd] 	= origin + Vector(0, 0, cHullz + (cHullz_Min-cHullz)) + (Endpos:Forward() * distMin)
+	elseif cHullz > cHullz_Max then
+		trace[traceStart] 	= origin + Vector(0, 0, cHullz - cHullz_Max)
+		trace[traceEnd] 	= origin + Vector(0, 0, cHullz - cHullz_Max) + (Endpos:Forward() * distMax)
+	else
+		trace[traceStart] 	= origin + Vector(0, 0, 8)
+		trace[traceEnd] 	= origin + Vector(0, 0, 8) + (Endpos:Forward() * distNorm)
+	end
+	
+	return trace
+end
+
+function GM.ViewCam.CamColDisabled( self, origin, Endpos, trace, traceStart, distMin, distMax, distNorm )
+	if cHullz < cHullz_Min then
+		trace[traceStart] = origin + Vector(0, 0, cHullz + (cHullz_Min-cHullz)) + (Endpos:Forward() * distMin)
+	elseif cHullz > cHullz_Max then
+		trace[traceStart] = origin + Vector(0, 0, cHullz - cHullz_Max) + (Endpos:Forward() * distMax)
+	else
+		trace[traceStart] = origin + Vector(0, 0, 8) + (Endpos:Forward() * distNorm)
+	end
+
+	return trace
+end
 
 -- Decides where  the player view should be (forces third person for props)
 function GM:CalcView(pl, origin, angles, fov)
@@ -152,7 +270,8 @@ function GM:CalcView(pl, origin, angles, fov)
 			local filterent = ents.FindByClass("ph_prop")
 			table.insert(filterent, pl)
 			
-			if cHullz < cHullz_Min then
+			trace = self.ViewCam:CamColEnabled( origin, angles, trace, "start", "endpos", -80, -80, -80 )
+			--[[ if cHullz < cHullz_Min then
 				trace.start = origin + Vector(0, 0, cHullz + (cHullz_Min-cHullz))
 				trace.endpos = origin + Vector(0, 0, cHullz + (cHullz_Min-cHullz)) + (angles:Forward() * -80)
 			elseif cHullz > cHullz_Max then
@@ -161,20 +280,21 @@ function GM:CalcView(pl, origin, angles, fov)
 			else
 				trace.start = origin + Vector(0, 0, 8)
 				trace.endpos = origin + Vector(0, 0, 8) + (angles:Forward() * -80)
-			end
+			end ]]
 			
 			trace.filter = filterent
 			
 			local tr = util.TraceLine(trace)
 			view.origin = tr.HitPos
 		else
-			if cHullz < cHullz_Min then
+			self:ViewCam:CamColDisabled( origin, angles, view, "origin", -80, -80, -80 )
+			--[[ if cHullz < cHullz_Min then
 				view.origin = origin + Vector(0, 0, cHullz + (cHullz_Min-cHullz)) + (angles:Forward() * -80)
 			elseif cHullz > cHullz_Max then
 				view.origin = origin + Vector(0, 0, cHullz - cHullz_Max) + (angles:Forward() * -80)
 			else
 				view.origin = origin + Vector(0, 0, 8) + (angles:Forward() * -80)
-			end
+			end ]]
 		end
 	elseif pl:Team() == TEAM_HUNTERS && pl:Alive() then
 	 	local wep = pl:GetActiveWeapon() 
@@ -189,6 +309,7 @@ function GM:CalcView(pl, origin, angles, fov)
 	 			view.origin, view.angles, view.fov = func(wep, pl, origin*1, angles*1, fov)
 	 		end 
 	 	end
+		
 		-- hunter glimpse of thirdperson
 		if CL_GLIMPCAM > CurTime() then
 			local trace = {}
@@ -208,21 +329,9 @@ function GM:CalcView(pl, origin, angles, fov)
  	return view 
 end
 
-local IndicatorColor = {
-	ok = Color(20, 250, 0, 255),
-	no = Color(250, 250, 0, 255)
-}
-
-local mat 		= "prophunt_enhanced/sprites/luckyball"
-local pointer 	= "prophunt_enhanced/sprites/luckyball_pointer"
-
-local dmat		= "prophunt_enhanced/sprites/devilball"
-local dpointer	= "prophunt_enhanced/sprites/devilball_pointer"
-local crosshair = Material("vgui/hud_crosshair")
--- Draw round timeleft and hunter release timeleft
 function HUDPaint()
 	-- Draw player texts
-	if PHX:GetCVar( "ph_enable_plnames" ) && PHX.CLCVAR.PlayerText:GetBool() && LocalPlayer():Team() != TEAM_SPECTATOR then
+	if PHX:GetCVar( "ph_enable_plnames" ) && PHX:GetCLCVar( "ph_cl_pltext" ) && LocalPlayer():Team() != TEAM_SPECTATOR then
 		for _, pl in pairs(player.GetAll()) do
 			if pl != LocalPlayer() && (pl && pl:IsValid() && pl:Alive() && pl:Team() == LocalPlayer():Team()) then
 				local addvector = Vector(0, 0, math.Clamp(pl:EyePos():Distance(LocalPlayer():EyePos())*0.04, 16, 64))
@@ -254,88 +363,23 @@ function HUDPaint()
 	end
 	
 	-- Draw Lucky Balls Icon
-	if PHX.CLCVAR.IconLuckyBall:GetBool() && LocalPlayer():Team() == TEAM_HUNTERS then
-		local offset = Vector( 0, 0, 45 )
-		local ang = LocalPlayer():EyeAngles()
-		
-		local w = ScrW()
-		local h = ScrH()
-		local cX = w/2
-		local cY = h/2
-		
-		for _,ent in pairs(ents.FindByClass('ph_luckyball')) do
-		
-			if IsValid(ent) then -- prevent icon stuck on new round
-		
-				local pos = ent:GetPos() + offset
-				local poscr = pos:ToScreen()
-				
-				if LocalPlayer():IsLineOfSightClear(ent) then
-				
-					if ((poscr.x > 32 && poscr.x < (w-43)) && (poscr.y > 32 && poscr.y < (h-38))) then
-						surface.SetDrawColor(255,255,255,255)
-						surface.SetTexture(surface.GetTextureID(mat))
-						surface.DrawTexturedRect( poscr.x-32, poscr.y, 64, 64 )
-					else
-						local r = math.Round(cX/2)
-						local rad = math.atan2(poscr.y-cY, poscr.x-cX)
-						local deg = 0 - math.Round(math.deg(rad))
-						surface.SetDrawColor(255,255,255,255)
-						surface.SetTexture(surface.GetTextureID(pointer))
-						surface.DrawTexturedRectRotated(math.cos(rad)*r+cX, math.sin(rad)*r+cY,64,64,deg+90)
-					end
-					
-				end
-				
-			end
-		end
-		
+	if PHX:GetCLCVar( "cl_enable_luckyballs_icon" ) && LocalPlayer():Team() == TEAM_HUNTERS then
+		DrawWaypointMarker( LocalPlayer(), mat, pointer, 'ph_luckyball', 45 )
 	end
 	
 	-- Draw Devil Ball Icon
-	if PHX.CLCVAR.IconDevilCrystal:GetBool() && LocalPlayer():Team() == TEAM_PROPS then
-		local offset = Vector( 0, 0, 35 )
-		local ang = LocalPlayer():EyeAngles()
-		
-		local w = ScrW()
-		local h = ScrH()
-		local cX = w/2
-		local cY = h/2
-		
-		for _,ent in pairs(ents.FindByClass('ph_devilball')) do
-			
-			if IsValid(ent) then
-		
-				local pos = ent:GetPos() + offset
-				local poscr = pos:ToScreen()
-				
-				if LocalPlayer():IsLineOfSightClear(ent) then
-				
-					if ((poscr.x > 32 && poscr.x < (w-43)) && (poscr.y > 32 && poscr.y < (h-38))) then
-						surface.SetDrawColor(255,255,255,255)
-						surface.SetTexture(surface.GetTextureID(dmat))
-						surface.DrawTexturedRect( poscr.x-32, poscr.y, 64, 64 )
-					else
-						local r = math.Round(cX/2)
-						local rad = math.atan2(poscr.y-cY, poscr.x-cX)
-						local deg = 0 - math.Round(math.deg(rad))
-						surface.SetDrawColor(255,255,255,255)
-						surface.SetTexture(surface.GetTextureID(dpointer))
-						surface.DrawTexturedRectRotated(math.cos(rad)*r+cX, math.sin(rad)*r+cY,64,64,deg+90)
-					end
-					
-				end
-			
-			end
-		end
-		
+	if PHX:GetCLCVar( "cl_enable_devilballs_icon" ) && LocalPlayer():Team() == TEAM_PROPS then
+		DrawWaypointMarker( LocalPlayer(), dmat, dpointer, 'ph_devilball', 35 )
 	end
 	
 	-- Prop Crosshair
-	if PHX.CLCVAR.CustomCrosshair:GetBool() && LocalPlayer():Team() == TEAM_PROPS && LocalPlayer():Alive() then
+	if PHX:GetCLCVar( "ph_show_custom_crosshair" ) && LocalPlayer():Team() == TEAM_PROPS && LocalPlayer():Alive() then
 		local color
 		local trace = {}
-		if cHullz < cHullz_Min then
+		
+		trace = self.ViewCam:CamColEnabled( LocalPlayer():EyePos(), LocalPlayer():EyeAngles(), trace, "start", "endpos", 100, 300, 100 )
+		
+		--[[ if cHullz < cHullz_Min then
 			trace.start = LocalPlayer():EyePos() + Vector(0, 0, cHullz + (cHullz_Min-cHullz))
 			trace.endpos = LocalPlayer():EyePos() + Vector(0, 0, cHullz + (cHullz_Min-cHullz)) + LocalPlayer():EyeAngles():Forward() * 100
 		elseif cHullz > cHullz_Max then
@@ -344,7 +388,7 @@ function HUDPaint()
 		else
 			trace.start = LocalPlayer():EyePos() + Vector(0, 0, 8)
 			trace.endpos = LocalPlayer():EyePos() + Vector(0, 0, 8) + LocalPlayer():EyeAngles():Forward() * 100
-		end
+		end ]]
 		--trace.filter = ents.FindByClass("ph_prop")
 		--Fix by Codingale: https://github.com/Codingale , https://github.com/prop-hunt-enhanced/prop-hunt-enhanced/pull/11
 		local filter = {} -- We need to filter out players and the ph_prop.
@@ -385,16 +429,22 @@ function HUDPaint()
 end
 hook.Add("HUDPaint", "PH_HUDPaint", HUDPaint)
 
-
 -- After the player has been drawn
 function PH_PostPlayerDraw(pl)
 	-- Draw a line on hunters
-	if PHX.CLCVAR.HunterEyeLine:GetBool() && (!LocalPlayer():Alive() || LocalPlayer():Team() == TEAM_SPECTATOR) then
-		if IsValid(pl) && pl:Alive() && pl:Team() == TEAM_HUNTERS then
+	if PHX:GetCLCVar( "ph_cl_spec_hunter_line" ) && (!LocalPlayer():Alive() || LocalPlayer():Team() == TEAM_SPECTATOR) then
+		
+		DrawLine(pl, MAT_LASERDOT, TEAM_HUNTERS, true)
+		
+		--[[ if IsValid(pl) && pl:Alive() && pl:Team() == TEAM_HUNTERS then
 			render.DrawLine(pl:GetShootPos(), pl:GetEyeTrace().HitPos, team.GetColor(pl:Team()), true)
 			render.SetMaterial(MAT_LASERDOT)
 			render.DrawSprite(pl:GetEyeTrace().HitPos, 8, 8, team.GetColor(pl:Team()))
-		end
+		end ]]
+	end
+	
+	if GetGlobalBool("InRound", false) and LocalPlayer():HasFakePropEntity() && LocalPlayer():Alive() && LocalPlayer():Team() ~= TEAM_SPECTATOR then
+		DrawLine(pl, MAT_LASERDOT, TEAM_PROPS, false, true, 200, true, Color(34,177,76), Color(255,128,40))
 	end
 end
 hook.Add("PostPlayerDraw", "PH_PostPlayerDraw", PH_PostPlayerDraw)
@@ -407,7 +457,7 @@ end)
 function drawPropSelectHalos()
 	local halocol = IndicatorColor.ok
 	
-	if PHX.CLCVAR.PropHalos:GetBool() then
+	if PHX:GetCLCVar( "ph_cl_halos" ) then
 		-- Something to tell if the prop is selectable
 		if LocalPlayer():Team() == TEAM_PROPS && LocalPlayer():Alive() then
 		
@@ -419,7 +469,10 @@ function drawPropSelectHalos()
 		
 			local trace = {}
 			-- fix for smaller prop size. They should stay horizontal rather than looking straight down.
-			if cHullz < cHullz_Min then
+			
+			trace = self.ViewCam:CamColEnabled( LocalPlayer():EyePos(), LocalPlayer():EyeAngles(), trace, "start", "endpos", 100, 300, 100 )
+			
+			--[[ if cHullz < cHullz_Min then
 				trace.start = LocalPlayer():EyePos() + Vector(0, 0, cHullz + (cHullz_Min-cHullz))
 				trace.endpos = LocalPlayer():EyePos() + Vector(0, 0, cHullz + (cHullz_Min-cHullz)) + LocalPlayer():EyeAngles():Forward() * 100
 			elseif cHullz > cHullz_Max then
@@ -428,8 +481,18 @@ function drawPropSelectHalos()
 			else
 				trace.start = LocalPlayer():EyePos() + Vector(0, 0, 8)
 				trace.endpos = LocalPlayer():EyePos() + Vector(0, 0, 8) + LocalPlayer():EyeAngles():Forward() * 100
+			end ]]
+			
+			--trace.filter = ents.FindByClass("ph_prop")
+			
+			local filter = {} -- We need to filter out players and the ph_prop.
+			for k,v in pairs(ents.GetAll()) do
+				if v:GetClass() == "ph_prop" or string.lower(v:GetClass()) == "player" then
+					table.insert(filter, v)
+				end
 			end
-			trace.filter = ents.FindByClass("ph_prop")
+			
+			trace.filter = filter
 			
 			local trace2 = util.TraceLine(trace) 
 			if trace2.Entity && trace2.Entity:IsValid() && PHX:IsUsablePropEntity(trace2.Entity:GetClass()) then
@@ -468,10 +531,8 @@ end
 -- 			Net Receives Hooks 			--
 -- ///////////////////\\\\\\\\\\\\\\\\\ --
 
-local tutormat = "vgui/hud_control_help.png"
-local curshow = 0
 net.Receive("PH_ShowTutor", function()
-	if PHX.CLCVAR.ControlTutorial:GetBool() && LocalPlayer():Alive() then
+	if PHX:GetCLCVar( "ph_show_tutor_control" ) && LocalPlayer():Alive() then
 	
 		if curshow <= 2 then
 	
@@ -497,17 +558,9 @@ net.Receive("PH_ShowTutor", function()
 end)
 
 -- Receive the Winning Notification
---[[
-// Obsolete.
-net.Receive("PH_RoundDraw_Snd", function(len)
-	if PHX.CLCVAR.EndCue:GetBool() then
-		surface.PlaySound(table.Random(PHX.WINNINGSOUNDS["Draw"]))
-	end
-end)
-]]--
 net.Receive("PH_TeamWinning_Snd", function(len)
 	local snd = net.ReadString()
-	if PHX.CLCVAR.EndCue:GetBool() then
+	if PHX:GetCLCVar( "ph_cl_endround_sound" ) then
 		surface.PlaySound(snd)
 	end
 end)
@@ -563,7 +616,6 @@ net.Receive("DisableDynamicLight", function()
 	end
 end)
 
-local lgWind = {}
 -- Language Preview Window
 function PHX:showLangPreview()
 	

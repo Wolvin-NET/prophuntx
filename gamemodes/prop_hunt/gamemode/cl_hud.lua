@@ -138,13 +138,13 @@ end
 -- Hook sections
 hook.Add("HUDShouldDraw", "PHX.ShouldHideHUD", function(hudname)
 	-- make sure matw is already installed, otherwise don't use new HUD.
-	if PHX.CLCVAR.NewHUD:GetBool() and (not matw:IsError()) then
+	if PHX:GetCLCVar( "ph_hud_use_new" ) and (not matw:IsError()) then
 		if (hide[hudname]) then return false end
 	end
 end)
 
 hook.Add("Think", "PHX.GUIAvatarUI_Think", function()
-	state = PHX.CLCVAR.NewHUD:GetBool()
+	state = PHX:GetCLCVar( "ph_hud_use_new" )
 
 	-- Avatar will behave strangely enough on HUDPaint so We'll use Think for now. Because it's a PANEL, not an HUD element.
 	if IsValid(LocalPlayer()) && LocalPlayer():Alive() && state && (LocalPlayer():Team() == TEAM_HUNTERS or LocalPlayer():Team() == TEAM_PROPS) then
@@ -248,7 +248,7 @@ hook.Add("HUDPaint", "PHX.MainHUD", function()
 		if LocalPlayer():Team() == TEAM_HUNTERS then
 			surface.SetDrawColor(disabledcolor)
 		else
-			surface.SetDrawColor( indic.halo[tonumber(PHX.CLCVAR.PropHalos:GetInt())])
+			surface.SetDrawColor( indic.halo[tonumber( GetConVar("ph_cl_halos"):GetInt() )])
 		end
 		surface.SetMaterial( indic.halo.mat )
 		surface.DrawTexturedRect( pos.x + (82), pos.y + 7, 32, 32 )
@@ -349,7 +349,7 @@ hook.Add("HUDPaint", "PHX.MainHUD", function()
 	end
 	
 	-- the Team Bar. This requires at least 4 players to get this displayed.
-	if PHX.CLCVAR.TeamTopBar:GetBool() then
+	if PHX:GetCLCVar( "ph_show_team_topbar" ) then
 		if ((player.GetCount() >= 4 && LocalPlayer():Alive()) && (LocalPlayer():Team() != TEAM_UNASSIGNED && LocalPlayer():Team() != TEAM_SPECTATOR)) then
 			surface.SetDrawColor( 255, 255, 255, 255 )
 			surface.SetMaterial( hudtopbar.mat )

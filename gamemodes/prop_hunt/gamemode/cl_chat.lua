@@ -41,7 +41,7 @@ end
 
 local font = "PHX_NicePrintCenter"
 local sx,sy = ScrW()*0.5,ScrH()*0.2
-hook.Add("HUDPaint", "DrawNotificationText", function()
+hook.Add("HUDPaint", "PHX.DrawCenteredText", function()
 	if printCenter:notify_wait() then
 		surface.SetFont(font)
 		draw.DrawText( printCenter.Text, font, sx, sy, printCenter.color, TEXT_ALIGN_CENTER )
@@ -53,7 +53,7 @@ function PHX:CenterPrint( msg, color, showInput, inputNum )
 	if !msg or msg == nil or msg == "" then return end
 	if !color or color == nil then color = color_white end
 	
-	if !printCenter:notify_wait() then
+	--if !printCenter:notify_wait() then // what if ?
 		if (showInput and showInput ~= nil) and (inputNum and inputNum ~= nil) then
 			printCenter:SetColor(color)
 			printCenter:SetText( string.format(msg,  input.GetKeyName(inputNum):upper()) )
@@ -62,7 +62,7 @@ function PHX:CenterPrint( msg, color, showInput, inputNum )
 			printCenter:SetText( msg )
 		end
 		printCenter.lastShownNotify = CurTime()
-	end
+	--end
 
 end
 
