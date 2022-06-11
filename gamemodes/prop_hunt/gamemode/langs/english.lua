@@ -18,8 +18,8 @@ LANG.AuthorURL		= {
 }
 
 -- Special Section that isn't String-based
-LANG.SUICIDEMSG = { --> FRETTA
-	"suicided!", -- i believe this was from 9gag joke.
+LANG.SUICIDEMSG = {
+	"suicided!",
 	"died mysteriously.",
 	"died from magic.",
 	"no-scoped themself.",
@@ -39,7 +39,7 @@ LANG.SUICIDEMSG = { --> FRETTA
 	"ragdolled.",
 }
 
-LANG.RANDOM_SPECTATORS = { --> FRETTA
+LANG.RANDOM_SPECTATORS = {
 	"to watch and chill.",
 	"to see them hanging around.",
 	"to see the things.",
@@ -91,7 +91,7 @@ LANG["HELP_F1"] 				= [[A Prop Hunt X Project.
 A project to make Prop Hunt be more modern and customisable.
 
 More info can be found at:
-https://wolvindra.xyz/prophuntx
+https://www.buymeacoffee.com/wolvindra
 
 To See more info, help and guide, Press [F1] key and then click [Prop Hunt Menu] button.
 
@@ -99,12 +99,10 @@ Version: ]].. PHX.VERSION ..[[ Revision: ]].. PHX.REVISION ..[[
 
 Have Fun!]]
 
--- Important!
 LANG["LANGUAGE_CHANGED"]		= "Prefered Language has been changed to %s"
 
 -- internal cl_menutypes section.
 LANG["SUBTYPE_PREFERED_LANG"]	= "Prefered Language"
---LANG["SUBTYPE_TEXTENTRY_?"]	= "???"
 
 -- Events
 LANG["EV_PLAYER_CONNECT"]		= "%s has connected to the server."
@@ -113,8 +111,8 @@ LANG["EV_PLAYER_DISCONNECT"]	= "%s has disconnected from the server (Reason: %s)
 
 -- HUD elements
 LANG["HUD_HP"]					= "HEALTH"
-LANG["HUD_AMMO"] 				= "AMMO"	-- obsolete
-LANG["HUD_MAGSEC"]				= "MAG. / SEC." --Magazine Counts (separator) Secondary Magazine Counts
+LANG["HUD_AMMO"] 				= "AMMO"
+LANG["HUD_MAGSEC"]				= "MAG. / SEC." --Magazine | Secondary Magazine
 
 -- !!WEAPON NAMES CANNOT BE TRANSLATED, THEY USE FROM language.GetPhrase THEREFORE IT'S IMPOSSIBLE TO DO.
 
@@ -128,7 +126,7 @@ LANG["HUD_KILLEDBY"]			= "You were killed by %s"
 LANG["HUD_AUTOTAUNT"]			= "Auto Taunting in %d second(s)"
 LANG["HUD_AUTOTAUNT_ALT"]		= "Auto Taunting in %d"
 
-LANG["HUD_TargetID"]			= "Player: %s (%d%%)" -- Player: <NAME> (<HEALTH>%)
+LANG["HUD_TargetID"]			= "Player: %s (%d%%)"
 
 LANG["HUD_BLINDED"]				= "Hunters will be unblinded and released in %s"
 LANG["HUD_UNBLINDED"]			= "Ready or not, here we come!"
@@ -185,7 +183,7 @@ LANG["PHXM_TAB_HELP"]			= "Help & Guide"
 LANG["PHXM_TAB_MUTE"]			= "Player Muting"
 LANG["PHXM_TAB_PLAYER"]			= "Player Settings"
 LANG["PHXM_TAB_MODEL"] 			= "Model Browser"
-LANG["PHXM_TAB_MODEL_DISABLED"]	= "Model Browser (Disabled)" -- Obsolete -- Revision Edit: 16.09.21/X2Z
+LANG["PHXM_TAB_MODEL_DISABLED"]	= "Model Browser (Disabled)"
 LANG["PHXM_TAB_ADMIN"]			= "Admin Settings"
 LANG["PHXM_TAB_ABOUT"]			= "About PH:X"
 LANG["PHXM_TAB_MAPVOTE"]		= "MapVote"
@@ -260,7 +258,7 @@ LANG["PHXM_ADMIN_CUSTOM_MODEL_PROP"]		= "Enable custom models for Props - Make s
 LANG["PHXM_ADMIN_TAUNT_DELAY_CUSTOM"]		= "Custom Taunts Delay (Seconds)"
 LANG["PHXM_ADMIN_TAUNT_DELAY_RANDOM"]		= "Normal Taunts Delay (Seconds)"
 LANG["PHXM_ADMIN_TAUNT_DELAY_AUTO"]			= "Auto Taunts Delay (Seconds)"
-LANG["PHXM_ADMIN_AUTOTAUNT_ENABLE"]			= "Enable Auto Taunt Features (Proper Timer will be fixed on next round)"	-- Revision Edit: 16.09.21/X2Z
+LANG["PHXM_ADMIN_AUTOTAUNT_ENABLE"]			= "Enable Auto Taunt Features (Proper Timer will be fixed on next round)"
 
 LANG["PHXM_ADMIN_NOTICE_ROTATION"]			= "Display 'Prop Rotation' notification on every Prop Spawns"
 LANG["PHXM_ADMIN_CAMERA_COLLIDE"]			= "Enable Prop Camera collision to the wall"
@@ -271,12 +269,12 @@ LANG["PHXM_ADMIN_SWAP_TEAM"] 				= "Swap team every round - Disabling means team
 LANG["PHXM_ADMIN_HUNTER_PENALTY"]			= "Hunter health penalty"
 LANG["PHXM_ADMIN_HUNTER_KILL_BONUS"]		= "Hunter kill bonus"
 LANG["PHXM_ADMIN_HUNTER_SMG_GRENADES"]		= "Hunter SMG grenades"
-LANG["PHXM_ADMIN_GAME_TIME"]				= "(Require Map Restart) Total Game time (Minutes)"		-- Revision Edit: 16.09.21/X2Z
+LANG["PHXM_ADMIN_GAME_TIME"]				= "(Require Map Restart) Total Game time (Minutes)"
 LANG["PHXM_ADMIN_BLINDLOCK_TIME"]			= "Hunter blindlock time (Seconds)"
-LANG["PHXM_ADMIN_ROUND_TIME"]				= "(Require Map Restart) Game round time (Seconds)"		-- Revision Edit: 16.09.21/X2Z
-LANG["PHXM_ADMIN_ROUNDS_PER_MAP"]			= "(Require Map Restart) Total game Rounds per Map"		-- Revision Edit: 16.09.21/X2Z
+LANG["PHXM_ADMIN_ROUND_TIME"]				= "(Require Map Restart) Game round time (Seconds)"
+LANG["PHXM_ADMIN_ROUNDS_PER_MAP"]			= "(Require Map Restart) Total game Rounds per Map"
 LANG["PHXM_ADMIN_ENABLE_LUCKYBALL"]			= "Allow Lucky Balls Features to be spawned on breakable props (Chance is 8%)"
-LANG["PHXM_ADMIN_ENABLE_CRYSTAL"]			= "Allow Devil Balls Features to be spawned when hunter dies (Always Spawn)"	-- Revision Edit: 16.09.21/X2Z
+LANG["PHXM_ADMIN_ENABLE_CRYSTAL"]			= "Allow Devil Balls Features to be spawned when hunter dies (Always Spawn)"
 LANG["PHXM_ADMIN_WAIT_PLAYERS"]				= "Wait for Players to begin the gameplay"
 LANG["PHXM_ADMIN_WAIT_MIN_PLAYERS"]			= "Mininum Players to Wait before the game starts (default: 1)"
 LANG["PHXM_ENABLE_PLAYER_JOIN_LEAVE"] 		= "Enable chat notification for player join and leave? Set this 0 if you prefer to use with your own Custom Chat addon."
@@ -382,10 +380,8 @@ LANG["PLUGINS_SERVER_SETTINGS"]			= "-- Server Settings --"
 LANG["PLUGINS_CLIENT_SETTINGS"]			= "-- Client Settings --"
 
 -- Text Entries
-LANG["TEXTENTRY_FZ_SINGLE"] = "Freeze Cam Single Sound Path" -- this one is for ph_fc_cue_path command
-LANG["TEXTENTRY_MV_PREFIX"] = "MapVote Map Prefix"			 -- the map previx for mv_mapprefix
-
---============= LATE ADDITION OF 29.10.21/X2Z. =============--
+LANG["TEXTENTRY_FZ_SINGLE"] = "Freeze Cam Single Sound Path"
+LANG["TEXTENTRY_MV_PREFIX"] = "MapVote Map Prefix"
 
 LANG["MISC_GAME_ENDED"]		= "Game has ended."
 
@@ -444,6 +440,7 @@ LANG["PCR_NOTIFY_2"]			= " in console or use F1 -> [PropChooser Help] menu."
 LANG["PCR_CL_DISABLED"]			= " This feature is disabled."
 LANG["PCR_CL_GROUP"]			= " Only certain groups can open this menu!"
 LANG["PCR_CL_LIMIT"]			= " You have reached the limit!"
+
 LANG["PCR_UNLIMIT_TEXT"]		= "Unlimited"
 LANG["PCR_WINDOW_TITLE"]		= "PH:X Prop Menu"
 LANG["PCR_HEADER_TOP"]			= "Choose any prop you want. You have"
@@ -456,23 +453,17 @@ LANG["PCR_WINDOW_GUIDE_TTL"]	= "Quick Guide: Prop Menu 101"
 LANG["PCR_BTN_HELP_MENU"]		= "Prop Menu Help"
 
 LANG["PCR_CL_CMDUSEULX"]		= " This command is disabled. Use 'ulx propmenu' instead!"
-LANG["PCR_CMD_ULX_DISABLED"]	= "Command ulx propmenu is disabled. Press your [Prop Menu Bind] to open."	--input.GetKeyName is impossible to access.
+LANG["PCR_CMD_ULX_DISABLED"]	= "Command ulx propmenu is disabled. Press your [Prop Menu Bind] to open."
 
 LANG["PCR_EDT_IN_USE"]			= "An admin is still editing the prop data. Please Wait!"
 LANG["PCR_EDT_ERROR_DISABLED"]	= "[Prop Menu] Error: Custom Prop Addition is Disabled!"
 LANG["PCR_EDT_NO_RIGHTS"]		= "You have no rights to access this feature."
-
--- I'm actually exhausted and feel so burned out, but I'll update this in future, or in PH:Zero I guess.
--- Section: Custom Prop Editor File Browser and stuff...
--- LANG["PCR_EDT_XXX"] 	= "todo"
--- LANG["PCR_FB_XXX"] 	= "todo"
 
 --[[
 	Admin Section, Revision: 16.09.21/X2Z
 ]]
 LANG["PHXM_PLAYER_PROP_CHOOSER_KEY"]	= "Default Key to open Prop Menu (Prop Chooser)."
 LANG["PHXM_PROP_FREEZE_MIDAIR"]			= "Default Key to toogle Freeze movement during on midair as a Prop."
-LANG["PHXM_ADMIN_PROP_RIGHT_CLICK"]		= "Should Props also able to Taunt by pressing Right Click?"
 LANG["PHXM_ADMIN_TAUNT_SCANNER"]		= "(Require Map Restart) Enable Taunt Scanner?"
 LANG["PHXM_ADMLBL_USABLE_ENTS"]			= "Usable Prop Entities Types"
 LANG["PHXM_ADMLBL_USABLE_ENTS_REF"]		= "Types can be: 1: Physics Only, 2: Physics & Dynamics, 3: Almost Anything inc. Ragdolls, 4: Custom Entities."
@@ -488,14 +479,13 @@ LANG["TM_TAUNTS_SEARCH_NOTHING"]		= "Taunt containing '%s' was not found..."
 LANG["TM_SEARCH_PLACEHOLDER"]			= "Search in this category: Enter word, lowercase & no wildcards. Empty=Show All."
 LANG["PHXM_MSG_INPUT_IS_EMPTY"]			= "Text is empty or you didn't pressed ENTER key."
 
---[[
-	LANGUAGE UPDATE: Revision 10.06.2022/X2Z
-]]
+--============= LATE ADDITION OF 10.06.2022/X2Z. =============--
+
 --goto line: @132
 LANG["MISC_SET"]						= "Set"
 LANG["MISC_APPLY"]						= "Apply"
-LANG["MISC_NO"]							= "Yes"
-LANG["MISC_YES"]						= "No"
+LANG["MISC_NO"]							= "No"
+LANG["MISC_YES"]						= "Yes"
 LANG["MISC_WARN"]						= "Warning"
 LANG["MISC_ERROR"]						= "Error"
 LANG["MISC_INFO"]						= "Information"
@@ -511,6 +501,7 @@ LANG["PHXM_GENERAL_SETTINGS"]			= "General Settings"
 LANG["PHXM_FAKE_TAUNT_SETTINGS"]		= "Fake Taunt Settings"
 LANG["PHXM_FAKE_TAUNT_ENABLE"]			= "Allow fake taunts to be played on random props in the map. Can be accessed only through Custom Taunt menu."
 LANG["PHXM_FAKE_TAUNT_MAXUSAGE"]		= "Maximum usage for fake taunts to be used; -1 is unlimited."
+LANG["PHXM_TAUNT_RIGHT_CLICK"]		    = "Right click for taunt. This will disable Right-clicking on custom menu!"
 
 LANG["PHXM_TAUNT_PITCH_SETTINGS"]		= "Taunt Pitch Settings"
 LANG["PHXM_TAUNT_PITCH_ENABLE"]			= "Enable Taunt Pitch"
@@ -519,6 +510,8 @@ LANG["PHXM_TAUNT_PITCH_RANGE_MAX"]		= "Maximum threshold/acceptable pitch range 
 
 LANG["PHXM_DECOY_SETTINGS"]				= "Decoy Settings"
 LANG["PHXM_DECOY_ENABLE"]				= "Enable Decoy reward? Reward will be given ONLY ONCE for alive props until the round ends. They don't add and only substract once they're placed."
+
+LANG["PHXM_DISABLE_FOOTSTEP"]           = "Toggle silent prop team footsteps"
 
 LANG["PHXM_ADMIN_CHATSETTING"]			= "Chat Window Settings"
 LANG["PHXM_ADMIN_HUNTERBLIND"]			= "Hunter Blind Control"
@@ -534,26 +527,27 @@ LANG["PLUG_DESCRIPTION"]				= "Description: %s"
 ]]--
 LANG["PHX_CTAUNT_USE_PITCH"]			= "Use pitch for custom taunts"
 LANG["PHX_CTAUNT_RANDOM_PITCH"]			= "Randomize pitch when playing taunt"
-LANG["PHX_RTAUNT_USE_PITCH"]			= "Use pitch for random taunts [%s]" -- input.GetKeyName( PHX:GetCVar( "ph_default_taunt_key" ) )
+LANG["PHX_RTAUNT_USE_PITCH"]			= "Use pitch for random taunts [%s]"
 LANG["PHX_RTAUNT_RANDOMIZE"]			= "Randomize pitch for random taunts [%s]"
 LANG["PHX_CTAUNT_PITCH_FOR_FAKE"]		= "Use pitch for fake taunts"
 LANG["PHX_CTAUNT_RANDPITCH_FOR_FAKE"]	= "Randomize pitch for fake taunts"
 LANG["PHX_CTAUNT_SLIDER_PITCH"]			= "Taunt pitch slider."
 LANG["TM_TOOLTIP_FAKETAUNT"]			= "Play a Fake Taunt on random prop"
+LANG["TM_PREFERRED_PITCH"]              = "Preferred Taunt Pitch Level"
 
 --[[
-	FAKE TAUNT, Revision 10.06/2022/X2Z
+	Fake Taunt, Revision 10.06/2022/X2Z
 	Description: Play fake taunts on random props in the map (Not Players)
 ]]--
 LANG["PHX_CTAUNT_ON_RAND_PROPS"]		= "Play on random props (%ix)"
 LANG["PHX_CTAUNT_ON_RAND_PROPS_UNLI"]	= "Play on random props"
 LANG["PHX_CTAUNT_PLAYED_ON_RANDPROP"]	= "You played a taunt on a random prop."
 LANG["PHX_CTAUNT_RAND_PROPS_LIMIT"]		= "You have hit the limit!"
+LANG["PHX_CTAUNT_RAND_PROPS_NOT_PROP"]  = "Not available at this moment."
 LANG["PHX_CTAUNT_RANDPROP_DISABLED"]	= "Fake taunt is currently disabled."
 
 --[[
-	DECOY, Revision 10.06/2022/X2Z
-	Borrowed feature from Prop Hunt: (codename) Z
+	PH:Z Simple Decoy, Revision 10.06/2022/X2Z
 ]]--
 LANG.DECOY_PROP	= {
 	"killed the dummy!",
@@ -565,19 +559,25 @@ LANG.DECOY_PROP	= {
 
 LANG["DECOY_PUT_SUCC"]					= "Decoy successfully placed."
 LANG["DECOY_CANT_PUT_HERE"]				= "Cannot put decoy here."
-LANG["DECOY_GET_REWARD"]				= "Congrats! You're now own a Prop Decoy for suviving this round!"
---LANG["DECOY_FRAGS_STOLEN"]				= "Uh oh, you just killed a decoy!" -- let the hunter confused.
-LANG["DECOY_FRAGS_RECEIVED"]			= "Decoy successfully baited: You receive 1 score from %s!"
+LANG["DECOY_GET_REWARD"]				= "Congrats! You received ['Prop Decoy'] for suviving this round!"
+LANG["DECOY_REMINDER_GET"]              = "You have a Decoy/Dummy prop! Place somewhere to confuse hunters!"
+LANG["DECOY_FRAGS_RECEIVED"]			= "Decoy successfully baited: You stole 1 score from %s!"
 LANG["DECOY_DISABLED"]					= "Currently, decoy is unavailable."
 LANG["PHXM_CL_DECOY_KEYBIND"]			= "Default key to place a decoy prop. Default is 1 (not keypad 1)."
 
+LANG["DECOY_INDICATOR_INVALID"]         = "Invalid Slope!"
+LANG["DECOY_INDICATOR_TOOFAR"]          = "Range too far!"
+LANG["DECOY_INDICATOR_OK"]              = "Place Decoy [Press %s]"
+
+LANG["PHXM_PLAYER_SHOW_DECOY_HELPER"]   = "Show/Hide Decoy placement helper? This will show a white dot with a text near on your crosshair."
+LANG["PHXM_PLAYER_SHOW_DECOY_MARKER"]   = "Show/Hide Decoy marker?"
+
 --[[
 	Revision 10.06/2022/X2Z
-	PROP MENU:
-	- Plugins Menu 
-	- Prop Menu Editor
-	- File Browser for Prop Menu core file (lang is borrowed from PH:Z)
+    Prop Menu Update: Menu, Editor, Browser
 ]]--
+LANG["PCR_MODEL_DONT_EXISTS"]   = "Sorry, this model is not available at the moment!"
+
 LANG["PCR_PLUG_WARN_MSG"]		= "Warning: Custom Prop Addition (pcr_allow_custom) is set to 0.\nYou Must Enable this feature in order to edit your custom prop!\nA Map change is required to change this setting."
 LANG["PCR_PLUG_LBL_BINDKEY"]	= "To change bind key, switch to '[Player] tab."
 LANG["PCR_PLUG_LBL_EDITOR"]		= "Custom Prop Menu Editor"
@@ -624,14 +624,13 @@ LANG["PHZ_generic_helptext"]	= [[[How To Use:
 - Pressing [Close] button will cancel the operation.
 - Not all models will have a valid VPhysics.
 - Not all Players (inc. Your Server) will have custom models. If they don't exists they will removed after Applying selections.
-- Your Server content might be different from you. If you see "<game> [Not Available]" on dropdown menu, it means that you haven't mounted/installed the game.
+- Your Server content might be different from you. If you see "<game> [Not Mounted]" on dropdown menu, it means that you haven't mounted/installed the game.
 - Addon folder browsing isn't implemented yet so You'll have to use 'All Contents' instead.
 ]]
 LANG["PHZ_generic_mdlinfo"] = [[Model Info:
 %s
 Has Physics: %s]]
 LANG["PHZ_generic_mdlinfoStart"] = "(Select model first!)"
---LANG["PHX_SELECT_LEFT"]		= "(Select Model on the Left)"
 
 LANG["PHZ_generic_no_ragdoll"]	= "No: Ragdoll"
 LANG["PHZ_generic_titlelabel"]	= "%s Preview :"
@@ -657,6 +656,4 @@ If you close this editor, this will automatically removed.]]
 LANG["PHZ_pcr_fb_allcontent"] = "All Contents (Not All Players/Server will have same contents as you)"
 LANG["PHZ_pcr_fb_notmounted"] = "%s [Not Mounted]"
 
-
--- Add to Language Table.
 PHX.LANGUAGES[LANG.code] = LANG

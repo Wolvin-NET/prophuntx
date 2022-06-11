@@ -391,16 +391,16 @@ hook.Add("OnPlayerChangedTeam", "TeamChange_switchLimitter", function(ply, old, 
 	end
 end)
 
-function PHX.ResetStuffs(self)
+function PHX.ResetStuffs()
 	-- Force close any taunt menu windows
 	ForceCloseTauntWindow(0)
 	-- Extra additional
-	self.VOICE_IS_END_ROUND = 0
+	PHX.VOICE_IS_END_ROUND = 0
 	
 	-- Called every round restart: make sure this was set publicly and make it synced accross clients.
-	SetGlobalInt("unBlind_Time", math.Clamp(self:GetCVar( "ph_hunter_blindlock_time" ) - (CurTime() - GetGlobalFloat("RoundStartTime", 0)), 0, self:GetCVar( "ph_hunter_blindlock_time" )) )
+	SetGlobalInt("unBlind_Time", math.Clamp(PHX:GetCVar( "ph_hunter_blindlock_time" ) - (CurTime() - GetGlobalFloat("RoundStartTime", 0)), 0, PHX:GetCVar( "ph_hunter_blindlock_time" )) )
 	
-	local cvarPercent	= self:GetCVar( "ph_blindtime_respawn_percent" )
+	local cvarPercent	= PHX:GetCVar( "ph_blindtime_respawn_percent" )
 	local blindTime		= GetGlobalInt("unBlind_Time", 0)
 	local percent		= blindTime * cvarPercent
 	phx_blind_unlocktime = CurTime() + percent
@@ -653,6 +653,11 @@ end
 -- Called when a player leaves
 function PlayerDisconnected(ply)
 	ply:RemoveProp()
+    
+    if IsValid(ply.propdecoy) then
+        ply.propdecoy:SetOwner(NULL)
+        ply.propdecoy = nil
+    end
 	
 	-- Save player Change Team info -- this will reset after map has been changed
 	if PHX:GetCVar( "ph_max_teamchange_limit" ) ~= -1 and !ply:CheckUserGroup() and (not ply:IsBot()) then
@@ -728,7 +733,11 @@ function PlayerSpawn(pl)
 	pl:UnLock()
 	pl:ResetHull()
 	pl:SetNWFloat("LastTauntTime", CurTime())
-	pl.last_taunt_time = 0
+    -- Reset Fake taunts
+	pl:ResetTauntRandMapCount()
+	
+    pl.last_taunt_time = 0
+    pl.propdecoy = nil -- don't link to your decoy prop
 	
 	net.Start("ResetHull")
 	net.Send(pl)
@@ -764,8 +773,8 @@ function RoundEnd()
 	-- Give rewards for living props for a decoy
 	for _, pl in pairs(team.GetPlayers(TEAM_PROPS)) do
 		if PHX:GetCVar( "ph_enable_decoy_reward" ) and pl:Alive() and pl:Health() > 0 and (not pl:HasFakePropEntity()) then
-			pl:SetFakePropEntity(1)
-			pl:PHXChatPrint( "DECOY_GET_REWARD", Color(153,217,234), true )
+			pl:SetFakePropEntity(true)
+			pl:PHXChatPrint( "DECOY_GET_REWARD", Color(50,248,56), true )
 		end
 	end
 	
@@ -799,17 +808,13 @@ function GM:OnPreRoundStart(num)
 	if GetGlobalInt("RoundNumber") != 1 && (PHX:GetCVar( "ph_swap_teams_every_round" ) || ((team.GetScore(TEAM_PROPS) + team.GetScore(TEAM_HUNTERS)) > 0)) then
 		for _, pl in pairs(player.GetAll()) do
 		
-			-- Reset 'Play taunt on random props in map' thingy. This includes Spectators.
-			pl:ResetTauntRandMapCount()
-		
 			if pl:Team() == TEAM_PROPS || pl:Team() == TEAM_HUNTERS then
-			
-				-- todo: Inform if they have decoy reward
 			
 				if pl:Team() == TEAM_PROPS then
 					pl:SetTeam(TEAM_HUNTERS)
 				else
 					pl:SetTeam(TEAM_PROPS)
+                    if pl:HasFakePropEntity() then pl:PHXChatInfo( "GOOD", "DECOY_REMINDER_GET" ) end
 					if PHX:GetCVar( "ph_notice_prop_rotation" ) then
 						timer.Simple(0.5, function() 
 							pl:PHXNotify( "NOTIFY_IN_PROP_TEAM", "UNDO", 20, true )
@@ -1063,6 +1068,7 @@ hook.Add("PlayerButtonDown", "PlayerButton_ControlTaunts", function(pl, key)
 	local isRandomPitch = pl:GetInfoNum("ph_cl_pitch_randomized_random", 0)	-- Use Randomized pitch for Random Taunts instead of specified level
 	
 	local decoyKey		= pl:GetInfoNum("ph_cl_decoy_spawn_key", 0)			-- Used for spawning decoy
+    local isRightClickMode = pl:GetInfoNum("ph_prop_right_mouse_taunt", 0)  -- Right Click for taunt. Changed to clientside convar instead
 	
 	-- Freeze Prop while midair
 	if pl:Alive() and pl:Team() == TEAM_PROPS and (key == freezePropKey) then
@@ -1070,7 +1076,7 @@ hook.Add("PlayerButtonDown", "PlayerButton_ControlTaunts", function(pl, key)
 	end
 	
 	-- if you're excluding custom taunts not to be played on random taunts or use them *only* for specific 'groups', you're evil. jk it's good tho :)
-	if pl and pl:IsValid() and pl:Alive() and (key == info or (pl:Team() == TEAM_PROPS and ( PHX:QCVar( "ph_prop_right_mouse_taunt" ) and key == MOUSE_RIGHT ))) then
+	if pl and pl:IsValid() and pl:Alive() and (key == info or (pl:Team() == TEAM_PROPS and ( tobool(isRightClickMode) and key == MOUSE_RIGHT ))) then
 		if (PHX:GetCVar( "ph_custom_taunt_mode" ) == 1) && GAMEMODE:InRound() then
 			pl:ConCommand("ph_showtaunts")
 		elseif ((PHX:GetCVar( "ph_custom_taunt_mode" ) == 0) or (PHX:GetCVar( "ph_custom_taunt_mode" ) == 2)) and
@@ -1094,10 +1100,12 @@ hook.Add("PlayerButtonDown", "PlayerButton_ControlTaunts", function(pl, key)
 			
 			local pitch = 100
 			if PHX:GetCVar("ph_taunt_pitch_enable") then
-				if tobool( isRandomPitch ) then 	-- is it Randomized?
-					pitch = math.random(PHX:GetCVar("ph_taunt_pitch_min"), PHX:GetCVar("ph_taunt_pitch_max"))
-				elseif tobool(pitchApplyRand) then	-- is it Specified?
-					pitch = plPitchLevel
+				if tobool(pitchApplyRand) then	-- is it Specified?
+                    if tobool( isRandomPitch ) then 	-- is it Randomized?
+                        pitch = math.random(PHX:GetCVar("ph_taunt_pitch_range_min"), PHX:GetCVar("ph_taunt_pitch_range_max"))
+                    else
+                        pitch = plPitchLevel
+                    end
 				end
 			end
 			pl:EmitSound(rand_taunt, 100, pitch)
@@ -1117,7 +1125,7 @@ hook.Add("PlayerButtonDown", "PlayerButton_ControlTaunts", function(pl, key)
 			if pl:GetPlayerLockedRot() then
 				pl:SetNWBool("PlayerLockedRotation", false)
 				--pl:PHXNotify( "HUD_ROTFREE", "UNDO", 3, true )
-				pl:PrintCenter( "HUD_ROTFREE", Color(34,177,76) )
+				pl:PrintCenter( "HUD_ROTFREE", Color(32,200,72) )
 				net.Start("PHX.rotateState")
 					net.WriteInt(0, 2)
 				net.Send(pl)

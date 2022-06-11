@@ -472,11 +472,14 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 		PHX.UI:CreateVGUIType("ph_cl_spec_hunter_line", "check", "CLIENT", gridpl, "PHXM_PLAYER_SEE_HUNTER_LINE")
 		PHX.UI:CreateVGUIType("cl_enable_luckyballs_icon", "check", "CLIENT", gridpl, "PHXM_PLAYER_SEE_LBALL_ICONS")
 		PHX.UI:CreateVGUIType("cl_enable_devilballs_icon", "check", "CLIENT", gridpl, "PHXM_PLAYER_SEE_CRYSTAL_ICONS")
+        PHX.UI:CreateVGUIType("ph_prop_right_mouse_taunt", "check", "CLIENT", gridpl, "PHXM_TAUNT_RIGHT_CLICK") --RIGHT CLICK TAUNT: Moved from admin to client.
 		
 		PHX.UI:CreateVGUIType("hudspacer","spacer",nil,gridpl,"" )
 		PHX.UI:CreateVGUIType("", "label", false, gridpl, "PHXM_PLAYER_HUDSETTINGS")
 		
 		PHX.UI:CreateVGUIType("ph_hud_use_new", "check", "CLIENT", gridpl, "PHXM_PLAYER_USE_NEW_HUD")
+        PHX.UI:CreateVGUIType("ph_cl_decoy_spawn_helper", "check", "CLIENT", gridpl, "PHXM_PLAYER_SHOW_DECOY_HELPER")
+        PHX.UI:CreateVGUIType("ph_cl_decoy_spawn_marker", "check", "CLIENT", gridpl, "PHXM_PLAYER_SHOW_DECOY_MARKER")
 		PHX.UI:CreateVGUIType("ph_show_tutor_control", "check", "CLIENT", gridpl, "PHXM_PLAYER_SHOW_TUTOR")
 		PHX.UI:CreateVGUIType("ph_show_custom_crosshair", "check", "CLIENT", gridpl, "PHXM_PLAYER_USE_NEW_CROSSHAIR")
 		PHX.UI:CreateVGUIType("ph_show_team_topbar", "check", "CLIENT", gridpl, "PHXM_PLAYER_SHOW_TEAM_TOPBAR")
@@ -526,7 +529,6 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 		PHX.UI:CreateVGUIType("ph_autotaunt_enabled", "check", "SERVER", grid, "PHXM_ADMIN_AUTOTAUNT_ENABLE")
 		PHX.UI:CreateVGUIType("ph_autotaunt_delay", "slider", {min = 30, max = 180, init = PHX:GetCVar( "ph_autotaunt_delay" ), dec = 0, kind = "SERVER"}, grid, "PHXM_ADMIN_TAUNT_DELAY_AUTO")
 		PHX.UI:CreateVGUIType("ph_enable_taunt_scanner", "check", "SERVER", grid, "PHXM_ADMIN_TAUNT_SCANNER")
-		PHX.UI:CreateVGUIType("ph_prop_right_mouse_taunt", "check", "SERVER", grid, "PHXM_ADMIN_PROP_RIGHT_CLICK")
 		
 		-- taunt modes
 		PHX.UI:CreateVGUIType("", "label", false, grid, "PHXM_ADMIN_TAUNTMODES")
@@ -591,6 +593,7 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 		PHX.UI:CreateVGUIType("","spacer",nil,grid,"" )
 		PHX.UI:CreateVGUIType("", "label", false, grid, "PHXM_GENERAL_SETTINGS")
 		PHX.UI:CreateVGUIType("ph_notify_player_join_leave", "check", "SERVER", grid, "PHXM_ENABLE_PLAYER_JOIN_LEAVE")
+        PHX.UI:CreateVGUIType("ph_props_disable_footstep", "check", "SERVER", grid, "PHXM_DISABLE_FOOTSTEP")
 		
 		PHX.UI:CreateVGUIType("ph_notice_prop_rotation", "check", "SERVER", grid, "PHXM_ADMIN_NOTICE_ROTATION")
 		PHX.UI:CreateVGUIType("ph_prop_camera_collisions", "check", "SERVER", grid, "PHXM_ADMIN_CAMERA_COLLIDE")
@@ -719,7 +722,7 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 		PHX.UI:CreateVGUIType("", "btn", {
 			[1] = {"PHXM_MV_START", function(self) 
 				if (ulx and ulx ~= nil) then
-					LocalPlayer():ConCommand("map_vote")
+					LocalPlayer():ConCommand("ulx map_vote")
 				else
 					LocalPlayer():ConCommand("mv_start")
 				end
@@ -727,7 +730,7 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 			},
 			[2] = {"PHXM_MV_STOP", function(self)
 				if (ulx and ulx ~= nil) then
-					LocalPlayer():ConCommand("unmap_vote")
+					LocalPlayer():ConCommand("ulx unmap_vote")
 				else
 					LocalPlayer():ConCommand("mv_stop")
 				end

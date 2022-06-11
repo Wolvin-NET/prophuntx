@@ -6,15 +6,6 @@
 
 hook.Add("PH_CustomTabMenu", "PHX.About", function(tab, pVgui, paintPanelFunc)
 	
-	surface.CreateFont("PHX.TitleFont", 
-	{
-		font = "Roboto",
-		size = 40,
-		weight = 700,
-		antialias = true,
-		shadow = true
-	})
-	
 	local panel = vgui.Create("DPanel", tab)
 	panel:SetBackgroundColor(Color(40,40,40,120))
 	panel:Dock(FILL)
@@ -26,7 +17,7 @@ hook.Add("PH_CustomTabMenu", "PHX.About", function(tab, pVgui, paintPanelFunc)
 	grid:Dock(NODOCK)
 	grid:SetPos(10,10)
 	grid:SetCols(1)
-	grid:SetColWide(800)
+	grid:SetColWide(900)
 	grid:SetRowHeight(50)
 	
 	local label = {
@@ -38,9 +29,9 @@ hook.Add("PH_CustomTabMenu", "PHX.About", function(tab, pVgui, paintPanelFunc)
 		lgit	= "https://github.com/Wolvin-NET/prophuntx/",
 		lhome	= "https://wolvindra.xyz/prophuntx",
 		ldonate = GAMEMODE.DONATEURL,
-		lwiki	= "https://wolvindra.xyz/wiki/prophuntx",
-		lklog	= "https://wolvindra.xyz/phxchangelogs",
-		lplugins = "https://wolvindra.xyz/phxplugins"
+		lwiki	= "https://gmodgameservers.com/wiki/",
+		lklog	= "https://gmodgameservers.com/prophuntx",
+		lplugins = "https://gmodgameservers.com/prophuntx/plugins"
 	}
 	
 	pVgui("","label","PHX.TitleFont",grid, label.title )
@@ -70,7 +61,7 @@ hook.Add("PH_CustomTabMenu", "PHX.About", function(tab, pVgui, paintPanelFunc)
 		[6] = {"PHXM_ABOUT_BTN_WIKI",		function() gui.OpenURL(label.wiki)     end}
 	},grid,"")
 	pVgui("spacer2","spacer",nil,grid,"" )
-	pVgui("","label","Trebuchet24",grid, PHX:FTranslate("PHXM_ABOUT_THANKS", label.credits) )
+	pVgui("","label",false,grid, PHX:FTranslate("PHXM_ABOUT_THANKS", label.credits) )
 	
 	local PanelModify = tab:AddSheet("", panel, "vgui/ph_iconmenu/m_info.png")
 	paintPanelFunc(PanelModify, PHX:FTranslate("PHXM_TAB_ABOUT"))

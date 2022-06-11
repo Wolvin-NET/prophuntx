@@ -1,26 +1,3 @@
-surface.CreateFont("RAM_VoteFont", {
-    font = "Trebuchet MS",
-    size = 19,
-    weight = 700,
-    antialias = true,
-    shadow = true
-})
-
-surface.CreateFont("RAM_VoteFontCountdown", {
-    font = "Tahoma",
-    size = 32,
-    weight = 700,
-    antialias = true,
-    shadow = true
-})
-
-surface.CreateFont("RAM_VoteSysButton", 
-{    font = "Marlett",
-    size = 13,
-    weight = 0,
-    symbol = true,
-})
-
 MapVote.EndTime = 0
 MapVote.Panel = false
 

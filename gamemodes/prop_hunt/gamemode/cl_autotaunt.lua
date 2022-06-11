@@ -41,6 +41,11 @@ local function TimeleftCTaunt()
 	return nextCustomTime - curTime
 end
 
+local function FakeTauntRemainings()
+    local ply = LocalPlayer()
+    return LocalPlayer():GetTauntRandMapPropCount()
+end
+
 -- a: amplitude
 -- p: period
 local function outElastic(t, b, c, d, a, p)
@@ -85,7 +90,9 @@ local function AutoTauntPaint()
 	draw.DrawText(txt, "HunterBlindLockFont", x + 70, ScrH() - 57, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER)
 end
 
-local matw = Material("vgui/phehud/res_wep")
+local matw          = Material("vgui/phehud/res_wep")
+local matFkTaunt    = Material("vgui/phehud/ftaunt_count")
+local matDecoyHUD   = Material("vgui/phehud/decoy_hud")
 local posw = { x = ScrW() - 480, y = ScrH()-130 }
 
 local indic = {
@@ -107,6 +114,7 @@ local delayR = PHX:GetCVar( "ph_normal_taunt_delay" )
 local delayC = PHX:GetCVar( "ph_customtaunts_delay" )
 
 -- /!\ NOTICE: This is prototype, will improved or changed sometime in future.
+local colText = color_white -- decoy
 local function AutoTauntPaint_phx()
 
 	if IsValid(LocalPlayer()) && LocalPlayer():Alive() && isProp && started then
@@ -140,11 +148,13 @@ local function AutoTauntPaint_phx()
 		
 		local r = math.Round(TimeleftRTaunt())
 		local c = math.Round(TimeleftCTaunt())
+        local ftRm = FakeTauntRemainings()
 		
 		local colR = Color(255,255,255,50)
 		local colC = Color(255,255,255,50)
 		local colCR = Color(200,200,200,30)
 		local colCC = Color(200,200,200,30)
+        local colftRm = color_white
 		
 		local literalR = r + 1 .."s"
 		local literalC = c .."s"
@@ -159,15 +169,43 @@ local function AutoTauntPaint_phx()
 			colC = Color(20,230,230,220)
 			colCC = colC
 		end
+        -- Fake Taunt text & color
+        local fakeTauntRem = ftRm .. "x left"
+        if ftRm <= 0 then
+            colftRm = Color(128,128,128,200)
+        end
+        if GetConVar("ph_randtaunt_map_prop_max"):GetInt() == -1 then
+            colftRm = Color(220,220,10,200)
+            fakeTauntRem = "unlimited"
+        end
+        
+        -- Decoy Prop color setting
+        local decoyKey = "..."
+        if LocalPlayer():HasFakePropEntity() then
+            colText = color_white
+            decoyKey = string.format("Press [%s]", input.GetKeyName( GetConVar("ph_cl_decoy_spawn_key"):GetInt() ))
+        else
+            colText = Color(200, 200, 200, 128)
+            decoyKey = "N/A"
+        end
 		
 		draw.DrawText(PHX:FTranslate("HUD_PROP_TAUNT_TIME"), "PHX.AmmoFont", posw.x + 96, posw.y + 50, color_white, TEXT_ALIGN_CENTER)
 		draw.DrawText(PHX:FTranslate("HUD_PROP_CTAUNT_TIME"), "PHX.AmmoFont", posw.x + 212, posw.y + 50, color_white, TEXT_ALIGN_CENTER)
 		
 		draw.DrawText(literalR, "PHX.TopBarFont", posw.x + 96 + 50, posw.y + 18, color_white, TEXT_ALIGN_CENTER)
 		draw.DrawText(literalC, "PHX.TopBarFont", posw.x + 212 + 50, posw.y + 19, color_white, TEXT_ALIGN_CENTER)
+        
+        -- Fake taunt & Decoy texts
+        draw.DrawText(decoyKey,     "PHX.TopBarFont", posw.x+96+30, posw.y-30, colText, TEXT_ALIGN_LEFT)
+        draw.DrawText(fakeTauntRem, "PHX.TopBarFont", posw.x+212+30, posw.y-30,  colftRm, TEXT_ALIGN_LEFT)
 		
 		CreateTauntIndicators(indic.rand, colR, posw.x + 72, posw.y + 2, 50, 50)
 		CreateTauntIndicators(indic.cust, colC, posw.x + 190, posw.y + 2, 50, 50)
+        
+        -- Fake taunt & Decoy Indicator
+        CreateTauntIndicators(matDecoyHUD, colText, posw.x+72, posw.y-55, 64, 64)
+        CreateTauntIndicators(matFkTaunt,  colftRm, posw.x+190, posw.y-55, 64, 64)
+        
 		
 		-- check list
 		if not indic.cek:IsError() then

@@ -75,7 +75,7 @@ balls.randomtext = {
 	"I once saw a man with a pink mustache.",
 	"There was Obsidian and it had a Conflict.",
 	"We all just need a bit of Synergy in our lives.",
-	"The Presense is Watching you", -- todo is this correct for Terraria Eye of Chtulu Boss?
+	"The Presense is Watching you",
 	"sudo apt-get moo",
 	"\"Have you mooed today?\"",
 	"Someone could do well on the stage, we just need to find him.",

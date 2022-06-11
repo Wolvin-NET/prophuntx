@@ -52,7 +52,7 @@ function PANEL:Init()
 		self.lblHoverText:SetContentAlignment( 8 )
 		--self.lblHoverText:SetWrap( true )
 		-- function self.lblHoverText:PerformLayout()
-			self.lblHoverText:SetFontInternal( "FRETTA_MEDIUM" ) --:SetFont
+			-- self.lblHoverText:SetFontInternal( "FRETTA_MEDIUM" ) --:SetFont
 		-- end
 		
 	self.lblFooterText = vgui.Create( "DLabel", self )
@@ -147,20 +147,22 @@ function PANEL:SetHeaderText( strName )
 
 end
 
-function PANEL:SetForHelp( strHelpText )
+function PANEL:SetForHelp( strHelpText, ContribsText )
 	
 	self.lblHoverText:SetText( PHX:FTranslate("HELP_F1")  or "Error: No Help found." )
 	
 	-- Contributors & Donators
-	if GAMEMODE.PHXContributors and GAMEMODE.PHXContributors ~= nil then
-		local c = table.concat(GAMEMODE.PHXContributors,"\n- ")
+    local c =""
+	if ContribsText and ContribsText ~= nil then
+		c = table.concat(GAMEMODE.PHXContributors,"\n- ")
 	end
-	self.lblHoverText:AppendText("\n\nDonators & Contributors:\n" .. c)
+    self.lblHoverText:InsertColorChange(220,220,220,255)
+	self.lblHoverText:AppendText("\n\nDonators & Contributors:\n- " .. c)
 	timer.Simple(0, function()
-		--function self.lblHoverText:PerformLayout()
-			self.lblHoverText:SetToFullHeight()
-			--self.lblHoverText:SetFontInternal("FRETTA_MEDIUM")
-		--end
+		self.lblHoverText.PerformLayout = function(me)
+			--me:SetToFullHeight()
+			me:SetFontInternal("FRETTA_SMALL")
+		end
 	end)
 
 end

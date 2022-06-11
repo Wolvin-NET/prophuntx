@@ -33,6 +33,8 @@ local nets = {
 	"SvCommandTextEntry",
 	"SvCommandLang",
 	
+    "PHX.DeathNoticeDecoy",
+    
 	"PHX.scan_ReqTaunts",
 	"PHX.scan_SendTauntLists"
 }

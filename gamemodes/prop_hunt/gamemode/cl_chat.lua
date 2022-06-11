@@ -1,15 +1,8 @@
 -- handles special chat or notification events and or stuff.
-surface.CreateFont("PHX_NicePrintCenter", {
-	font	= "Roboto",
-	size	= 26,
-	weight	= 750,
-	shadow	= true
-})
-
 local printCenter = {}
 
 printCenter.lastShownNotify = 0
-printCenter.delay = 3	-- We'll follow PrintMessage's rule. Don't attempt to use ConVar here!
+printCenter.delay = 3.5	-- We'll follow PrintMessage's rule. Don't attempt to use ConVar here!
 printCenter.color = color_white
 
 function printCenter:notify_wait()

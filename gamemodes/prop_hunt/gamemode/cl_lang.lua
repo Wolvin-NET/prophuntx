@@ -131,9 +131,9 @@ function PHX:QTrans( data )
 
 	if istable(data) then
 		local text = data[1]
-		PHX:FTranslate( text, unpack(data, 2) ) -- we take 2nd index and onwards from table and become varargs
+		return PHX:FTranslate( text, unpack(data, 2) ) -- we take 2nd index and onwards from table and become varargs
 	elseif isstring(data) then
-		PHX:FTranslate( data )
+		return PHX:FTranslate( data )
 	else
 		return "!ERROR_NOT_STRING_OR_TABLE"
 	end
@@ -193,10 +193,11 @@ function PHX:MsgBox_Query( body, title, b1, f1, b2, f2, b3, f3, b4, f4 )
 	
 	body 	= self:QTrans( body )
 	title 	= self:QTrans( title )
-	b1 		= self:QTrans( b1 )
-	b2 		= self:QTrans( b2 )
-	b3 		= self:QTrans( b3 )
-	b4 		= self:QTrans( b4 )
+	b1      = self:QTrans( b1 ) -- required!
+    
+    if b2 and b2 ~= nil then b2	= self:QTrans( b2 ) end
+    if b3 and b3 ~= nil then b3	= self:QTrans( b3 ) end
+    if b4 and b4 ~= nil then b4	= self:QTrans( b4 ) end
 	
 	Derma_Query( body, title, b1, f1, b2, f2, b3, f3, b4, f4 )
 	

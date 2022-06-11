@@ -93,7 +93,7 @@ function Player:CheckUserGroup()
 	return false
 end
 
-function Player:GetTauntRandMapPropCount()
+function Player:GetTauntRandMapPropCount()  -- Fake Taunt
 	return self:GetNWInt("iRandMapPropCount", 0)
 end
 
@@ -104,8 +104,7 @@ end
 if SERVER then
 	function Player:SubTauntRandMapPropCount()
 		local count = self:GetNWInt("iRandMapPropCount", 0)
-		if count < 0 then return end
-		
+		if count <= 0 then return end
 		count = count - 1
 		self:SetNWInt("iRandMapPropCount", count)
 	end
@@ -130,36 +129,36 @@ if SERVER then
 		if self:HasFakePropEntity() and self:Alive() and self:Team() == TEAM_PROPS then
 			-- todo: See cl_init.lua @ 394, values must be match!
 			local trace = {}
-			local dist = 200
-			
-			local trace.start = vector_origin
-			local trace.endpos = vector_origin
-			
-			local propent = self:GetPlayerPropEntity()
-			if IsValid(propent) then -- prevent from dying/removed
-								-- todo: :EyePos() // if this method fails
-				trace.start 	= propent:GetPos() + Vector(0,0,16)
-				trace.endpos 	= propent:GetPos() + Vector(0,0,16) + self:EyeAngles():Forward() * dist
-				trace.mask		= MASK_SOLID + MASK_PLAYERSOLID
-				trace.filter	= ents.FindByClass('ph_prop')
-			end
+			local dist = 250
+			trace.start 	= self:EyePos() + Vector(0,0,16)
+			trace.endpos 	= self:EyePos() + Vector(0,0,16) + self:EyeAngles():Forward() * dist
+			trace.mask		= MASK_PLAYERSOLID
+			trace.filter	= ents.FindByClass('ph_prop')
+            table.insert(trace.filter, self)
 			
 			local tr = util.TraceLine( trace )
-			if (tr.Hit) then
+			if (tr.Hit and tr.HitNormal.z > 0.5) then
 				local pos = tr.HitPos
 				
-				local decoy = ents.Create("ph_fake_prop")
-				decoy:SetPos( pos )
-				decoy:SetAngles( Angle( 0, math.random(0,359), 0 ) )
-				decoy:Spawn()
-				decoy:SetOwner( self )
-				
+				self.propdecoy = ents.Create("ph_fake_prop")
+                if self.ph_prop:GetModel() == "models/player/kleiner.mdl" or
+                    self.ph_prop:GetModel() == player_manager.TranslatePlayerModel( tostring(self:GetInfo("cl_playermodel")) ) then
+                    self.propdecoy:SetPos( pos )
+                else
+                    self.propdecoy:SetPos( pos - Vector(0,0, self.ph_prop:OBBMins().z ) ) 
+                end
+				self.propdecoy:SetAngles( self.ph_prop:GetAngles() )
+				self.propdecoy:Spawn()
+                
+				self.propdecoy:ChangeModel( self.ph_prop )
+                self.propdecoy:SetOwner( self )
+                
 				timer.Simple(0, function() 
 					--decoy:TakeModelFromMap()
 					self:SendSurfaceSound('buttons/lever4.wav')
 				end)
 				
-				self:SetFakePropEntity(0)
+				self:SetFakePropEntity(false)
 				self:PHXChatInfo( "PRIMARY", "DECOY_PUT_SUCC" )
 			else
 				self:PHXChatInfo( "WARNING", "DECOY_CANT_PUT_HERE" )

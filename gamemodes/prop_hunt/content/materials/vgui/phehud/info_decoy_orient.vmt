@@ -1,0 +1,6 @@
+"UnlitGeneric"
+{
+	"$basetexture" "vgui\phehud\info_decoy_orient"
+	"$vertexcolor" "1"
+	"$translucent" "1"
+}

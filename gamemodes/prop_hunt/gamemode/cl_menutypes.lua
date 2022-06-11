@@ -11,9 +11,9 @@ local function CvarChangedMessage( ... )
 end
 
 -- [!] VarArgs as Table
-local function ConfirmMessage( ... )
+local function ConfirmMessage( cvar, value )
 	--Derma_Message( PHX:Translate("PHXM_CVAR_CHANGED", ... ), "INFO", "OK" )
-	PHX:MsgBox( { ... }, "MISC_INFO", "MISC_OK" )
+	PHX:MsgBox( {"PHXM_CVAR_CHANGED", cvar, value}, "MISC_INFO", "MISC_OK" )
 end
 
 PHX.CLUI = {
@@ -29,7 +29,6 @@ PHX.CLUI = {
 		chk:SetSize(p:GetColWide(),p:GetRowHeight())
 		chk:SetText(PHX:QTrans(l))	--chk:SetText(l)
 		chk:SetFont("HudHintTextLarge")
-		chk:SetConVar(c)
 		chk:SetValue( GetConVar(c):GetBool() ) -- forcebool, don't use PHX:CLCVar()
 		function chk:OnChange(bool)
 			local v = 0
@@ -360,7 +359,7 @@ end,
 	label:SetSize(300,0)
 	label:DockMargin(2,0,0,0)
 	label:SetFont("HudHintTextLarge")
-	label:SetText(l)
+	label:SetText(PHX:QTrans(l))
 	
 	local textEntry = vgui.Create("DTextEntry", pnl)
 	textEntry:Dock(LEFT)
@@ -372,7 +371,7 @@ end,
 	btn:Dock(LEFT)
 	btn:SetSize(64,0)
 	btn:DockMargin(4,2,0,2)
-	btn:SetText(PHX:FTranslate("PHX_BTNTXTENTRY_Set")) --btn:SetText("Set")
+	btn:SetText(PHX:QTrans("MISC_SET")) --btn:SetText("Set")
 	
 	textEntry.EnteredText = ""
 	
@@ -403,7 +402,8 @@ end,
 	return pnl
 end,
 
--- todo: Add Customisable Combo Box in future version.
+-- todo: Add Customisable Combo Box in future version
+    -- todo: not yet
 
 -- Add More here :)
 }

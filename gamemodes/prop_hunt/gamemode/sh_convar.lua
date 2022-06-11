@@ -184,8 +184,6 @@ CVAR["ph_custom_mv_func"]					=	{ CTYPE_STRING, "MapVote.Start()", CVAR_SERVER_H
 CVAR["ph_forcejoinbalancedteams"]			=	{ CTYPE_BOOL, 	"0", CVAR_SERVER_ONLY, "Force players to even out teams upon joining? Setting 0 means do not force to join in balanced teams." }
 CVAR["ph_smggrenadecounts"]					=	{ CTYPE_NUMBER, "1", CVAR_SERVER_ONLY, "How many grenades for SMG1 served on spawn?", { min = 1, max = 10 } }
 
-CVAR["ph_prop_right_mouse_taunt"]			=	{ CTYPE_BOOL,	"1", CVAR_SERVER_ONLY_NO_NOTIFY, "Should Prop also able to Taunt by pressing Right Click?"}
-
 CVAR["ph_print_verbose"]					=	{ CTYPE_BOOL,	"0", CVAR_SERVER_ONLY_NO_NOTIFY, "Developer Verbose. Some printed messages will only appear if this is enabled." }
 
 -- Prop Chooser / Prop Menu
@@ -215,6 +213,7 @@ CVAR["ph_taunt_pitch_enable"]				=	{ CTYPE_BOOL, "1", CVAR_SERVER_ONLY, "Enable 
 CVAR["ph_taunt_pitch_range_min"]			=	{ CTYPE_FLOAT, "50.0", CVAR_SERVER_ONLY, "Minimum threshold/acceptable pitch range for taunt", {min = 1, max = 99} }
 CVAR["ph_taunt_pitch_range_max"]			=	{ CTYPE_FLOAT, "200.0", CVAR_SERVER_ONLY, "Maximum threshold/acceptable pitch range for taunt", {min = 100, max = 255} }
 CVAR["ph_enable_decoy_reward"]				=	{ CTYPE_BOOL,	"1", CVAR_SERVER_ONLY_NO_NOTIFY, "Enable a decoy reward? Reward will be given if any prop player is alive on every round ends." }
+CVAR["ph_props_disable_footstep"]           =   { CTYPE_BOOL,  "1", CVAR_SERVER_ONLY, "Toggle Mute player footstep for Prop players." }
 
 -- Load & init
 
@@ -339,6 +338,8 @@ if CLIENT then
 	CLCVAR["ph_show_team_topbar"] 			=	{ CTYPE_BOOL, 	"1",	 true, false, "Show total alive team players bar on the top left", {min=0,max=1} }
 	CLCVAR["ph_show_custom_crosshair"]		=	{ CTYPE_BOOL, 	"1",	 true, false, "Show custom crosshair for props", {min=0,max=1} }
 	CLCVAR["ph_show_tutor_control"]			=	{ CTYPE_BOOL, 	"1",	 true, false, "Show 'Prop Gameplay Control' hud on each prop spawns. This only show twice and reset until map changes/user disconnect.", {min=0,max=1} }
+    -- Mouse right clicking is now client-sided.
+    CLCVAR["ph_prop_right_mouse_taunt"]		=	{ CTYPE_BOOL,	"0",     true, true,  "Should Prop also able to Taunt by pressing Right Click?" }
 
 	CLCVAR["ph_default_taunt_key"]			=	{ CTYPE_NUMBER,  KEY_F3, true, true,  "Default random taunt key to be used. Default is F3 ("..tostring(KEY_F3)..")" }
 	CLCVAR["ph_default_customtaunt_key"]	=	{ CTYPE_NUMBER,  KEY_C,  true, true,  "Default custom taunt key to be used. Default is C ("..tostring(KEY_C)..")" }
@@ -351,12 +352,15 @@ if CLIENT then
 	CLCVAR["ph_cl_pitch_taunt_enable"]		=	{ CTYPE_BOOL,	"1",	 true, true,  "Enable pitch level for custom taunts?"}
 	CLCVAR["ph_cl_pitch_level"]				=	{ CTYPE_FLOAT,	"100.0", true, true,  "Current pitch level used for.", { min = 1, max = 255 } }
 	CLCVAR["ph_cl_pitch_apply_random"]		=	{ CTYPE_BOOL,	"0",	 true, true,  "Apply for random taunts as well."}
-	CLCVAR["ph_cl_pitch_randomized"]		=	{ CTYPE_BOOL,	"0",	 true, true,  "Enable randomized taunt pitch for CUSTOM taunt regardless from the preferred pitch level."}
-	CLCVAR["ph_cl_pitch_randomized_random"]	=	{ CTYPE_BOOL,	"0", 	 true, true,  "Enable randomized taunt pitch for RANDOM taunt regardless from the preferred pitch level." }
+	CLCVAR["ph_cl_pitch_randomized"]		=	{ CTYPE_BOOL,	"0",	 true, true,  "Randomize taunt pitch for CUSTOM taunt regardless from the preferred pitch level."}
+	CLCVAR["ph_cl_pitch_randomized_random"]	=	{ CTYPE_BOOL,	"0", 	 true, true,  "Randomize taunt pitch for RANDOM taunt regardless from the preferred pitch level." }
 	
-	CLCVAR["ph_cl_pitch_apply_fake_prop"]	=	{ CTYPE_BOOL,	"0", 	 true, true,  "Also applies for fake prop taunt regardless it's randomized or preferred pitch level." }
+	CLCVAR["ph_cl_pitch_apply_fake_prop"]	=	{ CTYPE_BOOL,	"0", 	 true, true,  "Apply pitch for fake taunts." }
+    CLCVAR["ph_cl_pitch_fake_prop_random"]  =   { CTYPE_BOOL,   "0",     true, true,  "Randomize taunt pitch for FAKE taunt regardless from the preferred pitch level."}
 	
 	CLCVAR["ph_cl_decoy_spawn_key"]			=	{ CTYPE_NUMBER, KEY_1,	 true, true,  "What key should we use to spawn 'Decoy' prop? Default is Key number 1 ("..tostring(KEY_1)..")" }
+    CLCVAR["ph_cl_decoy_spawn_helper"]      =   { CTYPE_BOOL,   "1",     true, false, "Show/Hide a Decoy placement helper? This will show a white dot with a text near on your crosshair." }
+    CLCVAR["ph_cl_decoy_spawn_marker"]      =   { CTYPE_BOOL,   "1",     true, false, "Show/Hide Decoy marker?" }
 
 	local cTranslate = {}
 

@@ -1,18 +1,7 @@
+include("cl_fonts.lua")
+
 language.Add("ph_fake_prop", "Prop Decoy")
 killicon.Add("ph_fake_prop", "vgui/hud/killicon_decoy", Color(248,200,0,255))
-
-surface.CreateFont( "HunterBlindLockFont", {
-	font	= "Arial",
-	size	= 14,
-	weight	= 1200,
-	antialias = true,
-	underline = false
-})
-
-surface.CreateFont("TrebuchetBig", {
-	font = "Impact",
-	size = 40
-})
 
 -- public function for drawing simple circle.
 function draw.Circle( x, y, radius, seg )
@@ -59,13 +48,19 @@ local pointer 	= "prophunt_enhanced/sprites/luckyball_pointer"
 local dmat		= "prophunt_enhanced/sprites/devilball"
 local dpointer	= "prophunt_enhanced/sprites/devilball_pointer"
 local tutormat 	= "vgui/hud_control_help.png"
-local matHasDecoy = ""
 local crosshair = Material("vgui/hud_crosshair")
+
+local decoy = {
+    indicator   = "vgui/phehud/info_decoy",
+    radial      = "vgui/phehud/info_decoy_orient"
+}
 local lgWind 	= {}
 local curshow 	= 0
 
+local translate = PHX.FTranslate
+
 -- // local functions \\
-local function DrawWaypointMarker( pl, mat, pointer, entToFind, offset )
+local function DrawWaypointMarker( pl, matMarker, pointer, entToFind, offset )
 
 	local offset = Vector( 0, 0, offset ) --45
 	local ang = pl:EyeAngles()
@@ -86,7 +81,7 @@ local function DrawWaypointMarker( pl, mat, pointer, entToFind, offset )
 			
 				if ((poscr.x > 32 && poscr.x < (w-43)) && (poscr.y > 32 && poscr.y < (h-38))) then
 					surface.SetDrawColor(255,255,255,255)
-					surface.SetTexture(surface.GetTextureID( mat ))
+					surface.SetTexture(surface.GetTextureID( matMarker ))
 					surface.DrawTexturedRect( poscr.x-32, poscr.y, 64, 64 )
 				else
 					local r = math.Round(cX/2)
@@ -104,50 +99,46 @@ local function DrawWaypointMarker( pl, mat, pointer, entToFind, offset )
 
 end
 
-local function DrawLine( pl, mat, forTeam, ZEnabled, bShouldClamp, dist, bUseIndicator, colorHit, colorNoHit )
+local function DrawLine( pl, spriteMat, forTeam, dist, sizex, sizey, convarToCheck )
 
-	if IsValid(pl) && pl:Alive() && pl:Team() == forTeam then
+	if pl:Team() == forTeam then
+    
+        if !PHX:GetCLCVar( convarToCheck ) then return end
+        
+        local colour = color_white
+
+        if dist == nil then dist = 100 end
+        if sizex == nil then sizex = 8 end
+        if sizey == nil then sizey = 8 end
 	
 		local trace = {}
+            trace.start 	= pl:EyePos() + Vector(0,0,16)
+            trace.endpos 	= pl:EyePos() + Vector(0,0,16) + pl:EyeAngles():Forward() * dist
+            trace.mask		= MASK_PLAYERSOLID
+            trace.filter	= ents.FindByClass('ph_prop')
+            
+        local tr = util.TraceLine( trace )
+        local decoyCanBePlaced = ""
+        
+        if tr.Hit then
+            if tr.HitNormal.z > 0.5 then
+                colour = color_white
+                decoyCanBePlaced = translate( "DECOY_INDICATOR_OK", input.GetKeyName(GetConVar("ph_cl_decoy_spawn_key"):GetInt()) )
+            else
+                decoyCanBePlaced = translate( "DECOY_INDICATOR_INVALID" )
+                colour = Color(225, 25, 25)
+            end
+        else
+            colour = Color(220, 40, 25)
+            decoyCanBePlaced = translate( "DECOY_INDICATOR_TOOFAR" )
+        end
+        
+        draw.DrawText( decoyCanBePlaced, "HunterBlindLockFont", ScrW() / 2 + 36, ScrH() / 2 - 6, colour, TEXT_ALIGN_LEFT )
 		
-		local trace.start = vector_origin
-		local trace.endpos = vector_origin
-		
-		if (bShouldClamp) and dist and dist ~= nil then
-			local propent = pl:GetPlayerPropEntity()
-			if IsValid(propent) then -- prevent from dying/removed
-								-- todo: :EyePos() // if this method fails
-				trace.start 	= propent:GetPos() + Vector(0,0,16)
-				trace.endpos 	= propent:GetPos() + Vector(0,0,16) + pl:EyeAngles():Forward() * dist
-				-- anything that are clamped, this must be also needed!
-				trace.mask		= MASK_SOLID + MASK_PLAYERSOLID
-				trace.filter	= ents.FindByClass('ph_prop') -- todo: pl ?
-			end
-		else
-			--default pos if there is no clamp set.
-			trace.start = pl:GetShootPos()
-			trace.endpos = pl:GetEyeTrace().HitPos
-		end
-		
-		local lineColor = team.GetColor( pl:Team() )
-		if ZEnabled == nil then ZEnabled = false end
-		
-		if (bUseIndicator) and colorHit and colorHit ~= nil and colorNoHit and colorNoHit ~= nil then
-			local c
-			
-			local tr = util.TraceLine( trace )
-			if (tr.Hit) then
-				c = colorHit
-			else
-				c = colorNoHit
-			end
-			
-			lineColor = c
-		end
-		
-		render.DrawLine(trace.start, trace.endpos, lineColor, ZEnabled)
-		render.SetMaterial(mat)
-		render.DrawSprite(trace.endpos, 8, 8, team.GetColor(pl:Team()))
+        cam.Start3D()
+            render.SetMaterial(spriteMat)
+            render.DrawSprite(trace.endpos, sizex, sizey, colour)
+        cam.End3D()
 		
 	end
 
@@ -176,7 +167,7 @@ function GM:ShowHelp()
 	
 		local Help = vgui.CreateFromTable( vgui_Splash )
 		Help:SetHeaderText( GAMEMODE.Name or "Prop Hunt: X" )
-		Help:SetForHelp( "HELP_F1" )
+		Help:SetForHelp( "HELP_F1", GAMEMODE.PHXContributors )
 		
 		Help.lblFooterText.Think = function( panel ) 
 			local tl = GAMEMODE:GetGameTimeLeft()
@@ -197,23 +188,22 @@ function GM:ShowHelp()
 		
 		hook.Run("PH_AddSplashHelpButton", Help)
 		
-		--if ( GAMEMODE.TeamBased ) then -- clearly because PH is roundbased.
-			local btn = Help:AddSelectButton( PHX:FTranslate("DERMA_CHANGETEAM"), function() GAMEMODE:ShowTeam() end )
-			btn.m_colBackground = Color( 120, 255, 100 )
-		--end
+		local btn = Help:AddSelectButton( PHX:FTranslate("DERMA_CHANGETEAM"), function() GAMEMODE:ShowTeam() end )
+		btn.m_colBackground = Color( 120, 255, 100 )
 
 		Help:AddCancelButton()
-		
+		Help:MakePopup()
+        Help:NoFadeIn()
+        
 	else
 	
 		Help:AddCancelButton()
-	
+        
+        Help:MakePopup()
+        Help:NoFadeIn()
 		ErrorNoHalt("[Prop Hunt: X] - Unable to open Help splash screen!!!")
 
 	end
-	
-	Help:MakePopup()
-	Help:NoFadeIn()
 	
 end
 
@@ -271,30 +261,14 @@ function GM:CalcView(pl, origin, angles, fov)
 			table.insert(filterent, pl)
 			
 			trace = self.ViewCam:CamColEnabled( origin, angles, trace, "start", "endpos", -80, -80, -80 )
-			--[[ if cHullz < cHullz_Min then
-				trace.start = origin + Vector(0, 0, cHullz + (cHullz_Min-cHullz))
-				trace.endpos = origin + Vector(0, 0, cHullz + (cHullz_Min-cHullz)) + (angles:Forward() * -80)
-			elseif cHullz > cHullz_Max then
-				trace.start = origin + Vector(0, 0, cHullz - cHullz_Max)
-				trace.endpos = origin + Vector(0, 0, cHullz - cHullz_Max) + (angles:Forward() * -80)
-			else
-				trace.start = origin + Vector(0, 0, 8)
-				trace.endpos = origin + Vector(0, 0, 8) + (angles:Forward() * -80)
-			end ]]
 			
 			trace.filter = filterent
 			
 			local tr = util.TraceLine(trace)
 			view.origin = tr.HitPos
 		else
-			self:ViewCam:CamColDisabled( origin, angles, view, "origin", -80, -80, -80 )
-			--[[ if cHullz < cHullz_Min then
-				view.origin = origin + Vector(0, 0, cHullz + (cHullz_Min-cHullz)) + (angles:Forward() * -80)
-			elseif cHullz > cHullz_Max then
-				view.origin = origin + Vector(0, 0, cHullz - cHullz_Max) + (angles:Forward() * -80)
-			else
-				view.origin = origin + Vector(0, 0, 8) + (angles:Forward() * -80)
-			end ]]
+			self.ViewCam:CamColDisabled( origin, angles, view, "origin", -80, -80, -80 )
+
 		end
 	elseif pl:Team() == TEAM_HUNTERS && pl:Alive() then
 	 	local wep = pl:GetActiveWeapon() 
@@ -335,7 +309,7 @@ function HUDPaint()
 		for _, pl in pairs(player.GetAll()) do
 			if pl != LocalPlayer() && (pl && pl:IsValid() && pl:Alive() && pl:Team() == LocalPlayer():Team()) then
 				local addvector = Vector(0, 0, math.Clamp(pl:EyePos():Distance(LocalPlayer():EyePos())*0.04, 16, 64))
-				-- todo: text will disappear in a specified distance.
+				-- todo: text will disappear in a specified distance - not yet
 				draw.DrawText(PHX:FTranslate("HUD_TargetID", pl:Name(), pl:Health()), "TargetIDSmall", (pl:EyePos() + addvector):ToScreen().x, (pl:EyePos() + addvector):ToScreen().y, team.GetColor(pl:Team()), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
 		end
@@ -371,27 +345,19 @@ function HUDPaint()
 	if PHX:GetCLCVar( "cl_enable_devilballs_icon" ) && LocalPlayer():Team() == TEAM_PROPS then
 		DrawWaypointMarker( LocalPlayer(), dmat, dpointer, 'ph_devilball', 35 )
 	end
+    
+    if PHX:GetCLCVar( "ph_cl_decoy_spawn_marker" ) && LocalPlayer():Team() == TEAM_PROPS then
+        DrawWaypointMarker( LocalPlayer(), decoy.indicator, decoy.radial, 'ph_fake_prop', 50 )
+    end
 	
 	-- Prop Crosshair
 	if PHX:GetCLCVar( "ph_show_custom_crosshair" ) && LocalPlayer():Team() == TEAM_PROPS && LocalPlayer():Alive() then
 		local color
 		local trace = {}
 		
-		trace = self.ViewCam:CamColEnabled( LocalPlayer():EyePos(), LocalPlayer():EyeAngles(), trace, "start", "endpos", 100, 300, 100 )
-		
-		--[[ if cHullz < cHullz_Min then
-			trace.start = LocalPlayer():EyePos() + Vector(0, 0, cHullz + (cHullz_Min-cHullz))
-			trace.endpos = LocalPlayer():EyePos() + Vector(0, 0, cHullz + (cHullz_Min-cHullz)) + LocalPlayer():EyeAngles():Forward() * 100
-		elseif cHullz > cHullz_Max then
-			trace.start = LocalPlayer():EyePos() + Vector(0, 0, cHullz - cHullz_Max)
-			trace.endpos = LocalPlayer():EyePos() + Vector(0, 0, cHullz - cHullz_Max) + LocalPlayer():EyeAngles():Forward() * 300
-		else
-			trace.start = LocalPlayer():EyePos() + Vector(0, 0, 8)
-			trace.endpos = LocalPlayer():EyePos() + Vector(0, 0, 8) + LocalPlayer():EyeAngles():Forward() * 100
-		end ]]
-		--trace.filter = ents.FindByClass("ph_prop")
-		--Fix by Codingale: https://github.com/Codingale , https://github.com/prop-hunt-enhanced/prop-hunt-enhanced/pull/11
-		local filter = {} -- We need to filter out players and the ph_prop.
+		trace = GAMEMODE.ViewCam:CamColEnabled( LocalPlayer():EyePos(), LocalPlayer():EyeAngles(), trace, "start", "endpos", 100, 300, 100 )
+
+		local filter = {}
 		
 		for k,v in pairs(ents.GetAll()) do
 			if v:GetClass() == "ph_prop" or string.lower(v:GetClass()) == "player" then
@@ -408,7 +374,6 @@ function HUDPaint()
 			else
 				color = IndicatorColor.ok
 			end
-			--color = Color(10,255,10,255)
 		else
 			color = Color(255,255,255,255)
 		end
@@ -426,26 +391,26 @@ function HUDPaint()
 		local steamx = (ScrW()/2) - 32
 		draw.SimpleTextOutlined(transtext , "TrebuchetBig", textx, ScrH()*0.75, Color(255, 10, 10, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1.5, Color(0, 0, 0, 255))
 	end
+    
+    -- Draw a sprite
+    if GetGlobalBool("InRound", false) and LocalPlayer():HasFakePropEntity() and LocalPlayer():Alive() then
+		DrawLine(LocalPlayer(), MAT_LASERDOT, TEAM_PROPS, 250, 24, 24, "ph_cl_decoy_spawn_helper" )
+	end
 end
 hook.Add("HUDPaint", "PH_HUDPaint", HUDPaint)
 
 -- After the player has been drawn
 function PH_PostPlayerDraw(pl)
 	-- Draw a line on hunters
-	if PHX:GetCLCVar( "ph_cl_spec_hunter_line" ) && (!LocalPlayer():Alive() || LocalPlayer():Team() == TEAM_SPECTATOR) then
-		
-		DrawLine(pl, MAT_LASERDOT, TEAM_HUNTERS, true)
-		
-		--[[ if IsValid(pl) && pl:Alive() && pl:Team() == TEAM_HUNTERS then
-			render.DrawLine(pl:GetShootPos(), pl:GetEyeTrace().HitPos, team.GetColor(pl:Team()), true)
-			render.SetMaterial(MAT_LASERDOT)
-			render.DrawSprite(pl:GetEyeTrace().HitPos, 8, 8, team.GetColor(pl:Team()))
-		end ]]
-	end
-	
-	if GetGlobalBool("InRound", false) and LocalPlayer():HasFakePropEntity() && LocalPlayer():Alive() && LocalPlayer():Team() ~= TEAM_SPECTATOR then
-		DrawLine(pl, MAT_LASERDOT, TEAM_PROPS, false, true, 200, true, Color(34,177,76), Color(255,128,40))
-	end
+	if PHX:GetCLCVar( "ph_cl_spec_hunter_line" ) && (!LocalPlayer():Alive() || LocalPlayer():Team() == TEAM_SPECTATOR) then        
+        local trace = {}
+        trace.start = pl:GetShootPos()
+        trace.endpos = pl:GetEyeTrace().HitPos
+        
+        render.DrawLine(trace.start, trace.endpos, team.GetColor(pl:Team()), true)
+		render.SetMaterial(MAT_LASERDOT)
+		render.DrawSprite(trace.endpos, 8, 8, team.GetColor(pl:Team()))
+    end
 end
 hook.Add("PostPlayerDraw", "PH_PostPlayerDraw", PH_PostPlayerDraw)
 
@@ -468,22 +433,8 @@ function drawPropSelectHalos()
 			end
 		
 			local trace = {}
-			-- fix for smaller prop size. They should stay horizontal rather than looking straight down.
 			
-			trace = self.ViewCam:CamColEnabled( LocalPlayer():EyePos(), LocalPlayer():EyeAngles(), trace, "start", "endpos", 100, 300, 100 )
-			
-			--[[ if cHullz < cHullz_Min then
-				trace.start = LocalPlayer():EyePos() + Vector(0, 0, cHullz + (cHullz_Min-cHullz))
-				trace.endpos = LocalPlayer():EyePos() + Vector(0, 0, cHullz + (cHullz_Min-cHullz)) + LocalPlayer():EyeAngles():Forward() * 100
-			elseif cHullz > cHullz_Max then
-				trace.start = LocalPlayer():EyePos() + Vector(0, 0, cHullz - cHullz_Max)
-				trace.endpos = LocalPlayer():EyePos() + Vector(0, 0, cHullz - cHullz_Max) + LocalPlayer():EyeAngles():Forward() * 300
-			else
-				trace.start = LocalPlayer():EyePos() + Vector(0, 0, 8)
-				trace.endpos = LocalPlayer():EyePos() + Vector(0, 0, 8) + LocalPlayer():EyeAngles():Forward() * 100
-			end ]]
-			
-			--trace.filter = ents.FindByClass("ph_prop")
+			trace = GAMEMODE.ViewCam:CamColEnabled( LocalPlayer():EyePos(), LocalPlayer():EyeAngles(), trace, "start", "endpos", 100, 300, 100 )
 			
 			local filter = {} -- We need to filter out players and the ph_prop.
 			for k,v in pairs(ents.GetAll()) do
@@ -557,7 +508,6 @@ net.Receive("PH_ShowTutor", function()
 	end
 end)
 
--- Receive the Winning Notification
 net.Receive("PH_TeamWinning_Snd", function(len)
 	local snd = net.ReadString()
 	if PHX:GetCLCVar( "ph_cl_endround_sound" ) then
@@ -565,16 +515,12 @@ net.Receive("PH_TeamWinning_Snd", function(len)
 	end
 end)
 
--- Resets the player hull
 net.Receive("ResetHull", function()
 	if LocalPlayer() && LocalPlayer():IsValid() then
 		LocalPlayer():ResetHull()
 		cHullz = 64
 	end
 end)
-
--- Plays the Freeze Cam sound
--- PHX.FreezeCamSounds is moved to sh_config.lua!
 
 net.Receive("PlayFreezeCamSound", function()
 	if PHX:GetCVar( "ph_fc_use_single_sound" ) then
@@ -584,7 +530,6 @@ net.Receive("PlayFreezeCamSound", function()
 	end
 end)
 
--- Sets the player hull
 net.Receive("SetHull", function()
 	local hullxy = net.ReadInt(32)
 	local huz = net.ReadInt(32)
@@ -615,6 +560,18 @@ net.Receive("DisableDynamicLight", function()
 		client_prop_light = false
 	end
 end)
+
+-- Draw a deathnotice from decoy prop
+function PHX:DrawDecoyDeathNotice( attacker, inflictor )
+    GAMEMODE:AddDeathNotice( attacker:Nick(), -1, inflictor, "#ph_fake_prop", -1 )
+end
+
+net.Receive( "PHX.DeathNoticeDecoy", function() 
+    local attacker = net.ReadEntity()
+    local inflictor = net.ReadEntity()
+    
+    PHX:DrawDecoyDeathNotice( attacker, inflictor )
+end )
 
 -- Language Preview Window
 function PHX:showLangPreview()

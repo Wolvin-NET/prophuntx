@@ -1,0 +1,9 @@
+"Sprite"
+{
+	"$spriteorientation" "vp_parallel"
+	"$spriteorigin" "[ 0.50 0.50 ]"
+	"$basetexture" "vgui\phehud\decoy_placehere"
+    
+    "$additive" "1"
+    "$ignorez"  "1"
+}

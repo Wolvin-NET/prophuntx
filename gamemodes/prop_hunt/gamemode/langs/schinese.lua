@@ -482,7 +482,184 @@ LANG["TM_SEARCH_PLACEHOLDER"]			= "Search in this category: Enter word, lowercas
 --[[
 	Freeze Cam, Revision: 23.09.21/X2Z
 ]]
-LANG["PHXM_ADMIN_FREEZECAM_HUNTER"]			= "Enable Freeze Cam features for team hunters"	-- Todo: Translate Me
+LANG["PHXM_ADMIN_FREEZECAM_HUNTER"]			= "Enable Freeze Cam features for team hunters"
 
--- Add to Language Table.
+
+--============= LATE ADDITION OF 10.06.2022/X2Z. =============--
+
+LANG["PHXM_MSG_INPUT_IS_EMPTY"]			= "Text is empty or you didn't pressed ENTER key."
+LANG["MISC_SET"]						= "Set"
+LANG["MISC_APPLY"]						= "Apply"
+LANG["MISC_NO"]							= "No"
+LANG["MISC_YES"]						= "Yes"
+LANG["MISC_WARN"]						= "Warning"
+LANG["MISC_ERROR"]						= "Error"
+LANG["MISC_INFO"]						= "Information"
+LANG["MISC_NOTICE"]						= "Notice"
+LANG["MISC_IDK"]						= "Unknown"
+LANG["MISC_NA"]							= "N/A"
+
+--[[
+	ADMIN PANEL, Revision 10.06/2022/X2Z
+]]--
+LANG["PHXM_TAUNT_SETTINGS"]				= "Taunt Settings"
+LANG["PHXM_GENERAL_SETTINGS"]			= "General Settings"
+LANG["PHXM_FAKE_TAUNT_SETTINGS"]		= "Fake Taunt Settings"
+LANG["PHXM_FAKE_TAUNT_ENABLE"]			= "Allow fake taunts to be played on random props in the map. Can be accessed only through Custom Taunt menu."
+LANG["PHXM_FAKE_TAUNT_MAXUSAGE"]		= "Maximum usage for fake taunts to be used; -1 is unlimited."
+LANG["PHXM_TAUNT_RIGHT_CLICK"]		    = "Right click for taunt. This will disable Right-clicking on custom menu!"
+
+LANG["PHXM_TAUNT_PITCH_SETTINGS"]		= "Taunt Pitch Settings"
+LANG["PHXM_TAUNT_PITCH_ENABLE"]			= "Enable Taunt Pitch"
+LANG["PHXM_TAUNT_PITCH_RANGE_MIN"]		= "Minimum threshold/acceptable pitch range for a taunt. 1 to 99."
+LANG["PHXM_TAUNT_PITCH_RANGE_MAX"]		= "Maximum threshold/acceptable pitch range for a taunt. 100 to 255."
+
+LANG["PHXM_DECOY_SETTINGS"]				= "Decoy Settings"
+LANG["PHXM_DECOY_ENABLE"]				= "Enable Decoy reward? Reward will be given ONLY ONCE for alive props until the round ends. They don't add and only substract once they're placed."
+
+LANG["PHXM_DISABLE_FOOTSTEP"]           = "Toggle silent prop team footsteps"
+
+LANG["PHXM_ADMIN_CHATSETTING"]			= "Chat Window Settings"
+LANG["PHXM_ADMIN_HUNTERBLIND"]			= "Hunter Blind Control"
+
+--[[
+	Plugins in sh_init.lua, Revision 10.06/2022/X2Z
+]]--
+LANG["PLUG_NAME_VER"]					= "Plugin: %s | v.%s"
+LANG["PLUG_DESCRIPTION"]				= "Description: %s"
+
+--[[
+	Taunt Pitch, Revision 10.06/2022/X2Z
+]]--
+LANG["PHX_CTAUNT_USE_PITCH"]			= "Use pitch for custom taunts"
+LANG["PHX_CTAUNT_RANDOM_PITCH"]			= "Randomize pitch when playing taunt"
+LANG["PHX_RTAUNT_USE_PITCH"]			= "Use pitch for random taunts [%s]"
+LANG["PHX_RTAUNT_RANDOMIZE"]			= "Randomize pitch for random taunts [%s]"
+LANG["PHX_CTAUNT_PITCH_FOR_FAKE"]		= "Use pitch for fake taunts"
+LANG["PHX_CTAUNT_RANDPITCH_FOR_FAKE"]	= "Randomize pitch for fake taunts"
+LANG["PHX_CTAUNT_SLIDER_PITCH"]			= "Taunt pitch slider."
+LANG["TM_TOOLTIP_FAKETAUNT"]			= "Play a Fake Taunt on random prop"
+LANG["TM_PREFERRED_PITCH"]              = "Preferred Taunt Pitch Level"
+
+--[[
+	Fake Taunt, Revision 10.06/2022/X2Z
+	Description: Play fake taunts on random props in the map (Not Players)
+]]--
+LANG["PHX_CTAUNT_ON_RAND_PROPS"]		= "Play on random props (%ix)"
+LANG["PHX_CTAUNT_ON_RAND_PROPS_UNLI"]	= "Play on random props"
+LANG["PHX_CTAUNT_PLAYED_ON_RANDPROP"]	= "You played a taunt on a random prop."
+LANG["PHX_CTAUNT_RAND_PROPS_LIMIT"]		= "You have hit the limit!"
+LANG["PHX_CTAUNT_RAND_PROPS_NOT_PROP"]  = "Not available at this moment."
+LANG["PHX_CTAUNT_RANDPROP_DISABLED"]	= "Fake taunt is currently disabled."
+
+--[[
+	PH:Z Simple Decoy, Revision 10.06/2022/X2Z
+]]--
+LANG.DECOY_PROP	= {
+	"killed the dummy!",
+	"feel regret after killing a dummy.",
+	"killed a decoy.",
+	"killed an innocent dummy.",
+	"feel embarrased after killing a dummy."
+}
+
+LANG["DECOY_PUT_SUCC"]					= "Decoy successfully placed."
+LANG["DECOY_CANT_PUT_HERE"]				= "Cannot put decoy here."
+LANG["DECOY_GET_REWARD"]				= "Congrats! You received ['Prop Decoy'] for suviving this round!"
+LANG["DECOY_REMINDER_GET"]              = "You have a Decoy/Dummy prop! Place somewhere to confuse hunters!"
+LANG["DECOY_FRAGS_RECEIVED"]			= "Decoy successfully baited: You stole 1 score from %s!"
+LANG["DECOY_DISABLED"]					= "Currently, decoy is unavailable."
+LANG["PHXM_CL_DECOY_KEYBIND"]			= "Default key to place a decoy prop. Default is 1 (not keypad 1)."
+
+LANG["DECOY_INDICATOR_INVALID"]         = "Invalid Slope!"
+LANG["DECOY_INDICATOR_TOOFAR"]          = "Range too far!"
+LANG["DECOY_INDICATOR_OK"]              = "Place Decoy [Press %s]"
+
+LANG["PHXM_PLAYER_SHOW_DECOY_HELPER"]   = "Show/Hide Decoy placement helper? This will show a white dot with a text near on your crosshair."
+LANG["PHXM_PLAYER_SHOW_DECOY_MARKER"]   = "Show/Hide Decoy marker?"
+
+--[[
+	Revision 10.06/2022/X2Z
+    Prop Menu Update: Menu, Editor, Browser
+]]--
+LANG["PCR_MODEL_DONT_EXISTS"]   = "Sorry, this model is not available at the moment!"
+
+LANG["PCR_PLUG_WARN_MSG"]		= "Warning: Custom Prop Addition (pcr_allow_custom) is set to 0.\nYou Must Enable this feature in order to edit your custom prop!\nA Map change is required to change this setting."
+LANG["PCR_PLUG_LBL_BINDKEY"]	= "To change bind key, switch to '[Player] tab."
+LANG["PCR_PLUG_LBL_EDITOR"]		= "Custom Prop Menu Editor"
+LANG["PCR_PLUG_BTN_OPEN_EDT"]	= "Open Editor"
+LANG["PCR_PLUG_LBL_COMSET"]		= "Common Settings"
+LANG["PCR_PLUG_LBL_TECHSET"]	= "Technical Settings"
+LANG["PCR_PLUG_LBL_EXPSET"]		= "Experimentals"
+LANG["PCR_PLUG_LBL_PLAYERSET"]	= "Player Settings"
+
+LANG["PCR_PLUG_ENABLE"]			= "Enable 'Prop Menu' feature"
+LANG["PCR_PLUG_ALLOW_CUSTOM"]	= "(Require Map Restart) Allow custom props to be added in to the Prop Menu list?"
+LANG["PCR_PLUG_PROP_BAN"]		= "(Require Map Restart) Do not include banned props into Prop Menu list?"
+LANG["PCR_PLUG_USAGE_LIMIT"]	= "Maximum usage limit for player to use. -1 means unlimited."
+LANG["PCR_PLUG_PROP_LIMIT"]		= "(Require Map Restart) Limit amount of prop addition to Prop Menu list"
+LANG["PCR_PLUG_PROP_LIMITMAX"]	= "Maximum amount of props that will be added to Prop Menu list. Note: This will be randomly added!"
+LANG["PCR_PLUG_USE_ULXMENU"]	= "Should Prop Menu can be accessed by Console (0) or ULX (1)? Bound key will respect with this setting"
+LANG["PCR_PLUG_USE_DELAY"]		= "Delay in seconds before player to use another Prop in Prop Menu"
+LANG["PCR_PLUG_KICK_INVALID"]	= "Kick any user attempt to access Invalid Model (4x Max. threshold)"
+LANG["PCR_PLUG_SPACE_CHECK"]	= "Check for space for a room before player use another prop to prevent Stuck"
+LANG["PCR_PLUG_X_BBOX"]			= "(Require Map Restart) Check Entity BBox Limit before adding to Prop Menu list"
+LANG["PCR_PLUG_X_BBOX_MAX"]		= "BBox CollisionBound Maximum Height limit. Mins will be auto-calculated."
+LANG["PCR_PLUG_X_BBOX_MIN"]		= "BBox CollisionBound Maximum Width limit. ins will be auto-calculated."
+LANG["PCR_PLUG_ONLY_GROUPS"]	= "Should Prop Menu can only be accessed by certain groups e.g. Donator?"
+LANG["PCR_PLUG_NOTIFYMSG"]		= "Notify player on how to use Prop Menu on every round start"
+
+LANG["PCR_EDITOR_MSG_ERROR"]	= "Your changes hasn't been saved due to Errors.\nPlease check on your server console!"
+LANG["PCR_EDITOR_MSG_SUCC"]		= "Your changes and Custom Prop data has has been saved and updated successfully."
+
+LANG["PHZ_generic_title"]		= "Custom Prop Inclusion Editor"
+LANG["PHZ_generic_helptext"]	= [[[How To Use:
+[LEFT PANEL]
+← Choose a game content
+← Click on icons to add models to the right
+← Right Click to open context menu
+
+[RIGHT PANEL]
+→ Click to 'mark' any props before deleting
+→ Hit 'Remove Selected' to Remove Models
+→ Hit 'Apply Selection' to Make changes
+
+[INFO]
+- You can only add models up to 2048 entries.
+- All maps props will be included automatically, so you don't have to.
+- Pressing [Close] button will cancel the operation.
+- Not all models will have a valid VPhysics.
+- Not all Players (inc. Your Server) will have custom models. If they don't exists they will removed after Applying selections.
+- Your Server content might be different from you. If you see "<game> [Not Mounted]" on dropdown menu, it means that you haven't mounted/installed the game.
+- Addon folder browsing isn't implemented yet so You'll have to use 'All Contents' instead.
+]]
+LANG["PHZ_generic_mdlinfo"] = [[Model Info:
+%s
+Has Physics: %s]]
+LANG["PHZ_generic_mdlinfoStart"] = "(Select model first!)"
+
+LANG["PHZ_generic_no_ragdoll"]	= "No: Ragdoll"
+LANG["PHZ_generic_titlelabel"]	= "%s Preview :"
+
+LANG["PHZ_mount_game_sel"]		= "Select mounted game (Default: Garry's Mod)"
+LANG["PHZ_input_placeholder1"]	= "Folder to Search: <folder name> or '*', blank for all folders."
+LANG["PHZ_input_placeholder2"]  = "Addon to Search: <name> or '*', blank for all folders."
+LANG["PHZ_msg_warn_close"]		= "Are you sure you want to close this window? Any unsaved edits will be lost!"
+LANG["PHZ_msg_commit"] 			= "Are you sure you want to commig changes?"
+LANG["PHZ_msg_cant_empty"]		= "Prop List cannot be empty!"
+LANG["PHZ_msg_removesel"] 		= [[Remove selected props in the list. Legends:
+Red = Marked Selections
+Yellow: Prop don't exists in server AND should be Removed.]]
+LANG["PHZ_msg_warn_mdlinlist"]  = "WARNING: This Model is already in the list!"
+LANG["PHZ_msg_invalid_mdl"] 	= "Reason: This is invalid model"
+LANG["PHZ_apply_select"] 		= "Apply & Save Selections"
+LANG["PHZ_menu_copy"] 		= "Copy Model"
+LANG["PHZ_menu_refresh"] 	= "Refresh Model"
+LANG["PHZ_tooltip_removesel"]	= "Remove Selected"
+LANG["PHZ_tooltip_wasmarked"] = [[This prop was marked because it does't exist in the server.
+If you close this editor, this will automatically removed.]]
+
+LANG["PHZ_pcr_fb_allcontent"] = "All Contents (Not All Players/Server will have same contents as you)"
+LANG["PHZ_pcr_fb_notmounted"] = "%s [Not Mounted]"
+
 PHX.LANGUAGES[LANG.code] = LANG

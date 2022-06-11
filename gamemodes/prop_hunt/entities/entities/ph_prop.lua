@@ -19,8 +19,6 @@ function ENT:Initialize()
 		self:SetLagCompensated(true)			
 		self:SetMoveType(MOVETYPE_NONE)
 		self.health = 100
-	else
-	
 	end
 end
 
@@ -125,7 +123,7 @@ if SERVER then
 				attacker:AddFrags(1)
 				pl:AddDeaths(1)
 				attacker:SetHealth(math.Clamp(attacker:Health() + GetConVarNumber("ph_hunter_kill_bonus"), 1, 100))
-
+                
 				pl:RemoveProp()
 			end
 		end

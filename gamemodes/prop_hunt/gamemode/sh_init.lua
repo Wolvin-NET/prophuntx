@@ -1,18 +1,21 @@
-PHX 		 = PHX or {}
+PHX = PHX or {}
 
 TEAM_HUNTERS 	= 1
 TEAM_PROPS 	 	= 2
 IS_PHX		 	= true	-- an easy check if PHX is installed.
 
 PHX.ConfigPath 	= "phx_data"
-PHX.VERSION		= "X"
-PHX.REVISION	= "10.09.22/X2Z" --Format: dd/mm/yy.
+PHX.VERSION		= "X2Z"
+PHX.REVISION	= "11.06.22" --Format: dd/mm/yy.
+
+-- Fonts
+AddCSLuaFile("cl_fonts.lua")
 
 -- Init Convars first!
 AddCSLuaFile("sh_convar.lua")
 include("sh_convar.lua")
 
-function PHX.VerboseMsg( self, text )
+function PHX.VerboseMsg( text )
 	-- Very stupid checks: PHX:GetCVar() will only sets after 1st player is joined. This is intentional
 	-- because Loading PHX:GetCVar() too early (outside initialization hook) will only load it's default value
 	-- followed by GetGlobal* value. This problem was noticed on TTT here: 
@@ -24,7 +27,7 @@ function PHX.VerboseMsg( self, text )
 	else
 		-- BUGS: This somehow works on client *AFTER* map changes, but occasionally not working in some cases (e.g: Early Hook Calls)
 		-- Can't do anything about this atm...
-		if self:GetCVar( "ph_print_verbose" ) and text then
+		if PHX:GetCVar( "ph_print_verbose" ) and text then
 			print( text )
 		end
 	end
@@ -93,10 +96,10 @@ GM.Author	= "Wolvindra-Vinzuerio & D4UNKN0WNM4N"
 -- Versioning
 GM._VERSION		= PHX.VERSION
 GM.REVISION		= PHX.REVISION --dd/mm/yy.
-GM.DONATEURL 	= "https://wolvindra.xyz/donate"
+GM.DONATEURL 	= "https://ko-fi/wolvindra"
 
 -- Update information - returns json only
-GM.UPDATEURL 		= "https://wolvindra.xyz/ph_update_check.php"
+GM.UPDATEURL 		= "https://gmodgameservers.com/ph_update_check.php"
 GM.UPDATEURLBACKUP 	= "https://raw.githubusercontent.com/Wolvin-NET/prophuntx/master/updates/update.json"
 
 -- unused
@@ -129,6 +132,7 @@ local mark = utf8.char(9733)
 GM.PHXContributors			= {
 	"Galaxio "..mark,
 	"Godfather "..mark,
+    "Fryman",
 	"Dralga",
 	"Berry",
 	"Yam",
@@ -172,7 +176,7 @@ hook.Add("ShouldCollide", "CheckPropCollision", CheckPropCollision)
 
 -- Footstep Control
 hook.Add( "PlayerFootstep", "PHX_FootstepControls", function( ply )
-	if not PHX:GetCVar( "ph_props_footstep" ) and ply:Team() == TEAM_PROPS then	-- TODOOOOO
+	if PHX:GetCVar( "ph_props_disable_footstep" ) and ply:Team() == TEAM_PROPS then
 		return true
 	end
 end )

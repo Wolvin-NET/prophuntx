@@ -18,24 +18,6 @@ eChat.config = {
 	fadeTime = 12,
 }
 
-surface.CreateFont( "eChat_18", {
-	font = "Roboto Lt",
-	size = 18,
-	weight = 500,
-	antialias = true,
-	shadow = true,
-	extended = true,
-} )
-
-surface.CreateFont( "eChat_16", {
-	font = "Roboto Lt",
-	size = 16,
-	weight = 500,
-	antialias = true,
-	shadow = true,
-	extended = true,
-} )
-
 --// Prevents errors if the script runs too early, which it will
 if not GAMEMODE then
 	hook.Remove("Initialize", "echat_init")

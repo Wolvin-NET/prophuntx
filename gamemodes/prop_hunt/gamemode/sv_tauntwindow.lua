@@ -14,7 +14,6 @@ end
 net.Receive("CL2SV_PlayThisTaunt", function(len, ply)
 	local snd 		= net.ReadString()
 	local bool 		= net.ReadBool()	-- enable fake taunt
-	local randPitch = net.ReadBool()	-- enable randomized pitch
 	
 	if (ply and IsValid(ply)) then
 	
@@ -22,7 +21,10 @@ net.Receive("CL2SV_PlayThisTaunt", function(len, ply)
 		local isDelay 		= delay[1]
 		local TauntTime 	= delay[2]
 		local playerTeam	= ply:Team()
+        local plPitchOn     = ply:GetInfoNum( "ph_cl_pitch_taunt_enable", 0 )
 		local plApplyOnFake = ply:GetInfoNum( "ph_cl_pitch_apply_fake_prop", 0 )
+        local plPitchRandomized = ply:GetInfoNum( "ph_cl_pitch_randomized", 0 )
+        local randFakePitch = ply:GetInfoNum( "ph_cl_pitch_fake_prop_random", 0 )
 		local desiredPitch	= ply:GetInfoNum( "ph_cl_pitch_level", 100 )
 		local pitch			= 100
 	
@@ -30,21 +32,32 @@ net.Receive("CL2SV_PlayThisTaunt", function(len, ply)
 			if bool then
 				if PHX:GetCVar( "ph_randtaunt_map_prop_enable" ) then
 					local Count = ply:GetTauntRandMapPropCount()
+                    
+                    if ply:Team() ~= TEAM_PROPS then
+                        ply:PHXChatInfo( "ERROR", "PHX_CTAUNT_RAND_PROPS_NOT_PROP" )
+                        return
+                    end
 					
-					if Count >= 0 or PHX:GetCVar( "ph_randtaunt_map_prop_max" ) == -1 then
+					if Count > 0 or PHX:GetCVar( "ph_randtaunt_map_prop_max" ) == -1 then
 						
-						if CheckValidity( snd, playerTeam ) then --Extra Checks
+						if CheckValidity( snd, playerTeam ) then
 							local props = ents.FindByClass("prop_physics*")
+                            local fakeprops = ents.FindByClass("ph_fake_props")
+                            if #fakeprops > 0 then
+                                table.Add( props, fakeprops ) -- add ph_fake_props as well.
+                            end
 							local randomprop = props[math.random(1, #props)]
 							
 							if tobool( plApplyOnFake ) then
-								pitch = desiredPitch
-							elseif ( randPitch ) then
-								pitch = math.random(PHX:GetCVar("ph_taunt_pitch_min"), PHX:GetCVar("ph_taunt_pitch_max"))
+                                if tobool( randFakePitch ) then
+                                    pitch = math.random(PHX:GetCVar("ph_taunt_pitch_range_min"), PHX:GetCVar("ph_taunt_pitch_range_max"))
+                                else
+                                    pitch = desiredPitch
+                                end
 							end
 							
 							randomprop:EmitSound(snd, 100, pitch)
-							ply:SubTauntRandMapPropCount()
+                            ply:SubTauntRandMapPropCount()
 							ply:SetNWFloat("LastTauntTime", CurTime())
 						else
 							ply:PHXChatInfo( "WARNING", "TM_DELAYTAUNT_NOT_EXIST" )
@@ -55,12 +68,14 @@ net.Receive("CL2SV_PlayThisTaunt", function(len, ply)
 					end
 				end
 			else
-				if CheckValidity( snd, playerTeam ) then --Extra Checks
+				if CheckValidity( snd, playerTeam ) then
 				
-					if tobool( plApplyOnFake ) then
-						pitch = desiredPitch
-					elseif ( randPitch ) then
-						pitch = math.random(PHX:GetCVar("ph_taunt_pitch_min"), PHX:GetCVar("ph_taunt_pitch_max"))
+					if tobool( plPitchOn ) then
+                        if tobool( plPitchRandomized ) then
+                            pitch = math.random(PHX:GetCVar("ph_taunt_pitch_range_min"), PHX:GetCVar("ph_taunt_pitch_range_max"))
+                        else
+                            pitch = desiredPitch
+                        end
 					end
 				
 					ply:EmitSound(snd, 100, pitch)

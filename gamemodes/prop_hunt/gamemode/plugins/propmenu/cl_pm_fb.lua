@@ -1,7 +1,5 @@
--- Currently, this isn't translated. Maybe in future version of PH:X, sorry everyone!
-
 local serverContents = {}
-serverContents["GAME"]	= PHX:FTranslate("PHZ_pcr_fb_allcontent") --All Contents (Not All Players/Server will have same contents as you)
+serverContents["GAME"]	= "ALL" -- DO NOT TRANSLATE FROM HERE!
 serverContents["MOD"]	= "Garry's Mod"
 
 hook.Add("InitPostEntity", "reqServerContent", function()
@@ -25,6 +23,9 @@ net.Receive("PCR.TheServerGameContents", function()
 		end
 	end
 	
+    -- Replace the ["GAME"] into translatable one
+    serverContents["GAME"]  = PHX:FTranslate("PHZ_pcr_fb_allcontent")
+    
 	for modname,title in pairs(tblGames) do
 		serverContents[modname] = title
 	end
@@ -55,7 +56,6 @@ net.Receive("phxpm.fb_openPM_Editor", function()
 			local isFor = net.ReadTable()
 			thePanel = PHXPM_openFileBrowser( ply, isFor.global, isFor.sub, serverContents )
 		else
-			--chat.AddText(Color(220,0,0), "[Prop Menu] Error: Custom Prop Addition is Disabled!")
 			PHX:ChatInfo("PCR_EDT_ERROR_DISABLED", "ERROR")
 		end
 	
