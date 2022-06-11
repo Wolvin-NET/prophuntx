@@ -150,11 +150,11 @@ local function AutoTauntPaint_phx()
 		local c = math.Round(TimeleftCTaunt())
         local ftRm = FakeTauntRemainings()
 		
-		local colR = Color(255,255,255,50)
-		local colC = Color(255,255,255,50)
-		local colCR = Color(200,200,200,30)
-		local colCC = Color(200,200,200,30)
-        local colftRm = color_white
+		local colR      = Color(255,255,255,50)
+		local colC      = Color(255,255,255,50)
+		local colCR     = Color(200,200,200,30)
+		local colCC     = Color(200,200,200,30)
+        local colftRm   = Color(20,230,230,255)
 		
 		local literalR = r + 1 .."s"
 		local literalC = c .."s"
@@ -170,23 +170,23 @@ local function AutoTauntPaint_phx()
 			colCC = colC
 		end
         -- Fake Taunt text & color
-        local fakeTauntRem = ftRm .. "x left"
+        local fakeTauntRem = PHX:FTranslate("HUD_FAKETAUNT_COUNT", ftRm)
         if ftRm <= 0 then
             colftRm = Color(128,128,128,200)
         end
         if GetConVar("ph_randtaunt_map_prop_max"):GetInt() == -1 then
             colftRm = Color(220,220,10,200)
-            fakeTauntRem = "unlimited"
+            fakeTauntRem = PHX:FTranslate("HUD_FAKETAUNT_UNLI")
         end
         
         -- Decoy Prop color setting
         local decoyKey = "..."
         if LocalPlayer():HasFakePropEntity() then
-            colText = color_white
-            decoyKey = string.format("Press [%s]", input.GetKeyName( GetConVar("ph_cl_decoy_spawn_key"):GetInt() ))
+            colText = Color(240, 200, 30, 255)
+            decoyKey = PHX:FTranslate("HUD_DECOY_ACTIVE", input.GetKeyName( GetConVar("ph_cl_decoy_spawn_key"):GetInt() ))
         else
             colText = Color(200, 200, 200, 128)
-            decoyKey = "N/A"
+            decoyKey = PHX:FTranslate( "MISC_NA" )
         end
 		
 		draw.DrawText(PHX:FTranslate("HUD_PROP_TAUNT_TIME"), "PHX.AmmoFont", posw.x + 96, posw.y + 50, color_white, TEXT_ALIGN_CENTER)

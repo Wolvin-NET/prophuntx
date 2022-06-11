@@ -57,8 +57,6 @@ local decoy = {
 local lgWind 	= {}
 local curshow 	= 0
 
-local translate = PHX.FTranslate
-
 -- // local functions \\
 local function DrawWaypointMarker( pl, matMarker, pointer, entToFind, offset )
 
@@ -123,14 +121,14 @@ local function DrawLine( pl, spriteMat, forTeam, dist, sizex, sizey, convarToChe
         if tr.Hit then
             if tr.HitNormal.z > 0.5 then
                 colour = color_white
-                decoyCanBePlaced = translate( "DECOY_INDICATOR_OK", input.GetKeyName(GetConVar("ph_cl_decoy_spawn_key"):GetInt()) )
+                decoyCanBePlaced = PHX:FTranslate( "DECOY_INDICATOR_OK", input.GetKeyName(GetConVar("ph_cl_decoy_spawn_key"):GetInt()) )
             else
-                decoyCanBePlaced = translate( "DECOY_INDICATOR_INVALID" )
+                decoyCanBePlaced = PHX:FTranslate( "DECOY_INDICATOR_INVALID" )
                 colour = Color(225, 25, 25)
             end
         else
             colour = Color(220, 40, 25)
-            decoyCanBePlaced = translate( "DECOY_INDICATOR_TOOFAR" )
+            decoyCanBePlaced = PHX:FTranslate( "DECOY_INDICATOR_TOOFAR" )
         end
         
         draw.DrawText( decoyCanBePlaced, "HunterBlindLockFont", ScrW() / 2 + 36, ScrH() / 2 - 6, colour, TEXT_ALIGN_LEFT )

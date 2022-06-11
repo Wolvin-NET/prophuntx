@@ -215,6 +215,9 @@ CVAR["ph_taunt_pitch_range_max"]			=	{ CTYPE_FLOAT, "200.0", CVAR_SERVER_ONLY, "
 CVAR["ph_enable_decoy_reward"]				=	{ CTYPE_BOOL,	"1", CVAR_SERVER_ONLY_NO_NOTIFY, "Enable a decoy reward? Reward will be given if any prop player is alive on every round ends." }
 CVAR["ph_props_disable_footstep"]           =   { CTYPE_BOOL,  "1", CVAR_SERVER_ONLY, "Toggle Mute player footstep for Prop players." }
 
+CVAR["ph_give_grenade_near_roundend"]       =   { CTYPE_BOOL, "0", CVAR_SERVER_ONLY_NO_NOTIFY, "Should grenades will be given near round end? If Yes, see 'ph_give_grenade_roundend_before_time' also."}
+CVAR["ph_give_grenade_roundend_before_time"] =   { CTYPE_FLOAT, "30", CVAR_SERVER_ONLY_NO_NOTIFY, "Time in seconds to give grenades before Round Ends. This is typically between 10 to 30 seconds." }
+
 -- Load & init
 
 for name, data in pairs(CVAR) do

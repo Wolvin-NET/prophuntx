@@ -34,7 +34,7 @@ local function MainFrame()
 	window.frame:SetKeyboardInputEnabled(true)
 	
 	window.frame.Paint = function(self,w,h)
-		surface.SetDrawColor(Color(40,40,40,210))
+		surface.SetDrawColor(Color(40,40,40,230))
 		surface.DrawRect(0,0,w,h)
 	end
 	

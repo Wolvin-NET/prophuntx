@@ -41,7 +41,7 @@ net.Receive("CL2SV_PlayThisTaunt", function(len, ply)
 					if Count > 0 or PHX:GetCVar( "ph_randtaunt_map_prop_max" ) == -1 then
 						
 						if CheckValidity( snd, playerTeam ) then
-							local props = ents.FindByClass("prop_physics*")
+							local props = ents.FindByClass("prop_physics")
                             local fakeprops = ents.FindByClass("ph_fake_props")
                             if #fakeprops > 0 then
                                 table.Add( props, fakeprops ) -- add ph_fake_props as well.

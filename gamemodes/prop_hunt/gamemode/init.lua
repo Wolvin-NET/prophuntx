@@ -74,6 +74,10 @@ local function ClearTimer()
 	if timer.Exists("tmr_handleUnblindHook") then
 		timer.Remove("tmr_handleUnblindHook")
 	end
+    
+    if timer.Exists("phx.tmr_GiveGrenade") then
+        timer.Remove("phx.tmr_GiveGrenade")
+    end
 end
 
 -- Called alot
@@ -771,12 +775,14 @@ function RoundEnd()
 	end
 	
 	-- Give rewards for living props for a decoy
-	for _, pl in pairs(team.GetPlayers(TEAM_PROPS)) do
-		if PHX:GetCVar( "ph_enable_decoy_reward" ) and pl:Alive() and pl:Health() > 0 and (not pl:HasFakePropEntity()) then
-			pl:SetFakePropEntity(true)
-			pl:PHXChatPrint( "DECOY_GET_REWARD", Color(50,248,56), true )
-		end
-	end
+    if GetGlobalInt("RoundNumber") > 2 then -- It should start giving after Round #2
+        for _, pl in pairs(team.GetPlayers(TEAM_PROPS)) do
+            if PHX:GetCVar( "ph_enable_decoy_reward" ) and pl:Alive() and pl:Health() > 0 and (not pl:HasFakePropEntity()) then
+                pl:SetFakePropEntity(true)
+                pl:PHXChatPrint( "DECOY_GET_REWARD", Color(50,248,56), true )
+            end
+        end
+    end
 	
 	-- Stop autotaunting
 	net.Start("AutoTauntRoundEnd")
@@ -854,6 +860,19 @@ function GM:OnPreRoundStart(num)
 	if PHX:GetCVar( "ph_enable_teambalance" ) then
 		GAMEMODE:CheckTeamBalance(true)
 	end
+    
+    -- Timer to give grenades, if ph_give_grenade_near_roundend is set.
+    timer.Create( "phx.tmr_GiveGrenade", GAMEMODE.RoundLength - PHX:GetCVar( "ph_give_grenade_roundend_before_time" ), 1, function()
+        if PHX:GetCVar( "ph_give_grenade_near_roundend" ) and GAMEMODE:InRound() then
+            for _,h in pairs(team.GetPlayers( TEAM_HUNTERS )) do
+                if h:Alive() and h:HasWeapon( "weapon_smg1" ) then
+                    local numGrenade = PHX:GetCVar( "ph_smggrenadecounts" )
+                    h:SetAmmo(numGrenade, "SMG1_Grenade")
+                    h:SendSurfaceSound("misc/grenadepickup.wav")
+                end
+            end
+        end
+    end)
 	
 	UTIL_StripAllPlayers()
 	UTIL_SpawnAllPlayers()
@@ -951,6 +970,7 @@ function GM:OnRoundEnd( num )
 	end
 	
 	-- forgot to add this; Remove handleUnblindHook
+    print( "[DEBUG] ClearTimer was called OnRoundEnd" ) --todo
 	ClearTimer()
 	
 	hook.Call("PH_OnRoundEnd", nil, num)

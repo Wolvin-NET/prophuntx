@@ -25,7 +25,7 @@ surface.CreateFont("PHX.HealthFont",
 surface.CreateFont("PHX.AmmoFont", 
 {
 	font = "Roboto",
-	size = 14,
+	size = 16,
 	weight = 500,
 	antialias = true,
 	shadow = true

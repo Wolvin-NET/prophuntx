@@ -22,9 +22,11 @@ function CLASS:Loadout(pl)
     pl:Give("weapon_smg1")
     pl:Give("weapon_357")
 	
-	--pl:Give("item_ar2_grenade")
-	local numGrenade = PHX:GetCVar( "ph_smggrenadecounts" ) or 1
-	pl:SetAmmo(numGrenade, "SMG1_Grenade")
+    -- Only gives grenade if near round end feature is disabled.
+	if (not PHX:GetCVar( "ph_give_grenade_near_roundend" )) then
+        local numGrenade = PHX:GetCVar( "ph_smggrenadecounts" ) or 1
+        pl:SetAmmo(numGrenade, "SMG1_Grenade")
+    end
 	
 	local cl_defaultweapon = pl:GetInfo("cl_defaultweapon") 
  	 

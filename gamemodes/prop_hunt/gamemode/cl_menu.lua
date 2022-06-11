@@ -580,6 +580,7 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 		
 		PHX.UI:CreateVGUIType("", "label", false, grid, "PHXM_TAUNT_PITCH_SETTINGS")
 		PHX.UI:CreateVGUIType("ph_taunt_pitch_enable", "check", "SERVER", grid, "PHXM_TAUNT_PITCH_ENABLE")
+        -- these two below are intentionally set without float.
 		PHX.UI:CreateVGUIType("ph_taunt_pitch_range_min", "slider", {min = 1, max = 99, init = PHX:GetCVar( "ph_taunt_pitch_range_min" ), dec = 0, kind = "SERVER"}, grid, "PHXM_TAUNT_PITCH_RANGE_MIN")
 		PHX.UI:CreateVGUIType("ph_taunt_pitch_range_max", "slider", {min = 100, max = 255, init = PHX:GetCVar( "ph_taunt_pitch_range_max" ), dec = 0, kind = "SERVER"}, grid, "PHXM_TAUNT_PITCH_RANGE_MAX")
 		
@@ -594,6 +595,9 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 		PHX.UI:CreateVGUIType("", "label", false, grid, "PHXM_GENERAL_SETTINGS")
 		PHX.UI:CreateVGUIType("ph_notify_player_join_leave", "check", "SERVER", grid, "PHXM_ENABLE_PLAYER_JOIN_LEAVE")
         PHX.UI:CreateVGUIType("ph_props_disable_footstep", "check", "SERVER", grid, "PHXM_DISABLE_FOOTSTEP")
+        
+        PHX.UI:CreateVGUIType("ph_give_grenade_near_roundend", "check", "SERVER", grid, "PHXM_ADMIN_GIVEGRENADE_NEAREND")
+        PHX.UI:CreateVGUIType("ph_give_grenade_roundend_before_time", "slider", {min = 3, max = GAMEMODE.RoundLength, init = PHX:GetCVar( "ph_give_grenade_roundend_before_time" ), dec = 2, float = true, kind = "SERVER"}, grid, "PHXM_ADMIN_GIVEGRENADE_TIME")
 		
 		PHX.UI:CreateVGUIType("ph_notice_prop_rotation", "check", "SERVER", grid, "PHXM_ADMIN_NOTICE_ROTATION")
 		PHX.UI:CreateVGUIType("ph_prop_camera_collisions", "check", "SERVER", grid, "PHXM_ADMIN_CAMERA_COLLIDE")

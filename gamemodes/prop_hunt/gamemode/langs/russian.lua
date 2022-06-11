@@ -332,6 +332,10 @@ LANG["MISC_INFO"]						    = "Information"
 LANG["MISC_NOTICE"]						    = "Notice"
 LANG["MISC_IDK"]						    = "Unknown"
 LANG["MISC_NA"]							    = "N/A"
+-- HUD: Late #4
+LANG["HUD_DECOY_ACTIVE"]                = "Press [%s]"
+LANG["HUD_FAKETAUNT_COUNT"]             = "%ix Left"
+LANG["HUD_FAKETAUNT_UNLI"]              = "Unlimited"
 -- Help/Admin Panel: Late #4
 LANG["PHXM_TAUNT_SETTINGS"]				    = "Taunt Settings"
 LANG["PHXM_GENERAL_SETTINGS"]			    = "General Settings"
@@ -348,6 +352,8 @@ LANG["PHXM_DECOY_ENABLE"]				    = "Enable Decoy reward? Reward will be given ON
 LANG["PHXM_DISABLE_FOOTSTEP"]               = "Toggle silent prop team footsteps"
 LANG["PHXM_ADMIN_CHATSETTING"]			    = "Chat Window Settings"
 LANG["PHXM_ADMIN_HUNTERBLIND"]			    = "Hunter Blind Control"
+LANG["PHXM_ADMIN_GIVEGRENADE_NEAREND"]      = "Should grenades will be given near round end? If Yes, see 'ph_give_grenade_roundend_before_time'"
+LANG["PHXM_ADMIN_GIVEGRENADE_TIME"]         = "Time in seconds to give grenades before Round Ends. This is typically between 10 to 30 seconds"
 LANG["PHXM_PLAYER_SHOW_DECOY_HELPER"]       = "Show/Hide Decoy placement helper? This will show a white dot with a text near on your crosshair."
 LANG["PHXM_PLAYER_SHOW_DECOY_MARKER"]       = "Show/Hide Decoy marker?"
 -- Plugins sh_init.lua: Late #4

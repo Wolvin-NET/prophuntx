@@ -496,6 +496,11 @@ LANG["MISC_NOTICE"]						= "Notice"
 LANG["MISC_IDK"]						= "Unknown"
 LANG["MISC_NA"]							= "N/A"
 
+-- HUD
+LANG["HUD_DECOY_ACTIVE"]                = "Press [%s]"
+LANG["HUD_FAKETAUNT_COUNT"]             = "%ix Left"
+LANG["HUD_FAKETAUNT_UNLI"]              = "Unlimited"
+
 --[[
 	ADMIN PANEL, Revision 10.06/2022/X2Z
 ]]--
@@ -518,6 +523,9 @@ LANG["PHXM_DISABLE_FOOTSTEP"]           = "Toggle silent prop team footsteps"
 
 LANG["PHXM_ADMIN_CHATSETTING"]			= "Chat Window Settings"
 LANG["PHXM_ADMIN_HUNTERBLIND"]			= "Hunter Blind Control"
+
+LANG["PHXM_ADMIN_GIVEGRENADE_NEAREND"]  = "Should grenades will be given near round end? If Yes, see 'ph_give_grenade_roundend_before_time'"
+LANG["PHXM_ADMIN_GIVEGRENADE_TIME"]     = "Time in seconds to give grenades before Round Ends. This is typically between 10 to 30 seconds"
 
 --[[
 	Plugins in sh_init.lua, Revision 10.06/2022/X2Z

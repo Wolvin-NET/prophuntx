@@ -486,6 +486,11 @@ LANG["MISC_NOTICE"]						= "Perhatian"
 LANG["MISC_IDK"]						= "Tak Diketahui"
 LANG["MISC_NA"]							= "Kosong"
 
+-- HUD
+LANG["HUD_DECOY_ACTIVE"]                = "Tekan [%s]"
+LANG["HUD_FAKETAUNT_COUNT"]             = "Sisa %ix"
+LANG["HUD_FAKETAUNT_UNLI"]              = "Tak Terbatas"
+
 --[[
 	ADMIN PANEL, Revision 10.06/2022/X2Z
 ]]--
@@ -508,6 +513,9 @@ LANG["PHXM_DISABLE_FOOTSTEP"]           = "Alihkan suara langkah kaki untuk tim 
 
 LANG["PHXM_ADMIN_CHATSETTING"]			= "Peraturan Jendela Chat"
 LANG["PHXM_ADMIN_HUNTERBLIND"]			= "Peraturan Kontrol Pemejaman Mata Hunter"
+
+LANG["PHXM_ADMIN_GIVEGRENADE_NEAREND"]  = "Haruskah grenade diberikan sebelum round berakhir? Jika iya, lihat 'ph_give_grenade_roundend_before_time'"
+LANG["PHXM_ADMIN_GIVEGRENADE_TIME"]     = "Waktu dalam detik untuk memberikan grenade sebelum round berakhir. Umumnya dimulai dari 10 s.d. 30 detik."
 
 --[[
 	Plugins in sh_init.lua, Revision 10.06/2022/X2Z
