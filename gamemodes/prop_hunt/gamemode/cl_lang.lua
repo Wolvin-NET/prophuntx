@@ -7,7 +7,7 @@ function PHX:AddLanguage( tbl )
 		if PHX.LANGUAGES[code] ~= nil or (not table.IsEmpty(PHX.LANGUAGES[code])) then
 			PHX:VerboseMsg("[PHX] It appears that Language " .. name .. " ("..code..") is already exist. Ignoring...")
 		else
-			PHX:VerboseMsg("[PHX] Adding External custom language from " .. name .. "(".. code ..")")
+			PHX:VerboseMsg("[PHX] Adding External Language " .. name .. "(".. code ..")")
 			PHX.LANGUAGES[code] = tbl
 		end
 	end
@@ -15,11 +15,11 @@ end
 
 function PHX:InsertToLanguage( tbl, code )
 	if (tbl and type(tbl) == "table" and tbl ~= nil) and (code and (code ~= nil or code ~= "")) then		
-		PHX:VerboseMsg("[PHX] Adding External insertion language: (".. code ..")...")
+		PHX:VerboseMsg("[PHX] Adding External insertion language code: (".. code ..")")
 		
 		for STRINGCODE, TRANSLATION in pairs(tbl) do
 			if (PHX.LANGUAGES[code][STRINGCODE] ~= nil) then -- don't use table.HasValue() because some values may contains table.
-				PHX:VerboseMsg("[PHX] Ignoring " .. STRINGCODE .. " because it was exist in the language table.")
+				PHX:VerboseMsg("[PHX] Ignoring Language ID" .. STRINGCODE .. " because it was exist in the language table.")
 			else
 				PHX.LANGUAGES[code][STRINGCODE] = TRANSLATION
 			end
@@ -27,37 +27,41 @@ function PHX:InsertToLanguage( tbl, code )
 	end
 end
 
--- Let's add language from list.Get, if any.
-for langName,tblLangExt in pairs(list.Get("PHX.CustomExternalLanguage")) do
-	if !tblLangExt or tblLangExt == nil or table.IsEmpty(tblLangExt) then
-		PHX.VerboseMsg("[PHX External Language] Ignoring " .. langName .. " because it does contains nothing.")
-	else
-		PHX.VerboseMsg("[PHX External Language] Adding " .. langName .."...")
-		PHX:AddLanguage( tblLangExt )
-	end
-end
+hook.Add("Initialize", "PHX.AddExternalLanguage", function()
+    
+    -- Let's add language from list.Get, if any.
+    for langName,tblLangExt in pairs(list.Get("PHX.CustomExternalLanguage")) do
+        if !tblLangExt or tblLangExt == nil or table.IsEmpty(tblLangExt) then
+            PHX.VerboseMsg("[PHX External Language] Ignoring " .. langName .. " because it contains nothing.")
+        else
+            PHX.VerboseMsg("[PHX External Language] Adding " .. langName .."...")
+            PHX:AddLanguage( tblLangExt )
+        end
+    end
 
--- Let's add external language insertion, if any.
-for name,tblLangIns in pairs(list.Get("PHX.LanguageInsertion")) do
-	if !tblLangIns or tblLangIns == nil or table.IsEmpty(tblLangIns) then
-		PHX.VerboseMsg("[PHX Insertion Language] Ignoring LangCode " .. name .. " because it does contains nothing.")
-	else
-		PHX.VerboseMsg("[PHX Insertion Language] Attempting to insert language: " .. name .. "...")
-		
-		for code,tbl in pairs(tblLangIns) do
-			PHX:InsertToLanguage( tbl, code )
-		end
-	end
-end
+    -- Let's add external language insertion, if any.
+    for name,tblLangIns in pairs(list.Get("PHX.LanguageInsertion")) do
+        if !tblLangIns or tblLangIns == nil or table.IsEmpty(tblLangIns) then
+            PHX.VerboseMsg("[PHX Insertion Language] Ignoring Language Code " .. name .. " because it contains nothing.")
+        else
+            PHX.VerboseMsg("[PHX Insertion Language] Adding new phrase Language ID: " .. name)            
+            for code,tbl in pairs(tblLangIns) do
+                PHX:InsertToLanguage( tbl, code )
+            end
+        end
+    end
 
--- Check
-if table.IsEmpty(PHX.LANGUAGES) then
-	print("[PHX] Language Table: Empty... something's wrong?")
-else
-	print("[PHX] Language Table: OK, got " .. table.Count(PHX.LANGUAGES) .. " total lang codes.")
-end
+    -- Check
+    if table.IsEmpty(PHX.LANGUAGES) then
+        print("[PHX] Language Table: Empty. Something's wrong?")
+    else
+        print("[PHX] Language Table: OK! Got " .. table.Count(PHX.LANGUAGES) .. " total Language Codes.")
+    end
 
--- Normal Translation. This will output error and does not return original text from textToFind.
+end)
+
+-- Normal Translation. 
+-- This will output error and does not revert the original text from textToFind.
 function PHX:Translate( textToFind, ... )
 	if !textToFind then textToFind = "ERROR" end
 
@@ -70,11 +74,11 @@ function PHX:Translate( textToFind, ... )
 	end
 	
 	local code = self.LANGUAGES[lg]
-	if !code or code == nil then return "Cannot translate [" .. textToFind .. "], Language " .. lg .. " not found." end
+	if !code or code == nil then return "Cannot translate [" .. textToFind .. "], Language code " .. lg .. " not found" end
 
 	if args ~= nil and (not table.IsEmpty(args)) then
-		if !code[textToFind] then 
-			return "Error: Cannot translate, " .. textToFind .. " not found."
+		if !code[textToFind] then
+			return "Error: Cannot translate, " .. textToFind .. " not found"
 		else
 			local NiceFormat = string.format(code[textToFind], ...)
 			return NiceFormat
@@ -82,15 +86,17 @@ function PHX:Translate( textToFind, ... )
 	end
 	
 	if !code[textToFind] or code[textToFind] == nil then
-		return "translation not found"
+		return "Error: Translation ".. textToFind .." not found"
 	end
 	
 	return code[textToFind]
 end
 
--- Fallback Translate: A quick version, used to revert translation to textToFind if translation was nothing found.
--- This commonly used for VGUI or Fretta's component to avoid Informational "Not Found" texts.
--- USE THIS ONLY FOR VGUI ELEMENTS. If you want to use for Chat/Notification System, Consider use PHX:Translate() instead!
+-- Fallback Translate
+-- Any language code that does not exist will return into english as fallback.
+-- If Language ID of textToFind was not found, it would revert whatever the text that provided in textToFind argument.
+-- Compared to PHX:Translate(), this does not output "error text".
+-- Used internally with QTrans:()
 function PHX:FTranslate( textToFind, ... )
 	
 	local args = {...}
@@ -103,13 +109,13 @@ function PHX:FTranslate( textToFind, ... )
 	
 	local code = self.LANGUAGES[lg]
 	if !code or code == nil then
-		--fallback
-		return textToFind
+		--Fallback
+		code = self.LANGUAGES["en_us"]
 	end
 	
 	if args ~= nil and (not table.IsEmpty(args)) then
 		if !code[textToFind] then
-			--fallback
+			--Revert
 			return textToFind
 		else
 			local NiceFormat = string.format(code[textToFind], ...)
@@ -118,11 +124,12 @@ function PHX:FTranslate( textToFind, ... )
 	end
 	
 	if !code[textToFind] or code[textToFind] == nil then
-		--fallback
+		--Revert
 		return textToFind
 	end
 	
 	return code[textToFind]
+    
 end
 
 -- used internally in `cl_menutypes.lua` and some other user interface elements
@@ -202,3 +209,23 @@ function PHX:MsgBox_Query( body, title, b1, f1, b2, f2, b3, f3, b4, f4 )
 	Derma_Query( body, title, b1, f1, b2, f2, b3, f3, b4, f4 )
 	
 end
+
+-- Tester utility console command
+local function TestTranslation( ply, strCmd, tArgs )
+    if table.IsEmpty(tArgs) then
+        print("Usage: " .. strCmd .." \"LANGUAGE_ID_TO_TEST\" \"<other arg>\" - always use quote marks!")
+    else
+        local LangID = tostring(tArgs[1])
+        print( PHX:Translate(LangID, unpack(tArgs, 2)) )
+    end
+end
+local function TestRandomTranslation(ply, strCmd, tArgs)
+    if table.IsEmpty(tArgs) then
+        print("Usage: " .. strCmd .." \"LANGUAGE_ID_TO_TEST\" \"<other arg>\" - always use quote marks!")
+    else
+        local LangID = tostring(tArgs[1])
+        print( PHX:GetRandomTranslated(LangID, unpack(tArgs, 2)) )
+    end
+end
+concommand.Add("phx_test_translate", TestTranslation, nil, "Language to test: Arg1 always translation ID, ArgN = VarArgs in strings only.")
+concommand.Add("phx_test_random_translate", TestRandomTranslation, nil, "Language to test 'random translation': Arg1 always translation ID, ArgN = VarArgs in strings only.")

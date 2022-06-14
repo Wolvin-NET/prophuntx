@@ -1,8 +1,9 @@
-local CVAR_SERVER_ONLY				= { FCVAR_SERVER_CAN_EXECUTE, FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY }
-local CVAR_SERVER_ONLY_NO_NOTIFY 	= { FCVAR_SERVER_CAN_EXECUTE, FCVAR_REPLICATED, FCVAR_ARCHIVE }
-local CVAR_SERVER_HIDDEN 			= { FCVAR_SERVER_CAN_EXECUTE, 0x10, FCVAR_DONTRECORD }
+-- phx's global cvar constants
+CVAR_SERVER_ONLY			= { FCVAR_SERVER_CAN_EXECUTE, FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY }
+CVAR_SERVER_ONLY_NO_NOTIFY 	= { FCVAR_SERVER_CAN_EXECUTE, FCVAR_REPLICATED, FCVAR_ARCHIVE }
+CVAR_SERVER_HIDDEN 			= { FCVAR_SERVER_CAN_EXECUTE, 0x10, FCVAR_DONTRECORD }
 
--- cons
+-- global constant type
 CTYPE_STRING	= 1
 CTYPE_NUMBER	= 2
 CTYPE_BOOL		= 3
@@ -216,7 +217,7 @@ CVAR["ph_enable_decoy_reward"]				=	{ CTYPE_BOOL,	"1", CVAR_SERVER_ONLY_NO_NOTIF
 CVAR["ph_props_disable_footstep"]           =   { CTYPE_BOOL,  "1", CVAR_SERVER_ONLY, "Toggle Mute player footstep for Prop players." }
 
 CVAR["ph_give_grenade_near_roundend"]       =   { CTYPE_BOOL, "0", CVAR_SERVER_ONLY_NO_NOTIFY, "Should grenades will be given near round end? If Yes, see 'ph_give_grenade_roundend_before_time' also."}
-CVAR["ph_give_grenade_roundend_before_time"] =   { CTYPE_FLOAT, "30", CVAR_SERVER_ONLY_NO_NOTIFY, "Time in seconds to give grenades before Round Ends. This is typically between 10 to 30 seconds." }
+CVAR["ph_give_grenade_roundend_before_time"] =   { CTYPE_FLOAT, "15", CVAR_SERVER_ONLY_NO_NOTIFY, "Time in seconds to give grenades before Round Ends. This is typically between 10 to 30 seconds." }
 
 -- Load & init
 

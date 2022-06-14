@@ -490,6 +490,7 @@ LANG["MISC_NA"]							= "Kosong"
 LANG["HUD_DECOY_ACTIVE"]                = "Tekan [%s]"
 LANG["HUD_FAKETAUNT_COUNT"]             = "Sisa %ix"
 LANG["HUD_FAKETAUNT_UNLI"]              = "Tak Terbatas"
+LANG["NOTICE_GRENADE_SMG_GIVEN"]        = "Kamu baru saja diberi Grenade SMG."
 
 --[[
 	ADMIN PANEL, Revision 10.06/2022/X2Z

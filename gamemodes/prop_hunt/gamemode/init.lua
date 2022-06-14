@@ -266,7 +266,7 @@ function GM:PlayerShouldTakeDamage(ply, attacker)
 		if ( attacker.Team and ply:Team() == attacker:Team() and ply ~= attacker ) then return false end
 	end
 	
-	-- Allow only prop damage to hunters
+	-- Allow props damage to hunters
 	if GAMEMODE:InRound() and ply:Team() == TEAM_HUNTERS and (IsValid(attacker) and attacker:IsPlayer() and attacker:Team() == TEAM_PROPS) then
 		return true
 	end
@@ -820,7 +820,7 @@ function GM:OnPreRoundStart(num)
 					pl:SetTeam(TEAM_HUNTERS)
 				else
 					pl:SetTeam(TEAM_PROPS)
-                    if pl:HasFakePropEntity() then pl:PHXChatInfo( "GOOD", "DECOY_REMINDER_GET" ) end
+                    if pl:HasFakePropEntity() then pl:PHXNotify( "DECOY_REMINDER_GET", "GENERIC", 18, true ) end
 					if PHX:GetCVar( "ph_notice_prop_rotation" ) then
 						timer.Simple(0.5, function() 
 							pl:PHXNotify( "NOTIFY_IN_PROP_TEAM", "UNDO", 20, true )
@@ -869,6 +869,7 @@ function GM:OnPreRoundStart(num)
                     local numGrenade = PHX:GetCVar( "ph_smggrenadecounts" )
                     h:SetAmmo(numGrenade, "SMG1_Grenade")
                     h:SendSurfaceSound("misc/grenadepickup.wav")
+                    h:PHXNotify( "NOTICE_GRENADE_SMG_GIVEN", "GENERIC", 5, true )
                 end
             end
         end
@@ -876,7 +877,9 @@ function GM:OnPreRoundStart(num)
 	
 	UTIL_StripAllPlayers()
 	UTIL_SpawnAllPlayers()
-	UTIL_FreezeAllPlayers()
+    
+    --print("UTIL_FreezeAllPlayers is called!")
+	--UTIL_FreezeAllPlayers()
 end
 
 
@@ -969,8 +972,7 @@ function GM:OnRoundEnd( num )
 		end
 	end
 	
-	-- forgot to add this; Remove handleUnblindHook
-    print( "[DEBUG] ClearTimer was called OnRoundEnd" ) --todo
+	-- forgot to add this; Remove handleUnblindHook    
 	ClearTimer()
 	
 	hook.Call("PH_OnRoundEnd", nil, num)
@@ -1027,27 +1029,17 @@ end
 -- Player pressed a key
 function PlayerPressedKey(pl, key)
 	-- Use traces to select a prop
-	local min,max = pl:GetHull()
 	if pl && pl:IsValid() && pl:Alive() && pl:Team() == TEAM_PROPS then
-		plhullz = max.z
+        local min,max = pl:GetHull()
 	
 		if key == IN_ATTACK then
 			local trace = {}
-			-- Wolvin: careful and pay attention after modifying cl_init's cHullz min & max, where min = 24, max = 84 in here.
-			if plhullz < 24 then
-				trace.start = pl:EyePos() + Vector(0, 0, plhullz + (24 -  plhullz))
-				trace.endpos = pl:EyePos() + Vector(0, 0, plhullz + (24 - plhullz)) + pl:EyeAngles():Forward() * 100
-			elseif plhullz > 84 then
-				trace.start = pl:EyePos() + Vector(0, 0, plhullz - 84)
-				trace.endpos = pl:EyePos() + Vector(0, 0, plhullz - 84) + pl:EyeAngles():Forward() * 300
-			else
-				trace.start = pl:EyePos() + Vector(0, 0, 8)
-				trace.endpos = pl:EyePos() + Vector(0, 0, 8) + pl:EyeAngles():Forward() * 100
-			end
-			--trace.filter = ents.FindByClass("ph_prop")
+
+            trace = GAMEMODE.ViewCam:CommonCamCollEnabledView( pl:EyePos(), pl:EyeAngles(), max.z )
+			
 			--Fix by Codingale: https://github.com/Codingale, https://github.com/prop-hunt-enhanced/prop-hunt-enhanced/pull/11
 			local filter = {} -- We need to filter out players and the ph_prop.
-
+            
 			for k,v in pairs(ents.GetAll()) do
 				if v:GetClass() == "ph_prop" or string.lower(v:GetClass()) == "player" then
 					table.insert(filter, v)
@@ -1144,14 +1136,12 @@ hook.Add("PlayerButtonDown", "PlayerButton_ControlTaunts", function(pl, key)
 		if key == lockInfo then
 			if pl:GetPlayerLockedRot() then
 				pl:SetNWBool("PlayerLockedRotation", false)
-				--pl:PHXNotify( "HUD_ROTFREE", "UNDO", 3, true )
 				pl:PrintCenter( "HUD_ROTFREE", Color(32,200,72) )
 				net.Start("PHX.rotateState")
 					net.WriteInt(0, 2)
 				net.Send(pl)
 			else
 				pl:SetNWBool("PlayerLockedRotation", true)
-				--pl:PHXNotify( "HUD_ROTLOCK", "ERROR", 3, true )
 				pl:PrintCenter( "HUD_ROTLOCK", Color(255,128,40) )
 				net.Start("PHX.rotateState")
 					net.WriteInt(1, 2)

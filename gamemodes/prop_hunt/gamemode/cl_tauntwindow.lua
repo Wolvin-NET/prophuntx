@@ -130,6 +130,7 @@ local function MainFrame()
 	window.ckPRandFake:SetSize(0,20)
 	window.ckPRandFake:DockMargin(8,1,0,5)
 	window.ckPRandFake:SetText( PHX:FTranslate("PHX_CTAUNT_RANDPITCH_FOR_FAKE") )
+    window.ckPRandFake:SetConVar( "ph_cl_pitch_fake_prop_random" )
     window.ckPRandFake:SetEnabled( window.ckPFake:GetChecked() )
 
 	local btnpanel = vgui.Create("DPanel", window.frame)
@@ -387,7 +388,21 @@ local function MainFrame()
 			if PHX:GetCVar( "ph_randtaunt_map_prop_max" ) == -1 then textRandProp = "PHX_CTAUNT_ON_RAND_PROPS_UNLI" end
 			
 			local menu = DermaMenu()
-			menu:AddOption(PHX:FTranslate("TM_TOOLTIP_PREVIEW"), function() if hasLines then surface.PlaySound(getline); PHX:AddChat(PHX:Translate("TM_NOTICE_PLAYPREVIEW", getline), Color(20,220,0)); end end):SetIcon("icon16/control_play.png")
+			menu:AddOption(PHX:FTranslate("TM_TOOLTIP_PREVIEW"), function() 
+                if hasLines then 
+                    --surface.PlaySound(getline);
+                    local pt = 100
+                    if window.ckpitch:GetChecked() then
+                        if window.ckpitrand:GetChecked() then
+                            pt = math.random(window.slider:GetMin(), window.slider:GetMax())
+                        else
+                            pt = window.slider:GetValue()
+                        end
+                    end
+                    LocalPlayer():EmitSound( getline, 0, pt )
+                    PHX:AddChat(PHX:Translate("TM_NOTICE_PLAYPREVIEW", getline), Color(20,220,0)); 
+                end 
+            end):SetIcon("icon16/control_play.png")
 			
 			if PHX:GetCVar( "ph_randtaunt_map_prop_enable" ) and LocalPlayer():Team() == TEAM_PROPS then
 				menu:AddOption(PHX:QTrans( textRandProp ), function()

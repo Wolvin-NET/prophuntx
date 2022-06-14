@@ -2,7 +2,7 @@
 local printCenter = {}
 
 printCenter.lastShownNotify = 0
-printCenter.delay = 3.5	-- We'll follow PrintMessage's rule. Don't attempt to use ConVar here!
+printCenter.delay = 3.25	-- We'll follow PrintMessage's rule. Don't attempt to use ConVar here!
 printCenter.color = color_white
 
 function printCenter:notify_wait()

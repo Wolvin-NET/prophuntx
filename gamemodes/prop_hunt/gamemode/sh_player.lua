@@ -4,17 +4,17 @@ if !Player then return end
 if !Entity then return end
 
 function Entity:GetPropSize()
-	local hullxymax = math.Round(math.Max(self:OBBMaxs().x-self:OBBMins().x, self:OBBMaxs().y-self:OBBMins().y))
-	local hullz = math.Round(self:OBBMaxs().z - self:OBBMins().z)
+	local hullxymax     = math.Round(math.Max(self:OBBMaxs().x - self:OBBMins().x, self:OBBMaxs().y - self:OBBMins().y) / 2)
+	local hullz         = math.Round(self:OBBMaxs().z - self:OBBMins().z)
 	
-	return hullxymax,hullz
+	return hullxymax, hullz
 end
 
 function Player:CheckHull(hx,hy,hz)
 	local tr = {}
 	tr.start = self:GetPos()
 	tr.endpos = self:GetPos()
-	tr.filter = {self, self.ph_prop}
+	tr.filter = { self, self:GetPlayerPropEntity() }
 	tr.maxs = Vector(hx,hy,hz)
 	tr.mins = Vector(-hx,-hy,0)
 	
@@ -129,9 +129,10 @@ if SERVER then
 		if self:HasFakePropEntity() and self:Alive() and self:Team() == TEAM_PROPS then
 			-- todo: See cl_init.lua @ 394, values must be match!
 			local trace = {}
-			local dist = 250
-			trace.start 	= self:EyePos() + Vector(0,0,16)
-			trace.endpos 	= self:EyePos() + Vector(0,0,16) + self:EyeAngles():Forward() * dist
+			local dist = PHX.DecoyDistance
+            local min,max = self:GetHull()
+            
+            trace           = GAMEMODE.ViewCam:CamColEnabled( self:EyePos(), self:EyeAngles(), trace, "start", "endpos", dist, dist, dist, max.z )
 			trace.mask		= MASK_PLAYERSOLID
 			trace.filter	= ents.FindByClass('ph_prop')
             table.insert(trace.filter, self)

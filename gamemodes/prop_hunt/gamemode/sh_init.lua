@@ -6,10 +6,90 @@ IS_PHX		 	= true	-- an easy check if PHX is installed.
 
 PHX.ConfigPath 	= "phx_data"
 PHX.VERSION		= "X2Z"
-PHX.REVISION	= "11.06.22" --Format: dd/mm/yy.
+PHX.REVISION	= "14.06.22" --Format: dd/mm/yy.
 
 -- Fonts
 AddCSLuaFile("cl_fonts.lua")
+
+-- Global Trace ViewControl for Props
+GM.ViewCam = {}
+
+-- Vector: Crouch Hull Z (Height) limit
+GM.ViewCam.cHullz      = 64    -- Fallback Value. Currently 64 for default value.
+GM.ViewCam.cHullzMins  = 24    -- Used for duck: Limit Minimums Height in BBox
+GM.ViewCam.cHullzMaxs  = 84    -- Limit Maximum Height in BBox
+GM.ViewCam.cHullzLow   = 8     -- Limit everything below this height
+
+-- Can also internally used for CalcView but you can use anywhere in serverside realm.
+function GM.ViewCam.CamColEnabled( self, origin, Endpos, trace, traceStart, traceEnd, distMin, distMax, distNorm, entHullz )
+	
+    -- don't allow 0.
+    if (!entHullz or entHullz == nil) then entHullz = self.cHullz end
+    if !trace or trace == nil then trace = {} end
+    
+	if entHullz < self.cHullzMins then
+		trace[traceStart] 	= origin + Vector(0, 0, entHullz + (self.cHullzMins - entHullz))
+		trace[traceEnd] 	= origin + Vector(0, 0, entHullz + (self.cHullzMins - entHullz)) + (Endpos:Forward() * distMin)
+	elseif entHullz > self.cHullzMaxs then
+		trace[traceStart] 	= origin + Vector(0, 0, entHullz - self.cHullzMaxs)
+		trace[traceEnd] 	= origin + Vector(0, 0, entHullz - self.cHullzMaxs) + (Endpos:Forward() * distMax)
+	else
+		trace[traceStart] 	= origin + Vector(0, 0, self.cHullzLow)
+		trace[traceEnd] 	= origin + Vector(0, 0, self.cHullzLow) + (Endpos:Forward() * distNorm)
+	end
+	
+	return trace
+end
+
+-- Internally used for CalcView.
+function GM.ViewCam.CamColDisabled( self, origin, Endpos, trace, traceStart, distMin, distMax, distNorm, entHullz )
+
+    -- don't allow 0.
+    if (!entHullz or entHullz == nil) then entHullz = self.cHullz end
+    if !trace or trace == nil then trace = {} end
+
+	if entHullz < self.cHullzMins then
+		trace[traceStart] = origin + Vector(0, 0, entHullz + (self.cHullzMins - entHullz)) + (Endpos:Forward() * distMin)
+	elseif entHullz > self.cHullzMaxs then
+		trace[traceStart] = origin + Vector(0, 0, entHullz - self.cHullzMaxs) + (Endpos:Forward() * distMax)
+	else
+		trace[traceStart] = origin + Vector(0, 0, self.cHullzLow) + (Endpos:Forward() * distNorm)
+	end
+
+	return trace
+    
+end
+
+-- Use this to get a common value instead of using CamColEnabled()
+function GM.ViewCam.CommonCamCollEnabledView( self, origin, angles, entZ )
+    if (!entZ and entZ == nil) then entZ = self.cHullz end
+
+    local trace = {}
+      trace = self:CamColEnabled( origin, angles, trace, "start", "endpos", 100, 300, 100, entZ )
+      
+    return trace
+end
+
+-- Inclusions. These exclude plugins!
+-- Do not end with "/"
+function PHX:Includes( path, name, isExternal )
+    local root = engine.ActiveGamemode() .. "/gamemode/"
+    local pathToSearch = root .. path .. "/*.lua"
+    local ReqFiles = file.Find(pathToSearch, "LUA")    
+    for _,File in SortedPairs( ReqFiles ) do
+        PHX.VerboseMsg( string.format( "[PHX] [%s] Loading %s: %s", name:upper(), name, File ) )
+        
+        if (isExternal) then
+            local nice = root .. path .. "/" .. File
+            AddCSLuaFile(nice)
+            include(nice)
+        else
+            local nice = path .. "/" .. File
+            AddCSLuaFile(nice)
+            include(nice)
+        end
+    end
+end
 
 -- Init Convars first!
 AddCSLuaFile("sh_convar.lua")
@@ -36,12 +116,28 @@ end
 --Include Languages
 PHX.LANGUAGES = {}
 
-local f = file.Find(engine.ActiveGamemode() .. "/gamemode/langs/*.lua", "LUA")
+PHX:Includes( "langs", "Languages" )
+PHX:Includes( "config/lib", "Libraries" )
+
+--Add Alias for NewSoundDuration()
+function PHX:SoundDuration( snd )
+    return NewSoundDuration( snd )
+end
+
+--[[ local f = file.Find(engine.ActiveGamemode() .. "/gamemode/langs/*.lua", "LUA")
 for _,lgfile in SortedPairs(f) do
 	PHX.VerboseMsg("[PHX] [LANGUAGE] Adding Language File -> ".. lgfile)
 	AddCSLuaFile("langs/" .. lgfile)
 	include("langs/" .. lgfile)
 end
+
+--Required Libray
+local libDir = file.Find(engine.ActiveGamemode() .. "/gamemode/config/lib/*.lua", "LUA")
+for _,libFile in SortedPairs(libDir) do
+	PHX.VerboseMsg("[PHX] [LIBRARY] Adding Library File -> ".. libFile)
+	AddCSLuaFile("config/lib/" .. libFile)
+	include("config/lib/" .. libFile)
+end ]]
 
 -- Standard Inclusion
 AddCSLuaFile("cl_lang.lua")
@@ -120,13 +216,13 @@ GM.NoPlayerPlayerDamage 	= true
 GM.NoPlayerTeamDamage		= true
 
 GM.RoundBased				= true
-GM.RoundLimit				= PHX:QCVar( "ph_rounds_per_map" )
-GM.RoundLength 				= PHX:QCVar( "ph_round_time" )
+GM.RoundLimit				= PHX:QCVar( "ph_rounds_per_map" )  -- Tested: Using GetGlobalInt without restarting will mess up round system!
+GM.RoundLength 				= PHX:QCVar( "ph_round_time" )      -- Tested: Using GetGlobalInt may serve severe problems including weird timer precision!
 GM.RoundPreStartTime		= 0
 GM.SuicideString			= "dead" -- obsolete
 GM.TeamBased 				= true
 
-GM.ForceJoinBalancedTeams 	= PHX:QCVar( "ph_forcejoinbalancedteams" )
+GM.ForceJoinBalancedTeams 	= GetGlobalInt( "ph_forcejoinbalancedteams", false )
 
 local mark = utf8.char(9733)
 GM.PHXContributors			= {
@@ -313,4 +409,31 @@ if CLIENT then
 	paintPanelFunc(PanelModify, PHX:FTranslate("PHXM_TAB_PLUGINS"))
 	
 	end)
+end
+
+-- We don't need some hooks that mostly used from sandbox.
+hook.Remove("PlayerTick", "TickWidgets")
+
+--todo: check if this break the clientside effects
+if CLIENT then
+    hook.Remove("RenderScreenspaceEffects", "RenderColorModify")
+    hook.Remove("RenderScreenspaceEffects", "RenderBloom")
+    hook.Remove("RenderScreenspaceEffects", "RenderToyTown")
+    hook.Remove("RenderScreenspaceEffects", "RenderTexturize")
+    hook.Remove("RenderScreenspaceEffects", "RenderSunbeams")
+    hook.Remove("RenderScreenspaceEffects", "RenderSobel")
+    hook.Remove("RenderScreenspaceEffects", "RenderSharpen")
+    hook.Remove("RenderScreenspaceEffects", "RenderMaterialOverlay")
+    hook.Remove("RenderScreenspaceEffects", "RenderMotionBlur")
+    hook.Remove("RenderScene", "RenderStereoscopy")
+    hook.Remove("RenderScene", "RenderSuperDoF")
+    hook.Remove("GUIMousePressed", "SuperDOFMouseDown")
+    hook.Remove("GUIMouseReleased", "SuperDOFMouseUp")
+    hook.Remove("PreventScreenClicks", "SuperDOFPreventClicks")
+    hook.Remove("PostRender", "RenderFrameBlend")
+    hook.Remove("PreRender", "PreRenderFrameBlend")
+    hook.Remove("Think", "DOFThink")
+    hook.Remove("RenderScreenspaceEffects", "RenderBokeh")
+    hook.Remove("NeedsDepthPass", "NeedsDepthPass_Bokeh")
+    hook.Remove("PostDrawEffects", "RenderWidgets")
 end

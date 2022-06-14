@@ -45,6 +45,8 @@ function ENT:Think()
 			end
 			if !lockstate then self:SetAngles(Angle(0,ang.y,0)) end
 		end
+        
+        
 	end
 end
 
@@ -72,7 +74,6 @@ if SERVER then
 			pl:SetHealth(self.health)
 			
 			if self.health <= 0 then
-				hook.Call("PH_OnPropKilled", nil, pl, attacker)	-- temporarily moved, to make sure it's get called first.
 			
 				pl:KillSilent()
 				pl:SetArmor(0)
@@ -124,6 +125,7 @@ if SERVER then
 				pl:AddDeaths(1)
 				attacker:SetHealth(math.Clamp(attacker:Health() + GetConVarNumber("ph_hunter_kill_bonus"), 1, 100))
                 
+                hook.Call("PH_OnPropKilled", nil, pl, inflictor, attacker) -- Added inflictor, due to PS2 needs it, although it doesn't.
 				pl:RemoveProp()
 			end
 		end

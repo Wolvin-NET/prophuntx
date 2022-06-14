@@ -336,6 +336,7 @@ LANG["MISC_NA"]							    = "N/A"
 LANG["HUD_DECOY_ACTIVE"]                = "Press [%s]"
 LANG["HUD_FAKETAUNT_COUNT"]             = "%ix Left"
 LANG["HUD_FAKETAUNT_UNLI"]              = "Unlimited"
+LANG["NOTICE_GRENADE_SMG_GIVEN"]        = "You are now acquired some SMG Grenades."
 -- Help/Admin Panel: Late #4
 LANG["PHXM_TAUNT_SETTINGS"]				    = "Taunt Settings"
 LANG["PHXM_GENERAL_SETTINGS"]			    = "General Settings"

@@ -504,6 +504,7 @@ LANG["MISC_NA"]							= "N/A"
 LANG["HUD_DECOY_ACTIVE"]                = "Press [%s]"
 LANG["HUD_FAKETAUNT_COUNT"]             = "%ix Left"
 LANG["HUD_FAKETAUNT_UNLI"]              = "Unlimited"
+LANG["NOTICE_GRENADE_SMG_GIVEN"]        = "You are now acquired some SMG Grenades."
 
 --[[
 	ADMIN PANEL, Revision 10.06/2022/X2Z

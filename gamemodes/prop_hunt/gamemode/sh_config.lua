@@ -1,5 +1,8 @@
 PHX.DEFAULT_CATEGORY = "PHX Original"
 
+-- Decoy Default Distance
+PHX.DecoyDistance   = 250
+
 -- Time (in seconds) for spectator check (Default: 0.1)
 PHX.SPECTATOR_CHECK_ADD = 0.1
 

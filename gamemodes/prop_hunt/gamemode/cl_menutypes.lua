@@ -356,16 +356,17 @@ end,
 	
 	local label = vgui.Create("DLabel", pnl)
 	label:Dock(LEFT)
-	label:SetSize(300,0)
+	label:SetSize(pnl:GetWide()*0.5,0)
 	label:DockMargin(2,0,0,0)
 	label:SetFont("HudHintTextLarge")
 	label:SetText(PHX:QTrans(l))
 	
 	local textEntry = vgui.Create("DTextEntry", pnl)
 	textEntry:Dock(LEFT)
-	textEntry:SetSize(256, 0)
+	textEntry:SetSize(pnl:GetWide()*0.25, 0)
 	textEntry:DockMargin(4,2,0,2)
 	textEntry:SetValue( GetConVar(c):GetString() )
+    textEntry:SetToolTip(PHX:QTrans(l))
 	
 	local btn = vgui.Create("DButton", pnl)
 	btn:Dock(LEFT)

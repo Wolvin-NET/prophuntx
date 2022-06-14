@@ -219,11 +219,7 @@ hook.Add("HUDPaint", "PHX.MainHUD", function()
 	end
 	
 	-- Weapon HUD
-	if IsValid(LocalPlayer()) && LocalPlayer():Alive() && state && LocalPlayer():Team() == TEAM_HUNTERS then
-		surface.SetDrawColor( 255, 255, 255, 255 )
-		surface.SetMaterial( matw )
-		surface.DrawTexturedRect( posw.x, posw.y, 480, 120 )
-		
+	if IsValid(LocalPlayer()) && LocalPlayer():Alive() && state && LocalPlayer():Team() == TEAM_HUNTERS then		
 		local curWep = LocalPlayer():GetActiveWeapon()
 		
 		local clip
@@ -236,6 +232,10 @@ hook.Add("HUDPaint", "PHX.MainHUD", function()
 		local LiteralStringSec
 		
 		if IsValid(curWep) then
+            surface.SetDrawColor( 255, 255, 255, 255 )
+            surface.SetMaterial( matw )
+            surface.DrawTexturedRect( posw.x, posw.y, 480, 120 )
+        
 			clip 	= curWep:Clip1()
 			maxclip = curWep:GetMaxClip1()
 			mag 	= LocalPlayer():GetAmmoCount(curWep:GetPrimaryAmmoType())

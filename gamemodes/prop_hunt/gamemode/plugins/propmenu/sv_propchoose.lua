@@ -157,8 +157,10 @@ hook.Add("PlayerInitialSpawn","pcr.InitPropRequestData",function(ply)
 	ply:SetNWInt("CurrentUsage", 0)
 end)
 
-net.Receive("pcr.ClientRequestPropData", function(len, ply)
+local function SendPropData( ply )
+
 	if !ply.pcrHasPropData then		
+        
 		net.Start("pcr.PropListData")
 		net.WriteUInt(PCR.propDataSize, 32)
 		net.WriteData(PCR.propDatajson, PCR.propDataSize)
@@ -173,6 +175,18 @@ net.Receive("pcr.ClientRequestPropData", function(len, ply)
 
 		ply.pcrHasPropData = true
 	end
+    
+end
+
+net.Receive("pcr.ClientRequestPropData", function(len, ply)
+    if ply:IsListenServerHost() then
+        -- bug: Host don't retreive the prop data at first spawn. We might have to DELAY it.
+        timer.Simple(3, function() SendPropData( ply ) end)
+    else
+        timer.Simple(0, function() -- send the data on next frame instead, for safety.
+            SendPropData( ply ) -- Dedicated servers should be no problem. Singleplayer does not.
+        end)
+    end
 end)
 
 hook.Add("PostCleanupMap","PCR.ResetUseLimit",function()

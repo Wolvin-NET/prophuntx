@@ -110,8 +110,7 @@ local function DrawLine( pl, spriteMat, forTeam, dist, sizex, sizey, convarToChe
         if sizey == nil then sizey = 8 end
 	
 		local trace = {}
-            trace.start 	= pl:EyePos() + Vector(0,0,16)
-            trace.endpos 	= pl:EyePos() + Vector(0,0,16) + pl:EyeAngles():Forward() * dist
+            trace = GAMEMODE.ViewCam:CamColEnabled( pl:EyePos(), pl:EyeAngles(), trace, "start", "endpos", dist, dist, dist, cHullz )
             trace.mask		= MASK_PLAYERSOLID
             trace.filter	= ents.FindByClass('ph_prop')
             
@@ -142,14 +141,25 @@ local function DrawLine( pl, spriteMat, forTeam, dist, sizex, sizey, convarToChe
 
 end
 
+local function getIndicColor( trace, fallback, colorTrue, colorFalse )
+    local color = fallback
+    local maxxy,maxz = trace.Entity:GetPropSize()
+    
+        if (!LocalPlayer():IsOnGround() or LocalPlayer():Crouching()) then return colorFalse end
+        if PHX:GetCVar( "ph_check_props_boundaries" ) and not LocalPlayer():CheckHull(maxxy,maxxy,maxz) then return colorFalse end
+        color = colorTrue
+        
+    return color
+end
+
 -- Called immediately after starting the gamemode 
 function Initialize()
 	cHullz 				= 64
 	client_prop_light 	= false
 	blind 				= false
 	
-	cHullz_Min 			= 24 -- desired amount of hull.z to modify.
-	cHullz_Max 			= 84 -- desired amount of hull.z to modify.
+	--cHullz_Min 			= 24 -- desired amount of hull.z to modify, no longer used
+	--cHullz_Max 			= 84 -- desired amount of hull.z to modify, no longer used
 	
 	CL_GLIMPCAM 		= 0
 	MAT_LASERDOT 		= Material("sprites/glow04_noz")
@@ -205,35 +215,6 @@ function GM:ShowHelp()
 	
 end
 
-GM.ViewCam = {}
-function GM.ViewCam.CamColEnabled( self, origin, Endpos, trace, traceStart, traceEnd, distMin, distMax, distNorm )
-	
-	if cHullz < cHullz_Min then
-		trace[traceStart] 	= origin + Vector(0, 0, cHullz + (cHullz_Min-cHullz))
-		trace[traceEnd] 	= origin + Vector(0, 0, cHullz + (cHullz_Min-cHullz)) + (Endpos:Forward() * distMin)
-	elseif cHullz > cHullz_Max then
-		trace[traceStart] 	= origin + Vector(0, 0, cHullz - cHullz_Max)
-		trace[traceEnd] 	= origin + Vector(0, 0, cHullz - cHullz_Max) + (Endpos:Forward() * distMax)
-	else
-		trace[traceStart] 	= origin + Vector(0, 0, 8)
-		trace[traceEnd] 	= origin + Vector(0, 0, 8) + (Endpos:Forward() * distNorm)
-	end
-	
-	return trace
-end
-
-function GM.ViewCam.CamColDisabled( self, origin, Endpos, trace, traceStart, distMin, distMax, distNorm )
-	if cHullz < cHullz_Min then
-		trace[traceStart] = origin + Vector(0, 0, cHullz + (cHullz_Min-cHullz)) + (Endpos:Forward() * distMin)
-	elseif cHullz > cHullz_Max then
-		trace[traceStart] = origin + Vector(0, 0, cHullz - cHullz_Max) + (Endpos:Forward() * distMax)
-	else
-		trace[traceStart] = origin + Vector(0, 0, 8) + (Endpos:Forward() * distNorm)
-	end
-
-	return trace
-end
-
 -- Decides where  the player view should be (forces third person for props)
 function GM:CalcView(pl, origin, angles, fov)
 	local view = {} 
@@ -258,14 +239,14 @@ function GM:CalcView(pl, origin, angles, fov)
 			local filterent = ents.FindByClass("ph_prop")
 			table.insert(filterent, pl)
 			
-			trace = self.ViewCam:CamColEnabled( origin, angles, trace, "start", "endpos", -80, -80, -80 )
+			trace = self.ViewCam:CamColEnabled( origin, angles, trace, "start", "endpos", -80, -80, -80, cHullz )
 			
 			trace.filter = filterent
 			
 			local tr = util.TraceLine(trace)
 			view.origin = tr.HitPos
 		else
-			self.ViewCam:CamColDisabled( origin, angles, view, "origin", -80, -80, -80 )
+			self.ViewCam:CamColDisabled( origin, angles, view, "origin", -80, -80, -80, cHullz )
 
 		end
 	elseif pl:Team() == TEAM_HUNTERS && pl:Alive() then
@@ -353,8 +334,7 @@ function HUDPaint()
 		local color
 		local trace = {}
 		
-		trace = GAMEMODE.ViewCam:CamColEnabled( LocalPlayer():EyePos(), LocalPlayer():EyeAngles(), trace, "start", "endpos", 100, 300, 100 )
-
+        trace = GAMEMODE.ViewCam:CommonCamCollEnabledView( LocalPlayer():EyePos(), LocalPlayer():EyeAngles(), cHullz )
 		local filter = {}
 		
 		for k,v in pairs(ents.GetAll()) do
@@ -367,13 +347,9 @@ function HUDPaint()
 		
 		local trace2 = util.TraceLine(trace)
 		if trace2.Entity && trace2.Entity:IsValid() && PHX:IsUsablePropEntity( trace2.Entity:GetClass() ) then
-			if (!LocalPlayer():IsOnGround() or LocalPlayer():Crouching()) then
-				color = IndicatorColor.no
-			else
-				color = IndicatorColor.ok
-			end
+            color = getIndicColor( trace2, color_white, IndicatorColor.ok, IndicatorColor.no )
 		else
-			color = Color(255,255,255,255)
+			color = color_white
 		end
 		surface.SetDrawColor( color )
 		surface.SetMaterial( crosshair )
@@ -392,7 +368,7 @@ function HUDPaint()
     
     -- Draw a sprite
     if GetGlobalBool("InRound", false) and LocalPlayer():HasFakePropEntity() and LocalPlayer():Alive() then
-		DrawLine(LocalPlayer(), MAT_LASERDOT, TEAM_PROPS, 250, 24, 24, "ph_cl_decoy_spawn_helper" )
+		DrawLine(LocalPlayer(), MAT_LASERDOT, TEAM_PROPS, PHX.DecoyDistance, 24, 24, "ph_cl_decoy_spawn_helper" )
 	end
 end
 hook.Add("HUDPaint", "PH_HUDPaint", HUDPaint)
@@ -424,15 +400,9 @@ function drawPropSelectHalos()
 		-- Something to tell if the prop is selectable
 		if LocalPlayer():Team() == TEAM_PROPS && LocalPlayer():Alive() then
 		
-			if (!LocalPlayer():IsOnGround() or LocalPlayer():Crouching()) then
-				halocol = IndicatorColor.no
-			else
-				halocol = IndicatorColor.ok
-			end
-		
 			local trace = {}
 			
-			trace = GAMEMODE.ViewCam:CamColEnabled( LocalPlayer():EyePos(), LocalPlayer():EyeAngles(), trace, "start", "endpos", 100, 300, 100 )
+            trace = GAMEMODE.ViewCam:CommonCamCollEnabledView( LocalPlayer():EyePos(), LocalPlayer():EyeAngles(), cHullz )
 			
 			local filter = {} -- We need to filter out players and the ph_prop.
 			for k,v in pairs(ents.GetAll()) do
@@ -447,6 +417,9 @@ function drawPropSelectHalos()
 			if trace2.Entity && trace2.Entity:IsValid() && PHX:IsUsablePropEntity(trace2.Entity:GetClass()) then
 				local ent_table = {}
 				table.insert(ent_table, trace2.Entity)
+                
+                halocol = getIndicColor( trace2, color_white, IndicatorColor.ok, IndicatorColor.no ) --fallback is unused but just for failsafe.
+                
 				halo.Add(ent_table, halocol, 1.2, 1.2, 1, true, true)
 			end
 		end
