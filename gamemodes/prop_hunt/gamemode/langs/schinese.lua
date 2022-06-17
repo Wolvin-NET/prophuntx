@@ -34,6 +34,12 @@ LANG.RANDOM_SPECTATORS = { --> FRETTA
 	" ",
 }
 
+LANG["PHX_TEAM_CONNECTING"] = "连接"
+LANG["PHX_TEAM_PROPS"]		= "物品"
+LANG["PHX_TEAM_HUNTERS"] 	= "猎人"
+LANG["PHX_TEAM_UNASSIGNED"]	= "未分配" --Fix Me
+LANG["PHX_TEAM_SPECTATOR"] 	= "观众" --Fix Me
+
 -- List of string-based translation
 
 -- // FRETTA SECTION \\
@@ -79,7 +85,7 @@ LANG["HELP_F1"] 				= [[物品猎杀 (代号) X 专案.
 本专案制作现代化与可定制的物品猎杀 X.
 
 更多信息可在以下位置找到:
-https://wolvindra.xyz/prophuntx
+https://gmodgameservers.com/prophuntx
 
 要查看更多信息、帮助和指南，请按[F1]键，然后点击[物品猎杀菜单]按钮.
 
@@ -106,8 +112,8 @@ LANG["HUD_MAGSEC"]				= "弹匣. / 次要." --Magazine Counts (separator) Second
 
 -- !!WEAPON NAMES CANNOT BE TRANSLATED, THEY USE FROM language.GetPhrase THEREFORE IT'S IMPOSSIBLE TO DO.
 
-LANG["TEAM_PROPS"]				= "物品"
-LANG["TEAM_HUNTERS"]			= "猎人"
+LANG["TEAM_PROPS"]				= LANG["PHX_TEAM_PROPS"]
+LANG["TEAM_HUNTERS"]			= LANG["PHX_TEAM_HUNTERS"]
 
 LANG["HUD_ROTLOCK"]				= "物品旋转: 锁定"
 LANG["HUD_ROTFREE"]				= "物品旋转: 自由"
@@ -118,7 +124,7 @@ LANG["HUD_AUTOTAUNT_ALT"]		= "在 %d 中自动嘲讽"
 
 LANG["HUD_TargetID"]			= "玩家: %s (%d%%)" -- Player: <NAME> (<HEALTH>%)
 
-LANG["HUD_BLINDED"]				= "猎人将在 %s 秒后行动"
+LANG["HUD_BLINDED"]				= "%s将在 %s 秒后行动" -- Todo: Fix Me!
 LANG["HUD_UNBLINDED"]			= "准备好了吗，咱们来喽!"
 
 LANG["BLIND_RESPAWN_TEAM"]		= "失明时间内，你在 %d 秒后在 %s队伍中复活."
@@ -150,7 +156,7 @@ LANG["TM_NO_TAUNTS"]			= "警告: 在此类别中未找到嘲讽."
 LANG["TM_PLAY_ONLY_ALIVE"] 		= "仅能在活着的时候使用自订嘲讽."
 
 LANG["TM_WINDOW_TITLE"]			= "物品猎杀自订嘲讽窗口"
-LANG["TM_NOTICE_PLSWAIT"]		= "请稍等 %s 秒!"
+LANG["TM_NOTICE_PLSWAIT"]		= "请稍等 %s 秒!" -- fix me: Add " before Random Taunt ends!"
 LANG["TM_NOTICE_PLAYPREVIEW"]	= "预览嘲讽: %s"
 
 LANG["TM_TOOLTIP_PLAYTAUNT"] 	= "播放嘲讽"
@@ -584,6 +590,7 @@ LANG["DECOY_INDICATOR_INVALID"]         = "Invalid Slope!"
 LANG["DECOY_INDICATOR_TOOFAR"]          = "Range too far!"
 LANG["DECOY_INDICATOR_OK"]              = "Place Decoy [Press %s]"
 
+LANG["PHXM_DECOY_HEALTH"]				= "How much health does the decoy should have. Default is 10."
 LANG["PHXM_PLAYER_SHOW_DECOY_HELPER"]   = "Show/Hide Decoy placement helper? This will show a white dot with a text near on your crosshair."
 LANG["PHXM_PLAYER_SHOW_DECOY_MARKER"]   = "Show/Hide Decoy marker?"
 

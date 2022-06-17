@@ -11,7 +11,7 @@ LANG.AuthorURL = {"https://steamcommunity.com/profiles/76561198273773489"}
 
 -- Special Section that isn't String-based
 LANG.SUICIDEMSG = { -- > FRETTA
-"님이 자살 '당함'!", -- i believe this was from 9gag joke.
+"님이 자살 '당함'!",
 "님이 신비하게 죽었습니다.", "님이 마법으로 인해 죽으셨습니다.", "님이 저격총을 반대로 쐈나봐요.",
 "님이 그냥 돌아버리셨나봐요.", "님이 숙취로 인해 돌아가셨습니다.",
 "님이 죽었네요... 다음은 죽지 않도록 행운을 빌게요!", "님의 바닥이 미끄러웠던 모양입니다.",
@@ -19,6 +19,12 @@ LANG.SUICIDEMSG = { -- > FRETTA
 
 LANG.RANDOM_SPECTATORS = { -- > FRETTA
 "잠시 여유를 즐기려", "노는 것을 지켜보려고", "뭔가 보려고", " "}
+
+LANG["PHX_TEAM_CONNECTING"] = "연결" --Fix me
+LANG["PHX_TEAM_PROPS"]		= "Props"
+LANG["PHX_TEAM_HUNTERS"] 	= "헌터들이"
+LANG["PHX_TEAM_UNASSIGNED"]	= "할당되지 않음"  --Fix Me
+LANG["PHX_TEAM_SPECTATOR"] 	= "구경꾼"	--Fix Me
 
 -- List of string-based translation
 
@@ -65,7 +71,7 @@ LANG["HELP_F1"] = [[Prop Hunt (코드네임) X
 Prop Hunt X를 현대적이고 좀 더 커스텀 가능하도록 만든 프로젝트입니다.
 
 자세한 정보는 아래 링크에서 확인할 수 있습니다.
-https://wolvindra.xyz/prophuntx
+https://gmodgameservers.com/prophuntx
 
 자세한 도움말 및 가이드를 보시려면, [F1] 키를 누르고 [Prop Hunt 메뉴] 버튼을 클릭하세요.
 
@@ -92,8 +98,8 @@ LANG["HUD_MAGSEC"] = "탄창. / 보조." -- Magazine Counts (separator) Secondar
 
 -- !!WEAPON NAMES CANNOT BE TRANSLATED, THEY USE FROM language.GetPhrase THEREFORE IT'S IMPOSSIBLE TO DO.
 
-LANG["TEAM_PROPS"] = "Props"
-LANG["TEAM_HUNTERS"] = "Hunters"
+LANG["TEAM_PROPS"] 		= LANG["PHX_TEAM_PROPS"]
+LANG["TEAM_HUNTERS"] 	= LANG["PHX_TEAM_HUNTERS"]
 
 LANG["HUD_ROTLOCK"] = "프롭 회전 : 고정"
 LANG["HUD_ROTFREE"] = "프롭 회전 : 자유"
@@ -104,7 +110,7 @@ LANG["HUD_AUTOTAUNT_ALT"] = "%d 후 자동 도발"
 
 LANG["HUD_TargetID"] = "플레이어: %s (%d%%)" -- Player: <NAME> (<HEALTH>%)
 
-LANG["HUD_BLINDED"] = "%s초 후에 헌터들이 풀려납니다"
+LANG["HUD_BLINDED"] = "%s초 후에 %s 풀려납니다"
 LANG["HUD_UNBLINDED"] = "준비됐든 말든, 시작합니다!"
 
 LANG["BLIND_RESPAWN_TEAM"] = "눈가림 시간 동안 %d초만에 %s 팀에서 부활되었습니다."
@@ -139,7 +145,7 @@ LANG["TM_NO_TAUNTS"] = "주의: 이 카테고리에서 도발을 감지하지 �
 LANG["TM_PLAY_ONLY_ALIVE"] = "살아 있을 때만 커스텀 도발을 할 수 있습니다."
 
 LANG["TM_WINDOW_TITLE"] = "Prop Hunt 커스텀 도발 메뉴"
-LANG["TM_NOTICE_PLSWAIT"] = "%s초 동안 기다리세요."
+LANG["TM_NOTICE_PLSWAIT"] = "%s초 동안 기다리세요." -- fix me: Add " before Random Taunt ends!"
 LANG["TM_NOTICE_PLAYPREVIEW"] = "도발 %s 미리보는 중"
 
 LANG["TM_TOOLTIP_PLAYTAUNT"] = "도발 재생"
@@ -590,6 +596,7 @@ LANG["DECOY_INDICATOR_INVALID"]         = "Invalid Slope!"
 LANG["DECOY_INDICATOR_TOOFAR"]          = "Range too far!"
 LANG["DECOY_INDICATOR_OK"]              = "Place Decoy [Press %s]"
 
+LANG["PHXM_DECOY_HEALTH"]				= "How much health does the decoy should have. Default is 10."
 LANG["PHXM_PLAYER_SHOW_DECOY_HELPER"]   = "Show/Hide Decoy placement helper? This will show a white dot with a text near on your crosshair."
 LANG["PHXM_PLAYER_SHOW_DECOY_MARKER"]   = "Show/Hide Decoy marker?"
 

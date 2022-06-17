@@ -35,6 +35,12 @@ LANG.RANDOM_SPECTATORS = { --> FRETTA
 	" ",
 }
 
+LANG["PHX_TEAM_CONNECTING"] = "Verbinden"
+LANG["PHX_TEAM_PROPS"]		= "Props"
+LANG["PHX_TEAM_HUNTERS"] 	= "Zoekers"
+LANG["PHX_TEAM_UNASSIGNED"]	= "Niet toegewezen"
+LANG["PHX_TEAM_SPECTATOR"] 	= "Toeschouwer"
+
 -- List of string-based translation
 
 -- // FRETTA SECTION \\
@@ -80,7 +86,7 @@ LANG["HELP_F1"] 				= [[A Prop Hunt (Codename) X Project.
 Een project om Prop Hunt X moder en aanpasbaar te maken.
 
 Meer informatie kan hier gevonden worden:
-https://wolvindra.xyz/prophuntx
+https://gmodgameservers.com/prophuntx
 
 Om meer informatie te zien, hulp en uitleg, Druk op de [F1] toets en klik dan op het [Prop Hunt Menu] knopje.
 
@@ -107,8 +113,8 @@ LANG["HUD_MAGSEC"]				= "MAG. / SEC." --Magazine Counts (separator) Secondary Ma
 
 -- !!WEAPON NAMES CANNOT BE TRANSLATED, THEY USE FROM language.GetPhrase THEREFORE IT'S IMPOSSIBLE TO DO.
 
-LANG["TEAM_PROPS"]				= "Props"
-LANG["TEAM_Zoekers"]			= "Zoekers"
+LANG["TEAM_PROPS"]				= LANG["PHX_TEAM_PROPS"] --"Props"
+LANG["TEAM_Zoekers"]			= LANG["PHX_TEAM_HUNTERS"] --"Zoekers"
 
 LANG["HUD_ROTLOCK"]				= "Prop Rotatie: Gesloten"
 LANG["HUD_ROTFREE"]				= "Prop Rotatie: Vrij"
@@ -119,7 +125,7 @@ LANG["HUD_AUTOTAUNT_ALT"]		= "Automatisch taunt vertonen in %d"
 
 LANG["HUD_TargetID"]			= "Gebruiker: %s (%d%%)" -- Player: <NAME> (<HEALTH>%)
 
-LANG["HUD_BLINDED"]				= "de Zoekers zullen gaan zoeken in %s"
+LANG["HUD_BLINDED"]				= "de %s zullen gaan zoeken in %s"
 LANG["HUD_UNBLINDED"]			= "Klaar? Hier komen ze!"
 
 LANG["BLIND_RESPAWN_TEAM"]		= "Je bent respawned in %s team in %d seconden tijdens blinde tijd." 
@@ -151,7 +157,7 @@ LANG["TM_NO_TAUNTS"]			= "Waarschuwing: Geen taunts gedetecteerd in deze categor
 LANG["TM_PLAY_ONLY_ALIVE"] 		= "Je bent alleen toegestaan gepersonaliseerde taunts af te spelen als je levend bent."
 
 LANG["TM_WINDOW_TITLE"]			= "Prop Hunt Gepersonaliseerde Taunt Menu"
-LANG["TM_NOTICE_PLSWAIT"]		= "Wacht alsjeblieft %s seconden!"
+LANG["TM_NOTICE_PLSWAIT"]		= "Wacht alsjeblieft %s seconden!" -- fix me: Add " before Random Taunt ends!"
 LANG["TM_NOTICE_PLAYPREVIEW"]	= "Voorbeeld Taunt: %s"
 
 LANG["TM_TOOLTIP_PLAYTAUNT"] 	= "Play Taunt"
@@ -579,6 +585,7 @@ LANG["DECOY_INDICATOR_INVALID"]         = "Invalid Slope!"
 LANG["DECOY_INDICATOR_TOOFAR"]          = "Range too far!"
 LANG["DECOY_INDICATOR_OK"]              = "Place Decoy [Press %s]"
 
+LANG["PHXM_DECOY_HEALTH"]				= "How much health does the decoy should have. Default is 10."
 LANG["PHXM_PLAYER_SHOW_DECOY_HELPER"]   = "Show/Hide Decoy placement helper? This will show a white dot with a text near on your crosshair."
 LANG["PHXM_PLAYER_SHOW_DECOY_MARKER"]   = "Show/Hide Decoy marker?"
 

@@ -56,6 +56,12 @@ LANG.RANDOM_SPECTATORS = { --> FRETTA
 	" ",
 }
 
+LANG["PHX_TEAM_CONNECTING"] = "Menyambung"
+LANG["PHX_TEAM_PROPS"]		= "Prop"
+LANG["PHX_TEAM_HUNTERS"] 	= "Pemburu"
+LANG["PHX_TEAM_UNASSIGNED"]	= "Belum Join"
+LANG["PHX_TEAM_SPECTATOR"] 	= "Penonton"
+
 -- List of string-based translation
 
 -- // FRETTA SECTION \\
@@ -101,7 +107,7 @@ LANG["HELP_F1"] 				= [[Project Prop Hunt X.
 Sebuah proyek mode permainan "Prop Hunt" untuk lebih modern dan optimal.
 
 Informasi lebih lanjut bisa kunjungi di:
-https://wolvindra.xyz/prophuntx
+https://gmodgameservers.com/prophuntx
 
 Untuk melihat tutorial, pengaturan, dan menu lainnya bisa diakses melalui:
 Tombol [F1], tekan menu 'Menu Prop Hunt'.
@@ -127,8 +133,8 @@ LANG["HUD_HP"]					= "NYAWA"
 LANG["HUD_AMMO"] 				= "PELURU"
 LANG["HUD_MAGSEC"]				= "ISI / CAD." --Magazine | Secondary Magazine
 
-LANG["TEAM_PROPS"]				= "Props"
-LANG["TEAM_HUNTERS"]			= "Hunters"
+LANG["TEAM_PROPS"]				= LANG["PHX_TEAM_PROPS"] 	--"Props"
+LANG["TEAM_HUNTERS"]			= LANG["PHX_TEAM_HUNTERS"] 	--"Hunters"
 
 LANG["HUD_ROTLOCK"]				= "Rotasi: Terkunci"
 LANG["HUD_ROTFREE"]				= "Rotasi: Bebas"
@@ -140,7 +146,7 @@ LANG["HUD_AUTOTAUNT_DISABLED"]	= "Taunt Otomatis non-aktif."
 
 LANG["HUD_TargetID"]			= "Pemain: %s (%d%%)" -- Player: <NAME> (<HEALTH>%)
 
-LANG["HUD_BLINDED"]				= "Hunters akan dilepaskan dalam %s"
+LANG["HUD_BLINDED"]				= "%s akan dilepaskan dalam %s"
 LANG["HUD_UNBLINDED"]			= "Siap atau nggak, kami datang!"
 
 LANG["BLIND_RESPAWN_TEAM"]		= "Kamu telah ter-respawn pada tim %s dalam waktu %d detik ketika hunter memejamkan mata."
@@ -172,7 +178,7 @@ LANG["TM_NO_TAUNTS"]			= "Peringatan: Tidak ada taunt yang terdeteksi di kategor
 LANG["TM_PLAY_ONLY_ALIVE"] 		= "Kamu hanya dapat menggunakan Custom Taunt disaat kamu masih hidup."
 
 LANG["TM_WINDOW_TITLE"]			= "Prop Hunt Custom Taunt"
-LANG["TM_NOTICE_PLSWAIT"]		= "Harap Menunggu %s detik!"
+LANG["TM_NOTICE_PLSWAIT"]		= "Harap tunggu %s detik sebelum random taunt berakhir!"
 LANG["TM_NOTICE_PLAYPREVIEW"]	= "Memainkan Taunt: %s"
 
 LANG["TM_TOOLTIP_PLAYTAUNT"] 	= "Mainkan Taunt"
@@ -579,6 +585,7 @@ LANG["DECOY_INDICATOR_INVALID"]         = "Terlalu Miring!"
 LANG["DECOY_INDICATOR_TOOFAR"]          = "Kejauhan!"
 LANG["DECOY_INDICATOR_OK"]              = "Taruh Decoy [Tekan %s]"
 
+LANG["PHXM_DECOY_HEALTH"]				= "Nyawa yang harus diberikan untuk prop tipuan (decoy). Default: 10"
 LANG["PHXM_PLAYER_SHOW_DECOY_HELPER"]   = "Tampilkan penempatan Decoy? ini akan menampilkan dot putih dan teks dekat crosshair."
 LANG["PHXM_PLAYER_SHOW_DECOY_MARKER"]   = "Tampilkan penanda Decoy?"
 
@@ -589,7 +596,7 @@ LANG["PHXM_PLAYER_SHOW_DECOY_MARKER"]   = "Tampilkan penanda Decoy?"
 LANG["PCR_MODEL_DONT_EXISTS"]   = "Model yang kamu pilih tidak tersedia di map ini!"
 
 LANG["PCR_PLUG_WARN_MSG"]		= "Perhatian: Penambahan Kustom Prop ('pcr_allow_custom') adalah 0.\nYKamu harus aktifkan fitur ini agar bisa menggunakan editor\nCatatan: Membutuhkan map restart!"
-LANG["PCR_PLUG_LBL_BINDKEY"]	= "Untuk mengganti tombol, klik pada menu navigasi '[Player]'"
+LANG["PCR_PLUG_LBL_BINDKEY"]	= "Untuk mengganti tombol Bind, ketuk pada menu '[Pengaturan Saya] > Binds'"
 LANG["PCR_PLUG_LBL_EDITOR"]		= "Editor Kustom Prop Menu"
 LANG["PCR_PLUG_BTN_OPEN_EDT"]	= "Buka Editor"
 LANG["PCR_PLUG_LBL_COMSET"]		= "Peraturan Umum"

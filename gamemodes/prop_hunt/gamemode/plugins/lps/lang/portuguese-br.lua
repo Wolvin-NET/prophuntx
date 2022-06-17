@@ -1,7 +1,7 @@
 local LANG = {}
 
 -- English Section
-LANG["en_us"]   = {
+LANG["pt-BR"]   = {
     -- setting menu
     ["LPS_GENERAL_SETTINGS"]    = "General Settings",
     ["LPS_APPEARANCES"]         = "Appearances",
@@ -46,4 +46,4 @@ LANG["en_us"]   = {
     ["WEAPON_AMMO_UNLI"]        = "Unlimited"
 }
 
-list.Set("PHX.LanguageInsertion", "[LastPropStanding] English", LANG)
+list.Set("PHX.LanguageInsertion", "[LastPropStanding] Portuguese Brazil", LANG)

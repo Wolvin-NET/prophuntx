@@ -16,7 +16,6 @@ LANG.AuthorURL		= {
 	"https://steamcommunity.com/profiles/76561198283562416", 
 	"https://steamcommunity.com/profiles/76561198016233242"
 }
-
 -- Special Section that isn't String-based
 LANG.SUICIDEMSG = {
 	"suicided!",
@@ -38,13 +37,18 @@ LANG.SUICIDEMSG = {
 	"stop it, get some help.",
 	"ragdolled.",
 }
-
 LANG.RANDOM_SPECTATORS = {
 	"to watch and chill.",
 	"to see them hanging around.",
 	"to see the things.",
 	" ",
 }
+
+LANG["PHX_TEAM_CONNECTING"] = "Connecting"
+LANG["PHX_TEAM_PROPS"]		= "Props"
+LANG["PHX_TEAM_HUNTERS"] 	= "Hunters"
+LANG["PHX_TEAM_UNASSIGNED"]	= "Unassigned"
+LANG["PHX_TEAM_SPECTATOR"] 	= "Spectator"
 
 -- List of string-based translation
 
@@ -116,8 +120,8 @@ LANG["HUD_MAGSEC"]				= "MAG. / SEC." --Magazine | Secondary Magazine
 
 -- !!WEAPON NAMES CANNOT BE TRANSLATED, THEY USE FROM language.GetPhrase THEREFORE IT'S IMPOSSIBLE TO DO.
 
-LANG["TEAM_PROPS"]				= "Props"
-LANG["TEAM_HUNTERS"]			= "Hunters"
+LANG["TEAM_PROPS"]				= LANG["PHX_TEAM_PROPS"] 
+LANG["TEAM_HUNTERS"]			= LANG["PHX_TEAM_HUNTERS"]
 
 LANG["HUD_ROTLOCK"]				= "Prop Rotation: Locked"
 LANG["HUD_ROTFREE"]				= "Prop Rotation: Free"
@@ -128,7 +132,7 @@ LANG["HUD_AUTOTAUNT_ALT"]		= "Auto Taunting in %d"
 
 LANG["HUD_TargetID"]			= "Player: %s (%d%%)"
 
-LANG["HUD_BLINDED"]				= "Hunters will be unblinded and released in %s"
+LANG["HUD_BLINDED"]				= "%s will be unblinded and released in %s"
 LANG["HUD_UNBLINDED"]			= "Ready or not, here we come!"
 
 LANG["BLIND_RESPAWN_TEAM"]		= "You were respawned only on %s team in %d seconds during blind time."
@@ -160,7 +164,7 @@ LANG["TM_NO_TAUNTS"]			= "Warning: No taunts were detected in this category."
 LANG["TM_PLAY_ONLY_ALIVE"] 		= "You are only allowed to play Custom Taunts when you're alive."
 
 LANG["TM_WINDOW_TITLE"]			= "Prop Hunt Custom Taunt Window"
-LANG["TM_NOTICE_PLSWAIT"]		= "Please wait in %s second(s)!"
+LANG["TM_NOTICE_PLSWAIT"]		= "Please wait in %s sec(s) before random taunt ends!"
 LANG["TM_NOTICE_PLAYPREVIEW"]	= "Previewing Taunt: %s"
 
 LANG["TM_TOOLTIP_PLAYTAUNT"] 	= "Play Taunt"
@@ -578,6 +582,7 @@ LANG["DECOY_INDICATOR_INVALID"]         = "Invalid Slope!"
 LANG["DECOY_INDICATOR_TOOFAR"]          = "Range too far!"
 LANG["DECOY_INDICATOR_OK"]              = "Place Decoy [Press %s]"
 
+LANG["PHXM_DECOY_HEALTH"]				= "How much health does the decoy should have. Default is 10."
 LANG["PHXM_PLAYER_SHOW_DECOY_HELPER"]   = "Show/Hide Decoy placement helper? This will show a white dot with a text near on your crosshair."
 LANG["PHXM_PLAYER_SHOW_DECOY_MARKER"]   = "Show/Hide Decoy marker?"
 

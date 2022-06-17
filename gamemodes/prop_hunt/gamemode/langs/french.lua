@@ -32,6 +32,12 @@ LANG.RANDOM_SPECTATORS = {
 	"",
 }
 
+LANG["PHX_TEAM_CONNECTING"] = "De Liaison" --Fix Me
+LANG["PHX_TEAM_PROPS"]		= "Props"
+LANG["PHX_TEAM_HUNTERS"] 	= "Chasseurs"
+LANG["PHX_TEAM_UNASSIGNED"]	= "Non attribué" -- Fix me
+LANG["PHX_TEAM_SPECTATOR"] 	= "Spectateur"	-- Fix me
+
 -- List of string-based translation
 
 LANG["HELP_F1"] 			= [[
@@ -40,7 +46,7 @@ Un projet de Prop Hunt (Nom de code) X.
 Un projet pour rendre Prop Hunt X moderne et personnalisable.
 
 Plus d'informations peuvent être trouvées sur:
-https://wolvindra.xyz/prophuntx
+https://gmodgameservers.com/prophuntx
 
 Pour voir plus d'informations, d'aide et de guide, appuyez sur la touche [F1] puis cliquez sur le bouton [Prop Hunt Menu].
 
@@ -106,14 +112,14 @@ LANG["HUD_MAGSEC"]				= "MAG. / SEC."  --"Magazine Counts" (separator) "Secondar
 
 -- !!WEAPON NAMES CANNOT BE TRANSLATED, THEY USE FROM language.GetPhrase THEREFORE IT'S IMPOSSIBLE TO DO.
 
-LANG["TEAM_PROPS"]				= "Props"
-LANG["TEAM_HUNTERS"]			= "Chasseurs"
+LANG["TEAM_PROPS"]				= LANG["PHX_TEAM_PROPS"] --"Props"
+LANG["TEAM_HUNTERS"]			= LANG["PHX_TEAM_HUNTERS"]
 
 LANG["HUD_ROTLOCK"]			= "Rotation du Prop: Bloquée"
 LANG["HUD_ROTFREE"]			= "Rotation du Prop: Libre"
 LANG["HUD_KILLEDBY"]		= "Vous avez été tué par %s"
 
-LANG["HUD_BLINDED"]			= "Les chasseurs seront libérez dans %s"
+LANG["HUD_BLINDED"]			= "Les %s seront libérez dans %s"
 LANG["HUD_UNBLINDED"]		= "Prêt ou non, nous arrivons !"
 
 LANG["HUD_AUTOTAUNT"]			= "Auto Taunt dans %d seconde(s)"
@@ -150,7 +156,7 @@ LANG["TM_NO_TAUNTS"]			= "Attention: aucun taunts n'a été détectée dans cett
 LANG["TM_PLAY_ONLY_ALIVE"] 		= "Vous n'êtes autorisé à jouer des taunts que lorsque vous êtes en vie." 
 
 LANG["TM_WINDOW_TITLE"]			= "Prop Hunt Custom Taunt" 
-LANG["TM_NOTICE_PLSWAIT"]		= "Veuillez patienter %s seconde(s) !" 
+LANG["TM_NOTICE_PLSWAIT"]		= "Veuillez patienter %s seconde(s) !" -- fix me: Add " before Random Taunt ends!"
 LANG["TM_NOTICE_PLAYPREVIEW"]	= "Aperçu du Taunt: %s" 
 
 LANG["TM_TOOLTIP_PLAYTAUNT"] 	= "Jouer le Taunt" 
@@ -580,6 +586,7 @@ LANG["DECOY_INDICATOR_INVALID"]         = "Invalid Slope!"
 LANG["DECOY_INDICATOR_TOOFAR"]          = "Range too far!"
 LANG["DECOY_INDICATOR_OK"]              = "Place Decoy [Press %s]"
 
+LANG["PHXM_DECOY_HEALTH"]				= "How much health does the decoy should have. Default is 10."
 LANG["PHXM_PLAYER_SHOW_DECOY_HELPER"]   = "Show/Hide Decoy placement helper? This will show a white dot with a text near on your crosshair."
 LANG["PHXM_PLAYER_SHOW_DECOY_MARKER"]   = "Show/Hide Decoy marker?"
 

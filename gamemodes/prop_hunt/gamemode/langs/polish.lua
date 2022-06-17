@@ -30,6 +30,12 @@ LANG.RANDOM_SPECTATORS = { --> FRETTA
 	" ",
 }
 
+LANG["PHX_TEAM_CONNECTING"] = "Złączony" --Fix Me
+LANG["PHX_TEAM_PROPS"]		= "Przedmioty"
+LANG["PHX_TEAM_HUNTERS"] 	= "Łowcy"
+LANG["PHX_TEAM_UNASSIGNED"]	= "Nieprzypisany" --Fix Me
+LANG["PHX_TEAM_SPECTATOR"] 	= "Widz" -- Fix Me
+
 -- List of string-based translation
 
 -- // FRETTA SECTION \\
@@ -75,7 +81,7 @@ LANG["HELP_F1"] 				= [[Prop Hunt (Nazwa Kodowa) Projekt X.
 Projekt, który uczyni Prop Hunt X nowoczesnym i konfigurowalnym.
 
 Więcej informacji znajdziesz tutaj:
-https://wolvindra.xyz/prophuntx
+https://gmodgameservers.com/prophuntx
 
 Informacje, pomoc oraz poradniki znajdziesz, klikając przycisk [F1], a następnie przechodząc do [Menu Prop Hunt].
 
@@ -102,8 +108,8 @@ LANG["HUD_MAGSEC"]				= "MAG. / REZ." --Magazine Counts (separator) Secondary Ma
 
 -- !!WEAPON NAMES CANNOT BE TRANSLATED, THEY USE FROM language.GetPhrase THEREFORE IT'S IMPOSSIBLE TO DO.
 
-LANG["TEAM_PROPS"]				= "Przedmioty"
-LANG["TEAM_HUNTERS"]			= "Łowcy"
+LANG["TEAM_PROPS"]				= LANG["PHX_TEAM_PROPS"]
+LANG["TEAM_HUNTERS"]			= LANG["PHX_TEAM_HUNTERS"]
 
 LANG["HUD_ROTLOCK"]				= "Obracanie Przedmiotu: Zablokowane"
 LANG["HUD_ROTFREE"]				= "Obracanie Przedmiotu: Odblokowane"
@@ -114,7 +120,7 @@ LANG["HUD_AUTOTAUNT_ALT"]		= "Auto-podpowiedź za %d"
 
 LANG["HUD_TargetID"]			= "Gracz: %s (%d%%)" -- Player: <NAME> (<HEALTH>%)
 
-LANG["HUD_BLINDED"]				= "Łowcy zaczną poszukiwania za %s"
+LANG["HUD_BLINDED"]				= "%s zaczną poszukiwania za %s"
 LANG["HUD_UNBLINDED"]			= "Gotowi czy nie, nadchodzimy!"
 
 LANG["BLIND_RESPAWN_TEAM"]		= "Odradzasz się tylko w drużynie %s po %d sek. trwania czasu chowania."
@@ -146,7 +152,7 @@ LANG["TM_NO_TAUNTS"]			= "Ostrzeżenie: Nie znaleziono niestandardowych podpowie
 LANG["TM_PLAY_ONLY_ALIVE"] 		= "Nie możesz odtwarzać podpowiedzi, kiedy jesteś trupem."
 
 LANG["TM_WINDOW_TITLE"]			= "Prop Hunt - Niestandardowe podpowiedzi"
-LANG["TM_NOTICE_PLSWAIT"]		= "Zaczekaj %s sek."
+LANG["TM_NOTICE_PLSWAIT"]		= "Zaczekaj %s sek." -- fix me: Add " before Random Taunt ends!"
 LANG["TM_NOTICE_PLAYPREVIEW"]	= "Podgląd podpowiedzi: %s"
 
 LANG["TM_TOOLTIP_PLAYTAUNT"] 	= "Odtwórz podpowiedź"
@@ -578,6 +584,7 @@ LANG["DECOY_INDICATOR_INVALID"]         = "Invalid Slope!"
 LANG["DECOY_INDICATOR_TOOFAR"]          = "Range too far!"
 LANG["DECOY_INDICATOR_OK"]              = "Place Decoy [Press %s]"
 
+LANG["PHXM_DECOY_HEALTH"]				= "How much health does the decoy should have. Default is 10."
 LANG["PHXM_PLAYER_SHOW_DECOY_HELPER"]   = "Show/Hide Decoy placement helper? This will show a white dot with a text near on your crosshair."
 LANG["PHXM_PLAYER_SHOW_DECOY_MARKER"]   = "Show/Hide Decoy marker?"
 

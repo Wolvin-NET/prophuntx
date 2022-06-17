@@ -24,6 +24,11 @@ LANG.RANDOM_SPECTATORS = {
 	"ушёл, чтобы увидеть некоторые вещи.",
 	" ",
 }
+LANG["PHX_TEAM_CONNECTING"] 	= "подключение" --Fix Me
+LANG["PHX_TEAM_PROPS"]			= "Объекты"
+LANG["PHX_TEAM_HUNTERS"] 		= "Охотники"
+LANG["PHX_TEAM_UNASSIGNED"]		= "Неназначенный" --Fix Me
+LANG["PHX_TEAM_SPECTATOR"] 		= "Зритель" --Fix Me
 -- Fretta Components
 LANG["HUD_KILLED"]				= "убил"
 LANG["HUD_TIME"] 				= "ВРЕМЯ"
@@ -53,7 +58,7 @@ LANG["HELP_F1"] 				= [[Prop Hunt проекта X.
 Проект, призванный сделать Prop Hunt более современным и настраиваемым.
 
 Более подробную информацию можно найти на:
-https://wolvindra.xyz/prophuntx
+https://gmodgameservers.com/prophuntx
 
 Чтобы увидеть больше информации, помощь и руководство, Нажмите клавишу [F1] а затем нажмите кнопку [Prop Hunt Menu].
 
@@ -69,15 +74,15 @@ LANG["EV_PLAYER_DISCONNECT"]	            = "%s отключается от се�
 LANG["HUD_HP"]					            = "ЖИЗНЬ"
 LANG["HUD_AMMO"] 				            = "ПАТР"
 LANG["HUD_MAGSEC"]				            = "МАГ. / ВТО."
-LANG["TEAM_PROPS"]				            = "Объекты"
-LANG["TEAM_HUNTERS"]			            = "Охотники"
+LANG["TEAM_PROPS"]				            = LANG["PHX_TEAM_PROPS"]
+LANG["TEAM_HUNTERS"]			            = LANG["PHX_TEAM_HUNTERS"]
 LANG["HUD_ROTLOCK"]				            = "Вращение объекта: Заблокировано"
 LANG["HUD_ROTFREE"]				            = "Вращение объекта: Свободно"
 LANG["HUD_KILLEDBY"]			            = "Вы были убиты игроком %s"
 LANG["HUD_AUTOTAUNT"]			            = "Автонасмешка через %d сек."
 LANG["HUD_AUTOTAUNT_ALT"]		            = "Автонасмешка через %d"
 LANG["HUD_TargetID"]			            = "Игрок: %s (%d%%)"
-LANG["HUD_BLINDED"]				            = "Охотники смогут видеть и будут выпущены через %s"
+LANG["HUD_BLINDED"]				            = "%s смогут видеть и будут выпущены через %s"
 LANG["HUD_UNBLINDED"]			            = "Готовы или нет, мы уже идём!"
 LANG["BLIND_RESPAWN_TEAM"]		            = "Вы возродитесь только в команде %s через %d сек. в слепое время."
 LANG["BLIND_RESPAWN"]			            = "Вы возродитесь через %d сек. в слепое время."
@@ -99,7 +104,7 @@ LANG["TM_WARNING_CT_DISABLE"]	            = "[PHX - Taunts] Внимание: Н
 LANG["TM_NO_TAUNTS"]			            = "Внимание: В этой категории не было обнаружено насмешек."
 LANG["TM_PLAY_ONLY_ALIVE"] 		            = "Вы можете проигрывать пользовательские насмешки только тогда, когда Вы живы."
 LANG["TM_WINDOW_TITLE"]			            = "Окно польз. насмешек Prop Hunt"
-LANG["TM_NOTICE_PLSWAIT"]		            = "Пожалуйста, подождите %s сек.!"
+LANG["TM_NOTICE_PLSWAIT"]		            = "Пожалуйста, подождите %s сек.!" -- fix me: Add " before Random Taunt ends!"
 LANG["TM_NOTICE_PLAYPREVIEW"]	            = "Предпросмотр насмешки: %s"
 LANG["TM_TOOLTIP_PLAYTAUNT"] 	            = "Проиграть насмешку"
 LANG["TM_TOOLTIP_PREVIEW"]		            = "Предпросмотр"
@@ -355,6 +360,7 @@ LANG["PHXM_ADMIN_CHATSETTING"]			    = "Chat Window Settings"
 LANG["PHXM_ADMIN_HUNTERBLIND"]			    = "Hunter Blind Control"
 LANG["PHXM_ADMIN_GIVEGRENADE_NEAREND"]      = "Should grenades will be given near round end? If Yes, see 'ph_give_grenade_roundend_before_time'"
 LANG["PHXM_ADMIN_GIVEGRENADE_TIME"]         = "Time in seconds to give grenades before Round Ends. This is typically between 10 to 30 seconds"
+LANG["PHXM_DECOY_HEALTH"]					= "How much health does the decoy should have. Default is 10."
 LANG["PHXM_PLAYER_SHOW_DECOY_HELPER"]       = "Show/Hide Decoy placement helper? This will show a white dot with a text near on your crosshair."
 LANG["PHXM_PLAYER_SHOW_DECOY_MARKER"]       = "Show/Hide Decoy marker?"
 -- Plugins sh_init.lua: Late #4

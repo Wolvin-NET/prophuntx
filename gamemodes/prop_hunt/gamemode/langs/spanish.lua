@@ -34,6 +34,12 @@ LANG.RANDOM_SPECTATORS = { --> FRETTA
 	" ",
 }
 
+LANG["PHX_TEAM_CONNECTING"] = "Conectando"
+LANG["PHX_TEAM_PROPS"]		= "Objetos"
+LANG["PHX_TEAM_HUNTERS"] 	= "Cazadores"
+LANG["PHX_TEAM_UNASSIGNED"]	= "Sin asignar" --Fix Me
+LANG["PHX_TEAM_SPECTATOR"] 	= "Espectador"  --Fix Me
+
 -- List of string-based translation
 
 -- // FRETTA SECTION \\
@@ -106,8 +112,8 @@ LANG["HUD_MAGSEC"]				= "CARG.1 / CARG.2" --Magazine Counts (separator) Secondar
 
 -- !!WEAPON NAMES CANNOT BE TRANSLATED, THEY USE FROM language.GetPhrase THEREFORE IT'S IMPOSSIBLE TO DO.
 
-LANG["TEAM_PROPS"]				= "Objetos"
-LANG["TEAM_HUNTERS"]			= "Cazadores"
+LANG["TEAM_PROPS"]				= LANG["PHX_TEAM_PROPS"]
+LANG["TEAM_HUNTERS"]			= LANG["PHX_TEAM_HUNTERS"]
 
 LANG["HUD_ROTLOCK"]				= "Rotación de objeto: bloqueado"
 LANG["HUD_ROTFREE"]				= "Rotación de objeto: libre"
@@ -118,7 +124,7 @@ LANG["HUD_AUTOTAUNT_ALT"]		= "Llamada de atención en %d"
 
 LANG["HUD_TargetID"]			= "Jugador: %s (%d%%)" -- Player: <NAME> (<HEALTH>%)
 
-LANG["HUD_BLINDED"]				= "Las cazadores abrirán los ojos y saldrán en %s"
+LANG["HUD_BLINDED"]				= "Las %s abrirán los ojos y saldrán en %s"
 LANG["HUD_UNBLINDED"]			= "¡Quien no se haya escondido, tiempo ha tenido!"
 
 LANG["BLIND_RESPAWN_TEAM"]		= "Reapareces solo en el equipo %s en %d segundos durante la cuenta atrás."
@@ -150,7 +156,7 @@ LANG["TM_NO_TAUNTS"]			= "Aviso: No se han detectado burlas en esta categoría."
 LANG["TM_PLAY_ONLY_ALIVE"] 		= "Solo puedes llamar la atención con burlas personalizadas cuando estás vivo."
 
 LANG["TM_WINDOW_TITLE"]			= "Ventana de burlas personalizadas en Prop Hunt"
-LANG["TM_NOTICE_PLSWAIT"]		= "¡Espera %s segundo(s)!"
+LANG["TM_NOTICE_PLSWAIT"]		= "¡Espera %s segundo(s)!" -- fix me: Add " before Random Taunt ends!"
 LANG["TM_NOTICE_PLAYPREVIEW"]	= "Previsualizando burla: %s"
 
 LANG["TM_TOOLTIP_PLAYTAUNT"] 	= "Reproducir burla"
@@ -585,6 +591,7 @@ LANG["DECOY_INDICATOR_INVALID"]         = "Invalid Slope!"
 LANG["DECOY_INDICATOR_TOOFAR"]          = "Range too far!"
 LANG["DECOY_INDICATOR_OK"]              = "Place Decoy [Press %s]"
 
+LANG["PHXM_DECOY_HEALTH"]				= "How much health does the decoy should have. Default is 10."
 LANG["PHXM_PLAYER_SHOW_DECOY_HELPER"]   = "Show/Hide Decoy placement helper? This will show a white dot with a text near on your crosshair."
 LANG["PHXM_PLAYER_SHOW_DECOY_MARKER"]   = "Show/Hide Decoy marker?"
 
