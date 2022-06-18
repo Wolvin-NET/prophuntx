@@ -5,7 +5,7 @@ LANG.Name 		 	= "Русский"
 LANG.NameEnglish	= "Russian"
 LANG.Author			= "berry"
 LANG.AuthorURL		= "https://steamcommunity.com/profiles/76561198158864042"
-LANG.SUICIDEMSG = {
+LANG.SUICIDEMSG = {  -- Fix me: there was addition text here but feel free to add more.
 	"суицид!",
 	"умер мистически.",
 	"умер от магии.",
@@ -459,7 +459,7 @@ LANG["PHZ_mount_game_sel"]		        = "Select mounted game (Default: Garry's Mod
 LANG["PHZ_input_placeholder1"]	        = "Folder to Search: <folder name> or '*', blank for all folders."
 LANG["PHZ_input_placeholder2"]          = "Addon to Search: <name> or '*', blank for all folders."
 LANG["PHZ_msg_warn_close"]		        = "Are you sure you want to close this window? Any unsaved edits will be lost!"
-LANG["PHZ_msg_commit"] 			        = "Are you sure you want to commig changes?"
+LANG["PHZ_msg_commit"] 			        = "Are you sure you want to commit changes?"
 LANG["PHZ_msg_cant_empty"]		        = "Prop List cannot be empty!"
 LANG["PHZ_msg_removesel"] 		        = [[Remove selected props in the list. Legends:
 Red = Marked Selections

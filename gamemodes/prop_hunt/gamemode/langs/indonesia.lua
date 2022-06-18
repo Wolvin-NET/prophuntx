@@ -9,7 +9,7 @@ LANG.Author			= "Wolvindra-Vinzuerio, KamFretoZ" -- Only accept STRINGS.
 LANG.AuthorURL		= "https://steamcommunity.com/profiles/76561198210777189"
 
 -- Special Section that isn't String-based
-LANG.SUICIDEMSG = { --> FRETTA
+LANG.SUICIDEMSG = {  -- Fix me: there was addition text here but feel free to add more.
 	"kesandung semut.",
 	"ditampol emak-emak kos.",
 	"kesantet.",
