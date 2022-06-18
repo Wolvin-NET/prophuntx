@@ -5,7 +5,7 @@ LANG.Name 		 	= "Русский"
 LANG.NameEnglish	= "Russian"
 LANG.Author			= "berry"
 LANG.AuthorURL		= "https://steamcommunity.com/profiles/76561198158864042"
-LANG.SUICIDEMSG = {
+LANG.SUICIDEMSG = {  -- there was addition text here but feel free to add more.
 	"убивает себя!",
 	"погибает при необъяснимых обстоятельствах.",
 	"умер от магии.",
