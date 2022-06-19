@@ -3,47 +3,47 @@ local LANG = {}
 -- English Section
 LANG["es-ES"]   = {
     -- setting menu
-    ["LPS_GENERAL_SETTINGS"]    = "General Settings",
-    ["LPS_APPEARANCES"]         = "Appearances",
-    ["LPS_WEAPON_SETTINGS"]     = "Last Stands Weapon Setting",
+    ["LPS_GENERAL_SETTINGS"]    = "Ajustes generales",
+    ["LPS_APPEARANCES"]         = "Apariencias",
+    ["LPS_WEAPON_SETTINGS"]     = "Ajustes de arma con último superviviente",
     
-    ["LPS_MENU_ENABLE"]         = "Enable Last Prop Standing",
-	["LPS_ENABLE_MUSIC"]		= "Enable Music when LPS occurs. Require Round Restart to take effect.",
-    ["LPS_WEAPON_SELECT"]       = "Weapon to give ('random' or 'name'). See Weapon List below.",
-    ["LPS_BTN_WEPLIST"]         = "Available Weapons List",
-    ["LPS_MINIMUM_PROPS_TEAM"]  = "Minimum number of props on Team before LPS can be triggered. Minium: 2.",
+    ["LPS_MENU_ENABLE"]         = "Activar último objeto superviviente",
+	["LPS_ENABLE_MUSIC"]		= "Acitvar la música cuando solo quede un objeto vivo. Hay que reiniciar la ronda para que surja efecto.",
+    ["LPS_WEAPON_SELECT"]       = "Armas otorgadas («random» para que sea aleatoria o por su nombre). Véase la lista de armas.",
+    ["LPS_BTN_WEPLIST"]         = "Lista de armas disponibles",
+    ["LPS_MINIMUM_PROPS_TEAM"]  = "Número mínimo de objetos en el equipo antes de que quede un objeto con vida. Mínimo: 2.",
     
-    ["LPS_WEPLIST"]             = "Available Weapons list:\n%s\nYou can use 'lps_weapon_list' in the console.",
+    ["LPS_WEPLIST"]             = "Lista de armas disp.:\n%s\nPuedes usar «lps_weapon_list» en la consola.",
     
-    ["LPS_HALO_ENABLE"]         = "Draw a halo effect around the last prop?",
-    ["LPS_HALO_SEETHROUGHWALL"] = "Draw the halo effect through walls?",
-    ["LPS_HALO_COLOUR"]         = "Colour for Last Prop Standing's Halo effect ('rainbow' or hex code)",
-    ["LPS_TRAILS_ENABLE"]       = "Draw a trail behind Last Prop player?",
-    ["LPS_TRAILS_COLOUR"]       = "Colour for the Last Prop's trail (hex code)",
-    ["LPS_TRAIL_TEXTURE"]       = "Trail colour texture for Last Prop's player",
+    ["LPS_HALO_ENABLE"]         = "¿Resaltar al último objeto con vida?",
+    ["LPS_HALO_SEETHROUGHWALL"] = "¿Resaltar al último objeto con vida a través de las paredes?",
+    ["LPS_HALO_COLOUR"]         = "Color del resaltado del último objeto con vida («arcoíris» o código hex.)",
+    ["LPS_TRAILS_ENABLE"]       = "¿Dejar un rastro tras el último objeto con vida?",
+    ["LPS_TRAILS_COLOUR"]       = "Color del rastro del último objeto con vida (código hex.)",
+    ["LPS_TRAIL_TEXTURE"]       = "Textura para el color del rastro del último objeto con vida",
     
-    ["LPS_PLAY_MUSIC"]          = "Play Background Music when LPS Event begin. (Only applies on next music)",
-    ["LPS_CL_DRAW_HALO"]        = "(Client side) Show/Hide Halo, even server sets it.",
+    ["LPS_PLAY_MUSIC"]          = "Reproducir música de fondo cuando solo quede un objeto con vida.",
+    ["LPS_CL_DRAW_HALO"]        = "(Para el cliente) Mostrar/Ocultar objeto resaltado, aunque el servidor lo tenga.",
     
     -- Internal: Weapon Settings
-    ["LPS_WEPSET_REV_AMMO"]     = "LPS Revolver Ammo. -1=Unlimited.",
-    ["LPS_WEPSET_SMG_AMMO"]     = "LPS SMG Ammo. -1=Unlimited.",
+    ["LPS_WEPSET_REV_AMMO"]     = "Muni. del revolver en últ. superv. -1=Sin límite.",
+    ["LPS_WEPSET_SMG_AMMO"]     = "Muni. de subfusil en últ. superv. -1=Sin límite.",
     
-    ["LPS_WEPSET_DAMAGE_REV"]   = "LPS Damage for Revolver",
-    ["LPS_WEPSET_DAMAGE_SMG"]   = "LPS Damage for SMG",
-    ["LPS_WEPSET_DAMAGE_BLAST"] = "LPS Damage for Blaster",
+    ["LPS_WEPSET_DAMAGE_REV"]   = "Daño de últ. superv. para revólver",
+    ["LPS_WEPSET_DAMAGE_SMG"]   = "Daño de últ. superv. para subfusil",
+    ["LPS_WEPSET_DAMAGE_BLAST"] = "Daño de últ. superv. para bláster",
     
     -- More into stuff now.
-    ["LASTPROP_ANNOUNCE"]       = "You are the Last Prop Standing!",
-    ["LASTPROP_ANNOUNCE_ALL"]   = "The Last Prop Standing is Resisting!",
+    ["LASTPROP_ANNOUNCE"]       = "¡Eres el último objeto con vida!",
+    ["LASTPROP_ANNOUNCE_ALL"]   = "¡El último objeto con vida se resiste!",
     
     -- Weapon State
-    ["WEAPON_STATE_READY"]      = "Ready",
-    ["WEAPON_STATE_RELOAD"]     = "Reloading...",
-    ["WEAPON_STATE_OUTOFAMMO"]  = "Out of Ammo",
-    ["WEAPON_STATE_UNARMED"]    = "No Weapon",
+    ["WEAPON_STATE_READY"]      = "Listo",
+    ["WEAPON_STATE_RELOAD"]     = "Recargando...",
+    ["WEAPON_STATE_OUTOFAMMO"]  = "Sin munición",
+    ["WEAPON_STATE_UNARMED"]    = "Sin arma",
     
-    ["WEAPON_AMMO_UNLI"]        = "Unlimited"
+    ["WEAPON_AMMO_UNLI"]        = "Sin límite"
 }
 
 list.Set("PHX.LanguageInsertion", "[LastPropStanding] Spanish", LANG)
