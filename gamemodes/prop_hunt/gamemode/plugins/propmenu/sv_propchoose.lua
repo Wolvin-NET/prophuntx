@@ -16,28 +16,28 @@ function PCR.ReadBannedProps()
 	local path = PHX.ConfigPath .. "/prop_model_bans"
 	
 	if !file.Exists(path,"DATA") then
-		PHX.VerboseMsg("[Prop Menu] !!WARNING : Prop Hunt: X's Prop Ban Data does not exist. Did you forgot to install Prop Hunt: X? Creating the folder anyway...")
+		PHX.VerboseMsg("[PHX Prop Menu] !!WARNING : Prop Hunt: X's Prop Ban Data does not exist. Did you forgot to install Prop Hunt: X? Creating the folder anyway...")
 		file.CreateDir(path)
 	end
 	
 	if file.Exists(path.."/model_bans.txt","DATA") then
-		PHX.VerboseMsg("[Prop Menu] Reading Prop Hunt: X's Prop Ban Data...")	-- PHX.BANNED_PROP_MODELS
+		PHX.VerboseMsg("[PHX Prop Menu] Reading Prop Hunt: X's Prop Ban Data...")	-- PHX.BANNED_PROP_MODELS
 		local read = util.JSONToTable(file.Read(path.."/model_bans.txt"))
 		for _,mdl in pairs(read) do
 			table.insert(PCR.BannedProp, mdl)
 		end
 	else
-		PHX.VerboseMsg("[Prop Menu] !!WARNING: Prop Hunt: X's Prop Ban Data does not exists, Ignoring..!")
+		PHX.VerboseMsg("[PHX Prop Menu] !!WARNING: Prop Hunt: X's Prop Ban Data does not exists, Ignoring..!")
 	end
 	
 	if file.Exists(path.."/pcr_bans.txt","DATA") then
-		PHX.VerboseMsg("[Prop Menu] Reading Prop Menu's additional ban list...")
+		PHX.VerboseMsg("[PHX Prop Menu] Reading Prop Menu's additional ban list...")
 		local read = util.JSONToTable(file.Read(path.."/pcr_bans.txt"))
 		for _,mdl in pairs(read) do
 			table.insert(PCR.BannedProp, mdl)
 		end
 	else
-		PHX.VerboseMsg("[Prop Menu] !!WARNING: Prop Menu's additional ban list does not exists, Creating new one...")
+		PHX.VerboseMsg("[PHX Prop Menu] !!WARNING: Prop Menu's additional ban list does not exists, Creating new one...")
 		
 		local proplist = { "models/player.mdl", "models/player/kleiner.mdl" }
 		local json = util.TableToJSON(proplist,true)
@@ -46,7 +46,7 @@ function PCR.ReadBannedProps()
 			table.insert(PCR.BannedProp, mdl)
 		end
 		
-		PHX.VerboseMsg("[Prop Menu] Prop Menu additional ban list has successfully created.")
+		PHX.VerboseMsg("[PHX Prop Menu] Prop Menu additional ban list has successfully created.")
 	end
 end
 
@@ -66,9 +66,9 @@ function PCR.GetCustomProps()
 	local path = PHX.ConfigPath .. "/prop_chooser_custom"
 	
 	if !file.Exists(path,"DATA") then
-		PHX.VerboseMsg("[Prop Menu] Creating default Prop Menu's Prop Data folder...")
+		PHX.VerboseMsg("[PHX Prop Menu] Creating default Prop Menu's Prop Data folder...")
 		file.CreateDir(path)
-		PHX.VerboseMsg("[Prop Menu] Successfully created: "..path.."!")
+		PHX.VerboseMsg("[PHX Prop Menu] Successfully created: "..path.."!")
 	end
 	
 	if file.Exists(path.."/models.txt","DATA") then
@@ -77,7 +77,7 @@ function PCR.GetCustomProps()
 			table.insert(PCR.CustomProp, string.lower( mdl ))
 		end
 	else
-		PHX.VerboseMsg("[Prop Menu] Creating default Prop Menu's Custom Prop data file...")
+		PHX.VerboseMsg("[PHX Prop Menu] Creating default Prop Menu's Custom Prop data file...")
 		
 		local proplist = { "models/balloons/balloon_star.mdl", "models/balloons/balloon_dog.mdl", "models/balloons/balloon_classicheart.mdl" }
 		local json = util.TableToJSON(proplist,true)
@@ -87,7 +87,7 @@ function PCR.GetCustomProps()
 			table.insert(PCR.CustomProp, mdl)
 		end
 		
-		PHX.VerboseMsg("[Prop Menu] Prop Menu's Custom Prop Data successfully created.")
+		PHX.VerboseMsg("[PHX Prop Menu] Prop Menu's Custom Prop Data successfully created.")
 	end
 end
 
@@ -98,16 +98,20 @@ function PCR.PopulateProp()
 	local count = 0
 	for i,prop in RandomPairs(ents.FindByClass("prop_physics*")) do			
 		if (!IsValid(prop:GetPhysicsObject())) then
-			PHX.VerboseMsg("[Prop Menu] Warning: Prop "..prop:GetModel().. " @Index #"..prop:EntIndex().." has no physics. Ignoring!")
+			PHX.VerboseMsg("[PHX Prop Menu] Warning: Prop "..prop:GetModel().. " @Index #"..prop:EntIndex().." has no physics. Ignoring!")
+			continue
+		end
+		-- update: Do not include Forbidden models
+		if PHX.PROHIBITTED_MDLS[prop:GetModel()] then
 			continue
 		end
 		if table.HasValue(PCR.PropList, string.lower(prop:GetModel())) then continue end
 		if (PHX:QCVar( "pcr_enable_prop_ban" ) && table.HasValue(PCR.BannedProp, prop:GetModel())) then
-			PHX.VerboseMsg("[Prop Menu] Banning prop of "..prop:GetModel().." @Index #"..prop:EntIndex().."...")
+			PHX.VerboseMsg("[PHX Prop Menu] Banning prop of "..prop:GetModel().." @Index #"..prop:EntIndex().."...")
 			continue
 		end
 		if (PHX:QCVar( "pcr_enable_bbox_limit" ) && PCR.CheckBBox(prop)) then
-			PHX.VerboseMsg("[Prop Menu] Found prop "..prop:GetModel().." @Index #"..prop:EntIndex().." that Exceeds the OBB settings, ignoring...")
+			PHX.VerboseMsg("[PHX Prop Menu] Found prop "..prop:GetModel().." @Index #"..prop:EntIndex().." that Exceeds the OBB settings, ignoring...")
 			continue
 		end
 		
@@ -117,10 +121,10 @@ function PCR.PopulateProp()
 		table.insert(PCR.PropList, string.lower(prop:GetModel()))
 		util.PrecacheModel(prop:GetModel())
 	end
-	PHX.VerboseMsg("[Prop Menu] Total by "..count.." props was added.")
+	PHX.VerboseMsg("[PHX Prop Menu] Total by "..count.." props was added.")
 	
 	if PHX:QCVar( "pcr_allow_custom" ) then
-		PHX.VerboseMsg("[Prop Menu] Adding Custom Props as well...")
+		PHX.VerboseMsg("[PHX Prop Menu] Adding Custom Props as well...")
 		PCR.GetCustomProps()
 		for i,prop in pairs(PCR.CustomProp) do
 			table.insert(PCR.PropList, prop)
@@ -157,8 +161,10 @@ hook.Add("PlayerInitialSpawn","pcr.InitPropRequestData",function(ply)
 	ply:SetNWInt("CurrentUsage", 0)
 end)
 
-net.Receive("pcr.ClientRequestPropData", function(len, ply)
+local function SendPropData( ply )
+
 	if !ply.pcrHasPropData then		
+        
 		net.Start("pcr.PropListData")
 		net.WriteUInt(PCR.propDataSize, 32)
 		net.WriteData(PCR.propDatajson, PCR.propDataSize)
@@ -173,6 +179,18 @@ net.Receive("pcr.ClientRequestPropData", function(len, ply)
 
 		ply.pcrHasPropData = true
 	end
+    
+end
+
+net.Receive("pcr.ClientRequestPropData", function(len, ply)
+    if ply:IsListenServerHost() then
+        -- bug: Host don't retreive the prop data at first spawn. We might have to DELAY it.
+        timer.Simple(3, function() SendPropData( ply ) end)
+    else
+        timer.Simple(0, function() -- send the data on next frame instead, for safety.
+            SendPropData( ply ) -- Dedicated servers should be no problem. Singleplayer does not.
+        end)
+    end
 end)
 
 hook.Add("PostCleanupMap","PCR.ResetUseLimit",function()
@@ -226,13 +244,13 @@ net.Receive("pcr.SetMetheProp",function(len,ply)
 			ply.warnInvalidModel = 0
 		end
 		
-		print("[Prop Menu] !!WARNING: User ".. ply:Nick() .." ("..ply:SteamID()..") is trying to use Invalid Prop Model : " .. mdl .. ", which DOES NOT EXIST in the map!")
+		print("[PHX Prop Menu] !!WARNING: User ".. ply:Nick() .." ("..ply:SteamID()..") is trying to use Invalid Prop Model : " .. mdl .. ", which DOES NOT EXIST in the map!")
 		
 		if ( PHX:QCVar( "pcr_kick_invalid" ) ) then
 			ply.warnInvalidModel = ply.warnInvalidModel + 1
 			ply:PHXChatInfo("ERROR", "PCR_NOT_EXIST_COUNT", tostring(ply.warnInvalidModel))
 			if ply.warnInvalidModel > 4 then
-				ply:Kick("[Prop Menu] Kicked for Reason: trying to access invalid prop!")
+				ply:Kick("[PHX Prop Menu] Kicked for Reason: trying to access invalid prop!")
 			end
 		else
 			ply:PHXChatInfo("ERROR", "PCR_NOT_EXIST")
@@ -240,6 +258,13 @@ net.Receive("pcr.SetMetheProp",function(len,ply)
 		
 		return
 	end
+    
+    if (not file.Exists(mdl, "GAME")) then
+        ply:PHXChatInfo("ERROR", "PCR_MODEL_DONT_EXISTS")
+        ply:PrintMessage(HUD_PRINTCONSOLE, "[PHX Prop Menu] Warning: Trying to access model of: " .. mdl ..", is the server owner forgot to enable their game content?")
+        print("[PHX Prop Menu] Warning: ".. ply:Nick() .. " is trying to access model: ".. mdl ..", did you forgot to enable your game content?")
+        return
+    end
 	
 	-- Make sure that the player is On Ground and Not crouching.
 	if ( ply:Crouching() or (not ply:IsOnGround()) ) then

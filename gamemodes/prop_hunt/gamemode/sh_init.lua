@@ -1,12 +1,107 @@
-if PHX then return end
+PHX = PHX or {}
 
--- Initialize shared variable
-PHX = {}
-PHX.__index = PHX
+-- Utils
+function util.IsHexColor( str )
+
+    if str == nil then return false end
+
+    if string.find( str,'^#?%x%x%x%x%x%x$') then
+        return true
+    end
+    return false
+    
+end
+
+TEAM_HUNTERS 	= 1
+TEAM_PROPS 	 	= 2
+IS_PHX		 	= true	-- an easy check if PHX is installed.
 
 PHX.ConfigPath 	= "phx_data"
-PHX.VERSION		= "X"
-PHX.REVISION	= "16.09.21/X2Z" --Format: dd/mm/yy.
+PHX.VERSION		= "X2Z"
+PHX.REVISION	= "19.06.22" --Format: dd/mm/yy.
+
+-- Fonts
+AddCSLuaFile("cl_fonts.lua")
+
+-- Global Trace ViewControl for Props
+GM.ViewCam = {}
+
+-- Vector: Crouch Hull Z (Height) limit
+GM.ViewCam.cHullz      = 64    -- Fallback Value. Currently 64 for default value.
+GM.ViewCam.cHullzMins  = 24    -- Used for duck: Limit Minimums Height in BBox
+GM.ViewCam.cHullzMaxs  = 84    -- Limit Maximum Height in BBox
+GM.ViewCam.cHullzLow   = 8     -- Limit everything below this height
+
+-- Can also internally used for CalcView but you can use anywhere in serverside realm.
+function GM.ViewCam.CamColEnabled( self, origin, Endpos, trace, traceStart, traceEnd, distMin, distMax, distNorm, entHullz )
+	
+    -- don't allow 0.
+    if (!entHullz or entHullz == nil) then entHullz = self.cHullz end
+    if !trace or trace == nil then trace = {} end
+    
+	if entHullz < self.cHullzMins then
+		trace[traceStart] 	= origin + Vector(0, 0, entHullz + (self.cHullzMins - entHullz))
+		trace[traceEnd] 	= origin + Vector(0, 0, entHullz + (self.cHullzMins - entHullz)) + (Endpos:Forward() * distMin)
+	elseif entHullz > self.cHullzMaxs then
+		trace[traceStart] 	= origin + Vector(0, 0, entHullz - self.cHullzMaxs)
+		trace[traceEnd] 	= origin + Vector(0, 0, entHullz - self.cHullzMaxs) + (Endpos:Forward() * distMax)
+	else
+		trace[traceStart] 	= origin + Vector(0, 0, self.cHullzLow)
+		trace[traceEnd] 	= origin + Vector(0, 0, self.cHullzLow) + (Endpos:Forward() * distNorm)
+	end
+	
+	return trace
+end
+
+-- Internally used for CalcView.
+function GM.ViewCam.CamColDisabled( self, origin, Endpos, trace, traceStart, distMin, distMax, distNorm, entHullz )
+
+    -- don't allow 0.
+    if (!entHullz or entHullz == nil) then entHullz = self.cHullz end
+    if !trace or trace == nil then trace = {} end
+
+	if entHullz < self.cHullzMins then
+		trace[traceStart] = origin + Vector(0, 0, entHullz + (self.cHullzMins - entHullz)) + (Endpos:Forward() * distMin)
+	elseif entHullz > self.cHullzMaxs then
+		trace[traceStart] = origin + Vector(0, 0, entHullz - self.cHullzMaxs) + (Endpos:Forward() * distMax)
+	else
+		trace[traceStart] = origin + Vector(0, 0, self.cHullzLow) + (Endpos:Forward() * distNorm)
+	end
+
+	return trace
+    
+end
+
+-- Use this to get a common value instead of using CamColEnabled()
+function GM.ViewCam.CommonCamCollEnabledView( self, origin, angles, entZ )
+    if (!entZ and entZ == nil) then entZ = self.cHullz end
+
+    local trace = {}
+      trace = self:CamColEnabled( origin, angles, trace, "start", "endpos", 100, 300, 100, entZ )
+      
+    return trace
+end
+
+-- Inclusions. These exclude plugins!
+-- Do not end with "/"
+function PHX:Includes( path, name, isExternal )
+    local root = engine.ActiveGamemode() .. "/gamemode/"
+    local pathToSearch = root .. path .. "/*.lua"
+    local ReqFiles = file.Find(pathToSearch, "LUA")    
+    for _,File in SortedPairs( ReqFiles ) do
+        PHX.VerboseMsg( string.format( "[PHX] [%s] Loading %s: %s", name:upper(), name, File ) )
+        
+        if (isExternal) then
+            local nice = root .. path .. "/" .. File
+            AddCSLuaFile(nice)
+            include(nice)
+        else
+            local nice = path .. "/" .. File
+            AddCSLuaFile(nice)
+            include(nice)
+        end
+    end
+end
 
 -- Init Convars first!
 AddCSLuaFile("sh_convar.lua")
@@ -33,11 +128,13 @@ end
 --Include Languages
 PHX.LANGUAGES = {}
 
-local f = file.Find(engine.ActiveGamemode() .. "/gamemode/langs/*.lua", "LUA")
-for _,lgfile in SortedPairs(f) do
-	PHX.VerboseMsg("[PHX] [LANGUAGE] Adding Language File -> ".. lgfile)
-	AddCSLuaFile("langs/" .. lgfile)
-	include("langs/" .. lgfile)
+PHX:Includes( "langs", "Languages" )
+PHX:Includes( "config/lib", "Libraries" )
+PHX:Includes( "config/external", "External Lua" )
+
+--Add Alias for NewSoundDuration()
+function PHX:SoundDuration( snd )
+    return NewSoundDuration( snd )
 end
 
 -- Standard Inclusion
@@ -49,9 +146,6 @@ AddCSLuaFile("sh_config.lua")
 AddCSLuaFile("sh_player.lua")
 AddCSLuaFile("sh_chatbox.lua")
 AddCSLuaFile("sh_tauntscanner.lua")
-if CLIENT then
-	include("cl_lang.lua")
-end
 include("config/sh_init.lua")
 include("sh_drive_prop.lua")
 include("ulx/modules/sh/sh_phx_mapvote.lua")
@@ -85,6 +179,55 @@ for _,plugfolder in SortedPairs( folder ) do
 	include("plugins/" .. plugfolder .. "/sh_load.lua")
 end
 
+local strteam = {}
+strteam[TEAM_CONNECTING] 	= "PHX_TEAM_CONNECTING"
+strteam[TEAM_HUNTERS]		= "PHX_TEAM_HUNTERS"
+strteam[TEAM_PROPS]			= "PHX_TEAM_PROPS"
+strteam[TEAM_UNASSIGNED]	= "PHX_TEAM_UNASSIGNED"
+strteam[TEAM_SPECTATOR]		= "PHX_TEAM_SPECTATOR"
+
+-- Team Translate Name. Might not optimized at the moment.
+function PHX.TranslateName( self, teamID, ply )
+	local strID = strteam[teamID]
+	
+	if SERVER then	-- self:F/Translate() DON'T EXIST on Serverside!
+		-- Note: DO NOT use this on expensive operations such as Think Hook, PlayerTick Hook, etc.
+		-- You  have been warned!
+		if self:GetCVar( "ph_use_lang" ) then
+			local lang = self:GetCVar( "ph_force_lang" )			
+			if self.LANGUAGES[lang] and self.LANGUAGES[lang] ~= nil and
+				self.LANGUAGES[lang][ strID ] and 
+				self.LANGUAGES[lang][ strID ] ~= nil then
+				teamID = self.LANGUAGES[lang][ strID ]
+			else
+				teamID = self.LANGUAGES["en_us"][ strID ]
+			end
+		else
+			if ply and IsValid(ply) then
+				local clLang = ply:GetInfo("ph_cl_language")
+				if self.LANGUAGES[clLang] and self.LANGUAGES[clLang] ~= nil and
+					self.LANGUAGES[clLang][ strID ] and 
+					self.LANGUAGES[clLang][ strID ] ~= nil then
+					teamID = self.LANGUAGES[clLang][ strID ]
+				end
+			else
+				teamID = self.LANGUAGES["en_us"][ strID ]
+			end
+		end
+		
+		return teamID
+	else
+		local txt = self:FTranslate( strID )
+		if !txt or txt == nil then
+			teamID = team.GetName( teamID )
+		else
+			teamID = txt
+		end
+		
+		return teamID
+	end
+end
+
 -- Fretta!
 DeriveGamemode("fretta")
 IncludePlayerClasses()
@@ -96,9 +239,13 @@ GM.Author	= "Wolvindra-Vinzuerio & D4UNKN0WNM4N"
 -- Versioning
 GM._VERSION		= PHX.VERSION
 GM.REVISION		= PHX.REVISION --dd/mm/yy.
-GM.DONATEURL 	= "https://wolvindra.xyz/donate"
-GM.UPDATEURL 	= "https://wolvindra.xyz/ph_update_check.php" --return json only
+GM.DONATEURL 	= "https://ko-fi/wolvindra"
 
+-- Update information - returns json only
+GM.UPDATEURL 		= "https://gmodgameservers.com/ph_update_check.php"
+GM.UPDATEURLBACKUP 	= "https://raw.githubusercontent.com/Wolvin-NET/prophuntx/master/updates/update.json"
+
+-- unused
 GM.Help			= ""
 
 -- Fretta configuration
@@ -116,13 +263,28 @@ GM.NoPlayerPlayerDamage 	= true
 GM.NoPlayerTeamDamage		= true
 
 GM.RoundBased				= true
-GM.RoundLimit				= PHX:QCVar( "ph_rounds_per_map" )
-GM.RoundLength 				= PHX:QCVar( "ph_round_time" )
+GM.RoundLimit				= PHX:QCVar( "ph_rounds_per_map" )  -- Tested: Using GetGlobalInt without restarting will mess up round system!
+GM.RoundLength 				= PHX:QCVar( "ph_round_time" )      -- Tested: Using GetGlobalInt may serve severe problems including weird timer precision!
 GM.RoundPreStartTime		= 0
 GM.SuicideString			= "dead" -- obsolete
 GM.TeamBased 				= true
 
-GM.ForceJoinBalancedTeams 	= PHX:QCVar( "ph_forcejoinbalancedteams" )
+GM.ForceJoinBalancedTeams 	= GetGlobalInt( "ph_forcejoinbalancedteams", false )
+
+local mark = utf8.char(9733)
+GM.PHXContributors			= {
+	"Galaxio "..mark,
+	"Godfather "..mark,
+    "Fryman",
+	"Dralga",
+	"Berry",
+	"Yam",
+	"adk",
+	"Haeiven",
+	"Jonpopnycorn",
+	"Thundernerd",
+	"TR1NITY"
+}
 
 -- Called on gamemdoe initialization to create teams
 function GM:CreateTeams()
@@ -130,19 +292,19 @@ function GM:CreateTeams()
 		return
 	end
 	
-	TEAM_HUNTERS = 1
+	-- hunters
 	team.SetUp(TEAM_HUNTERS, "Hunters", Color(150, 205, 255, 255))
 	team.SetSpawnPoint(TEAM_HUNTERS, {"info_player_counterterrorist", "info_player_combine", "info_player_deathmatch", "info_player_axis", "info_player_hunter"})
 	team.SetClass(TEAM_HUNTERS, {"Hunter"})
 
-	TEAM_PROPS = 2
+	-- props
 	team.SetUp(TEAM_PROPS, "Props", Color(255, 60, 60, 255))
 	team.SetSpawnPoint(TEAM_PROPS, {"info_player_terrorist", "info_player_rebel", "info_player_deathmatch", "info_player_allies", "info_player_props"})
 	team.SetClass(TEAM_PROPS, {"Prop"})
 end
 
 -- Check collisions
-function CheckPropCollision(entA, entB)
+local function CheckPropCollision(entA, entB)
 	-- Disable prop on prop collisions
 	if !PHX:QCVar( "ph_prop_collision" ) && (entA && entB && ((entA:IsPlayer() && entA:Team() == TEAM_PROPS && entB:IsValid() && entB:GetClass() == "ph_prop") || (entB:IsPlayer() && entB:Team() == TEAM_PROPS && entA:IsValid() && entA:GetClass() == "ph_prop"))) then
 		return false
@@ -154,6 +316,13 @@ function CheckPropCollision(entA, entB)
 	end
 end
 hook.Add("ShouldCollide", "CheckPropCollision", CheckPropCollision)
+
+-- Footstep Control
+hook.Add( "PlayerFootstep", "PHX_FootstepControls", function( ply )
+	if PHX:GetCVar( "ph_props_disable_footstep" ) and ply:Team() == TEAM_PROPS then
+		return true
+	end
+end )
 
 -- External / Internal Plugins
 PHX.PLUGINS = {}
@@ -199,7 +368,8 @@ function PHX:InitializePlugin()
 		self.VerboseMsg("[PHX Plugin] No plugins detected, skipping...")
 	end
 end
-hook.Add("PostGamemodeLoaded", "PHX.LoadPlugins", function()
+-- Initialize?
+hook.Add("Initialize", "PHX.LoadPlugins", function() -- Origin: PostGamemodeLoaded
 	PHX:InitializePlugin()
 end)
 
@@ -217,9 +387,9 @@ if CLIENT then
 		
 		main.grid = vgui.Create("DGrid", main.scroll)
 		main.grid:SetPos(10,10)
-		main.grid:SetSize(tab:GetWide()*0.9,320)
+		main.grid:SetSize(tab:GetWide()*0.85,320)
 		main.grid:SetCols(1)
-		main.grid:SetColWide(tab:GetWide()*0.85)
+		main.grid:SetColWide(tab:GetWide()*0.8)
 		main.grid:SetRowHeight(340)
 		
 		if table.IsEmpty(PHX.PLUGINS) then
@@ -235,7 +405,7 @@ if CLIENT then
 				but:SetPos(40,96)
 				but:SetSize(256,40)
 				but:SetText(PHX:FTranslate("PLUGINS_BROWSE_MORE"))
-				but.DoClick = function() gui.OpenURL("https://wolvindra.xyz/phxplugins") end
+				but.DoClick = function() gui.OpenURL( "https://gmodgameservers.com/prophuntx/plugins" ) end
 				but:SetIcon("icon16/bricks.png")
 			else
 				local lbl = vgui.Create("DLabel",main.panel)
@@ -262,18 +432,18 @@ if CLIENT then
 				section.grid:SetColWide(section.roll:GetWide()-32)
 				section.grid:SetRowHeight(40)
 				
-				pVgui("","label","Trebuchet24",section.grid, Data.name.."| v."..Data.version )
-				pVgui("","label",false,section.grid, "INFO: "..Data.info )
+				pVgui("","label","Trebuchet24",section.grid, { "PLUG_NAME_VER", Data.name, Data.version } )
+				pVgui("","label",false,section.grid, { "PLUG_DESCRIPTION", Data.info } )
 				if (LocalPlayer():IsSuperAdmin() or LocalPlayer():CheckUserGroup()) then
 					if !table.IsEmpty(Data.settings) then
-						pVgui("","label",false,section.grid, PHX:FTranslate("PLUGINS_SERVER_SETTINGS") )
+						pVgui("","label",false,section.grid, "PLUGINS_SERVER_SETTINGS" )
 						for _,val in pairs(Data.settings) do
 							pVgui(val[1],val[2],val[3],section.grid,val[4])
 						end
 					end
 				end
 				if !table.IsEmpty(Data.client) then
-					pVgui("","label",false,section.grid, PHX:FTranslate("PLUGINS_CLIENT_SETTINGS") )
+					pVgui("","label",false,section.grid, "PLUGINS_CLIENT_SETTINGS" )
 					for _,val in pairs(Data.client) do
 						pVgui(val[1],val[2],val[3],section.grid,val[4])
 					end
@@ -286,4 +456,31 @@ if CLIENT then
 	paintPanelFunc(PanelModify, PHX:FTranslate("PHXM_TAB_PLUGINS"))
 	
 	end)
+end
+
+-- We don't need some hooks that mostly used from sandbox.
+hook.Remove("PlayerTick", "TickWidgets")
+
+--todo: check if this break the clientside effects
+if CLIENT then
+    hook.Remove("RenderScreenspaceEffects", "RenderColorModify")
+    hook.Remove("RenderScreenspaceEffects", "RenderBloom")
+    hook.Remove("RenderScreenspaceEffects", "RenderToyTown")
+    hook.Remove("RenderScreenspaceEffects", "RenderTexturize")
+    hook.Remove("RenderScreenspaceEffects", "RenderSunbeams")
+    hook.Remove("RenderScreenspaceEffects", "RenderSobel")
+    hook.Remove("RenderScreenspaceEffects", "RenderSharpen")
+    hook.Remove("RenderScreenspaceEffects", "RenderMaterialOverlay")
+    hook.Remove("RenderScreenspaceEffects", "RenderMotionBlur")
+    hook.Remove("RenderScene", "RenderStereoscopy")
+    hook.Remove("RenderScene", "RenderSuperDoF")
+    hook.Remove("GUIMousePressed", "SuperDOFMouseDown")
+    hook.Remove("GUIMouseReleased", "SuperDOFMouseUp")
+    hook.Remove("PreventScreenClicks", "SuperDOFPreventClicks")
+    hook.Remove("PostRender", "RenderFrameBlend")
+    hook.Remove("PreRender", "PreRenderFrameBlend")
+    hook.Remove("Think", "DOFThink")
+    hook.Remove("RenderScreenspaceEffects", "RenderBokeh")
+    hook.Remove("NeedsDepthPass", "NeedsDepthPass_Bokeh")
+    hook.Remove("PostDrawEffects", "RenderWidgets")
 end

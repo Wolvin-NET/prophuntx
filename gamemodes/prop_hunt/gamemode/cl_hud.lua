@@ -1,47 +1,3 @@
-surface.CreateFont("PHX.HealthFont", 
-{
-	font = "Roboto",
-	size = 56,
-	weight = 650,
-	antialias = true,
-	shadow = true
-})
-
-surface.CreateFont("PHX.AmmoFont", 
-{
-	font = "Roboto",
-	size = 14,
-	weight = 500,
-	antialias = true,
-	shadow = true
-})
-
-surface.CreateFont("PHX.ArmorFont", 
-{
-	font = "Roboto",
-	size = 32,
-	weight = 500,
-	antialias = true,
-	shadow = true
-})
-
-surface.CreateFont("PHX.TopBarFont", 
-{
-	font = "Roboto",
-	size = 20,
-	weight = 500,
-	antialias = true,
-	shadow = true
-})
-surface.CreateFont("PHX.TopBarFontTeam", 
-{
-	font = "Roboto",
-	size = 60,
-	weight = 650,
-	antialias = true,
-	shadow = true
-})
-
 -- // WARNING: The section below may NOT be optimised and very unclean. I'm currently working on this as a Temporary solution. \\ --
 
 -- Hides HUD
@@ -138,13 +94,13 @@ end
 -- Hook sections
 hook.Add("HUDShouldDraw", "PHX.ShouldHideHUD", function(hudname)
 	-- make sure matw is already installed, otherwise don't use new HUD.
-	if PHX.CLCVAR.NewHUD:GetBool() and (not matw:IsError()) then
+	if PHX:GetCLCVar( "ph_hud_use_new" ) and (not matw:IsError()) then
 		if (hide[hudname]) then return false end
 	end
 end)
 
 hook.Add("Think", "PHX.GUIAvatarUI_Think", function()
-	state = PHX.CLCVAR.NewHUD:GetBool()
+	state = PHX:GetCLCVar( "ph_hud_use_new" )
 
 	-- Avatar will behave strangely enough on HUDPaint so We'll use Think for now. Because it's a PANEL, not an HUD element.
 	if IsValid(LocalPlayer()) && LocalPlayer():Alive() && state && (LocalPlayer():Team() == TEAM_HUNTERS or LocalPlayer():Team() == TEAM_PROPS) then
@@ -248,7 +204,7 @@ hook.Add("HUDPaint", "PHX.MainHUD", function()
 		if LocalPlayer():Team() == TEAM_HUNTERS then
 			surface.SetDrawColor(disabledcolor)
 		else
-			surface.SetDrawColor( indic.halo[tonumber(PHX.CLCVAR.PropHalos:GetInt())])
+			surface.SetDrawColor( indic.halo[tonumber( GetConVar("ph_cl_halos"):GetInt() )])
 		end
 		surface.SetMaterial( indic.halo.mat )
 		surface.DrawTexturedRect( pos.x + (82), pos.y + 7, 32, 32 )
@@ -263,11 +219,7 @@ hook.Add("HUDPaint", "PHX.MainHUD", function()
 	end
 	
 	-- Weapon HUD
-	if IsValid(LocalPlayer()) && LocalPlayer():Alive() && state && LocalPlayer():Team() == TEAM_HUNTERS then
-		surface.SetDrawColor( 255, 255, 255, 255 )
-		surface.SetMaterial( matw )
-		surface.DrawTexturedRect( posw.x, posw.y, 480, 120 )
-		
+	if IsValid(LocalPlayer()) && LocalPlayer():Alive() && state && LocalPlayer():Team() == TEAM_HUNTERS then		
 		local curWep = LocalPlayer():GetActiveWeapon()
 		
 		local clip
@@ -280,6 +232,10 @@ hook.Add("HUDPaint", "PHX.MainHUD", function()
 		local LiteralStringSec
 		
 		if IsValid(curWep) then
+            surface.SetDrawColor( 255, 255, 255, 255 )
+            surface.SetMaterial( matw )
+            surface.DrawTexturedRect( posw.x, posw.y, 480, 120 )
+        
 			clip 	= curWep:Clip1()
 			maxclip = curWep:GetMaxClip1()
 			mag 	= LocalPlayer():GetAmmoCount(curWep:GetPrimaryAmmoType())
@@ -349,7 +305,7 @@ hook.Add("HUDPaint", "PHX.MainHUD", function()
 	end
 	
 	-- the Team Bar. This requires at least 4 players to get this displayed.
-	if PHX.CLCVAR.TeamTopBar:GetBool() then
+	if PHX:GetCLCVar( "ph_show_team_topbar" ) then
 		if ((player.GetCount() >= 4 && LocalPlayer():Alive()) && (LocalPlayer():Team() != TEAM_UNASSIGNED && LocalPlayer():Team() != TEAM_SPECTATOR)) then
 			surface.SetDrawColor( 255, 255, 255, 255 )
 			surface.SetMaterial( hudtopbar.mat )

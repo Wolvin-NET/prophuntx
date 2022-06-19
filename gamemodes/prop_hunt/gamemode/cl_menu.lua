@@ -40,10 +40,13 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 		surface.DrawRect(0,0,self:GetWide(),self:GetTall())
 	end
 	
-	PHX.UI.PnlTab.Navigation:SetWide(200)
+	PHX.UI.PnlTab.Navigation:SetWide(250)
 	--PHX.UI.PnlTab:UseButtonOnlyStyle()
 	
-	function PHX.UI:CreateBasicLayout( color, pTab )
+	function PHX.UI:CreateBasicLayout( color, pTab, customHeight )
+    
+        if !customHeight or customHeight == nil then customHeight = 35 end
+    
 		local panel = vgui.Create("DPanel", pTab )
 		panel:SetBackgroundColor(color)
 		panel:Dock(FILL)
@@ -56,7 +59,7 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 		grid:SetPos(16,12)
 		grid:SetCols(1)
 		grid:SetColWide(PHX.UI.MainForm:GetWide() - 200)
-		grid:SetRowHeight(35)
+		grid:SetRowHeight( customHeight )
 		
 		return panel,grid
 	end
@@ -82,8 +85,10 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 				surface.DrawRect(0,0,w,h)
 			end
 			
-			draw.DrawText( text, font ,w*0.25,h*0.4, color, TEXT_ALIGN_LEFT )
+			draw.DrawText( text, font ,w*0.22,h*0.4, color, TEXT_ALIGN_LEFT )
 		end
+        
+        item.Button:SetToolTip( text )
 		
 		item.Button.OnCursorEntered = function(self)
 			color = Color(255,255,0)
@@ -152,10 +157,14 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 			pn:Dock(TOP)
 			pn:SetSize(0,160)
 			pn:SetBackgroundColor(Color(0,0,0,0))
-			local DonateLogo = pn:Add("DImage")
-			DonateLogo:SetPos(0,0)
-			DonateLogo:SetSize(256,128)
-			DonateLogo:SetImage("vgui/bmac.vmt")
+			local BMAC = pn:Add("DImage")
+			BMAC:SetPos(0,0)
+			BMAC:SetSize(256,128)
+			BMAC:SetImage("vgui/bmac.vmt")
+            local KOFI = pn:Add("DImage")
+			KOFI:SetPos(260,0)
+			KOFI:SetSize(256,128)
+			KOFI:SetImage("vgui/kofi.vmt")
 			
 			local btnDn = pn:Add("DButton")
 			btnDn:SetPos(6,110)
@@ -163,6 +172,13 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 			btnDn:SetText("Donate via Buy me a Coffee")
 			btnDn.DoClick = function()
 				gui.OpenURL("https://www.buymeacoffee.com/wolvindra")
+			end
+            local btnKf = pn:Add("DButton")
+			btnKf:SetPos(266,110)
+			btnKf:SetSize(240,24)
+			btnKf:SetText("Donate via Buy Ko-Fi")
+			btnKf.DoClick = function()
+				gui.OpenURL("https://ko-fi.com/wolvindra")
 			end
 			
 			local check = panel:Add("DCheckBoxLabel")
@@ -198,10 +214,15 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 		local panel = vgui.Create("DPanel", PHX.UI.PnlTab)
 		panel:SetBackgroundColor(Color(100,100,100,255))
 		panel:Dock(FILL)
-	
-		local helpImage = vgui.Create("DImage", panel)
+		
+		local pnImage = vgui.Create("DPanel", panel)
+		pnImage:SetBackgroundColor(Color(16,16,16,255))
+		pnImage:Dock(FILL)
+		
+		local helpImage = vgui.Create("DImage", pnImage)
 		helpImage.Count = 1
 		helpImage:Dock(FILL)
+		helpImage:DockMargin(0,32,0,32)
 		helpImage:SetImage("vgui/phhelp1.vmt")
 	
 		local pBottom = vgui.Create("DPanel", panel)
@@ -250,7 +271,7 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 		end
 		bnext.DoClick = function(pnl)
 			helpImage.Count = helpImage.Count + 1
-			if helpImage.Count > 6 then
+			if helpImage.Count > 10 then
 				helpImage.Count = 1
 			end
 			helpImage:SetImage("vgui/phhelp"..helpImage.Count..".vmt")
@@ -280,7 +301,7 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 		bprev.DoClick = function(pnl)
 			helpImage.Count = helpImage.Count - 1
 			if helpImage.Count < 1 then
-				helpImage.Count = 6
+				helpImage.Count = 10
 			end
 			helpImage:SetImage("vgui/phhelp"..helpImage.Count..".vmt")
 		end
@@ -362,8 +383,8 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 					surface.PlaySound( "buttons/combine_button3.wav" )
 					RunConsoleCommand( "cl_playermodel", name )
 					modelPreview:SetModel(model)
-					Derma_Query(PHX:FTranslate("QUERY_MODEL_SELECTED", name), "PHX",
-						PHX:FTranslate("MISC_OK"), function() end)
+					PHX:MsgBox_Query( {"QUERY_MODEL_SELECTED", name}, "PHX",
+					"MISC_OK", function() end )
 				end
 				
 				-- Right click functions
@@ -373,13 +394,13 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 						surface.PlaySound( "buttons/combine_button3.wav" )
 						RunConsoleCommand( "cl_playermodel", name )
 						modelPreview:SetModel(model)
-						Derma_Query(PHX:FTranslate("QUERY_MODEL_SELECTED", name), "PHX", PHX:FTranslate("MISC_OK"), function() end)
+						PHX:MsgBox_Query({"QUERY_MODEL_SELECTED", name}, "PHX", "MISC_OK", function() end)
 					end):SetIcon("icon16/tick.png")
 					menu:AddSpacer()
 					menu:AddOption( PHX:FTranslate("MDL_MENU_REFRESH"), function() icon:RebuildSpawnIcon() end):SetIcon("icon16/arrow_refresh.png")
 					menu:AddOption( PHX:FTranslate("MDL_MENU_PREVIEW"), function() modelPreview:SetModel(model) end):SetIcon("icon16/magnifier.png")
 					menu:AddOption( PHX:FTranslate("MDL_MENU_MODELINFO"),	function()
-						Derma_Message( PHX:FTranslate("QUERY_MODEL_INFO", name), "Model Info", "Close" )
+						PHX:MsgBox( {"QUERY_MODEL_INFO", name}, "MDL_MENU_MODELINFO", "MISC_CLOSE" )
 						end ):SetIcon("icon16/information.png")
 					menu:AddSpacer()
 					menu:AddOption( PHX:FTranslate("MISC_CLOSE") ):SetIcon("icon16/cross.png")
@@ -423,7 +444,7 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 			gridmdl:SetColWide(800)
 			gridmdl:SetRowHeight(32)
 			
-			PHX.UI:CreateVGUIType("", "label", false, gridmdl, PHX:FTranslate("PHXM_MODEL_DISABLED"))
+			PHX.UI:CreateVGUIType("", "label", false, gridmdl, "PHXM_MODEL_DISABLED")
 			
 			-- this hook is intended to use for custom player model outside from PHX Menu. (like Custom Donator Model window or something).
 			hook.Call("PH_CustomPlayermdlButton", nil, panel, gridmdl, function(cmd,typ,data,panel,text) PHX.UI:CreateVGUIType(cmd,typ,data,panel,text) end)
@@ -443,43 +464,48 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 	function PHX.UI:PlayerOption()
 		local panel,gridpl = PHX.UI:CreateBasicLayout(Color(40,40,40,180),PHX.UI.PnlTab)
 
-		PHX.UI:CreateVGUIType("", "label", false, gridpl, PHX:FTranslate("PHXM_PLAYER_LANG"))
+		PHX.UI:CreateVGUIType("", "label", "PHX.MenuCategoryLabel", gridpl, "PHXM_PLAYER_LANG")
 		if (PHX:GetCVar( "ph_use_lang" )) then
 			PHX.UI:CreateVGUIType("", "label", false, gridpl, "Server is currently using a forced language. Current Language is: " .. PHX.LANGUAGES[PHX:GetCVar( "ph_force_lang" )].NameEnglish)
 		else
 			PHX.UI:CreateVGUIType(nil, "langcombobox", nil, gridpl, nil)
-			PHX.UI:CreateVGUIType("", "btn", {max = 1, textdata = {
+			PHX.UI:CreateVGUIType("", "btn", {
 			[1] = {"See all available Languages" , 
 			function(self)
 				PHX:showLangPreview()
 			end}
-			}}, gridpl ,"")
+			}, gridpl ,"")
 		end
-		PHX.UI:CreateVGUIType("", "label", false, gridpl, PHX:FTranslate("PHXM_PLAYER_BIND"))
+		PHX.UI:CreateVGUIType("", "label", "PHX.MenuCategoryLabel", gridpl, "PHXM_PLAYER_BIND")
 		
-		PHX.UI:CreateVGUIType("ph_default_taunt_key", "binder", false, gridpl, PHX:FTranslate("PHXM_PLAYER_TAUNT_KEY"))
-		PHX.UI:CreateVGUIType("ph_default_customtaunt_key", "binder", false, gridpl, PHX:FTranslate("PHXM_PLAYER_TAUNTWINDOW_KEY"))
-		PHX.UI:CreateVGUIType("ph_default_rotation_lock_key", "binder", false, gridpl, PHX:FTranslate("PHXM_PLAYER_ROTATLOCK_KEY"))
+		PHX.UI:CreateVGUIType("ph_default_taunt_key", "binder", false, gridpl, "PHXM_PLAYER_TAUNT_KEY")
+		PHX.UI:CreateVGUIType("ph_default_customtaunt_key", "binder", false, gridpl, "PHXM_PLAYER_TAUNTWINDOW_KEY")
+		PHX.UI:CreateVGUIType("ph_default_rotation_lock_key", "binder", false, gridpl, "PHXM_PLAYER_ROTATLOCK_KEY")
+		PHX.UI:CreateVGUIType("ph_prop_menu_key", "binder", false, gridpl, "PHXM_PLAYER_PROP_CHOOSER_KEY")
+		PHX.UI:CreateVGUIType("ph_prop_midair_freeze_key", "binder", false, gridpl, "PHXM_PROP_FREEZE_MIDAIR")
+		PHX.UI:CreateVGUIType("ph_cl_decoy_spawn_key", "binder", false, gridpl, "PHXM_CL_DECOY_KEYBIND")
 		
-		PHX.UI:CreateVGUIType("ph_prop_menu_key", "binder", false, gridpl, PHX:FTranslate("PHXM_PLAYER_PROP_CHOOSER_KEY"))
-		PHX.UI:CreateVGUIType("ph_prop_midair_freeze_key", "binder", false, gridpl, PHX:FTranslate("PHXM_PROP_FREEZE_MIDAIR"))
+        PHX.UI:CreateVGUIType("","spacer",nil,gridpl,"" )
+		PHX.UI:CreateVGUIType("", "label", "PHX.MenuCategoryLabel", gridpl, "PHXM_PLAYER_OPTIONS")
+        
+		PHX.UI:CreateVGUIType("ph_cl_halos", "check", "CLIENT", gridpl, "PHXM_PLAYER_TOGGLE_HALOS" )
+		PHX.UI:CreateVGUIType("ph_cl_pltext", "check", "CLIENT", gridpl, "PHXM_PLAYER_IDNAMES")
+		PHX.UI:CreateVGUIType("ph_cl_endround_sound", "check", "CLIENT", gridpl, "PHXM_PLAYER_ENDROUND_CUE")
+		PHX.UI:CreateVGUIType("ph_cl_autoclose_taunt", "check", "CLIENT", gridpl, "PHXM_PLAYER_TAUNTMENU_AUTOCLOSE")
+		PHX.UI:CreateVGUIType("ph_cl_spec_hunter_line", "check", "CLIENT", gridpl, "PHXM_PLAYER_SEE_HUNTER_LINE")
+		PHX.UI:CreateVGUIType("cl_enable_luckyballs_icon", "check", "CLIENT", gridpl, "PHXM_PLAYER_SEE_LBALL_ICONS")
+		PHX.UI:CreateVGUIType("cl_enable_devilballs_icon", "check", "CLIENT", gridpl, "PHXM_PLAYER_SEE_CRYSTAL_ICONS")
+        PHX.UI:CreateVGUIType("ph_prop_right_mouse_taunt", "check", "CLIENT", gridpl, "PHXM_TAUNT_RIGHT_CLICK") --RIGHT CLICK TAUNT: Moved from admin to client.
 		
-		PHX.UI:CreateVGUIType("", "label", false, gridpl, PHX:FTranslate("PHXM_PLAYER_OPTIONS"))
-		PHX.UI:CreateVGUIType("ph_cl_halos", "check", "CLIENT", gridpl, PHX:FTranslate("PHXM_PLAYER_TOGGLE_HALOS") )
-		PHX.UI:CreateVGUIType("ph_cl_pltext", "check", "CLIENT", gridpl, PHX:FTranslate("PHXM_PLAYER_IDNAMES"))
-		PHX.UI:CreateVGUIType("ph_cl_endround_sound", "check", "CLIENT", gridpl, PHX:FTranslate("PHXM_PLAYER_ENDROUND_CUE"))
-		PHX.UI:CreateVGUIType("ph_cl_autoclose_taunt", "check", "CLIENT", gridpl, PHX:FTranslate("PHXM_PLAYER_TAUNTMENU_AUTOCLOSE"))
-		PHX.UI:CreateVGUIType("ph_cl_spec_hunter_line", "check", "CLIENT", gridpl, PHX:FTranslate("PHXM_PLAYER_SEE_HUNTER_LINE"))
-		PHX.UI:CreateVGUIType("cl_enable_luckyballs_icon", "check", "CLIENT", gridpl, PHX:FTranslate("PHXM_PLAYER_SEE_LBALL_ICONS"))
-		PHX.UI:CreateVGUIType("cl_enable_devilballs_icon", "check", "CLIENT", gridpl, PHX:FTranslate("PHXM_PLAYER_SEE_CRYSTAL_ICONS"))
+		PHX.UI:CreateVGUIType("","spacer",nil,gridpl,"" )
+		PHX.UI:CreateVGUIType("", "label", "PHX.MenuCategoryLabel", gridpl, "PHXM_PLAYER_HUDSETTINGS")
 		
-		PHX.UI:CreateVGUIType("hudspacer","spacer",nil,gridpl,"" )
-		PHX.UI:CreateVGUIType("", "label", false, gridpl, PHX:FTranslate("PHXM_PLAYER_HUDSETTINGS"))
-		
-		PHX.UI:CreateVGUIType("ph_hud_use_new", "check", "CLIENT", gridpl, PHX:FTranslate("PHXM_PLAYER_USE_NEW_HUD"))
-		PHX.UI:CreateVGUIType("ph_show_tutor_control", "check", "CLIENT", gridpl, PHX:FTranslate("PHXM_PLAYER_SHOW_TUTOR"))
-		PHX.UI:CreateVGUIType("ph_show_custom_crosshair", "check", "CLIENT", gridpl, PHX:FTranslate("PHXM_PLAYER_USE_NEW_CROSSHAIR"))
-		PHX.UI:CreateVGUIType("ph_show_team_topbar", "check", "CLIENT", gridpl, PHX:FTranslate("PHXM_PLAYER_SHOW_TEAM_TOPBAR"))
+		PHX.UI:CreateVGUIType("ph_hud_use_new", "check", "CLIENT", gridpl, "PHXM_PLAYER_USE_NEW_HUD")
+        PHX.UI:CreateVGUIType("ph_cl_decoy_spawn_helper", "check", "CLIENT", gridpl, "PHXM_PLAYER_SHOW_DECOY_HELPER")
+        PHX.UI:CreateVGUIType("ph_cl_decoy_spawn_marker", "check", "CLIENT", gridpl, "PHXM_PLAYER_SHOW_DECOY_MARKER")
+		PHX.UI:CreateVGUIType("ph_show_tutor_control", "check", "CLIENT", gridpl, "PHXM_PLAYER_SHOW_TUTOR")
+		PHX.UI:CreateVGUIType("ph_show_custom_crosshair", "check", "CLIENT", gridpl, "PHXM_PLAYER_USE_NEW_CROSSHAIR")
+		PHX.UI:CreateVGUIType("ph_show_team_topbar", "check", "CLIENT", gridpl, "PHXM_PLAYER_SHOW_TEAM_TOPBAR")
 		
 		local PanelModify = PHX.UI.PnlTab:AddSheet("", panel, "vgui/ph_iconmenu/m_player.png")
 		PHX.UI.PaintTabButton(PanelModify, PHX:FTranslate("PHXM_TAB_PLAYER"))
@@ -491,11 +517,14 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 		
 		Usage:
 			<internal::call>
+		
+		-- DO NOT RECREATE THIS FUNCTION!
+		-- THIS FUNCTION MUST BE CREATED _ONCE_.
 	]]
 	function PHX.UI:PlayerMute()
-		local panel,gridmute = PHX.UI:CreateBasicLayout(Color(40,40,40,180),PHX.UI.PnlTab)
+		local panel,gridmute = PHX.UI:CreateBasicLayout(Color(40,40,40,180),PHX.UI.PnlTab,64)
 	
-		PHX.UI:CreateVGUIType("","label",false,gridmute, PHX:FTranslate("PHXM_MUTE_SELECT"))
+		PHX.UI:CreateVGUIType("","label",false,gridmute, "PHXM_MUTE_SELECT")
 		for _,Plys in pairs(player.GetAll()) do
 			PHX.UI:CreateVGUIType("","mute",Plys,gridmute,"")
 		end
@@ -505,52 +534,39 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 	end
 	
 	function PHX.UI:ShowAdminMenu()
-		local panel,grid = PHX.UI:CreateBasicLayout(Color(40,40,40,180),PHX.UI.PnlTab)
+		local panel,grid = PHX.UI:CreateBasicLayout(Color(40,40,40,180),PHX.UI.PnlTab,36)
 
-		PHX.UI:CreateVGUIType("", "label", false, grid, PHX:FTranslate("PHXM_ADMIN_LANGOVERRIDE"))
-		PHX.UI:CreateVGUIType("ph_use_lang", "check", "SERVER", grid, PHX:FTranslate("PHXM_ADMIN_FORCELANG"))
-		PHX.UI:CreateVGUIType("ph_force_lang", "langcombobox", true, grid, PHX:FTranslate("PHXM_ADMIN_LANGTOUSE"))
-		PHX.UI:CreateVGUIType("ph_default_lang", "langcombobox", true, grid, PHX:FTranslate("PHXM_ADMIN_PLAYERDEFAULTLANG"))
+		PHX.UI:CreateVGUIType("", "label", "PHX.MenuCategoryLabel", grid, "PHXM_ADMIN_LANGOVERRIDE")
+		PHX.UI:CreateVGUIType("ph_use_lang", "check", "SERVER", grid, "PHXM_ADMIN_FORCELANG")
+		PHX.UI:CreateVGUIType("ph_force_lang", "langcombobox", true, grid, "PHXM_ADMIN_LANGTOUSE")
+		PHX.UI:CreateVGUIType("ph_default_lang", "langcombobox", true, grid, "PHXM_ADMIN_PLAYERDEFAULTLANG")
 		
-		PHX.UI:CreateVGUIType("", "label", false, grid, PHX:FTranslate("PHXM_ADMIN_OPTIONS"))
-		PHX.UI:CreateVGUIType("ph_notify_player_join_leave", "check", "SERVER", grid, PHX:FTranslate("PHXM_ENABLE_PLAYER_JOIN_LEAVE"))
-		PHX.UI:CreateVGUIType("ph_use_custom_plmodel", "check", "SERVER", grid, PHX:FTranslate("PHXM_ADMIN_CUSTOM_MODEL"))
-		PHX.UI:CreateVGUIType("ph_use_custom_plmodel_for_prop", "check", "SERVER", grid, PHX:FTranslate("PHXM_ADMIN_CUSTOM_MODEL_PROP"))
-		PHX.UI:CreateVGUIType("ph_customtaunts_delay", "slider", {min = 2, max = 120, init = PHX:GetCVar( "ph_customtaunts_delay" ), dec = 0, kind = "SERVER"}, grid, PHX:FTranslate("PHXM_ADMIN_TAUNT_DELAY_CUSTOM"))
-		PHX.UI:CreateVGUIType("ph_normal_taunt_delay", "slider", {min = 2, max = 120, init = PHX:GetCVar( "ph_normal_taunt_delay" ), dec = 0, kind = "SERVER"}, grid, PHX:FTranslate("PHXM_ADMIN_TAUNT_DELAY_RANDOM"))
-		PHX.UI:CreateVGUIType("ph_autotaunt_enabled", "check", "SERVER", grid, PHX:FTranslate("PHXM_ADMIN_AUTOTAUNT_ENABLE"))
-		PHX.UI:CreateVGUIType("ph_autotaunt_delay", "slider", {min = 30, max = 180, init = PHX:GetCVar( "ph_autotaunt_delay" ), dec = 0, kind = "SERVER"}, grid, PHX:FTranslate("PHXM_ADMIN_TAUNT_DELAY_AUTO"))
-		PHX.UI:CreateVGUIType("ph_enable_taunt_scanner", "check", "SERVER", grid, PHX:FTranslate("PHXM_ADMIN_TAUNT_SCANNER"))
-		PHX.UI:CreateVGUIType("ph_prop_right_mouse_taunt", "check", "SERVER", grid, PHX:FTranslate("PHXM_ADMIN_PROP_RIGHT_CLICK"))
-		PHX.UI:CreateVGUIType("","spacer",nil,grid,"" )
-		PHX.UI:CreateVGUIType("ph_forcejoinbalancedteams", "check", "SERVER", grid, PHX:FTranslate("PHXM_ADMIN_FORCEJOINBALANCE"))
-		PHX.UI:CreateVGUIType("ph_enable_teambalance", "check", "SERVER", grid, PHX:FTranslate("PHXM_ADMIN_ENABLETEAMBALANCE"))
-		PHX.UI:CreateVGUIType("","spacer",nil,grid,"" )
-		PHX.UI:CreateVGUIType("ph_notice_prop_rotation", "check", "SERVER", grid, PHX:FTranslate("PHXM_ADMIN_NOTICE_ROTATION"))
-		PHX.UI:CreateVGUIType("ph_prop_camera_collisions", "check", "SERVER", grid, PHX:FTranslate("PHXM_ADMIN_CAMERA_COLLIDE"))
-		PHX.UI:CreateVGUIType("ph_freezecam", "check", "SERVER", grid, PHX:FTranslate("PHXM_ADMIN_FREEZECAM"))
-		PHX.UI:CreateVGUIType("ph_freezecam_hunter", "check", "SERVER", grid, PHX:FTranslate("PHXM_ADMIN_FREEZECAM_HUNTER"))
-		PHX.UI:CreateVGUIType("ph_prop_collision", "check", "SERVER", grid, PHX:FTranslate("PHXM_ADMIN_PROP_COLLIDE"))
-		PHX.UI:CreateVGUIType("ph_swap_teams_every_round", "check", "SERVER", grid, PHX:FTranslate("PHXM_ADMIN_SWAP_TEAM"))
-		PHX.UI:CreateVGUIType("ph_hunter_fire_penalty", "slider", 	{min = 2, max = 80, init = PHX:GetCVar( "ph_hunter_fire_penalty" ), dec = 0, kind = "SERVER"}, grid, PHX:FTranslate("PHXM_ADMIN_HUNTER_PENALTY"))
-		PHX.UI:CreateVGUIType("ph_hunter_kill_bonus", "slider", 	{min = 5, max = 100, init = PHX:GetCVar( "ph_hunter_kill_bonus" ), dec = 0, kind = "SERVER"}, grid, PHX:FTranslate("PHXM_ADMIN_HUNTER_KILL_BONUS"))
-		PHX.UI:CreateVGUIType("ph_smggrenadecounts",  "slider", 	{min = 1, max = 50, init = PHX:GetCVar( "ph_smggrenadecounts" ), dec = 0, kind = "SERVER"}, grid, PHX:FTranslate("PHXM_ADMIN_HUNTER_SMG_GRENADES"))
-		PHX.UI:CreateVGUIType("ph_game_time", "slider", 			{min = 20, max = 300, init = PHX:GetCVar( "ph_game_time" ), dec = 0, kind = "SERVER"}, grid, PHX:FTranslate("PHXM_ADMIN_GAME_TIME"))
-		PHX.UI:CreateVGUIType("ph_hunter_blindlock_time", "slider", {min = 15, max = 60, init = PHX:GetCVar( "ph_hunter_blindlock_time" ), dec = 0, kind = "SERVER"}, grid, PHX:FTranslate("PHXM_ADMIN_BLINDLOCK_TIME"))
-		PHX.UI:CreateVGUIType("ph_round_time", "slider", 			{min = 120, max = 600, init = PHX:GetCVar( "ph_round_time" ), dec = 0, kind = "SERVER"}, grid, PHX:FTranslate("PHXM_ADMIN_ROUND_TIME"))
-		PHX.UI:CreateVGUIType("ph_rounds_per_map", "slider", 		{min = 5, max = 30, init = PHX:GetCVar( "ph_rounds_per_map" ), dec = 0, kind = "SERVER"}, grid, PHX:FTranslate("PHXM_ADMIN_ROUNDS_PER_MAP"))
-		PHX.UI:CreateVGUIType("ph_enable_lucky_balls", "check", "SERVER", grid, PHX:FTranslate("PHXM_ADMIN_ENABLE_LUCKYBALL"))
-		PHX.UI:CreateVGUIType("ph_enable_devil_balls", "check", "SERVER", grid, PHX:FTranslate("PHXM_ADMIN_ENABLE_CRYSTAL"))
-		PHX.UI:CreateVGUIType("ph_waitforplayers", "check", "SERVER", grid, PHX:FTranslate("PHXM_ADMIN_WAIT_PLAYERS"))
-		PHX.UI:CreateVGUIType("ph_min_waitforplayers", "slider", { min = 1, max = game.MaxPlayers(), init = PHX:GetCVar( "ph_min_waitforplayers" ), dec = 0, kind = "SERVER" }, grid, PHX:FTranslate("PHXM_ADMIN_WAIT_MIN_PLAYERS"))
-		PHX.UI:CreateVGUIType("", "label", false, grid, PHX:FTranslate("PHXM_ADMIN_TAUNTMODES"))
-		PHX.UI:CreateVGUIType("", "btn", {max = 2, textdata = {
-			[1] = {PHX:FTranslate( "PHXM_ADMIN_TAUNTMODE_MODE", PHX:GetCVar( "ph_custom_taunt_mode" ) ), 
+        PHX.UI:CreateVGUIType("","spacer",nil,grid,"" )
+		PHX.UI:CreateVGUIType("", "label", "PHX.MenuCategoryLabel", grid, "PHXM_ADMIN_OPTIONS")
+        
+		PHX.UI:CreateVGUIType("ph_use_custom_plmodel", "check", "SERVER", grid, "PHXM_ADMIN_CUSTOM_MODEL")
+		PHX.UI:CreateVGUIType("ph_use_custom_plmodel_for_prop", "check", "SERVER", grid, "PHXM_ADMIN_CUSTOM_MODEL_PROP")
+		
+        PHX.UI:CreateVGUIType("","spacer",nil,grid,"" )
+		PHX.UI:CreateVGUIType("", "label", "PHX.MenuCategoryLabel", grid, "PHXM_TAUNT_SETTINGS")
+		
+		PHX.UI:CreateVGUIType("ph_customtaunts_delay", "slider", {min = 2, max = 120, init = PHX:GetCVar( "ph_customtaunts_delay" ), dec = 0, kind = "SERVER"}, grid, "PHXM_ADMIN_TAUNT_DELAY_CUSTOM")
+		PHX.UI:CreateVGUIType("ph_normal_taunt_delay", "slider", {min = 2, max = 120, init = PHX:GetCVar( "ph_normal_taunt_delay" ), dec = 0, kind = "SERVER"}, grid, "PHXM_ADMIN_TAUNT_DELAY_RANDOM")
+		PHX.UI:CreateVGUIType("ph_autotaunt_enabled", "check", "SERVER", grid, "PHXM_ADMIN_AUTOTAUNT_ENABLE")
+		PHX.UI:CreateVGUIType("ph_autotaunt_delay", "slider", {min = 30, max = 180, init = PHX:GetCVar( "ph_autotaunt_delay" ), dec = 0, kind = "SERVER"}, grid, "PHXM_ADMIN_TAUNT_DELAY_AUTO")
+		PHX.UI:CreateVGUIType("ph_enable_taunt_scanner", "check", "SERVER", grid, "PHXM_ADMIN_TAUNT_SCANNER")
+		
+		-- taunt modes
+        PHX.UI:CreateVGUIType("","spacer",nil,grid,"" )
+		PHX.UI:CreateVGUIType("", "label", "PHX.MenuCategoryLabel", grid, "PHXM_ADMIN_TAUNTMODES")
+        
+		PHX.UI:CreateVGUIType("", "btn", {
+			[1] = { { "PHXM_ADMIN_TAUNTMODE_MODE", PHX:GetCVar( "ph_custom_taunt_mode" ) },
 			function(self)
 				local CusTauntConvar = {
-					[0] = PHX:FTranslate("PHXM_ADMIN_TAUNTMODE0"),
-					[1] = PHX:FTranslate("PHXM_ADMIN_TAUNTMODE1"),
-					[2] = PHX:FTranslate("PHXM_ADMIN_TAUNTMODE2")
+					[0] = PHX:QTrans("PHXM_ADMIN_TAUNTMODE0"),
+					[1] = PHX:QTrans("PHXM_ADMIN_TAUNTMODE1"),
+					[2] = PHX:QTrans("PHXM_ADMIN_TAUNTMODE2")
 				}
 				local function SendTauntCommandState(state)
 					net.Start("SendTauntStateCmd")
@@ -577,7 +593,7 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 				self:SizeToContents()
 				self:SetSize(self:GetWide()+16, self:GetTall())
 			end},
-			[2] = {PHX:FTranslate("PHXM_ADMIN_TAUNTSOPEN"), function(self)
+			[2] = { "PHXM_ADMIN_TAUNTSOPEN", function(self)
 				if !LocalPlayer():Alive() and (LocalPlayer():Team() == TEAM_PROPS or LocalPlayer():Team() == TEAM_HUNTERS) then
 					PHX:ChatInfo(PHX:Translate("PHXM_ADMIN_MUSTALIVE"), "NOTICE")
 					PHX.UI.MainForm:Close()
@@ -588,54 +604,102 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 					LocalPlayer():ConCommand("ph_showtaunts")
 				end
 			end}
-			}
-		}, grid ,"")
+			}, grid ,"")
+		
+        PHX.UI:CreateVGUIType("","spacer",nil,grid,"" )
+		PHX.UI:CreateVGUIType("", "label", "PHX.MenuCategoryLabel", grid, "PHXM_TAUNT_PITCH_SETTINGS")
+		PHX.UI:CreateVGUIType("ph_taunt_pitch_enable", "check", "SERVER", grid, "PHXM_TAUNT_PITCH_ENABLE")
+        -- these two below are intentionally set without float.
+		PHX.UI:CreateVGUIType("ph_taunt_pitch_range_min", "slider", {min = 1, max = 99, init = PHX:GetCVar( "ph_taunt_pitch_range_min" ), dec = 0, kind = "SERVER"}, grid, "PHXM_TAUNT_PITCH_RANGE_MIN")
+		PHX.UI:CreateVGUIType("ph_taunt_pitch_range_max", "slider", {min = 100, max = 255, init = PHX:GetCVar( "ph_taunt_pitch_range_max" ), dec = 0, kind = "SERVER"}, grid, "PHXM_TAUNT_PITCH_RANGE_MAX")
+		
+        PHX.UI:CreateVGUIType("","spacer",nil,grid,"" )
+		PHX.UI:CreateVGUIType("", "label", "PHX.MenuCategoryLabel", grid, "PHXM_FAKE_TAUNT_SETTINGS")
+        
+		PHX.UI:CreateVGUIType("ph_randtaunt_map_prop_enable", "check", "SERVER", grid, "PHXM_FAKE_TAUNT_ENABLE")
+		PHX.UI:CreateVGUIType("ph_randtaunt_map_prop_max", "slider", {min = -1, max = 100, init = PHX:GetCVar( "ph_randtaunt_map_prop_max" ), dec = 0, kind = "SERVER"}, grid, "PHXM_FAKE_TAUNT_MAXUSAGE")
+		
+        PHX.UI:CreateVGUIType("","spacer",nil,grid,"" )
+		PHX.UI:CreateVGUIType("", "label", "PHX.MenuCategoryLabel", grid, "PHXM_DECOY_SETTINGS")
+		PHX.UI:CreateVGUIType("ph_enable_decoy_reward", "check", "SERVER", grid, "PHXM_DECOY_ENABLE")
+		PHX.UI:CreateVGUIType("", "label", false, grid, "PHXM_DECOY_HEALTH")
+		PHX.UI:CreateVGUIType("ph_decoy_health", "slider", {min = 1, max = 200, init = "DEF_CONVAR", dec = 0, kind = "SERVER"}, grid, "PHXM_DECOY_HEALTH")
+		
+		PHX.UI:CreateVGUIType("","spacer",nil,grid,"" )
+		PHX.UI:CreateVGUIType("", "label", "PHX.MenuCategoryLabel", grid, "PHXM_GENERAL_SETTINGS")
+        
+		PHX.UI:CreateVGUIType("ph_notify_player_join_leave", "check", "SERVER", grid, "PHXM_ENABLE_PLAYER_JOIN_LEAVE")
+        PHX.UI:CreateVGUIType("ph_props_disable_footstep", "check", "SERVER", grid, "PHXM_DISABLE_FOOTSTEP")
+        PHX.UI:CreateVGUIType("ph_give_grenade_near_roundend", "check", "SERVER", grid, "PHXM_ADMIN_GIVEGRENADE_NEAREND")
+        PHX.UI:CreateVGUIType("ph_give_grenade_roundend_before_time", "slider", {min = 3, max = GAMEMODE.RoundLength, init = PHX:GetCVar( "ph_give_grenade_roundend_before_time" ), dec = 2, float = true, kind = "SERVER"}, grid, "PHXM_ADMIN_GIVEGRENADE_TIME")
+		PHX.UI:CreateVGUIType("ph_notice_prop_rotation", "check", "SERVER", grid, "PHXM_ADMIN_NOTICE_ROTATION")
+		PHX.UI:CreateVGUIType("ph_prop_camera_collisions", "check", "SERVER", grid, "PHXM_ADMIN_CAMERA_COLLIDE")
+		PHX.UI:CreateVGUIType("ph_freezecam", "check", "SERVER", grid, "PHXM_ADMIN_FREEZECAM")
+		PHX.UI:CreateVGUIType("ph_freezecam_hunter", "check", "SERVER", grid, "PHXM_ADMIN_FREEZECAM_HUNTER")
+		PHX.UI:CreateVGUIType("ph_prop_collision", "check", "SERVER", grid, "PHXM_ADMIN_PROP_COLLIDE")
+		PHX.UI:CreateVGUIType("ph_swap_teams_every_round", "check", "SERVER", grid, "PHXM_ADMIN_SWAP_TEAM")
+		PHX.UI:CreateVGUIType("ph_hunter_fire_penalty", "slider", 	{min = 2, max = 80, init = PHX:GetCVar( "ph_hunter_fire_penalty" ), dec = 0, kind = "SERVER"}, grid, "PHXM_ADMIN_HUNTER_PENALTY")
+		PHX.UI:CreateVGUIType("ph_hunter_kill_bonus", "slider", 	{min = 5, max = 100, init = PHX:GetCVar( "ph_hunter_kill_bonus" ), dec = 0, kind = "SERVER"}, grid, "PHXM_ADMIN_HUNTER_KILL_BONUS")
+		PHX.UI:CreateVGUIType("ph_smggrenadecounts",  "slider", 	{min = 1, max = 50, init = PHX:GetCVar( "ph_smggrenadecounts" ), dec = 0, kind = "SERVER"}, grid, "PHXM_ADMIN_HUNTER_SMG_GRENADES")
+		PHX.UI:CreateVGUIType("ph_game_time", "slider", 			{min = 20, max = 300, init = PHX:GetCVar( "ph_game_time" ), dec = 0, kind = "SERVER"}, grid, "PHXM_ADMIN_GAME_TIME")
+		PHX.UI:CreateVGUIType("ph_hunter_blindlock_time", "slider", {min = 15, max = 60, init = PHX:GetCVar( "ph_hunter_blindlock_time" ), dec = 0, kind = "SERVER"}, grid, "PHXM_ADMIN_BLINDLOCK_TIME")
+		PHX.UI:CreateVGUIType("ph_round_time", "slider", 			{min = 120, max = 600, init = PHX:GetCVar( "ph_round_time" ), dec = 0, kind = "SERVER"}, grid, "PHXM_ADMIN_ROUND_TIME")
+		PHX.UI:CreateVGUIType("ph_rounds_per_map", "slider", 		{min = 5, max = 30, init = PHX:GetCVar( "ph_rounds_per_map" ), dec = 0, kind = "SERVER"}, grid, "PHXM_ADMIN_ROUNDS_PER_MAP")
+		PHX.UI:CreateVGUIType("ph_enable_lucky_balls", "check", "SERVER", grid, "PHXM_ADMIN_ENABLE_LUCKYBALL")
+		PHX.UI:CreateVGUIType("ph_enable_devil_balls", "check", "SERVER", grid, "PHXM_ADMIN_ENABLE_CRYSTAL")
+		PHX.UI:CreateVGUIType("ph_waitforplayers", "check", "SERVER", grid, "PHXM_ADMIN_WAIT_PLAYERS")
+		PHX.UI:CreateVGUIType("ph_min_waitforplayers", "slider", { min = 1, max = game.MaxPlayers(), init = PHX:GetCVar( "ph_min_waitforplayers" ), dec = 0, kind = "SERVER" }, grid, "PHXM_ADMIN_WAIT_MIN_PLAYERS")
+		
 		PHX.UI:CreateVGUIType("devspacer","spacer",nil,grid,"" )
-		PHX.UI:CreateVGUIType("", "label", false, grid, PHX:FTranslate("PHXM_ADMIN_DEVSECTION"))
-		PHX.UI:CreateVGUIType("ph_check_props_boundaries", "check", "SERVER", grid, PHX:FTranslate("PHXM_ADMIN_ROOMCHECK"))
-		PHX.UI:CreateVGUIType("ph_mkbren_use_new_mdl","check","SERVER",grid, PHX:FTranslate("PHXM_ADMIN_USENEWMKBREN"))
-		PHX.UI:CreateVGUIType("ph_print_verbose", "check", "SERVER", grid, PHX:FTranslate("PHXM_ADMIN_BEVERBOSE"))
-		PHX.UI:CreateVGUIType("ph_enable_plnames", "check", "SERVER", grid, PHX:FTranslate("PHXM_ADMIN_SHOWPLNAMEHEAD"))
-		PHX.UI:CreateVGUIType("ph_fc_use_single_sound", "check", "SERVER", grid, PHX:FTranslate("PHXM_ADMIN_USESINGLE_FZCAM"))
-		PHX.UI:CreateVGUIType("ph_fc_cue_path","textentry","SERVER", grid, PHX:FTranslate("TEXTENTRY_FZ_SINGLE"))
-		PHX.UI:CreateVGUIType("ph_use_playermodeltype", "check", "SERVER", grid, PHX:FTranslate("PHXM_ADMIN_MODELLISTINGTYPE"))
-		PHX.UI:CreateVGUIType("ph_prop_jumppower", "slider", {min = 1, max = 3, init = PHX:GetCVar( "ph_prop_jumppower" ), dec = 2, float = true, kind = "SERVER"}, grid, PHX:FTranslate("PHXM_ADMIN_JUMPPOWER"))
-		PHX.UI:CreateVGUIType("ph_sv_enable_obb_modifier","check","SERVER",grid, PHX:FTranslate("PHXM_ADMIN_ENABLE_OBB"))
-		PHX.UI:CreateVGUIType("ph_reload_obb_setting_everyround","check","SERVER",grid, PHX:FTranslate("PHXM_ADMIN_RELOAD_OBB"))
-		
-		-- new cvar PH:X additions
-		PHX.UI:CreateVGUIType("","spacer",nil,grid,"" )
-		PHX.UI:CreateVGUIType("", "label", false, grid, PHX:FTranslate("PHXM_ADMLBL_USABLE_ENTS"))
-		PHX.UI:CreateVGUIType("", "label", false, grid, PHX:FTranslate("PHXM_ADMLBL_USABLE_ENTS_REF"))
-		
-		PHX.UI:CreateVGUIType("ph_usable_prop_type", "slider", {min = 1, max = 4, init = PHX:GetCVar( "ph_usable_prop_type" ), dec = 0, kind = "SERVER"}, grid, PHX:FTranslate("PHXM_ADMIN_USABLE_ENT_TYPE"))
-		PHX.UI:CreateVGUIType("ph_usable_prop_type_notice", "check", "SERVER", grid, PHX:FTranslate("PHXM_ADMIN_NOTIFY_ENT_TYPE"))
+		PHX.UI:CreateVGUIType("", "label", "PHX.MenuCategoryLabel", grid, "PHXM_ADMIN_DEVSECTION")
+        
+		PHX.UI:CreateVGUIType("ph_check_for_rooms", "check", "SERVER", grid, "PHXM_ADMIN_ROOMCHECK")
+		PHX.UI:CreateVGUIType("ph_mkbren_use_new_mdl","check","SERVER",grid, "PHXM_ADMIN_USENEWMKBREN")
+		PHX.UI:CreateVGUIType("ph_print_verbose", "check", "SERVER", grid, "PHXM_ADMIN_BEVERBOSE")
+		PHX.UI:CreateVGUIType("ph_enable_plnames", "check", "SERVER", grid, "PHXM_ADMIN_SHOWPLNAMEHEAD")
+		PHX.UI:CreateVGUIType("ph_fc_use_single_sound", "check", "SERVER", grid, "PHXM_ADMIN_USESINGLE_FZCAM")
+		PHX.UI:CreateVGUIType("ph_fc_cue_path","textentry","SERVER", grid, "TEXTENTRY_FZ_SINGLE")
+		PHX.UI:CreateVGUIType("ph_use_playermodeltype", "check", "SERVER", grid, "PHXM_ADMIN_MODELLISTINGTYPE")
+		PHX.UI:CreateVGUIType("ph_prop_jumppower", "slider", {min = 1, max = 3, init = PHX:GetCVar( "ph_prop_jumppower" ), dec = 2, float = true, kind = "SERVER"}, grid, "PHXM_ADMIN_JUMPPOWER")
+		PHX.UI:CreateVGUIType("ph_sv_enable_obb_modifier","check","SERVER",grid, "PHXM_ADMIN_ENABLE_OBB")
+		PHX.UI:CreateVGUIType("ph_reload_obb_setting_everyround","check","SERVER",grid, "PHXM_ADMIN_RELOAD_OBB")
 		
 		PHX.UI:CreateVGUIType("","spacer",nil,grid,"" )
-		PHX.UI:CreateVGUIType("", "label", false, grid, PHX:FTranslate("PHXM_ADMIN_EXPERIMENTALPHX"))
-
-		PHX.UI:CreateVGUIType("ph_add_hla_combine", "check", "SERVER", grid, PHX:FTranslate("PHXM_ADMIN_HLA_COMBINE"))
-		PHX.UI:CreateVGUIType("ph_enable_teambalance", "check", "SERVER", grid, PHX:FTranslate("PHXM_ADMIN_TEAMBALANCE"))
-		PHX.UI:CreateVGUIType("ph_max_teamchange_limit", "slider", {min = 3, max = 50, init = PHX:GetCVar( "ph_max_teamchange_limit" ), dec = 0, kind = "SERVER"}, grid, PHX:FTranslate("PHXM_ADMIN_CHANGETEAM_LIMIT"))
-		PHX.UI:CreateVGUIType("ph_use_new_chat", "check", "SERVER", grid, PHX:FTranslate("PHXM_ADMIN_USENEWCHAT"))
-		PHX.UI:CreateVGUIType("ph_new_chat_pos_sub", "slider", {min = 45, max = 1500, init = PHX:GetCVar( "ph_new_chat_pos_sub" ), dec = 0, kind = "SERVER"}, grid, PHX:FTranslate("PHXM_ADMIN_NEWCHATPOS"))
-
-		PHX.UI:CreateVGUIType("ph_allow_respawnonblind", "check", "SERVER", grid, PHX:FTranslate("PHXM_ADMIN_RESPAWNONBLIND"))
-		PHX.UI:CreateVGUIType("ph_allow_respawnonblind_team_only", "slider", {min = 0, max = 2, init = PHX:GetCVar( "ph_allow_respawnonblind_team_only" ), dec = 0, kind = "SERVER"}, grid, PHX:FTranslate("PHXM_ADMIN_RESPAWNONBLIND_TEAM"))
-		PHX.UI:CreateVGUIType("ph_allow_respawn_from_spectator", "check", "SERVER", grid, PHX:FTranslate("PHXM_ADMIN_ALLOWRESPAWN_SPECTATOR"))
-		PHX.UI:CreateVGUIType("ph_blindtime_respawn_percent", "slider", {min = 0, max = 1, init = PHX:GetCVar( "ph_blindtime_respawn_percent" ), dec = 2, float = true, kind = "SERVER"}, grid, PHX:FTranslate("PHXM_ADMIN_REWSPANTIMEPERCENT"))
-		PHX.UI:CreateVGUIType("ph_allow_respawnonblind_teamchange", "check", "SERVER", grid, PHX:FTranslate("PHXM_ADMIN_ALLOWRESPAWN_TEAMCHANGE"))
+		PHX.UI:CreateVGUIType("", "label", "PHX.MenuCategoryLabel", grid, "PHXM_ADMLBL_USABLE_ENTS")
+		PHX.UI:CreateVGUIType("", "label", false, grid, "PHXM_ADMLBL_USABLE_ENTS_REF")
+		PHX.UI:CreateVGUIType("ph_usable_prop_type", "slider", {min = 1, max = 4, init = PHX:GetCVar( "ph_usable_prop_type" ), dec = 0, kind = "SERVER"}, grid, "PHXM_ADMIN_USABLE_ENT_TYPE")
+		PHX.UI:CreateVGUIType("ph_usable_prop_type_notice", "check", "SERVER", grid, "PHXM_ADMIN_NOTIFY_ENT_TYPE")
 		
-		PHX.UI:CreateVGUIType("", "label", false, grid, PHX:FTranslate("PHXM_ADMIN_PICKUP_PROPS"))
+		PHX.UI:CreateVGUIType("","spacer",nil,grid,"" )
+		PHX.UI:CreateVGUIType("", "label", "PHX.MenuCategoryLabel", grid, "PHXM_ADMIN_EXPERIMENTALPHX")
+
+		PHX.UI:CreateVGUIType("ph_add_hla_combine", "check", "SERVER", grid, "PHXM_ADMIN_HLA_COMBINE")
 		
-		PHX.UI:CreateVGUIType("", "btn", {max = 1, textdata = {
-			[1] = {PHX:FTranslate( "PHXM_MODE_DEFAULT", PHX:GetCVar( "ph_allow_pickup_object" ) ), 
+		PHX.UI:CreateVGUIType("", "label", "PHX.MenuCategoryLabel", grid, "PHXM_ADMIN_CHATSETTING")
+		PHX.UI:CreateVGUIType("ph_use_new_chat", "check", "SERVER", grid, "PHXM_ADMIN_USENEWCHAT")
+		PHX.UI:CreateVGUIType("ph_new_chat_pos_sub", "slider", {min = 45, max = 1500, init = PHX:GetCVar( "ph_new_chat_pos_sub" ), dec = 0, kind = "SERVER"}, grid, "PHXM_ADMIN_NEWCHATPOS")
+
+		PHX.UI:CreateVGUIType("", "label", "PHX.MenuCategoryLabel", grid, "PHXM_ADMIN_HUNTERBLIND")
+		PHX.UI:CreateVGUIType("ph_allow_respawnonblind", "check", "SERVER", grid, "PHXM_ADMIN_RESPAWNONBLIND")
+		PHX.UI:CreateVGUIType("ph_allow_respawnonblind_team_only", "slider", {min = 0, max = 2, init = PHX:GetCVar( "ph_allow_respawnonblind_team_only" ), dec = 0, kind = "SERVER"}, grid, "PHXM_ADMIN_RESPAWNONBLIND_TEAM")
+		PHX.UI:CreateVGUIType("ph_allow_respawn_from_spectator", "check", "SERVER", grid, "PHXM_ADMIN_ALLOWRESPAWN_SPECTATOR")
+		PHX.UI:CreateVGUIType("ph_blindtime_respawn_percent", "slider", {min = 0, max = 1, init = PHX:GetCVar( "ph_blindtime_respawn_percent" ), dec = 2, float = true, kind = "SERVER"}, grid, "PHXM_ADMIN_REWSPANTIMEPERCENT")
+		
+		PHX.UI:CreateVGUIType("", "label", "PHX.MenuCategoryLabel", grid, "PHXM_ADMIN_TEAMBALANCE")
+		PHX.UI:CreateVGUIType("ph_forcejoinbalancedteams", "check", "SERVER", grid, "PHXM_ADMIN_FORCEJOINBALANCE")
+		PHX.UI:CreateVGUIType("ph_enable_teambalance", "check", "SERVER", grid, "PHXM_ADMIN_ENABLETEAMBALANCE")
+		PHX.UI:CreateVGUIType("ph_max_teamchange_limit", "slider", {min = 3, max = 50, init = PHX:GetCVar( "ph_max_teamchange_limit" ), dec = 0, kind = "SERVER"}, grid, "PHXM_ADMIN_CHANGETEAM_LIMIT")
+		PHX.UI:CreateVGUIType("ph_allow_respawnonblind_teamchange", "check", "SERVER", grid, "PHXM_ADMIN_ALLOWRESPAWN_TEAMCHANGE")
+		
+		PHX.UI:CreateVGUIType("", "label", false, grid, "PHXM_ADMIN_PICKUP_PROPS")
+		PHX.UI:CreateVGUIType("", "btn", {
+			[1] = { { "PHXM_MODE_DEFAULT", PHX:GetCVar( "ph_allow_pickup_object" ) },
 			function(self)
 				local modes = {
-					[0] = PHX:FTranslate("PHXM_MODE0"),
-					[1] = PHX:FTranslate("PHXM_MODE1"),
-					[2] = PHX:FTranslate("PHXM_MODE2"),
-					[3] = PHX:FTranslate("PHXM_MODE3")
+					[0] = PHX:QTrans("PHXM_MODE0"),
+					[1] = PHX:QTrans("PHXM_MODE1"),
+					[2] = PHX:QTrans("PHXM_MODE2"),
+					[3] = PHX:QTrans("PHXM_MODE3")
 				}
 				local function SendPickupCmdState(state)
 					net.Start("PHXPickupCmdState")
@@ -664,9 +728,10 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 				self:SizeToContents()
 				self:SetSize(self:GetWide()+16, self:GetTall())
 			end}
-		}}, grid ,"")
+		}, grid ,"")
 		
 		PHX.UI:CreateVGUIType("","spacer",nil,grid,"" )
+		
 		
 	local PanelModify = PHX.UI.PnlTab:AddSheet("", panel, "vgui/ph_iconmenu/m_admin.png")
 	PHX.UI.PaintTabButton(PanelModify, PHX:FTranslate("PHXM_TAB_ADMIN"))
@@ -676,39 +741,39 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 	function PHX.UI:MapVoteMenu()
 		local panel,grid = PHX.UI:CreateBasicLayout(Color(40,40,40,180),PHX.UI.PnlTab)
 		
-		PHX.UI:CreateVGUIType("", "label", false, grid, PHX:FTranslate("PHXM_MV_SETTINGS"))
-		PHX.UI:CreateVGUIType("mv_allowcurmap","check","SERVER",grid,PHX:FTranslate("PHXM_MV_ALLOWCURMAP"))
-		PHX.UI:CreateVGUIType("mv_cooldown","check","SERVER",grid,PHX:FTranslate("PHXM_MV_COOLDOWN"))
-		PHX.UI:CreateVGUIType("mv_use_ulx_votemaps","check","SERVER",grid,PHX:FTranslate("PHXM_MV_USE_ULX_VOTEMAPS"))
-		PHX.UI:CreateVGUIType("mv_mapprefix","textentry","SERVER",grid, PHX:FTranslate("TEXTENTRY_MV_PREFIX"))
-		PHX.UI:CreateVGUIType("mv_maplimit", "slider", 	{min = 2, max = 80, init = GetConVar("mv_maplimit"):GetInt(), dec = 0, kind = "SERVER"}, grid, PHX:FTranslate("PHXM_MV_MAPLIMIT"))
-		PHX.UI:CreateVGUIType("mv_timelimit", "slider", {min = 15, max = 90, init = GetConVar("mv_timelimit"):GetInt(), dec = 0, kind = "SERVER"}, grid, PHX:FTranslate("PHXM_MV_TIMELIMIT"))
-		PHX.UI:CreateVGUIType("mv_mapbeforerevote", "slider", 	{min = 1, max = 10, init = GetConVar("mv_mapbeforerevote"):GetInt(), dec = 0, kind = "SERVER"}, grid, PHX:FTranslate("PHXM_MV_MAPBEFOREREVOTE"))
-		PHX.UI:CreateVGUIType("mv_rtvcount", "slider", 	{min = 2, max = game.MaxPlayers(), init = GetConVar("mv_rtvcount"):GetInt(), dec = 0, kind = "SERVER"}, grid, PHX:FTranslate("PHXM_MV_RTVCOUNT"))
-		PHX.UI:CreateVGUIType("s1","spacer",nil,grid,"" )
-		PHX.UI:CreateVGUIType("", "label", false, grid, PHX:FTranslate("PHXM_MV_EXPLANATION1"))
-		PHX.UI:CreateVGUIType("", "label", false, grid, PHX:FTranslate("PHXM_MV_EXPLANATION2"))
-		PHX.UI:CreateVGUIType("s2","spacer",nil,grid,"" )
-		PHX.UI:CreateVGUIType("", "label", false, grid, PHX:FTranslate("PHXM_MV_EXPLANATION3"))
+		PHX.UI:CreateVGUIType("", "label", "PHX.MenuCategoryLabel", grid, "PHXM_MV_SETTINGS")
+		PHX.UI:CreateVGUIType("mv_allowcurmap","check","SERVER",grid,"PHXM_MV_ALLOWCURMAP")
+		PHX.UI:CreateVGUIType("mv_cooldown","check","SERVER",grid,"PHXM_MV_COOLDOWN")
+		PHX.UI:CreateVGUIType("mv_use_ulx_votemaps","check","SERVER",grid,"PHXM_MV_USE_ULX_VOTEMAPS")
+		PHX.UI:CreateVGUIType("mv_mapprefix","textentry","SERVER",grid, "TEXTENTRY_MV_PREFIX")
+        PHX.UI:CreateVGUIType("","spacer",nil,grid,"" )
+		PHX.UI:CreateVGUIType("mv_maplimit", "slider", 	{min = 2, max = 80, init = GetConVar("mv_maplimit"):GetInt(), dec = 0, kind = "SERVER"}, grid, "PHXM_MV_MAPLIMIT")
+		PHX.UI:CreateVGUIType("mv_timelimit", "slider", {min = 15, max = 90, init = GetConVar("mv_timelimit"):GetInt(), dec = 0, kind = "SERVER"}, grid, "PHXM_MV_TIMELIMIT")
+		PHX.UI:CreateVGUIType("mv_mapbeforerevote", "slider", 	{min = 1, max = 10, init = GetConVar("mv_mapbeforerevote"):GetInt(), dec = 0, kind = "SERVER"}, grid, "PHXM_MV_MAPBEFOREREVOTE")
+		PHX.UI:CreateVGUIType("mv_rtvcount", "slider", 	{min = 2, max = game.MaxPlayers(), init = GetConVar("mv_rtvcount"):GetInt(), dec = 0, kind = "SERVER"}, grid, "PHXM_MV_RTVCOUNT")
+		PHX.UI:CreateVGUIType("","spacer",nil,grid,"" )
+		PHX.UI:CreateVGUIType("", "label", false, grid, "PHXM_MV_EXPLANATION1")
+		PHX.UI:CreateVGUIType("", "label", false, grid, "PHXM_MV_EXPLANATION2")
+		PHX.UI:CreateVGUIType("","spacer",nil,grid,"" )
+		PHX.UI:CreateVGUIType("", "label", false, grid, "PHXM_MV_EXPLANATION3")
 		
-		PHX.UI:CreateVGUIType("", "btn", {max = 2, textdata = {
-			[1] = {PHX:FTranslate("PHXM_MV_START"), function(self) 
+		PHX.UI:CreateVGUIType("", "btn", {
+			[1] = {"PHXM_MV_START", function(self) 
 				if (ulx and ulx ~= nil) then
-					LocalPlayer():ConCommand("map_vote")
+					LocalPlayer():ConCommand("ulx map_vote")
 				else
 					LocalPlayer():ConCommand("mv_start")
 				end
 			end
 			},
-			[2] = {PHX:FTranslate("PHXM_MV_STOP"), function(self)
+			[2] = {"PHXM_MV_STOP", function(self)
 				if (ulx and ulx ~= nil) then
-					LocalPlayer():ConCommand("unmap_vote")
+					LocalPlayer():ConCommand("ulx unmap_vote")
 				else
 					LocalPlayer():ConCommand("mv_stop")
 				end
 			end}
-			}
-		},grid,"")
+			}, grid,"")
 	
 		local PanelModify = PHX.UI.PnlTab:AddSheet("", panel, "vgui/ph_iconmenu/m_map.png")
 		PHX.UI.PaintTabButton(PanelModify, PHX:FTranslate("PHXM_TAB_MAPVOTE"))
@@ -722,8 +787,8 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 	PHX.UI:PlayerOption()
 	PHX.UI:PlayerModelSelections()
 	
-	-- Custom Hook Menu here. Give 1 second for better "safe-calling"...
-	timer.Simple(1, function() 
+	-- Custom Hook Menu here. Give 0.5 second for better "safe-calling"...
+	timer.Simple(0.5, function() 
 		hook.Call("PH_CustomTabMenu", nil, PHX.UI.PnlTab, 
 		function(cmd,typ,data,panel,text) 
 			PHX.UI:CreateVGUIType(cmd,typ,data,panel,text)

@@ -10,8 +10,10 @@ local function CvarChangedMessage( ... )
 	PHX:AddChat( PHX:Translate("PHXM_CVAR_CHANGED", ... ), Color(255, 194, 14) )
 end
 
-local function ConfirmMessage( ... )
-	Derma_Message( PHX:Translate("PHXM_CVAR_CHANGED", ... ), "INFO", "OK" )
+-- [!] VarArgs as Table
+local function ConfirmMessage( cvar, value )
+	--Derma_Message( PHX:Translate("PHXM_CVAR_CHANGED", ... ), "INFO", "OK" )
+	PHX:MsgBox( {"PHXM_CVAR_CHANGED", cvar, value}, "MISC_INFO", "MISC_OK" )
 end
 
 PHX.CLUI = {
@@ -22,24 +24,20 @@ PHX.CLUI = {
 	end
 
 	if ( d and type(d) == "string" ) then
-		local chk = vgui.Create("DCheckBoxLabel")
-		chk:SetPos(0, p:GetRowHeight() / 2)
-		chk:SetSize(p:GetColWide(),p:GetRowHeight())
-		chk:SetText(l)
+        local pnl = vgui.Create("DPanel")
+		pnl:SetSize(p:GetColWide() * 0.85,p:GetRowHeight())
+		pnl:SetBackgroundColor( Color(0,0,0,0) )
+    
+		local chk = vgui.Create("DCheckBoxLabel", pnl)
+        chk:Dock(FILL)
+		--chk:SetPos(0,0)
+		chk:SetSize(p:GetColWide() * 0.85,p:GetRowHeight())
+		chk:SetText(PHX:QTrans(l))	--chk:SetText(l)
 		chk:SetFont("HudHintTextLarge")
-		local num = GetConVar(c):GetBool()
-		if num then 
-			chk:SetChecked(true); chk:SetValue(1);
-		else
-			chk:SetChecked(false); chk:SetValue(0);
-		end
+		chk:SetValue( GetConVar(c):GetBool() ) -- forcebool, don't use PHX:CLCVar()
 		function chk:OnChange(bool)
 			local v = 0
-			if bool then
-				v = 1
-			else
-				v = 0
-			end
+			v = (bool and 1 or 0)
 			if d == "SERVER" then
 				net.Start("SvCommandReq")
 				  net.WriteString(c)
@@ -55,7 +53,7 @@ PHX.CLUI = {
 				end
 			end
 		end
-		return chk
+		return pnl
 	else
 		ThrowError(2, c, "string", d)
 	end
@@ -64,8 +62,8 @@ end,
 
 ["label"] = function( c, d, p, l )
 	local txt = vgui.Create("DLabel")
-	txt:SetSize(p:GetColWide(),p:GetRowHeight())
-	txt:SetText(l)
+	txt:SetSize(p:GetColWide() * 0.85,p:GetRowHeight())
+	txt:SetText(PHX:QTrans(l)) --txt:SetText(l)
 	if !d then
 		txt:SetFont("HudHintTextLarge")
 	else
@@ -77,7 +75,7 @@ end,
 
 ["spacer"] = function( c, d, p, l )
 	local pnl = vgui.Create("DPanel")
-	pnl:SetSize(p:GetColWide(),p:GetRowHeight())
+	pnl:SetSize(p:GetColWide() * 0.85,p:GetRowHeight())
 	pnl:SetBackgroundColor(Color(0,0,0,0))
 	
 	return pnl
@@ -90,21 +88,16 @@ end,
 	end
 
 	if ( d and type(d) == "table" ) then
-		-- How many buttons do we need to make. 
-		-- Note: Currently, Maximum is 6 buttons per 1 panel segment.
-		
-		-- Legal Value. Override value if they are invalid or less then specific.
-		local legal = d.max
-		if d.max < 1 then legal = 1 end
-		if d.max > 6 then legal = 6 end
+
+		local legal = #d
 		
 		local pnl = vgui.Create("DPanel")
-		pnl:SetSize(p:GetColWide(),p:GetRowHeight())
+		pnl:SetSize(p:GetColWide() * 0.85,p:GetRowHeight())
 		pnl:SetBackgroundColor( Color(0,0,0,0) )
 		
 		local function m_btncreation( m_panel, m_panelText, m_func )
 			local btn = vgui.Create("DButton", m_panel)
-			btn:SetText(m_panelText)
+			btn:SetText(PHX:QTrans(m_panelText)) --btn:SetText(m_panelText)
 			btn:Dock(LEFT)
 			btn:DockMargin(0,2,8,2)
 			-- If this looks stupid, but it working, it ain't stupid!
@@ -114,7 +107,7 @@ end,
 		end
 		
 		for i=1,legal do
-			m_btncreation(pnl,d.textdata[i][1], d.textdata[i][2])
+			m_btncreation(pnl, d[i][1], d[i][2])	--1 = text string, 2 = function
 		end
 		return pnl
 	else
@@ -131,20 +124,28 @@ end,
 	if ( d and type(d) == "table" ) then
 		local min = d.min
 		local max = d.max
-		local dval = d.init
+		local dval = 0 -- this is fail-safe value, we can't guarantee the value of `d.init` yet.
 		local dec = d.dec
 		local kind = d.kind
 		local float = d.float
 		
+		if d.init == nil then
+			dval = c	-- use from 'c' instead.
+		elseif isstring(dval) or d.init == "DEF_CONVAR" then
+			dval = PHX:QCVar(c)	-- we can now enable default initialization value from the 'ConVar' (c) argument. See sh_propchooser.lua at ADDON_INFO.
+		else
+			dval = d.init -- assume it's correct number value. We keep this because there are still GetCVar() being used in cl_menu.lua
+		end
+		
 		local pnl = vgui.Create("DPanel")
-		pnl:SetSize(p:GetColWide()*0.9,p:GetRowHeight()-6)
+		pnl:SetSize(p:GetColWide() * 0.85,p:GetRowHeight()-6)
 		pnl:SetBackgroundColor(Color(120,120,120,200))
 		
 		local slider = vgui.Create("DNumSlider",pnl)
 		slider:SetPos(10,0)
-		slider:SetSize(pnl:GetWide(),pnl:GetTall())
-		slider:SetText(l)
-		slider:SetToolTip(l)
+		slider:SetSize(pnl:GetWide()*0.9,pnl:GetTall())
+		slider:SetText(PHX:QTrans(l))		--slider:SetText(l)
+		slider:SetToolTip(PHX:QTrans(l))	--slider:SetToolTip(l)
 		slider:SetMin(min)
 		slider:SetMax(max)
 		slider:SetValue(dval)
@@ -184,13 +185,15 @@ end,
 	if ( d and type(d) == "Player" and IsValid(d) ) then
 		local ply = d
 		local pnl = vgui.Create("DPanel")
-		pnl:SetSize(p:GetColWide()*0.9,p:GetRowHeight()-6)
+		pnl:SetSize(p:GetColWide() * 0.85,p:GetRowHeight()-6)
 		pnl:SetBackgroundColor(Color(20,20,20,150))
 		
+        local buttonsize = p:GetColWide() * 0.85 / 24
+        
 		local ava = vgui.Create("AvatarImage", pnl)
 		ava:Dock(LEFT)
-		ava:SetSize(24,24)
-		ava:SetPlayer(ply,32)
+		ava:SetSize(60,0)
+		ava:SetPlayer(ply,64)
 		
 		local name = vgui.Create("DLabel", pnl)
 		name:Dock(LEFT)
@@ -204,7 +207,7 @@ end,
 		local button = vgui.Create("DButton", pnl)
 		button:Dock(RIGHT)
 		button:DockMargin(4,0,4,0)
-		button:SetSize(24,0)
+		button:SetSize(60,0)
 		button:SetText("")
 		button.Paint = function(self)
 			surface.SetDrawColor(90,90,90,0)
@@ -242,7 +245,7 @@ end,
 
 ["binder"] = function( c, d, p, l )	
 	local pnl = vgui.Create("DPanel")
-	pnl:SetSize(p:GetColWide(),p:GetRowHeight())
+	pnl:SetSize(p:GetColWide() * 0.85,p:GetRowHeight())
 	pnl:SetBackgroundColor( Color(0,0,0,0) )
 	
 	local label = vgui.Create("DLabel", pnl)
@@ -250,7 +253,7 @@ end,
 	label:SetSize(pnl:GetWide()*0.75,0)
 	label:DockMargin(2,0,0,0)
 	label:SetFont("HudHintTextLarge")
-	label:SetText(l)
+	label:SetText(PHX:QTrans(l)) --label:SetText(l)
 	
 	local bind = vgui.Create("DBinder", pnl)
 	bind:Dock(LEFT)
@@ -284,7 +287,7 @@ end,
 	if (!l) then
 		label:SetText(PHX:FTranslate("SUBTYPE_PREFERED_LANG"))
 	else
-		label:SetText(l)
+		label:SetText(PHX:QTrans(l))
 	end
 	
 	local cbox = vgui.Create("DComboBox", pnl)
@@ -355,35 +358,48 @@ end,
 -- This will translated in future version.
 ["textentry"] = function( c, d, p, l )
 	local pnl = vgui.Create("DPanel")
-	pnl:SetSize(p:GetColWide(),p:GetRowHeight())
+	pnl:SetSize(p:GetColWide() * 0.85,p:GetRowHeight())
 	pnl:SetBackgroundColor( Color(0,0,0,0) )
 	
 	local label = vgui.Create("DLabel", pnl)
 	label:Dock(LEFT)
-	label:SetSize(300,0)
+	label:SetSize(pnl:GetWide()*0.6,0)
 	label:DockMargin(2,0,0,0)
 	label:SetFont("HudHintTextLarge")
-	label:SetText(l)
+	label:SetText(PHX:QTrans(l))
 	
 	local textEntry = vgui.Create("DTextEntry", pnl)
+    local cvar = GetConVar(c):GetString()
 	textEntry:Dock(LEFT)
-	textEntry:SetSize(256, 0)
+	textEntry:SetSize(pnl:GetWide()*0.25, 0)
 	textEntry:DockMargin(4,2,0,2)
-	textEntry:SetValue( GetConVar(c):GetString() )
+    -- hack: Hexadecimal color values will ignores '#', i think this was intentional by gmod.
+    if util.IsHexColor( cvar ) then
+        textEntry:SetValue( "#" .. cvar )
+    else
+        textEntry:SetValue( GetConVar(c):GetString() )
+    end
+    textEntry:SetToolTip(PHX:QTrans(l))
 	
 	local btn = vgui.Create("DButton", pnl)
 	btn:Dock(LEFT)
 	btn:SetSize(64,0)
 	btn:DockMargin(4,2,0,2)
-	btn:SetText("Set")
+	btn:SetText(PHX:QTrans("MISC_SET")) --btn:SetText("Set")
 	
 	textEntry.EnteredText = ""
 	
 	function textEntry:OnEnter()
 		-- avoid using backslash for ph_fc_cue_path
 		local properText = string.Replace(self:GetValue(), "\\", "/")
-		self:SetText(properText)
-		self.EnteredText = properText
+        
+        -- Hack: Hexadecimal colors
+        if util.IsHexColor( properText ) then
+            self:SetText( "#" .. properText )
+        else
+            self:SetText( properText )
+        end
+        self.EnteredText = properText
 	end
 	
 	function btn:DoClick()
@@ -399,14 +415,15 @@ end,
 			ConfirmMessage(c, textEntry.EnteredText)
 			CvarChangedMessage(c, textEntry.EnteredText)
 		else
-			Derma_Message("Text is empty or you didn't pressed ENTER key.", "Warning", "OK")
+			PHX:MsgBox("PHXM_MSG_INPUT_IS_EMPTY", "MISC_WARN", "MISC_OK")
 		end
 	end
 	
 	return pnl
 end,
 
--- todo: Add Customisable Combo Box in future version.
+-- todo: Add Customisable Combo Box in future version
+    -- todo: not yet
 
 -- Add More here :)
 }

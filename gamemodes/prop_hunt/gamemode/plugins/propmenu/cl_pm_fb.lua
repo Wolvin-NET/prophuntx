@@ -1,7 +1,5 @@
--- Currently, this isn't translated. Maybe in future version of PH:X, sorry everyone!
-
 local serverContents = {}
-serverContents["GAME"]	= "All Contents (Not All Players/Server will have same contents as you)"
+serverContents["GAME"]	= "ALL" -- DO NOT TRANSLATE FROM HERE!
 serverContents["MOD"]	= "Garry's Mod"
 
 hook.Add("InitPostEntity", "reqServerContent", function()
@@ -19,11 +17,15 @@ net.Receive("PCR.TheServerGameContents", function()
 	for _,v in pairs(games) do
 		if tblGames[v.folder] and tblGames[v.folder] ~= nil then
 			if !v.mounted then -- add subfix if any game contents aren't mounted by client.
-				tblGames[v.folder] = v.title .. " [Not Mounted]"
+				--tblGames[v.folder] = v.title .. " [Not Mounted]"
+				tblGames[v.folder] = PHX:FTranslate("PHZ_pcr_fb_notmounted", v.title)
 			end
 		end
 	end
 	
+    -- Replace the ["GAME"] into translatable one
+    serverContents["GAME"]  = PHX:FTranslate("PHZ_pcr_fb_allcontent")
+    
 	for modname,title in pairs(tblGames) do
 		serverContents[modname] = title
 	end
@@ -54,7 +56,7 @@ net.Receive("phxpm.fb_openPM_Editor", function()
 			local isFor = net.ReadTable()
 			thePanel = PHXPM_openFileBrowser( ply, isFor.global, isFor.sub, serverContents )
 		else
-			chat.AddText(Color(220,0,0), "[Prop Menu] Error: Custom Prop Addition is Disabled!")
+			PHX:ChatInfo("PCR_EDT_ERROR_DISABLED", "ERROR")
 		end
 	
 	end
@@ -70,10 +72,10 @@ net.Receive("phxpm.fb_UpdateConfirmed_Editor", function()
 	  local fail = false
 	
 		if isError then
-			Derma_Message("Your changes hasn't been saved due to Errors.\nPlease check on your server console!", "Warning", "OK")
+			PHX:MsgBox( "PCR_EDITOR_MSG_ERROR", "MISC_WARN", "MISC_OK" )
 			fail = true
 		else
-			Derma_Message("Your changes and Custom Prop data has has been saved and updated successfully.", "Info", "OK")
+			PHX:MsgBox( "PCR_EDITOR_MSG_SUCC", "MISC_INFO", "MISC_OK" )
 		end
 
 		if thePanel and thePanel.isOpen and (thePanel.frame and thePanel.frame ~= nil) and thePanel.frame:IsValid() then

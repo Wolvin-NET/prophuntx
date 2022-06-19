@@ -17,7 +17,6 @@ local nets = {
 	
 	"PH_ForceCloseTauntWindow", 
 	"PH_AllowTauntWindow", 
-	--"PH_RoundDraw_Snd",  // Obsolete
 	"PH_TeamWinning_Snd", 
 	"AutoTauntSpawn", 
 	"AutoTauntRoundEnd", 
@@ -33,6 +32,9 @@ local nets = {
 	"SvCommandTextEntry",
 	"SvCommandLang",
 	
+    "PHX.DeathNoticeDecoy",
+	"PHX.UpdatePropbanInfo",
+    
 	"PHX.scan_ReqTaunts",
 	"PHX.scan_SendTauntLists"
 }

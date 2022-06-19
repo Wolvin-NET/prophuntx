@@ -1,7 +1,7 @@
 PCR = {}
 PCR.__index = PCR
 
-PCR._VERSION = "X2Z"
+PCR._VERSION = "X2Z v2"
 
 PCR.BannedProp = {}
 PCR.CustomProp = {}
@@ -43,56 +43,56 @@ end
 
 if CLIENT then
 
-	-- Do not attempt to translate this because this was part of Legacy Addon imported into PHX and any translation you made will only loaded once after the gamemode is loaded!
-	-- I'm currently attempting to make a newer format in Prop Hunt: Zero about Plugins which is neater. So please Keep in this way!
 	local ADDON_INFO = {
-		name	= "Prop Menu",
-		version	= PCR._VERSION,
-		info	= "Prop Menu Integrated Plugin. Press [ "..  input.GetKeyName( PHX:GetCLCVar( "ph_prop_menu_key" ) ):upper() .." ] to open Prop Menu.",
+		-- name, version, info ARE NOT TRANSLATEABLE!!!
+		name	= "Prop Menu", 	-- DO NOT TRANSLATE
+		version	= PCR._VERSION, -- DO NOT TRANSLATE
+		info	= "Prop Menu Integrated Plugin for Prop Hunt: X", -- DO NOT TRANSLATE
 		
 		settings = {
-			{"", "label", false, "To change bind keys, go to [Player] tab." },
+			{"", "label", false, "PCR_PLUG_LBL_BINDKEY" },
 			
-			{"", "label", false, "Prop Menu Editor (Custom Prop Only)" },
-			{"", "btn", {max = 1, textdata = {
-				[1] = {"Open Custom Prop Editor (BETA)", function()
+			{"", "label", false, "PCR_PLUG_LBL_EDITOR" },
+			{"", "btn", {
+				[1] = {"PCR_PLUG_BTN_OPEN_EDT", function()
 					if PHX:GetCVar( "pcr_allow_custom" ) then
 						if LocalPlayer():CheckUserGroup() or LocalPlayer():IsSuperAdmin() then
 							net.Start("phxpm.fb_RequestOpen_w")
 							net.SendToServer()
 						end
 					else
-						Derma_Message(
-							"Warning: Custom Prop Addition (pcr_allow_custom) is set to 0.\nYou Must Enable this feature in order to edit your custom prop!\nAfter enabling this feature, a Map Change is also required!",
-							"Warning",
-							"OK"
+						PHX:MsgBox(
+							"PCR_PLUG_WARN_MSG",
+							"PCR_WINDOW_TITLE",
+							"MISC_OK"
 						)
 					end
-				end} }
+				end}
 			}, ""},
 			
-			{"", "label", false, "Common Settings" },
-			{"pcr_enable", "check", "SERVER", "Enable Prop Chooser feature"},
-			{"pcr_allow_custom", "check", "SERVER", "(Require Map Change) Allow custom prop to be included in to list?" },
-			{"pcr_enable_prop_ban", "check", "SERVER", "(Require Map Change) Do not include banned props into Prop Chooser list?" },
-			{"pcr_max_use" , "slider", {min = -1, max = 20, init = 3, dec = 0, kind = "SERVER"}, "Maximum usage limit for player use this feature. -1 means unlimited usage."},
-			{"pcr_limit_enable", "check", "SERVER", "(Require Map Change) Limit addition to Prop Chooser list. (see 'pcr_max_prop_list' for how many models you'll needed.)"},
-			{"pcr_max_prop_list" , "slider", {min = 20, max = 2048, init = 100, dec = 0, kind = "SERVER"}, "Maximum number of props that will be listed into Prop Chooser list."},
+			{"", "label", false, "PCR_PLUG_LBL_COMSET" },
+			{"pcr_enable", "check", "SERVER", "PCR_PLUG_ENABLE"},
+			{"pcr_allow_custom", "check", "SERVER", "PCR_PLUG_ALLOW_CUSTOM" },
+			{"pcr_enable_prop_ban", "check", "SERVER", "PCR_PLUG_PROP_BAN" },
+			{"pcr_max_use" , "slider", {min = -1, max = 20, init = "DEF_CONVAR", dec = 0, kind = "SERVER"}, "PCR_PLUG_USAGE_LIMIT"},
+			{"pcr_limit_enable", "check", "SERVER", "PCR_PLUG_PROP_LIMIT"},
+			--{"pcr_max_prop_list" , "slider", {min = 20, max = 2048, init = 100, dec = 0, kind = "SERVER"}, "PCR_PLUG_PROP_LIMITMAX"},
+			{"pcr_max_prop_list" , "slider", {min = 20, max = 2048, dec = 0, kind = "SERVER"}, "PCR_PLUG_PROP_LIMITMAX"}, -- missing init, test
 			
-			{"", "label", false, "Technical Settings" },
-			{"pcr_use_ulx_menu", "check", "SERVER", "Should Prop Menu can be accessed by Console command (0) or ULX command (1)?" },
-			{"pcr_delay_use" , "slider", {min = 1, max = 10, init = 2, dec = 0, kind = "SERVER"}, "Delay in seconds before player use next Props in Prop Chooser menu."},
-			{"pcr_kick_invalid", "check", "SERVER", "Kick any user attempt to access Invalid Model (4x Maximum threshold)"},
-			{"pcr_use_room_check", "check", "SERVER", "Use room check before player use other objects?"},
+			{"", "label", false, "PCR_PLUG_LBL_TECHSET" },
+			{"pcr_use_ulx_menu", "check", "SERVER", "PCR_PLUG_USE_ULXMENU" },
+			{"pcr_delay_use" , "slider", {min = 1, max = 10, dec = 0, kind = "SERVER"}, "PCR_PLUG_USE_DELAY"}, --missing init, test
+			{"pcr_kick_invalid", "check", "SERVER", "PCR_PLUG_KICK_INVALID"},
+			{"pcr_use_room_check", "check", "SERVER", "PCR_PLUG_SPACE_CHECK"},
 			
-			{"", "label", false, "Experimental" },
-			{"pcr_enable_bbox_limit", "check", "SERVER", "(Require Map Change) Check Entity BBox Limit before adding to Prop Chooser list." },
-			{"pcr_bbox_max_height" , "slider", {min = 16, max = 256, init = 96, dec = 0, kind = "SERVER"}, "BBox CollissionBound Maximum Height Limit." },
-			{"pcr_bbox_max_width" , "slider", {min = 16, max = 256, init = 72, dec = 0, kind = "SERVER"}, "BBox CollissionBound Maximum Width Limit." },
+			{"", "label", false, "PCR_PLUG_LBL_EXPSET" },
+			{"pcr_enable_bbox_limit", "check", "SERVER", "PCR_PLUG_X_BBOX" },
+			{"pcr_bbox_max_height" , "slider", {min = 16, max = 256, "DEF_CONVAR", dec = 0, kind = "SERVER"}, "PCR_PLUG_X_BBOX_MAX" },
+			{"pcr_bbox_max_width" , "slider", {min = 16, max = 256, "DEF_CONVAR", dec = 0, kind = "SERVER"}, "PCR_PLUG_X_BBOX_MIN" },
 			
-			{"", "label", false, "Players" },
-			{"pcr_only_allow_certain_groups", "check", "SERVER", "Should Prop Menu can only accessed by certain groups? (e.g: Donator, etc...)" },
-			{"pcr_notify_messages", "check", "SERVER", "Notify a message on how to use Prop Chooser?"},
+			{"", "label", false, "PCR_PLUG_LBL_PLAYERSET" },
+			{"pcr_only_allow_certain_groups", "check", "SERVER", "PCR_PLUG_ONLY_GROUPS" },
+			{"pcr_notify_messages", "check", "SERVER", "PCR_PLUG_NOTIFYMSG"},
 		},
 		
 		client	= {}

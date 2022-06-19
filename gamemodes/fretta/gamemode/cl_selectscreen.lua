@@ -44,12 +44,16 @@ function PANEL:Init()
 		Derma_Hook( self.btnCancel, "ApplySchemeSettings", 	"Scheme", 		"CancelButton" )
 		Derma_Hook( self.btnCancel, "PerformLayout", 		"Layout", 		"CancelButton" )
 		
-	self.lblHoverText = vgui.Create( "DLabel", self )
+		-- changed to RichText
+	--self.lblHoverText = vgui.Create( "DLabel", self )
+	self.lblHoverText = vgui.Create( "RichText", self )
 		self.lblHoverText:SetText( "" )
-		self.lblHoverText:SetFont( "FRETTA_MEDIUM" )
-		self.lblHoverText:SetColor( color_white )
+		self.lblHoverText:SetFGColor( color_white ) -- we don't need SetBGColor i guess.
 		self.lblHoverText:SetContentAlignment( 8 )
-		self.lblHoverText:SetWrap( true )
+		--self.lblHoverText:SetWrap( true )
+		-- function self.lblHoverText:PerformLayout()
+			-- self.lblHoverText:SetFontInternal( "FRETTA_MEDIUM" ) --:SetFont
+		-- end
 		
 	self.lblFooterText = vgui.Create( "DLabel", self )
 		self.lblFooterText:SetText( "" )
@@ -143,14 +147,28 @@ function PANEL:SetHeaderText( strName )
 
 end
 
-function PANEL:SetForHelp( strHelpText )
+function PANEL:SetForHelp( strHelpText, ContribsText )
 	
-	self.lblHoverText:SetText( PHX:FTranslate("HELP_F1") or "Error: No Help found." )
+	self.lblHoverText:SetText( PHX:FTranslate("HELP_F1")  or "Error: No Help found." )
+	
+	-- Contributors & Donators
+    local c =""
+	if ContribsText and ContribsText ~= nil then
+		c = table.concat(GAMEMODE.PHXContributors,"\n- ")
+	end
+    self.lblHoverText:InsertColorChange(220,220,220,255)
+	self.lblHoverText:AppendText("\n\nDonators & Contributors:\n- " .. c)
+	timer.Simple(0, function()
+		self.lblHoverText.PerformLayout = function(me)
+			--me:SetToFullHeight()
+			me:SetFontInternal("FRETTA_SMALL")
+		end
+	end)
 
 end
 
 /*---------------------------------------------------------
-   SetHeaderText
+   SetHeaderText	-- Wolvin: this is unused as we're now using 'PANEL:SetForHelp' instead.
 ---------------------------------------------------------*/
 function PANEL:SetHoverText( strName )
 
@@ -163,7 +181,8 @@ end
 ---------------------------------------------------------*/
 function PANEL:GetHoverText( strName )
 
-	return self.lblHoverText:GetValue()
+	return self.lblHoverText:GetValue()	-- do RichText support it ?
+	-- Limit: GetText only returns 1023 of strings.
 
 end
 
@@ -271,15 +290,17 @@ function PANEL:Paint()
 	GAMEMODE:PaintSplashScreen( self:GetWide(), self:GetTall() )
 
 end
+GM.VGUISplash = {}
+GM.VGUISplash = vgui.RegisterTable( PANEL, "DPanel" )
 
-vgui_Splash = vgui.RegisterTable( PANEL, "DPanel" )
-local TeamPanel = nil
+local TeamPanel = {}
 
+-- Replaced on prop_hunt -> cl_init.lua
 function GM:ShowTeam()
 
 	if ( !IsValid( TeamPanel ) ) then 
 	
-		TeamPanel = vgui.CreateFromTable( vgui_Splash )
+		TeamPanel = vgui.CreateFromTable( GAMEMODE.VGUISplash )
 		TeamPanel:SetHeaderText( PHX:FTranslate("DERMA_TEAMSELECT") or "Choose Team" )
 
 		local AllTeams = team.GetAllTeams()

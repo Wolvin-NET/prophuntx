@@ -1,23 +1,45 @@
 PHX.Messagedata = {}
 
+local function UPDATE_DO_FETCH_BACKUP()
+	
+	print( "[!PH:X Update] Retrying with backup update... " )
+	
+	http.Fetch(
+		GAMEMODE.UPDATEURLBACKUP,
+		function(body,len,_,code)
+			if code < 400 and (body ~= "" and tonumber(len) > 0) then
+				PHX:NotifyUpdate( body )
+				return
+			end
+			
+			print( "[!PH:X Update] Error retreiving backup update info. Reason: Data is Empty or Unknown Error. (HTTP Code: "..tostring(code)..", Size: ".. len )
+		end,
+		function(err)
+			print("[!PH:X Update] Error retreiving backup update info. Reason: " .. err)
+		end
+	)
+	
+end
+
 local function UPDATE_DO_FETCH()
 
 	http.Fetch(
 		GAMEMODE.UPDATEURL,
-		function(body,len,head,code)
-			if tonumber(code) < 400 and (body ~= "") then
+		function(body,len,_,code)
+			if tonumber(code) < 400 and (body ~= "" and tonumber(len) > 0) then
 				PHX:NotifyUpdate( body )
-				return true
-			else
-				print("[!PH:X Update] Error retreiving update. Reason: Data is Empty or Unknown Error.")
+				return
 			end
+			
+			print( "[!PH:X Update] Error retreiving update info. Reason: Data is Empty or Unknown Error. (HTTP Code: "..tostring(code)..", Size: ".. len )
+			UPDATE_DO_FETCH_BACKUP()
 		end,
 		function(err)
-			print("[!PH:X Update] Error retreiving update. Reason: " .. err)
+			print("[!PH:X Update] Error retreiving update info. Reason: " .. err)
+			UPDATE_DO_FETCH_BACKUP()
 		end
 	)
 
-	return false
 end
 
 function PHX:PrintUpdateConsole()
@@ -29,7 +51,7 @@ function PHX:PrintUpdateConsole()
 	end
 	
 	if (!self.Messagedata.version or !self.Messagedata.revision or !self.Messagedata.url) then
-		MsgC(Color(230,20,20), "[!!] Error Retreiving updates info - some update elements contains nothing.")
+		MsgC(Color(230,20,20), "[!!] Error Retreiving updates info - some update elements are missing.")
 		return
 	end
 	
@@ -42,27 +64,31 @@ end
 function PHX:NotifyUpdate(result)
 	
 	if (!result or result == "") then
-		print("[!PH:X Update] Warning: Data contains nothing.")
+		print("[!PH:X Update] Warning: Data contains nothing!")
 		return false,false,false
 	end
 	
 	self.VerboseMsg("[*PH: X Update] Incoming update result data, parsing infos...")
 	local data = util.JSONToTable(result)
 	
+	if !data or data == nil then
+		print("[!PH:X Update] Error: Unable to parse update info, aborting!")
+		return false,false,false
+	end
+	
 	local ver = data.version
 	local rev = data.revision
 	local url = data.url
 	local log = data.notice
 
-	-- Somehow this gets unreliable?
 	PHX.Messagedata = {
-		version 	= data.version,
-		revision 	= data.revision,
-		url		= data.url,
-		info	= data.notice
+		version 	= ver,
+		revision 	= rev,
+		url			= url,
+		info		= log
 	}
 	
-	-- write data instead. CLIENT SIDE ONLY.
+	-- write to /data instead. CLIENT SIDE ONLY.
 	if CLIENT then
 		file.Write(PHX.ConfigPath .. "/phx_update_info.txt", result)
 	end
@@ -99,7 +125,7 @@ local cooldown	= 86400
 hook.Add("Initialize", "PHX.CheckUpdateInit", function()
 
 timer.Simple(3, function()
-	local nextUpdate = cookie.GetNumber("nextUpdate",0)
+	local nextUpdate = cookie.GetNumber("phxNextUpdateInfo",0)
 	local time		 = os.time()
 	
 	if time < nextUpdate then
@@ -107,8 +133,8 @@ timer.Simple(3, function()
 	else	
 		print("[PHX] Checking Update...")
 		PHX:CheckUpdate()
-		cookie.Set("nextUpdate", time + cooldown)
-		print("[PHX] Update has been checked. Your next update notice will be displayed on "..os.date("%Y/%m/%d - %H:%M:%S", cookie.GetNumber("nextUpdate",0)) )
+		cookie.Set("phxNextUpdateInfo", time + cooldown)
+		print("[PHX] Update has been checked. Your next update notice will be displayed on "..os.date("%Y/%m/%d - %H:%M:%S", cookie.GetNumber("phxNextUpdateInfo",0)) )
 	end
 end)
 	

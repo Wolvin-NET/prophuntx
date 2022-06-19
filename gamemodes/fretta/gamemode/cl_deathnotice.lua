@@ -126,15 +126,19 @@ function GM:AddDeathNotice( Attacker, team1, Inflictor, Victim , team2 )
 	local color2
 	
 	
-	if ( team1 == -1 ) then color1 = table.Copy( NPC_Color ) 
+	if ( team1 == -1 ) then color1 = table.Copy( NPC_Color ) 	-- Warning: NPC_Color don't exists!
 	else color1 = table.Copy( team.GetColor( team1 ) ) end
 	
 	if ( team2 == -1 ) then color2 = table.Copy( NPC_Color ) 
 	else color2 = table.Copy( team.GetColor( team2 ) ) end
 	
 	if Victim == Attacker then
-		pnl:AddText( Attacker, color1)
+		pnl:AddText( Attacker, color1 )
 		pnl:AddText( PHX:GetRandomTranslated("SUICIDEMSG") or "is ded." )
+	elseif Victim == "#ph_fake_prop" then
+		pnl:AddText( Attacker, Color(255,174,200,255) )
+        pnl:AddIcon( "ph_fake_prop" )
+		pnl:AddText( PHX:GetRandomTranslated("DECOY_PROP") or "Decoy Prop" )
 	else
 		pnl:AddText( Attacker, color1)
 		pnl:AddIcon( Inflictor )

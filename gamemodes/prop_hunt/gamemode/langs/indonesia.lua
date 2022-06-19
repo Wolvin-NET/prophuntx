@@ -9,7 +9,7 @@ LANG.Author			= "Wolvindra-Vinzuerio, KamFretoZ" -- Only accept STRINGS.
 LANG.AuthorURL		= "https://steamcommunity.com/profiles/76561198210777189"
 
 -- Special Section that isn't String-based
-LANG.SUICIDEMSG = { --> FRETTA
+LANG.SUICIDEMSG = {  -- Fix me: there was addition text here but feel free to add more.
 	"kesandung semut.",
 	"ditampol emak-emak kos.",
 	"kesantet.",
@@ -56,6 +56,12 @@ LANG.RANDOM_SPECTATORS = { --> FRETTA
 	" ",
 }
 
+LANG["PHX_TEAM_CONNECTING"] = "Menyambung"
+LANG["PHX_TEAM_PROPS"]		= "Prop"
+LANG["PHX_TEAM_HUNTERS"] 	= "Pemburu"
+LANG["PHX_TEAM_UNASSIGNED"]	= "Belum Join"
+LANG["PHX_TEAM_SPECTATOR"] 	= "Penonton"
+
 -- List of string-based translation
 
 -- // FRETTA SECTION \\
@@ -101,7 +107,7 @@ LANG["HELP_F1"] 				= [[Project Prop Hunt X.
 Sebuah proyek mode permainan "Prop Hunt" untuk lebih modern dan optimal.
 
 Informasi lebih lanjut bisa kunjungi di:
-https://wolvindra.xyz/prophuntx
+https://gmodgameservers.com/prophuntx
 
 Untuk melihat tutorial, pengaturan, dan menu lainnya bisa diakses melalui:
 Tombol [F1], tekan menu 'Menu Prop Hunt'.
@@ -116,7 +122,6 @@ LANG["LANGUAGE_CHANGED"]		= "Preferensi bahasa kamu sekarang diganti ke %s"
 
 -- internal cl_menutypes section.
 LANG["SUBTYPE_PREFERED_LANG"]	= "Preferensi Bahasa"
---LANG["SUBTYPE_TEXTENTRY_?"]	= "???"
 
 -- Events
 LANG["EV_PLAYER_CONNECT"]		= "%s telah tersambung ke server."
@@ -125,13 +130,11 @@ LANG["EV_PLAYER_DISCONNECT"]	= "%s telah keluar dari server (Alasan: %s)"
 
 -- HUD elements
 LANG["HUD_HP"]					= "NYAWA"
-LANG["HUD_AMMO"] 				= "PELURU"	-- obsolete
-LANG["HUD_MAGSEC"]				= "TTL. / CAD." --Magazine Counts (separator) Secondary Magazine Counts
+LANG["HUD_AMMO"] 				= "PELURU"
+LANG["HUD_MAGSEC"]				= "ISI / CAD." --Magazine | Secondary Magazine
 
--- !!WEAPON NAMES CANNOT BE TRANSLATED, THEY USE FROM language.GetPhrase THEREFORE IT'S IMPOSSIBLE TO DO.
-
-LANG["TEAM_PROPS"]				= "Props"	-- ini agak aneh untuk di translate, jadi kita biarin aja dulu...
-LANG["TEAM_HUNTERS"]			= "Hunters"	-- ini agak aneh untuk di translate, jadi kita biarin aja dulu...
+LANG["TEAM_PROPS"]				= LANG["PHX_TEAM_PROPS"] 	--"Props"
+LANG["TEAM_HUNTERS"]			= LANG["PHX_TEAM_HUNTERS"] 	--"Hunters"
 
 LANG["HUD_ROTLOCK"]				= "Rotasi: Terkunci"
 LANG["HUD_ROTFREE"]				= "Rotasi: Bebas"
@@ -143,7 +146,7 @@ LANG["HUD_AUTOTAUNT_DISABLED"]	= "Taunt Otomatis non-aktif."
 
 LANG["HUD_TargetID"]			= "Pemain: %s (%d%%)" -- Player: <NAME> (<HEALTH>%)
 
-LANG["HUD_BLINDED"]				= "Hunters akan dilepaskan dalam %s"
+LANG["HUD_BLINDED"]				= "%s akan dilepaskan dalam %s"
 LANG["HUD_UNBLINDED"]			= "Siap atau nggak, kami datang!"
 
 LANG["BLIND_RESPAWN_TEAM"]		= "Kamu telah ter-respawn pada tim %s dalam waktu %d detik ketika hunter memejamkan mata."
@@ -175,7 +178,7 @@ LANG["TM_NO_TAUNTS"]			= "Peringatan: Tidak ada taunt yang terdeteksi di kategor
 LANG["TM_PLAY_ONLY_ALIVE"] 		= "Kamu hanya dapat menggunakan Custom Taunt disaat kamu masih hidup."
 
 LANG["TM_WINDOW_TITLE"]			= "Prop Hunt Custom Taunt"
-LANG["TM_NOTICE_PLSWAIT"]		= "Harap Menunggu %s detik!"
+LANG["TM_NOTICE_PLSWAIT"]		= "Harap tunggu %s detik sebelum random taunt berakhir!"
 LANG["TM_NOTICE_PLAYPREVIEW"]	= "Memainkan Taunt: %s"
 
 LANG["TM_TOOLTIP_PLAYTAUNT"] 	= "Mainkan Taunt"
@@ -188,9 +191,7 @@ LANG["TM_MENU_CLOSE"]			= "Tutup Menu"
 LANG["TM_DELAYTAUNT_NOT_EXIST"] = "Taunt yang kamu pilih tidak dapat ditemukan di server ini!"
 LANG["TM_DELAYTAUNT_PLSWAIT"]	= "Harap tunggu %s detik!"
 
---[[
-	PHX Menu window
-]]
+-- PHX Menu window
 LANG["PHXM_WINDOW_TITLE"]		= "Prop Hunt X - Menu & Pengaturan lebih lanjut"
 LANG["SERVER_INFO_MOTD"]		= "INFORMASI SERVER & PERATURAN [MOTD]"
 
@@ -205,14 +206,10 @@ LANG["PHXM_TAB_MAPVOTE"]		= "Pengaturan MapVote"
 
 LANG["PHXM_CVAR_CHANGED"]		= "[Pengaturan] ConVar %q telah diganti %q"
 
---[[
-	Player Mute Settings
-]]
+-- Player Mute Settings
 LANG["PHXM_MUTE_SELECT"]		= "Pilih siapapun yang ingin kamu diamkan."
 
---[[ 
-	Player Settings
-]]
+-- Player Settings
 LANG["PHXM_PLAYER_OPTIONS"]		= "Pengaturan Player"
 LANG["PHXM_PLAYER_LANG"]		= "Bahasa"
 LANG["PHXM_PLAYER_BIND"]		= "Binds"
@@ -235,9 +232,7 @@ LANG["PHXM_PLAYER_SHOW_TUTOR"]			= "Tampilkan tutorial singkat (Hanya muncul 2x 
 LANG["PHXM_PLAYER_USE_NEW_CROSSHAIR"]	= "Tampilkan Crosshair Baru"
 LANG["PHXM_PLAYER_SHOW_TEAM_TOPBAR"]	= "Tampilkan jumlah player yang masih hidup (Setidaknya 4 pemain dibutuhkan)"
 
---[[
-	Player model Browser Section
-]]
+-- Player model Browser Section
 LANG["QUERY_MODEL_SELECTED"]	= "Skin %s telah terpilih dan akan digunakan setelah respawn."
 LANG["QUERY_MODEL_INFO"]		= "Nama skin: %s - Tersedia untuk: Semua Orang"
 
@@ -251,15 +246,11 @@ LANG["MISC_APPLYMDL"] 			= "Skin Diterapkan"
 LANG["PHXM_MODEL_DISABLED"] 	= "Skin kustom telah di non-aktifkan di server ini."
 LANG["PHXM_PLAYERMODEL_SETFOV"]	= "  Atur Kamera jarak/FOV"
 
---[[
-	Server Settings
-]]
+-- Server Settings
 LANG["PHXM_ADMIN_OPTIONS"]		= "Opsi-opsi Gamemode server (Hanya tampil jika kamu seorang Admin)"
 LANG["PHXM_ADMIN_MUSTALIVE"]	= "Kamu harus dalam keadaan hidup untuk menaktifkan mode ini."
 
---[[
-	Language Override
-]]
+-- Language Override
 LANG["PHXM_ADMIN_LANGOVERRIDE"]	= "Kontrol Bahasa"
 
 LANG["PHXM_ADMIN_FORCELANG"] 				= "Gunakan Satu Bahasa? Pengaturan ini akan mengabaikan bahasa user yang telah dipilih dan mengikuti bahasa dari server."
@@ -371,19 +362,16 @@ LANG["PHXM_ABOUT_BTN_GITHUB"]		= "GitHub Repository PH:X"
 LANG["PHXM_ABOUT_BTN_PLUGINS"]		= "Plugin PH:X"
 LANG["PHXM_ABOUT_BTN_CHANGELOGS"]	= "Catatan Riwayat PH:X"
 
--- fretta
 LANG["HUD_SPECTATING"]	= "MENONTON"
 LANG["HUD_YOUDIED"]		= "Kamu Mati!"
 
 LANG["CHAT_STARTING_MAPVOTE"] = "Ronde telah Berakhir. Memulai 'MapVote'..."
 
--- This used for HUD Taunt Timer
 LANG["HUD_PROP_TAUNT_TIME"]	= "Taunt"
 LANG["HUD_PROP_CTAUNT_TIME"] = "Taunt Kustom"
 
 LANG["PHXM_TAB_PLUGINS"]				= "Plugin & Tambahan"
 
--- Plugins Section
 LANG["PLUGINS_NO_PLUGINS"]				= "Tidak ada plugin terinstall. Cari plugin lainnya disini!"
 LANG["PLUGINS_BROWSE_MORE"]				= "Cari plugin lainnya"
 LANG["PLUGINS_SERVER_HAS_NO_PLUGINS"]	= "Server ini tidak mepunyai plugin atau tambahan (addon) terinstall."
@@ -391,8 +379,12 @@ LANG["PLUGINS_SERVER_SETTINGS"]			= "-- Pengaturan Server --"
 LANG["PLUGINS_CLIENT_SETTINGS"]			= "-- Pengaturan Pengguna --"
 
 -- Text Entries
-LANG["TEXTENTRY_FZ_SINGLE"] = "Rintis untuk suara Freeze Cam" -- this one is for ph_fc_cue_path command
-LANG["TEXTENTRY_MV_PREFIX"] = "Imbuhan untuk MapVote"			 -- the map previx for mv_mapprefix
+LANG["TEXTENTRY_FZ_SINGLE"] = "Rintis untuk suara Freeze Cam"
+LANG["TEXTENTRY_MV_PREFIX"] = "Imbuhan untuk MapVote"
+
+-- Late Addition: 29.10.21/X2Z.
+
+LANG["MISC_GAME_ENDED"]		= "Permainan telah berakhir."
 
 --[[
 	Credits: Late Addition: Revision: 16.09.21/X2Z
@@ -465,11 +457,6 @@ LANG["PCR_EDT_IN_USE"]			= "Seorang admin sedang menyunting prop menu. Tunggu se
 LANG["PCR_EDT_ERROR_DISABLED"]	= "[Prop Menu] Error: Tambahan Prop Kuston di non-aktifkan!"
 LANG["PCR_EDT_NO_RIGHTS"]		= "Kamu tidak mempunyai hak untuk mengakses ini."
 
--- I'm actually exhausted and feel so burned out, but I'll update this in future, or in PH:Zero I guess.
--- Section: Custom Prop Editor File Browser and stuff...
--- LANG["PCR_EDT_XXX"] 	= "todo"
--- LANG["PCR_FB_XXX"] 	= "todo"
-
 --[[
 	Admin Section, Revision: 16.09.21/X2Z
 ]]
@@ -489,6 +476,201 @@ LANG["NOTIFY_CUST_ENT_TYPE_IS_ON"]		= "[PHX] Peringatan: Tekan [E] untuk interak
 ]]
 LANG["TM_TAUNTS_SEARCH_NOTHING"]		= "Kayaknya ga ada deh taunt '%s' disini :("
 LANG["TM_SEARCH_PLACEHOLDER"]			= "Cari di kategori ini: Ketik kata, huruf kecil & tanpa wildcard. Kosong=Semua."
+LANG["PHXM_MSG_INPUT_IS_EMPTY"]			= "Teks kosong atau kamu tidak menekan ENTER."
 
--- Add to Language Table.
+--============= LATE ADDITION OF 10.06.2022/X2Z. =============--
+
+--goto line: @132
+LANG["MISC_SET"]						= "Set"
+LANG["MISC_APPLY"]						= "Terapkan"
+LANG["MISC_NO"]							= "Tidak"
+LANG["MISC_YES"]						= "Ya"
+LANG["MISC_WARN"]						= "Perhatian"
+LANG["MISC_ERROR"]						= "Galat"
+LANG["MISC_INFO"]						= "Informasi"
+LANG["MISC_NOTICE"]						= "Perhatian"
+LANG["MISC_IDK"]						= "Tak Diketahui"
+LANG["MISC_NA"]							= "Kosong"
+
+-- HUD
+LANG["HUD_DECOY_ACTIVE"]                = "Tekan [%s]"
+LANG["HUD_FAKETAUNT_COUNT"]             = "Sisa %ix"
+LANG["HUD_FAKETAUNT_UNLI"]              = "Tak Terbatas"
+LANG["NOTICE_GRENADE_SMG_GIVEN"]        = "Kamu baru saja diberi Grenade SMG."
+
+--[[
+	ADMIN PANEL, Revision 10.06/2022/X2Z
+]]--
+LANG["PHXM_TAUNT_SETTINGS"]				= "Peraturan Taunt"
+LANG["PHXM_GENERAL_SETTINGS"]			= "Peraturan Umum"
+LANG["PHXM_FAKE_TAUNT_SETTINGS"]		= "Peraturan Tipuan Taunt"
+LANG["PHXM_FAKE_TAUNT_ENABLE"]			= "Perbolehkan Tipuan Taunt untuk dimainkan didalam prop pada map ini, Hanya bisa diakses melalui Taunt Menu."
+LANG["PHXM_FAKE_TAUNT_MAXUSAGE"]		= "Pemakaian maksimal untuk Tipuan taunt, -1 untuk tanpa batas."
+LANG["PHXM_TAUNT_RIGHT_CLICK"]		    = "Klik kanan untuk Taunt. Ini akan mengnon-aktifkan menu klik kanan di Taunt menu!"
+
+LANG["PHXM_TAUNT_PITCH_SETTINGS"]		= "Peraturan Nada Taunt (Pitch)"
+LANG["PHXM_TAUNT_PITCH_ENABLE"]			= "Perbolehkan Nada untuk Taunt"
+LANG["PHXM_TAUNT_PITCH_RANGE_MIN"]		= "Minimal jangkauan (range) untuk nada taunt, 1 s.d. 99."
+LANG["PHXM_TAUNT_PITCH_RANGE_MAX"]		= "Maximal jangkauan (range) untuk nada taunt, 100 s.d. 255."
+
+LANG["PHXM_DECOY_SETTINGS"]				= "Peraturan Umpan (Decoy)"
+LANG["PHXM_DECOY_ENABLE"]				= "Berikan reward Umpan? Reward akan diberikan SEKALI (maupun sudah punya) ketika prop masih hidup saat round berakhir."
+
+LANG["PHXM_DISABLE_FOOTSTEP"]           = "Alihkan suara langkah kaki untuk tim Prop (Bisukan atau tidak)"
+
+LANG["PHXM_ADMIN_CHATSETTING"]			= "Peraturan Jendela Chat"
+LANG["PHXM_ADMIN_HUNTERBLIND"]			= "Peraturan Kontrol Pemejaman Mata Hunter"
+
+LANG["PHXM_ADMIN_GIVEGRENADE_NEAREND"]  = "Haruskah grenade diberikan sebelum round berakhir? Jika iya, lihat 'ph_give_grenade_roundend_before_time'"
+LANG["PHXM_ADMIN_GIVEGRENADE_TIME"]     = "Waktu dalam detik untuk memberikan grenade sebelum round berakhir. Umumnya dimulai dari 10 s.d. 30 detik."
+
+--[[
+	Plugins in sh_init.lua, Revision 10.06/2022/X2Z
+]]--
+LANG["PLUG_NAME_VER"]					= "Plugin: %s | v.%s"
+LANG["PLUG_DESCRIPTION"]				= "Deskripsi: %s"
+
+--[[
+	Taunt Pitch, Revision 10.06/2022/X2Z
+]]--
+LANG["PHX_CTAUNT_USE_PITCH"]			= "Gunakan nada untuk taunt kustom"
+LANG["PHX_CTAUNT_RANDOM_PITCH"]			= "Gunakan nada secara acak ketika memainkan taunt"
+LANG["PHX_RTAUNT_USE_PITCH"]			= "Gunakan nada untuk taunt acak [%s]"
+LANG["PHX_RTAUNT_RANDOMIZE"]			= "Gunakan nada secara acak untuk taunt acak [%s]"
+LANG["PHX_CTAUNT_PITCH_FOR_FAKE"]		= "Gunakan nada untuk taunt tipuan"
+LANG["PHX_CTAUNT_RANDPITCH_FOR_FAKE"]	= "Gunakan nada secara acak untuk taunt tipuan"
+LANG["PHX_CTAUNT_SLIDER_PITCH"]			= "Slider untuk nada taunt"
+LANG["TM_TOOLTIP_FAKETAUNT"]			= "Mainkan taunt tipuan pada prop secara acak"
+LANG["TM_PREFERRED_PITCH"]              = "Level nada taunt yang diinginkan"
+
+--[[
+	Fake Taunt, Revision 10.06/2022/X2Z
+	Description: Play fake taunts on random props in the map (Not Players)
+]]--
+LANG["PHX_CTAUNT_ON_RAND_PROPS"]		= "Mainkan di prop apapun (%ix)"
+LANG["PHX_CTAUNT_ON_RAND_PROPS_UNLI"]	= "Mainkan di prop apapun"
+LANG["PHX_CTAUNT_PLAYED_ON_RANDPROP"]	= "Kamu memainkan taunt di prop sembarang."
+LANG["PHX_CTAUNT_RAND_PROPS_LIMIT"]		= "Penggunaan telah mencapai batas!"
+LANG["PHX_CTAUNT_RAND_PROPS_NOT_PROP"]  = "Fitur tidak tersedia saat ini."
+LANG["PHX_CTAUNT_RANDPROP_DISABLED"]	= "Taunt tipuan sedang di non-aktifkan."
+
+--[[
+	PH:Z Simple Decoy, Revision 10.06/2022/X2Z
+]]--
+LANG.DECOY_PROP	= {
+    "ngancurin barang tak berdosa.",
+	"membunuh benda kerang ajaib.",
+	"menyesal telah membunuh benda ajaib.",
+	"kena tipu deh wkwkwk",
+	"ngancurin benda ajaib tak bersalah.",
+	"malu-maluin mecahin pot tetangga.",
+    "yaaah kena tipu deh wkwkwk",
+    "itu bukan prop bego wkwkwk",
+    "diketawain sama ketawaan bajaj bajuri",
+    "mau dapet mangga malah dapet cempedak.",
+    "dapet kuota gratisan scam.",
+    "malah dapet sms mama minta pulsa.",
+    "mentung pocong lagi ngeronda sama pak hansip."
+}
+
+LANG["DECOY_PUT_SUCC"]					= "Decoy berhasil diletakkan."
+LANG["DECOY_CANT_PUT_HERE"]				= "Gak bisa taruh decoy disini!"
+LANG["DECOY_GET_REWARD"]				= "Selamat! Kamu mendapatkan ['Prop Decoy'] karena berhasil hidup di round ini!"
+LANG["DECOY_REMINDER_GET"]              = "Kamu mempunyai ['Prop Decoy'] Taruh di sembarang tempat untuk membingungkan Hunter!."
+LANG["DECOY_FRAGS_RECEIVED"]			= "Umpan sukses: Kamu mencuri 1 tambahan skor dari %s!"
+LANG["DECOY_DISABLED"]					= "Saat ini ['Prop Decoy'] sedang tidak tersedia."
+LANG["PHXM_CL_DECOY_KEYBIND"]			= "Tombol untuk meletakkan umpan decoy. Default adalah 1 (Bukan Keypad 1)."
+
+LANG["DECOY_INDICATOR_INVALID"]         = "Terlalu Miring!"
+LANG["DECOY_INDICATOR_TOOFAR"]          = "Kejauhan!"
+LANG["DECOY_INDICATOR_OK"]              = "Taruh Decoy [Tekan %s]"
+
+LANG["PHXM_DECOY_HEALTH"]				= "Nyawa yang harus diberikan untuk prop tipuan (decoy). Default: 10"
+LANG["PHXM_PLAYER_SHOW_DECOY_HELPER"]   = "Tampilkan penempatan Decoy? ini akan menampilkan dot putih dan teks dekat crosshair."
+LANG["PHXM_PLAYER_SHOW_DECOY_MARKER"]   = "Tampilkan penanda Decoy?"
+
+--[[
+	Revision 10.06/2022/X2Z
+    Prop Menu Update: Menu, Editor, Browser
+]]--
+LANG["PCR_MODEL_DONT_EXISTS"]   = "Model yang kamu pilih tidak tersedia di map ini!"
+
+LANG["PCR_PLUG_WARN_MSG"]		= "Perhatian: Penambahan Kustom Prop ('pcr_allow_custom') adalah 0.\nYKamu harus aktifkan fitur ini agar bisa menggunakan editor\nCatatan: Membutuhkan map restart!"
+LANG["PCR_PLUG_LBL_BINDKEY"]	= "Untuk mengganti tombol Bind, ketuk pada menu '[Pengaturan Saya] > Binds'"
+LANG["PCR_PLUG_LBL_EDITOR"]		= "Editor Kustom Prop Menu"
+LANG["PCR_PLUG_BTN_OPEN_EDT"]	= "Buka Editor"
+LANG["PCR_PLUG_LBL_COMSET"]		= "Peraturan Umum"
+LANG["PCR_PLUG_LBL_TECHSET"]	= "Peraturan Teknis"
+LANG["PCR_PLUG_LBL_EXPSET"]		= "Fitur Eksperiment"
+LANG["PCR_PLUG_LBL_PLAYERSET"]	= "Peraturan Pemain"
+
+LANG["PCR_PLUG_ENABLE"]			= "Aktifkan fitur 'Prop Menu'"
+LANG["PCR_PLUG_ALLOW_CUSTOM"]	= "(Butuh Map Restart) Tambahkan kustom prop lainnya ke daftar Prop Menu"
+LANG["PCR_PLUG_PROP_BAN"]		= "(Butuh Map Restart) Jangan tambahkan prop yang telah di banned (daftar hitam)"
+LANG["PCR_PLUG_USAGE_LIMIT"]	= "Batas penggunaan maksimal. -1 untuk bebas limit."
+LANG["PCR_PLUG_PROP_LIMIT"]		= "(Butuh Map Restart) Batasi tambahan prop ke daftar Prop Menu"
+LANG["PCR_PLUG_PROP_LIMITMAX"]	= "Jumlah prop maksimal yang akan ditambahkan ke Prop Menu. Catatan: Ini akan diacak!"
+LANG["PCR_PLUG_USE_ULXMENU"]	= "Haruskah Prop Menu bisa diakses melalui: Console/Perintah Chat (0) atau ULX (1)?"
+LANG["PCR_PLUG_USE_DELAY"]		= "Tunda waktu (dalam detik) sebelum pemain menggunakan prop lainnya."
+LANG["PCR_PLUG_KICK_INVALID"]	= "Kick pemain yang mencoba untuk mengakses Prop tidak valid (Maksimal 4x)"
+LANG["PCR_PLUG_SPACE_CHECK"]	= "Periksa jarak ruang (sempit/luas) sebelum pemain menggunakan prop agar tidak Stuck."
+LANG["PCR_PLUG_X_BBOX"]			= "(Butuh Map Restart) Periksa Batas 'Luas Kotak' Entity (OBB) sebelum menambahkan ke daftar Prop Menu."
+LANG["PCR_PLUG_X_BBOX_MAX"]		= "Luas Kotak 'BBox CollisionBound' Tinggi Maksimum. Minus akan di auto-kalkulasi."
+LANG["PCR_PLUG_X_BBOX_MIN"]		= "Luas Kotak 'BBox CollisionBound' Rendah Maksimum. Minus akan di auto-kalkulasi."
+LANG["PCR_PLUG_ONLY_GROUPS"]	= "Apakah Prop Menu hanya bisa diakses oleh beberapa grup, misalkan: Donator?"
+LANG["PCR_PLUG_NOTIFYMSG"]		= "Beri tahu pemain untuk cara menggunakan Prop Menu di setiap ronde dimulai."
+
+LANG["PCR_EDITOR_MSG_ERROR"]	= "Peraturanmu gagal karena ada yang Error.\nMohon periksa CONSOLE di servermu!"
+LANG["PCR_EDITOR_MSG_SUCC"]		= "Peraturanmu telah sukses tersimpan dan sudah diperbaharui!"
+
+LANG["PHZ_generic_title"]		= "Editor untuk Penambahan Prop Kustom"
+LANG["PHZ_generic_helptext"]	= [[[Cara Menggunakan:
+[PANEL KIRI]
+← Pilih konten game
+← Klik ikon untuk menambah ke kanan
+← Klik-Kanan ikon untuk buka menu
+
+[PANEL KANAN]
+→ Klik untuk 'menandai' sebelum menghapus
+→ Tekan 'Hapus Terpilih' untuk menghapus
+→ Tekan 'Simpan & Terapkan' untuk perbaharui
+
+[INFORMASI]
+- Kamu hanya bisa menambahkan maks. 2048 buah.
+- Prop yang disediakan map sudah otomatis ditambah.
+- Tekan [Close] untuk membatal & keluar editor.
+- Tidak semua model mempunyai fisik (VPhysics)!
+- Tidak semua pemain (Termasuk Server) mempunyai kustom model. Jika tidak mereka akan otomatis dihapus.
+- Konten server yang dimiliki bisa berbeda dengan kamu. Jika "<game> [Tidak Aktif]" di menu dropdown maknanya kamu belum install game tsb.
+- Untuk addon belum terimplementasi sehingga kamu harus gunakan 'Semua Kontent'.
+]]
+LANG["PHZ_generic_mdlinfo"] = [[Informasi Model:
+%s
+Ada Fisik: %s]]
+LANG["PHZ_generic_mdlinfoStart"] = "(Pilih prop dulu!)"
+
+LANG["PHZ_generic_no_ragdoll"]	= "Tidak: Ragdoll"
+LANG["PHZ_generic_titlelabel"]	= "%s Pratinjau :"
+
+LANG["PHZ_mount_game_sel"]		= "Pilih Game (Default: Garry's Mod)"
+LANG["PHZ_input_placeholder1"]	= "Cari Folder: <nama folder> atau '*', blank = semua"
+LANG["PHZ_input_placeholder2"]  = "Cari Addon: <nama> atau '*', blank = semua"
+LANG["PHZ_msg_warn_close"]		= "Apakah kamu yakin untuk menutup Editor? Editan yang belum disimpan akan hilang."
+LANG["PHZ_msg_commit"] 			= "Apakah kamu yakin untuk Perbaharui Perubahan?"
+LANG["PHZ_msg_cant_empty"]		= "Daftar Prop tidak boleh Kosong!"
+LANG["PHZ_msg_removesel"] 		= [[Hapus prop yang dipilih pada daftar. Legenda:
+Merah = Tertanda untuk dihapus
+Kuning: Prop tidak ada di server DAN harus di hapus.]]
+LANG["PHZ_msg_warn_mdlinlist"]  = "PERHATIAN: Model ini sudah terdaftar!"
+LANG["PHZ_msg_invalid_mdl"] 	= "Alasan: Model tidak cocok."
+LANG["PHZ_apply_select"] 		= "Simpan & Terapkan"
+LANG["PHZ_menu_copy"] 		    = "Salin Model"
+LANG["PHZ_menu_refresh"] 	    = "Segarkan Model"
+LANG["PHZ_tooltip_removesel"]	= "Hapus Terpilih"
+LANG["PHZ_tooltip_wasmarked"] = [[Prop ini telah ditandai karena tidak ada di server.
+Jika kamu menutup editor ini, prop tersebut akan dihapus.]]
+
+LANG["PHZ_pcr_fb_allcontent"] = "Semua Kontent (Tidak semua pemain/server mempunyai konten yang sama)"
+LANG["PHZ_pcr_fb_notmounted"] = "%s [Tidak Aktif]"
+
 PHX.LANGUAGES[LANG.code] = LANG

@@ -33,7 +33,7 @@ function CLASS:OnSpawn(pl)
 	pl:SetViewOffsetDucked(Vector(0,0,28))
 	
 	-- Prevent 'mod_studio: MOVETYPE_FOLLOW with No Models error.'
-	pl:DrawViewModel(false)
+	pl:DrawViewModel( false )
 	
 	pl.ph_prop = ents.Create("ph_prop")
 	pl.ph_prop:SetPos(pl:GetPos())

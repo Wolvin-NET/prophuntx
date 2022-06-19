@@ -17,17 +17,23 @@ local donator = {
 
 -- Add user group after Initialize hooks.
 hook.Add("Initialize", "phx.AddUserGroups", function()
-	timer.Simple(1, function()
-		
-		if PHX and PHX ~= nil then return end -- cancel if PHX don't exists. Remove this line if you'd like to force.
+	if PHX and PHX ~= nil then return end -- cancel if PHX don't exists. Remove this line if you'd like to force.
 	
-		-- admin
-		for _,v in pairs(admins) do PHX:AddAdminGroup( v ) end
-		
-		-- add to prop chooser & donator prop menu.
-		for _,v in pairs(donator) do
-			PCR:AddToGroup( v )
-			PMDR:AddToGroup( v )
-		end
+	-- admin
+	for _,v in pairs(admins) do PHX:AddAdminGroup( v ) end
+	
+	-- add to prop chooser & donator prop menu.
+	--[[ Uncomment this to enable this.
+	for _,v in pairs(donator) do
+		PCR:AddToGroup( v )
+		PMDR:AddToGroup( v )
+	end
+	]]--
+	
+	timer.Simple(1, function()
+		--[[ 
+			Uncomment this if you want to remove 'admin' for example.
+			table.RemoveByValue(PHX.SVAdmins, "admin")
+		]]--
 	end)
 end)

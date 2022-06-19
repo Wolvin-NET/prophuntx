@@ -12,8 +12,6 @@ balls.model = {
 	"models/maxofs2d/hover_rings.mdl"
 }
 
-balls.bombswitch = 0
-
 function ENT:Initialize()
 	self.Entity:SetModel(table.Random(balls.model))
 	self.Entity:PhysicsInit(SOLID_VPHYSICS)
@@ -38,6 +36,11 @@ balls.sounds = {
 	"prop_idbs/np_pickup.wav",
 	"prop_idbs/venta_pickup.wav",
 	"prop_idbs/biva_pickup.wav"
+}
+
+balls.MineSpawnSound = {
+    "taunts/ph_enhanced/dx_thebomb2.wav",
+    "taunts/ph_enhanced/dx_thebomb.wav"
 }
 
 balls.randomtext = {
@@ -75,7 +78,7 @@ balls.randomtext = {
 	"I once saw a man with a pink mustache.",
 	"There was Obsidian and it had a Conflict.",
 	"We all just need a bit of Synergy in our lives.",
-	"The Presense is Watching you", -- todo is this correct for Terraria Eye of Chtulu Boss?
+	"The Presense is Watching you",
 	"sudo apt-get moo",
 	"\"Have you mooed today?\"",
 	"Someone could do well on the stage, we just need to find him.",
@@ -99,9 +102,14 @@ Please note that you might have to create a custom serverside lua with full of f
 	
 Keep in note that UniqueName should be unique and different. Otherwise will cause some confusion with PHX.VerboseMsg!
 ]]
+function balls:randomizeText()
+    local text = self.randomtext[math.random(1, #self.randomtext)]
+    return text
+end
+
 balls.funclists = {
 	function(pl)
-		pl:ChatPrint(table.Random(balls.randomtext))
+		pl:ChatPrint(balls:randomizeText())
 	end,
 	function(pl)
 		if not pl:HasWeapon("wlv_bren") then
@@ -109,7 +117,7 @@ balls.funclists = {
 			pl:SelectWeapon("wlv_bren")
 			pl:ChatPrint("[Lucky Ball] You got a *special* weapon!")
 		else
-			pl:ChatPrint(table.Random(balls.randomtext))
+			pl:ChatPrint(balls:randomizeText())
 		end
 	end,
 	function(pl)
@@ -137,20 +145,42 @@ balls.funclists = {
 		pl:ChatPrint("[Lucky Ball] You gained armor points bonus : "..tostring(rand).."!")
 	end,
 	function(pl)
-		local ammo = {'Pistol', 'SMG1', '357', 'Buckshot'}
-		local rand
-		rand = math.random(8,45)
-		pl:GiveAmmo(rand, table.Random(ammo))
-		pl:ChatPrint("[Lucky Ball] You got a random ammo!")
+		local ammo = {'SMG1', '357', 'Buckshot'}
+		local rand,randAmmo
+		rand = math.random(6,30)
+        randAmmo = ammo[math.random(1,#ammo)]
+		pl:GiveAmmo(rand, randAmmo)
+		pl:ChatPrint( string.format("[Lucky Ball] You got %s ammo!", randAmmo) )
 	end,
-	function(pl)
-		if not pl:HasWeapon("weapon_rpg") then
-			pl:Give("weapon_rpg")
-			pl:SelectWeapon("weapon_rpg")
-			pl:SetAmmo(2, "RPG_Round")
-			pl:ChatPrint("[Lucky Ball] You got a free RPG!")
+    function(pl)
+		if not pl:HasWeapon("weapon_pistol") then
+			pl:Give("weapon_pistol")
+			pl:SelectWeapon("weapon_pistol")
+			pl:SetAmmo(36, "Pistol")
+			pl:ChatPrint("[Lucky Ball] You got a free Pistol!")
 		else
-			pl:ChatPrint(table.Random(balls.randomtext))
+			pl:ChatPrint(balls:randomizeText())
+		end
+	end,
+    function(pl)
+		if not pl:HasWeapon("weapon_ar2") then
+			pl:Give("weapon_ar2")
+			pl:SelectWeapon("weapon_ar2")
+			pl:SetAmmo(30, "AR2")
+            pl:SetAmmo(1, "AR2AltFire")
+			pl:ChatPrint("[Lucky Ball] You got a free AR2!")
+		else
+			pl:ChatPrint(balls:randomizeText())
+		end
+	end,
+    function(pl)
+		if not pl:HasWeapon("weapon_crossbow") then
+			pl:Give("weapon_crossbow")
+			pl:SelectWeapon("weapon_crossbow")
+			pl:SetAmmo(1, "XBowBolt")
+			pl:ChatPrint("[Lucky Ball] You got a free Crossbow!")
+		else
+			pl:ChatPrint(balls:randomizeText())
 		end
 	end,
 	function(pl)
@@ -158,6 +188,26 @@ balls.funclists = {
 			pl:Give("weapon_frag")
 			pl:SelectWeapon("weapon_frag")
 			pl:ChatPrint("[Lucky Ball] You got a Frag Grenade for free!")
+		end
+	end,
+    function(pl)
+		if not pl:HasWeapon("weapon_rpg") then
+			pl:Give("weapon_rpg")
+			pl:SelectWeapon("weapon_rpg")
+			pl:SetAmmo(2, "RPG_Round")
+			pl:ChatPrint("[Lucky Ball] You got a free RPG!")
+		else
+			pl:ChatPrint(balls:randomizeText())
+		end
+	end,
+    function(pl)
+		if not pl:HasWeapon("weapon_slam") then
+			pl:Give("weapon_slam")
+			pl:SelectWeapon("weapon_slam")
+			pl:SetAmmo(1, "slam")
+			pl:ChatPrint("[Lucky Ball] You got a free S.L.A.M!")
+		else
+			pl:ChatPrint(balls:randomizeText())
 		end
 	end,
 	function(pl)
@@ -172,7 +222,7 @@ balls.funclists = {
 			pl:Give("weapon_bugbait")
 			pl:ChatPrint("[Lucky Ball] You got Bugbait for free... which does nothing. (unless you have a pet antlion).")
 		else
-			pl:ChatPrint(table.Random(balls.randomtext))
+			pl:ChatPrint(balls:randomizeText())
 		end
 	end,
 	 function(pl)  -- Change hunter model to player mdl as a joke
@@ -181,7 +231,7 @@ balls.funclists = {
 			 pl:SetModel("models/player.mdl")
 			 pl:SendLua("CL_GLIMPCAM = CurTime() + 3")
 		 else
-			 pl:ChatPrint(table.Random(balls.randomtext))
+			 pl:ChatPrint(balls:randomizeText())
 		 end
 	 end,
 	 function(pl)  -- This is a fun little reference to staging
@@ -202,14 +252,7 @@ balls.funclists = {
 		suicidebomb:Activate()
 		suicidebomb:SetOwner(pl)
 		pl:ChatPrint("[Lucky Ball] You got a SUICIDE BOMB!")
-		
-		if balls.bombswitch == 0 then
-			pl:EmitSound("taunts/ph_enhanced/dx_thebomb2.wav")
-			balls.bombswitch = 1
-		elseif balls.bombswitch == 1 then
-			pl:EmitSound("taunts/ph_enhanced/dx_thebomb.wav")
-			balls.bombswitch = 0
-		end
+        suicidebomb:EmitSound( balls.MineSpawnSound[math.random(1, #balls.MineSpawnSound)] )
 	end
 }
 -- Don't Edit below unless you know what you're doing.
@@ -219,7 +262,7 @@ function balls:AddMoreLuckyEvents()
 	if !table.IsEmpty(t) then
 		for name,tab in pairs(t) do
 			PHX.VerboseMsg("[PHX: Lucky Ball] Adding new events : "..name)
-			table.insert(balls.funclists, tab)
+			table.insert(self.funclists, tab)
 		end
 	else
 		PHX.VerboseMsg("[PHX: Lucky Ball] There is no additional events detected, skipping...")
@@ -231,8 +274,8 @@ balls:AddMoreLuckyEvents()
 function balls:The_LuckyDrop(pl)
 	-- For hunter only.
 	if pl:Team() == TEAM_HUNTERS && pl:Alive() then
-		balls.getfunction = table.Random(balls.funclists)
-		balls.getfunction(pl)
+		self.getfunction = self.funclists[math.random(1,#self.funclists)]
+		self.getfunction(pl)
 		
 		hook.Call("PH_OnLuckyBallPickup", nil, pl)
 	end

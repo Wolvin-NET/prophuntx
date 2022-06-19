@@ -1,8 +1,9 @@
-local CVAR_SERVER_ONLY				= { FCVAR_SERVER_CAN_EXECUTE, FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY }
-local CVAR_SERVER_ONLY_NO_NOTIFY 	= { FCVAR_SERVER_CAN_EXECUTE, FCVAR_REPLICATED, FCVAR_ARCHIVE }
-local CVAR_SERVER_HIDDEN 			= { FCVAR_SERVER_CAN_EXECUTE, 0x10, FCVAR_DONTRECORD }
+-- phx's global cvar constants
+CVAR_SERVER_ONLY			= { FCVAR_SERVER_CAN_EXECUTE, FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY }
+CVAR_SERVER_ONLY_NO_NOTIFY 	= { FCVAR_SERVER_CAN_EXECUTE, FCVAR_REPLICATED, FCVAR_ARCHIVE }
+CVAR_SERVER_HIDDEN 			= { FCVAR_SERVER_CAN_EXECUTE, 0x10, FCVAR_DONTRECORD }
 
--- cons
+-- global constant type
 CTYPE_STRING	= 1
 CTYPE_NUMBER	= 2
 CTYPE_BOOL		= 3
@@ -80,6 +81,9 @@ local ConVarTranslate = {
 }
 
 local CVAR = {}
+-- Added index [7]: for prop_hunt.txt creation. Ignore this.
+CVAR["ph_print_verbose"]			    =	{ CTYPE_BOOL,	"0", CVAR_SERVER_ONLY_NO_NOTIFY, "Developer Verbose. Some printed messages will only appear if this is enabled." }
+
 CVAR["ph_use_lang"]						=	{ CTYPE_BOOL, 	"0", 	 CVAR_SERVER_ONLY, "Enable forced-language to display. THIS WILL BYPASS USER-PREFERED LANGUAGE!" }
 CVAR["ph_force_lang"]					=	{ CTYPE_STRING, "en_us", CVAR_SERVER_ONLY, "Default language to force." }
 CVAR["ph_default_lang"]					=	{ CTYPE_STRING, "en_us", CVAR_SERVER_ONLY, "This is their first time join to set which language should be set. You should always leave this as 'en_us'." }
@@ -93,6 +97,13 @@ CVAR["ph_autotaunt_delay"]				=	{ CTYPE_NUMBER, "45", CVAR_SERVER_ONLY_NO_NOTIFY
 CVAR["ph_custom_taunt_mode"]			=	{ CTYPE_NUMBER, "0", CVAR_SERVER_ONLY, "Enable custom taunts for prop teams by pressing C? (Default 0)\n  You must have a list of custom taunts to enable this.", { min = 0, max = 2 } }
 CVAR["ph_customtaunts_delay"]			=	{ CTYPE_NUMBER, "6", CVAR_SERVER_ONLY, "How many in seconds delay for props to play custom taunt again? (Default is 6)" }
 CVAR["ph_normal_taunt_delay"]			=	{ CTYPE_NUMBER, "2", CVAR_SERVER_ONLY, "How many in seconds delay for props to play normal [F3] taunt again? (Default is 2)" }
+-- fake taunt & pitch
+CVAR["ph_randtaunt_map_prop_enable"]	=	{ CTYPE_BOOL,	"1", CVAR_SERVER_ONLY, "Allow fake taunts to be played on random props in the maps. Can be accessed only through Custom Taunt menu." }
+CVAR["ph_randtaunt_map_prop_max"]		=	{ CTYPE_NUMBER, "6", CVAR_SERVER_ONLY, "Maximum usage for fake taunts to be used. -1 is unlimited (Be warned though,I don't recommend to set this as unlimited!)" }
+CVAR["ph_taunt_pitch_enable"]			=	{ CTYPE_BOOL,   "1", CVAR_SERVER_ONLY, "Enable or Disable Taunt Pitch" }
+CVAR["ph_taunt_pitch_range_min"]		=	{ CTYPE_FLOAT, "50.0", CVAR_SERVER_ONLY, "Minimum threshold/acceptable pitch range for taunt", {min = 1, max = 99} }
+CVAR["ph_taunt_pitch_range_max"]		=	{ CTYPE_FLOAT, "200.0", CVAR_SERVER_ONLY, "Maximum threshold/acceptable pitch range for taunt", {min = 100, max = 255} }
+
 CVAR["ph_enable_taunt_scanner"]			=	{ CTYPE_BOOL, 	"1", CVAR_SERVER_ONLY, "(Require Map Restart) Enable Taunt Scanner?" }
 
 CVAR["ph_prop_jumppower"]				=	{ CTYPE_FLOAT, 	"1.4", CVAR_SERVER_ONLY, "Multipliers for Prop Jump Power (Do not confused with Prop's Gravity!). Default is 1.4. Min. 1." }
@@ -127,8 +138,7 @@ CVAR["ph_usable_prop_type"]					=	{ CTYPE_NUMBER, "1", CVAR_SERVER_ONLY, "Usable
 			PHX:SetUsableEntity( tonumber(new) )
 			SetGlobalInt( cvarname, tonumber(new) )
 		end, "phx.cvnum_" .. cvarname )
-	end
-}
+	end, "Usable Prop Type (1 to 4)" }
 CVAR["ph_usable_prop_type_notice"]			= 	{ CTYPE_BOOL,	"1", CVAR_SERVER_ONLY, "Notify about certain entities cannot be replicated by pressing 'E'. This only works if 'ph_usable_prop_type' is set to '3' or '4'." }
 
 CVAR["ph_enable_lucky_balls"]				=	{ CTYPE_BOOL, 	"1", CVAR_SERVER_ONLY, "Spawn Lucky balls on breakable props?" }
@@ -147,7 +157,7 @@ CVAR["ph_sv_enable_obb_modifier"]			=	{ CTYPE_BOOL, 	"1",CVAR_SERVER_ONLY_NO_NOT
 CVAR["ph_reload_obb_setting_everyround"]	=	{ CTYPE_BOOL, 	"1",CVAR_SERVER_ONLY_NO_NOTIFY, "Developer: Reload OBB Model Data Override/Modifier Every round Restarts" }
 
 CVAR["ph_mkbren_use_new_mdl"]				=	{ CTYPE_BOOL, 	"1", CVAR_SERVER_ONLY_NO_NOTIFY, "Use new model for Bren MK II Bonus Weapon (Require Map Restart!!)" }
-CVAR["ph_check_props_boundaries"]			=	{ CTYPE_BOOL, 	"0", CVAR_SERVER_ONLY, "Enable prop boundaries/room check? This will prevent you to get stuck with other objects (such as prop, wall, etc)" }
+CVAR["ph_check_for_rooms"]					=	{ CTYPE_BOOL, 	"1", CVAR_SERVER_ONLY, "Check for rooms before replicating? This will prevent you to get stuck with other objects (such as prop, wall, etc)" }
 CVAR["ph_enable_plnames"]					=	{ CTYPE_BOOL, 	"0", CVAR_SERVER_ONLY, "Serverside control for if a clients see client\'s team player names through walls." }
 CVAR["ph_prop_camera_collisions"]			=	{ CTYPE_BOOL, 	"0", CVAR_SERVER_ONLY, "Attempts to stop props from viewing inside walls." }
 CVAR["ph_prop_collision"]					=	{ CTYPE_BOOL, 	"0", CVAR_SERVER_ONLY, "Should Team Props collide with each other?" }
@@ -155,6 +165,17 @@ CVAR["ph_add_hla_combine"]					=	{ CTYPE_BOOL, 	"1", CVAR_SERVER_ONLY, "Add HLA 
 CVAR["ph_swap_teams_every_round"]			=	{ CTYPE_BOOL, 	"1", CVAR_SERVER_ONLY, "Should teams swapped on every round?" }
 CVAR["ph_max_teamchange_limit"]				=	{ CTYPE_NUMBER, "8", CVAR_SERVER_ONLY_NO_NOTIFY, "Define how many times player can change team to another. Default is 5. -1 means disabled." }
 CVAR["ph_enable_teambalance"]				=	{ CTYPE_BOOL, 	"1", CVAR_SERVER_ONLY_NO_NOTIFY, "Enable Team Balance during round restart?" }
+-- Taken from PH:E v16. This addition was made by Fafy
+CVAR["ph_forcejoinbalancedteams"]			=	{ CTYPE_BOOL, 	"0", CVAR_SERVER_ONLY, "Force players to even out teams upon joining? Setting 0 means do not force to join in balanced teams." }
+
+CVAR["ph_enable_decoy_reward"]				=	{ CTYPE_BOOL,	"1", CVAR_SERVER_ONLY_NO_NOTIFY, "Enable a decoy reward? Reward will be given if any prop player is alive on every round ends." }
+CVAR["ph_decoy_health"]						=	{ CTYPE_NUMBER,	"10", CVAR_SERVER_ONLY_NO_NOTIFY, "How much health points does the decoy has. Default is 10.", { min = 1, max = 200 } }
+CVAR["ph_props_disable_footstep"]           =   { CTYPE_BOOL,  "1", CVAR_SERVER_ONLY, "Toggle Mute player footstep for Prop players." }
+
+CVAR["ph_smggrenadecounts"]					=	{ CTYPE_NUMBER, "1", CVAR_SERVER_ONLY, "How many grenades for SMG1 served on spawn?", { min = 1, max = 10 } }
+CVAR["ph_give_grenade_near_roundend"]       =   { CTYPE_BOOL, "0", CVAR_SERVER_ONLY_NO_NOTIFY, "Should grenades will be given near round end? If Yes, see 'ph_give_grenade_roundend_before_time' also."}
+CVAR["ph_give_grenade_roundend_before_time"] =   { CTYPE_FLOAT, "15", CVAR_SERVER_ONLY_NO_NOTIFY, "Time in seconds to give grenades before Round Ends. This is typically between 10 to 30 seconds." }
+
 CVAR["ph_use_new_chat"]						=	{ CTYPE_BOOL, 	"0", CVAR_SERVER_ONLY, "!!REQUIRE MAP RESTART!\nUse new (temporary) chat box? This will replace default chatbox and prevent new HUD overlap.", 
 function(cvarname, value)	
 	cvars.AddChangeCallback( cvarname, function(cv, _, new)
@@ -166,7 +187,6 @@ function(cvarname, value)
 		end
 		SetGlobalBool(cvarname, tobool(new))
 	end, "phx.cvbool_" .. cvarname)
-	
 end }
 CVAR["ph_new_chat_pos_sub"]					=	{ CTYPE_NUMBER, "50", CVAR_SERVER_ONLY_NO_NOTIFY, "Move (in pixels) by substracting chat position Y pixels high. Negative (-) means to move it lower." }
 
@@ -177,38 +197,29 @@ CVAR["ph_blindtime_respawn_percent"]		=	{ CTYPE_FLOAT, 	"0.75", CVAR_SERVER_ONLY
 CVAR["ph_allow_respawnonblind_teamchange"]	=	{ CTYPE_BOOL, 	"0", CVAR_SERVER_ONLY, "Not recommended if allowed: Allow respawn during blind time FROM team changes (from props to hunters, vice versa).\nI don't recommend enabling this because players may able to use this to take advantage by sitting on Prop team everytime.\nEnable this ONLY if you know what you're doing!" }
 CVAR["ph_allow_pickup_object"]				=	{ CTYPE_NUMBER, "3", CVAR_SERVER_ONLY, "Allow pickup objects? 0=No, 1=Hunters Only, 2=Props Only, 3=Everyone", { min = 0, max = 3 } }
 
-CVAR["ph_use_custom_mapvote"]				=	{ CTYPE_BOOL, 	"0", CVAR_SERVER_ONLY_NO_NOTIFY, "Use custom external Map votes system?" }
+CVAR["ph_use_custom_mapvote"]				=	{ CTYPE_BOOL, 	"0", CVAR_SERVER_ONLY_NO_NOTIFY, "Use custom external Map votes system? Type help 'ph_custom_mv_func' for more info." }
 CVAR["ph_custom_mv_func"]					=	{ CTYPE_STRING, "MapVote.Start()", CVAR_SERVER_HIDDEN, "If 'ph_use_custom_mapvote' specified, what's the map vote function to call in LUA?\nNOTE: Case Sensitive! Local variable will not passed to the given code." }
-
--- Taken from PH:E v16. This addition was made by Fafy
-CVAR["ph_forcejoinbalancedteams"]			=	{ CTYPE_BOOL, 	"0", CVAR_SERVER_ONLY, "Force players to even out teams upon joining? Setting 0 means do not force to join in balanced teams." }
-CVAR["ph_smggrenadecounts"]					=	{ CTYPE_NUMBER, "1", CVAR_SERVER_ONLY, "How many grenades for SMG1 served on spawn?", { min = 1, max = 10 } }
-
-CVAR["ph_prop_right_mouse_taunt"]			=	{ CTYPE_BOOL,	"1", CVAR_SERVER_ONLY_NO_NOTIFY, "Should Prop also able to Taunt by pressing Right Click?"}
-
-CVAR["ph_print_verbose"]					=	{ CTYPE_BOOL,	"0", CVAR_SERVER_ONLY_NO_NOTIFY, "Developer Verbose. Some printed messages will only appear if this is enabled." }
 
 -- Prop Chooser / Prop Menu
 CVAR["pcr_enable"]							=	{ CTYPE_BOOL, "1", CVAR_SERVER_ONLY, "Enable Prop Chooser Feature?"}
 CVAR["pcr_allow_custom"]					=	{ CTYPE_BOOL, "0", CVAR_SERVER_ONLY, "Allow custom prop to be added in the lists?"}
 CVAR["pcr_enable_prop_ban"]					=	{ CTYPE_BOOL, "0", CVAR_SERVER_ONLY_NO_NOTIFY, "Allow prop banning before adding to the Prop Chooser Lists?"}
-CVAR["pcr_limit_enable"]					=	{ CTYPE_BOOL, "0", CVAR_SERVER_ONLY,"Enable limit into Maximum Prop Entries (see pcr_max_prop_list for how many props model you'll need to limit."}
 CVAR["pcr_max_use"]							=	{ CTYPE_NUMBER, "3", CVAR_SERVER_ONLY, "Maximum usage limit. -1 means unlimited."}
 CVAR["pcr_delay_use"]						=	{ CTYPE_FLOAT, "2.00", CVAR_SERVER_ONLY_NO_NOTIFY, "Delay, in seconds before player able to use Prop Chooser in next N seconds. (default is 2) - This prevent spamming issues."}
 
+CVAR["pcr_only_allow_certain_groups"]		=	{ CTYPE_BOOL,   "0", CVAR_SERVER_ONLY_NO_NOTIFY, "Should Prop Menu can only accessed by certain groups? (e.g: Donator, etc...)"}
+CVAR["pcr_use_ulx_menu"]					=	{ CTYPE_BOOL,   "0", CVAR_SERVER_ONLY_NO_NOTIFY, "Should Prop Menu can be accessed by Console command (0) or ULX command (1)?"}
+
 CVAR["pcr_notify_messages"]					=	{ CTYPE_BOOL, "0", CVAR_SERVER_ONLY, "Notify client about how to use Prop Chooser?"}
-CVAR["pcr_max_prop_list"]					=	{ CTYPE_NUMBER, "100", CVAR_SERVER_ONLY, "Maximum list that props will be listed."}
+CVAR["pcr_limit_enable"]					=	{ CTYPE_BOOL, "0", CVAR_SERVER_ONLY,"Enable limit into Maximum Prop Entries (see 'pcr_max_prop_list' for how many models you can limit."}
+CVAR["pcr_max_prop_list"]					=	{ CTYPE_NUMBER, "100", CVAR_SERVER_ONLY, "Maximum number to list register prop into Prop Menu."}
 CVAR["pcr_kick_invalid"]					=	{ CTYPE_BOOL, "1", CVAR_SERVER_ONLY_NO_NOTIFY, "Kick any user attempt to access invalid model that does not exists in current map/custom list with threshold 4x max attempts."}
 CVAR["pcr_use_room_check"]					=	{ CTYPE_BOOL, "0", CVAR_SERVER_ONLY, "Use Room check before a player use other (larger) object? Disable this if you're facing with 'there is no room to change' message."}
-CVAR["pcr_enable_bbox_limit"]				=	{ CTYPE_BOOL, "0", CVAR_SERVER_ONLY_NO_NOTIFY, "[!] Add BBox Limit (Hull Size) before adding to the Prop Chooser Lists (if any/configured)?"}
-CVAR["pcr_bbox_max_height"]					=	{ CTYPE_NUMBER, "96", CVAR_SERVER_ONLY_NO_NOTIFY, "[!] BBOX CollissionBound Maximum Height Limit. Default is 96 (normally 72 is a standard hull size Kleiner models."}
-CVAR["pcr_bbox_max_width"]					=	{ CTYPE_NUMBER, "72", CVAR_SERVER_ONLY_NO_NOTIFY, "[!] BBOX CollissionBound Maximum Width Limit. Default is 72, 56 or 48."}
-
-CVAR["pcr_only_allow_certain_groups"]		=	{ CTYPE_BOOL, "0", CVAR_SERVER_ONLY_NO_NOTIFY, "Should Prop Menu can only accessed by certain groups? (e.g: Donator, etc...)"}
-CVAR["pcr_use_ulx_menu"]					=	{ CTYPE_BOOL, "0", CVAR_SERVER_ONLY_NO_NOTIFY, "Should Prop Menu can be accessed by Console command (0) or ULX command (1)?"}
+CVAR["pcr_enable_bbox_limit"]				=	{ CTYPE_BOOL, "0", CVAR_SERVER_ONLY_NO_NOTIFY, "Add BBox Limit (Hull Size) before adding to the Prop Chooser Lists (if any/configured)?"}
+CVAR["pcr_bbox_max_height"]					=	{ CTYPE_NUMBER, "96", CVAR_SERVER_ONLY_NO_NOTIFY, "BBOX CollissionBound Maximum Height Limit. Default is 96 (normally 72 is a standard hull size Kleiner models."}
+CVAR["pcr_bbox_max_width"]					=	{ CTYPE_NUMBER, "72", CVAR_SERVER_ONLY_NO_NOTIFY, "BBOX CollissionBound Maximum Width Limit. Default is 72, 56 or 48."}
 
 -- Load & init
-
 for name, data in pairs(CVAR) do
 	local isType = data[1]	   --cvar, value,   flag,    help,   data/f,   f callback
 	ConVarTranslate[isType].Set( name, data[2], data[3], data[4], data[5], data[6] )
@@ -317,13 +328,42 @@ if CLIENT then
 	local CLCVAR = {}
 
 	CLCVAR["ph_cl_language"]				=	{ CTYPE_STRING, GetGlobalString("ph_default_lang", "en_us"), true, true, "Prefered language to use" }
+	
+	-- Old convars that previously placed in cl_init.lua is moved HERE.
+	CLCVAR["ph_cl_halos"]					=	{ CTYPE_BOOL, 	"1",	 true, true,  "Toggle Enable/Disable Halo effects when choosing a prop.", {min=0,max=1} }
+	CLCVAR["ph_cl_pltext"] 					=	{ CTYPE_BOOL, 	"1",	 true, false, "Options for Text above players. 0 = Disable. 1 = Enable.", {min=0,max=1} }
+	CLCVAR["ph_cl_endround_sound"] 			=	{ CTYPE_BOOL, 	"1",	 true, false, "Play a sound when round ends? 0 to disable.", {min=0,max=1} }
+	CLCVAR["ph_cl_autoclose_taunt"] 		=	{ CTYPE_BOOL, 	"1",	 true, false, "Auto close the taunt window (When Double Clicking on them)?", {min=0,max=1} }
+	CLCVAR["ph_cl_spec_hunter_line"] 		=	{ CTYPE_BOOL, 	"1",	 true, false, "Draw a line on hunters so we can see their aim in spectator mode.", {min=0,max=1} }
+	CLCVAR["cl_enable_luckyballs_icon"] 	=	{ CTYPE_BOOL, 	"1",	 true, false, "Enable 'Lucky ball' icon to be displayed once they spawned", {min=0,max=1} }
+	CLCVAR["cl_enable_devilballs_icon"] 	=	{ CTYPE_BOOL, 	"1",	 true, false, "Enable 'Devil ball' icon to be displayed once they spawned", {min=0,max=1} }
+	CLCVAR["ph_hud_use_new"]				=	{ CTYPE_BOOL, 	"1",	 true, false, "Use new PHX HUD", {min=0,max=1} }
+	CLCVAR["ph_show_team_topbar"] 			=	{ CTYPE_BOOL, 	"1",	 true, false, "Show total alive team players bar on the top left", {min=0,max=1} }
+	CLCVAR["ph_show_custom_crosshair"]		=	{ CTYPE_BOOL, 	"1",	 true, false, "Show custom crosshair for props", {min=0,max=1} }
+	CLCVAR["ph_show_tutor_control"]			=	{ CTYPE_BOOL, 	"1",	 true, false, "Show 'Prop Gameplay Control' hud on each prop spawns. This only show twice and reset until map changes/user disconnect.", {min=0,max=1} }
+    -- Mouse right clicking is now client-sided.
+    CLCVAR["ph_prop_right_mouse_taunt"]		=	{ CTYPE_BOOL,	"0",     true, true,  "Should Prop also able to Taunt by pressing Right Click?" }
 
-	CLCVAR["ph_default_taunt_key"]			=	{ CTYPE_NUMBER,  KEY_F3, true, true, "Default random taunt key to be used. Default is F3 ("..tostring(KEY_F3)..")" }
-	CLCVAR["ph_default_customtaunt_key"]	=	{ CTYPE_NUMBER,  KEY_C,  true, true, "Default custom taunt key to be used. Default is C ("..tostring(KEY_C)..")" }
-	CLCVAR["ph_default_rotation_lock_key"]	=	{ CTYPE_NUMBER,  KEY_R,  true, true, "Default Rotation lock key to be used. Default is R ("..tostring(KEY_R)..")" }
+	CLCVAR["ph_default_taunt_key"]			=	{ CTYPE_NUMBER,  KEY_F3, true, true,  "Default random taunt key to be used. Default is F3 ("..tostring(KEY_F3)..")" }
+	CLCVAR["ph_default_customtaunt_key"]	=	{ CTYPE_NUMBER,  KEY_C,  true, true,  "Default custom taunt key to be used. Default is C ("..tostring(KEY_C)..")" }
+	CLCVAR["ph_default_rotation_lock_key"]	=	{ CTYPE_NUMBER,  KEY_R,  true, true,  "Default Rotation lock key to be used. Default is R ("..tostring(KEY_R)..")" }
 
-	CLCVAR["ph_prop_menu_key"]				=	{ CTYPE_NUMBER,  KEY_F8, true, true, "Default key to open Prop Menu. Default is F8 ("..tostring(KEY_F8)..")" }
-	CLCVAR["ph_prop_midair_freeze_key"]		=	{ CTYPE_NUMBER,  KEY_M,  true, true, "Default key to freeze your prop while in mid-air. Default is M ("..tostring(KEY_M)..")" }
+	CLCVAR["ph_prop_menu_key"]				=	{ CTYPE_NUMBER,  KEY_F8, true, true,  "Default key to open Prop Menu. Default is F8 ("..tostring(KEY_F8)..")" }
+	CLCVAR["ph_prop_midair_freeze_key"]		=	{ CTYPE_NUMBER,  KEY_M,  true, true,  "Default key to freeze your prop while in mid-air. Default is M ("..tostring(KEY_M)..")" }
+	
+	-- New ClientConvar
+	CLCVAR["ph_cl_pitch_taunt_enable"]		=	{ CTYPE_BOOL,	"1",	 true, true,  "Enable pitch level for custom taunts?"}
+	CLCVAR["ph_cl_pitch_level"]				=	{ CTYPE_FLOAT,	"100.0", true, true,  "Current pitch level used for.", { min = 1, max = 255 } }
+	CLCVAR["ph_cl_pitch_apply_random"]		=	{ CTYPE_BOOL,	"0",	 true, true,  "Apply for random taunts as well."}
+	CLCVAR["ph_cl_pitch_randomized"]		=	{ CTYPE_BOOL,	"0",	 true, true,  "Randomize taunt pitch for CUSTOM taunt regardless from the preferred pitch level."}
+	CLCVAR["ph_cl_pitch_randomized_random"]	=	{ CTYPE_BOOL,	"0", 	 true, true,  "Randomize taunt pitch for RANDOM taunt regardless from the preferred pitch level." }
+	
+	CLCVAR["ph_cl_pitch_apply_fake_prop"]	=	{ CTYPE_BOOL,	"0", 	 true, true,  "Apply pitch for fake taunts." }
+    CLCVAR["ph_cl_pitch_fake_prop_random"]  =   { CTYPE_BOOL,   "0",     true, true,  "Randomize taunt pitch for FAKE taunt regardless from the preferred pitch level."}
+	
+	CLCVAR["ph_cl_decoy_spawn_key"]			=	{ CTYPE_NUMBER, KEY_1,	 true, true,  "What key should we use to spawn 'Decoy' prop? Default is Key number 1 ("..tostring(KEY_1)..")" }
+    CLCVAR["ph_cl_decoy_spawn_helper"]      =   { CTYPE_BOOL,   "1",     true, false, "Show/Hide a Decoy placement helper? This will show a white dot with a text near on your crosshair." }
+    CLCVAR["ph_cl_decoy_spawn_marker"]      =   { CTYPE_BOOL,   "1",     true, false, "Show/Hide Decoy marker?" }
 
 	local cTranslate = {}
 
@@ -334,8 +374,9 @@ if CLIENT then
 	
 	local function SetClientConVar (name, value, shouldSave, isUserInfo, help, data, func)
 		if (data and data ~= nil) then
-			if type(data) == "table" then
-				CreateClientConVar(name, value, shouldSave, isUserInfo, help)
+			-- Note: if value contains String, it wouldn't work if data.min and data.max is present. You've been warned!
+			if type(data) == "table" and (not table.IsEmpty(data)) then
+				CreateClientConVar(name, value, shouldSave, isUserInfo, help, data.min, data.max)
 			end
 		else
 			CreateClientConVar(name, value, shouldSave, isUserInfo, help)

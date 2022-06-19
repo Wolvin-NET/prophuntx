@@ -19,8 +19,6 @@ function ENT:Initialize()
 		self:SetLagCompensated(true)			
 		self:SetMoveType(MOVETYPE_NONE)
 		self.health = 100
-	else
-	
 	end
 end
 
@@ -37,7 +35,7 @@ function ENT:Think()
 		if IsValid(pl) && pl:Alive() && pl == LocalPlayer() then
 			local me  = LocalPlayer()
 			local pos = me:GetPos()
-			local ang = me:GetAngles()
+			local ang = me:EyeAngles()  -- for some reason, this one really smoth out the rotation.
 			local lockstate = pl:GetPlayerLockedRot()
 			
 			if self:GetModel() == "models/player/kleiner.mdl" || self:GetModel() == player_manager.TranslatePlayerModel(GetConVar("cl_playermodel"):GetString()) then
@@ -74,6 +72,7 @@ if SERVER then
 			pl:SetHealth(self.health)
 			
 			if self.health <= 0 then
+			
 				pl:KillSilent()
 				pl:SetArmor(0)
 				
@@ -123,8 +122,8 @@ if SERVER then
 				attacker:AddFrags(1)
 				pl:AddDeaths(1)
 				attacker:SetHealth(math.Clamp(attacker:Health() + GetConVarNumber("ph_hunter_kill_bonus"), 1, 100))
-				
-				hook.Call("PH_OnPropKilled", nil, pl, attacker)			
+                
+                hook.Call("PH_OnPropKilled", nil, pl, inflictor, attacker) -- Added inflictor, due to PS2 needs it, although it doesn't.
 				pl:RemoveProp()
 			end
 		end

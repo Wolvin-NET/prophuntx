@@ -12,7 +12,11 @@ CLASS.DrawTeamRing			= false
 
 
 -- Called by spawn and sets loadout
-function CLASS:Loadout(pl)
+-- Original: function CLASS:Loadout(pl), Bug: Hunters can still shoot before they get blinded!
+local function StartLoadOut( pl )
+
+    if !pl:Alive() then return end
+
     pl:GiveAmmo(32, "Buckshot")
     pl:GiveAmmo(255, "SMG1")
     pl:GiveAmmo(12, "357")
@@ -22,9 +26,11 @@ function CLASS:Loadout(pl)
     pl:Give("weapon_smg1")
     pl:Give("weapon_357")
 	
-	--pl:Give("item_ar2_grenade")
-	local numGrenade = PHX:GetCVar( "ph_smggrenadecounts" ) or 1
-	pl:SetAmmo(numGrenade, "SMG1_Grenade")
+    -- Only gives grenade if near round end feature is disabled.
+	if (not PHX:GetCVar( "ph_give_grenade_near_roundend" )) then
+        local numGrenade = PHX:GetCVar( "ph_smggrenadecounts" ) or 1
+        pl:SetAmmo(numGrenade, "SMG1_Grenade")
+    end
 	
 	local cl_defaultweapon = pl:GetInfo("cl_defaultweapon") 
  	 
@@ -49,34 +55,30 @@ function CLASS:OnSpawn(pl)
 	
 	pl:SetViewOffset(Vector(0,0,64))
 	pl:SetViewOffsetDucked(Vector(0,0,28))
-
-	--local unlock_time = math.Clamp(PHX:GetCVar( "ph_hunter_blindlock_time" ) - (CurTime() - GetGlobalFloat("RoundStartTime", 0)), 0, PHX:GetCVar( "ph_hunter_blindlock_time" ))
 	
 	local unlock_time = GetGlobalInt("unBlind_Time", 0)
 	
 	local unblindfunc = function()
-		if pl:IsValid() then
-			pl:Blind(false)
-		end
+		if pl:IsValid() then pl:Blind(false) end
 	end
-	local lockfunc = function()
-		if pl:IsValid() then
-			pl.Lock(pl)
-		end
+    
+    local lockfunc = function()
+		if pl:IsValid() then pl:Lock() end
 	end
 	local unlockfunc = function()
 		if pl:IsValid() then
-			pl.UnLock(pl)
-		end
+            pl:UnLock()
+            -- Loadout are now moved here, to prevent bugs
+            StartLoadOut( pl )
+        end
 	end
 	
 	if unlock_time > 2 then
-		pl:Blind(true)
-		
-		timer.Simple(unlock_time, unblindfunc)
-		
-		timer.Simple(2, lockfunc)
-		timer.Simple(unlock_time, unlockfunc)
+        pl:Blind(true)
+        
+        timer.Simple(unlock_time, unblindfunc)
+        timer.Simple(1, lockfunc)
+        timer.Simple(unlock_time, unlockfunc)
 	end
 	
 end

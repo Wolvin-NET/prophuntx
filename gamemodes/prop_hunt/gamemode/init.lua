@@ -1,3 +1,6 @@
+-- Force client to download workshop. Instead of sharing files.
+resource.AddWorkshop("2176546751")
+
 -- Send required file to clients
 AddCSLuaFile("sh_init.lua")
 AddCSLuaFile("cl_fb_core.lua")
@@ -74,6 +77,10 @@ local function ClearTimer()
 	if timer.Exists("tmr_handleUnblindHook") then
 		timer.Remove("tmr_handleUnblindHook")
 	end
+    
+    if timer.Exists("phx.tmr_GiveGrenade") then
+        timer.Remove("phx.tmr_GiveGrenade")
+    end
 end
 
 -- Called alot
@@ -206,8 +213,9 @@ function GM:PlayerCanSeePlayersChat(txt, onteam, listen, speaker)
 end
 
 local hunterdamagefix = {
-	["func_breakable"]		= true,
-	["func_physbox"]		= true
+	["func_breakable"]	= true,
+	["func_physbox"]	= true,
+	["ph_fake_prop"]	= true
 }
 
 -- add damage return from prop to hunter
@@ -261,7 +269,7 @@ function GM:PlayerShouldTakeDamage(ply, attacker)
 		if ( attacker.Team and ply:Team() == attacker:Team() and ply ~= attacker ) then return false end
 	end
 	
-	-- Allow only prop damage to hunters
+	-- Allow props damage to hunters
 	if GAMEMODE:InRound() and ply:Team() == TEAM_HUNTERS and (IsValid(attacker) and attacker:IsPlayer() and attacker:Team() == TEAM_PROPS) then
 		return true
 	end
@@ -338,7 +346,8 @@ local function AutoRespawnCheck(ply)
 					local tim = PHX:GetCVar( "ph_allow_respawnonblind_team_only" )
 					if tim > 0 and ply:Team() == tim then
 						ply:Spawn()
-						ply:PHXChatInfo( "NOTICE", "BLIND_RESPAWN_TEAM", team.GetName( tim ), math.Round(phx_blind_unlocktime - CurTime()) )
+						--ply:PHXChatInfo( "NOTICE", "BLIND_RESPAWN_TEAM", team.GetName( tim ), math.Round(phx_blind_unlocktime - CurTime()) )
+						ply:PHXChatInfo( "NOTICE", "BLIND_RESPAWN_TEAM", PHX:TranslateName( tim, ply ), math.Round(phx_blind_unlocktime - CurTime()) )
 					elseif tim == 0 then
 						ply:Spawn()
 						ply:PHXChatInfo( "NOTICE", "BLIND_RESPAWN", math.Round(phx_blind_unlocktime - CurTime()) )
@@ -382,7 +391,8 @@ hook.Add("OnPlayerChangedTeam", "TeamChange_switchLimitter", function(ply, old, 
 			timer.Simple(0.3, function()
 				if old ~= TEAM_SPECTATOR then
 					ply:SetTeam(old)
-					ply:PHXChatInfo("ERROR", "CHAT_SWAPTEAM_REVERT", team.GetName(new))
+					--ply:PHXChatInfo("ERROR", "CHAT_SWAPTEAM_REVERT", team.GetName(new))
+					ply:PHXChatInfo("ERROR", "CHAT_SWAPTEAM_REVERT", PHX:TranslateName(new,ply))
 					PHX.VerboseMsg("[PHX] Reverting "..ply:Nick().."\'s team to "..team.GetName(old))
 				end
 			end)
@@ -611,10 +621,12 @@ function GM:PlayerUse(pl, ent)
 	if pl:Team() == TEAM_PROPS && pl.UseTime <= CurTime() then
 		
 		local hmx, hz = ent:GetPropSize()
-		if PHX:GetCVar( "ph_check_props_boundaries" ) && !pl:CheckHull(hmx, hmx, hz) then
-			pl:PHXChatInfo("WARNING", "CHAT_PROP_NO_ROOM")
+        local proptype = PHX:GetCVar( "ph_usable_prop_type" )
+		if PHX:GetCVar( "ph_check_for_rooms" ) && !pl:CheckHull(hmx, hmx, hz) then
+            if (proptype <= 2 && PHX:IsUsablePropEntity( ent:GetClass() )) then
+                pl:PHXChatInfo("WARNING", "CHAT_PROP_NO_ROOM")
+            end
 		else
-			local proptype = PHX:GetCVar( "ph_usable_prop_type" )
 			if ( proptype >= 3 && PHX.CVARUseAbleEnts[proptype][ent:GetClass()] ) then
 				if PHX:QCVar( "ph_usable_prop_type_notice" ) then
 					pl:PrintCenter( "NOTIFY_PROP_ENTTYPE" )
@@ -644,6 +656,11 @@ function GM:PlayerUse(pl, ent)
 	if table.HasValue(PHX.EXPLOITABLE_DOORS, ent:GetClass()) && pl.last_door_time && pl.last_door_time + 1 > CurTime() then
 		return false
 	end
+    
+    -- Sorry but Props not allowed to enter vehicle, this is due to new code fixes for ph_prop :(
+    if pl:Team() == TEAM_PROPS and ent:IsVehicle() then
+        return false
+    end
 	
 	pl.last_door_time = CurTime()
 	return true
@@ -652,6 +669,11 @@ end
 -- Called when a player leaves
 function PlayerDisconnected(ply)
 	ply:RemoveProp()
+    
+    if IsValid(ply.propdecoy) then
+        ply.propdecoy:SetOwner(NULL)
+        ply.propdecoy = nil
+    end
 	
 	-- Save player Change Team info -- this will reset after map has been changed
 	if PHX:GetCVar( "ph_max_teamchange_limit" ) ~= -1 and !ply:CheckUserGroup() and (not ply:IsBot()) then
@@ -666,7 +688,6 @@ end
 hook.Add("PlayerDisconnected", "PH_PlayerDisconnected", PlayerDisconnected)
 
 -- Set specific variable for checking in player initial spawn, then use Player:IsHoldingEntity()
-util.AddNetworkString("InitialPlayer_ShowWhatsNew")
 PHX.CurPlys = {}
 hook.Add("PlayerInitialSpawn", "PHX.SetupInitData", function(ply)
 	if not PHX.cvarsynced then PHX:InitCVar() end
@@ -728,7 +749,12 @@ function PlayerSpawn(pl)
 	pl:UnLock()
 	pl:ResetHull()
 	pl:SetNWFloat("LastTauntTime", CurTime())
-	pl.last_taunt_time = 0
+    -- Reset Fake taunts
+	pl:ResetTauntRandMapCount()
+	
+    pl.last_taunt_time 	= 0
+	pl.lastCTauntTime 	= 0
+    pl.propdecoy = nil -- don't link to your decoy prop
 	
 	net.Start("ResetHull")
 	net.Send(pl)
@@ -761,11 +787,22 @@ function RoundEnd()
 		pl:UnLock()
 	end
 	
+	-- Give rewards for living props for a decoy
+    if GetGlobalInt("RoundNumber") > 2 then -- It should start giving after Round #2
+        for _, pl in pairs(team.GetPlayers(TEAM_PROPS)) do
+            if PHX:GetCVar( "ph_enable_decoy_reward" ) and pl:Alive() and pl:Health() > 0 and (not pl:HasFakePropEntity()) then
+                pl:SetFakePropEntity(true)
+                pl:PHXChatPrint( "DECOY_GET_REWARD", Color(50,248,56), true )
+				pl:PHXNotify( "DECOY_GET_REWARD", "GENERIC", 5, true )
+            end
+        end
+    end
+	
 	-- Stop autotaunting
 	net.Start("AutoTauntRoundEnd")
 	net.Broadcast()
 end
-hook.Add("PH_RoundEnd", "PH.ForceHuntersUnblind", RoundEnd)
+hook.Add("PH_RoundEnd", "PHX.RoundIsEnd", RoundEnd)
 
 
 -- This is called when the round time ends (props win)
@@ -790,11 +827,14 @@ function GM:OnPreRoundStart(num)
 	
 	if GetGlobalInt("RoundNumber") != 1 && (PHX:GetCVar( "ph_swap_teams_every_round" ) || ((team.GetScore(TEAM_PROPS) + team.GetScore(TEAM_HUNTERS)) > 0)) then
 		for _, pl in pairs(player.GetAll()) do
+		
 			if pl:Team() == TEAM_PROPS || pl:Team() == TEAM_HUNTERS then
+			
 				if pl:Team() == TEAM_PROPS then
 					pl:SetTeam(TEAM_HUNTERS)
 				else
 					pl:SetTeam(TEAM_PROPS)
+                    if pl:HasFakePropEntity() then pl:PHXNotify( "DECOY_REMINDER_GET", "GENERIC", 18, true ) end
 					if PHX:GetCVar( "ph_notice_prop_rotation" ) then
 						timer.Simple(0.5, function() 
 							pl:PHXNotify( "NOTIFY_IN_PROP_TEAM", "UNDO", 20, true )
@@ -813,7 +853,7 @@ function GM:OnPreRoundStart(num)
 			end
 		end
 		
-		-- Props will gain a Bonus Armor points Hunter teams has more than 4 players in it. More player means more armor that they get.
+		-- Props will gain a Bonus Armor points Hunter teams has more than 4 players in it. More player means more armor they can get.
 		timer.Simple(1, function()
 			local NumHunter = table.Count(team.GetPlayers(TEAM_HUNTERS))
 			if NumHunter >= 4 && NumHunter <= 8 then
@@ -834,10 +874,26 @@ function GM:OnPreRoundStart(num)
 	if PHX:GetCVar( "ph_enable_teambalance" ) then
 		GAMEMODE:CheckTeamBalance(true)
 	end
+    
+    -- Timer to give grenades, if ph_give_grenade_near_roundend is set.
+    timer.Create( "phx.tmr_GiveGrenade", GAMEMODE.RoundLength - PHX:GetCVar( "ph_give_grenade_roundend_before_time" ), 1, function()
+        if PHX:GetCVar( "ph_give_grenade_near_roundend" ) and GAMEMODE:InRound() then
+            for _,h in pairs(team.GetPlayers( TEAM_HUNTERS )) do
+                if h:Alive() and h:HasWeapon( "weapon_smg1" ) then
+                    local numGrenade = PHX:GetCVar( "ph_smggrenadecounts" )
+                    h:SetAmmo(numGrenade, "SMG1_Grenade")
+                    h:SendSurfaceSound("misc/grenadepickup.wav")
+                    h:PHXNotify( "NOTICE_GRENADE_SMG_GIVEN", "GENERIC", 5, true )
+                end
+            end
+        end
+    end)
 	
 	UTIL_StripAllPlayers()
 	UTIL_SpawnAllPlayers()
-	UTIL_FreezeAllPlayers()
+    
+    --print("UTIL_FreezeAllPlayers is called!")
+	--UTIL_FreezeAllPlayers()
 end
 
 
@@ -930,7 +986,7 @@ function GM:OnRoundEnd( num )
 		end
 	end
 	
-	-- forgot to add this; Remove handleUnblindHook
+	-- forgot to add this; Remove handleUnblindHook    
 	ClearTimer()
 	
 	hook.Call("PH_OnRoundEnd", nil, num)
@@ -987,27 +1043,17 @@ end
 -- Player pressed a key
 function PlayerPressedKey(pl, key)
 	-- Use traces to select a prop
-	local min,max = pl:GetHull()
 	if pl && pl:IsValid() && pl:Alive() && pl:Team() == TEAM_PROPS then
-		plhullz = max.z
+        local min,max = pl:GetHull()
 	
 		if key == IN_ATTACK then
 			local trace = {}
-			-- Wolvin: careful and pay attention after modifying cl_init's cHullz min & max, where min = 24, max = 84 in here.
-			if plhullz < 24 then
-				trace.start = pl:EyePos() + Vector(0, 0, plhullz + (24-  plhullz))
-				trace.endpos = pl:EyePos() + Vector(0, 0, plhullz + (24 - plhullz)) + pl:EyeAngles():Forward() * 100
-			elseif plhullz > 84 then
-				trace.start = pl:EyePos() + Vector(0, 0, plhullz - 84)
-				trace.endpos = pl:EyePos() + Vector(0, 0, plhullz - 84) + pl:EyeAngles():Forward() * 300
-			else
-				trace.start = pl:EyePos() + Vector(0, 0, 8)
-				trace.endpos = pl:EyePos() + Vector(0, 0, 8) + pl:EyeAngles():Forward() * 100
-			end
-			--trace.filter = ents.FindByClass("ph_prop")
+
+            trace = GAMEMODE.ViewCam:CommonCamCollEnabledView( pl:EyePos(), pl:EyeAngles(), max.z )
+			
 			--Fix by Codingale: https://github.com/Codingale, https://github.com/prop-hunt-enhanced/prop-hunt-enhanced/pull/11
 			local filter = {} -- We need to filter out players and the ph_prop.
-
+            
 			for k,v in pairs(ents.GetAll()) do
 				if v:GetClass() == "ph_prop" or string.lower(v:GetClass()) == "player" then
 					table.insert(filter, v)
@@ -1021,7 +1067,7 @@ function PlayerPressedKey(pl, key)
 				if pl.UseTime <= CurTime() then
 					if !pl:IsHoldingEntity() then
 						local hmx, hz = trace2.Entity:GetPropSize()
-						if PHX:GetCVar( "ph_check_props_boundaries" ) && !pl:CheckHull(hmx, hmx, hz) then
+						if PHX:GetCVar( "ph_check_for_rooms" ) && !pl:CheckHull(hmx, hmx, hz) then
 							pl:PHXChatInfo("WARNING", "CHAT_PROP_NO_ROOM")
 						else
 							GAMEMODE:PlayerExchangeProp(pl, trace2.Entity)
@@ -1037,11 +1083,18 @@ end
 hook.Add("KeyPress", "PlayerPressedKey", PlayerPressedKey)
 
 hook.Add("PlayerButtonDown", "PlayerButton_ControlTaunts", function(pl, key)
-	local info 	 = pl:GetInfoNum("ph_default_taunt_key", 0)
-	local ctInfo = pl:GetInfoNum("ph_default_customtaunt_key", 0)
-	local lockInfo = pl:GetInfoNum("ph_default_rotation_lock_key", 0)
-	
+	local info 	 		= pl:GetInfoNum("ph_default_taunt_key", 0)
+	local ctInfo 		= pl:GetInfoNum("ph_default_customtaunt_key", 0)
+	local lockInfo 		= pl:GetInfoNum("ph_default_rotation_lock_key", 0)
 	local freezePropKey = pl:GetInfoNum("ph_prop_midair_freeze_key", 0)
+	
+	local pitchApplyRand = pl:GetInfoNum("ph_cl_pitch_apply_random", 0)		-- Also applies for random taunt, specified with pitch level
+	local plPitchLevel	= pl:GetInfoNum("ph_cl_pitch_level", 100)			-- Pitch level to use
+	
+	local isRandomPitch = pl:GetInfoNum("ph_cl_pitch_randomized_random", 0)	-- Use Randomized pitch for Random Taunts instead of specified level
+	
+	local decoyKey		= pl:GetInfoNum("ph_cl_decoy_spawn_key", 0)			-- Used for spawning decoy
+    local isRightClickMode = pl:GetInfoNum("ph_prop_right_mouse_taunt", 0)  -- Right Click for taunt. Changed to clientside convar instead
 	
 	-- Freeze Prop while midair
 	if pl:Alive() and pl:Team() == TEAM_PROPS and (key == freezePropKey) then
@@ -1049,7 +1102,7 @@ hook.Add("PlayerButtonDown", "PlayerButton_ControlTaunts", function(pl, key)
 	end
 	
 	-- if you're excluding custom taunts not to be played on random taunts or use them *only* for specific 'groups', you're evil. jk it's good tho :)
-	if pl and pl:IsValid() and pl:Alive() and (key == info or (pl:Team() == TEAM_PROPS and ( PHX:QCVar( "ph_prop_right_mouse_taunt" ) and key == MOUSE_RIGHT ))) then
+	if pl and pl:IsValid() and pl:Alive() and (key == info or (pl:Team() == TEAM_PROPS and ( tobool(isRightClickMode) and key == MOUSE_RIGHT ))) then
 		if (PHX:GetCVar( "ph_custom_taunt_mode" ) == 1) && GAMEMODE:InRound() then
 			pl:ConCommand("ph_showtaunts")
 		elseif ((PHX:GetCVar( "ph_custom_taunt_mode" ) == 0) or (PHX:GetCVar( "ph_custom_taunt_mode" ) == 2)) and
@@ -1067,11 +1120,20 @@ hook.Add("PlayerButtonDown", "PlayerButton_ControlTaunts", function(pl, key)
 					rand_taunt = PHX:GetRandomTaunt( TEAM_PROPS )
 				end
 			until rand_taunt != pl.last_taunt
-			
-			pl.last_taunt_time = CurTime() + PHX:GetCVar( "ph_normal_taunt_delay" )
+			pl.last_taunt_time  = CurTime()
 			pl.last_taunt = rand_taunt
 			
-			pl:EmitSound(rand_taunt, 100)
+			local pitch = 100
+			if PHX:GetCVar("ph_taunt_pitch_enable") then
+				if tobool(pitchApplyRand) then	-- is it Specified?
+                    if tobool( isRandomPitch ) then 	-- is it Randomized?
+                        pitch = math.random(PHX:GetCVar("ph_taunt_pitch_range_min"), PHX:GetCVar("ph_taunt_pitch_range_max"))
+                    else
+                        pitch = plPitchLevel
+                    end
+				end
+			end
+			pl:EmitSound(rand_taunt, 100, pitch)
 			pl:SetNWFloat("LastTauntTime", CurTime())
 			
 		end
@@ -1081,22 +1143,28 @@ hook.Add("PlayerButtonDown", "PlayerButton_ControlTaunts", function(pl, key)
 		pl:ConCommand("ph_showtaunts")
 	end
 	
-	-- Prop rotation lock key
+	-- Prop rotation lock key, and spawn decoy key
 	if pl && pl:IsValid() && pl:Alive() && pl:Team() == TEAM_PROPS then
+		-- Lock rotation
 		if key == lockInfo then
 			if pl:GetPlayerLockedRot() then
 				pl:SetNWBool("PlayerLockedRotation", false)
-				pl:PHXNotify( "HUD_ROTFREE", "UNDO", 3, true )
+				pl:PrintCenter( "HUD_ROTFREE", Color(32,200,72) )
 				net.Start("PHX.rotateState")
 					net.WriteInt(0, 2)
 				net.Send(pl)
 			else
 				pl:SetNWBool("PlayerLockedRotation", true)
-				pl:PHXNotify( "HUD_ROTLOCK", "ERROR", 3, true )
+				pl:PrintCenter( "HUD_ROTLOCK", Color(255,128,40) )
 				net.Start("PHX.rotateState")
 					net.WriteInt(1, 2)
 				net.Send(pl)
 			end
+		end
+		
+		-- Spawn Decoy
+		if GAMEMODE:InRound() and pl:HasFakePropEntity() and key == decoyKey then
+			pl:PlaceDecoyProp()
 		end
 	end
 end)

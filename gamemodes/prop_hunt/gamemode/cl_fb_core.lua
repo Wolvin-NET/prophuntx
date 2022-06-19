@@ -1,46 +1,9 @@
--- Currently, this isn't translated. Maybe in future version of PH:X, sorry everyone!
-
-surface.CreateFont("RobotoInfo", {
-	font	= "Roboto",
-	size	= 24,
-	weight	= 750
-})
-surface.CreateFont("RobotoWarn", {
-	font	= "Roboto",
-	size	= 16,
-	weight	= 750
-})
-
-local formatText = [[Model Info:
-%s
-Has Physics: %s]]
-
-local HelpText = [[How To Use:
-[LEFT PANEL]
-← Choose a game content
-← Click on icons to add models to the right
-← Right Click to open context menu
-
-[RIGHT PANEL]
-→ Click to 'mark' before deleting
-→ Hit 'Remove Selected' to Remove Models
-→ Hit 'Apply Selection' to Send & Save to server
-
-[INFO]
-- You can only add models up to 2048 entries.
-- All maps props will be included automatically, so You Don't Have to.
-- Pressing [Close] button will cancel the operation.
-- Not all models will have a valid VPhysics.
-- Not all Players (inc. Your Server) will have custom models. If they don't exists they will removed after Applying selections.
-- Your Server content might be different from you. If you see "<game> [Not Available]" on dropdown menu, it means that you haven't mounted/installed the game.
-- Addon folder browsing isn't implemented yet so You'll have to use 'All Contents' instead.
-]]
-
 local function checkmodel( fPath, label )
 	local mdlInfo = util.GetModelInfo( fPath )
 	
 	if mdlInfo == nil then
-		label:SetText(string.format(formatText, fPath, "NO"))
+		-- label:SetText(string.format(formatText, fPath, "NO"))
+		label:SetText( PHX:FTranslate("PHZ_generic_mdlinfo", fPath, PHX:FTranslate("MISC_NO")) )
 		return false 
 	end
 	
@@ -49,14 +12,19 @@ local function checkmodel( fPath, label )
 	
 		if info and info ~= nil then
 			if (info[2] and info[2] ~= nil) and info[2]["Key"] == "solid" then -- Asume it's Ragdoll.
-				label:SetText(string.format(formatText, fPath, "NO: Ragdoll")) -- We currently do not support Ragdolls until further testing. If found nothing crashing server/client, this feature will be re-enabled.
+				-- We currently do not support Ragdolls until further testing. 
+				-- If we found that ragdoll can no longer server/client crashes, this feature will be re-enabled.
+				-- label:SetText(string.format(formatText, fPath, "NO: Ragdoll"))
+				label:SetText( PHX:FTranslate("PHZ_generic_mdlinfo", fPath, PHX:FTranslate("PHZ_generic_no_ragdoll")) )
 			elseif (info[1] and info[1] ~= nil) and info[1]["Key"] == "solid" then
-				label:SetText(string.format(formatText, fPath, "YES"))
+				--label:SetText(string.format(formatText, fPath, "YES"))
+				label:SetText( PHX:FTranslate("PHZ_generic_mdlinfo", fPath, PHX:FTranslate("MISC_YES")) )
 				return true
 			end
 		end
 	else
-		label:SetText(string.format(formatText, fPath, "NO"))
+		--label:SetText(string.format(formatText, fPath, "NO"))
+		label:SetText( PHX:FTranslate("PHZ_generic_mdlinfo", fPath, PHX:FTranslate("MISC_NO")) )
 	end
 	
 	return false
@@ -74,7 +42,7 @@ function PHXPM_openFileBrowser( ply, global, sub, svContents, wTitle )
 	if (!_G[global] or _G[global] == nil) then return end
 	if (!_G[global][sub] or _G[global][sub] == nil) then return end
 	
-	if !wTitle or wTitle == nil then wTitle = "Prop Menu" end
+	if !wTitle or wTitle == nil then wTitle = "Editor" end	-- this is fallback
 	
 	local tblModify = table.Copy( _G[global][sub] )
 	
@@ -86,7 +54,7 @@ function PHXPM_openFileBrowser( ply, global, sub, svContents, wTitle )
 		
 		f.frame = vgui.Create("DFrame")
 		f.frame:SetSize(ScrW() - 128, ScrH() - 80)
-		f.frame:SetTitle("Prop Hunt X: Custom Prop Editor [BETA]")
+		f.frame:SetTitle(PHX:FTranslate("PHZ_generic_title"))
 		f.frame:ShowCloseButton( false )
 		f.frame:Center()
 		
@@ -102,7 +70,7 @@ function PHXPM_openFileBrowser( ply, global, sub, svContents, wTitle )
 			f.comb:Dock(TOP)
 			f.comb:SetSize(0,20)
 			f.comb:DockMargin(20,5,20,5)
-			f.comb:SetValue("Select Mounted Game (Default: Garry's Mod)")
+			f.comb:SetValue(PHX:FTranslate("PHZ_mount_game_sel"))
 			
 			for path,name in SortedPairs( svContents ) do
 				f.comb:AddChoice( name, path )
@@ -112,7 +80,7 @@ function PHXPM_openFileBrowser( ply, global, sub, svContents, wTitle )
 			f.input:Dock(TOP)
 			f.input:SetSize(0, 20)
 			f.input:DockMargin(20,5,20,15)
-			f.input:SetPlaceholderText("Folder to Search: <folder name> or '*', blank for all folders.")
+			f.input:SetPlaceholderText(PHX:FTranslate("PHZ_input_placeholder1"))
 			
 		  f.pnButton = vgui.Create("DPanel", f.panel)
 		  f.pnButton:Dock(FILL)
@@ -120,20 +88,20 @@ function PHXPM_openFileBrowser( ply, global, sub, svContents, wTitle )
 			f.btnCancel = vgui.Create("DButton", f.pnButton)
 			f.btnCancel:Dock(FILL)
 			f.btnCancel:SetFont("RobotoWarn")
-			f.btnCancel:SetText("Close")
+			f.btnCancel:SetText(PHX:FTranslate("MISC_CLOSE"))
 			f.btnCancel:DockMargin(20,5,20,15)
 			f.btnCancel.DoClick = function()	-- we'll put this on top.
 				if f.isHaventSave then
-					Derma_Query(
-						"Are you sure you want to close this window? Any unsaved edits will be lost!",
-						"Warning",
-						"Yes", function()
+					PHX:MsgBox_Query(
+						"PHZ_msg_warn_close",
+						"MISC_WARN",
+						"MISC_YES", function()
 							net.Start(global .. ".DoneEditing")
 							net.SendToServer()
 							f.isOpen = false
 							f.frame:Close()
 							end,
-						"No", function() end
+						"MISC_NO", function() end
 					)
 				else
 					net.Start(global .. ".DoneEditing")
@@ -173,7 +141,7 @@ function PHXPM_openFileBrowser( ply, global, sub, svContents, wTitle )
 		f.lbl = vgui.Create("DLabel", f.panelinfo)
 		f.lbl:SetFont("RobotoInfo")
 		f.lbl:SetColor(Color(20,20,20,255))
-		f.lbl:SetText(string.format(formatText, "(Select a model first!)", "Unknown"))
+		f.lbl:SetText(PHX:FTranslate("PHZ_generic_mdlinfo", PHX:FTranslate("PHZ_generic_mdlinfoStart"), PHX:FTranslate("MISC_IDK")))
 		f.lbl:Dock(TOP)
 		f.lbl:DockMargin(10,10,10,5)
 		f.lbl:SetWrap(true)
@@ -190,7 +158,7 @@ function PHXPM_openFileBrowser( ply, global, sub, svContents, wTitle )
 		f.lblHelp = vgui.Create("DLabel", f.panelinfo)
 		f.lblHelp:SetFont("RobotoWarn")
 		f.lblHelp:SetColor(Color(40,40,40,255))
-		f.lblHelp:SetText(HelpText)
+		f.lblHelp:SetText(PHX:FTranslate("PHZ_generic_helptext")) --HelpText
 		f.lblHelp:Dock(TOP)
 		f.lblHelp:DockMargin(10,5,10,5)
 		f.lblHelp:SetWrap(true)
@@ -227,15 +195,15 @@ function PHXPM_openFileBrowser( ply, global, sub, svContents, wTitle )
 			f.label:DockMargin(20,5,0,0)
 			f.label:SetFont("RobotoInfo")
 			f.label:SetColor(Color(20,20,20,255))
-			f.label:SetText(wTitle .. " Preview :")
+			f.label:SetText(PHX:FTranslate("PHZ_generic_titlelabel", wTitle))
 			
 			f.btn = vgui.Create("DButton", f.panelpm)
 			f.btn:Dock(TOP)
 			f.btn:SetSize(0,32)
 			f.btn:SetFont("RobotoWarn")
 			f.btn:DockMargin(20,5,10,5)
-			f.btn:SetText("Remove Selected")
-			f.btn:SetToolTip("Remove selected props in the list. Legends:\nRed = Your Marked Selections\nYellow: Prop don't exists in server AND should be Removed.")
+			f.btn:SetText(PHX:FTranslate("PHZ_tooltip_removesel"))
+			f.btn:SetToolTip(PHX:FTranslate("PHZ_Tooltip_removesel"))
 			
 			f.list = vgui.Create("DIconBrowser", f.panelpm)
 			f.list:Dock(FILL)
@@ -253,7 +221,7 @@ function PHXPM_openFileBrowser( ply, global, sub, svContents, wTitle )
 			f.btnApply:SetFont("RobotoInfo")
 			f.btnApply:SetSize(0,30)
 			f.btnApply:DockMargin(20,5,10,10)
-			f.btnApply:SetText("Apply & Save Selections")
+			f.btnApply:SetText(PHX:FTranslate("PHZ_apply_select"))
 			f.btnApply:SetDisabled(true)
 		
 		--[[ PANEL FUNCTIONS, MUST BE WRITTEN HERE ]] --
@@ -287,7 +255,7 @@ function PHXPM_openFileBrowser( ply, global, sub, svContents, wTitle )
 			local legit = checkmodel( fPath, f.lbl )
 			
 			if table.HasValue(tblModify, mdl) then
-				f.lbwarn:SetText("WARNING: This Model is already in the list!")
+				f.lbwarn:SetText(PHX:FTranslate("PHZ_msg_warn_mdlinlist"))
 				f:markPropExist( mdl )
 			else
 				if legit then
@@ -300,7 +268,7 @@ function PHXPM_openFileBrowser( ply, global, sub, svContents, wTitle )
 					end
 					f.lbwarn:SetText("")
 				else
-					f.lbwarn:SetText("Reason: This is invalid model.")
+					f.lbwarn:SetText(PHX:FTranslate("PHZ_msg_invalid_mdl"))
 				end
 			end
 		end
@@ -311,19 +279,19 @@ function PHXPM_openFileBrowser( ply, global, sub, svContents, wTitle )
 			m:AddOption("Model Info", function()
 				local legit = checkmodel( fPath, f.lbl )
 				if table.HasValue(tblModify, mdl) then
-					f.lbwarn:SetText("WARNING: This Model is already in the list!")
+					f.lbwarn:SetText(PHX:FTranslate("PHZ_msg_warn_mdlinlist"))
 					f:markPropExist( mdl )
 				else
 					if !legit then
-						f.lbwarn:SetText("Reason: This is invalid model.")
+						f.lbwarn:SetText(PHX:FTranslate("PHZ_msg_invalid_mdl"))
 					else
 						f.lbwarn:SetText("")
 					end
 				end
 			end):SetIcon("icon16/information.png")
-			m:AddOption("Copy Model", function() SetClipboardText( mdl ) end):SetIcon("icon16/page_copy.png")
+			m:AddOption(PHX:FTranslate("PHZ_menu_copy"), function() SetClipboardText( mdl ) end):SetIcon("icon16/page_copy.png")
 			m:AddSpacer()
-			m:AddOption("Refresh Model", function() p:RebuildSpawnIcon() end):SetIcon("icon16/arrow_rotate_clockwise.png")
+			m:AddOption(PHX:FTranslate("PHZ_menu_refresh"), function() p:RebuildSpawnIcon() end):SetIcon("icon16/arrow_rotate_clockwise.png")
 			m:Open()
 		end
 		
@@ -372,7 +340,7 @@ function PHXPM_openFileBrowser( ply, global, sub, svContents, wTitle )
 						if !table.HasValue(_G[global][sub], realIcon:GetModelName()) then
 							ic.markeddontexist = true
 							ic:SetBackgroundColor(Color(255,200,16))
-							realIcon:SetToolTip("This prop was marked because it does't exist in the server.\nIf you close this editor, this will automatically removed.")
+							realIcon:SetToolTip(PHX:FTranslate("PHZ_tooltip_wasmarked"))
 						end
 						if !ic.markeddontexist then ic:Remove() end
 					end
@@ -389,10 +357,10 @@ function PHXPM_openFileBrowser( ply, global, sub, svContents, wTitle )
 		
 		f.btnApply.DoClick = function(self)
 		
-			Derma_Query(
-				"Are you sure you want to commit changes?",
-				"Notice",
-				"Yes", function()
+			PHX:MsgBox_Query(
+				"PHZ_msg_commit",
+				"MISC_NOTICE",
+				"MISC_YES", function()
 				
 					if !table.IsEmpty( tblModify ) then
 				
@@ -411,15 +379,15 @@ function PHXPM_openFileBrowser( ply, global, sub, svContents, wTitle )
 						f.btnCancel:SetDisabled(true)
 						f.btn:SetDisabled(true)
 					else
-						Derma_Message("Prop List cannot be empty.","Warning","OK")
+						PHX:MsgBox("PHZ_msg_cant_empty", "MISC_WARN", "MISC_OK")
 					end
 				end,
-				"No", function() end
-			)
+				"MISC_NO", function()
+			end)
 		end
 		
 		function f.fb.Tree:OnNodeSelected( pnl )
-			--f.lbl:SetText(string.format(formatText, "(Select Model on the Left)", "N/A"))
+			--f.lbl:SetText(PHX:FTranslate("PHZ_generic_mdlinfo", PHX:FTranslate("PHX_SELECT_LEFT"), PHX:FTranslate("MISC_NA")))
 			f.lbwarn:SetText("")
 		end
 		

@@ -9,9 +9,14 @@ net.Receive("pcr.PropListData", function()
 	PCR.PropList = {}
 
 	local total = net.ReadUInt(32)
-	local data = net.ReadData(total)
-	
+	local data  = net.ReadData(total)
 	local model = util.JSONToTable(util.Decompress(data))
+    
+    if !model or model == nil then
+        print("[!!PHX Prop Menu] Error: We got empty prop list. Something terribly went wrong with Networking!!!")
+        return
+    end
+    
 	for i=1,#model do
 		table.insert(PCR.PropList, model[i])
 	end
@@ -31,7 +36,7 @@ end)
 
 if ( PHX:GetCVar( "pcr_notify_messages" ) ) then
 	timer.Create("pcrT.NotifyAddon", math.random(70,120), math.random(4,10), function()
-		chat.AddText( Color(10,235,235), "[Prop Menu]", Color(220,220,220), PHX:FTranslate("PCR_NOTIFY_1", PCR._VERSION), Color(235,235,0), "\"pcr_help\"" , Color(220,220,220), PHX:FTranslate("PCR_NOTIFY_2") )
+		chat.AddText( Color(10,235,235), "[PHX Prop Menu]", Color(220,220,220), PHX:FTranslate("PCR_NOTIFY_1", PCR._VERSION), Color(235,235,0), "\"pcr_help\"" , Color(220,220,220), PHX:FTranslate("PCR_NOTIFY_2") )
 	end)
 end
 
@@ -47,12 +52,12 @@ PCR.WindowControl = {}
 local f = {}
 function PCR.WindowControl.MainFrame( ls )
 	if !PHX:GetCVar( "pcr_enable" ) then
-		chat.AddText(Color(235,10,15), "[Prop Menu]", Color(220,220,220), PHX:FTranslate("PCR_CL_DISABLED"))
+		chat.AddText(Color(235,10,15), "[PHX Prop Menu]", Color(220,220,220), PHX:FTranslate("PCR_CL_DISABLED"))
 		return
 	end
 	
 	if PHX:GetCVar( "pcr_only_allow_certain_groups" ) and !PCR:CheckUserGroup( LocalPlayer() ) then
-		chat.AddText(Color(235,10,15), "[Prop Menu]", Color(220,220,220), PHX:FTranslate("PCR_CL_GROUP"))
+		chat.AddText(Color(235,10,15), "[PHX Prop Menu]", Color(220,220,220), PHX:FTranslate("PCR_CL_GROUP"))
 		return
 	end
 	
@@ -61,7 +66,7 @@ function PCR.WindowControl.MainFrame( ls )
 		local uselimit = LocalPlayer():CheckUsage()
 		
 		if uselimit == 0 then
-			chat.AddText(Color(10,235,30), "[Prop Menu]", Color(220,220,220), PHX:FTranslate("PCR_CL_LIMIT"))
+			chat.AddText(Color(10,235,30), "[PHX Prop Menu]", Color(220,220,220), PHX:FTranslate("PCR_CL_LIMIT"))
 			return
 		end
 		if uselimit <= -1 then str = PHX:Translate("PCR_UNLIMIT_TEXT") end
@@ -161,7 +166,7 @@ function PCR.WindowControl.MainFrame( ls )
 		f.frame:SetKeyboardInputEnabled(false)
 	else
 	
-		chat.AddText(Color(10,235,30), "[Prop Menu]", Color(220,220,220), PHX:FTranslate("PCR_CL_MENU_NOTREADY"))
+		chat.AddText(Color(10,235,30), "[PHX Prop Menu]", Color(220,220,220), PHX:FTranslate("PCR_CL_MENU_NOTREADY"))
 		
 	end
 end
@@ -174,7 +179,7 @@ end
 
 concommand.Add("ph_prop_menu", function()
 	if PHX:GetCVar( "pcr_use_ulx_menu" ) then
-		chat.AddText(Color(235,20,20), "[Prop Menu]", Color(220,220,220), PHX:FTranslate("PCR_CL_CMDUSEULX"))
+		chat.AddText(Color(235,20,20), "[PHX Prop Menu]", Color(220,220,220), PHX:FTranslate("PCR_CL_CMDUSEULX"))
 	else
 		PCR:AddProps()
 	end

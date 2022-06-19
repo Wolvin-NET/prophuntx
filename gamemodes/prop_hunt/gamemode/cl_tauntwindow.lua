@@ -1,14 +1,5 @@
 local window = {}
 
-surface.CreateFont("PHX.TauntFont", 
-{
-	font = "Roboto",
-	size = 16,
-	weight = 500,
-	antialias = true,
-	shadow = false
-})
-
 local hastaunt = false
 
 window.state = false
@@ -34,7 +25,7 @@ local function MainFrame()
 	window.CurrentlyOpen = true
 
 	window.frame = vgui.Create("DFrame")
-	window.frame:SetSize(490,680)
+	window.frame:SetSize(580, ScrH() - 80)
 	window.frame:SetTitle( PHX:FTranslate("TM_WINDOW_TITLE") )
 	window.frame:SetVisible(true)
 	window.frame:ShowCloseButton(true)
@@ -43,7 +34,7 @@ local function MainFrame()
 	window.frame:SetKeyboardInputEnabled(true)
 	
 	window.frame.Paint = function(self,w,h)
-		surface.SetDrawColor(Color(40,40,40,180))
+		surface.SetDrawColor(Color(40,40,40,230))
 		surface.DrawRect(0,0,w,h)
 	end
 	
@@ -57,9 +48,10 @@ local function MainFrame()
 	window.list:SetMultiSelect(false)
 	window.list:AddColumn("soundlist") -- does nothing because header is invisible.
 	window.list.m_bHideHeaders = true
-	window.list:SetPos(10,52)
-	window.list:SetSize(0,505)
-	window.list:Dock(BOTTOM)
+	window.list:SetPos(10,52) --ignore?
+	--window.list:SetSize(0,505)
+	window.list:SetDataHeight(21)
+	window.list:Dock(FILL) --BOTTOM ?
 	
 	window.comb = vgui.Create("DComboBox", window.frame)
 	window.comb:Dock(TOP)
@@ -71,6 +63,106 @@ local function MainFrame()
 	window.input:SetSize(0, 20)
 	window.input:DockMargin(0,5,0,0)
 	window.input:SetPlaceholderText( PHX:FTranslate("TM_SEARCH_PLACEHOLDER") )
+	
+	-- Checkbox Label & Slider for Pitch and stuff here
+	window.slider = vgui.Create("DNumSlider", window.frame)
+	window.slider:Dock(TOP)
+	window.slider:SetSize(0,24)
+	window.slider:DockMargin(8,2,0,0)
+	window.slider:SetTooltip( PHX:FTranslate("PHX_CTAUNT_SLIDER_PITCH") )
+	window.slider:SetMin( PHX:GetCVar("ph_taunt_pitch_range_min") )
+	window.slider:SetMax( PHX:GetCVar("ph_taunt_pitch_range_max") )
+	window.slider:SetValue( PHX:GetCLCVar( "ph_cl_pitch_level" ) )
+    window.slider:SetText( PHX:FTranslate( "TM_PREFERRED_PITCH" ) )
+	window.slider:SetDecimals(1)
+    
+	-- Normal Custom Taunt pitch
+	window.ckpitch = vgui.Create("DCheckBoxLabel", window.frame)
+	window.ckpitch:Dock(TOP)
+	window.ckpitch:SetSize(0,20)
+	window.ckpitch:DockMargin(8,1,0,0)
+	window.ckpitch:SetText( PHX:FTranslate("PHX_CTAUNT_USE_PITCH") )
+	window.ckpitch:SetConVar( "ph_cl_pitch_taunt_enable" )
+    function window.ckpitch:OnChange( bool )
+        window.ckpitrand:SetEnabled( bool )
+    end
+	
+	window.ckpitrand = vgui.Create("DCheckBoxLabel", window.frame)
+	window.ckpitrand:Dock(TOP)
+	window.ckpitrand:SetSize(0,20)
+	window.ckpitrand:DockMargin(8,1,0,0)
+	window.ckpitrand:SetText( PHX:FTranslate("PHX_CTAUNT_RANDOM_PITCH") )
+	window.ckpitrand:SetConVar( "ph_cl_pitch_randomized" )
+    window.ckpitrand:SetEnabled( window.ckpitch:GetChecked() )
+	
+	-- The [F3] Random taunt pitch
+	window.ckPF3 = vgui.Create("DCheckBoxLabel", window.frame)
+	window.ckPF3:Dock(TOP)
+	window.ckPF3:SetSize(0,20)
+	window.ckPF3:DockMargin(8,1,0,0)
+	window.ckPF3:SetText( PHX:FTranslate("PHX_RTAUNT_USE_PITCH", input.GetKeyName( PHX:GetCLCVar( "ph_default_taunt_key" ) )) )
+	window.ckPF3:SetConVar( "ph_cl_pitch_apply_random" )
+    function window.ckPF3:OnChange( bool )
+        window.ckPRandF3:SetEnabled( bool )
+    end
+	
+	window.ckPRandF3 = vgui.Create("DCheckBoxLabel", window.frame)
+	window.ckPRandF3:Dock(TOP)
+	window.ckPRandF3:SetSize(0,20)
+	window.ckPRandF3:DockMargin(8,1,0,0)
+	window.ckPRandF3:SetText( PHX:FTranslate("PHX_RTAUNT_RANDOMIZE", input.GetKeyName( PHX:GetCLCVar( "ph_default_taunt_key" ) )) )
+	window.ckPRandF3:SetConVar( "ph_cl_pitch_randomized_random" )
+    window.ckPRandF3:SetEnabled( window.ckPF3:GetChecked() )
+	
+	-- The Fake Taunts pitch
+	window.ckPFake = vgui.Create("DCheckBoxLabel", window.frame)
+	window.ckPFake:Dock(TOP)
+	window.ckPFake:SetSize(0,20)
+	window.ckPFake:DockMargin(8,1,0,0)
+	window.ckPFake:SetText( PHX:FTranslate("PHX_CTAUNT_PITCH_FOR_FAKE") )
+	window.ckPFake:SetConVar( "ph_cl_pitch_apply_fake_prop" )
+    function window.ckPFake:OnChange( bool )
+        window.ckPRandFake:SetEnabled( bool )
+    end
+	
+	window.ckPRandFake = vgui.Create("DCheckBoxLabel", window.frame)
+	window.ckPRandFake:Dock(TOP)
+	window.ckPRandFake:SetSize(0,20)
+	window.ckPRandFake:DockMargin(8,1,0,5)
+	window.ckPRandFake:SetText( PHX:FTranslate("PHX_CTAUNT_RANDPITCH_FOR_FAKE") )
+    window.ckPRandFake:SetConVar( "ph_cl_pitch_fake_prop_random" )
+    window.ckPRandFake:SetEnabled( window.ckPFake:GetChecked() )
+
+	local btnpanel = vgui.Create("DPanel", window.frame)
+	btnpanel:Dock(TOP)
+	btnpanel:SetSize(0,91) -- 86+5
+	btnpanel:SetBackgroundColor(Color(20,20,20,200))
+	
+	local function CreateStyledButton(dock, size, ttip, margin, texture, imagedock, btnfunction)
+		local left,top,right,bottom = margin[1],margin[2],margin[3],margin[4]
+		
+		local button = vgui.Create("DButton", btnpanel)
+		button:Dock(dock)
+		button:SetSize(size,0)
+		button:DockMargin(left,top,right,bottom)
+		button:SetText("")
+		button:SetTooltip(ttip)
+		
+		button.Paint = function(self,w,h)
+			if self:IsHovered() then
+				surface.SetDrawColor(Color(90,90,90,200))
+			else
+				surface.SetDrawColor(Color(0,0,0,0))
+			end
+			surface.DrawRect(0,0,w,h)
+		end
+		
+		button.DoClick = btnfunction
+		
+		local image = vgui.Create("DImage", button)
+		image:SetImage(texture)
+		image:Dock(imagedock)
+	end	
 	
 	window.input.OnGetFocus = function()
 		window.frame:SetKeyboardInputEnabled(true)
@@ -199,53 +291,45 @@ local function MainFrame()
 		self:SortAndStyle(window.list)
 	end
 	
+	window.slider.OnValueChanged = function(self,value)
+		self:SetValue(value)
+		RunConsoleCommand( "ph_cl_pitch_level", tostring( value ) )
+	end
+	
 	window.CurrentCategory = PHX.DEFAULT_CATEGORY
 	window.comb:SortAndStyle(window.list)
-	
-	local btnpanel = vgui.Create("DPanel", window.frame)
-	btnpanel:Dock(FILL)
-	btnpanel:SetBackgroundColor(Color(20,20,20,200))
-	
-	local function CreateStyledButton(dock, size, ttip, margin, texture, imagedock, btnfunction)
-		local left,top,right,bottom = margin[1],margin[2],margin[3],margin[4]
-		
-		local button = vgui.Create("DButton", btnpanel)
-		button:Dock(dock)
-		button:SetSize(size,0)
-		button:DockMargin(left,top,right,bottom)
-		button:SetText("")
-		button:SetTooltip(ttip)
-		
-		button.Paint = function(self,w,h)
-			if self:IsHovered() then
-				surface.SetDrawColor(Color(90,90,90,200))
-			else
-				surface.SetDrawColor(Color(0,0,0,0))
-			end
-			surface.DrawRect(0,0,w,h)
-		end
-		
-		button.DoClick = btnfunction
-		
-		local image = vgui.Create("DImage", button)
-		image:SetImage(texture)
-		image:Dock(imagedock)
-	end
 	
 	local function TranslateTaunt(category, linename)
 		local tm = LocalPlayer():Team()
 		return PHX.TAUNTS[category][tm][linename]
 	end
 	
-	local function SendToServer(snd)
-		local lastTauntTime = LocalPlayer():GetNWFloat("localLastTauntTime", 0)
-		local delay = lastTauntTime + PHX:GetCVar( "ph_customtaunts_delay" )
+	local function SendToServer(snd, bFakeTaunt)
 	
-		if (delay <= CurTime()) then
-			net.Start("CL2SV_PlayThisTaunt"); net.WriteString(tostring(snd)); net.SendToServer();
-			LocalPlayer():SetNWFloat( "localLastTauntTime", CurTime() + PHX:GetCVar( "ph_customtaunts_delay" ) )
+		if bFakeTaunt == nil then bFakeTaunt = false end
+	
+		local lastCTauntTime = LocalPlayer():GetNWFloat("CTaunt.LastTauntTime", 0)
+		local lastRTauntTime = LocalPlayer():GetNWFloat("LastTauntTime",0)
+		
+		local delay = lastCTauntTime + PHX:GetCVar( "ph_customtaunts_delay" )
+		local delayR = lastRTauntTime + PHX:GetCVar( "ph_normal_taunt_delay" )
+	
+		if (delay <= CurTime() and delayR <= CurTime()) then
+			net.Start("CL2SV_PlayThisTaunt")
+				net.WriteString(tostring(snd))
+				net.WriteBool(bFakeTaunt)
+			net.SendToServer();
 		else
-			PHX:ChatInfo( PHX:Translate("TM_NOTICE_PLSWAIT", tostring(math.Round(delay - CurTime()))) , "WARNING" )
+			local time = 0
+			local text = ""
+			if delay >= CurTime() then
+				time = delay
+				text   = "TM_DELAYTAUNT_PLSWAIT"	-- added extra random taunt text.
+			elseif delayR >= CurTime() then
+				time = delayR
+				text   = "TM_NOTICE_PLSWAIT"
+			end
+			PHX:ChatInfo( PHX:Translate(text, tostring(math.Round(time - CurTime()))) , "NOTICE" )
 		end
 	end
 	
@@ -258,7 +342,16 @@ local function MainFrame()
 	CreateStyledButton(LEFT,86,PHX:FTranslate("TM_TOOLTIP_PREVIEW"),{5,5,5,5}, "vgui/phehud/btn_play.vmt",FILL, function()
 		if hastaunt and hasLines then
 			local getline = TranslateTaunt(window.CurrentCategory, window.list:GetLine(window.list:GetSelectedLine()):GetValue(1))
-			surface.PlaySound(getline)
+			--surface.PlaySound(getline)
+            local pt = 100
+            if window.ckpitch:GetChecked() then
+                if window.ckpitrand:GetChecked() then
+                    pt = math.random(window.slider:GetMin(), window.slider:GetMax())
+                else
+                    pt = window.slider:GetValue()
+                end
+            end
+            LocalPlayer():EmitSound( getline, 0, pt )
 			PHX:AddChat(PHX:Translate("TM_NOTICE_PLAYPREVIEW", getline), Color(20,220,0))
 		end
 	end)
@@ -277,17 +370,64 @@ local function MainFrame()
 			SendToServer(getline)
 		end
 	end)
+	CreateStyledButton(LEFT,86,PHX:FTranslate("TM_TOOLTIP_FAKETAUNT"),{5,5,5,5},"vgui/phehud/btn_faketaunt.vmt",FILL, function( btn )    
+		if hastaunt and hasLines then
+            if LocalPlayer():Team() == TEAM_PROPS then
+                local getline = TranslateTaunt(window.CurrentCategory, window.list:GetLine(window.list:GetSelectedLine()):GetValue(1))
+			
+                if PHX:GetCVar( "ph_randtaunt_map_prop_enable" ) then
+                    SendToServer(getline, true)
+                    PHX:AddChat(PHX:Translate("PHX_CTAUNT_PLAYED_ON_RANDPROP"), Color(20,220,0))
+                else
+                    PHX:AddChat(PHX:Translate("PHX_CTAUNT_RANDPROP_DISABLED"), Color(220,20,0))
+                end
+            else
+                PHX:AddChat(PHX:Translate("PHX_CTAUNT_RAND_PROPS_NOT_PROP"), Color(220,20,0))
+            end
+		end
+	end)
 	CreateStyledButton(FILL,86,PHX:FTranslate("TM_TOOLTIP_CLOSE"),{5,5,5,5},"vgui/phehud/btn_close.vmt",FILL, function()
 		window.frame:Close()
 	end)
 	
 	window.list.OnRowRightClick = function(panel,line)
-		if !PHX:GetCVar( "ph_prop_right_mouse_taunt" ) then -- don't show menu if Prop Taunt Right Click is enabled!
+		if !PHX:GetCLCVar( "ph_prop_right_mouse_taunt" ) then
 			hastaunt = true
 			local getline = TranslateTaunt(window.CurrentCategory, window.list:GetLine(window.list:GetSelectedLine()):GetValue(1))
 			
+			local textRandProp = { "PHX_CTAUNT_ON_RAND_PROPS", LocalPlayer():GetTauntRandMapPropCount() }
+			if PHX:GetCVar( "ph_randtaunt_map_prop_max" ) == -1 then textRandProp = "PHX_CTAUNT_ON_RAND_PROPS_UNLI" end
+			
 			local menu = DermaMenu()
-			menu:AddOption(PHX:FTranslate("TM_TOOLTIP_PREVIEW"), function() if hasLines then surface.PlaySound(getline); PHX:AddChat(PHX:Translate("TM_NOTICE_PLAYPREVIEW", getline), Color(20,220,0)); end end):SetIcon("icon16/control_play.png")
+			menu:AddOption(PHX:FTranslate("TM_TOOLTIP_PREVIEW"), function() 
+                if hasLines then 
+                    --surface.PlaySound(getline);
+                    local pt = 100
+                    if window.ckpitch:GetChecked() then
+                        if window.ckpitrand:GetChecked() then
+                            pt = math.random(window.slider:GetMin(), window.slider:GetMax())
+                        else
+                            pt = window.slider:GetValue()
+                        end
+                    end
+                    LocalPlayer():EmitSound( getline, 0, pt )
+                    PHX:AddChat(PHX:Translate("TM_NOTICE_PLAYPREVIEW", getline), Color(20,220,0)); 
+                end 
+            end):SetIcon("icon16/control_play.png")
+			
+			if PHX:GetCVar( "ph_randtaunt_map_prop_enable" ) and LocalPlayer():Team() == TEAM_PROPS then
+				menu:AddOption(PHX:QTrans( textRandProp ), function()
+					if hasLines then
+                        if LocalPlayer():GetTauntRandMapPropCount() >= 0 then
+                            SendToServer(getline, true)
+                            PHX:AddChat(PHX:Translate("PHX_CTAUNT_PLAYED_ON_RANDPROP"), Color(20,220,0))
+                        else
+                            PHX:AddChat(PHX:Translate("PHX_CTAUNT_RAND_PROPS_LIMIT"), Color(220,150,30))
+                        end
+					end
+				end):SetIcon("icon16/feed.png")
+			end
+			
 			menu:AddOption(PHX:FTranslate("TM_TOOLTIP_PLAYTAUNT"), function() if hasLines then SendToServer(getline); end end):SetIcon("icon16/sound.png")
 			menu:AddOption(PHX:FTranslate("TM_TOOLTIP_PLAYCLOSE"), function() if hasLines then SendToServer(getline); window.frame:Close(); end end):SetIcon("icon16/sound_delete.png")
 			menu:AddSpacer()
@@ -305,7 +445,7 @@ local function MainFrame()
 		local getline = TranslateTaunt(window.CurrentCategory, window.list:GetLine(window.list:GetSelectedLine()):GetValue(1))
 		SendToServer(getline)
 		
-		if PHX.CLCVAR.AutoCloseTaunt:GetBool() then window.frame:Close(); end
+		if PHX:GetCLCVar( "ph_cl_autoclose_taunt" ) then window.frame:Close(); end
 	end
 	
 	window.frame:MakePopup()

@@ -53,7 +53,8 @@ function PANEL:Think()
 		return 
 	end
 	
-	local Str = team.GetName( self.iTeam ) .. ": "
+	--local Str = team.GetName( self.iTeam ) .. ": "
+	local Str = PHX:TranslateName( self.iTeam ) .. ": "
 		
 	for k, v in pairs( players ) do
 		Str = Str .. v:Name() .. ", "

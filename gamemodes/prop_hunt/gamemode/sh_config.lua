@@ -1,5 +1,24 @@
 PHX.DEFAULT_CATEGORY = "PHX Original"
 
+-- Permanent Ban models. DO NOT MODIFY.
+local phx_PermaBannedModels = {
+    -- Props that can cause server crash.
+    "models/props/ph_gas_stationrc7/piepan.mdl",
+    
+    -- General Tiny / Exploitable Props.
+    "models/props/cs_assault/money.mdl",
+    "models/props/cs_assault/dollar.mdl",
+    "models/props/cs_office/snowman_arm.mdl",
+    "models/props/cs_office/computer_mouse.mdl",
+    "models/props/cs_office/projector_remote.mdl",
+    "models/foodnhouseholditems/egg.mdl",
+    "models/props/cs_militia/reload_bullet_tray.mdl",
+    "models/sims/lightwall2.mdl"
+}
+
+-- Decoy Default Distance
+PHX.DecoyDistance   = 250
+
 -- Time (in seconds) for spectator check (Default: 0.1)
 PHX.SPECTATOR_CHECK_ADD = 0.1
 
@@ -54,7 +73,7 @@ PHX.CVARUseAbleEnts = {
 	},
 	[4] = {
 		-- Enter any custom entities here. Avoid adding dangerous entities which may cause your server/game to CRASH! 
-		-- See: https://wolvindra.xyz/wiki/prophuntx/#0_QuickFix/Dangerous_Entities+Dangerous_Entities
+		-- See: https://gmodgameservers.com/wiki/prophuntx/#0_QuickFix/Dangerous_Entities+Dangerous_Entities
 		--====================================================================================--
 		-- RULES: MUST HAVE VPHSYICS, MUST HAVE PROPER COLLISION BOUNDS/BOUNDING BOX (BBOX).
 		-- NO VPHYSICS = IGNORED
@@ -92,33 +111,17 @@ function PHX:GetUsableEntities()
 	return self.USABLE_PROP_ENTITIES
 end
 
-hook.Add("Initialize", "PHX.InitUsableEnt", function()
-	PHX.USABLE_PROP_ENTITIES = PHX.CVARUseAbleEnts[ PHX:QCVar( "ph_usable_prop_type" ) ]
-end)
-
 -- dirty hacks: Client and Server must update Usable Prop Entities settings every round restart!
 -- Also Addition: Prohibitted Props
 -- Prohibitted models which can cause server/client crash or other issues.
 -- This will automatically gets deleted after round restart!
 PHX.PROHIBITTED_MDLS = {
 	["models/props_collectables/piepan.mdl"]	= true,
-	["models/foodnhouseholditems/egg.mdl"]		= true
-}
-
-hook.Add("PostCleanupMap", "PHX.UpdateUsablePropEnt", function()
-	-- Update Prop Enttiies Type
-	PHX.USABLE_PROP_ENTITIES = PHX.CVARUseAbleEnts[ PHX:GetCVar( "ph_usable_prop_type" ) ]
+	["models/foodnhouseholditems/egg.mdl"]		= true,
 	
-	-- Prohibit specific prop from spawning
-	for _,ent in pairs(ents.GetAll()) do
-		timer.Simple(0.1, function()
-			if IsValid(ent) and PHX.PROHIBITTED_MDLS[ent:GetModel()] then
-				PHX.VerboseMsg("[PHX] Removing " .. ent:GetModel() .. " to prevent server crash or exploits.")
-				ent:Remove()
-			end
-		end)
-	end
-end)
+	--test
+	["models/sims/lightwall2.mdl"]				= true
+}
 
 -- This is default English as Fallback. DO NOT TRANSLATE HERE, USE YOUR TRANSLATED LANGUAGE FILE INSTEAD!
 PHX.DefaultHelp = [[A Prop Hunt: X Project.
@@ -126,7 +129,7 @@ PHX.DefaultHelp = [[A Prop Hunt: X Project.
 A project to make Prop Hunt X modern and customisable.
 
 More info can be found at:
-https://wolvindra.xyz/prophuntx
+https://gmodgameservers.com/prophuntx
 
 To See more info, help and guide, Press [F1] key and then click [Prop Hunt Menu] button.
 
@@ -450,29 +453,6 @@ function PHX:ManageTaunt( category, tauntData )
 	end
 end
 
-local function InitializeTaunts()
-
-	PHX.VerboseMsg("[PH Taunts] Initializing Taunts...")
-	
-	PHX.VerboseMsg("[PH Taunts] Precaching taunt base..." )
-	PHX:AddToCache( TEAM_PROPS, PHX.TAUNTS[PHX.DEFAULT_CATEGORY][TEAM_PROPS] )
-	PHX:AddToCache( TEAM_HUNTERS, PHX.TAUNTS[PHX.DEFAULT_CATEGORY][TEAM_HUNTERS] )
-	
-	PHX.VerboseMsg("[PHX Taunts] Adding Custom Taunts, if any...")
-	for category,tauntData in SortedPairs( list.Get("PHX.CustomTaunts") ) do 
-		
-		PHX.VerboseMsg("[PH Taunts] Working on category: [" .. category .. "]...")
-		PHX:ManageTaunt( category, tauntData )
-		
-	end
-	
-	PHX.VerboseMsg( "[PH Taunts] Total Cache size: Props - " .. tostring(table.Count(PHX.CachedTaunts[TEAM_PROPS])) .. ", Hunter: " .. tostring(table.Count(PHX.CachedTaunts[TEAM_HUNTERS])) .."\n[PH Taunts] Done. Have Fun!" )
-	
-end
-hook.Add("Initialize", "PHX.InitializeTaunts", InitializeTaunts)
---If you have problem taunts weren't properly added, uncomment this and COMMENT out the "Initialize" Hook!
--- hook.Add("PostGamemodeLoaded", "PHX.InitializeTaunts", InitializeTaunts)
-
 -- Taunts Addition & Removal
 function PHX:AddCustomTaunt( idTeam, category, tblTaunt )
 	if (idTeam ~= TEAM_PROPS or idTeam ~= TEAM_HUNTERS) and !tblTaunt and (type(tblTaunt) ~= "table") then
@@ -608,14 +588,9 @@ if SERVER then
 		local dir = config_path .. "/prop_model_bans"
 		
 		-- this is a stock template. DO NOT MODIFY.
-		local mdlpermabans = {
-			"models/props/cs_assault/dollar.mdl",
-			"models/props/cs_assault/money.mdl",
-			"models/props/cs_office/snowman_arm.mdl",
-			"models/props/cs_office/computer_mouse.mdl",
-			"models/props/cs_office/projector_remote.mdl",
-			"models/foodnhouseholditems/egg.mdl",
-			"models/props/cs_militia/reload_bullet_tray.mdl"
+		local template = {
+            "models/player.mdl",
+            "models/chefhat.mdl"
 		}
 		
 		if ( !file.Exists(dir, "DATA") ) then
@@ -623,31 +598,98 @@ if SERVER then
 		end
 		
 		if ( !file.Exists(dir.."/model_bans.txt","DATA") ) then
-			file.Write( dir.."/model_bans.txt", util.TableToJSON( mdlpermabans, true ))
+			file.Write( dir.."/model_bans.txt", util.TableToJSON( template, true ))
 		end
 		
 		if ( file.Exists ( dir.."/model_bans.txt","DATA" ) ) then
 			local PROP_MODEL_BANS_READ = util.JSONToTable(file.Read(dir.."/model_bans.txt"))
-			-- empty the tables anyway.
-			PHX.BANNED_PROP_MODELS = {}
-			table.insert(PHX.BANNED_PROP_MODELS, "models/props/ph_gas_stationrc7/piepan.mdl") -- Added this permanently, reason: May cause server to crash.
+            
+			--PHX.BANNED_PROP_MODELS = {}
 			for _,v in pairs(PROP_MODEL_BANS_READ) do
-				PHX.VerboseMsg("[PHX Model Bans] Adding entry of restricted model to be used --> "..string.lower(v))
-				table.insert(PHX.BANNED_PROP_MODELS, string.lower(v))
+				PHX.VerboseMsg("[PHX Model Bans] Adding entry of restricted model to be used -> "..string.lower(v))
+                
+                if table.HasValue(PHX.BANNED_PROP_MODELS, v) then
+                    PHX.VerboseMsg("[PHX Model Bans] Models " .. v .. " is already exists in the prop model banlist. Ignoring...!")
+                else
+                    table.insert(PHX.BANNED_PROP_MODELS, string.lower(v))
+                end
 			end
 		else
 			PHX.VerboseMsg("[PHX] Cannot read "..dir.."/model_bans.txt: Error - did not exist. Did you just delete it or what?")
 		end
 	end
-	
-	-- Add Banned Models
-	AddBadPLModels()
-	AddBannedPropModels()
+    
+    -- First, Add Permanent Ban
+    for _,v in pairs( phx_PermaBannedModels ) do
+        table.insert( PHX.BANNED_PROP_MODELS, v )
+    end
+        
+    -- Add Extra Banned Models
+    AddBadPLModels()
+    AddBannedPropModels()
 	
 	-- Add ConCommands.
 	concommand.Add("ph_refresh_plmodel_ban", AddBadPLModels, nil, "Refresh Server Playermodel Ban Lists, read from prop_plymodel_bans/bans.txt data.")
 	concommand.Add("ph_refresh_propmodel_ban", AddBannedPropModels, nil, "Refresh Server Prop Models Ban Lists, read from prop_model_bans/model_bans.txt data.")
 end
+
+local function UpdatePropBansInfo( PHXKey, tbl )
+	local json = util.TableToJSON( tbl )
+	local compress = util.Compress(json)
+	local len = compress:len()
+	
+	net.Start( "PHX.UpdatePropbanInfo" )
+		net.WriteString( PHXKey )
+		net.WriteUInt( len, 32 )
+		net.WriteData( compress, len )
+	net.Broadcast()
+end
+
+hook.Add("PostCleanupMap", "PHX.UpdateUsablePropEnt", function()
+	-- Update Prop Enttiies Type
+	PHX.USABLE_PROP_ENTITIES = PHX.CVARUseAbleEnts[ PHX:GetCVar( "ph_usable_prop_type" ) ]
+	
+	-- Prohibit specific prop from spawning
+	for _,ent in pairs(ents.GetAll()) do
+		timer.Simple(0.1, function()
+			if IsValid(ent) and PHX.PROHIBITTED_MDLS[ent:GetModel()] then
+				PHX.VerboseMsg("[PHX] Removing " .. ent:GetModel() .. " to prevent server crash or exploits.")
+				ent:Remove()
+			end
+		end)
+	end
+	
+	if SERVER then
+		UpdatePropBansInfo( "BANNED_PROP_MODELS", PHX.BANNED_PROP_MODELS )
+		UpdatePropBansInfo( "PROP_PLMODEL_BANS", PHX.PROP_PLMODEL_BANS )
+	end
+end)
+
+local function InitializeTaunts()
+
+	PHX.VerboseMsg("[PH Taunts] Initializing Taunts...")
+	
+	PHX.VerboseMsg("[PH Taunts] Precaching taunt base..." )
+	PHX:AddToCache( TEAM_PROPS, PHX.TAUNTS[PHX.DEFAULT_CATEGORY][TEAM_PROPS] )
+	PHX:AddToCache( TEAM_HUNTERS, PHX.TAUNTS[PHX.DEFAULT_CATEGORY][TEAM_HUNTERS] )
+	
+	PHX.VerboseMsg("[PHX Taunts] Adding Custom Taunts, if any...")
+	for category,tauntData in SortedPairs( list.Get("PHX.CustomTaunts") ) do 
+		
+		PHX.VerboseMsg("[PH Taunts] Working on category: [" .. category .. "]...")
+		PHX:ManageTaunt( category, tauntData )
+		
+	end
+	
+	PHX.VerboseMsg( "[PH Taunts] Total Cache size: Props - " .. tostring(table.Count(PHX.CachedTaunts[TEAM_PROPS])) .. ", Hunter: " .. tostring(table.Count(PHX.CachedTaunts[TEAM_HUNTERS])) .."\n[PH Taunts] Done. Have Fun!" )
+    
+    -- Initialize Usable Prop Entities
+    PHX.USABLE_PROP_ENTITIES = PHX.CVARUseAbleEnts[ PHX:QCVar( "ph_usable_prop_type" ) ]
+	
+end
+hook.Add("Initialize", "PHX.InitializeTaunts", InitializeTaunts)
+-- use this if taunts are not properly added.
+-- hook.Add("PostGamemodeLoaded", "PHX.InitializeTaunts", InitializeTaunts)
 
 -- AAAAAAARGGHHHHHH
 if CLIENT then

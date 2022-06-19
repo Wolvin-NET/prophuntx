@@ -85,14 +85,14 @@ local PropRevenge = {
 					end
 					
 					pl.itemshootcount = pl.itemshootcount + 1
-					if pl.itemshootcount == max then
-						timer.Remove(pl.tmr_item)	-- completely clear the timer.
+					if pl.itemshootcount >= max then
+						timer.Remove(pl.tmr_item)	-- immediately clear timer.
 						ResetPlayerStuff(pl)
 					end
 				elseif !pl:Alive() then
 					print("[PHX Devil Crystal] Removing Timer '" .. pl.tmr_item .. "' because player was dead!")
 					timer.Remove(pl.tmr_item)
-					print("[PHX] Unsetting parameters on dead player.")
+					print("[PHX Devil Crystal] Unsetting parameters on dead player.")
 					ResetPlayerStuff(pl)
 				else
 					print("[PHX Devil Crystal] Removing Timer '" .. safefail .. "' because player was disconnected!")
@@ -264,7 +264,7 @@ ENT.funclists = {
 			
 			local failsafe = pl.tmr_itemnotice
 			
-			local msg = "Press [CLICK] to shoot ".. name .."!"
+			local msg = "Press [RIGHT CLICK] to shoot ".. name .."!"
 			
 			pl:PrintMessage(HUD_PRINTCENTER, msg)
 			timer.Create(pl.tmr_itemnotice, 3, 0, function()
@@ -276,7 +276,7 @@ ENT.funclists = {
 				end
 			end)
 			
-			pl:ChatPrint("[Devil Ball] You have ".. name .." in your hand! Aim towards to hunters to damage them!")
+			pl:ChatPrint("[Devil Ball] You have ".. name .." in your hand! Aim towards hunters to damage them!")
 		  end
 	end,
 	function(pl)
@@ -317,7 +317,15 @@ ENT:AddMoreLuckyEvents()
 
 function ENT:The_DevilDrop(pl)
 	if pl:Team() == TEAM_PROPS && pl:Alive() then
-		self.getfunction = self.funclists[math.random(1, #self.funclists)]
+		--self.getfunction = self.funclists[math.random(1, #self.funclists)]
+		--self.getfunction(pl,self)
+		
+		local cur
+		repeat
+			cur = self.funclists[math.random(1, #self.funclists)]
+		until cur ~= self.getfunction
+		
+		self.getfunction = cur
 		self.getfunction(pl,self)
 		
 		hook.Call("PH_OnDevilBallPickup", nil, pl)
@@ -372,7 +380,6 @@ local function ResetEverything()
 		end
 	end
 end
---hook.Add("PH_RoundEnd", "PHX.ForceResetDevilBall", ResetEverything)
 
 -- Reset Everything and Destroy all devil crystals after Round End with Result. (New Hook)
 hook.Add("PH_RoundEndResult", "PHX.DestroyDevils", function(r,rt)
@@ -405,10 +412,10 @@ local function DoPropRevenge( pl, amount )
 end
 
 hook.Add("PlayerTick", "PHX.PlayerPropDoRevenge", function(pl, mv)
-	if GAMEMODE:InRound() and pl:Alive() and pl:Team() == TEAM_PROPS and pl:KeyPressed(IN_ATTACK) then
+	if GAMEMODE:InRound() and pl:Alive() and pl:Team() == TEAM_PROPS and pl:KeyPressed(IN_ATTACK2) then
 		if pl.prop_revenge_item and pl.prop_revenge_item ~= nil and pl.prop_revenge_item > 0 and 
 			pl.has_uniqueitem and pl.has_uniqueitem ~= nil and !pl.has_uniqueitem_shoot then
-			DoPropRevenge(pl, math.random(6,10))	-- this is only for flechette.
+			DoPropRevenge(pl, math.random(6,10))	-- 2nd argument is only for flechette.
 		end
 	end
 end)

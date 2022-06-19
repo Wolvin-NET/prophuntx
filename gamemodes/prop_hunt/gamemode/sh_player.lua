@@ -4,17 +4,17 @@ if !Player then return end
 if !Entity then return end
 
 function Entity:GetPropSize()
-	local hullxymax = math.Round(math.Max(self:OBBMaxs().x-self:OBBMins().x, self:OBBMaxs().y-self:OBBMins().y))
-	local hullz = math.Round(self:OBBMaxs().z - self:OBBMins().z)
+	local hullxymax     = math.Round(math.Max(self:OBBMaxs().x - self:OBBMins().x, self:OBBMaxs().y - self:OBBMins().y) / 2)
+	local hullz         = math.Round(self:OBBMaxs().z - self:OBBMins().z)
 	
-	return hullxymax,hullz
+	return hullxymax, hullz
 end
 
 function Player:CheckHull(hx,hy,hz)
 	local tr = {}
 	tr.start = self:GetPos()
 	tr.endpos = self:GetPos()
-	tr.filter = {self, self.ph_prop}
+	tr.filter = { self, self:GetPlayerPropEntity() }
 	tr.maxs = Vector(hx,hy,hz)
 	tr.mins = Vector(-hx,-hy,0)
 	
@@ -93,7 +93,84 @@ function Player:CheckUserGroup()
 	return false
 end
 
+function Player:GetTauntRandMapPropCount()  -- Fake Taunt
+	return self:GetNWInt("iRandMapPropCount", 0)
+end
+
+function Player:HasFakePropEntity()
+	return self:GetNWBool("PlayerFakePropEnt",false)
+end
+
 if SERVER then
+	function Player:SubTauntRandMapPropCount()
+		local count = self:GetNWInt("iRandMapPropCount", 0)
+		if count <= 0 then return end
+		count = count - 1
+		self:SetNWInt("iRandMapPropCount", count)
+	end
+
+	function Player:ResetTauntRandMapCount()
+		local maxCount = PHX:GetCVar( "ph_randtaunt_map_prop_max" )
+		self:SetNWInt("iRandMapPropCount", maxCount)
+	end
+
+	function Player:SetFakePropEntity( bool )
+		if bool == nil then bool = false end
+		self:SetNWBool("PlayerFakePropEnt", bool)
+	end
+
+	function Player:PlaceDecoyProp()
+	
+		if (not PHX:GetCVar( "ph_enable_decoy_reward" )) then
+			self:PHXChatInfo( "ERROR", "DECOY_DISABLED" )
+			return
+		end
+	
+		if self:HasFakePropEntity() and self:Alive() and self:Team() == TEAM_PROPS then
+			-- todo: See cl_init.lua @ 394, values must be match!
+			local trace = {}
+			local dist = PHX.DecoyDistance
+            local min,max = self:GetHull()
+            
+            trace           = GAMEMODE.ViewCam:CamColEnabled( self:EyePos(), self:EyeAngles(), trace, "start", "endpos", dist, dist, dist, max.z )
+			trace.mask		= MASK_PLAYERSOLID
+			trace.filter	= ents.FindByClass('ph_prop')
+            table.insert(trace.filter, self)
+			
+			local tr = util.TraceLine( trace )
+			if (tr.Hit and tr.HitNormal.z > 0.5) then
+				local pos = tr.HitPos
+				
+				self.propdecoy = ents.Create("ph_fake_prop")
+                if self.ph_prop:GetModel() == "models/player/kleiner.mdl" or
+                    self.ph_prop:GetModel() == player_manager.TranslatePlayerModel( tostring(self:GetInfo("cl_playermodel")) ) then
+                    self.propdecoy:SetPos( pos )
+                else
+                    self.propdecoy:SetPos( pos - Vector(0,0, self.ph_prop:OBBMins().z ) ) 
+                end
+				self.propdecoy:SetAngles( self.ph_prop:GetAngles() )
+				self.propdecoy:Spawn()
+                
+				self.propdecoy:ChangeModel( self.ph_prop )
+                self.propdecoy:SetOwner( self )
+                
+				timer.Simple(0, function() 
+					--decoy:TakeModelFromMap()
+					self:SendSurfaceSound('buttons/lever4.wav')
+				end)
+				
+				self:SetFakePropEntity(false)
+				self:PHXChatInfo( "PRIMARY", "DECOY_PUT_SUCC" )
+			else
+				self:PHXChatInfo( "WARNING", "DECOY_CANT_PUT_HERE" )
+			end
+		end
+	end
+	
+	function Player:SendSurfaceSound( strSnd )
+		self:SendLua( 'surface.PlaySound("'..strSnd..'")' )
+	end
+
 	-- bShouldUseTheirOwnLang: Unless if you have your own language SET in your /langs/<language>.lua, Force this to TRUE.
 	-- Example: msg = "MY_CUSTOM_TEXT" will be translated if bShouldUseTheirOwnLang = true. If you want regular message, just put normal text on <msg> argument.
 	
