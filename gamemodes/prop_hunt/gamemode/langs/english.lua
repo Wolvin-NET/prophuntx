@@ -371,7 +371,6 @@ LANG["PHXM_UPDATE_FOUND_TEXT"]			= "Update has been checked. Please check on the
 LANG["PHXM_UPDATE_FOUND_BUTTON1"]               = "Update Info"
 LANG["PHXM_UPDATE_FOUND_BUTTON2"]               = "View Update"
 LANG["PHXM_BUTTON_NO"]			        = "No"
-LANG["PHXM_BUTTON_NO"]			        = "No"
 LANG["PHXM_ABOUT_LINKS"]			= "Links and credits"
 LANG["PHXM_ABOUT_THANKS"]			= "Special Thanks for the Support, Suggestion & Contributions:\n %s"
 LANG["PHXM_ABOUT_BTN_DONATE"]		= "Support PH:X by donating"
