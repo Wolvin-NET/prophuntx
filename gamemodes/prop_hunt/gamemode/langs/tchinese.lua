@@ -8,9 +8,12 @@ LANG.code = "zh-TW"
 
 LANG.Name 		 	= "繁體中文"
 LANG.NameEnglish	= "Traditional Chinese"
-LANG.Author			= "辣雞 | LaGi"
+LANG.Author			= "辣雞 | LaGi, Ph.X"
 -- Can Accept: String, and Table.
-LANG.AuthorURL		= {"http://steamcommunity.com/profiles/76561198057744616"}
+LANG.AuthorURL		= {
+     "http://steamcommunity.com/profiles/76561198057744616",
+     "https://steamcommunity.com/profiles/76561198034356313"
+}
 
 -- Special Section that isn't String-based
 LANG.SUICIDEMSG = {  -- Fix me: there was addition text here but feel free to add more.
@@ -20,7 +23,13 @@ LANG.SUICIDEMSG = {  -- Fix me: there was addition text here but feel free to ad
 	"盲狙自己.",
 	"憤怒的彈出去了.",
 	"喝醉了.",
-	"陣亡... 祝下次好運!",
+	"陣亡. 祝下次好運!",
+	"為殺害無辜物品而後悔.",
+	"穿越到暗房.",
+	"正在努力滅絕.",
+	"仆街.",
+	"驚慌失措並試圖殺死所有物品.",
+	"停手, 找人幫忙.",
 	"把自己給拍沒了.",
 	"被棍子絆倒了.",
 	"死於力量之下.",
@@ -385,7 +394,7 @@ LANG["TEXTENTRY_MV_PREFIX"] = "地圖投票的地圖前綴"			 -- the map previx
 
 --============= LATE ADDITION OF 29.10.21/X2Z. Please Improve your Language Here! =============--
 
-LANG["MISC_GAME_ENDED"]		= "Game has ended."
+LANG["MISC_GAME_ENDED"]		= "游戲已結束."
 
 --============= LATE ADDITION OF 16.09.21/X2Z. =============--
 
@@ -393,72 +402,72 @@ LANG["MISC_GAME_ENDED"]		= "Game has ended."
 	Credits: Late Addition: Revision: 16.09.21/X2Z
 ]]
 
-LANG["PHXM_ABOUT_BTN_WIKI"]			= "PHX Wiki & Manuals"
+LANG["PHXM_ABOUT_BTN_WIKI"]			= "PHX 維基 & 手冊"
 
 --[[
 	Auto Taunt: Late Addition: Revision: 16.09.21/X2Z
 ]]
 
-LANG["HUD_AUTOTAUNT_DISABLED"]		= 	"Auto Taunting is disabled."
-LANG["HUD_AUTOTAUNT_WAITFORUPDATE"]	=	"Auto Taunt is Synchronizing..."
+LANG["HUD_AUTOTAUNT_DISABLED"]		= 	"自動嘲諷已禁用."
+LANG["HUD_AUTOTAUNT_WAITFORUPDATE"]	=	"正在同步自動嘲諷..."
 
 --[[
 	MapVote: Late Addition: Revision: 16.09.21/X2Z
 ]]
-LANG["PHXM_MV_VOTEROCKED"]				= " The vote has been rocked, map vote will begin on round end"
-LANG["PHXM_MV_VOTEROCKED_IMMINENT"]		= "The vote has been rocked, map vote imminent"
-LANG["PHXM_MV_VOTEROCKED_PLY_TOTAL"]	= "%s has voted to Rock the Vote. ( %d / %d )"
+LANG["PHXM_MV_VOTEROCKED"]				= " 投票已撼動,本輪結束後將開始地圖投票"
+LANG["PHXM_MV_VOTEROCKED_IMMINENT"]		= "投票已撼動,即將開始地圖投票"
+LANG["PHXM_MV_VOTEROCKED_PLY_TOTAL"]	= "%s 支持撼動投票. ( %d / %d )"
 
-LANG["PHXM_MV_MUST_WAIT"]				= "You must wait a bit before voting!"
-LANG["PHXM_MV_VOTEINPROG"]				= "There is currently a vote in progress!"
-LANG["PHXM_MV_HAS_VOTED"]				= "You have already voted to Rock the Vote!"
-LANG["PHXM_MV_ALR_IN_VOTE"]				= "There has already been a vote, the map is going to change!"
-LANG["PHXM_MV_NEED_MORE_PLY"]			= "You need more players before you can rock the vote!"
+LANG["PHXM_MV_MUST_WAIT"]				= "你必須在投票前等待一段時間!"
+LANG["PHXM_MV_VOTEINPROG"]				= "目前正在進行一項投票!"
+LANG["PHXM_MV_HAS_VOTED"]				= "你已支持撼動投票!"
+LANG["PHXM_MV_ALR_IN_VOTE"]				= "已經通過一項投票,即將更換地圖!"
+LANG["PHXM_MV_NEED_MORE_PLY"]			= "你需要更多的玩家來發起撼動投票!"
 
 --[[
 	Late Addition: Revision: 16.09.21/X2Z
 ]]
-LANG["PROP_PLAYERMDL_BANNED"]	= "Your custom Prop Player Model was banned from the server."
+LANG["PROP_PLAYERMDL_BANNED"]	= "你的自订物品玩家模型被該伺服器封禁."
 
 --[[
 	Prop Menu/Prop Chooser, Revision: 16.09.21/X2Z
 ]]
 
-LANG["PCR_USAGE_UNLIMIT"]		= "[Prop Menu] You have **unlimitted** usage left!"
-LANG["PCR_USAGE_COUNT"]			= "[Prop Menu] You have %d usage left!"
-LANG["PCR_PLS_WAIT"]			= "[Prop Menu] Please wait in %d seconds."
-LANG["PCR_NOROOM"]				= "[Prop Menu] There is no room to change the prop!"
-LANG["PCR_PROPBANNED"]			= "[Prop Menu] This prop was banned by the server."
-LANG["PCR_PROPBANNED_BYPCR"]	= "[Prop Menu] You cannot use this prop because it was banned by Prop Menu."
-LANG["PCR_REACHED_LIMIT"]		= "[Prop Menu] You have reached the limit!"
-LANG["PCR_STAY_ON_GROUND"]		= "[Prop Menu] You need to stay on the ground and not crouching!"
-LANG["PCR_ONLY_GROUP"]			= "[Prop Menu] Only certain groups can open this menu!"
-LANG["PCR_NOT_EXIST_COUNT"]		= "That prop you have selected does not exists in this map! ( %s / 4 )"
-LANG["PCR_NOT_EXIST"]			= "That prop you have selected does not exists in this map!"
+LANG["PCR_USAGE_UNLIMIT"]		= "[物品選單] 你還有 **無限次** 使用權!"
+LANG["PCR_USAGE_COUNT"]			= "[物品選單] 你還有 %d 次使用權!"
+LANG["PCR_PLS_WAIT"]			= "[物品選單] 請等待 %d 秒."
+LANG["PCR_NOROOM"]				= "[物品選單] 沒有足夠的空間變形該物品!"
+LANG["PCR_PROPBANNED"]			= "[物品選單] 該物品已被伺服器封禁."
+LANG["PCR_PROPBANNED_BYPCR"]	= "[物品選單] 你不能使用該物品因為其被物品選單禁用."
+LANG["PCR_REACHED_LIMIT"]		= "[物品選單] 你已達到限制!"
+LANG["PCR_STAY_ON_GROUND"]		= "[物品選單] 你需要站在地上且不能蹲下!"
+LANG["PCR_ONLY_GROUP"]			= "[物品選單] 只有特定組別可以打開這個選單!"
+LANG["PCR_NOT_EXIST_COUNT"]		= "你選擇的那個物品不存在於這張地圖中! ( %s / 4 )"
+LANG["PCR_NOT_EXIST"]			= "你選擇的那個物品不存在於這張地圖中!"
 
 -- PCR Client section, reason why there is a space because of chat.AddText between args.
-LANG["PCR_NOTIFY_1"]			= " This server use Prop Menu version %s! Type "
-LANG["PCR_NOTIFY_2"]			= " in console or use F1 -> [PropChooser Help] menu."
-LANG["PCR_CL_DISABLED"]			= " This feature is disabled."
-LANG["PCR_CL_GROUP"]			= " Only certain groups can open this menu!"
-LANG["PCR_CL_LIMIT"]			= " You have reached the limit!"
-LANG["PCR_UNLIMIT_TEXT"]		= "Unlimited"
-LANG["PCR_WINDOW_TITLE"]		= "PHX Prop Menu"
-LANG["PCR_HEADER_TOP"]			= "Choose any prop you want. You have"
-LANG["PCR_HEADER_MID"]			= "%s usage limit"
-LANG["PCR_HEADER_BOTTOM"]		= "to use this prop chooser!"
-LANG["PCR_CL_TOOLTIP_BANNED"]	= "You cannot use this model."
-LANG["PCR_CL_TOOLTIP_MODEL"]	= "Model: %s"
-LANG["PCR_CL_MENU_NOTREADY"]	= " This feature is not available at the moment."
-LANG["PCR_WINDOW_GUIDE_TTL"]	= "Quick Guide: Prop Menu 101"
-LANG["PCR_BTN_HELP_MENU"]		= "Prop Menu Help"
+LANG["PCR_NOTIFY_1"]			= " 本伺服器使用物品選單版本 %s! 類型 "
+LANG["PCR_NOTIFY_2"]			= " 在控制台或使用 F1 -> [物品選擇幫助] 選單."
+LANG["PCR_CL_DISABLED"]			= " 該功能已禁用."
+LANG["PCR_CL_GROUP"]			= " 只有特定組別可以打開這個選單!"
+LANG["PCR_CL_LIMIT"]			= " 你已達到限制!"
+LANG["PCR_UNLIMIT_TEXT"]		= "無限"
+LANG["PCR_WINDOW_TITLE"]		= "PHX 物品選單"
+LANG["PCR_HEADER_TOP"]			= "選擇你想要的物品."
+LANG["PCR_HEADER_MID"]			= "你還有 %s 次"
+LANG["PCR_HEADER_BOTTOM"]		= "物品選擇使用權!"
+LANG["PCR_CL_TOOLTIP_BANNED"]	= "你不能使用這個模型."
+LANG["PCR_CL_TOOLTIP_MODEL"]	= "模型: %s"
+LANG["PCR_CL_MENU_NOTREADY"]	= " 該功能當前不可用."
+LANG["PCR_WINDOW_GUIDE_TTL"]	= "快速指南: 物品選單 101"
+LANG["PCR_BTN_HELP_MENU"]		= "物品選單幫助"
 
-LANG["PCR_CL_CMDUSEULX"]		= " This command is disabled. Use 'ulx propmenu' instead!"
-LANG["PCR_CMD_ULX_DISABLED"]	= "Command ulx propmenu is disabled. Press your [Prop Menu Bind] to open."	--input.GetKeyName is impossible to access.
+LANG["PCR_CL_CMDUSEULX"]		= " 該指令已禁用. 請使用 'ulx propmenu'!"
+LANG["PCR_CMD_ULX_DISABLED"]	= "指令 ulx propmenu 已禁用. 按下 [物品選單鍵] 來開啟."	--input.GetKeyName is impossible to access.
 
-LANG["PCR_EDT_IN_USE"]			= "An admin is still editing the prop data. Please Wait!"
-LANG["PCR_EDT_ERROR_DISABLED"]	= "[Prop Menu] Error: Custom Prop Addition is Disabled!"
-LANG["PCR_EDT_NO_RIGHTS"]		= "You have no rights to access this feature."
+LANG["PCR_EDT_IN_USE"]			= "一名管理員仍在編輯物品數據. 請稍候!"
+LANG["PCR_EDT_ERROR_DISABLED"]	= "[物品選單] 錯誤: 自訂物品添加已被禁用!"
+LANG["PCR_EDT_NO_RIGHTS"]		= "你無權訪問該功能."
 
 -- I'm actually exhausted and feel so burned out, but I'll update this in future, or in PH:Zero I guess.
 -- Section: Custom Prop Editor File Browser and stuff...
@@ -468,214 +477,214 @@ LANG["PCR_EDT_NO_RIGHTS"]		= "You have no rights to access this feature."
 --[[
 	Admin Section, Revision: 16.09.21/X2Z
 ]]
-LANG["PHXM_PLAYER_PROP_CHOOSER_KEY"]	= "Default Key to open Prop Menu (Prop Chooser)."
-LANG["PHXM_PROP_FREEZE_MIDAIR"]			= "Default Key to toogle Freeze movement during on midair as a Prop."
-LANG["PHXM_ADMIN_PROP_RIGHT_CLICK"]		= "Should Props also able to Taunt by pressing Right Click?"
-LANG["PHXM_ADMIN_TAUNT_SCANNER"]		= "(Require Map Restart) Enable Taunt Scanner?"
-LANG["PHXM_ADMLBL_USABLE_ENTS"]			= "Usable Prop Entities Types"
-LANG["PHXM_ADMLBL_USABLE_ENTS_REF"]		= "Types can be: 1: Physics Only, 2: Physics & Dynamics, 3: Almost Anything inc. Ragdolls, 4: Custom Entities."
-LANG["PHXM_ADMIN_USABLE_ENT_TYPE"]		= "Type of Entities to use for Prop to Replicate"
-LANG["PHXM_ADMIN_NOTIFY_ENT_TYPE"]		= "Notify Props about entities that cannot be replicated by pressing E. Only works if 'ph_usable_prop_type' is set to 3 or 4."
-LANG["NOTIFY_PROP_ENTTYPE"]				= "Press [E] to interact, [Click] to replicate object."
-LANG["NOTIFY_CUST_ENT_TYPE_IS_ON"]		= "[PHX] Notice: Press [E] to interact object, Press [Click] to Replicate the object."
+LANG["PHXM_PLAYER_PROP_CHOOSER_KEY"]	= "打開物品選單 (物品選擇器) 的默認鍵."
+LANG["PHXM_PROP_FREEZE_MIDAIR"]			= "作為物品在空中靜止的默認鍵."
+LANG["PHXM_ADMIN_PROP_RIGHT_CLICK"]		= "作為物品時是否能用右鍵嘲諷?"
+LANG["PHXM_ADMIN_TAUNT_SCANNER"]		= "(需要重啟地圖) 啟用嘲諷掃描器?"
+LANG["PHXM_ADMLBL_USABLE_ENTS"]			= "可用的物品實體類型"
+LANG["PHXM_ADMLBL_USABLE_ENTS_REF"]		= "類型可以為: 1: 僅物理, 2: 物理 & 動態, 3: 幾乎所有包括布娃娃, 4: 自訂實體."
+LANG["PHXM_ADMIN_USABLE_ENT_TYPE"]		= "用於復制的物品實體類型"
+LANG["PHXM_ADMIN_NOTIFY_ENT_TYPE"]		= "按 E 時告知物品玩家無法復制的實體. 僅檔'ph_usable_prop_type' 設置為 3 或 4 時有效.."
+LANG["NOTIFY_PROP_ENTTYPE"]				= "按 [E] 來互動, [左鍵] 來復制目標."
+LANG["NOTIFY_CUST_ENT_TYPE_IS_ON"]		= "[PHX] 通知: 按 [E] 來互動目標, [左鍵] 來復制目標."
 
 --[[
 	Custom Taunts, Revision: 16.09.21/X2Z
 ]]
-LANG["TM_TAUNTS_SEARCH_NOTHING"]		= "Taunt containing '%s' was not found..."
-LANG["TM_SEARCH_PLACEHOLDER"]			= "Search in this category: Enter word, lowercase & no wildcards. Empty=Show All."
+LANG["TM_TAUNTS_SEARCH_NOTHING"]		= "未找到包含 '%s' 的嘲諷..."
+LANG["TM_SEARCH_PLACEHOLDER"]			= "在該類別種查找: 輸入名字, 小寫且無通配符. 留空=展示所有."
 
 --[[
 	Freeze Cam, Revision: 23.09.21/X2Z
 ]]
-LANG["PHXM_ADMIN_FREEZECAM_HUNTER"]			= "Enable Freeze Cam features for team hunters"
+LANG["PHXM_ADMIN_FREEZECAM_HUNTER"]			= "開啟獵人隊伍的死亡特寫"
 
 
 --============= LATE ADDITION OF 10.06.2022/X2Z. =============--
 
-LANG["PHXM_MSG_INPUT_IS_EMPTY"]			= "Text is empty or you didn't pressed ENTER key."
-LANG["MISC_SET"]						= "Set"
-LANG["MISC_APPLY"]						= "Apply"
-LANG["MISC_NO"]							= "No"
-LANG["MISC_YES"]						= "Yes"
-LANG["MISC_WARN"]						= "Warning"
-LANG["MISC_ERROR"]						= "Error"
-LANG["MISC_INFO"]						= "Information"
-LANG["MISC_NOTICE"]						= "Notice"
-LANG["MISC_IDK"]						= "Unknown"
+LANG["PHXM_MSG_INPUT_IS_EMPTY"]			= "文本為空或你沒有按回車鍵."
+LANG["MISC_SET"]						= "設置"
+LANG["MISC_APPLY"]						= "應用"
+LANG["MISC_NO"]							= "否"
+LANG["MISC_YES"]						= "是"
+LANG["MISC_WARN"]						= "警告"
+LANG["MISC_ERROR"]						= "錯誤"
+LANG["MISC_INFO"]						= "信息"
+LANG["MISC_NOTICE"]						= "通知"
+LANG["MISC_IDK"]						= "未知"
 LANG["MISC_NA"]							= "N/A"
 
 -- HUD
-LANG["HUD_DECOY_ACTIVE"]                = "Press [%s]"
-LANG["HUD_FAKETAUNT_COUNT"]             = "%ix Left"
-LANG["HUD_FAKETAUNT_UNLI"]              = "Unlimited"
-LANG["NOTICE_GRENADE_SMG_GIVEN"]        = "You are now acquired some SMG Grenades."
+LANG["HUD_DECOY_ACTIVE"]                = "按 [%s]"
+LANG["HUD_FAKETAUNT_COUNT"]             = "剩餘 %ix"
+LANG["HUD_FAKETAUNT_UNLI"]              = "無限"
+LANG["NOTICE_GRENADE_SMG_GIVEN"]        = "你現在獲得了一些 SMG 手雷."
 
 --[[
 	ADMIN PANEL, Revision 10.06/2022/X2Z
 ]]--
-LANG["PHXM_TAUNT_SETTINGS"]				= "Taunt Settings"
-LANG["PHXM_GENERAL_SETTINGS"]			= "General Settings"
-LANG["PHXM_FAKE_TAUNT_SETTINGS"]		= "Fake Taunt Settings"
-LANG["PHXM_FAKE_TAUNT_ENABLE"]			= "Allow fake taunts to be played on random props in the map. Can be accessed only through Custom Taunt menu."
-LANG["PHXM_FAKE_TAUNT_MAXUSAGE"]		= "Maximum usage for fake taunts to be used; -1 is unlimited."
-LANG["PHXM_TAUNT_RIGHT_CLICK"]		    = "Right click for taunt. This will disable Right-clicking on custom menu!"
+LANG["PHXM_TAUNT_SETTINGS"]				= "嘲諷設置"
+LANG["PHXM_GENERAL_SETTINGS"]			= "常規設置"
+LANG["PHXM_FAKE_TAUNT_SETTINGS"]		= "假嘲諷設置"
+LANG["PHXM_FAKE_TAUNT_ENABLE"]			= "允許地圖上的隨機物品進行假嘲諷. 只能通過自訂嘲諷選單使用."
+LANG["PHXM_FAKE_TAUNT_MAXUSAGE"]		= "假嘲諷的最多使用次數; -1 為無限制."
+LANG["PHXM_TAUNT_RIGHT_CLICK"]		    = "右鍵嘲諷. 這會禁用右鍵自訂選單!"
 
-LANG["PHXM_TAUNT_PITCH_SETTINGS"]		= "Taunt Pitch Settings"
-LANG["PHXM_TAUNT_PITCH_ENABLE"]			= "Enable Taunt Pitch"
-LANG["PHXM_TAUNT_PITCH_RANGE_MIN"]		= "Minimum threshold/acceptable pitch range for a taunt. 1 to 99."
-LANG["PHXM_TAUNT_PITCH_RANGE_MAX"]		= "Maximum threshold/acceptable pitch range for a taunt. 100 to 255."
+LANG["PHXM_TAUNT_PITCH_SETTINGS"]		= "嘲諷音調設置"
+LANG["PHXM_TAUNT_PITCH_ENABLE"]			= "啟用嘲諷音調"
+LANG["PHXM_TAUNT_PITCH_RANGE_MIN"]		= "嘲諷音調的最低閾值. 1 到 99."
+LANG["PHXM_TAUNT_PITCH_RANGE_MAX"]		= "嘲諷音調的最高閾值. 100 到 255."
 
-LANG["PHXM_DECOY_SETTINGS"]				= "Decoy Settings"
-LANG["PHXM_DECOY_ENABLE"]				= "Enable Decoy reward? Reward will be given ONLY ONCE for alive props until the round ends. They don't add and only substract once they're placed."
+LANG["PHXM_DECOY_SETTINGS"]				= "誘餌設置"
+LANG["PHXM_DECOY_ENABLE"]				= "啟用誘餌獎勵? 對活到回合結束的物品僅獎勵一次. 一旦放置就不會增加只會減少."
 
-LANG["PHXM_DISABLE_FOOTSTEP"]           = "Toggle silent prop team footsteps"
+LANG["PHXM_DISABLE_FOOTSTEP"]           = "切換靜音物品組的腳步聲"
 
-LANG["PHXM_ADMIN_CHATSETTING"]			= "Chat Window Settings"
-LANG["PHXM_ADMIN_HUNTERBLIND"]			= "Hunter Blind Control"
+LANG["PHXM_ADMIN_CHATSETTING"]			= "聊天視窗設置"
+LANG["PHXM_ADMIN_HUNTERBLIND"]			= "獵人失明控制"
 
-LANG["PHXM_ADMIN_GIVEGRENADE_NEAREND"]  = "Should grenades will be given near round end? If Yes, see 'ph_give_grenade_roundend_before_time'"
-LANG["PHXM_ADMIN_GIVEGRENADE_TIME"]     = "Time in seconds to give grenades before Round Ends. This is typically between 10 to 30 seconds"
+LANG["PHXM_ADMIN_GIVEGRENADE_NEAREND"]  = "是否在回合結束前提供手雷? 若是, 請查看 'ph_give_grenade_roundend_before_time'"
+LANG["PHXM_ADMIN_GIVEGRENADE_TIME"]     = "回合結束前提供手雷的秒數. 通常設置為 10 到 30 秒"
 
 --[[
 	Plugins in sh_init.lua, Revision 10.06/2022/X2Z
 ]]--
-LANG["PLUG_NAME_VER"]					= "Plugin: %s | v.%s"
-LANG["PLUG_DESCRIPTION"]				= "Description: %s"
+LANG["PLUG_NAME_VER"]					= "插件: %s | v.%s"
+LANG["PLUG_DESCRIPTION"]				= "描述: %s"
 
 --[[
 	Taunt Pitch, Revision 10.06/2022/X2Z
 ]]--
-LANG["PHX_CTAUNT_USE_PITCH"]			= "Use pitch for custom taunts"
-LANG["PHX_CTAUNT_RANDOM_PITCH"]			= "Randomize pitch when playing taunt"
-LANG["PHX_RTAUNT_USE_PITCH"]			= "Use pitch for random taunts [%s]"
-LANG["PHX_RTAUNT_RANDOMIZE"]			= "Randomize pitch for random taunts [%s]"
-LANG["PHX_CTAUNT_PITCH_FOR_FAKE"]		= "Use pitch for fake taunts"
-LANG["PHX_CTAUNT_RANDPITCH_FOR_FAKE"]	= "Randomize pitch for fake taunts"
-LANG["PHX_CTAUNT_SLIDER_PITCH"]			= "Taunt pitch slider."
-LANG["TM_TOOLTIP_FAKETAUNT"]			= "Play a Fake Taunt on random prop"
-LANG["TM_PREFERRED_PITCH"]              = "Preferred Taunt Pitch Level"
+LANG["PHX_CTAUNT_USE_PITCH"]			= "對自訂嘲諷使用音調"
+LANG["PHX_CTAUNT_RANDOM_PITCH"]			= "使用嘲諷時隨機音調"
+LANG["PHX_RTAUNT_USE_PITCH"]			= "對隨機嘲諷使用音調 [%s]"
+LANG["PHX_RTAUNT_RANDOMIZE"]			= "使用隨機嘲諷時隨機音調 [%s]"
+LANG["PHX_CTAUNT_PITCH_FOR_FAKE"]		= "對假嘲諷使用音調"
+LANG["PHX_CTAUNT_RANDPITCH_FOR_FAKE"]	= "使用假嘲諷時隨機音調"
+LANG["PHX_CTAUNT_SLIDER_PITCH"]			= "嘲諷音調滑塊."
+LANG["TM_TOOLTIP_FAKETAUNT"]			= "在隨機物品上播放假嘲諷"
+LANG["TM_PREFERRED_PITCH"]              = "偏好的嘲諷音調"
 
 --[[
 	Fake Taunt, Revision 10.06/2022/X2Z
 	Description: Play fake taunts on random props in the map (Not Players)
 ]]--
-LANG["PHX_CTAUNT_ON_RAND_PROPS"]		= "Play on random props (%ix)"
-LANG["PHX_CTAUNT_ON_RAND_PROPS_UNLI"]	= "Play on random props"
-LANG["PHX_CTAUNT_PLAYED_ON_RANDPROP"]	= "You played a taunt on a random prop."
-LANG["PHX_CTAUNT_RAND_PROPS_LIMIT"]		= "You have hit the limit!"
-LANG["PHX_CTAUNT_RAND_PROPS_NOT_PROP"]  = "Not available at this moment."
-LANG["PHX_CTAUNT_RANDPROP_DISABLED"]	= "Fake taunt is currently disabled."
+LANG["PHX_CTAUNT_ON_RAND_PROPS"]		= "在隨機物品上播放 (%ix)"
+LANG["PHX_CTAUNT_ON_RAND_PROPS_UNLI"]	= "在隨機物品上播放"
+LANG["PHX_CTAUNT_PLAYED_ON_RANDPROP"]	= "你在隨機物品上播放了一個嘲諷."
+LANG["PHX_CTAUNT_RAND_PROPS_LIMIT"]		= "你已達到使用上限!"
+LANG["PHX_CTAUNT_RAND_PROPS_NOT_PROP"]  = "當前不可用."
+LANG["PHX_CTAUNT_RANDPROP_DISABLED"]	= "假嘲諷目前已被禁用."
 
 --[[
 	PH:Z Simple Decoy, Revision 10.06/2022/X2Z
 ]]--
 LANG.DECOY_PROP	= {
-	"killed the dummy!",
-	"feel regret after killing a dummy.",
-	"killed a decoy.",
-	"killed an innocent dummy.",
-	"feel embarrased after killing a dummy."
+	"擊殺了假人!",
+	"後悔擊殺了假人.",
+	"擊殺了誘餌.",
+	"擊殺了一個無辜假人.",
+	"尷尬於擊殺了一個假人."
 }
 
-LANG["DECOY_PUT_SUCC"]					= "Decoy successfully placed."
-LANG["DECOY_CANT_PUT_HERE"]				= "Cannot put decoy here."
-LANG["DECOY_GET_REWARD"]				= "Congrats! You received ['Prop Decoy'] for suviving this round!"
-LANG["DECOY_REMINDER_GET"]              = "You have a Decoy/Dummy prop! Place somewhere to confuse hunters!"
-LANG["DECOY_FRAGS_RECEIVED"]			= "Decoy successfully baited: You stole 1 score from %s!"
-LANG["DECOY_DISABLED"]					= "Currently, decoy is unavailable."
-LANG["PHXM_CL_DECOY_KEYBIND"]			= "Default key to place a decoy prop. Default is 1 (not keypad 1)."
+LANG["DECOY_PUT_SUCC"]					= "誘餌已放置."
+LANG["DECOY_CANT_PUT_HERE"]				= "不能把誘餌放在這里."
+LANG["DECOY_GET_REWARD"]				= "恭喜! 你獲得了 ['物品誘餌'] 來活過本輪!"
+LANG["DECOY_REMINDER_GET"]              = "你有一個誘餌/假人物品! 放在某處來迷惑獵人吧!"
+LANG["DECOY_FRAGS_RECEIVED"]			= "上鉤了: 你從 %s 竊取了一分!"
+LANG["DECOY_DISABLED"]					= "誘餌當前不可用."
+LANG["PHXM_CL_DECOY_KEYBIND"]			= "放置誘餌的默認鍵. 默認為 1 (不是小鍵盤 1)."
 
-LANG["DECOY_INDICATOR_INVALID"]         = "Invalid Slope!"
-LANG["DECOY_INDICATOR_TOOFAR"]          = "Range too far!"
-LANG["DECOY_INDICATOR_OK"]              = "Place Decoy [Press %s]"
+LANG["DECOY_INDICATOR_INVALID"]         = "坡度太陡!"
+LANG["DECOY_INDICATOR_TOOFAR"]          = "距離太遠!"
+LANG["DECOY_INDICATOR_OK"]              = "放置誘餌 [按 %s]"
 
-LANG["PHXM_DECOY_HEALTH"]				= "How much health does the decoy should have. Default is 10."
-LANG["PHXM_PLAYER_SHOW_DECOY_HELPER"]   = "Show/Hide Decoy placement helper? This will show a white dot with a text near on your crosshair."
-LANG["PHXM_PLAYER_SHOW_DECOY_MARKER"]   = "Show/Hide Decoy marker?"
+LANG["PHXM_DECOY_HEALTH"]				= "誘餌的血量. 默認為 10."
+LANG["PHXM_PLAYER_SHOW_DECOY_HELPER"]   = "是否展示誘餌擺放助手? 這會在你的準星旁邊展示一個帶文字的白點."
+LANG["PHXM_PLAYER_SHOW_DECOY_MARKER"]   = "是否展示誘餌標記?"
 
 --[[
 	Revision 10.06/2022/X2Z
     Prop Menu Update: Menu, Editor, Browser
 ]]--
-LANG["PCR_MODEL_DONT_EXISTS"]   = "Sorry, this model is not available at the moment!"
+LANG["PCR_MODEL_DONT_EXISTS"]   = "對不起, 該模型當前不可用!"
 
-LANG["PCR_PLUG_WARN_MSG"]		= "Warning: Custom Prop Addition (pcr_allow_custom) is set to 0.\nYou Must Enable this feature in order to edit your custom prop!\nA Map change is required to change this setting."
-LANG["PCR_PLUG_LBL_BINDKEY"]	= "To change bind key, switch to '[Player] tab."
-LANG["PCR_PLUG_LBL_EDITOR"]		= "Custom Prop Menu Editor"
-LANG["PCR_PLUG_BTN_OPEN_EDT"]	= "Open Editor"
-LANG["PCR_PLUG_LBL_COMSET"]		= "Common Settings"
-LANG["PCR_PLUG_LBL_TECHSET"]	= "Technical Settings"
-LANG["PCR_PLUG_LBL_EXPSET"]		= "Experimentals"
-LANG["PCR_PLUG_LBL_PLAYERSET"]	= "Player Settings"
+LANG["PCR_PLUG_WARN_MSG"]		= "警告: 自訂物品添加 (pcr_allow_custom) 設置為 0.\n必須啟用此功能才能編輯你的自訂物品!\n更改此設置需要更改地圖."
+LANG["PCR_PLUG_LBL_BINDKEY"]	= "改變綁定的按鍵, 切換至 '[玩家] 標簽頁."
+LANG["PCR_PLUG_LBL_EDITOR"]		= "自訂物品選單編輯器"
+LANG["PCR_PLUG_BTN_OPEN_EDT"]	= "打開編輯器"
+LANG["PCR_PLUG_LBL_COMSET"]		= "常見設置"
+LANG["PCR_PLUG_LBL_TECHSET"]	= "技術設置"
+LANG["PCR_PLUG_LBL_EXPSET"]		= "實驗性"
+LANG["PCR_PLUG_LBL_PLAYERSET"]	= "玩家設置"
 
-LANG["PCR_PLUG_ENABLE"]			= "Enable 'Prop Menu' feature"
-LANG["PCR_PLUG_ALLOW_CUSTOM"]	= "(Require Map Restart) Allow custom props to be added in to the Prop Menu list?"
-LANG["PCR_PLUG_PROP_BAN"]		= "(Require Map Restart) Do not include banned props into Prop Menu list?"
-LANG["PCR_PLUG_USAGE_LIMIT"]	= "Maximum usage limit for player to use. -1 means unlimited."
-LANG["PCR_PLUG_PROP_LIMIT"]		= "(Require Map Restart) Limit amount of prop addition to Prop Menu list"
-LANG["PCR_PLUG_PROP_LIMITMAX"]	= "Maximum amount of props that will be added to Prop Menu list. Note: This will be randomly added!"
-LANG["PCR_PLUG_USE_ULXMENU"]	= "Should Prop Menu can be accessed by Console (0) or ULX (1)? Bound key will respect with this setting"
-LANG["PCR_PLUG_USE_DELAY"]		= "Delay in seconds before player to use another Prop in Prop Menu"
-LANG["PCR_PLUG_KICK_INVALID"]	= "Kick any user attempt to access Invalid Model (4x Max. threshold)"
-LANG["PCR_PLUG_SPACE_CHECK"]	= "Check for space for a room before player use another prop to prevent Stuck"
-LANG["PCR_PLUG_X_BBOX"]			= "(Require Map Restart) Check Entity BBox Limit before adding to Prop Menu list"
-LANG["PCR_PLUG_X_BBOX_MAX"]		= "BBox CollisionBound Maximum Height limit. Mins will be auto-calculated."
-LANG["PCR_PLUG_X_BBOX_MIN"]		= "BBox CollisionBound Maximum Width limit. ins will be auto-calculated."
-LANG["PCR_PLUG_ONLY_GROUPS"]	= "Should Prop Menu can only be accessed by certain groups e.g. Donator?"
-LANG["PCR_PLUG_NOTIFYMSG"]		= "Notify player on how to use Prop Menu on every round start"
+LANG["PCR_PLUG_ENABLE"]			= "啟用 '物品選單' 功能"
+LANG["PCR_PLUG_ALLOW_CUSTOM"]	= "(需要重啟地圖) 允許在物品選單列表中添加自訂物品?"
+LANG["PCR_PLUG_PROP_BAN"]		= "(需要重啟地圖) 不將被封禁的物品納入物品選單列表中?"
+LANG["PCR_PLUG_USAGE_LIMIT"]	= "玩家使用的最大使用限制. -1 代表無限制."
+LANG["PCR_PLUG_PROP_LIMIT"]		= "(需要重啟地圖) 限制物品選單列表中增加的物品數量"
+LANG["PCR_PLUG_PROP_LIMITMAX"]	= "可添加到物品選單列表中的最大數量. 注意: 該數值會隨機增加!"
+LANG["PCR_PLUG_USE_ULXMENU"]	= "物品選單可否通過控制台 (0) 或 ULX (1) 打開? 綁定的按鍵將遵從此設置"
+LANG["PCR_PLUG_USE_DELAY"]		= "玩家在物品選單中使用另一個物品前的延遲秒數"
+LANG["PCR_PLUG_KICK_INVALID"]	= "踢掉任何試圖訪問無效模型的用戶 (4x 最大閾值)"
+LANG["PCR_PLUG_SPACE_CHECK"]	= "在玩家使用另一個物品之前，檢查房間的空間，以防卡住"
+LANG["PCR_PLUG_X_BBOX"]			= "(需要重啟地圖) 在添加到物品選單列表前檢查實體的 BBox 限制"
+LANG["PCR_PLUG_X_BBOX_MAX"]		= "BBox 碰撞的最大高度限制. 最小值將自動計算."
+LANG["PCR_PLUG_X_BBOX_MIN"]		= "BBox 碰撞的最大寬度限制. 最小值將自動計算."
+LANG["PCR_PLUG_ONLY_GROUPS"]	= "物品選單是否只能由某些組別訪問例如捐助者?"
+LANG["PCR_PLUG_NOTIFYMSG"]		= "在每輪開始時通知玩家如何使用物品選單"
 
-LANG["PCR_EDITOR_MSG_ERROR"]	= "Your changes hasn't been saved due to Errors.\nPlease check on your server console!"
-LANG["PCR_EDITOR_MSG_SUCC"]		= "Your changes and Custom Prop data has has been saved and updated successfully."
+LANG["PCR_EDITOR_MSG_ERROR"]	= "你的更改由於錯誤而未被保存.\n請檢查你的伺服器控制台!"
+LANG["PCR_EDITOR_MSG_SUCC"]		= "您的更改和自訂物品數據已成功保存和更新."
 
-LANG["PHZ_generic_title"]		= "Custom Prop Inclusion Editor"
-LANG["PHZ_generic_helptext"]	= [[[How To Use:
-[LEFT PANEL]
-← Choose a game content
-← Click on icons to add models to the right
-← Right Click to open context menu
+LANG["PHZ_generic_title"]		= "自訂物品收錄編輯"
+LANG["PHZ_generic_helptext"]	= [[[使用方法:
+[左側面板]
+← 選擇一個游戲內容
+← 點擊圖標，將模型添加到右側
+← 右擊打開上下文菜單
 
-[RIGHT PANEL]
-→ Click to 'mark' any props before deleting
-→ Hit 'Remove Selected' to Remove Models
-→ Hit 'Apply Selection' to Make changes
+[右側面板]
+→ 點擊 '標記' 想要刪除的物品
+→ 點擊 '移除選中' 來刪除模型
+→ 點擊 '應用篩選' 來完成改動
 
-[INFO]
-- You can only add models up to 2048 entries.
-- All maps props will be included automatically, so you don't have to.
-- Pressing [Close] button will cancel the operation.
-- Not all models will have a valid VPhysics.
-- Not all Players (inc. Your Server) will have custom models. If they don't exists they will removed after Applying selections.
-- Your Server content might be different from you. If you see "<game> [Not Mounted]" on dropdown menu, it means that you haven't mounted/installed the game.
-- Addon folder browsing isn't implemented yet so You'll have to use 'All Contents' instead.
+[信息]
+- 你至多能添加 2048 個模型.
+- 所有的地圖物品將被自動包括在內，所以你不必添加.
+- 點擊 [關閉] 按鈕將取消操作.
+- 並非所有模型都有有效的 VPhysics.
+- 不是所有的玩家 (包括你的伺服器) 都有自定義模型. 若不存在模型，則其將在應用篩選後被刪除.
+- 你的伺服器內容可能與你不同. 如果你在下拉菜單中看到 "<game> [Not Mounted]", 這意味著你還沒有安裝/調試好游戲.
+- Addon 文件夾瀏覽尚未實現，所以你必須使用 '所有內容' 來代替.
 ]]
-LANG["PHZ_generic_mdlinfo"] = [[Model Info:
+LANG["PHZ_generic_mdlinfo"] = [[模型信息:
 %s
-Has Physics: %s]]
-LANG["PHZ_generic_mdlinfoStart"] = "(Select model first!)"
+是否有物理: %s]]
+LANG["PHZ_generic_mdlinfoStart"] = "(先選擇模型!)"
 
-LANG["PHZ_generic_no_ragdoll"]	= "No: Ragdoll"
-LANG["PHZ_generic_titlelabel"]	= "%s Preview :"
+LANG["PHZ_generic_no_ragdoll"]	= "否: 布娃娃"
+LANG["PHZ_generic_titlelabel"]	= "%s 預覽 :"
 
-LANG["PHZ_mount_game_sel"]		= "Select mounted game (Default: Garry's Mod)"
-LANG["PHZ_input_placeholder1"]	= "Folder to Search: <folder name> or '*', blank for all folders."
-LANG["PHZ_input_placeholder2"]  = "Addon to Search: <name> or '*', blank for all folders."
-LANG["PHZ_msg_warn_close"]		= "Are you sure you want to close this window? Any unsaved edits will be lost!"
-LANG["PHZ_msg_commit"] 			= "Are you sure you want to commit changes?"
-LANG["PHZ_msg_cant_empty"]		= "Prop List cannot be empty!"
-LANG["PHZ_msg_removesel"] 		= [[Remove selected props in the list. Legends:
-Red = Marked Selections
-Yellow: Prop don't exists in server AND should be Removed.]]
-LANG["PHZ_msg_warn_mdlinlist"]  = "WARNING: This Model is already in the list!"
-LANG["PHZ_msg_invalid_mdl"] 	= "Reason: This is invalid model"
-LANG["PHZ_apply_select"] 		= "Apply & Save Selections"
-LANG["PHZ_menu_copy"] 		= "Copy Model"
-LANG["PHZ_menu_refresh"] 	= "Refresh Model"
-LANG["PHZ_tooltip_removesel"]	= "Remove Selected"
-LANG["PHZ_tooltip_wasmarked"] = [[This prop was marked because it does't exist in the server.
-If you close this editor, this will automatically removed.]]
+LANG["PHZ_mount_game_sel"]		= "選擇安裝的游戲 (默認: Garry's Mod)"
+LANG["PHZ_input_placeholder1"]	= "查找的文件夾: <文件夾名> or '*', 留空表示所有文件夾."
+LANG["PHZ_input_placeholder2"]  = "搜索的擴展: <名字> or '*', 留空表示所有文件夾."
+LANG["PHZ_msg_warn_close"]		= "你確定要關閉此視窗嗎? 任何未保存的編輯都將丟失!"
+LANG["PHZ_msg_commit"] 			= "你確定要提交修改嗎?"
+LANG["PHZ_msg_cant_empty"]		= "物品列表不能為空!"
+LANG["PHZ_msg_removesel"] 		= [[移除列表中的選定物品. 圖例:
+紅色 = 標記為選中
+黃色: 不存在於伺服器且應被刪除的物品.]]
+LANG["PHZ_msg_warn_mdlinlist"]  = "警告: 該模型已經在列表中!"
+LANG["PHZ_msg_invalid_mdl"] 	= "原因: 這是個無效模型"
+LANG["PHZ_apply_select"] 		= "應用 & 保存篩選"
+LANG["PHZ_menu_copy"] 		= "復制模型"
+LANG["PHZ_menu_refresh"] 	= "刷新模型"
+LANG["PHZ_tooltip_removesel"]	= "刪除選中"
+LANG["PHZ_tooltip_wasmarked"] = [[該物品被標記是因為它不存在於伺服器中.
+如果你關閉編輯器，它將被自動刪除.]]
 
-LANG["PHZ_pcr_fb_allcontent"] = "All Contents (Not All Players/Server will have same contents as you)"
-LANG["PHZ_pcr_fb_notmounted"] = "%s [Not Mounted]"
+LANG["PHZ_pcr_fb_allcontent"] = "所有內容 (不是所有的玩家/伺服器都有與你相同的內容)"
+LANG["PHZ_pcr_fb_notmounted"] = "%s [未安裝]"
 
 PHX.LANGUAGES[LANG.code] = LANG

@@ -13,17 +13,24 @@ LANG.Author			= "Ryo567" -- Only accept STRINGS.
 LANG.AuthorURL		= {"http://steamcommunity.com/profiles/76561198009674175"}
 
 -- Special Section that isn't String-based
-LANG.SUICIDEMSG = {  -- Fix me: there was addition text here but feel free to add more.
+LANG.SUICIDEMSG = { --> FRETTA
 	"se ha suicidado.", -- i believe this was from 9gag joke.
 	"ha muerto misteriosamente.",
 	"ha muerto mágicamente.",
 	"se ha disparado sin apuntar.",
 	"se ha ido enfadado.",
 	"está borracho.",
-	"ha muerto... ¡suerte para la próxima!",
+	"ha muerto. ¡suerte para la próxima!",
 	"se ha abofeteado.",
 	"ha tropezado.",
 	"ha muerto por la fuerza.",
+	"ha muerto. Pulsa F, por favor.",
+    "se avergüenza por haber matado objetos inocentes.",
+    "se ha enviado a la casilla de salida.",
+    "está intentando extinguirse.",
+    "está más que muerto.",
+    "ha entrado en pánico, intentando matar objetos.",
+    "déjalo, busca ayuda.",
 	"se ha desplomado.",
 }
 
@@ -98,7 +105,7 @@ LANG["LANGUAGE_CHANGED"]		= "Tu idioma preferido se ha cambiado a %s"
 
 -- internal cl_menutypes section.
 LANG["SUBTYPE_PREFERED_LANG"]	= "Idioma preferido"
---LANG["SUBTYPE_TEXTENTRY_?"]	= "???"
+--LANG["SUBTYPE_TEXTENTRY_?"]	= "¿¿??"
 
 -- Events
 LANG["EV_PLAYER_CONNECT"]		= "%s se ha conectado al servidor."
@@ -156,7 +163,7 @@ LANG["TM_NO_TAUNTS"]			= "Aviso: No se han detectado burlas en esta categoría."
 LANG["TM_PLAY_ONLY_ALIVE"] 		= "Solo puedes llamar la atención con burlas personalizadas cuando estás vivo."
 
 LANG["TM_WINDOW_TITLE"]			= "Ventana de burlas personalizadas en Prop Hunt"
-LANG["TM_NOTICE_PLSWAIT"]		= "¡Espera %s segundo(s)!" -- fix me: Add " before Random Taunt ends!"
+LANG["TM_NOTICE_PLSWAIT"]		= "¡Espera %s segundo(s) hasta que acabe la burla!" -- fix me: Add " before Random Taunt ends!"
 LANG["TM_NOTICE_PLAYPREVIEW"]	= "Previsualizando burla: %s"
 
 LANG["TM_TOOLTIP_PLAYTAUNT"] 	= "Reproducir burla"
@@ -230,7 +237,7 @@ LANG["MDL_MENU_MODELINFO"] 		= "Información del modelo"
 LANG["MISC_APPLYMDL"] 			= "Aplicar modelo"
 
 LANG["PHXM_MODEL_DISABLED"] 	= "¡Qué pena, los modelos personalizados están desactivados en este servidor!"
-LANG["PHXM_PLAYERMODEL_SETFOV"]	= "  Seleccionar campo de visión"
+LANG["PHXM_PLAYERMODEL_SETFOV"]	= "Seleccionar campo de visión"
 
 --[[
 	Server Settings
@@ -385,7 +392,7 @@ LANG["TEXTENTRY_MV_PREFIX"] = "Prefijo de votación de mapas"			 -- the map prev
 
 --============= LATE ADDITION OF 29.10.21/X2Z. Please Improve your Language Here! =============--
 
-LANG["MISC_GAME_ENDED"]		= "Game has ended."
+LANG["MISC_GAME_ENDED"]		= "La partida ha acabado."
 
 --============= LATE ADDITION OF 16.09.21/X2Z. =============--
 
@@ -393,72 +400,72 @@ LANG["MISC_GAME_ENDED"]		= "Game has ended."
 	Credits: Late Addition: Revision: 16.09.21/X2Z
 ]]
 
-LANG["PHXM_ABOUT_BTN_WIKI"]			= "PHX Wiki & Manuals"
+LANG["PHXM_ABOUT_BTN_WIKI"]			= "PH:X Wiki y manuales"
 
 --[[
 	Auto Taunt: Late Addition: Revision: 16.09.21/X2Z
 ]]
 
-LANG["HUD_AUTOTAUNT_DISABLED"]		= 	"Auto Taunting is disabled."
-LANG["HUD_AUTOTAUNT_WAITFORUPDATE"]	=	"Auto Taunt is Synchronizing..."
+LANG["HUD_AUTOTAUNT_DISABLED"]		= 	"Burla automática desactivada."
+LANG["HUD_AUTOTAUNT_WAITFORUPDATE"]	=	"Sincronizando burla automática..."
 
 --[[
 	MapVote: Late Addition: Revision: 16.09.21/X2Z
 ]]
-LANG["PHXM_MV_VOTEROCKED"]				= " The vote has been rocked, map vote will begin on round end"
-LANG["PHXM_MV_VOTEROCKED_IMMINENT"]		= "The vote has been rocked, map vote imminent"
-LANG["PHXM_MV_VOTEROCKED_PLY_TOTAL"]	= "%s has voted to Rock the Vote. ( %d / %d )"
+LANG["PHXM_MV_VOTEROCKED"]				= "Se ha aprobado la votación, comenzará cuando acabe la ronda"
+LANG["PHXM_MV_VOTEROCKED_IMMINENT"]		= "Se ha aprobado la votación, cambio de mapa inminente"
+LANG["PHXM_MV_VOTEROCKED_PLY_TOTAL"]	= "%s ha pedido realizar una votación. ( %d / %d )"
 
-LANG["PHXM_MV_MUST_WAIT"]				= "You must wait a bit before voting!"
-LANG["PHXM_MV_VOTEINPROG"]				= "There is currently a vote in progress!"
-LANG["PHXM_MV_HAS_VOTED"]				= "You have already voted to Rock the Vote!"
-LANG["PHXM_MV_ALR_IN_VOTE"]				= "There has already been a vote, the map is going to change!"
-LANG["PHXM_MV_NEED_MORE_PLY"]			= "You need more players before you can rock the vote!"
+LANG["PHXM_MV_MUST_WAIT"]				= "¡Tienes que esperar antes de votar!"
+LANG["PHXM_MV_VOTEINPROG"]				= "¡Ya hay una votación en progreso!"
+LANG["PHXM_MV_HAS_VOTED"]				= "¡Ya has solicitado una votación!"
+LANG["PHXM_MV_ALR_IN_VOTE"]				= "¡Ya se ha realizado una votación, el mapa cambiará pronto!"
+LANG["PHXM_MV_NEED_MORE_PLY"]			= "¡Se necesitan más jugadores para pedir una votación!"
 
 --[[
 	Late Addition: Revision: 16.09.21/X2Z
 ]]
-LANG["PROP_PLAYERMDL_BANNED"]	= "Your custom Prop Player Model was banned from the server."
+LANG["PROP_PLAYERMDL_BANNED"]	= "Tu modelo de jugador personalizado se ha bloqueado en este servidor."
 
 --[[
 	Prop Menu/Prop Chooser, Revision: 16.09.21/X2Z
 ]]
 
-LANG["PCR_USAGE_UNLIMIT"]		= "[Prop Menu] You have **unlimitted** usage left!"
-LANG["PCR_USAGE_COUNT"]			= "[Prop Menu] You have %d usage left!"
-LANG["PCR_PLS_WAIT"]			= "[Prop Menu] Please wait in %d seconds."
-LANG["PCR_NOROOM"]				= "[Prop Menu] There is no room to change the prop!"
-LANG["PCR_PROPBANNED"]			= "[Prop Menu] This prop was banned by the server."
-LANG["PCR_PROPBANNED_BYPCR"]	= "[Prop Menu] You cannot use this prop because it was banned by Prop Menu."
-LANG["PCR_REACHED_LIMIT"]		= "[Prop Menu] You have reached the limit!"
-LANG["PCR_STAY_ON_GROUND"]		= "[Prop Menu] You need to stay on the ground and not crouching!"
-LANG["PCR_ONLY_GROUP"]			= "[Prop Menu] Only certain groups can open this menu!"
-LANG["PCR_NOT_EXIST_COUNT"]		= "That prop you have selected does not exists in this map! ( %s / 4 )"
-LANG["PCR_NOT_EXIST"]			= "That prop you have selected does not exists in this map!"
+LANG["PCR_USAGE_UNLIMIT"]		= "[Menú de obj.] ¡Te quedan usos **ilimitados**!"
+LANG["PCR_USAGE_COUNT"]			= "[Menú de obj.] ¡Te quedan %d usos!"
+LANG["PCR_PLS_WAIT"]			= "[Menú de obj.] Por favor, espera %d segundo(s)."
+LANG["PCR_NOROOM"]				= "[Menú de obj.] ¡No hay hueco para cambiar de objeto!"
+LANG["PCR_PROPBANNED"]			= "[Menú de obj.] Este objeto está bloqueado en este servidor."
+LANG["PCR_PROPBANNED_BYPCR"]	= "[Menú de obj.] No puedes usar este objeto, porque está baneado del menú de objetos."
+LANG["PCR_REACHED_LIMIT"]		= "[Menú de obj.] ¡Se ha alcanzado el límite!"
+LANG["PCR_STAY_ON_GROUND"]		= "[Menú de obj.] ¡Debes estar en el suelo y sin agacharte!"
+LANG["PCR_ONLY_GROUP"]			= "[Menú de obj.] ¡Solo algunos grupos pueden abrir este menú!"
+LANG["PCR_NOT_EXIST_COUNT"]		= "¡El objeto seleccionado no existe en este mapa! ( %s / 4 )"
+LANG["PCR_NOT_EXIST"]			= "¡El objeto seleccionado no existe en este mapa!"
 
 -- PCR Client section, reason why there is a space because of chat.AddText between args.
-LANG["PCR_NOTIFY_1"]			= " This server use Prop Menu version %s! Type "
-LANG["PCR_NOTIFY_2"]			= " in console or use F1 -> [PropChooser Help] menu."
-LANG["PCR_CL_DISABLED"]			= " This feature is disabled."
-LANG["PCR_CL_GROUP"]			= " Only certain groups can open this menu!"
-LANG["PCR_CL_LIMIT"]			= " You have reached the limit!"
-LANG["PCR_UNLIMIT_TEXT"]		= "Unlimited"
-LANG["PCR_WINDOW_TITLE"]		= "PHX Prop Menu"
-LANG["PCR_HEADER_TOP"]			= "Choose any prop you want. You have"
-LANG["PCR_HEADER_MID"]			= "%s usage limit"
-LANG["PCR_HEADER_BOTTOM"]		= "to use this prop chooser!"
-LANG["PCR_CL_TOOLTIP_BANNED"]	= "You cannot use this model."
-LANG["PCR_CL_TOOLTIP_MODEL"]	= "Model: %s"
-LANG["PCR_CL_MENU_NOTREADY"]	= " This feature is not available at the moment."
-LANG["PCR_WINDOW_GUIDE_TTL"]	= "Quick Guide: Prop Menu 101"
-LANG["PCR_BTN_HELP_MENU"]		= "Prop Menu Help"
+LANG["PCR_NOTIFY_1"]			= "Este servidor usa la versión %s del menú de objetos! Escribe "
+LANG["PCR_NOTIFY_2"]			= " en la consola o pulsa F1 -> para el menú [Ayuda con objetos]."
+LANG["PCR_CL_DISABLED"]			= " Esta característica está desactivada."
+LANG["PCR_CL_GROUP"]			= " ¡Solo algunos grupos pueden abrir este menú!"
+LANG["PCR_CL_LIMIT"]			= " ¡Has alcanzado el límite!"
+LANG["PCR_UNLIMIT_TEXT"]		= "Sin límite"
+LANG["PCR_WINDOW_TITLE"]		= "Menú de obj. PH:X"
+LANG["PCR_HEADER_TOP"]			= "Elige el objeto que quieras. ¡Tienes"
+LANG["PCR_HEADER_MID"]			= "%s usos disponibles"
+LANG["PCR_HEADER_BOTTOM"]		= "para elegir!"
+LANG["PCR_CL_TOOLTIP_BANNED"]	= "No puedes usar este modelo."
+LANG["PCR_CL_TOOLTIP_MODEL"]	= "Modelo: %s"
+LANG["PCR_CL_MENU_NOTREADY"]	= " Esta característica no está disponible actualmente."
+LANG["PCR_WINDOW_GUIDE_TTL"]	= "Guía rápida: Menú de objetos 101"
+LANG["PCR_BTN_HELP_MENU"]		= "Ayuda con el menú de obj."
 
-LANG["PCR_CL_CMDUSEULX"]		= " This command is disabled. Use 'ulx propmenu' instead!"
-LANG["PCR_CMD_ULX_DISABLED"]	= "Command ulx propmenu is disabled. Press your [Prop Menu Bind] to open."	--input.GetKeyName is impossible to access.
+LANG["PCR_CL_CMDUSEULX"]		= " Este comando está desactivado. ¡Usa «ulx propmenu»!"
+LANG["PCR_CMD_ULX_DISABLED"]	= "El comando «ulx propmenu» está desactivado. Pulsa tu [botón del menú de obj.] para abrirlo."	--input.GetKeyName is impossible to access.
 
-LANG["PCR_EDT_IN_USE"]			= "An admin is still editing the prop data. Please Wait!"
-LANG["PCR_EDT_ERROR_DISABLED"]	= "[Prop Menu] Error: Custom Prop Addition is Disabled!"
-LANG["PCR_EDT_NO_RIGHTS"]		= "You have no rights to access this feature."
+LANG["PCR_EDT_IN_USE"]			= "Hay un admin. editando los datos de objetos. ¡Espera, por favor!"
+LANG["PCR_EDT_ERROR_DISABLED"]	= "[Menú de obj.] Error: ¡Los obj. personalizados están desactivados!"
+LANG["PCR_EDT_NO_RIGHTS"]		= "No tienes derechos para acceder a esta característica."
 
 -- I'm actually exhausted and feel so burned out, but I'll update this in future, or in PH:Zero I guess.
 -- Section: Custom Prop Editor File Browser and stuff...
@@ -468,215 +475,215 @@ LANG["PCR_EDT_NO_RIGHTS"]		= "You have no rights to access this feature."
 --[[
 	Admin Section, Revision: 16.09.21/X2Z
 ]]
-LANG["PHXM_PLAYER_PROP_CHOOSER_KEY"]	= "Default Key to open Prop Menu (Prop Chooser)."
-LANG["PHXM_PROP_FREEZE_MIDAIR"]			= "Default Key to toogle Freeze movement during on midair as a Prop."
-LANG["PHXM_ADMIN_PROP_RIGHT_CLICK"]		= "Should Props also able to Taunt by pressing Right Click?"
-LANG["PHXM_ADMIN_TAUNT_SCANNER"]		= "(Require Map Restart) Enable Taunt Scanner?"
-LANG["PHXM_ADMLBL_USABLE_ENTS"]			= "Usable Prop Entities Types"
-LANG["PHXM_ADMLBL_USABLE_ENTS_REF"]		= "Types can be: 1: Physics Only, 2: Physics & Dynamics, 3: Almost Anything inc. Ragdolls, 4: Custom Entities."
-LANG["PHXM_ADMIN_USABLE_ENT_TYPE"]		= "Type of Entities to use for Prop to Replicate"
-LANG["PHXM_ADMIN_NOTIFY_ENT_TYPE"]		= "Notify Props about entities that cannot be replicated by pressing E. Only works if 'ph_usable_prop_type' is set to 3 or 4."
-LANG["NOTIFY_PROP_ENTTYPE"]				= "Press [E] to interact, [Click] to replicate object."
-LANG["NOTIFY_CUST_ENT_TYPE_IS_ON"]		= "[PHX] Notice: Press [E] to interact object, Press [Click] to Replicate the object."
+LANG["PHXM_PLAYER_PROP_CHOOSER_KEY"]	= "Tecla por defecto para abrir el menú de obj. (elegir objeto)."
+LANG["PHXM_PROP_FREEZE_MIDAIR"]			= "Tecla por defecto para alternar movimiento del obj. en el aire."
+LANG["PHXM_ADMIN_PROP_RIGHT_CLICK"]		= "¿Deberían los objetos hacer la burla con clic derecho?"
+LANG["PHXM_ADMIN_TAUNT_SCANNER"]		= "(Es necesario reiniciar el mapa) ¿Activar escáner de burlas?"
+LANG["PHXM_ADMLBL_USABLE_ENTS"]			= "Tipos de entidades utilizables"
+LANG["PHXM_ADMLBL_USABLE_ENTS_REF"]		= "Los tipos son: 1: Solo físicas, 2: Físicas y dinámicas, 3: Casi todo, cuerpos incluidos, 4: Entidades personalizadas."
+LANG["PHXM_ADMIN_USABLE_ENT_TYPE"]		= "Tipo de entidades a imitar por los objetos"
+LANG["PHXM_ADMIN_NOTIFY_ENT_TYPE"]		= "Notificar los objetos que no se pueden imitar al pulsar la E. Solo funciona con «ph_usable_prop_type» en 3 o 4."
+LANG["NOTIFY_PROP_ENTTYPE"]				= "Pulsa [E] para interactuar, o [Clic] para imitar un objeto."
+LANG["NOTIFY_CUST_ENT_TYPE_IS_ON"]		= "[PH:X] Nota: Pulsa [E] para interactuar con el objeto, o [Clic] para imitarlo."
 
 --[[
 	Custom Taunts, Revision: 16.09.21/X2Z
 ]]
-LANG["TM_TAUNTS_SEARCH_NOTHING"]		= "Taunt containing '%s' was not found..."
-LANG["TM_SEARCH_PLACEHOLDER"]			= "Search in this category: Enter word, lowercase & no wildcards. Empty=Show All."
+LANG["TM_TAUNTS_SEARCH_NOTHING"]		= "No se ha encontrado burla con «%s»..."
+LANG["TM_SEARCH_PLACEHOLDER"]			= "Buscar en esta categoría: Introducir palabra, minúsculas y sin comodines. Si se deja en blanco, se muestra todo."
 
 --[[
 	Freeze Cam, Revision: 23.09.21/X2Z
 ]]
-LANG["PHXM_ADMIN_FREEZECAM_HUNTER"]			= "Enable Freeze Cam features for team hunters"
+LANG["PHXM_ADMIN_FREEZECAM_HUNTER"]			= "Activar instantánea para el equipo de cazadores"
 
 
 --============= LATE ADDITION OF 10.06.2022/X2Z. =============--
 
-LANG["PHXM_MSG_INPUT_IS_EMPTY"]			= "Text is empty or you didn't pressed ENTER key."
+LANG["PHXM_MSG_INPUT_IS_EMPTY"]			= "El texto está en blanco o no has pulsado ENTRAR."
 
-LANG["MISC_SET"]						= "Set"
-LANG["MISC_APPLY"]						= "Apply"
+LANG["MISC_SET"]						= "Establecer"
+LANG["MISC_APPLY"]						= "Aplicar"
 LANG["MISC_NO"]							= "No"
-LANG["MISC_YES"]						= "Yes"
-LANG["MISC_WARN"]						= "Warning"
+LANG["MISC_YES"]						= "Sí"
+LANG["MISC_WARN"]						= "Aviso"
 LANG["MISC_ERROR"]						= "Error"
-LANG["MISC_INFO"]						= "Information"
-LANG["MISC_NOTICE"]						= "Notice"
-LANG["MISC_IDK"]						= "Unknown"
-LANG["MISC_NA"]							= "N/A"
+LANG["MISC_INFO"]						= "Información"
+LANG["MISC_NOTICE"]						= "Aviso"
+LANG["MISC_IDK"]						= "Desconocido"
+LANG["MISC_NA"]							= "N/D"
 
 -- HUD
-LANG["HUD_DECOY_ACTIVE"]                = "Press [%s]"
-LANG["HUD_FAKETAUNT_COUNT"]             = "%ix Left"
-LANG["HUD_FAKETAUNT_UNLI"]              = "Unlimited"
-LANG["NOTICE_GRENADE_SMG_GIVEN"]        = "You are now acquired some SMG Grenades."
+LANG["HUD_DECOY_ACTIVE"]                = "Pulsa [%s]"
+LANG["HUD_FAKETAUNT_COUNT"]             = "%ix restante"
+LANG["HUD_FAKETAUNT_UNLI"]              = "Sin límite"
+LANG["NOTICE_GRENADE_SMG_GIVEN"]        = "Has recibido algunas granadas para tu subfusil."
 
 --[[
 	ADMIN PANEL, Revision 10.06/2022/X2Z
 ]]--
-LANG["PHXM_TAUNT_SETTINGS"]				= "Taunt Settings"
-LANG["PHXM_GENERAL_SETTINGS"]			= "General Settings"
-LANG["PHXM_FAKE_TAUNT_SETTINGS"]		= "Fake Taunt Settings"
-LANG["PHXM_FAKE_TAUNT_ENABLE"]			= "Allow fake taunts to be played on random props in the map. Can be accessed only through Custom Taunt menu."
-LANG["PHXM_FAKE_TAUNT_MAXUSAGE"]		= "Maximum usage for fake taunts to be used; -1 is unlimited."
-LANG["PHXM_TAUNT_RIGHT_CLICK"]		    = "Right click for taunt. This will disable Right-clicking on custom menu!"
+LANG["PHXM_TAUNT_SETTINGS"]				= "Ajustes de burla"
+LANG["PHXM_GENERAL_SETTINGS"]			= "Ajustes generales"
+LANG["PHXM_FAKE_TAUNT_SETTINGS"]		= "Ajustes de burla falsa"
+LANG["PHXM_FAKE_TAUNT_ENABLE"]			= "Permitir burlas falsas en objetos aleatorios del mapa. Solo se puede acceder desde el menú de burla personalizada."
+LANG["PHXM_FAKE_TAUNT_MAXUSAGE"]		= "Máximo uso de burlas falsas limitado; establecido en -1 es ilimitado."
+LANG["PHXM_TAUNT_RIGHT_CLICK"]		    = "Haz clic derecho para hacer la burla. ¡Esto desactivará el clic derecho en el menú personalizado!"
 
-LANG["PHXM_TAUNT_PITCH_SETTINGS"]		= "Taunt Pitch Settings"
-LANG["PHXM_TAUNT_PITCH_ENABLE"]			= "Enable Taunt Pitch"
-LANG["PHXM_TAUNT_PITCH_RANGE_MIN"]		= "Minimum threshold/acceptable pitch range for a taunt. 1 to 99."
-LANG["PHXM_TAUNT_PITCH_RANGE_MAX"]		= "Maximum threshold/acceptable pitch range for a taunt. 100 to 255."
+LANG["PHXM_TAUNT_PITCH_SETTINGS"]		= "Ajustes de tono de burla"
+LANG["PHXM_TAUNT_PITCH_ENABLE"]			= "Activar tono de burla"
+LANG["PHXM_TAUNT_PITCH_RANGE_MIN"]		= "Límite mínimo aceptable para una burla. 1 a 99."
+LANG["PHXM_TAUNT_PITCH_RANGE_MAX"]		= "Límite máximo aceptable para una burla. 100 a 255."
 
-LANG["PHXM_DECOY_SETTINGS"]				= "Decoy Settings"
-LANG["PHXM_DECOY_ENABLE"]				= "Enable Decoy reward? Reward will be given ONLY ONCE for alive props until the round ends. They don't add and only substract once they're placed."
+LANG["PHXM_DECOY_SETTINGS"]				= "Ajustes de señuelo"
+LANG["PHXM_DECOY_ENABLE"]				= "¿Activar señuelo recompensa? La recompensa SOLO se dará UNA VEZ a los objetos vivos hasta que acabe la ronda. No se acumulan y solo se consumen al colocarse."
 
-LANG["PHXM_DISABLE_FOOTSTEP"]           = "Toggle silent prop team footsteps"
+LANG["PHXM_DISABLE_FOOTSTEP"]           = "Alternar silencio de pisadas de objetos"
 
-LANG["PHXM_ADMIN_CHATSETTING"]			= "Chat Window Settings"
-LANG["PHXM_ADMIN_HUNTERBLIND"]			= "Hunter Blind Control"
+LANG["PHXM_ADMIN_CHATSETTING"]			= "Ajustes de ventana de chat"
+LANG["PHXM_ADMIN_HUNTERBLIND"]			= "Control de cuenta atrás del cazador"
 
-LANG["PHXM_ADMIN_GIVEGRENADE_NEAREND"]  = "Should grenades will be given near round end? If Yes, see 'ph_give_grenade_roundend_before_time'"
-LANG["PHXM_ADMIN_GIVEGRENADE_TIME"]     = "Time in seconds to give grenades before Round Ends. This is typically between 10 to 30 seconds"
+LANG["PHXM_ADMIN_GIVEGRENADE_NEAREND"]  = "¿Las granadas deberían darse cerca del final de la ronda? En casi afirmativo, véase «ph_give_grenade_roundend_before_time»"
+LANG["PHXM_ADMIN_GIVEGRENADE_TIME"]     = "Tiempo en segundo para dar granadas antes de que acabe la ronda. Esto suele estar entre 10 y 30 segundos"
 
 --[[
 	Plugins in sh_init.lua, Revision 10.06/2022/X2Z
 ]]--
-LANG["PLUG_NAME_VER"]					= "Plugin: %s | v.%s"
-LANG["PLUG_DESCRIPTION"]				= "Description: %s"
+LANG["PLUG_NAME_VER"]					= "Extensión: %s | v.%s"
+LANG["PLUG_DESCRIPTION"]				= "Descripción: %s"
 
 --[[
 	Taunt Pitch, Revision 10.06/2022/X2Z
 ]]--
-LANG["PHX_CTAUNT_USE_PITCH"]			= "Use pitch for custom taunts"
-LANG["PHX_CTAUNT_RANDOM_PITCH"]			= "Randomize pitch when playing taunt"
-LANG["PHX_RTAUNT_USE_PITCH"]			= "Use pitch for random taunts [%s]"
-LANG["PHX_RTAUNT_RANDOMIZE"]			= "Randomize pitch for random taunts [%s]"
-LANG["PHX_CTAUNT_PITCH_FOR_FAKE"]		= "Use pitch for fake taunts"
-LANG["PHX_CTAUNT_RANDPITCH_FOR_FAKE"]	= "Randomize pitch for fake taunts"
-LANG["PHX_CTAUNT_SLIDER_PITCH"]			= "Taunt pitch slider."
-LANG["TM_TOOLTIP_FAKETAUNT"]			= "Play a Fake Taunt on random prop"
-LANG["TM_PREFERRED_PITCH"]              = "Preferred Taunt Pitch Level"
+LANG["PHX_CTAUNT_USE_PITCH"]			= "Usar tono para burlas personalizadas"
+LANG["PHX_CTAUNT_RANDOM_PITCH"]			= "Aleatorizar tono al usar burla"
+LANG["PHX_RTAUNT_USE_PITCH"]			= "Usar tono para burlas aleat. [%s]"
+LANG["PHX_RTAUNT_RANDOMIZE"]			= "Aleatorizar tono para burlas aleat. [%s]"
+LANG["PHX_CTAUNT_PITCH_FOR_FAKE"]		= "Usar tono para burlas falsas"
+LANG["PHX_CTAUNT_RANDPITCH_FOR_FAKE"]	= "Aleatorizar tono para burlas falsas"
+LANG["PHX_CTAUNT_SLIDER_PITCH"]			= "Nivel de tono de burla."
+LANG["TM_TOOLTIP_FAKETAUNT"]			= "Usar burla falsa en obj. aleatorio"
+LANG["TM_PREFERRED_PITCH"]              = "Nivel de tono preferido"
 
 --[[
 	Fake Taunt, Revision 10.06/2022/X2Z
 	Description: Play fake taunts on random props in the map (Not Players)
 ]]--
-LANG["PHX_CTAUNT_ON_RAND_PROPS"]		= "Play on random props (%ix)"
-LANG["PHX_CTAUNT_ON_RAND_PROPS_UNLI"]	= "Play on random props"
-LANG["PHX_CTAUNT_PLAYED_ON_RANDPROP"]	= "You played a taunt on a random prop."
-LANG["PHX_CTAUNT_RAND_PROPS_LIMIT"]		= "You have hit the limit!"
-LANG["PHX_CTAUNT_RAND_PROPS_NOT_PROP"]  = "Not available at this moment."
-LANG["PHX_CTAUNT_RANDPROP_DISABLED"]	= "Fake taunt is currently disabled."
+LANG["PHX_CTAUNT_ON_RAND_PROPS"]		= "Usar en obj. aleatorios (%ix)"
+LANG["PHX_CTAUNT_ON_RAND_PROPS_UNLI"]	= "Usar en obj. aleatorios"
+LANG["PHX_CTAUNT_PLAYED_ON_RANDPROP"]	= "Has usado una burla en un obj. aleatorio."
+LANG["PHX_CTAUNT_RAND_PROPS_LIMIT"]		= "¡Has alcanzado el límite!"
+LANG["PHX_CTAUNT_RAND_PROPS_NOT_PROP"]  = "No disponible en este momento."
+LANG["PHX_CTAUNT_RANDPROP_DISABLED"]	= "La burla falsa está desactivada."
 
 --[[
 	PH:Z Simple Decoy, Revision 10.06/2022/X2Z
 ]]--
 LANG.DECOY_PROP	= {
-	"killed the dummy!",
-	"feel regret after killing a dummy.",
-	"killed a decoy.",
-	"killed an innocent dummy.",
-	"feel embarrased after killing a dummy."
+	"ha matado al señuelo.",
+	"se siente mal por matar al señuelo.",
+	"ha matado a un señuelo.",
+	"ha matado a un inocente señuelo.",
+	"se avergüenza de matar un señuelo."
 }
 
-LANG["DECOY_PUT_SUCC"]					= "Decoy successfully placed."
-LANG["DECOY_CANT_PUT_HERE"]				= "Cannot put decoy here."
-LANG["DECOY_GET_REWARD"]				= "Congrats! You received ['Prop Decoy'] for suviving this round!"
-LANG["DECOY_REMINDER_GET"]              = "You have a Decoy/Dummy prop! Place somewhere to confuse hunters!"
-LANG["DECOY_FRAGS_RECEIVED"]			= "Decoy successfully baited: You stole 1 score from %s!"
-LANG["DECOY_DISABLED"]					= "Currently, decoy is unavailable."
-LANG["PHXM_CL_DECOY_KEYBIND"]			= "Default key to place a decoy prop. Default is 1 (not keypad 1)."
+LANG["DECOY_PUT_SUCC"]					= "Señuelo colocado con éxito."
+LANG["DECOY_CANT_PUT_HERE"]				= "No se puede colocar un señuelo aquí."
+LANG["DECOY_GET_REWARD"]				= "¡Enhorabuena! ¡Has recibido [«Objeto señuelo»] por sobrevivir!"
+LANG["DECOY_REMINDER_GET"]              = "¡Tienes un objeto señuelo! ¡Colócalo para confundir a los cazadores!"
+LANG["DECOY_FRAGS_RECEIVED"]			= "Señuelo destruido: ¡Has robado 1 punto de %s!"
+LANG["DECOY_DISABLED"]					= "Los señuelos están desactivados."
+LANG["PHXM_CL_DECOY_KEYBIND"]			= "Tecla por defecto para colocar un señuelo. Por defecot es 1 (no del Bloq. Num 1)."
 
-LANG["DECOY_INDICATOR_INVALID"]         = "Invalid Slope!"
-LANG["DECOY_INDICATOR_TOOFAR"]          = "Range too far!"
-LANG["DECOY_INDICATOR_OK"]              = "Place Decoy [Press %s]"
+LANG["DECOY_INDICATOR_INVALID"]         = "¡Terreno no válido!"
+LANG["DECOY_INDICATOR_TOOFAR"]          = "¡Demasiado lejos!"
+LANG["DECOY_INDICATOR_OK"]              = "Colocar señuelo [Pulsa %s]"
 
-LANG["PHXM_DECOY_HEALTH"]				= "How much health does the decoy should have. Default is 10."
-LANG["PHXM_PLAYER_SHOW_DECOY_HELPER"]   = "Show/Hide Decoy placement helper? This will show a white dot with a text near on your crosshair."
-LANG["PHXM_PLAYER_SHOW_DECOY_MARKER"]   = "Show/Hide Decoy marker?"
+LANG["PHXM_DECOY_HEALTH"]				= "¿Cuánta salud debería tener el señuelo? Por defecto: 10."
+LANG["PHXM_PLAYER_SHOW_DECOY_HELPER"]   = "¿Mostrar/Ocultar asistente de colocación del señuelo? Esto mostrará un punto blanco con un texto junto a tu punto de mira."
+LANG["PHXM_PLAYER_SHOW_DECOY_MARKER"]   = "¿Mostrar/Ocultar marcador del señuelo?"
 
 --[[
 	Revision 10.06/2022/X2Z
     Prop Menu Update: Menu, Editor, Browser
 ]]--
-LANG["PCR_MODEL_DONT_EXISTS"]   = "Sorry, this model is not available at the moment!"
+LANG["PCR_MODEL_DONT_EXISTS"]   = "¡Lo sentimos, este modelo no está disponible actualmente!"
 
-LANG["PCR_PLUG_WARN_MSG"]		= "Warning: Custom Prop Addition (pcr_allow_custom) is set to 0.\nYou Must Enable this feature in order to edit your custom prop!\nA Map change is required to change this setting."
-LANG["PCR_PLUG_LBL_BINDKEY"]	= "To change bind key, switch to '[Player] tab."
-LANG["PCR_PLUG_LBL_EDITOR"]		= "Custom Prop Menu Editor"
-LANG["PCR_PLUG_BTN_OPEN_EDT"]	= "Open Editor"
-LANG["PCR_PLUG_LBL_COMSET"]		= "Common Settings"
-LANG["PCR_PLUG_LBL_TECHSET"]	= "Technical Settings"
-LANG["PCR_PLUG_LBL_EXPSET"]		= "Experimentals"
-LANG["PCR_PLUG_LBL_PLAYERSET"]	= "Player Settings"
+LANG["PCR_PLUG_WARN_MSG"]		= "Aviso: Los objetos personalizados (pcr_allow_custom) están en 0.\n¡Debes activar esta característica para editar tu objeto personalizado!\nEs necesario cambiar de mapa para cambiar este ajuste."
+LANG["PCR_PLUG_LBL_BINDKEY"]	= "Para cambiar la tecla, cambia a la pestaña «[Jugador]»."
+LANG["PCR_PLUG_LBL_EDITOR"]		= "Editor del menú de obj. personalizado"
+LANG["PCR_PLUG_BTN_OPEN_EDT"]	= "Abrir editor"
+LANG["PCR_PLUG_LBL_COMSET"]		= "Ajustes comunes"
+LANG["PCR_PLUG_LBL_TECHSET"]	= "Ajustes técnicos"
+LANG["PCR_PLUG_LBL_EXPSET"]		= "Experimentales"
+LANG["PCR_PLUG_LBL_PLAYERSET"]	= "Ajustes de jugador"
 
-LANG["PCR_PLUG_ENABLE"]			= "Enable 'Prop Menu' feature"
-LANG["PCR_PLUG_ALLOW_CUSTOM"]	= "(Require Map Restart) Allow custom props to be added in to the Prop Menu list?"
-LANG["PCR_PLUG_PROP_BAN"]		= "(Require Map Restart) Do not include banned props into Prop Menu list?"
-LANG["PCR_PLUG_USAGE_LIMIT"]	= "Maximum usage limit for player to use. -1 means unlimited."
-LANG["PCR_PLUG_PROP_LIMIT"]		= "(Require Map Restart) Limit amount of prop addition to Prop Menu list"
-LANG["PCR_PLUG_PROP_LIMITMAX"]	= "Maximum amount of props that will be added to Prop Menu list. Note: This will be randomly added!"
-LANG["PCR_PLUG_USE_ULXMENU"]	= "Should Prop Menu can be accessed by Console (0) or ULX (1)? Bound key will respect with this setting"
-LANG["PCR_PLUG_USE_DELAY"]		= "Delay in seconds before player to use another Prop in Prop Menu"
-LANG["PCR_PLUG_KICK_INVALID"]	= "Kick any user attempt to access Invalid Model (4x Max. threshold)"
-LANG["PCR_PLUG_SPACE_CHECK"]	= "Check for space for a room before player use another prop to prevent Stuck"
-LANG["PCR_PLUG_X_BBOX"]			= "(Require Map Restart) Check Entity BBox Limit before adding to Prop Menu list"
-LANG["PCR_PLUG_X_BBOX_MAX"]		= "BBox CollisionBound Maximum Height limit. Mins will be auto-calculated."
-LANG["PCR_PLUG_X_BBOX_MIN"]		= "BBox CollisionBound Maximum Width limit. ins will be auto-calculated."
-LANG["PCR_PLUG_ONLY_GROUPS"]	= "Should Prop Menu can only be accessed by certain groups e.g. Donator?"
-LANG["PCR_PLUG_NOTIFYMSG"]		= "Notify player on how to use Prop Menu on every round start"
+LANG["PCR_PLUG_ENABLE"]			= "Activar «Menú de objetos»"
+LANG["PCR_PLUG_ALLOW_CUSTOM"]	= "(Es necesario reiniciar el mapa) ¿Permitir añadir objetos personalizados a la lista del menú?"
+LANG["PCR_PLUG_PROP_BAN"]		= "(Es necesario reiniciar el mapa) ¿No incluir los objetos eliminados en la lista del menú?"
+LANG["PCR_PLUG_USAGE_LIMIT"]	= "Límite máximo de usos para el jugador. -1 para ilimitado."
+LANG["PCR_PLUG_PROP_LIMIT"]		= "(Es necesario reiniciar el mapa) Límite de objetos añadidos a la lista del menú"
+LANG["PCR_PLUG_PROP_LIMITMAX"]	= "Límite máximo de objetos a añadir a la lista del menú de objetos. Nota: ¡Esto se añadirá aleatoriamente!"
+LANG["PCR_PLUG_USE_ULXMENU"]	= "¿Debería ser accesible el menú de objetos desde la consola (0) o ULX (1)? La tecla asignada respetará este ajuste"
+LANG["PCR_PLUG_USE_DELAY"]		= "El retraso en segundos antes de que el jugador use otro objeto del menú"
+LANG["PCR_PLUG_KICK_INVALID"]	= "Expulsar a todo usuario intentando acceder con un modelo no válido (límite máx.: 4)"
+LANG["PCR_PLUG_SPACE_CHECK"]	= "Comprobar espacio antes de que el jugador use otro objeto para evitar colisiones"
+LANG["PCR_PLUG_X_BBOX"]			= "(Es necesario reiniciar el mapa) Comprobar límite de la entidad BBox antes de añadir a la lista del menú de obj."
+LANG["PCR_PLUG_X_BBOX_MAX"]		= "Límite de altura máx. de colisión BBox. El resto será autocalculado."
+LANG["PCR_PLUG_X_BBOX_MIN"]		= "Límite de altura mín. de colisión BBox. El resto será autocalculado."
+LANG["PCR_PLUG_ONLY_GROUPS"]	= "¿Debería accederse al menú de obj. solo por ciertos grupos? (por ejemplo, donantes)"
+LANG["PCR_PLUG_NOTIFYMSG"]		= "Notificar a los jugadores cómo usar el menú de obj. al empezar cada ronda"
 
-LANG["PCR_EDITOR_MSG_ERROR"]	= "Your changes hasn't been saved due to Errors.\nPlease check on your server console!"
-LANG["PCR_EDITOR_MSG_SUCC"]		= "Your changes and Custom Prop data has has been saved and updated successfully."
+LANG["PCR_EDITOR_MSG_ERROR"]	= "Tus cambios no se han guardado por culpa de unos errores.\n¡Revisa la consola del servidor!"
+LANG["PCR_EDITOR_MSG_SUCC"]		= "Tus cambios y datos de obj. personalizados se han guardado y actualizado con éxito."
 
-LANG["PHZ_generic_title"]		= "Custom Prop Inclusion Editor"
-LANG["PHZ_generic_helptext"]	= [[[How To Use:
-[LEFT PANEL]
-← Choose a game content
-← Click on icons to add models to the right
-← Right Click to open context menu
+LANG["PHZ_generic_title"]		= "Editor incl. de obj. personaliz."
+LANG["PHZ_generic_helptext"]	= [[[Cómo utilizarlo:
+[PANEL IZQUIERDO]
+← Elige contenido del juego
+← Haz clic en los iconos para añadir modelos a la derecha
+← Haz clic derecho para abrir el menú contextual
 
-[RIGHT PANEL]
-→ Click to 'mark' any props before deleting
-→ Hit 'Remove Selected' to Remove Models
-→ Hit 'Apply Selection' to Make changes
+[PANEL DERECHO]
+→ Haz clic para «marcar» los objetos antes de eliminarlos
+→ Pulsa «Eliminar selección» para eliminar modelos.
+→ Pulsa «Aplicar selección» para realizar cambios.
 
-[INFO]
-- You can only add models up to 2048 entries.
-- All maps props will be included automatically, so you don't have to.
-- Pressing [Close] button will cancel the operation.
-- Not all models will have a valid VPhysics.
-- Not all Players (inc. Your Server) will have custom models. If they don't exists they will removed after Applying selections.
-- Your Server content might be different from you. If you see "<game> [Not Mounted]" on dropdown menu, it means that you haven't mounted/installed the game.
-- Addon folder browsing isn't implemented yet so You'll have to use 'All Contents' instead.
+[INFO.]
+- Solo puedes añadir hasta 2048 modelos.
+- Todos los objetos del mapa se incluirán automáticamente.
+- Al pulsar [Cerrar] se cancelará la operación.
+- No todos los modelos tendrán VPhysics válidas.
+- No todos los jugadores tendrán modelos personalizados. Si no existen, serán eliminados tras aplicar la selección.
+- El contenido de tu servidor puede ser distintos al tuyo. Si ves «<juego> [Sin montar/instalar]» en el menú desplegable, significa que no has montado/instalado el juego.
+- La carpeta de la extensión no está implementada todavía, por lo que verás «Todos los contenidos» en su lugar.
 ]]
-LANG["PHZ_generic_mdlinfo"] = [[Model Info:
+LANG["PHZ_generic_mdlinfo"] = [[Info. del modelo:
 %s
-Has Physics: %s]]
-LANG["PHZ_generic_mdlinfoStart"] = "(Select model first!)"
+Tiene físicas: %s]]
+LANG["PHZ_generic_mdlinfoStart"] = "(¡Selecciona el modelo primero!)"
 
-LANG["PHZ_generic_no_ragdoll"]	= "No: Ragdoll"
-LANG["PHZ_generic_titlelabel"]	= "%s Preview :"
+LANG["PHZ_generic_no_ragdoll"]	= "No: Cuerpo"
+LANG["PHZ_generic_titlelabel"]	= "Vista previa de %s:"
 
-LANG["PHZ_mount_game_sel"]		= "Select mounted game (Default: Garry's Mod)"
-LANG["PHZ_input_placeholder1"]	= "Folder to Search: <folder name> or '*', blank for all folders."
-LANG["PHZ_input_placeholder2"]  = "Addon to Search: <name> or '*', blank for all folders."
-LANG["PHZ_msg_warn_close"]		= "Are you sure you want to close this window? Any unsaved edits will be lost!"
-LANG["PHZ_msg_commit"] 			= "Are you sure you want to commit changes?"
-LANG["PHZ_msg_cant_empty"]		= "Prop List cannot be empty!"
-LANG["PHZ_msg_removesel"] 		= [[Remove selected props in the list. Legends:
-Red = Marked Selections
-Yellow: Prop don't exists in server AND should be Removed.]]
-LANG["PHZ_msg_warn_mdlinlist"]  = "WARNING: This Model is already in the list!"
-LANG["PHZ_msg_invalid_mdl"] 	= "Reason: This is invalid model"
-LANG["PHZ_apply_select"] 		= "Apply & Save Selections"
-LANG["PHZ_menu_copy"] 		= "Copy Model"
-LANG["PHZ_menu_refresh"] 	= "Refresh Model"
-LANG["PHZ_tooltip_removesel"]	= "Remove Selected"
-LANG["PHZ_tooltip_wasmarked"] = [[This prop was marked because it does't exist in the server.
-If you close this editor, this will automatically removed.]]
+LANG["PHZ_mount_game_sel"]		= "Seleccionar juego instalado (por defecto: Garry's Mod)"
+LANG["PHZ_input_placeholder1"]	= "Carpeta a buscar: <nombre> o «*», dejar en blanco para mostrar todo."
+LANG["PHZ_input_placeholder2"]  = "Extensión a buscar: <nombre> o «*», dejar en blanco para mostrar todo."
+LANG["PHZ_msg_warn_close"]		= "¿Seguro que quieres cerrar esta ventana? ¡Las ediciones no guardadas se perderán!"
+LANG["PHZ_msg_commit"] 			= "¿Seguro que quieres confirmar los cambios?"
+LANG["PHZ_msg_cant_empty"]		= "¡La lista de obj. no puede estar en blanco!"
+LANG["PHZ_msg_removesel"] 		= [[Elimina los objetos seleccionados. Leyendas:
+Rojo = Selección marcada
+Amarillo = Objetos que no existen en el servidor Y deben eliminarse.]]
+LANG["PHZ_msg_warn_mdlinlist"]  = "AVISO: ¡Este modelo ya está en la lista!"
+LANG["PHZ_msg_invalid_mdl"] 	= "Motivo: Este modelo no es válido"
+LANG["PHZ_apply_select"] 		= "Aplicar y guardar selección"
+LANG["PHZ_menu_copy"] 		= "Copiar modelo"
+LANG["PHZ_menu_refresh"] 	= "Actualizar modelo"
+LANG["PHZ_tooltip_removesel"]	= "Eliminar selección"
+LANG["PHZ_tooltip_wasmarked"] = [[Este objeto se ha marcado, porque no existe en el servidor.
+Si cierras este editor, se eliminará automáticamente.]]
 
-LANG["PHZ_pcr_fb_allcontent"] = "All Contents (Not All Players/Server will have same contents as you)"
-LANG["PHZ_pcr_fb_notmounted"] = "%s [Not Mounted]"
+LANG["PHZ_pcr_fb_allcontent"] = "Todos los contenidos (no todos los jugadores/servidores tendrán el mismo contenido que tú)"
+LANG["PHZ_pcr_fb_notmounted"] = "%s [Sin montar/instalar]"
 
 PHX.LANGUAGES[LANG.code] = LANG

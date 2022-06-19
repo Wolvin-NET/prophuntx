@@ -3,47 +3,47 @@ local LANG = {}
 -- English Section
 LANG["zh-TW"]   = {
     -- setting menu
-    ["LPS_GENERAL_SETTINGS"]    = "General Settings",
-    ["LPS_APPEARANCES"]         = "Appearances",
-    ["LPS_WEAPON_SETTINGS"]     = "Last Stands Weapon Setting",
+    ["LPS_GENERAL_SETTINGS"]    = "常規設置",
+    ["LPS_APPEARANCES"]         = "外觀",
+    ["LPS_WEAPON_SETTINGS"]     = "最後一物武器設置",
     
-    ["LPS_MENU_ENABLE"]         = "Enable Last Prop Standing",
-	["LPS_ENABLE_MUSIC"]		= "Enable Music when LPS occurs. Require Round Restart to take effect.",
-    ["LPS_WEAPON_SELECT"]       = "Weapon to give ('random' or 'name'). See Weapon List below.",
-    ["LPS_BTN_WEPLIST"]         = "Available Weapons List",
-    ["LPS_MINIMUM_PROPS_TEAM"]  = "Minimum number of props on Team before LPS can be triggered. Minium: 2.",
+    ["LPS_MENU_ENABLE"]         = "啟用最後一物",
+	["LPS_ENABLE_MUSIC"]		= "最後一物時啟用音樂. 需要重開一輪來生效.",
+    ["LPS_WEAPON_SELECT"]       = "給予武器 ('random' 或 'name'). 查看下麵的武器列表.",
+    ["LPS_BTN_WEPLIST"]         = "可用武器列表",
+    ["LPS_MINIMUM_PROPS_TEAM"]  = "最後一物觸發前所需的最少物品隊人數. 最小: 2.",
     
-    ["LPS_WEPLIST"]             = "Available Weapons list:\n%s\nYou can use 'lps_weapon_list' in the console.",
+    ["LPS_WEPLIST"]             = "可用武器列表:\n%s\n你可以在控制台使用 'lps_weapon_list' 命令.",
     
-    ["LPS_HALO_ENABLE"]         = "Draw a halo effect around the last prop?",
-    ["LPS_HALO_SEETHROUGHWALL"] = "Draw the halo effect through walls?",
-    ["LPS_HALO_COLOUR"]         = "Colour for Last Prop Standing's Halo effect ('rainbow' or hex code)",
-    ["LPS_TRAILS_ENABLE"]       = "Draw a trail behind Last Prop player?",
-    ["LPS_TRAILS_COLOUR"]       = "Colour for the Last Prop's trail (hex code)",
-    ["LPS_TRAIL_TEXTURE"]       = "Trail colour texture for Last Prop's player",
+    ["LPS_HALO_ENABLE"]         = "在最後一物周圍繪制光暈?",
+    ["LPS_HALO_SEETHROUGHWALL"] = "光暈效果穿牆?",
+    ["LPS_HALO_COLOUR"]         = "最後一物光暈效果顏色 ('rainbow' 或十六進制色碼)",
+    ["LPS_TRAILS_ENABLE"]       = "在最後一物玩家身後繪制尾跡?",
+    ["LPS_TRAILS_COLOUR"]       = "最後一物尾跡顏色 (十六進制色碼)",
+    ["LPS_TRAIL_TEXTURE"]       = "最後一物玩家尾跡顏色材質",
     
-    ["LPS_PLAY_MUSIC"]          = "Play Background Music when LPS Event begin. (Only applies on next music)",
-    ["LPS_CL_DRAW_HALO"]        = "(Client side) Show/Hide Halo, even server sets it.",
+    ["LPS_PLAY_MUSIC"]          = "當最後一物事件開始時播放背景音樂. (只適用於下一曲)",
+    ["LPS_CL_DRAW_HALO"]        = "(客戶端) 展示/隱藏光暈, 即便伺服器啟用.",
     
     -- Internal: Weapon Settings
-    ["LPS_WEPSET_REV_AMMO"]     = "LPS Revolver Ammo. -1=Unlimited.",
-    ["LPS_WEPSET_SMG_AMMO"]     = "LPS SMG Ammo. -1=Unlimited.",
+    ["LPS_WEPSET_REV_AMMO"]     = "最後一物左輪彈藥. -1=無限制.",
+    ["LPS_WEPSET_SMG_AMMO"]     = "最後一物沖鋒槍彈藥. -1=無限制.",
     
-    ["LPS_WEPSET_DAMAGE_REV"]   = "LPS Damage for Revolver",
-    ["LPS_WEPSET_DAMAGE_SMG"]   = "LPS Damage for SMG",
-    ["LPS_WEPSET_DAMAGE_BLAST"] = "LPS Damage for Blaster",
+    ["LPS_WEPSET_DAMAGE_REV"]   = "最後一物左輪傷害",
+    ["LPS_WEPSET_DAMAGE_SMG"]   = "最後一物沖鋒槍傷害",
+    ["LPS_WEPSET_DAMAGE_BLAST"] = "最後一物爆炸傷害",
     
     -- More into stuff now.
-    ["LASTPROP_ANNOUNCE"]       = "You are the Last Prop Standing!",
-    ["LASTPROP_ANNOUNCE_ALL"]   = "The Last Prop Standing is Resisting!",
+    ["LASTPROP_ANNOUNCE"]       = "你是最後一物!",
+    ["LASTPROP_ANNOUNCE_ALL"]   = "最後一物正在負隅頑抗!",
     
     -- Weapon State
-    ["WEAPON_STATE_READY"]      = "Ready",
-    ["WEAPON_STATE_RELOAD"]     = "Reloading...",
-    ["WEAPON_STATE_OUTOFAMMO"]  = "Out of Ammo",
-    ["WEAPON_STATE_UNARMED"]    = "No Weapon",
+    ["WEAPON_STATE_READY"]      = "就緒",
+    ["WEAPON_STATE_RELOAD"]     = "裝彈中...",
+    ["WEAPON_STATE_OUTOFAMMO"]  = "彈藥耗盡",
+    ["WEAPON_STATE_UNARMED"]    = "沒有武器",
     
-    ["WEAPON_AMMO_UNLI"]        = "Unlimited"
+    ["WEAPON_AMMO_UNLI"]        = "無限"
 }
 
 list.Set("PHX.LanguageInsertion", "[LastPropStanding] Chinese Traditional", LANG)
