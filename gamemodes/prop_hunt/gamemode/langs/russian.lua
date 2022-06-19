@@ -17,12 +17,12 @@ LANG.SUICIDEMSG = {  -- there was addition text here but feel free to add more.
 	"спотыкается об палку.",
 	"погибает от неизвестной силы.",
 	"погибает. F.",
-    "чувствует сожаление после убийства нескольких невинных объектов.",
-    "попадает в бэкрум.",
-    "пытался вымереть.",
-    "дед.",
-    "в панике, поэтому попытался стрелять по всем объектам.",
-    "НЕ НАДО, ДЯДЯ.",
+        "чувствует сожаление после убийства нескольких невинных объектов.",
+        "попадает в бэкрум.",
+        "пытался вымереть.",
+        "дед.",
+        "в панике, поэтому попытался стрелять по всем объектам.",
+        "НЕ НАДО, ДЯДЯ.",
 	"стал рэгдоллом.",
 }
 LANG.RANDOM_SPECTATORS = {
@@ -37,7 +37,7 @@ LANG["PHX_TEAM_HUNTERS"] 		= "Охотники"
 LANG["PHX_TEAM_UNASSIGNED"]		= "Неназначенные"
 LANG["PHX_TEAM_SPECTATOR"] 		= "Наблюдатели"
 -- Fretta Components
-LANG["HUD_KILLED"]				= "убивает"
+LANG["HUD_KILLED"]				= "убит"
 LANG["HUD_TIME"] 				= "ВРЕМЯ"
 LANG["HUD_ROUND"]				= "РАУНД"
 LANG["HUD_WAITPLY"]				= "Ожидаем других игроков..."
@@ -56,10 +56,14 @@ LANG["DERMA_NAME"]				= "Имя"
 LANG["DERMA_KILLS"]				= "Убийств"
 LANG["DERMA_DEATHS"]			= "Смертей"
 LANG["DERMA_PING"]				= "Пинг"
+LANG["DERMA_SERVER_TAG"]			= "СВ"
+LANG["DERMA_BOT_TAG"]				= "БОТ"
+LANG["DERMA_GAMEMODE_CREDITS"]			= "%s | Версии: %s - Рев. %s"	
 LANG["CHAT_JOINED"]				= " присоединяется к "
 LANG["CHAT_JOINEDTHE"]			= " присоединяется к "
 LANG["CHAT_SWAPBALANCE"]		= "%s переместили в команду %s для баланса."
 LANG["CHAT_SWAPBALANCEYOU"]		= "Вы с другой командой поменялись местами, чтобы достичь идеального баланса."
+LANG["SPASHSCREEN_BY_X"]		= "создано: %s"
 LANG["HELP_F1"] 				= [[Prop Hunt проекта X.
 
 Проект, призванный сделать Prop Hunt более современным и настраиваемым.
@@ -72,6 +76,7 @@ https://gmodgameservers.com/prophuntx
 Версия: ]].. PHX.VERSION ..[[ Ревизия: ]].. PHX.REVISION ..[[
 
 Веселитесь!]]
+LANG["HELP_DONATORS_AND_CONTRIBUTORS"]  = "\n\nСпонсоры и участники вклада в режим:\n- %s"
 -- General
 LANG["LANGUAGE_CHANGED"]		            = "Язык был изменён на %s"
 LANG["SUBTYPE_PREFERED_LANG"]	            = "Язык"
@@ -244,6 +249,12 @@ LANG["PHXM_ABOUT_VERSIONING"]		        = "Версия: %s - Ревизия: %s"
 LANG["PHXM_ABOUT_AUTHOR"]			        = "Создатель: %s"
 LANG["PHXM_ABOUT_ENJOYING"]			        = "Если вам нравится игра, подумайте о пожертвовании!"
 LANG["PHXM_ABOUT_UPDATE"]			        = "Обновления Prop Hunt X"
+LANG["PHXM_VIEW_UPDATE_INFO"]			        = "Информация обновления"
+LANG["PHXM_CHECK_FOR_UPDATES"]			        = "Проверка обновлений"
+LANG["PHXM_UPDATE_FOUND_TEXT"]			        = "Обновление было проверено. Дополнительную информацию можно получить в консоли.\n\nВы хотите просмотреть новости и информацию об обновлении?"
+LANG["PHXM_UPDATE_FOUND_BUTTON1"]                       = "Информация"
+LANG["PHXM_UPDATE_FOUND_BUTTON2"]                       = "Просмотреть"
+LANG["PHXM_BUTTON_NO"]			                = "Нет"
 LANG["PHXM_ABOUT_LINKS"]			        = "Ссылки и авторство"
 LANG["PHXM_ABOUT_THANKS"]			        = "Особая благодарность за поддержку, предложение и вклад:\n %s"
 LANG["PHXM_ABOUT_BTN_DONATE"]		        = "Поддержите PH:X пожертвованием"
