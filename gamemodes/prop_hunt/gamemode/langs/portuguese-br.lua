@@ -70,12 +70,20 @@ LANG["DERMA_NAME"]				= "Nome"
 LANG["DERMA_KILLS"]				= "Kills"
 LANG["DERMA_DEATHS"]			= "Mortes"
 LANG["DERMA_PING"]				= "Latência"
+LANG["DERMA_SERVER_TAG"]		= "SV" --Fix Me
+LANG["DERMA_BOT_TAG"]			= "BOT" -- Fix Me
+LANG["DERMA_GAMEMODE_CREDITS"]	= "%s | Version: %s - Rev. %s" -- Fix Me
 
 LANG["CHAT_JOINED"]				= " se conectou "
 LANG["CHAT_JOINEDTHE"]			= " filiou-se a "
 
 LANG["CHAT_SWAPBALANCE"]		= "%s  foi movido para %s para balanceamento de time."
 LANG["CHAT_SWAPBALANCEYOU"]		= "Você foi trocado para equilibrio perfeito." -- Smile... for even in death, you have become children of Thanos
+
+-- FRETTA: Splash Starting Screen
+LANG["SPASHSCREEN_BY_X"]		= "by %s"	--Fix Me
+-- RichTextBox
+LANG["HELP_DONATORS_AND_CONTRIBUTORS"]  = "\n\nDonators & Contributors:\n- %s" --Fix Me
 -- // END OF FRETTA SECTION \\
 
 LANG["HELP_F1"] 				= [[Um projeto Prop Hunt (codinome) X.
@@ -347,6 +355,18 @@ LANG["PHXM_ABOUT_VERSIONING"]		= "Versão: %s - Revisão: %s"
 LANG["PHXM_ABOUT_AUTHOR"]			= "Por: %s"
 LANG["PHXM_ABOUT_ENJOYING"]			= "Se você tiver gostando do jogo, considere doar!"
 LANG["PHXM_ABOUT_UPDATE"]			= "Atualizações do Prop Hunt X"
+-- [[ FIX ME ]] --
+LANG["PHXM_VIEW_UPDATE_INFO"]		= "View update info"
+LANG["PHXM_CHECK_FOR_UPDATES"]		= "Check for Updates"
+LANG["PHXM_UPDATE_FOUND_TEXT"]		= "Update has been checked. Please check on the Console for more information.\n\nWould you like to view update what's new?"
+LANG["PHXM_UPDATE_FOUND_TITLE"]   	= "Update Information"
+LANG["PHXM_UPDATE_FOUND_BUTTON"]   	= "View Updates"
+LANG["UPDATE_NOTIFY_MSG_NOTFOUND"]	= "No update was found. Please click on 'Check for Updates' button first!"
+LANG["UPDATE_NOTIFY_MSG_TITLE"]		= "No updates found"
+LANG["UPDATE_NOTIFY_WINDOW_TITLE"]	= "Update Notice"
+LANG["UPDATE_RTBOX_APPEND"]			= "\n\nFor your information:\nCurrently you are using version: %s with Revision: %s"
+LANG["UPDATE_BTN_SEEFULL"]			= "See Full Changes"
+-- [[ FIX ME ]] --
 LANG["PHXM_ABOUT_LINKS"]			= "Links e créditos"
 LANG["PHXM_ABOUT_THANKS"]			= "Agradecimento especial pelo apoio, sugestão e contribuição:\n %s"
 LANG["PHXM_ABOUT_BTN_DONATE"]		= "Apoie PH:X doando"

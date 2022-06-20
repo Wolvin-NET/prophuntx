@@ -16,7 +16,7 @@ function PANEL:Init()
 		self.lblGamemodeName:SetColor( color_white )
 		
 	self.lblGamemodeAuthor = vgui.Create( "DLabel", self )
-		self.lblGamemodeAuthor:SetText( "by " .. GAMEMODE.Author )
+		self.lblGamemodeAuthor:SetText( PHX:FTranslate( "SPASHSCREEN_BY_X", GAMEMODE.Author ) or "Unknown" )
 		self.lblGamemodeAuthor:SetFont( "FRETTA_MEDIUM" )
 		self.lblGamemodeAuthor:SetColor( color_white )
 		

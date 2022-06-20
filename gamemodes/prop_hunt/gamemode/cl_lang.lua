@@ -125,7 +125,8 @@ function PHX:FTranslate( textToFind, ... )
                 return textToFind
             else
                 --Fallback
-                return fallback[textToFind]
+				local NiceFallback = string.format(fallback[textToFind], ...)
+                return NiceFallback
             end
 		else
 			local NiceFormat = string.format(code[textToFind], ...)

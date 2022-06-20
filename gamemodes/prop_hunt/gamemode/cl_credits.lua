@@ -43,15 +43,14 @@ hook.Add("PH_CustomTabMenu", "PHX.About", function(tab, pVgui, paintPanelFunc)
 	pVgui("","label",false,grid, "PHXM_ABOUT_ENJOYING" )
 	pVgui("","label",false,grid, "PHXM_ABOUT_UPDATE" )
 	pVgui("","btn", {
-		-- This section isn't translated by intentional. 
-        -- Because the response always returned to English anyway.
-		[1] = {"View update info", function() PHX:notifyUser() end},
-		[2] = {"Check for Updates", 
+		[1] = {"PHXM_VIEW_UPDATE_INFO", function() PHX:notifyUser() end},
+		[2] = {"PHXM_CHECK_FOR_UPDATES", 
 			function()
 				PHX:CheckUpdate()
-				Derma_Query("Update has been checked. Please check on the Console for more information.\n\nWould you like to view update what's new & info?","Update Info",
-                "View Update", function() PHX:notifyUser() end,
-				"No", function() end)
+				PHX:MsgBox_Query(
+				"PHXM_UPDATE_FOUND_TEXT", "PHXM_UPDATE_FOUND_TITLE",
+                "PHXM_UPDATE_FOUND_BUTTON", function() PHX:notifyUser() end,
+				"MISC_NO", function() end)
 			end},
 	},grid,"")
 	pVgui("","label",false,grid, "PHXM_ABOUT_LINKS" )
@@ -72,5 +71,4 @@ hook.Add("PH_CustomTabMenu", "PHX.About", function(tab, pVgui, paintPanelFunc)
 	
 	local PanelModify = tab:AddSheet("", panel, "vgui/ph_iconmenu/m_info.png")
 	paintPanelFunc(PanelModify, PHX:FTranslate("PHXM_TAB_ABOUT"))
-
 end)

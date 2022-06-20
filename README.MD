@@ -2,7 +2,7 @@
 ## X2Z - Road to Zero
 
 ### Versioning
-Version: X2Z, Revision: 19/06/2022 (dd/mm/yyyy)
+Version: X2Z, Revision: 20/06/2022 (dd/mm/yyyy)
 
 ### Public Beta Test
 Live Testing currently unavailable.

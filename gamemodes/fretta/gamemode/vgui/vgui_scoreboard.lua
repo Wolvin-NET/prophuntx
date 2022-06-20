@@ -17,7 +17,7 @@ function PANEL:Init()
 	self.HostName:SetText( GetHostName() )
 	
 	self.GamemodeName = vgui.Create( "DLabel", self )
-	self.GamemodeName:SetText( GAMEMODE.Name .. " | Version: ".. GAMEMODE._VERSION .. " - Rev. ".. GAMEMODE.REVISION )
+	self.GamemodeName:SetText( PHX:FTranslate( "DERMA_GAMEMODE_CREDITS", GAMEMODE.Name, GAMEMODE._VERSION, GAMEMODE.REVISION ) )
 	
 	self:SetHeight( 64 )
 

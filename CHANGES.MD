@@ -1,6 +1,18 @@
 ## A new major updates to Prop Hunt: X has been released.
 For now, the Prop Hunt X will change it's version to "X2Z." with Revision 19.06.2022
 
+## Revision 20.06.2022
+---
+- Language & String Addition to core files: `vgui_scoreboard.lua, cl_splashscreen.lua, cl_selectscreen.lua, cl_credits.lua` and `sh_httpupdates.lua`
+- Updated Language: English, Indonesia, Russian, Spanish (Late)
+- Increased Damage for "Grenade Launcher" and "RPG Missile Launcher" for Prop's devil crystal from 50 to 75 Damage Points.
+- Fixed "Grenade Frag" Drop for Prop's devil crystal that can now kills hunters when not thrown.
+- Added & Changed the way of Derma_Message & Derma_Query into `PHX:MsgBox()` and `PHX:MsgBox_Query` - A quick way to translate using Translations (Internally uses `PHX:QTrans()`)
+- Added new Config Directory: `prop_hunt/gamemode/config/external` - You can now place some custom configuration/codes file rather than using autorun folder.  
+This will scanned automatically by the gamemode. (Realm: Shared)
+
+## Revision 19.06.2022
+---
 ### Full Changes:
 
 **Features Addition**

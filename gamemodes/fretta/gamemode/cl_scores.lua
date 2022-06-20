@@ -71,7 +71,7 @@ end
 
 function GM:AddScoreboardPing( ScoreBoard )
 
-	local f = function( ply ) return ply:ScoreboardPing() end
+	local f = function( ply ) return PHX:FTranslate( ply:ScoreboardPing() ) or "SV" end -- Original: ply:ScoreboardPing()
 	ScoreBoard:AddColumn( PHX:FTranslate("DERMA_PING") or "Ping", 40, f, 0.1, nil, 6, 6 )
 
 end

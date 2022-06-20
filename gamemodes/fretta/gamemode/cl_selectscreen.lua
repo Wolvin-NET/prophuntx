@@ -157,7 +157,7 @@ function PANEL:SetForHelp( strHelpText, ContribsText )
 		c = table.concat(GAMEMODE.PHXContributors,"\n- ")
 	end
     self.lblHoverText:InsertColorChange(220,220,220,255)
-	self.lblHoverText:AppendText("\n\nDonators & Contributors:\n- " .. c)
+	self.lblHoverText:AppendText( PHX:FTranslate("HELP_DONATORS_AND_CONTRIBUTORS", c) )
 	timer.Simple(0, function()
 		self.lblHoverText.PerformLayout = function(me)
 			--me:SetToFullHeight()

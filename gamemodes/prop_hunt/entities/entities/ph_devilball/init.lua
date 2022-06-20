@@ -119,7 +119,7 @@ local PropRevenge = {
 					g:Spawn()
 					g:SetVelocity( Forward * 1000 )
 					g:SetLocalAngularVelocity(Angle(math.random(-400,400),math.random(-400,400),math.random(-400,400)))
-					g:SetSaveValue("m_flDamage", 50)	-- Original: sk_plr_dmg_smg1_grenade = 100. 100 is already OP!
+					g:SetSaveValue("m_flDamage", 75)	-- Original: sk_plr_dmg_smg1_grenade = 100. 100 is already OP!
 					g:SetOwner(pl)
 				end
 				ResetPlayerStuff(pl)	-- keep this always called!
@@ -142,7 +142,7 @@ local PropRevenge = {
 					r:SetAngles( pl:EyeAngles() )
 					r:Spawn()
 					r:SetVelocity( Forward * 300 + Vector(0, 0, 128) )
-					r:SetSaveValue("m_flDamage", 50)	-- Original: sk_plr_dmg_rpg = 100. 100 is already OP!
+					r:SetSaveValue("m_flDamage", 75)	-- Original: sk_plr_dmg_rpg = 100. 100 is already OP!
 					r:SetOwner(pl)
 				end
 				ResetPlayerStuff(pl)	-- keep this always called!
@@ -235,13 +235,19 @@ ENT.funclists = {
 	end,
 	function(pl)
 		local nade = ents.Create("npc_grenade_frag")
-		nade:SetPos(Vector(pl:GetPos()))
+		local pos = pl:GetPos()
+		nade:SetPos(Vector( pos.x, pos.y, pos.z+8 ))
 		nade:SetAngles(Angle(0,0,0))
 		nade:Spawn()
 		nade:Activate()
-		nade:SetOwner(pl)
 		
-		nade:Fire("SetTimer","4",0)
+		nade:Fire("SetTimer","3",0)
+		timer.Simple(0.1, function()
+			nade:SetOwner(pl)
+			nade:SetSaveValue( "m_hThrower", pl )
+			nade:SetSaveValue( "m_flDamage", 90 )
+		end)
+		
 		pl:ChatPrint("[Devil Ball] You spawned grenade! Throw this grenade at hunters!")
 	end,
 	function(pl, ent)

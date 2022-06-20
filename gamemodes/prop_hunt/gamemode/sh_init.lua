@@ -18,7 +18,7 @@ IS_PHX		 	= true	-- an easy check if PHX is installed.
 
 PHX.ConfigPath 	= "phx_data"
 PHX.VERSION		= "X2Z"
-PHX.REVISION	= "19.06.22" --Format: dd/mm/yy.
+PHX.REVISION	= "20.06.22" --Format: dd/mm/yy.
 
 -- Fonts
 AddCSLuaFile("cl_fonts.lua")
@@ -276,6 +276,8 @@ GM.PHXContributors			= {
 	"Galaxio "..mark,
 	"Godfather "..mark,
     "Fryman",
+	"Berry",
+	"Ph.X",
 	"Dralga",
 	"Berry",
 	"Yam",

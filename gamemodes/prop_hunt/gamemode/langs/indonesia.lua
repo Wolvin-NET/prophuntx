@@ -94,12 +94,21 @@ LANG["DERMA_NAME"]				= "Nama"
 LANG["DERMA_KILLS"]				= "Skor"
 LANG["DERMA_DEATHS"]			= "Mati"
 LANG["DERMA_PING"]				= "Ping"
+LANG["DERMA_SERVER_TAG"]		= "SVR"
+LANG["DERMA_BOT_TAG"]			= "BOT"
+LANG["DERMA_GAMEMODE_CREDITS"]	= "%s | Versi: %s, Revisi %s"
 
 LANG["CHAT_JOINED"]				= " bergabung "
 LANG["CHAT_JOINEDTHE"]			= " menjadi " -- ini ke Team Spectator
 
 LANG["CHAT_SWAPBALANCE"]		= "%s telah diganti ke %s untuk menyeimbangkan tim."
 LANG["CHAT_SWAPBALANCEYOU"]		= "Kamu telah dipindahkan dari tim sebelumnya agar supaya lebih seimbang." -- Smile... for even in death, you have become children of Thanos
+
+-- Fretta Splash Screen
+LANG["SPASHSCREEN_BY_X"]		= "Oleh %s"
+-- RichTextBox
+LANG["HELP_DONATORS_AND_CONTRIBUTORS"]  = "\n\nDonor & Kontributor:\n- %s"
+
 -- // END OF FRETTA SECTION \\
 
 LANG["HELP_F1"] 				= [[Project Prop Hunt X.
@@ -354,6 +363,19 @@ LANG["PHXM_ABOUT_VERSIONING"]	= "Versi: %s - Revisi: %s"
 LANG["PHXM_ABOUT_AUTHOR"]		= "Oleh: %s"
 LANG["PHXM_ABOUT_ENJOYING"]		= "Jika kamu senang bermain Prop Hunt X, jangan lupa support ya! :)"
 LANG["PHXM_ABOUT_UPDATE"]		= "Update untuk Prop Hunt X"
+
+LANG["PHXM_VIEW_UPDATE_INFO"]		= "Lihat info perbaharuan"
+LANG["PHXM_CHECK_FOR_UPDATES"]		= "Cek untuk Update"
+LANG["PHXM_UPDATE_FOUND_TEXT"]		= "Update telah di cek. Silahkan cek di console untuk informasi lebih lanjut.\n\nApakah kamu ingin melihat informasi update?"
+LANG["PHXM_UPDATE_FOUND_TITLE"]   	= "Informasi Update"
+LANG["PHXM_UPDATE_FOUND_BUTTON"]   	= "Lihat Update"
+
+LANG["UPDATE_NOTIFY_MSG_NOTFOUND"]	= "Tidak ada informasi update. Mohon klik tombol 'Cek untuk Update' dahulu!"
+LANG["UPDATE_NOTIFY_MSG_TITLE"]		= "Tidak ada update"
+LANG["UPDATE_NOTIFY_WINDOW_TITLE"]	= "Pemberitahuan Update"
+LANG["UPDATE_RTBOX_APPEND"]			= "\n\nInformasi Tambahan:\nSaat ini kamu menggunakan versi: %s Revisi: %s"
+LANG["UPDATE_BTN_SEEFULL"]			= "Lihat Semua Pembaharuan"
+
 LANG["PHXM_ABOUT_LINKS"]		= "Tautan dan Kredit"
 LANG["PHXM_ABOUT_THANKS"]		= "Terima kasih banyak untuk Bantuan, Sugesti & Kontribusi kepada:\n %s"
 LANG["PHXM_ABOUT_BTN_DONATE"]		= "Bantu PH:X dengan Donasi"

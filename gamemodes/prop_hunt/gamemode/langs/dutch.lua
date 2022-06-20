@@ -73,12 +73,20 @@ LANG["DERMA_NAME"]				= "Naam"
 LANG["DERMA_KILLS"]				= "Kills"
 LANG["DERMA_DEATHS"]			= "Doden"
 LANG["DERMA_PING"]				= "Ping"
+LANG["DERMA_SERVER_TAG"]		= "SV" --Fix Me
+LANG["DERMA_BOT_TAG"]			= "BOT" -- Fix Me
+LANG["DERMA_GAMEMODE_CREDITS"]	= "%s | Version: %s - Rev. %s" -- Fix Me
 
 LANG["CHAT_JOINED"]				= " toegetreden "
 LANG["CHAT_JOINEDTHE"]			= " is toegetreden tot "
 
 LANG["CHAT_SWAPBALANCE"]		= "%s is veranderd naar %s voor gebalabceerde teams."
-LANG["CHAT_SWAPBALANCEYOU"]		= "Je bent van team gewisseld voor perfecte balans :)" -- Smile... for even in death, you have become children of Thanos
+LANG["CHAT_SWAPBALANCEYOU"]		= "Je bent van team gewisseld voor perfecte balans :)"
+
+-- FRETTA: Splash Starting Screen
+LANG["SPASHSCREEN_BY_X"]		= "by %s"	--Fix Me
+-- RichTextBox
+LANG["HELP_DONATORS_AND_CONTRIBUTORS"]  = "\n\nDonators & Contributors:\n- %s" --Fix Me
 -- // END OF FRETTA SECTION \\
 
 LANG["HELP_F1"] 				= [[A Prop Hunt (Codename) X Project.
@@ -114,7 +122,7 @@ LANG["HUD_MAGSEC"]				= "MAG. / SEC." --Magazine Counts (separator) Secondary Ma
 -- !!WEAPON NAMES CANNOT BE TRANSLATED, THEY USE FROM language.GetPhrase THEREFORE IT'S IMPOSSIBLE TO DO.
 
 LANG["TEAM_PROPS"]				= LANG["PHX_TEAM_PROPS"] --"Props"
-LANG["TEAM_Zoekers"]			= LANG["PHX_TEAM_HUNTERS"] --"Zoekers"
+LANG["TEAM_HUNTERS"]			= LANG["PHX_TEAM_HUNTERS"] --"Zoekers"
 
 LANG["HUD_ROTLOCK"]				= "Prop Rotatie: Gesloten"
 LANG["HUD_ROTFREE"]				= "Prop Rotatie: Vrij"
@@ -350,6 +358,18 @@ LANG["PHXM_ABOUT_VERSIONING"]		= "Versie: %s - Hervisie: %s"
 LANG["PHXM_ABOUT_AUTHOR"]			= "Door: %s"
 LANG["PHXM_ABOUT_ENJOYING"]			= "Als je de game leuk vind, overweeg te doneren!"
 LANG["PHXM_ABOUT_UPDATE"]			= "Prop Hunt X Updates"
+-- [[ FIX ME ]] --
+LANG["PHXM_VIEW_UPDATE_INFO"]		= "View update info"
+LANG["PHXM_CHECK_FOR_UPDATES"]		= "Check for Updates"
+LANG["PHXM_UPDATE_FOUND_TEXT"]		= "Update has been checked. Please check on the Console for more information.\n\nWould you like to view update what's new?"
+LANG["PHXM_UPDATE_FOUND_TITLE"]   	= "Update Information"
+LANG["PHXM_UPDATE_FOUND_BUTTON"]   	= "View Updates"
+LANG["UPDATE_NOTIFY_MSG_NOTFOUND"]	= "No update was found. Please click on 'Check for Updates' button first!"
+LANG["UPDATE_NOTIFY_MSG_TITLE"]		= "No updates found"
+LANG["UPDATE_NOTIFY_WINDOW_TITLE"]	= "Update Notice"
+LANG["UPDATE_RTBOX_APPEND"]			= "\n\nFor your information:\nCurrently you are using version: %s with Revision: %s"
+LANG["UPDATE_BTN_SEEFULL"]			= "See Full Changes"
+-- [[ FIX ME ]] --
 LANG["PHXM_ABOUT_LINKS"]			= "Links en credits"
 LANG["PHXM_ABOUT_THANKS"]			= "Speciaal dank voor de Support, Suggesties & Bijdragen:\n %s"
 LANG["PHXM_ABOUT_BTN_DONATE"]		= "Steun PH:X door te doneren"

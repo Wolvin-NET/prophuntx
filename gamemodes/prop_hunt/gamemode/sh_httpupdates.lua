@@ -141,7 +141,6 @@ end)
 end)
 
 if CLIENT then
-	-- if cvar then
 	local w = {}
 	
 	function PHX:notifyUser()
@@ -151,12 +150,12 @@ if CLIENT then
 			local json = file.Read(PHX.ConfigPath .. "/phx_update_info.txt", "DATA")
 			data = util.JSONToTable(json)
 		else
-			Derma_Message("No update was found. Please click on 'Check for Updates' button first!", "No update found", "OK")
+			PHX:MsgBox("UPDATE_NOTIFY_MSG_NOTFOUND", "UPDATE_NOTIFY_MSG_TITLE", "MISC_OK")
 			return
 		end
 	
 		w.frame = vgui.Create("DFrame")
-		w.frame:SetTitle("Update Notice")
+		w.frame:SetTitle( PHX:FTranslate("UPDATE_NOTIFY_WINDOW_TITLE") )
 		w.frame:SetSize(640, ScrH() * 0.75)
 		w.frame:Center()
 		
@@ -169,13 +168,13 @@ if CLIENT then
 			self:SetFontInternal("PHX.TopBarFont")
 		end
 		w.richtext:InsertColorChange(220,220,220,255)
-		w.richtext:AppendText("\n\nFor your information:\nCurrently you are using version: "..GAMEMODE._VERSION.." with Revision: "..GAMEMODE.REVISION)
+		w.richtext:AppendText( PHX:FTranslate( "UPDATE_RTBOX_APPEND", GAMEMODE._VERSION, GAMEMODE.REVISION ) )
 		
 		w.button = vgui.Create("DButton", w.frame)
 		w.button:Dock(BOTTOM)
 		w.button:DockMargin(4,8,4,8)
 		w.button:SetSize(0,48)
-		w.button:SetText("See Full Changes")
+		w.button:SetText( PHX:FTranslate( "UPDATE_BTN_SEEFULL" ) )
 		function w.button:DoClick()
 			gui.OpenURL(data.url)
 		end
