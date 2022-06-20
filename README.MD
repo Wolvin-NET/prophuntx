@@ -1,4 +1,4 @@
-## Pre-Release 14/06/2022
+## Pre-Release 20/06/2022
 
 ### Warning: This is nightly build development branch which may incomplete or unstable. Use at your own risk! 
 ### This branch may contains alot of commit changes. Be sure to stay up to date & checkout regularly.
@@ -20,4 +20,6 @@ https://ko-fi.com/wolvindra
 https://www.buymeacoffee.com/wolvindra  
 
 Development Notes:
-- Todo: Finish Last Prop Standing
+- Lucky & Devil ball optimization
+- Dynamic Team?
+- Other tweaks

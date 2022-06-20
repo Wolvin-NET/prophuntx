@@ -4,7 +4,7 @@ matBlueMuzzle:SetInt("$spriterendermode",9) -- 8 ?
 
 function EFFECT:Init(data)
 	
-	self.Shooter        = data:GetEntity()
+	self.Shooter        = data:GetEntity():GetOwner()
 	self.Attachment     = data:GetAttachment()
 	self.WeaponEnt      = self.Shooter:GetLPSWeaponEntity()
 	self.KillTime       = 0

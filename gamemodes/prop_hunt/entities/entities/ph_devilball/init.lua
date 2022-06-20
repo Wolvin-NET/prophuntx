@@ -85,14 +85,14 @@ local PropRevenge = {
 					end
 					
 					pl.itemshootcount = pl.itemshootcount + 1
-					if pl.itemshootcount == max then
-						timer.Remove(pl.tmr_item)	-- completely clear the timer.
+					if pl.itemshootcount >= max then
+						timer.Remove(pl.tmr_item)	-- immediately clear timer.
 						ResetPlayerStuff(pl)
 					end
 				elseif !pl:Alive() then
 					print("[PHX Devil Crystal] Removing Timer '" .. pl.tmr_item .. "' because player was dead!")
 					timer.Remove(pl.tmr_item)
-					print("[PHX] Unsetting parameters on dead player.")
+					print("[PHX Devil Crystal] Unsetting parameters on dead player.")
 					ResetPlayerStuff(pl)
 				else
 					print("[PHX Devil Crystal] Removing Timer '" .. safefail .. "' because player was disconnected!")
@@ -119,7 +119,7 @@ local PropRevenge = {
 					g:Spawn()
 					g:SetVelocity( Forward * 1000 )
 					g:SetLocalAngularVelocity(Angle(math.random(-400,400),math.random(-400,400),math.random(-400,400)))
-					g:SetSaveValue("m_flDamage", 50)	-- Original: sk_plr_dmg_smg1_grenade = 100. 100 is already OP!
+					g:SetSaveValue("m_flDamage", 75)	-- Original: sk_plr_dmg_smg1_grenade = 100. 100 is already OP!
 					g:SetOwner(pl)
 				end
 				ResetPlayerStuff(pl)	-- keep this always called!
@@ -142,7 +142,7 @@ local PropRevenge = {
 					r:SetAngles( pl:EyeAngles() )
 					r:Spawn()
 					r:SetVelocity( Forward * 300 + Vector(0, 0, 128) )
-					r:SetSaveValue("m_flDamage", 50)	-- Original: sk_plr_dmg_rpg = 100. 100 is already OP!
+					r:SetSaveValue("m_flDamage", 75)	-- Original: sk_plr_dmg_rpg = 100. 100 is already OP!
 					r:SetOwner(pl)
 				end
 				ResetPlayerStuff(pl)	-- keep this always called!
@@ -235,13 +235,19 @@ ENT.funclists = {
 	end,
 	function(pl)
 		local nade = ents.Create("npc_grenade_frag")
-		nade:SetPos(Vector(pl:GetPos()))
+		local pos = pl:GetPos()
+		nade:SetPos(Vector( pos.x, pos.y, pos.z+8 ))
 		nade:SetAngles(Angle(0,0,0))
 		nade:Spawn()
 		nade:Activate()
-		nade:SetOwner(pl)
 		
-		nade:Fire("SetTimer","4",0)
+		nade:Fire("SetTimer","3",0)
+		timer.Simple(0.1, function()
+			nade:SetOwner(pl)
+			nade:SetSaveValue( "m_hThrower", pl )
+			nade:SetSaveValue( "m_flDamage", 90 )
+		end)
+		
 		pl:ChatPrint("[Devil Ball] You spawned grenade! Throw this grenade at hunters!")
 	end,
 	function(pl, ent)
@@ -264,7 +270,7 @@ ENT.funclists = {
 			
 			local failsafe = pl.tmr_itemnotice
 			
-			local msg = "Press [CLICK] to shoot ".. name .."!"
+			local msg = "Press [RIGHT CLICK] to shoot ".. name .."!"
 			
 			pl:PrintMessage(HUD_PRINTCENTER, msg)
 			timer.Create(pl.tmr_itemnotice, 3, 0, function()
@@ -276,7 +282,7 @@ ENT.funclists = {
 				end
 			end)
 			
-			pl:ChatPrint("[Devil Ball] You have ".. name .." in your hand! Aim towards to hunters to damage them!")
+			pl:ChatPrint("[Devil Ball] You have ".. name .." in your hand! Aim towards hunters to damage them!")
 		  end
 	end,
 	function(pl)
@@ -317,7 +323,15 @@ ENT:AddMoreLuckyEvents()
 
 function ENT:The_DevilDrop(pl)
 	if pl:Team() == TEAM_PROPS && pl:Alive() then
-		self.getfunction = self.funclists[math.random(1, #self.funclists)]
+		--self.getfunction = self.funclists[math.random(1, #self.funclists)]
+		--self.getfunction(pl,self)
+		
+		local cur
+		repeat
+			cur = self.funclists[math.random(1, #self.funclists)]
+		until cur ~= self.getfunction
+		
+		self.getfunction = cur
 		self.getfunction(pl,self)
 		
 		hook.Call("PH_OnDevilBallPickup", nil, pl)
@@ -372,7 +386,6 @@ local function ResetEverything()
 		end
 	end
 end
---hook.Add("PH_RoundEnd", "PHX.ForceResetDevilBall", ResetEverything)
 
 -- Reset Everything and Destroy all devil crystals after Round End with Result. (New Hook)
 hook.Add("PH_RoundEndResult", "PHX.DestroyDevils", function(r,rt)
@@ -405,10 +418,10 @@ local function DoPropRevenge( pl, amount )
 end
 
 hook.Add("PlayerTick", "PHX.PlayerPropDoRevenge", function(pl, mv)
-	if GAMEMODE:InRound() and pl:Alive() and pl:Team() == TEAM_PROPS and pl:KeyPressed(IN_ATTACK) then
+	if GAMEMODE:InRound() and pl:Alive() and pl:Team() == TEAM_PROPS and pl:KeyPressed(IN_ATTACK2) then
 		if pl.prop_revenge_item and pl.prop_revenge_item ~= nil and pl.prop_revenge_item > 0 and 
 			pl.has_uniqueitem and pl.has_uniqueitem ~= nil and !pl.has_uniqueitem_shoot then
-			DoPropRevenge(pl, math.random(6,10))	-- this is only for flechette.
+			DoPropRevenge(pl, math.random(6,10))	-- 2nd argument is only for flechette.
 		end
 	end
 end)

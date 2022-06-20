@@ -81,12 +81,20 @@ LANG["DERMA_NAME"]				= "名称"
 LANG["DERMA_KILLS"]				= "击杀"
 LANG["DERMA_DEATHS"]			= "死亡"
 LANG["DERMA_PING"]				= "Ping"
+LANG["DERMA_SERVER_TAG"]		= "SV" --Fix Me
+LANG["DERMA_BOT_TAG"]			= "BOT" -- Fix Me
+LANG["DERMA_GAMEMODE_CREDITS"]	= "%s | Version: %s - Rev. %s" -- Fix Me
 
 LANG["CHAT_JOINED"]				= " 已加入 "
 LANG["CHAT_JOINEDTHE"]			= " 加入了 "
 
 LANG["CHAT_SWAPBALANCE"]		= "为了平衡队伍，将 %s 送到 %s 了."
 LANG["CHAT_SWAPBALANCEYOU"]		= "你被换队以实现完美的游戏平衡." -- Smile... for even in death, you have become children of Thanos
+
+-- FRETTA: Splash Starting Screen
+LANG["SPASHSCREEN_BY_X"]		= "by %s"	--Fix Me
+-- RichTextBox
+LANG["HELP_DONATORS_AND_CONTRIBUTORS"]  = "\n\nDonators & Contributors:\n- %s" --Fix Me
 -- // END OF FRETTA SECTION \\
 
 LANG["HELP_F1"] 				= [[物品猎杀 X 项目.
@@ -358,6 +366,18 @@ LANG["PHXM_ABOUT_VERSIONING"]		= "版本: %s - 修订版: %s"
 LANG["PHXM_ABOUT_AUTHOR"]			= "By: %s"
 LANG["PHXM_ABOUT_ENJOYING"]			= "如果您喜欢此游戏，请考虑捐赠我们!"
 LANG["PHXM_ABOUT_UPDATE"]			= "物品猎杀 X 更新"
+-- [[ FIX ME ]] --
+LANG["PHXM_VIEW_UPDATE_INFO"]		= "View update info"
+LANG["PHXM_CHECK_FOR_UPDATES"]		= "Check for Updates"
+LANG["PHXM_UPDATE_FOUND_TEXT"]		= "Update has been checked. Please check on the Console for more information.\n\nWould you like to view update what's new?"
+LANG["PHXM_UPDATE_FOUND_TITLE"]   	= "Update Information"
+LANG["PHXM_UPDATE_FOUND_BUTTON"]   	= "View Updates"
+LANG["UPDATE_NOTIFY_MSG_NOTFOUND"]	= "No update was found. Please click on 'Check for Updates' button first!"
+LANG["UPDATE_NOTIFY_MSG_TITLE"]		= "No updates found"
+LANG["UPDATE_NOTIFY_WINDOW_TITLE"]	= "Update Notice"
+LANG["UPDATE_RTBOX_APPEND"]			= "\n\nFor your information:\nCurrently you are using version: %s with Revision: %s"
+LANG["UPDATE_BTN_SEEFULL"]			= "See Full Changes"
+-- [[ FIX ME ]] --
 LANG["PHXM_ABOUT_LINKS"]			= "链接和名单"
 LANG["PHXM_ABOUT_THANKS"]			= "特别感谢支持、建议与贡献:\n %s"
 LANG["PHXM_ABOUT_BTN_DONATE"]		= "捐款支持PH:X"

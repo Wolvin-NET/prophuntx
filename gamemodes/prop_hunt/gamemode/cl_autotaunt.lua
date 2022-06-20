@@ -35,7 +35,7 @@ end
 
 local function TimeleftCTaunt()
 	local ply = LocalPlayer()
-	local lastTauntTime = ply:GetNWFloat("localLastTauntTime", 0)
+	local lastTauntTime = ply:GetNWFloat("CTaunt.LastTauntTime", 0)
 	local nextCustomTime = lastTauntTime + PHX:GetCVar( "ph_customtaunts_delay" )
 	local curTime = CurTime()
 	return nextCustomTime - curTime
@@ -156,15 +156,15 @@ local function AutoTauntPaint_phx()
 		local colCC     = Color(200,200,200,30)
         local colftRm   = Color(20,230,230,255)
 		
-		local literalR = r + 1 .."s"
-		local literalC = c .."s"
+		local literalR = r
+		local literalC = c
 		
 		if r < 0 then 
 			literalR = ""
 			colR = Color(20,255,20,220)
 			colCR = colR
 		end
-		if c < 0 then 
+		if c < 0 then
 			literalC = ""
 			colC = Color(20,230,230,220)
 			colCC = colC

@@ -1,3 +1,6 @@
+-- Force client to download workshop. Instead of sharing files.
+resource.AddWorkshop("2176546751")
+
 -- Send required file to clients
 AddCSLuaFile("sh_init.lua")
 AddCSLuaFile("cl_fb_core.lua")
@@ -343,7 +346,8 @@ local function AutoRespawnCheck(ply)
 					local tim = PHX:GetCVar( "ph_allow_respawnonblind_team_only" )
 					if tim > 0 and ply:Team() == tim then
 						ply:Spawn()
-						ply:PHXChatInfo( "NOTICE", "BLIND_RESPAWN_TEAM", team.GetName( tim ), math.Round(phx_blind_unlocktime - CurTime()) )
+						--ply:PHXChatInfo( "NOTICE", "BLIND_RESPAWN_TEAM", team.GetName( tim ), math.Round(phx_blind_unlocktime - CurTime()) )
+						ply:PHXChatInfo( "NOTICE", "BLIND_RESPAWN_TEAM", PHX:TranslateName( tim, ply ), math.Round(phx_blind_unlocktime - CurTime()) )
 					elseif tim == 0 then
 						ply:Spawn()
 						ply:PHXChatInfo( "NOTICE", "BLIND_RESPAWN", math.Round(phx_blind_unlocktime - CurTime()) )
@@ -387,7 +391,8 @@ hook.Add("OnPlayerChangedTeam", "TeamChange_switchLimitter", function(ply, old, 
 			timer.Simple(0.3, function()
 				if old ~= TEAM_SPECTATOR then
 					ply:SetTeam(old)
-					ply:PHXChatInfo("ERROR", "CHAT_SWAPTEAM_REVERT", team.GetName(new))
+					--ply:PHXChatInfo("ERROR", "CHAT_SWAPTEAM_REVERT", team.GetName(new))
+					ply:PHXChatInfo("ERROR", "CHAT_SWAPTEAM_REVERT", PHX:TranslateName(new,ply))
 					PHX.VerboseMsg("[PHX] Reverting "..ply:Nick().."\'s team to "..team.GetName(old))
 				end
 			end)
@@ -616,10 +621,12 @@ function GM:PlayerUse(pl, ent)
 	if pl:Team() == TEAM_PROPS && pl.UseTime <= CurTime() then
 		
 		local hmx, hz = ent:GetPropSize()
-		if PHX:GetCVar( "ph_check_props_boundaries" ) && !pl:CheckHull(hmx, hmx, hz) then
-			pl:PHXChatInfo("WARNING", "CHAT_PROP_NO_ROOM")
+        local proptype = PHX:GetCVar( "ph_usable_prop_type" )
+		if PHX:GetCVar( "ph_check_for_rooms" ) && !pl:CheckHull(hmx, hmx, hz) then
+            if (proptype <= 2 && PHX:IsUsablePropEntity( ent:GetClass() )) then
+                pl:PHXChatInfo("WARNING", "CHAT_PROP_NO_ROOM")
+            end
 		else
-			local proptype = PHX:GetCVar( "ph_usable_prop_type" )
 			if ( proptype >= 3 && PHX.CVARUseAbleEnts[proptype][ent:GetClass()] ) then
 				if PHX:QCVar( "ph_usable_prop_type_notice" ) then
 					pl:PrintCenter( "NOTIFY_PROP_ENTTYPE" )
@@ -649,6 +656,11 @@ function GM:PlayerUse(pl, ent)
 	if table.HasValue(PHX.EXPLOITABLE_DOORS, ent:GetClass()) && pl.last_door_time && pl.last_door_time + 1 > CurTime() then
 		return false
 	end
+    
+    -- Sorry but Props not allowed to enter vehicle, this is due to new code fixes for ph_prop :(
+    if pl:Team() == TEAM_PROPS and ent:IsVehicle() then
+        return false
+    end
 	
 	pl.last_door_time = CurTime()
 	return true
@@ -740,7 +752,8 @@ function PlayerSpawn(pl)
     -- Reset Fake taunts
 	pl:ResetTauntRandMapCount()
 	
-    pl.last_taunt_time = 0
+    pl.last_taunt_time 	= 0
+	pl.lastCTauntTime 	= 0
     pl.propdecoy = nil -- don't link to your decoy prop
 	
 	net.Start("ResetHull")
@@ -780,6 +793,7 @@ function RoundEnd()
             if PHX:GetCVar( "ph_enable_decoy_reward" ) and pl:Alive() and pl:Health() > 0 and (not pl:HasFakePropEntity()) then
                 pl:SetFakePropEntity(true)
                 pl:PHXChatPrint( "DECOY_GET_REWARD", Color(50,248,56), true )
+				pl:PHXNotify( "DECOY_GET_REWARD", "GENERIC", 5, true )
             end
         end
     end
@@ -1053,7 +1067,7 @@ function PlayerPressedKey(pl, key)
 				if pl.UseTime <= CurTime() then
 					if !pl:IsHoldingEntity() then
 						local hmx, hz = trace2.Entity:GetPropSize()
-						if PHX:GetCVar( "ph_check_props_boundaries" ) && !pl:CheckHull(hmx, hmx, hz) then
+						if PHX:GetCVar( "ph_check_for_rooms" ) && !pl:CheckHull(hmx, hmx, hz) then
 							pl:PHXChatInfo("WARNING", "CHAT_PROP_NO_ROOM")
 						else
 							GAMEMODE:PlayerExchangeProp(pl, trace2.Entity)
@@ -1106,8 +1120,7 @@ hook.Add("PlayerButtonDown", "PlayerButton_ControlTaunts", function(pl, key)
 					rand_taunt = PHX:GetRandomTaunt( TEAM_PROPS )
 				end
 			until rand_taunt != pl.last_taunt
-			
-			pl.last_taunt_time = CurTime() + PHX:GetCVar( "ph_normal_taunt_delay" )
+			pl.last_taunt_time  = CurTime()
 			pl.last_taunt = rand_taunt
 			
 			local pitch = 100

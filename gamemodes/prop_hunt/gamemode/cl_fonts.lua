@@ -12,6 +12,16 @@ surface.CreateFont("TrebuchetBig", {
 	size = 40
 })
 
+-- cl_menu.lua
+surface.CreateFont("PHX.MenuCategoryLabel", 
+{
+	font = "Roboto",
+	size = 26,
+	weight = 500,
+	antialias = true,
+	shadow = true
+})
+
 -- cl_hud.lua
 surface.CreateFont("PHX.HealthFont", 
 {

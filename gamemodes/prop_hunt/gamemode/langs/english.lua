@@ -82,9 +82,9 @@ LANG["DERMA_NAME"]				= "Name"
 LANG["DERMA_KILLS"]				= "Kills"
 LANG["DERMA_DEATHS"]			= "Deaths"
 LANG["DERMA_PING"]				= "Ping"
-LANG["DERMA_SERVER_TAG"]			= "SV"
-LANG["DERMA_BOT_TAG"]				= "BOT"
-LANG["DERMA_GAMEMODE_CREDITS"]			= "%s | Version: %s - Rev. %s"	
+LANG["DERMA_SERVER_TAG"]		= "SV"
+LANG["DERMA_BOT_TAG"]			= "BOT"
+LANG["DERMA_GAMEMODE_CREDITS"]	= "%s | Version: %s - Rev. %s"
 
 LANG["CHAT_JOINED"]				= " joined "
 LANG["CHAT_JOINEDTHE"]			= " joined the "
@@ -94,6 +94,8 @@ LANG["CHAT_SWAPBALANCEYOU"]		= "You were swapped to achieve perfect balance." --
 
 -- FRETTA: Splash Starting Screen
 LANG["SPASHSCREEN_BY_X"]		= "by %s"
+-- RichTextBox
+LANG["HELP_DONATORS_AND_CONTRIBUTORS"]  = "\n\nDonators & Contributors:\n- %s"
 -- // END OF FRETTA SECTION \\
 
 LANG["HELP_F1"] 				= [[A Prop Hunt X Project.
@@ -108,7 +110,6 @@ To See more info, help and guide, Press [F1] key and then click [Prop Hunt Menu]
 Version: ]].. PHX.VERSION ..[[ Revision: ]].. PHX.REVISION ..[[
 
 Have Fun!]]
-LANG["HELP_DONATORS_AND_CONTRIBUTORS"]  = "\n\nDonators & Contributors:\n- %s"
 
 LANG["LANGUAGE_CHANGED"]		= "Prefered Language has been changed to %s"
 
@@ -365,12 +366,19 @@ LANG["PHXM_ABOUT_VERSIONING"]		= "Version: %s - Revision: %s"
 LANG["PHXM_ABOUT_AUTHOR"]			= "By: %s"
 LANG["PHXM_ABOUT_ENJOYING"]			= "If you are enjoying the game, consider donating!"
 LANG["PHXM_ABOUT_UPDATE"]			= "Prop Hunt X Updates"
-LANG["PHXM_VIEW_UPDATE_INFO"]			= "View update info"
-LANG["PHXM_CHECK_FOR_UPDATES"]			= "Check for Updates"
-LANG["PHXM_UPDATE_FOUND_TEXT"]			= "Update has been checked. Please check on the Console for more information.\n\nWould you like to view update what's new & info?"
-LANG["PHXM_UPDATE_FOUND_BUTTON1"]               = "Update Info"
-LANG["PHXM_UPDATE_FOUND_BUTTON2"]               = "View Update"
-LANG["PHXM_BUTTON_NO"]			        = "No"
+
+LANG["PHXM_VIEW_UPDATE_INFO"]		= "View update info"
+LANG["PHXM_CHECK_FOR_UPDATES"]		= "Check for Updates"
+LANG["PHXM_UPDATE_FOUND_TEXT"]		= "Update has been checked. Please check on the Console for more information.\n\nWould you like to view update what's new?"
+LANG["PHXM_UPDATE_FOUND_TITLE"]   	= "Update Information"
+LANG["PHXM_UPDATE_FOUND_BUTTON"]   	= "View Updates"
+
+LANG["UPDATE_NOTIFY_MSG_NOTFOUND"]	= "No update was found. Please click on 'Check for Updates' button first!"
+LANG["UPDATE_NOTIFY_MSG_TITLE"]		= "No updates found"
+LANG["UPDATE_NOTIFY_WINDOW_TITLE"]	= "Update Notice"
+LANG["UPDATE_RTBOX_APPEND"]			= "\n\nFor your information:\nCurrently you are using version: %s with Revision: %s"
+LANG["UPDATE_BTN_SEEFULL"]			= "See Full Changes"
+
 LANG["PHXM_ABOUT_LINKS"]			= "Links and credits"
 LANG["PHXM_ABOUT_THANKS"]			= "Special Thanks for the Support, Suggestion & Contributions:\n %s"
 LANG["PHXM_ABOUT_BTN_DONATE"]		= "Support PH:X by donating"

@@ -1,14 +1,20 @@
 -- Validity check to prevent some sort of spam
 local function IsDelayed(ply)
-	local lastTauntTime = ply:GetNWFloat("LastTauntTime")
-	local delayedTauntTime = lastTauntTime + PHX:GetCVar( "ph_customtaunts_delay" )
-	local currentTime = CurTime()
-	
-	return { delayedTauntTime > currentTime, delayedTauntTime - currentTime }
+	local delay = ply.lastCTauntTime + PHX:GetCVar( "ph_customtaunts_delay" )
+	return { delay > CurTime(), delay - CurTime() }
 end
 
 local function CheckValidity( sndFile, plyTeam )
 	return file.Exists("sound/"..sndFile, "GAME") and table.HasValue( PHX.CachedTaunts[plyTeam], sndFile )
+end
+
+local function SetLastTauntDelay( ply )
+	ply.lastCTauntTime = CurTime()
+	ply:SetNWFloat("CTaunt.LastTauntTime", CurTime())
+	
+	-- This affects random & auto taunt as well
+	ply.last_taunt_time = CurTime()
+	ply:SetNWFloat("LastTauntTime", CurTime())
 end
 
 net.Receive("CL2SV_PlayThisTaunt", function(len, ply)
@@ -42,10 +48,11 @@ net.Receive("CL2SV_PlayThisTaunt", function(len, ply)
 						
 						if CheckValidity( snd, playerTeam ) then
 							local props = ents.FindByClass("prop_physics")
-                            local fakeprops = ents.FindByClass("ph_fake_props")
+                            local fakeprops = ents.FindByClass("ph_fake_prop")
                             if #fakeprops > 0 then
-                                table.Add( props, fakeprops ) -- add ph_fake_props as well.
+                                table.Add( props, fakeprops ) -- add ph_fake_prop as well.
                             end
+                            
 							local randomprop = props[math.random(1, #props)]
 							
 							if tobool( plApplyOnFake ) then
@@ -58,7 +65,7 @@ net.Receive("CL2SV_PlayThisTaunt", function(len, ply)
 							
 							randomprop:EmitSound(snd, 100, pitch)
                             ply:SubTauntRandMapPropCount()
-							ply:SetNWFloat("LastTauntTime", CurTime())
+							SetLastTauntDelay( ply )
 						else
 							ply:PHXChatInfo( "WARNING", "TM_DELAYTAUNT_NOT_EXIST" )
 						end
@@ -79,13 +86,11 @@ net.Receive("CL2SV_PlayThisTaunt", function(len, ply)
 					end
 				
 					ply:EmitSound(snd, 100, pitch)
-					ply:SetNWFloat("LastTauntTime", CurTime())
+					SetLastTauntDelay( ply )
 				else
 					ply:PHXChatInfo( "WARNING", "TM_DELAYTAUNT_NOT_EXIST" )
 				end
 			end
-		else
-			ply:PHXChatInfo( "NOTICE", "TM_DELAYTAUNT_PLSWAIT", tostring(math.Round(TauntTime)) )
 		end
 		
 	end

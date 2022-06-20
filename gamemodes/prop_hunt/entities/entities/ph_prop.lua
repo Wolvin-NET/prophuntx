@@ -35,7 +35,7 @@ function ENT:Think()
 		if IsValid(pl) && pl:Alive() && pl == LocalPlayer() then
 			local me  = LocalPlayer()
 			local pos = me:GetPos()
-			local ang = me:GetAngles()
+			local ang = me:EyeAngles()  -- for some reason, this one really smoth out the rotation.
 			local lockstate = pl:GetPlayerLockedRot()
 			
 			if self:GetModel() == "models/player/kleiner.mdl" || self:GetModel() == player_manager.TranslatePlayerModel(GetConVar("cl_playermodel"):GetString()) then
@@ -45,8 +45,6 @@ function ENT:Think()
 			end
 			if !lockstate then self:SetAngles(Angle(0,ang.y,0)) end
 		end
-        
-        
 	end
 end
 

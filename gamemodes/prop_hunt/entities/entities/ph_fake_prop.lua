@@ -18,7 +18,7 @@ function ENT:Initialize()
         self.Entity:SetSolid(SOLID_BBOX)
 		self.Entity:SetMoveType(MOVETYPE_NONE)
         self.Entity.owner = NULL
-		self.health = 10
+		self.health = GetConVar( "ph_decoy_health" ):GetInt() or 10
 	end
 end
 
@@ -30,6 +30,7 @@ end
 
 ENT.LaughsSound = {
 	-- SoundDuration() is broken, we have to put this temporarily.
+	-- Todo: use PHX:SoundDuration() instead.
 	{ "vo/ravenholm/madlaugh04.wav", 2.5 },
 	{ "misc/fakeprop_laugh1.mp3", 11.5 },
 	{ "misc/fakeprop_laugh2.mp3", 10 },

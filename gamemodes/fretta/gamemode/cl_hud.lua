@@ -112,6 +112,7 @@ function GM:UpdateHUD_RoundResult( RoundResult, Alive )
 	--hax
 	local propTeam = GetGlobalInt( "RoundResult", 0 )
 	
+	-- doesn't required but we'll keep this.
 	if ( type( RoundResult ) == "number" ) && ( team.GetAllTeams()[ RoundResult ] && txt == "" ) then
 		local TeamName = team.GetName( RoundResult )
 		if ( TeamName ) then txt = TeamName .. " Wins!" end
@@ -121,7 +122,8 @@ function GM:UpdateHUD_RoundResult( RoundResult, Alive )
 
 	local RespawnText = vgui.Create( "DHudElement" );
 		RespawnText:SizeToContents()
-		RespawnText:SetText( PHX:FTranslate(txt, team.GetName(propTeam)) or txt )
+		RespawnText:SetText( PHX:FTranslate(txt, PHX:TranslateName(propTeam)) or txt )
+		--RespawnText:SetText( PHX:FTranslate(txt, team.GetName(propTeam)) or txt )
 	GAMEMODE:AddHUDItem( RespawnText, 8 )
 
 end
@@ -202,12 +204,14 @@ function GM:UpdateHUD_Dead( bWaitingToSpawn, InRound )
 	if ( InRound ) then 
 	
 		local TeamIndicator_Name_AddString = PHX:FTranslate("HUD_DEAD") or "(DEAD) "
+		local phxTeamText = PHX:TranslateName( LocalPlayer():Team() )
 		if ( LocalPlayer():Team() == TEAM_SPECTATOR ) then TeamIndicator_Name_AddString = "" end
 	
 		local TeamIndicator = vgui.Create( "DHudUpdater" );
 			TeamIndicator:SizeToContents()
 			TeamIndicator:SetValueFunction( function() 
-												return TeamIndicator_Name_AddString..""..team.GetName( LocalPlayer():Team() )
+												--return TeamIndicator_Name_AddString..""..team.GetName( LocalPlayer():Team() )
+												return TeamIndicator_Name_AddString .. phxTeamText
 											end )
 			TeamIndicator:SetColorFunction( function() 
 												return team.GetColor( LocalPlayer():Team() )
@@ -254,7 +258,8 @@ function GM:UpdateHUD_Alive( InRound )
 			local TeamIndicator = vgui.Create( "DHudUpdater" );
 				TeamIndicator:SizeToContents()
 				TeamIndicator:SetValueFunction( function() 
-													return team.GetName( LocalPlayer():Team() )
+													--return team.GetName( LocalPlayer():Team() )
+													return PHX:TranslateName( LocalPlayer():Team() )
 												end )
 				TeamIndicator:SetColorFunction( function() 
 													return team.GetColor( LocalPlayer():Team() )

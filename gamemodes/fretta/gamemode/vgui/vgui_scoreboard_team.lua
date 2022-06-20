@@ -17,7 +17,8 @@ end
 
 function PANEL:Setup( iTeam, pMainScoreboard )
 
-	self.TeamName:SetText( team.GetName( iTeam ) )
+	--self.TeamName:SetText( team.GetName( iTeam ) )
+	self.TeamName:SetText( PHX:TranslateName( iTeam ) )
 	self.iTeamID = iTeam
 
 end
@@ -27,7 +28,8 @@ function PANEL:Think()
 	local Count = #team.GetPlayers( self.iTeamID )
 	if ( self.PlayerCount != Count ) then
 		self.PlayerCount = Count
-		self.TeamName:SetText( team.GetName( self.iTeamID ) .. " (" .. self.PlayerCount .. " Players)" )
+		--self.TeamName:SetText( team.GetName( self.iTeamID ) .. " (" .. self.PlayerCount .. " Players)" )
+		self.TeamName:SetText( PHX:TranslateName( self.iTeamID ) .. " (" .. self.PlayerCount .. " Players)" )
 	end
 	
 	self.TeamScore:SetText( team.GetScore( self.iTeamID ) )

@@ -101,6 +101,10 @@ function PCR.PopulateProp()
 			PHX.VerboseMsg("[PHX Prop Menu] Warning: Prop "..prop:GetModel().. " @Index #"..prop:EntIndex().." has no physics. Ignoring!")
 			continue
 		end
+		-- update: Do not include Forbidden models
+		if PHX.PROHIBITTED_MDLS[prop:GetModel()] then
+			continue
+		end
 		if table.HasValue(PCR.PropList, string.lower(prop:GetModel())) then continue end
 		if (PHX:QCVar( "pcr_enable_prop_ban" ) && table.HasValue(PCR.BannedProp, prop:GetModel())) then
 			PHX.VerboseMsg("[PHX Prop Menu] Banning prop of "..prop:GetModel().." @Index #"..prop:EntIndex().."...")

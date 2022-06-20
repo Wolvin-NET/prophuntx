@@ -8,23 +8,39 @@ if SERVER then
     
     function Player:CreateLPSTrail( ... )
         self.lpstrail = util.SpriteTrail(self, ...)
+        
+        local ph_prop = self:GetPlayerPropEntity()
+        if ph_prop and IsValid(ph_prop) then
+            ph_prop:DeleteOnRemove( self.lpstrail )
+        end
     end
     
+    -- In case if this needed.
     function Player:RemoveLPSTrail()
-        SafeRemoveEntity( self.lpstrail )
+        if IsValid(self.lpstrail) then
+            self.lpstrail:Remove()
+        end
     end
     
     -- Only used if mode == 1
-    function Player:CreateLPSWeaponEntity( model )
-        local min,max = self:GetHull()
-        self._lpsWepEnt = ents.Create("prop_dynamic")
-        self._lpsWepEnt:SetPos( self:GetPos() + Vector( 0, 0, (max.z*0.5)) )
-        self._lpsWepEnt:GetAngles( self:GetAngles() )
-        self._lpsWepEnt:SetParent( self:GetPlayerPropEntity() )
-        self._lpsWepEnt:SetModel( Model(model) )
-        self._lpsWepEnt:SetSolid( SOLID_NONE )
-        self._lpsWepEnt:Spawn()
+    function Player:CreateLPSWeaponEntity( model, hasFixAngle )
+    
+        if !hasFixAngle or hasFixAngle == nil then hasFixAngle = angle_zero end
+    
+        local mins,maxs = self:GetHull()
+        self._lpsWepEnt = ents.Create( "ph_lps_weapon" )
+        self._lpsWepEnt:SetPos( self:GetPos() + Vector(0,0,maxs.z*0.5) )
+        self._lpsWepEnt:GetAngles( Vector(0, self:GetAngles().y, 0) )
         
+        self._lpsWepEnt:SetSolid( SOLID_NONE )
+        self._lpsWepEnt:SetOwner( self )
+        self._lpsWepEnt:SetModel( Model(model) )
+        self._lpsWepEnt:SetSolid(SOLID_NONE)
+		self._lpsWepEnt:SetMoveType(MOVETYPE_NONE)
+        
+        self._lpsWepEnt:SetFixAngles( hasFixAngle )
+        
+        self._lpsWepEnt:Spawn()
         -- Delete weapon prop when ph_prop is removed.
         self:GetPlayerPropEntity():DeleteOnRemove( self._lpsWepEnt )
         
@@ -53,6 +69,15 @@ if SERVER then
         self.LPSWeapon = strWeapon
         self:SetNWString( "bLps.WeaponName", self.LPSWeapon )
     end
+    
+    function Player:SetLPSWeaponReloadType( bool )
+        self:SetNWBool( "bLps.WeaponReloadType", bool )
+    end
+    
+    function Player:SetLPSAmmoCount( intAmmo )
+        -- do not use self.propLPSAmmo!
+        self:SetNWInt( "bLps.AmmoCount", intAmmo )
+    end
 end
 
 function Player:IsLastStanding()
@@ -63,10 +88,22 @@ function Player:GetLPSWeaponEntity()
     return self:GetNWEntity( "bLps.WeaponEnt", NULL )
 end
 
+function Player:HasLPSWeapon()
+    return IsValid( self:GetNWEntity( "bLps.WeaponEnt", NULL ) )
+end
+
 function Player:GetLPSWeaponState()
     return self:GetNWInt( "bLps.WeaponState", 0 )
 end
 
 function Player:GetLPSWeaponName()
-    return self:GetNWString( "bLps.WeaponName" )
+    return self:GetNWString( "bLps.WeaponName", "No Weapon" )
+end
+
+function Player:GetLPSWeaponReloadType()
+    return self:GetNWBool( "bLps.WeaponReloadType", false )
+end
+
+function Player:GetLPSAmmo()
+    return self:GetNWInt( "bLps.AmmoCount", 0 ) -- can also -1.
 end

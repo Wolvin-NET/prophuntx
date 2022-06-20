@@ -18,8 +18,21 @@ sound.Add(
     volume  = 0.9,
     level   = 140,
 	pitch   = {95, 105},
-    sound   = "^weapons/smg2/npc_smg1_fire1.wav"
+    sound   = "^weapons/smg2/npc_smg2_fire1.wav"
 })
+
+if CLIENT then
+    surface.CreateFont("PHX.LPS.IndicatorFont", 
+    {
+        font = "Roboto",
+        size = 17,
+        weight = 750,
+        antialias = true
+    })
+    
+    language.Add("ph_lps_weapon", "Prop LPS Gun")
+    killicon.Add("ph_lps_weapon", "vgui/hud/ph_lps_weapon", Color(248,200,0,255))
+end
 
 AddCSLuaFile("sh_lps.lua")
 AddCSLuaFile("sh_lps_player.lua")

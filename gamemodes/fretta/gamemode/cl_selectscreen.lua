@@ -290,15 +290,17 @@ function PANEL:Paint()
 	GAMEMODE:PaintSplashScreen( self:GetWide(), self:GetTall() )
 
 end
+GM.VGUISplash = {}
+GM.VGUISplash = vgui.RegisterTable( PANEL, "DPanel" )
 
-vgui_Splash = vgui.RegisterTable( PANEL, "DPanel" )
-local TeamPanel = nil
+local TeamPanel = {}
 
+-- Replaced on prop_hunt -> cl_init.lua
 function GM:ShowTeam()
 
 	if ( !IsValid( TeamPanel ) ) then 
 	
-		TeamPanel = vgui.CreateFromTable( vgui_Splash )
+		TeamPanel = vgui.CreateFromTable( GAMEMODE.VGUISplash )
 		TeamPanel:SetHeaderText( PHX:FTranslate("DERMA_TEAMSELECT") or "Choose Team" )
 
 		local AllTeams = team.GetAllTeams()

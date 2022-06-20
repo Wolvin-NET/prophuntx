@@ -168,7 +168,8 @@ function GM:TeamChangeNotification( ply, oldteam, newteam )
 	if( ply && ply:IsValid() ) then
 		local nick = ply:Nick();
 		local oldTeamColor = team.GetColor( oldteam );
-		local newTeamName = team.GetName( newteam );
+		--local newTeamName = team.GetName( newteam );
+		local newTeamName = PHX:TranslateName( newteam );
 		local newTeamColor = team.GetColor( newteam );
 		
 		local txtjoinedTo	= PHX:FTranslate("CHAT_JOINEDTHE") or " joined the "

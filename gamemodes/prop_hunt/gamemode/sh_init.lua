@@ -1,12 +1,24 @@
 PHX = PHX or {}
 
+-- Utils
+function util.IsHexColor( str )
+
+    if str == nil then return false end
+
+    if string.find( str,'^#?%x%x%x%x%x%x$') then
+        return true
+    end
+    return false
+    
+end
+
 TEAM_HUNTERS 	= 1
 TEAM_PROPS 	 	= 2
 IS_PHX		 	= true	-- an easy check if PHX is installed.
 
 PHX.ConfigPath 	= "phx_data"
 PHX.VERSION		= "X2Z"
-PHX.REVISION	= "14.06.22" --Format: dd/mm/yy.
+PHX.REVISION	= "20.06.22" --Format: dd/mm/yy.
 
 -- Fonts
 AddCSLuaFile("cl_fonts.lua")
@@ -118,26 +130,12 @@ PHX.LANGUAGES = {}
 
 PHX:Includes( "langs", "Languages" )
 PHX:Includes( "config/lib", "Libraries" )
+PHX:Includes( "config/external", "External Lua" )
 
 --Add Alias for NewSoundDuration()
 function PHX:SoundDuration( snd )
     return NewSoundDuration( snd )
 end
-
---[[ local f = file.Find(engine.ActiveGamemode() .. "/gamemode/langs/*.lua", "LUA")
-for _,lgfile in SortedPairs(f) do
-	PHX.VerboseMsg("[PHX] [LANGUAGE] Adding Language File -> ".. lgfile)
-	AddCSLuaFile("langs/" .. lgfile)
-	include("langs/" .. lgfile)
-end
-
---Required Libray
-local libDir = file.Find(engine.ActiveGamemode() .. "/gamemode/config/lib/*.lua", "LUA")
-for _,libFile in SortedPairs(libDir) do
-	PHX.VerboseMsg("[PHX] [LIBRARY] Adding Library File -> ".. libFile)
-	AddCSLuaFile("config/lib/" .. libFile)
-	include("config/lib/" .. libFile)
-end ]]
 
 -- Standard Inclusion
 AddCSLuaFile("cl_lang.lua")
@@ -179,6 +177,55 @@ for _,plugfolder in SortedPairs( folder ) do
 	PHX.VerboseMsg("[PHX] [PLUGINS] Loading plugin: ".. plugfolder)
 	AddCSLuaFile("plugins/" .. plugfolder .. "/sh_load.lua")
 	include("plugins/" .. plugfolder .. "/sh_load.lua")
+end
+
+local strteam = {}
+strteam[TEAM_CONNECTING] 	= "PHX_TEAM_CONNECTING"
+strteam[TEAM_HUNTERS]		= "PHX_TEAM_HUNTERS"
+strteam[TEAM_PROPS]			= "PHX_TEAM_PROPS"
+strteam[TEAM_UNASSIGNED]	= "PHX_TEAM_UNASSIGNED"
+strteam[TEAM_SPECTATOR]		= "PHX_TEAM_SPECTATOR"
+
+-- Team Translate Name. Might not optimized at the moment.
+function PHX.TranslateName( self, teamID, ply )
+	local strID = strteam[teamID]
+	
+	if SERVER then	-- self:F/Translate() DON'T EXIST on Serverside!
+		-- Note: DO NOT use this on expensive operations such as Think Hook, PlayerTick Hook, etc.
+		-- You  have been warned!
+		if self:GetCVar( "ph_use_lang" ) then
+			local lang = self:GetCVar( "ph_force_lang" )			
+			if self.LANGUAGES[lang] and self.LANGUAGES[lang] ~= nil and
+				self.LANGUAGES[lang][ strID ] and 
+				self.LANGUAGES[lang][ strID ] ~= nil then
+				teamID = self.LANGUAGES[lang][ strID ]
+			else
+				teamID = self.LANGUAGES["en_us"][ strID ]
+			end
+		else
+			if ply and IsValid(ply) then
+				local clLang = ply:GetInfo("ph_cl_language")
+				if self.LANGUAGES[clLang] and self.LANGUAGES[clLang] ~= nil and
+					self.LANGUAGES[clLang][ strID ] and 
+					self.LANGUAGES[clLang][ strID ] ~= nil then
+					teamID = self.LANGUAGES[clLang][ strID ]
+				end
+			else
+				teamID = self.LANGUAGES["en_us"][ strID ]
+			end
+		end
+		
+		return teamID
+	else
+		local txt = self:FTranslate( strID )
+		if !txt or txt == nil then
+			teamID = team.GetName( teamID )
+		else
+			teamID = txt
+		end
+		
+		return teamID
+	end
 end
 
 -- Fretta!
@@ -229,6 +276,8 @@ GM.PHXContributors			= {
 	"Galaxio "..mark,
 	"Godfather "..mark,
     "Fryman",
+	"Berry",
+	"Ph.X",
 	"Dralga",
 	"Berry",
 	"Yam",
@@ -340,9 +389,9 @@ if CLIENT then
 		
 		main.grid = vgui.Create("DGrid", main.scroll)
 		main.grid:SetPos(10,10)
-		main.grid:SetSize(tab:GetWide()*0.9,320)
+		main.grid:SetSize(tab:GetWide()*0.85,320)
 		main.grid:SetCols(1)
-		main.grid:SetColWide(tab:GetWide()*0.85)
+		main.grid:SetColWide(tab:GetWide()*0.8)
 		main.grid:SetRowHeight(340)
 		
 		if table.IsEmpty(PHX.PLUGINS) then
@@ -358,7 +407,7 @@ if CLIENT then
 				but:SetPos(40,96)
 				but:SetSize(256,40)
 				but:SetText(PHX:FTranslate("PLUGINS_BROWSE_MORE"))
-				but.DoClick = function() gui.OpenURL("https://wolvindra.xyz/phxplugins") end
+				but.DoClick = function() gui.OpenURL( "https://gmodgameservers.com/prophuntx/plugins" ) end
 				but:SetIcon("icon16/bricks.png")
 			else
 				local lbl = vgui.Create("DLabel",main.panel)

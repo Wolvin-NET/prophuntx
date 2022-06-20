@@ -70,7 +70,7 @@ local function DrawWaypointMarker( pl, matMarker, pointer, entToFind, offset )
 	
 	for _,ent in pairs(ents.FindByClass( entToFind )) do
 	
-		if IsValid(ent) then -- prevent icon stuck on new round
+		if ent and IsValid(ent) then -- prevent icon stuck on new round
 	
 			local pos = ent:GetPos() + offset
 			local poscr = pos:ToScreen()
@@ -146,7 +146,7 @@ local function getIndicColor( trace, fallback, colorTrue, colorFalse )
     local maxxy,maxz = trace.Entity:GetPropSize()
     
         if (!LocalPlayer():IsOnGround() or LocalPlayer():Crouching()) then return colorFalse end
-        if PHX:GetCVar( "ph_check_props_boundaries" ) and not LocalPlayer():CheckHull(maxxy,maxxy,maxz) then return colorFalse end
+        if PHX:GetCVar( "ph_check_for_rooms" ) and not LocalPlayer():CheckHull(maxxy,maxxy,maxz) then return colorFalse end
         color = colorTrue
         
     return color
@@ -157,23 +157,17 @@ function Initialize()
 	cHullz 				= 64
 	client_prop_light 	= false
 	blind 				= false
-	
-	--cHullz_Min 			= 24 -- desired amount of hull.z to modify, no longer used
-	--cHullz_Max 			= 84 -- desired amount of hull.z to modify, no longer used
-	
 	CL_GLIMPCAM 		= 0
 	MAT_LASERDOT 		= Material("sprites/glow04_noz")
-	
-	LocalPlayer():SetNWFloat("localLastTauntTime", 0)
 end
 hook.Add("Initialize", "PH_Initialize", Initialize)
 
 -- ShowHelp is now moved to prop_hunt gamemodedir.
 function GM:ShowHelp()
 	
-	if vgui_Splash and vgui_Splash ~= nil and istable(vgui_Splash) then
+	if GAMEMODE.VGUISplash and GAMEMODE.VGUISplash ~= nil and istable(GAMEMODE.VGUISplash) then
 	
-		local Help = vgui.CreateFromTable( vgui_Splash )
+		local Help = vgui.CreateFromTable( GAMEMODE.VGUISplash )
 		Help:SetHeaderText( GAMEMODE.Name or "Prop Hunt: X" )
 		Help:SetForHelp( "HELP_F1", GAMEMODE.PHXContributors )
 		
@@ -213,6 +207,61 @@ function GM:ShowHelp()
 
 	end
 	
+end
+
+-- ShowTeam also moved in here.
+local TeamPanel = {}
+
+function GM:ShowTeam()
+
+	if ( !IsValid( TeamPanel ) ) then 
+	
+		TeamPanel = vgui.CreateFromTable( GAMEMODE.VGUISplash )
+		TeamPanel:SetHeaderText( PHX:FTranslate("DERMA_TEAMSELECT") )
+
+		local AllTeams = team.GetAllTeams()
+		for ID, TeamInfo in SortedPairs ( AllTeams ) do
+		
+			if ( ID != TEAM_CONNECTING && ID != TEAM_UNASSIGNED && ( ID != TEAM_SPECTATOR || GAMEMODE.AllowSpectating ) && team.Joinable(ID) ) then
+			
+				if ( ID == TEAM_SPECTATOR ) then
+					TeamPanel:AddSpacer( 12 )
+				end
+			
+				local strName = PHX:TranslateName( ID ) -- TeamInfo.Name
+				local func = function() RunConsoleCommand( "changeteam", ID ) end
+			
+				local btn = TeamPanel:AddSelectButton( strName, func )
+				btn.m_colBackground = TeamInfo.Color
+				btn.Think = function( self ) 
+								self:SetText( Format( "%s (%i)", strName, team.NumPlayers( ID ) ))
+								if ID ~= TEAM_SPECTATOR then -- skip player ammount check
+									self:SetDisabled( GAMEMODE:TeamHasEnoughPlayers( ID ) ) 
+								end
+							end
+				
+				if (  IsValid( LocalPlayer() ) && LocalPlayer():Team() == ID ) then
+					btn:SetDisabled( true )
+				end
+				
+			end
+			
+		end
+		
+		if (  IsValid( LocalPlayer() ) &&
+		
+			( LocalPlayer():Team() == TEAM_UNASSIGNED or
+			LocalPlayer():Team() == TEAM_SPECTATOR or
+			LocalPlayer():Team() == TEAM_HUNTERS or
+			LocalPlayer():Team() == TEAM_PROPS ) ) then
+			
+			TeamPanel:AddCancelButton()
+		end
+		
+	end
+	
+	TeamPanel:MakePopup()
+
 end
 
 -- Decides where  the player view should be (forces third person for props)
@@ -301,7 +350,7 @@ function HUDPaint()
 		if blindlock_time_left < 1 && blindlock_time_left > -6 then
 			blindlock_time_left_msg = PHX:FTranslate("HUD_UNBLINDED")
 		elseif blindlock_time_left > 0 then
-			blindlock_time_left_msg = PHX:FTranslate("HUD_BLINDED", string.ToMinutesSeconds(blindlock_time_left))
+			blindlock_time_left_msg = PHX:FTranslate("HUD_BLINDED", PHX:TranslateName(TEAM_HUNTERS), string.ToMinutesSeconds(blindlock_time_left))
 		else
 			blindlock_time_left_msg = nil
 		end
@@ -452,6 +501,19 @@ end
 -- ///////////////////\\\\\\\\\\\\\\\\\ --
 -- 			Net Receives Hooks 			--
 -- ///////////////////\\\\\\\\\\\\\\\\\ --
+
+net.Receive("PHX.UpdatePropbanInfo", function()
+	local key = net.ReadString()
+	local size = net.ReadUInt(32)
+	local comp = net.ReadData(size)
+	local data = util.JSONToTable( util.Decompress(comp) )
+	
+	-- Replace the data anyway.
+	PHX[key]	= {}
+	for _,mdl in pairs( data ) do
+		table.insert(PHX[key], mdl)
+	end
+end)
 
 net.Receive("PH_ShowTutor", function()
 	if PHX:GetCLCVar( "ph_show_tutor_control" ) && LocalPlayer():Alive() then

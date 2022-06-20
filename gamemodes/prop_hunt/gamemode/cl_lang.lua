@@ -66,11 +66,13 @@ function PHX:Translate( textToFind, ... )
 	if !textToFind then textToFind = "ERROR" end
 
 	local args = {...}
-	local lg = PHX:GetCLCVar( "ph_cl_language" )
+	local lg = "en_us"
 	
 	-- if this was forced by server, we'll use that instead.
 	if PHX:GetCVar( "ph_use_lang" ) then
 		lg = PHX:GetCVar( "ph_force_lang" )
+	else
+		lg = PHX:GetCLCVar( "ph_cl_language" )
 	end
 	
 	local code = self.LANGUAGES[lg]
@@ -100,23 +102,32 @@ end
 function PHX:FTranslate( textToFind, ... )
 	
 	local args = {...}
-	local lg = PHX:GetCLCVar( "ph_cl_language" )
+	local lg = "en_us"
+    local fallback = self.LANGUAGES["en_us"]
 	
 	-- if this was forced by server, we'll use that instead.
 	if PHX:GetCVar( "ph_use_lang" ) then
 		lg = PHX:GetCVar( "ph_force_lang" )
+	else
+		lg = PHX:GetCLCVar( "ph_cl_language" )
 	end
 	
 	local code = self.LANGUAGES[lg]
 	if !code or code == nil then
 		--Fallback
-		code = self.LANGUAGES["en_us"]
+		code = fallback
 	end
 	
 	if args ~= nil and (not table.IsEmpty(args)) then
 		if !code[textToFind] then
-			--Revert
-			return textToFind
+			-- Revert
+            if !fallback[textToFind] or fallback[textToFind] == nil then
+                return textToFind
+            else
+                --Fallback
+				local NiceFallback = string.format(fallback[textToFind], ...)
+                return NiceFallback
+            end
 		else
 			local NiceFormat = string.format(code[textToFind], ...)
 			return NiceFormat
@@ -125,7 +136,12 @@ function PHX:FTranslate( textToFind, ... )
 	
 	if !code[textToFind] or code[textToFind] == nil then
 		--Revert
-		return textToFind
+		if !fallback[textToFind] or fallback[textToFind] == nil then
+            return textToFind
+        else
+            --Fallback
+            return fallback[textToFind]
+        end
 	end
 	
 	return code[textToFind]

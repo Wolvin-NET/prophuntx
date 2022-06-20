@@ -24,9 +24,14 @@ PHX.CLUI = {
 	end
 
 	if ( d and type(d) == "string" ) then
-		local chk = vgui.Create("DCheckBoxLabel")
-		chk:SetPos(0, p:GetRowHeight() / 2)
-		chk:SetSize(p:GetColWide(),p:GetRowHeight())
+        local pnl = vgui.Create("DPanel")
+		pnl:SetSize(p:GetColWide() * 0.85,p:GetRowHeight())
+		pnl:SetBackgroundColor( Color(0,0,0,0) )
+    
+		local chk = vgui.Create("DCheckBoxLabel", pnl)
+        chk:Dock(FILL)
+		--chk:SetPos(0,0)
+		chk:SetSize(p:GetColWide() * 0.85,p:GetRowHeight())
 		chk:SetText(PHX:QTrans(l))	--chk:SetText(l)
 		chk:SetFont("HudHintTextLarge")
 		chk:SetValue( GetConVar(c):GetBool() ) -- forcebool, don't use PHX:CLCVar()
@@ -48,7 +53,7 @@ PHX.CLUI = {
 				end
 			end
 		end
-		return chk
+		return pnl
 	else
 		ThrowError(2, c, "string", d)
 	end
@@ -57,7 +62,7 @@ end,
 
 ["label"] = function( c, d, p, l )
 	local txt = vgui.Create("DLabel")
-	txt:SetSize(p:GetColWide(),p:GetRowHeight())
+	txt:SetSize(p:GetColWide() * 0.85,p:GetRowHeight())
 	txt:SetText(PHX:QTrans(l)) --txt:SetText(l)
 	if !d then
 		txt:SetFont("HudHintTextLarge")
@@ -70,7 +75,7 @@ end,
 
 ["spacer"] = function( c, d, p, l )
 	local pnl = vgui.Create("DPanel")
-	pnl:SetSize(p:GetColWide(),p:GetRowHeight())
+	pnl:SetSize(p:GetColWide() * 0.85,p:GetRowHeight())
 	pnl:SetBackgroundColor(Color(0,0,0,0))
 	
 	return pnl
@@ -87,7 +92,7 @@ end,
 		local legal = #d
 		
 		local pnl = vgui.Create("DPanel")
-		pnl:SetSize(p:GetColWide(),p:GetRowHeight())
+		pnl:SetSize(p:GetColWide() * 0.85,p:GetRowHeight())
 		pnl:SetBackgroundColor( Color(0,0,0,0) )
 		
 		local function m_btncreation( m_panel, m_panelText, m_func )
@@ -133,12 +138,12 @@ end,
 		end
 		
 		local pnl = vgui.Create("DPanel")
-		pnl:SetSize(p:GetColWide()*0.9,p:GetRowHeight()-6)
+		pnl:SetSize(p:GetColWide() * 0.85,p:GetRowHeight()-6)
 		pnl:SetBackgroundColor(Color(120,120,120,200))
 		
 		local slider = vgui.Create("DNumSlider",pnl)
 		slider:SetPos(10,0)
-		slider:SetSize(pnl:GetWide(),pnl:GetTall())
+		slider:SetSize(pnl:GetWide()*0.9,pnl:GetTall())
 		slider:SetText(PHX:QTrans(l))		--slider:SetText(l)
 		slider:SetToolTip(PHX:QTrans(l))	--slider:SetToolTip(l)
 		slider:SetMin(min)
@@ -180,13 +185,15 @@ end,
 	if ( d and type(d) == "Player" and IsValid(d) ) then
 		local ply = d
 		local pnl = vgui.Create("DPanel")
-		pnl:SetSize(p:GetColWide()*0.9,p:GetRowHeight()-6)
+		pnl:SetSize(p:GetColWide() * 0.85,p:GetRowHeight()-6)
 		pnl:SetBackgroundColor(Color(20,20,20,150))
 		
+        local buttonsize = p:GetColWide() * 0.85 / 24
+        
 		local ava = vgui.Create("AvatarImage", pnl)
 		ava:Dock(LEFT)
-		ava:SetSize(24,24)
-		ava:SetPlayer(ply,32)
+		ava:SetSize(60,0)
+		ava:SetPlayer(ply,64)
 		
 		local name = vgui.Create("DLabel", pnl)
 		name:Dock(LEFT)
@@ -200,7 +207,7 @@ end,
 		local button = vgui.Create("DButton", pnl)
 		button:Dock(RIGHT)
 		button:DockMargin(4,0,4,0)
-		button:SetSize(24,0)
+		button:SetSize(60,0)
 		button:SetText("")
 		button.Paint = function(self)
 			surface.SetDrawColor(90,90,90,0)
@@ -238,7 +245,7 @@ end,
 
 ["binder"] = function( c, d, p, l )	
 	local pnl = vgui.Create("DPanel")
-	pnl:SetSize(p:GetColWide(),p:GetRowHeight())
+	pnl:SetSize(p:GetColWide() * 0.85,p:GetRowHeight())
 	pnl:SetBackgroundColor( Color(0,0,0,0) )
 	
 	local label = vgui.Create("DLabel", pnl)
@@ -351,21 +358,27 @@ end,
 -- This will translated in future version.
 ["textentry"] = function( c, d, p, l )
 	local pnl = vgui.Create("DPanel")
-	pnl:SetSize(p:GetColWide(),p:GetRowHeight())
+	pnl:SetSize(p:GetColWide() * 0.85,p:GetRowHeight())
 	pnl:SetBackgroundColor( Color(0,0,0,0) )
 	
 	local label = vgui.Create("DLabel", pnl)
 	label:Dock(LEFT)
-	label:SetSize(pnl:GetWide()*0.5,0)
+	label:SetSize(pnl:GetWide()*0.6,0)
 	label:DockMargin(2,0,0,0)
 	label:SetFont("HudHintTextLarge")
 	label:SetText(PHX:QTrans(l))
 	
 	local textEntry = vgui.Create("DTextEntry", pnl)
+    local cvar = GetConVar(c):GetString()
 	textEntry:Dock(LEFT)
 	textEntry:SetSize(pnl:GetWide()*0.25, 0)
 	textEntry:DockMargin(4,2,0,2)
-	textEntry:SetValue( GetConVar(c):GetString() )
+    -- hack: Hexadecimal color values will ignores '#', i think this was intentional by gmod.
+    if util.IsHexColor( cvar ) then
+        textEntry:SetValue( "#" .. cvar )
+    else
+        textEntry:SetValue( GetConVar(c):GetString() )
+    end
     textEntry:SetToolTip(PHX:QTrans(l))
 	
 	local btn = vgui.Create("DButton", pnl)
@@ -379,8 +392,14 @@ end,
 	function textEntry:OnEnter()
 		-- avoid using backslash for ph_fc_cue_path
 		local properText = string.Replace(self:GetValue(), "\\", "/")
-		self:SetText(properText)
-		self.EnteredText = properText
+        
+        -- Hack: Hexadecimal colors
+        if util.IsHexColor( properText ) then
+            self:SetText( "#" .. properText )
+        else
+            self:SetText( properText )
+        end
+        self.EnteredText = properText
 	end
 	
 	function btn:DoClick()

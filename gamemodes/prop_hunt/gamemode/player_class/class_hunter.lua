@@ -14,6 +14,9 @@ CLASS.DrawTeamRing			= false
 -- Called by spawn and sets loadout
 -- Original: function CLASS:Loadout(pl), Bug: Hunters can still shoot before they get blinded!
 local function StartLoadOut( pl )
+
+    if !pl:Alive() then return end
+
     pl:GiveAmmo(32, "Buckshot")
     pl:GiveAmmo(255, "SMG1")
     pl:GiveAmmo(12, "357")

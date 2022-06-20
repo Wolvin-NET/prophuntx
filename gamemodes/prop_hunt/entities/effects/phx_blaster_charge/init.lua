@@ -1,10 +1,11 @@
 local matPinch 		= Material("Effects/strider_pinch_dudv")
 local matBlueFlash 	= Material("Sprites/strider_blackball")
 local matBlueBeam	= Material("Effects/blueblacklargebeam")
+matBlueFlash:SetInt("$spriterendermode",8)
 
 function EFFECT:Init(data)
 	
-	self.Shooter        = data:GetEntity() -- currently Player.
+	self.Shooter        = data:GetEntity():GetOwner() -- currently Player.
 	self.Attachment     = data:GetAttachment()
 	self.WeaponEnt      = self.Shooter:GetLPSWeaponEntity()
 	self.KillTime       = 0

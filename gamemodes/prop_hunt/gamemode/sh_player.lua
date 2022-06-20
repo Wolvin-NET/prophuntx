@@ -60,9 +60,9 @@ end
 function Player:ScoreboardPing()
 	-- If this is not a dedicated server and player is the host
 	if self:GetNWBool("ListenServerHost") then
-		return PHX:FTranslate("DERMA_SERVER_TAG")
+		return "DERMA_SERVER_TAG" --return "SV"
 	elseif self:IsBot() then
-		return PHX:FTranslate("DERMA_BOT_TAG") -- otherwise this will act very strange.
+		return "DERMA_BOT_TAG" --return "BOT" -- otherwise this will act very strange.
 	end
 	-- Return normal ping value otherwise
 	return self:Ping()

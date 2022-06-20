@@ -58,12 +58,20 @@ LANG["DERMA_NAME"] = "이름"
 LANG["DERMA_KILLS"] = "처치"
 LANG["DERMA_DEATHS"] = "사망"
 LANG["DERMA_PING"] = "핑"
+LANG["DERMA_SERVER_TAG"]		= "SV" --Fix Me
+LANG["DERMA_BOT_TAG"]			= "BOT" -- Fix Me
+LANG["DERMA_GAMEMODE_CREDITS"]	= "%s | Version: %s - Rev. %s" -- Fix Me
 
 LANG["CHAT_JOINED"] = " 님이 참가한 "
 LANG["CHAT_JOINEDTHE"] = " 님이 참가한 "
 
 LANG["CHAT_SWAPBALANCE"] = "%s 님이 밸런스를 위하여 %s 팀으로 이동하였습니다."
 LANG["CHAT_SWAPBALANCEYOU"] = "밸런스를 맞추기 위해 다른 팀으로 이동되었습니다." -- Smile... for even in death, you have become children of Thanos
+
+-- FRETTA: Splash Starting Screen
+LANG["SPASHSCREEN_BY_X"]		= "by %s"	--Fix Me
+-- RichTextBox
+LANG["HELP_DONATORS_AND_CONTRIBUTORS"]  = "\n\nDonators & Contributors:\n- %s" --Fix Me
 -- // END OF FRETTA SECTION \\
 
 LANG["HELP_F1"] = [[Prop Hunt (코드네임) X
@@ -354,6 +362,18 @@ LANG["PHXM_ABOUT_VERSIONING"] = "버전: %s - Rev: %s"
 LANG["PHXM_ABOUT_AUTHOR"] = "제작: %s"
 LANG["PHXM_ABOUT_ENJOYING"] = "게임모드가 재미있으시다면 기부도 한번 고려 해주세요!"
 LANG["PHXM_ABOUT_UPDATE"] = "Prop Hunt X 업데이트"
+-- [[ FIX ME ]] --
+LANG["PHXM_VIEW_UPDATE_INFO"]		= "View update info"
+LANG["PHXM_CHECK_FOR_UPDATES"]		= "Check for Updates"
+LANG["PHXM_UPDATE_FOUND_TEXT"]		= "Update has been checked. Please check on the Console for more information.\n\nWould you like to view update what's new?"
+LANG["PHXM_UPDATE_FOUND_TITLE"]   	= "Update Information"
+LANG["PHXM_UPDATE_FOUND_BUTTON"]   	= "View Updates"
+LANG["UPDATE_NOTIFY_MSG_NOTFOUND"]	= "No update was found. Please click on 'Check for Updates' button first!"
+LANG["UPDATE_NOTIFY_MSG_TITLE"]		= "No updates found"
+LANG["UPDATE_NOTIFY_WINDOW_TITLE"]	= "Update Notice"
+LANG["UPDATE_RTBOX_APPEND"]			= "\n\nFor your information:\nCurrently you are using version: %s with Revision: %s"
+LANG["UPDATE_BTN_SEEFULL"]			= "See Full Changes"
+-- [[ FIX ME ]] --
 LANG["PHXM_ABOUT_LINKS"] = "링크 및 제작자"
 LANG["PHXM_ABOUT_THANKS"] = "지원, 제안 및 기여에 도움주신 다음 분들께 감사드립니다.\n%s"
 LANG["PHXM_ABOUT_BTN_DONATE"] = "PH:X를 후원으로 도와주세요"

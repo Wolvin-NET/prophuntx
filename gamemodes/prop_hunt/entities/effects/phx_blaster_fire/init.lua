@@ -4,7 +4,7 @@ local matBlueBeam	= Material("Effects/blueblacklargebeam")
 
 function EFFECT:Init(data)
 	
-	self.Shooter        = data:GetEntity()
+	self.Shooter        = data:GetEntity():GetOwner()
 	self.EndPos         = data:GetOrigin()
 	self.Attachment     = data:GetAttachment()
 	self.WeaponEnt      = self.Shooter:GetLPSWeaponEntity()

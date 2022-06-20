@@ -453,7 +453,8 @@ function GM:CheckTeamBalance( bDontKillPlayer )
 							if listener == ply then
 								listener:PHXChatInfo("NOTICE", "CHAT_SWAPBALANCEYOU")
 							else
-								listener:PHXChatInfo("NOTICE", "CHAT_SWAPBALANCE", ply:Name(), team.GetName( id ))
+								--listener:PHXChatInfo("NOTICE", "CHAT_SWAPBALANCE", ply:Name(), team.GetName( id ))
+								listener:PHXChatInfo("NOTICE", "CHAT_SWAPBALANCE", ply:Name(), PHX:TranslateName( id ))
 							end
 						end
 					end

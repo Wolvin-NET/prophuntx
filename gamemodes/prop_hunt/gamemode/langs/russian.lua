@@ -64,6 +64,7 @@ LANG["CHAT_JOINEDTHE"]			= " присоединяется к "
 LANG["CHAT_SWAPBALANCE"]		= "%s переместили в команду %s для баланса."
 LANG["CHAT_SWAPBALANCEYOU"]		= "Вы с другой командой поменялись местами, чтобы достичь идеального баланса."
 LANG["SPASHSCREEN_BY_X"]		= "создано: %s"
+LANG["HELP_DONATORS_AND_CONTRIBUTORS"]  = "\n\nСпонсоры и участники вклада в режим:\n- %s"
 LANG["HELP_F1"] 				= [[Prop Hunt проекта X.
 
 Проект, призванный сделать Prop Hunt более современным и настраиваемым.
@@ -76,7 +77,6 @@ https://gmodgameservers.com/prophuntx
 Версия: ]].. PHX.VERSION ..[[ Ревизия: ]].. PHX.REVISION ..[[
 
 Веселитесь!]]
-LANG["HELP_DONATORS_AND_CONTRIBUTORS"]  = "\n\nСпонсоры и участники вклада в режим:\n- %s"
 -- General
 LANG["LANGUAGE_CHANGED"]		            = "Язык был изменён на %s"
 LANG["SUBTYPE_PREFERED_LANG"]	            = "Язык"
@@ -249,12 +249,16 @@ LANG["PHXM_ABOUT_VERSIONING"]		        = "Версия: %s - Ревизия: %s"
 LANG["PHXM_ABOUT_AUTHOR"]			        = "Создатель: %s"
 LANG["PHXM_ABOUT_ENJOYING"]			        = "Если вам нравится игра, подумайте о пожертвовании!"
 LANG["PHXM_ABOUT_UPDATE"]			        = "Обновления Prop Hunt X"
-LANG["PHXM_VIEW_UPDATE_INFO"]			        = "Информация обновления"
-LANG["PHXM_CHECK_FOR_UPDATES"]			        = "Проверка обновлений"
-LANG["PHXM_UPDATE_FOUND_TEXT"]			        = "Обновление было проверено. Дополнительную информацию можно получить в консоли.\n\nВы хотите просмотреть новости и информацию об обновлении?"
-LANG["PHXM_UPDATE_FOUND_BUTTON1"]                       = "Информация"
-LANG["PHXM_UPDATE_FOUND_BUTTON2"]                       = "Просмотреть"
-LANG["PHXM_BUTTON_NO"]			                = "Нет"
+LANG["PHXM_VIEW_UPDATE_INFO"]			    = "Информация обновления"
+LANG["PHXM_CHECK_FOR_UPDATES"]			    = "Проверка обновлений"
+LANG["PHXM_UPDATE_FOUND_TEXT"]			    = "Обновление было проверено. Дополнительную информацию можно получить в консоли.\n\nВы хотите просмотреть новости и информацию об обновлении?"
+LANG["PHXM_UPDATE_FOUND_TITLE"]             = "Информация"
+LANG["PHXM_UPDATE_FOUND_BUTTON"]           	= "Просмотреть"
+LANG["UPDATE_NOTIFY_MSG_NOTFOUND"]			= "Обновление не найдено. Пожалуйста, сначала нажмите на кнопку «Проверить наличие обновлений»!"
+LANG["UPDATE_NOTIFY_MSG_TITLE"]				= "Обновления не найдены"
+LANG["UPDATE_NOTIFY_WINDOW_TITLE"]			= "Уведомление"
+LANG["UPDATE_RTBOX_APPEND"]					= "\n\nК вашему сведению:\nВ настоящее время вы используете версию: %s с ревизией: %s"
+LANG["UPDATE_BTN_SEEFULL"]					= "Все изменения"
 LANG["PHXM_ABOUT_LINKS"]			        = "Ссылки и авторство"
 LANG["PHXM_ABOUT_THANKS"]			        = "Особая благодарность за поддержку, предложение и вклад:\n %s"
 LANG["PHXM_ABOUT_BTN_DONATE"]		        = "Поддержите PH:X пожертвованием"

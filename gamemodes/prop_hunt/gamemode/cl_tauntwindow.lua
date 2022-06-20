@@ -308,17 +308,28 @@ local function MainFrame()
 	
 		if bFakeTaunt == nil then bFakeTaunt = false end
 	
-		local lastTauntTime = LocalPlayer():GetNWFloat("localLastTauntTime", 0)
-		local delay = lastTauntTime + PHX:GetCVar( "ph_customtaunts_delay" )
+		local lastCTauntTime = LocalPlayer():GetNWFloat("CTaunt.LastTauntTime", 0)
+		local lastRTauntTime = LocalPlayer():GetNWFloat("LastTauntTime",0)
+		
+		local delay = lastCTauntTime + PHX:GetCVar( "ph_customtaunts_delay" )
+		local delayR = lastRTauntTime + PHX:GetCVar( "ph_normal_taunt_delay" )
 	
-		if (delay <= CurTime()) then
+		if (delay <= CurTime() and delayR <= CurTime()) then
 			net.Start("CL2SV_PlayThisTaunt")
 				net.WriteString(tostring(snd))
 				net.WriteBool(bFakeTaunt)
 			net.SendToServer();
-			LocalPlayer():SetNWFloat( "localLastTauntTime", CurTime() + PHX:GetCVar( "ph_customtaunts_delay" ) )
 		else
-			PHX:ChatInfo( PHX:Translate("TM_NOTICE_PLSWAIT", tostring(math.Round(delay - CurTime()))) , "WARNING" )
+			local time = 0
+			local text = ""
+			if delay >= CurTime() then
+				time = delay
+				text   = "TM_DELAYTAUNT_PLSWAIT"	-- added extra random taunt text.
+			elseif delayR >= CurTime() then
+				time = delayR
+				text   = "TM_NOTICE_PLSWAIT"
+			end
+			PHX:ChatInfo( PHX:Translate(text, tostring(math.Round(time - CurTime()))) , "NOTICE" )
 		end
 	end
 	
