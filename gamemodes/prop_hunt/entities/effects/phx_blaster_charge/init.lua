@@ -5,7 +5,14 @@ matBlueFlash:SetInt("$spriterendermode",8)
 
 function EFFECT:Init(data)
 	
-	self.Shooter        = data:GetEntity():GetOwner() -- currently Player.
+	self.Ent			= data:GetEntity()
+	
+	if not IsValid( self.Ent ) or self.Ent == NULL then return end
+	
+	self.Shooter        = self.Ent:GetOwner() -- currently Player.
+	
+	if not IsValid(self.Shooter) then return end
+	
 	self.Attachment     = data:GetAttachment()
 	self.WeaponEnt      = self.Shooter:GetLPSWeaponEntity()
 	self.KillTime       = 0
@@ -31,8 +38,9 @@ end
 
 function EFFECT:Think()
 
+	if not self.KillTime or self.KillTime == nil then return false end
 	if CurTime() > self.KillTime then return false end
-	if not self.Shooter then return false end
+	if not IsValid(self.Shooter) then return false end
 	if not IsValid(self.WeaponEnt) then return false end
 
 	return true
@@ -43,6 +51,7 @@ end
 function EFFECT:Render()
 
 	if not self.ShouldRender then return end
+	if not IsValid( self.Shooter ) then return end
 
 	local Muzzle = 	self.WeaponEnt:GetAttachment( self.Attachment )
 	if not Muzzle then return end

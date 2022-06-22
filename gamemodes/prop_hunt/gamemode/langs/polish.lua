@@ -337,7 +337,7 @@ LANG["PHXM_MV_TIMELIMIT"]			= "Czas na głosowanie"
 LANG["PHXM_MV_MAPBEFOREREVOTE"]		= "Ilość zmian map wymaganych, aby konkretna mapa ponownie pokazała się w głosowaniu."
 LANG["PHXM_MV_RTVCOUNT"]			= "Mimalna ilość graczy wymagana do RTV (Głosowanie Za Zmianą)"
 
-LANG["PHXM_MV_EXPLANATION1"]		= "Aby określić, które mapy powinny być użyte, ustaw zmienną (dla przykładu) [ mv_mapprefix 'ph_,cs_,de_' ] w konsoli."
+LANG["PHXM_MV_EXPLANATION1"]		= "Aby określić, które mapy powinny być użyte, ustaw zmienną (dla przykładu) [ mv_map_prefix 'phx_,ph_,cs_,de_' ] w konsoli."
 LANG["PHXM_MV_EXPLANATION2"]		= "Jeżeli używasz ULX, użyj map_vote. Jeżeli nie, użyj mv_start."
 LANG["PHXM_MV_EXPLANATION3"]		= "Akcja Głosowania (Aby anulować, po prostu wpisz !unmap_vote (dla ULX) lub w konsoli: mv_stop)"
 
@@ -397,7 +397,7 @@ LANG["PLUGINS_CLIENT_SETTINGS"]			= "-- Ustawienia Klienta --"
 
 -- Text Entries
 LANG["TEXTENTRY_FZ_SINGLE"] = "Ścieżka dźwięku zamrażania kamery" -- this one is for ph_fc_cue_path command
-LANG["TEXTENTRY_MV_PREFIX"] = "Prefiks map dla Głosowania"			 -- the map previx for mv_mapprefix
+LANG["TEXTENTRY_MV_PREFIX"] = "Prefiks map dla Głosowania"			 -- the map previx for mv_map_prefix
 
 --============= LATE ADDITION OF 29.10.21/X2Z. Please Improve your Language Here! =============--
 

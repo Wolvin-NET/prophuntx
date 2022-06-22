@@ -46,15 +46,7 @@ net.Receive("CL2SV_PlayThisTaunt", function(len, ply)
 					
 					if Count > 0 or PHX:GetCVar( "ph_randtaunt_map_prop_max" ) == -1 then
 						
-						if CheckValidity( snd, playerTeam ) then
-							local props = ents.FindByClass("prop_physics")
-                            local fakeprops = ents.FindByClass("ph_fake_prop")
-                            if #fakeprops > 0 then
-                                table.Add( props, fakeprops ) -- add ph_fake_prop as well.
-                            end
-                            
-							local randomprop = props[math.random(1, #props)]
-							
+						if CheckValidity( snd, playerTeam ) then							
 							if tobool( plApplyOnFake ) then
                                 if tobool( randFakePitch ) then
                                     pitch = math.random(PHX:GetCVar("ph_taunt_pitch_range_min"), PHX:GetCVar("ph_taunt_pitch_range_max"))
@@ -63,9 +55,15 @@ net.Receive("CL2SV_PlayThisTaunt", function(len, ply)
                                 end
 							end
 							
-							randomprop:EmitSound(snd, 100, pitch)
-                            ply:SubTauntRandMapPropCount()
-							SetLastTauntDelay( ply )
+							local props = ents.FindByClass("prop_physics")
+                            table.Add( props, ents.FindByClass("ph_fake_prop") ) -- add ph_fake_prop as well.
+							local randomprop = table.Random( props ) -- because of table.Add, it become non-sequential?
+							
+							if IsValid(randomprop) then
+								randomprop:EmitSound(snd, 100, pitch)
+								ply:SubTauntRandMapPropCount()
+								SetLastTauntDelay( ply )
+							end
 						else
 							ply:PHXChatInfo( "WARNING", "TM_DELAYTAUNT_NOT_EXIST" )
 						end

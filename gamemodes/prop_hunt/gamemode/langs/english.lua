@@ -351,7 +351,7 @@ LANG["PHXM_MV_TIMELIMIT"]			= "Time in Seconds for default mapvote when voting."
 LANG["PHXM_MV_MAPBEFOREREVOTE"]		= "Map changes needed for a map to reappear"
 LANG["PHXM_MV_RTVCOUNT"]			= "How many players required to use RTV (Rock the Vote)"
 
-LANG["PHXM_MV_EXPLANATION1"]		= "To Setup which map should be listed, use (for example) [ mv_mapprefix 'ph_,cs_,de_' ] in the console."
+LANG["PHXM_MV_EXPLANATION1"]		= "To Setup which map should be listed, use (for example) [ mv_map_prefix 'phx_,ph_,cs_,de_' ] in the console."
 LANG["PHXM_MV_EXPLANATION2"]		= "If you're using ULX, use map_vote. If you don't, use mv_start."
 LANG["PHXM_MV_EXPLANATION3"]		= "MapVote Action (To cancel, simply type !unmap_vote (ULX) or mv_stop in console.)"
 

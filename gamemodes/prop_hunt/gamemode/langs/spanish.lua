@@ -348,7 +348,7 @@ LANG["PHXM_MV_TIMELIMIT"]			= "Tiempo en segundos durante la votación."
 LANG["PHXM_MV_MAPBEFOREREVOTE"]		= "Cambiar un mapa para que vuelva a aparecer."
 LANG["PHXM_MV_RTVCOUNT"]			= "Jugadores necesarios para una votación RTV (rock the vote)."
 
-LANG["PHXM_MV_EXPLANATION1"]		= "Para configurar qué mapas deben aparecer, usa (por ejemplo) [ mv_mapprefix 'ph_,cs_,de_' ] en la consola."
+LANG["PHXM_MV_EXPLANATION1"]		= "Para configurar qué mapas deben aparecer, usa (por ejemplo) [ mv_map_prefix 'phx_,ph_,cs_,de_' ] en la consola."
 LANG["PHXM_MV_EXPLANATION2"]		= "Si estás usando ULX, usa map_vote. Si no, usa mv_start."
 LANG["PHXM_MV_EXPLANATION3"]		= "Acción de votación de mapa (para cancelar, escribe !unmap_vote (ULX) o mv_stop en consola.)"
 
@@ -408,7 +408,7 @@ LANG["PLUGINS_CLIENT_SETTINGS"]			= "-- Ajustes del cliente --"
 
 -- Text Entries
 LANG["TEXTENTRY_FZ_SINGLE"] = "Ruta de sonido de instantánea" -- this one is for ph_fc_cue_path command
-LANG["TEXTENTRY_MV_PREFIX"] = "Prefijo de votación de mapas"			 -- the map previx for mv_mapprefix
+LANG["TEXTENTRY_MV_PREFIX"] = "Prefijo de votación de mapas"			 -- the map previx for mv_map_prefix
 
 --============= LATE ADDITION OF 29.10.21/X2Z. Please Improve your Language Here! =============--
 

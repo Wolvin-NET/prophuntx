@@ -350,7 +350,7 @@ LANG["PHXM_MV_TIMELIMIT"]			= "投票时作为默认的地图投票时间(秒)."
 LANG["PHXM_MV_MAPBEFOREREVOTE"]		= "重新出现地图所需的地图更改数"
 LANG["PHXM_MV_RTVCOUNT"]			= "需要多少人才能发起撼动投票(Rock the Vote)"
 
-LANG["PHXM_MV_EXPLANATION1"]		= "要设置列出相对应的地图，请在控制台中使用(举例)[ mv_mapprefix 'ph_,cs_,de_' ]."
+LANG["PHXM_MV_EXPLANATION1"]		= "要设置列出相对应的地图，请在控制台中使用(举例)[ mv_map_prefix 'phx_,ph_,cs_,de_' ]."
 LANG["PHXM_MV_EXPLANATION2"]		= "如果你使用ULX，请使用map_vote. 若不是，请使用mv_start."
 LANG["PHXM_MV_EXPLANATION3"]		= "地图投票操作(要取消，需在控制台中输入!unmap_vote(ULX)或mv_stop.)"
 
@@ -410,7 +410,7 @@ LANG["PLUGINS_CLIENT_SETTINGS"]			= "-- 客户端设置 --"
 
 -- Text Entries
 LANG["TEXTENTRY_FZ_SINGLE"] = "死亡特写单个声音路径" -- this one is for ph_fc_cue_path command
-LANG["TEXTENTRY_MV_PREFIX"] = "地图投票的地图前缀"			 -- the map previx for mv_mapprefix
+LANG["TEXTENTRY_MV_PREFIX"] = "地图投票的地图前缀"			 -- the map previx for mv_map_prefix
 
 --============= LATE ADDITION OF 29.10.21/X2Z. Please Improve your Language Here! =============--
 

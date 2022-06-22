@@ -341,7 +341,7 @@ LANG["PHXM_MV_TIMELIMIT"]			= "Zeit in Sekunden Während Der Karten Abstimmung."
 LANG["PHXM_MV_MAPBEFOREREVOTE"]		= "Karten Änderung Muss Passieren befor eine Karte wider auftaucht"
 LANG["PHXM_MV_RTVCOUNT"]			= "Wie Viele Spiler Müssen RTV stimmen um es zu aktivieren (Rock the Vote)"
 
-LANG["PHXM_MV_EXPLANATION1"]		= "Um Einzustellen welche Karte Aufgelistet werden soll, benutze (Z.b.) [ mv_mapprefix 'ph_,cs_,de_' ] in der console."
+LANG["PHXM_MV_EXPLANATION1"]		= "Um Einzustellen welche Karte Aufgelistet werden soll, benutze (Z.b.) [ mv_map_prefix 'phx_,ph_,cs_,de_' ] in der console."
 LANG["PHXM_MV_EXPLANATION2"]		= "wenn du ULX Benutzt, Benutze Karten abstimmung. Wenn nicht, use mv_start."
 LANG["PHXM_MV_EXPLANATION3"]		= "KartenAbstimmung Aktion (Um abzubrechen, Schreibe !unmap_vote (ULX) oder mv_stop In der Console.)"
 
@@ -401,7 +401,7 @@ LANG["PLUGINS_CLIENT_SETTINGS"]			= "-- Client Settings --"
 
 -- Text Entries
 LANG["TEXTENTRY_FZ_SINGLE"] = "Gefrorene Camera Audio Pfad" -- this one is for ph_fc_cue_path command
-LANG["TEXTENTRY_MV_PREFIX"] = "Karten Abstimmung Vorwahl"			 -- the map previx for mv_mapprefix
+LANG["TEXTENTRY_MV_PREFIX"] = "Karten Abstimmung Vorwahl"			 -- the map previx for mv_map_prefix
 
 --============= LATE ADDITION OF 29.10.21/X2Z. Please Improve your Language Here! =============--
 
