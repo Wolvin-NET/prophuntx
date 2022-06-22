@@ -42,7 +42,7 @@ if ConVarExists("mv_maplimit") then
 		EnableCooldown 	= GetConVar("mv_cooldown"):GetBool(),
 		MapsBeforeRevote = GetConVar("mv_mapbeforerevote"):GetBool(),
 		RTVPlayerCount 	= GetConVar("mv_rtvcount"):GetInt(),
-		MapPrefixes 	= string.Explode(",", GetConVar("mv_mapprefix"):GetString():lower())
+		MapPrefixes 	= string.Explode(",", GetConVar("mv_map_prefix"):GetString():lower())
 	}
 else
 	MapVote.Config = {}
@@ -79,7 +79,7 @@ local conv = {
 			MapVote.Config.RTVPlayerCount = tonumber(new)
 		end
 	end,
-	["mv_mapprefix"]	= function(cvar,old,new)
+	["mv_map_prefix"]	= function(cvar,old,new)
 		if new && (new != nil || new != "") then
 			MapVote.Config.MapPrefixes = string.Explode(",", new:lower())
 		end

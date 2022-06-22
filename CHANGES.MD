@@ -1,6 +1,13 @@
 ## A new major updates to Prop Hunt: X has been released.
 For now, the Prop Hunt X will change it's version to "X2Z." with Revision 19.06.2022
 
+## Revision 23.06.2022
+---
+- Fixes for Last Prop Standing: Blaster weapon
+- Fixed Fake Taunt will stop playing if a prop does not exists in the map
+- Added 'phx_' map prefix for mapvote settings and main menu map selection
+- Changed `mv_mapprefix` to `mv_map_prefix` to update new map's prefix pattern.
+
 ## Revision 20.06.2022
 ---
 - Language & String Addition to core files: `vgui_scoreboard.lua, cl_splashscreen.lua, cl_selectscreen.lua, cl_credits.lua` and `sh_httpupdates.lua`

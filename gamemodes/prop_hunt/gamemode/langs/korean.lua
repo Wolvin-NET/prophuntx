@@ -345,7 +345,7 @@ LANG["PHXM_MV_MAPBEFOREREVOTE"] = "맵이 다시 나올때까지 필요한 맵 �
 LANG["PHXM_MV_RTVCOUNT"] = "RTV (Rock the Vote)를 사용하는 데 필요한 플레이어 수"
 
 LANG["PHXM_MV_EXPLANATION1"] =
-    "어느 맵을 목록에 표시할지 지정하려면, 예를 들어 [ mv_mapprefix 'ph_,cs_,de_' ] 를 콘솔에 쓰면 됩니다."
+    "어느 맵을 목록에 표시할지 지정하려면, 예를 들어 [ mv_map_prefix 'phx_,ph_,cs_,de_' ] 를 콘솔에 쓰면 됩니다."
 LANG["PHXM_MV_EXPLANATION2"] =
     "ULX를 사용하는 경우 map_vote를 사용하시고, 그렇지 않은 경우 mv_start를 사용하세요."
 LANG["PHXM_MV_EXPLANATION3"] =
@@ -407,7 +407,7 @@ LANG["PLUGINS_CLIENT_SETTINGS"] = "-- 클라이언트 설정 --"
 
 -- Text Entries
 LANG["TEXTENTRY_FZ_SINGLE"] = "Freeze Cam 단일 사운드 경로" -- this one is for ph_fc_cue_path command
-LANG["TEXTENTRY_MV_PREFIX"] = "맵 투표 맵 접두사" -- the map previx for mv_mapprefix
+LANG["TEXTENTRY_MV_PREFIX"] = "맵 투표 맵 접두사" -- the map previx for mv_map_prefix
 
 --============= LATE ADDITION OF 29.10.21/X2Z. Please Improve your Language Here! =============--
 

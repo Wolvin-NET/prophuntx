@@ -342,7 +342,7 @@ LANG["PHXM_MV_TIMELIMIT"]			= "Tijd in seconden voor standaard Map Stemming."
 LANG["PHXM_MV_MAPBEFOREREVOTE"]		= "Map verandering nodig voor een map om terug te keren in de stemming"
 LANG["PHXM_MV_RTVCOUNT"]			= "Hoeveel spelers RTV moeten gebruiken (Rock the Vote)"
 
-LANG["PHXM_MV_EXPLANATION1"]		= "Om op te zetten welke map gebruikt zou moeten worden, gebruik (bijvoorbeeld) [ mv_mapprefix 'ph_,cs_,de_' ] in de console."
+LANG["PHXM_MV_EXPLANATION1"]		= "Om op te zetten welke map gebruikt zou moeten worden, gebruik (bijvoorbeeld) [ mv_map_prefix 'phx_,ph_,cs_,de_' ] in de console."
 LANG["PHXM_MV_EXPLANATION2"]		= "Als je ULX gebruikt, gebruik map_vote. Zo niet, gebruik mv_start."
 LANG["PHXM_MV_EXPLANATION3"]		= "Map Stemming actie (Annuleren, simpel type !unmap_vote (ULX) of mv_stop in de console.)"
 
@@ -408,7 +408,7 @@ LANG["MISC_GAME_ENDED"]		= "Game has ended."
 
 -- Text Entries
 LANG["TEXTENTRY_FZ_SINGLE"] = "Freeze Cam Single Sound Path" -- this one is for ph_fc_cue_path command
-LANG["TEXTENTRY_MV_PREFIX"] = "Map Stemming Prefix"			 -- the map previx for mv_mapprefix
+LANG["TEXTENTRY_MV_PREFIX"] = "Map Stemming Prefix"			 -- the map previx for mv_map_prefix
 
 --[[
 	Credits: Late Addition: Revision: 16.09.21/X2Z

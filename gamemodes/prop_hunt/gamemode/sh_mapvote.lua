@@ -12,7 +12,7 @@ MapVoteConfigDefault = {
     EnableCooldown = true,
     MapsBeforeRevote = 2,
     RTVPlayerCount = 3,
-    MapPrefixes = {"ph_"}
+    MapPrefixes = {"phx_", "ph_"}
     }
 --Default Config
 
@@ -25,7 +25,7 @@ local convarlist = {
 	{"mv_cooldown",			"1",	{ FCVAR_SERVER_CAN_EXECUTE, FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY }, "enable cooldown for voting a map" },
 	{"mv_mapbeforerevote",	"2", 	{ FCVAR_SERVER_CAN_EXECUTE, FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY }, "how many times that the map which cooldown can be shown again?" },
 	{"mv_rtvcount",			"3", 	{ FCVAR_SERVER_CAN_EXECUTE, FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY }, "number of required players to use rtv mapvote." },
-	{"mv_mapprefix",		"ph_,cs_,de_", { FCVAR_SERVER_CAN_EXECUTE, FCVAR_REPLICATED, FCVAR_ARCHIVE }, 		"Map Prefixes that will be shown under mapvote. Use the following example:\n  \"ph_,cs_,de_\" (Dont forget to use quotation marks!)." }
+	{"mv_map_prefix",		"phx_,ph_", { FCVAR_SERVER_CAN_EXECUTE, FCVAR_REPLICATED, FCVAR_ARCHIVE }, 		"Map Prefixes that will be shown under mapvote. Use the following example:\n  \"phx_,ph_\" (Dont forget to use quotation marks!)." }
 }
 
 if !ConVarExists("mv_maplimit") then

@@ -349,7 +349,7 @@ LANG["PHXM_MV_TIMELIMIT"]			= "Waktu dalam detik untuk melakukan voting."
 LANG["PHXM_MV_MAPBEFOREREVOTE"]		= "Berapa kali 'ganti map' untuk map yang dipilih tampil kembali"
 LANG["PHXM_MV_RTVCOUNT"]			= "Berapa banyak pemain untuk bisa melakukan RTV ('Rock the Vote')"
 
-LANG["PHXM_MV_EXPLANATION1"]		= "Untuk mengatur map apa yang akan dipilih, gunakan variable konsol 'mv_mapprefix' dengan mengisi: 'ph_,cs_,de_,'."
+LANG["PHXM_MV_EXPLANATION1"]		= "Untuk mengatur map apa yang akan dipilih, gunakan variable konsol 'mv_map_prefix' dengan mengisi: 'ph_,cs_,de_,'."
 LANG["PHXM_MV_EXPLANATION2"]		= "Jika kamu menggunakan ULX, gunakan 'map_vote'. Jika tidak, gunakan 'mv_start'"
 LANG["PHXM_MV_EXPLANATION3"]		= "Aksi MapVote"
 

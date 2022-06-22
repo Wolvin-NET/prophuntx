@@ -338,7 +338,7 @@ LANG["PHXM_MV_TIMELIMIT"]			= "Temps en seconde pour le Mapvote."
 LANG["PHXM_MV_MAPBEFOREREVOTE"]		= "Changement de map requis pour faire réapparaitre cette map"
 LANG["PHXM_MV_RTVCOUNT"]			= "Nombre de joueurs nécessaires pour le RTV (Rock the Vote)"
 
-LANG["PHXM_MV_EXPLANATION1"]		= "Pour définir les maps à utiliser, utilise (par exemple) [ mv_mapprefix 'ph_,cs_,de_' ] dans la console."
+LANG["PHXM_MV_EXPLANATION1"]		= "Pour définir les maps à utiliser, utilise (par exemple) [ mv_map_prefix 'phx_,ph_,cs_,de_' ] dans la console."
 LANG["PHXM_MV_EXPLANATION2"]		= "Si vous n'arrivez pas à utiliser le Mapvote, il faut installer ULX Admin Mod !"
 LANG["PHXM_MV_EXPLANATION3"]		= "Action MapVote (Pour annuler, utilise !unmap_vote dans le chat ou 'unmap_vote' dans la console)"
 
@@ -397,7 +397,7 @@ LANG["PLUGINS_CLIENT_SETTINGS"]			= "-- Paramètres utilisateur --"
 
 -- Text Entries
 LANG["TEXTENTRY_FZ_SINGLE"] = "Chemin d'accès au son Freeze Cam" -- this one is for ph_fc_cue_path command
-LANG["TEXTENTRY_MV_PREFIX"] = "Préfixe du MapVote"			 	 -- the map previx for mv_mapprefix
+LANG["TEXTENTRY_MV_PREFIX"] = "Préfixe du MapVote"			 	 -- the map previx for mv_map_prefix
 
 --============= LATE ADDITION OF 29.10.21/X2Z. =============--
 
