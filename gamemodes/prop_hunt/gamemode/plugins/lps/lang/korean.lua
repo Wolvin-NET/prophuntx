@@ -15,6 +15,7 @@ LANG["ko_kr"]   = {
     
     ["LPS_WEPLIST"]             = "Available Weapons list:\n%s\nYou can use 'lps_weapon_list' in the console.",
     
+	["LPS_SHOW_WEAPON"]			= "Show Last Prop Standing's Weapon?", --Todo: Fix Me
     ["LPS_HALO_ENABLE"]         = "Draw a halo effect around the last prop?",
     ["LPS_HALO_SEETHROUGHWALL"] = "Draw the halo effect through walls?",
     ["LPS_HALO_COLOUR"]         = "Colour for Last Prop Standing's Halo effect ('rainbow' or hex code)",

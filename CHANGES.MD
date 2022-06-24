@@ -1,20 +1,24 @@
 ## A new major updates to Prop Hunt: X has been released.
 For now, the Prop Hunt X will change it's version to "X2Z".
 
+## Revision 25.06.2022
+- Changed default ConVar for `ph_custom_taunt_mode` from `0` to `2`.
+- Added "Very First Tutorial" for Introducing New X2Z Features. They'll only show once upon joining by prompting the user first.  
+  Additionally, this will automatically set `ph_cl_show_first_tutorial` to `0` after the user read the tutorial window.
+- Added Last Prop Standing's Weapon to be Visible or Not. Added ConVar `lps_show_weapon` to be set `1` as default.
+- Updated Contributors
+
 ## Revision 24.06.2022
----
 - Updated Polish Language (by: Pawelxxdd)
 - Updated Contributors
 
 ## Revision 23.06.2022
----
 - Fixes for Last Prop Standing: Blaster weapon
 - Fixed Fake Taunt will stop playing if a prop does not exists in the map
 - Added 'phx_' map prefix for mapvote settings and main menu map selection
 - Changed `mv_mapprefix` to `mv_map_prefix` to update new map's prefix pattern.
 
 ## Revision 20.06.2022
----
 - Language & String Addition to core files: `vgui_scoreboard.lua, cl_splashscreen.lua, cl_selectscreen.lua, cl_credits.lua` and `sh_httpupdates.lua`
 - Updated Language: English, Indonesia, Russian, Spanish (Late)
 - Increased Damage for "Grenade Launcher" and "RPG Missile Launcher" for Prop's devil crystal from 50 to 75 Damage Points.
@@ -24,7 +28,6 @@ For now, the Prop Hunt X will change it's version to "X2Z".
 This will scanned automatically by the gamemode. (Realm: Shared)
 
 ## Revision 19.06.2022
----
 ### Full Changes:
 
 **Features Addition**

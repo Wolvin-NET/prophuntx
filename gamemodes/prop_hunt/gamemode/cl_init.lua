@@ -682,3 +682,67 @@ function PHX:showLangPreview()
 	end
 	
 end
+
+--Very First Tutorial - this will only show ONCE.
+CreateClientConVar("ph_cl_show_first_tutorial","1",true,true,"Show a very first tutorial window on joining")
+local fh = {}
+local function ShowVeryFirstTutorial()
+	fh.frame = vgui.Create("DFrame")
+	fh.frame:SetSize(ScrW()*0.8,ScrH()*0.85)
+	fh.frame:Center()
+	fh.frame:SetTitle("Prop Hunt X2Z: Tutorial")
+	
+		fh.panel = vgui.Create("DPanel", fh.frame)
+		fh.panel:SetBackgroundColor(Color(100,100,100,255))
+		fh.panel:Dock(FILL)
+		
+		fh.helpImage = vgui.Create("DImage", fh.panel)
+		fh.helpImage.Count = 1
+		fh.helpImage:Dock(FILL)
+		fh.helpImage:SetImage("vgui/phhelp1.vmt")
+	
+		fh.pBottom = vgui.Create("DPanel", fh.panel)
+		fh.pBottom:Dock(BOTTOM)
+		fh.pBottom:SetSize(0,40)
+		fh.pBottom:SetBackgroundColor(Color(0,0,0,0))
+		
+		fh.center = vgui.Create("DPanel", fh.pBottom)
+		fh.center:Dock(FILL)
+		fh.center:SetSize(0,40)
+		fh.center:SetBackgroundColor(Color(0,0,0,0))
+		
+		fh.bnext = vgui.Create("DButton", fh.pBottom)
+		fh.bnext:Dock(RIGHT)
+		fh.bnext:SetSize(128,40)
+		fh.bnext:SetText(PHX:FTranslate("MISC_NEXT"))
+		fh.bnext.DoClick = function(pnl)
+			fh.helpImage.Count = fh.helpImage.Count + 1
+			if fh.helpImage.Count > 10 then
+				fh.helpImage.Count = 1
+			end
+			fh.helpImage:SetImage("vgui/phhelp" .. fh.helpImage.Count .. ".vmt")
+		end
+		
+		fh.bprev = vgui.Create("DButton", fh.pBottom)
+		fh.bprev:Dock(LEFT)
+		fh.bprev:SetSize(128,40)
+		fh.bprev:SetText(PHX:FTranslate("MISC_PREV"))
+		fh.bprev.DoClick = function(pnl)
+			fh.helpImage.Count = fh.helpImage.Count - 1
+			if fh.helpImage.Count < 1 then
+				fh.helpImage.Count = 10
+			end
+			fh.helpImage:SetImage("vgui/phhelp" .. fh.helpImage.Count .. ".vmt")
+		end
+	
+	fh.frame:MakePopup()
+	RunConsoleCommand("ph_cl_show_first_tutorial", "0")
+end
+
+net.Receive("phx_showVeryFirstTutorial", function()
+	if GetConVar("ph_cl_show_first_tutorial"):GetBool() then
+		Derma_Query("Prop Hunt X2Z Introduces new features. Would you like to see Tutorial window before playing?", "Prop Hunt X2Z",
+		"Yes", function() ShowVeryFirstTutorial() end,
+		"No", function() RunConsoleCommand("ph_cl_show_first_tutorial", "0") end)
+	end
+end)

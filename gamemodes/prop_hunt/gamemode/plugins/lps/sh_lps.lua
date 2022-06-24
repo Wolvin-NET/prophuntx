@@ -16,6 +16,8 @@ PHX.LPS.WEAPON2         = {
 
 cvar["lps_enable"]              = { CTYPE_BOOL,     "1",        CVAR_SERVER_ONLY, "Enable Last Prop Standing?" }
 cvar["lps_weapon"]              = { CTYPE_STRING,   "random",   CVAR_SERVER_ONLY, "If set, should the weapon given by 'random' or specific. See 'lps_weapon_list' for more info." }
+cvar["lps_show_weapon"]			= { CTYPE_BOOL,		"1",		CVAR_SERVER_ONLY, "Make Last Prop Standing's weapon visible or not" }
+
 cvar["lps_halo_enable"]         = { CTYPE_BOOL,     "1",        CVAR_SERVER_ONLY, "Draw a halo effect around the last prop?" }
 cvar["lps_halo_walls"]          = { CTYPE_BOOL,     "0",        CVAR_SERVER_ONLY, "Draw the halo effect through walls?" }
 cvar["lps_halo_color"]          = { CTYPE_STRING,   "#14FA00",  CVAR_SERVER_ONLY, "Draw a halo effect of what color (\"rainbow\" or by hex code)?" }
@@ -77,6 +79,7 @@ if CLIENT then
 			{"lps_enable_music", 	"check", "SERVER",	"LPS_ENABLE_MUSIC"},
             
             {"", "label", false,    "LPS_APPEARANCES" },
+			{"lps_show_weapon",     "check",     "SERVER", "LPS_SHOW_WEAPON"},
             {"lps_halo_enable",     "check",     "SERVER", "LPS_HALO_ENABLE"},
             {"lps_halo_walls",      "check",     "SERVER", "LPS_HALO_SEETHROUGHWALL"},
             {"lps_halo_color",      "textentry", "SERVER", "LPS_HALO_COLOUR"},
