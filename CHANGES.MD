@@ -1,5 +1,10 @@
 ## A new major updates to Prop Hunt: X has been released.
-For now, the Prop Hunt X will change it's version to "X2Z." with Revision 19.06.2022
+For now, the Prop Hunt X will change it's version to "X2Z".
+
+## Revision 24.06.2022
+---
+- Updated Polish Language (by: Pawelxxdd)
+- Updated Contributors
 
 ## Revision 23.06.2022
 ---
