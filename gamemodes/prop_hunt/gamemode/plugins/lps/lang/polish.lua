@@ -1,49 +1,51 @@
 local LANG = {}
 
--- English Section
+-- Last updated: June 24, 2022
+
+-- Polish Section
 LANG["pl_pl"]   = {
     -- setting menu
-    ["LPS_GENERAL_SETTINGS"]    = "General Settings",
-    ["LPS_APPEARANCES"]         = "Appearances",
-    ["LPS_WEAPON_SETTINGS"]     = "Last Stands Weapon Setting",
+    ["LPS_GENERAL_SETTINGS"]    = "Ustawienia Ogólne",
+    ["LPS_APPEARANCES"]         = "Wyświetlanie",
+    ["LPS_WEAPON_SETTINGS"]     = "Ustawienia Broni OŻP",
     
-    ["LPS_MENU_ENABLE"]         = "Enable Last Prop Standing",
-	["LPS_ENABLE_MUSIC"]		= "Enable Music when LPS occurs. Require Round Restart to take effect.",
-    ["LPS_WEAPON_SELECT"]       = "Weapon to give ('random' or 'name'). See Weapon List below.",
-    ["LPS_BTN_WEPLIST"]         = "Available Weapons List",
-    ["LPS_MINIMUM_PROPS_TEAM"]  = "Minimum number of props on Team before LPS can be triggered. Minium: 2.",
+    ["LPS_MENU_ENABLE"]         = "Włącz opcję Ostatni Żywy Przedmiot (OŻP)",
+	["LPS_ENABLE_MUSIC"]		= "Włącz muzykę kiedy wystąpi OŻP. Wymaga restartu rundy.",
+    ["LPS_WEAPON_SELECT"]       = "Broń do rozdania ('random' lub 'nazwa'). Zobacz listę broni poniżej.",
+    ["LPS_BTN_WEPLIST"]         = "Lista dostępnych broni",
+    ["LPS_MINIMUM_PROPS_TEAM"]  = "Minimalna ilość graczy w drużynie przedmiotów, aby OŻP mógł wystąpić. Minimalnie: 2",
     
-    ["LPS_WEPLIST"]             = "Available Weapons list:\n%s\nYou can use 'lps_weapon_list' in the console.",
+    ["LPS_WEPLIST"]             = "Lista dostępnych broni:\n%s\nMożesz użyć komendy 'lps_weapon_list' w konsoli.",
     
-    ["LPS_HALO_ENABLE"]         = "Draw a halo effect around the last prop?",
-    ["LPS_HALO_SEETHROUGHWALL"] = "Draw the halo effect through walls?",
-    ["LPS_HALO_COLOUR"]         = "Colour for Last Prop Standing's Halo effect ('rainbow' or hex code)",
-    ["LPS_TRAILS_ENABLE"]       = "Draw a trail behind Last Prop player?",
-    ["LPS_TRAILS_COLOUR"]       = "Colour for the Last Prop's trail (hex code)",
-    ["LPS_TRAIL_TEXTURE"]       = "Trail colour texture for Last Prop's player",
+    ["LPS_HALO_ENABLE"]         = "Zastosować efekt poświaty wokół ostatniego przedmiotu?",
+    ["LPS_HALO_SEETHROUGHWALL"] = "Wyświetlać efekt poświaty przez ściany?",
+    ["LPS_HALO_COLOUR"]         = "Kolor poświaty Ostatniego Żywego Przedmiotu ('rainbow' lub kod HEX)",
+    ["LPS_TRAILS_ENABLE"]       = "Rysować ścieżkę za Ostatnim Żywym Przedmiotem?",
+    ["LPS_TRAILS_COLOUR"]       = "Kolor ścieżki ruchu Ostatniego Żywego Przedmiotu (kod HEX)",
+    ["LPS_TRAIL_TEXTURE"]       = "Tekstura ścieżki ruchu Ostatniego Żywego Przedmiotu",
     
-    ["LPS_PLAY_MUSIC"]          = "Play Background Music when LPS Event begin. (Only applies on next music)",
-    ["LPS_CL_DRAW_HALO"]        = "(Client side) Show/Hide Halo, even server sets it.",
+    ["LPS_PLAY_MUSIC"]          = "Odtwórz muzykę w tle, kiedy rozpocznie się wydarzenie OŻP. (Działa tylko na następnej muzyce)",
+    ["LPS_CL_DRAW_HALO"]        = "(Klient) Pokaż/Ukryj poświatę jeżeli serwer na nią pozwala.",
     
     -- Internal: Weapon Settings
-    ["LPS_WEPSET_REV_AMMO"]     = "LPS Revolver Ammo. -1=Unlimited.",
-    ["LPS_WEPSET_SMG_AMMO"]     = "LPS SMG Ammo. -1=Unlimited.",
+    ["LPS_WEPSET_REV_AMMO"]     = "Amunicja Rewolweru OŻP. -1 = nielimitowana.",
+    ["LPS_WEPSET_SMG_AMMO"]     = "Amunicja SMG OŹP. -1 = nielimitowana.",
     
-    ["LPS_WEPSET_DAMAGE_REV"]   = "LPS Damage for Revolver",
-    ["LPS_WEPSET_DAMAGE_SMG"]   = "LPS Damage for SMG",
-    ["LPS_WEPSET_DAMAGE_BLAST"] = "LPS Damage for Blaster",
+    ["LPS_WEPSET_DAMAGE_REV"]   = "Obrażenia z Rewolweru OŻP",
+    ["LPS_WEPSET_DAMAGE_SMG"]   = "Obrażenia z SMG OŻP",
+    ["LPS_WEPSET_DAMAGE_BLAST"] = "Obrażenia z Blaster'a",
     
     -- More into stuff now.
-    ["LASTPROP_ANNOUNCE"]       = "You are the Last Prop Standing!",
-    ["LASTPROP_ANNOUNCE_ALL"]   = "The Last Prop Standing is Resisting!",
+    ["LASTPROP_ANNOUNCE"]       = "Jesteś Ostatnim Żywym Przedmiotem!",
+    ["LASTPROP_ANNOUNCE_ALL"]   = "Ostatni Żywy Przedmiot rozpoczyna walkę!",
     
     -- Weapon State
-    ["WEAPON_STATE_READY"]      = "Ready",
-    ["WEAPON_STATE_RELOAD"]     = "Reloading...",
-    ["WEAPON_STATE_OUTOFAMMO"]  = "Out of Ammo",
-    ["WEAPON_STATE_UNARMED"]    = "No Weapon",
+    ["WEAPON_STATE_READY"]      = "Gotowa",
+    ["WEAPON_STATE_RELOAD"]     = "Przeładowywanie...",
+    ["WEAPON_STATE_OUTOFAMMO"]  = "Brak amunicji",
+    ["WEAPON_STATE_UNARMED"]    = "Brak broni",
     
-    ["WEAPON_AMMO_UNLI"]        = "Unlimited"
+    ["WEAPON_AMMO_UNLI"]        = "Nielimitowana"
 }
 
 list.Set("PHX.LanguageInsertion", "[LastPropStanding] Polish", LANG)
