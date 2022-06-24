@@ -2,7 +2,7 @@
 ## X2Z - Road to Zero
 
 ### Versioning
-Version: X2Z, Revision: 20/06/2022 (dd/mm/yyyy)
+Version: X2Z, Revision: 25/06/2022 (dd/mm/yyyy)
 
 ### Public Beta Test
 Live Testing currently unavailable.
@@ -29,10 +29,11 @@ This gamemode is similar to current Prop Hunt: Enhanced development lineup, but 
 - And many other...
 
 ### Change Logs
-To see what things are changed, see: https://gmodgameservers.com/prophuntx/logs
+To see what things are changed, see `CHANGES.MD`
 
 ### Wiki
-Read the manuals here: https://gmodgameservers.com/wiki/prophuntx/
+Read the manuals here: https://gmodgameservers.com/wiki/prophuntx/  
+**Note:** Wiki page is currently outdated. We're planning to move with MediaWiki sometime soon.
 
 ### Steam Workshop
 https://steamcommunity.com/sharedfiles/filedetails/?id=2176546751
