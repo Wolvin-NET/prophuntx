@@ -18,7 +18,7 @@ IS_PHX		 	= true	-- an easy check if PHX is installed.
 
 PHX.ConfigPath 	= "phx_data"
 PHX.VERSION		= "X2Z"
-PHX.REVISION	= "23.06.22" --Format: dd/mm/yy.
+PHX.REVISION	= "24.06.22" --Format: dd/mm/yy.
 
 -- Fonts
 AddCSLuaFile("cl_fonts.lua")
@@ -273,19 +273,24 @@ GM.ForceJoinBalancedTeams 	= GetGlobalInt( "ph_forcejoinbalancedteams", false )
 
 local mark = utf8.char(9733)
 GM.PHXContributors			= {
-	"Galaxio "..mark,
-	"Godfather "..mark,
-    "Fryman",
-	"Berry",
-	"Ph.X",
-	"Dralga",
-	"Berry",
+	"Galaxio "..mark.." (Support)",
+	"Godfather "..mark.." (Support)",
+    "Fryman (Web Hosting)",
+	"Berry (Russian Translation)",
+	"Ph.X (Chinese Translation)",
+	"Trigstur (Dutch Translation)",
+	"Haeiven, TR1NITY (French Translation)",
+	"Major Nick (German Translation)",
+	"KamFretoZ (Indonesian Translation)",
+	"So-chiru (Korean Translation)", 
+	"Pawelxxdd (Polish Translation)",
+	"Clã | BR | The Fire Fuchs (Portuguese/Brazil Translation)",
+	"Ryo567, Kurayashi (Spannish Translation)",
+	"Dralga (Discord Helper)",
 	"Yam",
 	"adk",
-	"Haeiven",
 	"Jonpopnycorn",
-	"Thundernerd",
-	"TR1NITY"
+	"Thundernerd"
 }
 
 -- Called on gamemdoe initialization to create teams
