@@ -15,6 +15,7 @@ LANG["id"]   = {
     
     ["LPS_WEPLIST"]             = "Daftar Senjata untuk Prop:\n%s\nKamu bisa menggunakan 'lps_weapon_list' di console untuk lebih lanjut.",
     
+	["LPS_SHOW_WEAPON"]			= "Tampilkan Senjata untuk 'Last Prop Standing'?",
     ["LPS_HALO_ENABLE"]         = "Tampilkan efek Sinar pada Prop Terakhir?",
     ["LPS_HALO_SEETHROUGHWALL"] = "Tampilkan pula efek Sinar dibalik Tembok?",
     ["LPS_HALO_COLOUR"]         = "Warna efek Sinar untuk 'Last Prop Standing' ('rainbow'/kode hex)",

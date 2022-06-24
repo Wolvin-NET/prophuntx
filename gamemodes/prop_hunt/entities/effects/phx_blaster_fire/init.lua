@@ -14,7 +14,7 @@ function EFFECT:Init(data)
 	if not self.Shooter or not self.Shooter:IsValid() then return end
 	if not self.WeaponEnt or not self.WeaponEnt:IsValid() then return end
 	
-	self.BeamWidth      = 25
+	self.BeamWidth      = 32
 	
 	if not self.WeaponEnt:IsValid() then return end	
 

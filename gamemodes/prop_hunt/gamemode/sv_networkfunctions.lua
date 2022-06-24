@@ -36,7 +36,10 @@ local nets = {
 	"PHX.UpdatePropbanInfo",
     
 	"PHX.scan_ReqTaunts",
-	"PHX.scan_SendTauntLists"
+	"PHX.scan_SendTauntLists",
+	
+	-- X2Z Very-first Tutorial Window
+	"phx_showVeryFirstTutorial"
 }
 
 for _,init in pairs(nets) do

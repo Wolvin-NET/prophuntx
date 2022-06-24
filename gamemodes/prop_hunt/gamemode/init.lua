@@ -722,6 +722,17 @@ hook.Add("PlayerInitialSpawn", "PHX.SetupInitData", function(ply)
 			end
 		end
 	end)
+	
+	-- Inform Player to recently joined with X2Z's Tutorial
+	
+	timer.Simple(5, function()
+		if IsValid(ply) then			
+			if tobool( ply:GetInfoNum("ph_cl_show_first_tutorial",0) ) then
+				net.Start("phx_showVeryFirstTutorial")
+				net.Send(ply)
+			end
+		end
+	end)
 
 end)
 

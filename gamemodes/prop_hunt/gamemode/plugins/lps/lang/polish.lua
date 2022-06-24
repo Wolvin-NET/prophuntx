@@ -17,6 +17,7 @@ LANG["pl_pl"]   = {
     
     ["LPS_WEPLIST"]             = "Lista dostępnych broni:\n%s\nMożesz użyć komendy 'lps_weapon_list' w konsoli.",
     
+	["LPS_SHOW_WEAPON"]			= "Spraw, aby broń Ostatni Żywy Przedmiot była widoczna", --Todo: Fix me!
     ["LPS_HALO_ENABLE"]         = "Zastosować efekt poświaty wokół ostatniego przedmiotu?",
     ["LPS_HALO_SEETHROUGHWALL"] = "Wyświetlać efekt poświaty przez ściany?",
     ["LPS_HALO_COLOUR"]         = "Kolor poświaty Ostatniego Żywego Przedmiotu ('rainbow' lub kod HEX)",

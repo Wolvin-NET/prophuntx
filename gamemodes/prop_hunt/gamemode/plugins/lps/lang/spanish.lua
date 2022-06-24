@@ -15,6 +15,7 @@ LANG["es-ES"]   = {
     
     ["LPS_WEPLIST"]             = "Lista de armas disp.:\n%s\nPuedes usar «lps_weapon_list» en la consola.",
     
+	["LPS_SHOW_WEAPON"]			= "Haz visible el arma del último objeto superviviente", --Todo: Fix Me
     ["LPS_HALO_ENABLE"]         = "¿Resaltar al último objeto con vida?",
     ["LPS_HALO_SEETHROUGHWALL"] = "¿Resaltar al último objeto con vida a través de las paredes?",
     ["LPS_HALO_COLOUR"]         = "Color del resaltado del último objeto con vida («arcoíris» o código hex.)",

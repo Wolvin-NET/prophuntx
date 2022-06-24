@@ -19,12 +19,18 @@ function ENT:SetupDataTables()
 end
 
 function ENT:Initialize()
+	self.Entity:DrawShadow( false ) -- don't draw shadows.
 end
 
 if CLIENT then
 	function ENT:Draw()
 		self.Entity:DrawModel()
 	end
+end
+
+function ENT:ShouldDraw()
+	local state = GetGlobalBool( "lps_show_weapon", 0 )
+	self:SetNoDraw( !state and true or false )
 end
 
 function ENT:Think()
@@ -44,8 +50,10 @@ function ENT:Think()
     end
     
     if SERVER then
+		-- DO NOT USE `self:ShouldDraw()` or this entity will be glitched!
         self:NextThink( CurTime() )
     elseif CLIENT then
+		self:ShouldDraw()
         self:SetNextClientThink( CurTime() )
     end
     return true

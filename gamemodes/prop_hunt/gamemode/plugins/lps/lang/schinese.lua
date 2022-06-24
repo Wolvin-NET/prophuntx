@@ -15,6 +15,7 @@ LANG["zh-CN"]   = {
     
     ["LPS_WEPLIST"]             = "可用武器列表:\n%s\n你可以在控制台使用 'lps_weapon_list' 命令.",
     
+	["LPS_SHOW_WEAPON"]			= "使最后一物武器可见", --Todo: Fix Me
     ["LPS_HALO_ENABLE"]         = "在最后一物周围绘制光晕?",
     ["LPS_HALO_SEETHROUGHWALL"] = "光晕效果穿墙?",
     ["LPS_HALO_COLOUR"]         = "最后一物光晕效果颜色 ('rainbow' 或十六进制色码)",
