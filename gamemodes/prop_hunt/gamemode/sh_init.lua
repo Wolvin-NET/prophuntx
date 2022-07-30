@@ -1,35 +1,28 @@
 PHX = PHX or {}
 
--- Utils
-function util.IsHexColor( str )
-
-    if str == nil then return false end
-
-    if string.find( str,'^#?%x%x%x%x%x%x$') then
-        return true
-    end
-    return false
-    
-end
-
 TEAM_HUNTERS 	= 1
 TEAM_PROPS 	 	= 2
 IS_PHX		 	= true	-- an easy check if PHX is installed.
 
 PHX.ConfigPath 	= "phx_data"
-PHX.VERSION		= "X2Z"
-PHX.REVISION	= "25.06.22" --Format: dd/mm/yy.
+PHX.VERSION		= "X2Z (DEV-BRANCH)"
+PHX.REVISION	= "dev-branch" --Format: dd/mm/yy.
 
--- Fonts
+--[[ BEGIN OF SHARED INIT HEADERS ]]--
+
+-- Add important stuffs
 AddCSLuaFile("cl_fonts.lua")
+AddCSLuaFile("sh_utils.lua")
+AddCSLuaFile("sh_convar.lua")
+include("sh_utils.lua")
+include("sh_convar.lua")
 
 -- Global Trace ViewControl for Props
 GM.ViewCam = {}
-
 -- Vector: Crouch Hull Z (Height) limit
-GM.ViewCam.cHullz      = 64    -- Fallback Value. Currently 64 for default value.
-GM.ViewCam.cHullzMins  = 24    -- Used for duck: Limit Minimums Height in BBox
-GM.ViewCam.cHullzMaxs  = 84    -- Limit Maximum Height in BBox
+GM.ViewCam.cHullz      = 64    -- Fallback/Default Value.
+GM.ViewCam.cHullzMins  = 24    -- Limit Minimums Height in BBox
+GM.ViewCam.cHullzMaxs  = 84    -- Limit Maximums Height in BBox
 GM.ViewCam.cHullzLow   = 8     -- Limit everything below this height
 
 -- Can also internally used for CalcView but you can use anywhere in serverside realm.
@@ -82,8 +75,8 @@ function GM.ViewCam.CommonCamCollEnabledView( self, origin, angles, entZ )
     return trace
 end
 
--- Inclusions. These exclude plugins!
--- Do not end with "/"
+-- Inclusions. Requires absolute path. These does not include plugins!
+-- No trailing "/" please on "path" argument.
 function PHX:Includes( path, name, isExternal )
     local root = engine.ActiveGamemode() .. "/gamemode/"
     local pathToSearch = root .. path .. "/*.lua"
@@ -102,10 +95,6 @@ function PHX:Includes( path, name, isExternal )
         end
     end
 end
-
--- Init Convars first!
-AddCSLuaFile("sh_convar.lua")
-include("sh_convar.lua")
 
 function PHX.VerboseMsg( text )
 	-- Very stupid checks: PHX:GetCVar() will only sets after 1st player is joined. This is intentional
@@ -186,12 +175,11 @@ strteam[TEAM_PROPS]			= "PHX_TEAM_PROPS"
 strteam[TEAM_UNASSIGNED]	= "PHX_TEAM_UNASSIGNED"
 strteam[TEAM_SPECTATOR]		= "PHX_TEAM_SPECTATOR"
 
--- Team Translate Name. Might not optimized at the moment.
 function PHX.TranslateName( self, teamID, ply )
 	local strID = strteam[teamID]
 	
 	if SERVER then	-- self:F/Translate() DON'T EXIST on Serverside!
-		-- Note: DO NOT use this on expensive operations such as Think Hook, PlayerTick Hook, etc.
+		-- Note: DO NOT use this on expensive operations on Think, PlayerTick, and other hooks.
 		-- You  have been warned!
 		if self:GetCVar( "ph_use_lang" ) then
 			local lang = self:GetCVar( "ph_force_lang" )			
@@ -228,12 +216,14 @@ function PHX.TranslateName( self, teamID, ply )
 	end
 end
 
+--[[ END OF SHARED INIT HEADERS ]]--
+
 -- Fretta!
 DeriveGamemode("fretta")
 IncludePlayerClasses()
 
 -- Information about the gamemode
-GM.Name		= "Prop Hunt X"
+GM.Name		= "Prop Hunt X2Z (DEV BRANCH)"
 GM.Author	= "Wolvindra-Vinzuerio & D4UNKN0WNM4N"
 
 -- Versioning
@@ -275,6 +265,8 @@ local mark = utf8.char(9733)
 GM.PHXContributors			= {
 	"Galaxio "..mark.." (Support)",
 	"Godfather "..mark.." (Support)",
+    --"? "..mark.." (Support)",
+    --"? "..mark.." (PH:E+ Contributor)",
     "Fryman (Web Hosting)",
 	"Phyremaster (Last Prop Standing)",
 	"Berry (Russian Translation)",
@@ -376,7 +368,7 @@ function PHX:InitializePlugin()
 		self.VerboseMsg("[PHX Plugin] No plugins detected, skipping...")
 	end
 end
--- Initialize?
+-- Initialize Plugins
 hook.Add("Initialize", "PHX.LoadPlugins", function() -- Origin: PostGamemodeLoaded
 	PHX:InitializePlugin()
 end)

@@ -1,8 +1,8 @@
 PHX.DEFAULT_CATEGORY = "PHX Original"
 
--- Permanent Ban models. DO NOT MODIFY.
+-- Permanently banned models.
 local phx_PermaBannedModels = {
-    -- Props that can cause server crash.
+    -- Props that can cause server crash. Please DO NOT REMOVE as this is for your own safety sake!
     "models/props/ph_gas_stationrc7/piepan.mdl",
     
     -- General Tiny / Exploitable Props.
@@ -53,7 +53,7 @@ PHX.CVARUseAbleEnts = {
 		["prop_physics_override"]		= true,
 		["prop_dynamic"] 				= true,
 		["prop_dynamic_override"] 		= true,
-		["prop_ragdoll"]				= true,
+		["prop_ragdoll"]				= true, -- Warning: prop_ragdoll will be deprecated: Causing bug with Pitch Prop Rotation.
 		["ph_luckyball"]				= true,
 		["item_healthkit"] 				= true,
 		["item_battery"] 				= true,
@@ -115,11 +115,16 @@ end
 -- Also Addition: Prohibitted Props
 -- Prohibitted models which can cause server/client crash or other issues.
 -- This will automatically gets deleted after round restart!
+
+-- Please DO NOT REMOVE OR MODIFY THIS TABLE as this is for your own safety sake!
 PHX.PROHIBITTED_MDLS = {
-	["models/props_collectables/piepan.mdl"]	= true,
+    -- Can cause server crash when being used with Prop Menu. Occurs on ph_gas_station* maps.
+	["models/props_collectables/piepan.mdl"]	    = true,
+    ["models/props/ph_gas_stationrc7/piepan.mdl"]   = true,
+    
+    -- This props are tiny that can be exploited almost in any objects!
 	["models/foodnhouseholditems/egg.mdl"]		= true,
-	
-	--test
+    -- Not crashing problem, but upon rotation, the prop will get inside into a wall.
 	["models/sims/lightwall2.mdl"]				= true
 }
 
@@ -649,17 +654,19 @@ hook.Add("PostCleanupMap", "PHX.UpdateUsablePropEnt", function()
 	-- Update Prop Enttiies Type
 	PHX.USABLE_PROP_ENTITIES = PHX.CVARUseAbleEnts[ PHX:GetCVar( "ph_usable_prop_type" ) ]
 	
-	-- Prohibit specific prop from spawning
-	for _,ent in pairs(ents.GetAll()) do
-		timer.Simple(0.1, function()
-			if IsValid(ent) and PHX.PROHIBITTED_MDLS[ent:GetModel()] then
-				PHX.VerboseMsg("[PHX] Removing " .. ent:GetModel() .. " to prevent server crash or exploits.")
-				ent:Remove()
-			end
-		end)
-	end
-	
 	if SERVER then
+    
+        -- Prohibit specific prop from spawning
+        for _,ent in pairs(ents.GetAll()) do
+            timer.Simple(0.1, function()
+                if IsValid(ent) and PHX.PROHIBITTED_MDLS[ ent:GetModel() ] then
+                    PHX.VerboseMsg("[PHX] Removing " .. ent:GetModel() .. " to prevent server crash or gameplay-breaking exploits.")
+                    ent:Remove()
+                end
+            end)
+        end
+        
+        -- Always update the prop bans info.
 		UpdatePropBansInfo( "BANNED_PROP_MODELS", PHX.BANNED_PROP_MODELS )
 		UpdatePropBansInfo( "PROP_PLMODEL_BANS", PHX.PROP_PLMODEL_BANS )
 	end

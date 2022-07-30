@@ -169,6 +169,21 @@ local function getConValue( val )
     return 1
 end
 
+local function getAccurateAim( tblEntity, pos, WeaponPos, ang, maxsz )
+    local eyeTrace = {}
+    local aimTrace = {}
+    local filter   = tblEntity
+    eyeTrace  = GAMEMODE.ViewCam:CamColEnabled( pos, ang, {}, "start", "endpos", 32768/2, 32768, 32768/2, maxsz )
+    eyeTrace.filter = filter
+    aimTrace.filter = eyeTrace.filter
+    local eyeResult = util.TraceLine(eyeTrace)  --tested: Using eyeResult.Normal will create inaccurate result after changing into smaller props.
+    aimTrace.start  = WeaponPos
+    aimTrace.endpos = eyeResult.HitPos
+    local aimTraceResult = util.TraceLine( aimTrace )
+
+    return aimTraceResult
+end
+
 local function PropFireBullet( ply, cmd, args )
     if !IsValid(ply) and ply:Team() ~= TEAM_PROPS and !ply:Alive() then return end
     if !PHX:GetCVar( "lps_enable" ) then return end
@@ -199,26 +214,16 @@ local function PropFireBullet( ply, cmd, args )
         
         ply:SetLPSAmmoCount( ply.propLPSAmmo )
         
-        local att = wepEntity:GetAttachment(1)
-        local shootOrg = att.Pos
-        local shootAng = ply:EyeAngles()
-        local shootDir = shootAng:Forward()
-        --[[]]--
-        local eyeTrace = {}
-        local aimTrace = {}
-        local eyeTrace  = GAMEMODE.ViewCam:CamColEnabled( ply:EyePos(), shootAng, trace, "start", "endpos", 32768/2, 32768, 32768/2, plmaxs.z )
-        eyeTrace.filter = { ply:GetPlayerPropEntity() }
-        aimTrace.filter = { ply:GetPlayerPropEntity() }
-        local eyeResult = util.TraceLine(eyeTrace)
-        aimTrace.start  = shootOrg
-        aimTrace.endpos = eyeResult.HitPos
-        local aimTraceResult = util.TraceLine( aimTrace )
-        --[[]]--
-        local AmmoCount = getConValue( wepdata.AmmoCount )
+        local att            = wepEntity:GetAttachment(1)
+        local shootOrg       = att.Pos
+        local shootAng       = ply:EyeAngles()
+        local ph_prop        = ply:GetPlayerPropEntity()
+        local aimTraceResult = getAccurateAim( { ph_prop }, ply:EyePos(), shootOrg, shootAng, plmaxs.z )
+        local AmmoCount      = getConValue( wepdata.AmmoCount )
         local bullet = {}
             bullet.Num          = wepdata.Num
             bullet.Src          = shootOrg
-            bullet.Dir          = aimTraceResult.Normal --shootDir
+            bullet.Dir          = aimTraceResult.Normal
             bullet.Spread       = getSpread( wepdata.Spread )
             bullet.Tracer       = wepdata.Tracer
             bullet.TracerName   = wepdata.TracerName
@@ -226,17 +231,17 @@ local function PropFireBullet( ply, cmd, args )
             bullet.Damage       = getConValue( wepdata.Damage )
             bullet.AmmoType     = wepdata.AmmoType
             bullet.Attacker     = ply
-            bullet.IgnoreEntity = ply:GetPlayerPropEntity()
+            bullet.IgnoreEntity = ph_prop
             bullet.Callback = function(atk,_,cDamage)
                 cDamage:SetInflictor(atk:GetLPSWeaponEntity())
             end
         wepEntity:FireBullets( bullet )
         
-        local muzz = EffectData()
-        muzz:SetOrigin( shootOrg )
-        muzz:SetAngles( shootAng )
-        muzz:SetScale( 1.2 )
-        util.Effect( "MuzzleEffect", muzz )
+        --FireMuzzle flash
+        if wepdata.MuzzleFx and wepdata.MuzzleFx ~= nil then
+			-- arg: Entity, StartPos, EndPos (Origin), Angles
+            wepdata.MuzzleFx( wepEntity, shootOrg, aimTraceResult.HitPos, shootAng )
+        end
         
         wepEntity:EmitSound( wepdata.ShootSound )
         local viewpunchAng = wepdata.ViewPunch
@@ -258,18 +263,25 @@ local function PropFireBullet( ply, cmd, args )
                 ply:SetLPSWeaponState( LPS_WEAPON_RELOAD )
                 return
             else
+			  if ply.propLPSAmmo > 0 or ply.propLPSAmmo == -1 then
                 ply:SetLPSWeaponState( LPS_WEAPON_READY )
+              else
+                ply:SetLPSWeaponState( LPS_WEAPON_OUTOFAMMO )
+			  end
             end
         end
         
         ply.propNextFire = CurTime() + wepdata.Delay
+		
+		ply:SetLPSAmmoCount( ply.propLPSAmmo )
         
-        -- do the thing!
+        -- Judy, do the thing!
         wepdata:Function( ply )
         
         local AmmoCount = getConValue( wepdata.AmmoCount )
         if AmmoCount > 0 then
             ply.propLPSAmmo = ply.propLPSAmmo - 1
+			ply:SetLPSAmmoCount( ply.propLPSAmmo )
         end
         
         if ply.propLPSAmmo == 0 then
@@ -319,7 +331,7 @@ local function DoPlayerCheck(ply)
                         
                         pl:SetLPSAmmoCount( pl.propLPSAmmo )
                         pl:SetLPSWeapon( PHX.LPS.WEAPON2.NAME )
-                        pl:CreateLPSWeaponEntity( PHX.LPS.WEAPON2.DATA.WorldModel, PHX.LPS.WEAPON2.DATA.FixAngles )
+                        pl:CreateLPSWeaponEntity( PHX.LPS.WEAPON2.DATA.WorldModel, PHX.LPS.WEAPON2.DATA.FixAngles, PHX.LPS.WEAPON2.DATA.FixPos )
                         pl:SetLastStanding( true )
                         pl:SetLPSWeaponState( LPS_WEAPON_READY )
                         

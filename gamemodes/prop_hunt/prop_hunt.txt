@@ -2,12 +2,8 @@
 {
 	"base"		"base"
 	"title"		"Prop Hunt: X2Z"
-	"maps"      "^ph_"
+	"maps"      "^ph_|^phx_"
     "category"  "pvp"
-	"fretta_maps"
-	{
-		"1"	  "ph_"
-	}
     
 	"selectable"	"1"
 	"menusystem"	"1"

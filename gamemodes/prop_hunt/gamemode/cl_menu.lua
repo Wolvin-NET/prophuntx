@@ -41,7 +41,6 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 	end
 	
 	PHX.UI.PnlTab.Navigation:SetWide(250)
-	--PHX.UI.PnlTab:UseButtonOnlyStyle()
 	
 	function PHX.UI:CreateBasicLayout( color, pTab, customHeight )
     
@@ -324,7 +323,7 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 		panel:SetBackgroundColor(Color(40,40,40,120))
 		panel:Dock(FILL)
 		
-		function PHX.UI:PlayerModelAdditions()
+		local function PlayerModelAdditions()
 		
 			-- the Model's DPanel preview. The Pos & Size must be similar as the ModelPreview.
 			local panelpreview = vgui.Create( "DPanel", panel )
@@ -337,7 +336,9 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 			modelPreview:Dock(FILL)
 			modelPreview:SetFOV ( 50 )
 			modelPreview:SetModel ( mdlPath )
+            modelPreview.Entity.GetPlayerColor = function() return GetConVar( "cl_playercolor" ):GetString() end
 			
+            -- Model FOV Slider
 			local slider = vgui.Create("DNumSlider", panelpreview)
 			slider:Dock(BOTTOM)
 			slider:SetSize(0,32)
@@ -350,10 +351,32 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 				slider:SetValue(val)
 				modelPreview:SetFOV(val)
 			end
+            
+            -- Model List
+            local pnList = vgui.Create("DPanel", panel)
+            pnList:Dock(LEFT)
+            pnList:SetSize( 640, 0 )
+            pnList:DockMargin(10,10,15,10)
 			
-			local scroll = vgui.Create( "DScrollPanel", panel )
-			scroll:Dock(LEFT)
-			scroll:SetSize( 640, 0 )
+            local ColorPicker = vgui.Create( "DColorMixer", pnList )
+            ColorPicker:SetAlphaBar( false )
+            ColorPicker:SetPalette( false )
+            ColorPicker:Dock( TOP )
+            ColorPicker:DockMargin( 10, 10, 10, 10 )
+            ColorPicker:SetSize( 200, 260 )
+            ColorPicker:SetVector( Vector( GetConVar( "cl_playercolor" ):GetString() ) )
+            
+            ColorPicker.ValueChanged = function()
+                local col = ColorPicker:GetVector()
+                modelPreview.Entity.GetPlayerColor = function()
+                    return col
+                end
+                RunConsoleCommand( "cl_playercolor", tostring( col ) )
+            end
+            
+            -- Begin of Model List by using a DScroll
+			local scroll = vgui.Create( "DScrollPanel", pnList )
+			scroll:Dock( FILL )
 			scroll:DockMargin(10,10,15,10)
 			
 			-- ^dito, grid dimensions 66x66 w/ Coloumn 7.
@@ -429,7 +452,8 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 		-- Self Explanationary.
 		if PHX:GetCVar( "ph_use_custom_plmodel" ) then
 			-- Call the VGUI Properties of PlayerModelAdditions().
-			PHX.UI:PlayerModelAdditions()
+			PlayerModelAdditions()
+            
 			local PanelModify = PHX.UI.PnlTab:AddSheet("", panel, "vgui/ph_iconmenu/m_plmodel.png")
 			PHX.UI.PaintTabButton(PanelModify, PHX:FTranslate("PHXM_TAB_MODEL"))
 		else
@@ -809,18 +833,5 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 		PHX.UI:ShowAdminMenu()
 		PHX.UI:MapVoteMenu()
 	end)
-	
-	-- This was a test for painting vertical tab. I'll just leave it here for reference.
-	--local Btns = PHX.UI.PnlTab.Navigation:GetChildren()[1]:GetChildren()
-	--[[ local dTabItems = PHX.UI.PnlTab.Items
-	for _,item in pairs(dTabItems) do
-		item.Button:SetSize(item.Button:GetParent():GetWide(), 60)
-		item.Button:SetText("")
-		item.Button:SetStretchToFit( false )
-		item.Button.Paint = function(self)
-			surface.SetDrawColor(20,20,20,200)
-			surface.DrawRect(0,0,self:GetWide(),60)
-		end
-	end ]]
 end
 concommand.Add("ph_x_menu", PHX.UI.BaseMainMenu, nil, "Open Prop Hunt X Advanced Menu window." )

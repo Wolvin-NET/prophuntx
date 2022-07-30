@@ -23,22 +23,25 @@ if SERVER then
     end
     
     -- Only used if mode == 1
-    function Player:CreateLPSWeaponEntity( model, hasFixAngle )
+    function Player:CreateLPSWeaponEntity( model, hasFixAngle, hasFixPos )
     
+        if !IsValid(self:GetPlayerPropEntity()) then return end
         if !hasFixAngle or hasFixAngle == nil then hasFixAngle = angle_zero end
+        if !hasFixPos or hasFixPos == nil then hasFixPos = Vector(0,0,0) end
     
-        local mins,maxs = self:GetHull()
+        --local mins,maxs = self:GetHull()
+        local maxs = self:GetPlayerPropEntity():OBBMaxs()
         self._lpsWepEnt = ents.Create( "ph_lps_weapon" )
-        self._lpsWepEnt:SetPos( self:GetPos() + Vector(0,0,maxs.z*0.5) )
+        self._lpsWepEnt:SetPos( self:GetPos() + Vector(0,0,maxs.z*1.1) )
         self._lpsWepEnt:GetAngles( Vector(0, self:GetAngles().y, 0) )
         
         self._lpsWepEnt:SetSolid( SOLID_NONE )
         self._lpsWepEnt:SetOwner( self )
         self._lpsWepEnt:SetModel( Model(model) )
-        self._lpsWepEnt:SetSolid(SOLID_NONE)
 		self._lpsWepEnt:SetMoveType(MOVETYPE_NONE)
         
         self._lpsWepEnt:SetFixAngles( hasFixAngle )
+        self._lpsWepEnt:SetTranslatePos( hasFixPos )
         
         self._lpsWepEnt:Spawn()
         -- Delete weapon prop when ph_prop is removed.

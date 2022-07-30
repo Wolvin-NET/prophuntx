@@ -82,10 +82,11 @@ local ConVarTranslate = {
 
 local CVAR = {}
 CVAR["ph_print_verbose"]			    =	{ CTYPE_BOOL,	"0", CVAR_SERVER_ONLY_NO_NOTIFY, "Developer Verbose. Some printed messages will only appear if this is enabled." }
+CVAR["ph_show_splash_screen"]           =   { CTYPE_BOOL,   "1", CVAR_SERVER_ONLY, "Show Splash Screen upon joining." }
 
 CVAR["ph_use_lang"]						=	{ CTYPE_BOOL, 	"0", 	 CVAR_SERVER_ONLY, "Enable forced-language to display. THIS WILL BYPASS USER-PREFERED LANGUAGE!" }
 CVAR["ph_force_lang"]					=	{ CTYPE_STRING, "en_us", CVAR_SERVER_ONLY, "Default language to force." }
-CVAR["ph_default_lang"]					=	{ CTYPE_STRING, "en_us", CVAR_SERVER_ONLY, "This is their first time join to set which language should be set. You should always leave this as 'en_us'." }
+CVAR["ph_default_lang"]					=	{ CTYPE_STRING, "en_us", CVAR_SERVER_ONLY, "What language should be set for the first-time player joined to your server. You should always leave this as 'en_us'." }
 
 CVAR["ph_use_custom_plmodel_for_prop"]	=	{ CTYPE_BOOL, 	"0", CVAR_SERVER_ONLY, "Should use a custom Player's Model for Props when the round begins?" }
 CVAR["ph_use_custom_plmodel"]			=	{ CTYPE_BOOL, 	"0", CVAR_SERVER_ONLY, "Should use a custom player model available for Hunters?\nPlease note that you must have to activate \'ph_use_custom_plmodel_for_prop\' too!" }
@@ -105,7 +106,17 @@ CVAR["ph_taunt_pitch_range_max"]		=	{ CTYPE_FLOAT, "200.0", CVAR_SERVER_ONLY, "M
 
 CVAR["ph_enable_taunt_scanner"]			=	{ CTYPE_BOOL, 	"1", CVAR_SERVER_ONLY, "(Require Map Restart) Enable Taunt Scanner?" }
 
-CVAR["ph_prop_jumppower"]				=	{ CTYPE_FLOAT, 	"1.4", CVAR_SERVER_ONLY, "Multipliers for Prop Jump Power (Do not confused with Prop's Gravity!). Default is 1.4. Min. 1." }
+CVAR["ph_prop_jumppower"]				=	{ CTYPE_FLOAT, 	"1.5", CVAR_SERVER_ONLY, "Multipliers for Prop Jump Power (Do not confused with Prop's Gravity!). Default is 1.4. Min. 1.", nil,
+function(cvarname, val)
+    cvars.AddChangeCallback( cvarname, function(_,_,new )    
+        -- Updates player jump power immediately. This also sets when the player spawns (see: player_class/class_prop.lua)
+        for _,v in pairs(team.GetPlayers(TEAM_PROPS)) do
+            if v:Alive() then v:SetJumpPower(160 * tonumber(new)) end
+        end
+        SetGlobalFloat( cvarname, tonumber(new) )
+    end, "phx.cvflt_" .. cvarname)
+    
+end }
 CVAR["ph_notice_prop_rotation"]			=	{ CTYPE_BOOL, 	"1", CVAR_SERVER_ONLY, "Enable Prop Rotation notification on every time Prop Spawns." }
 
 CVAR["ph_freezecam"]					=	{ CTYPE_BOOL, 	"1", CVAR_SERVER_ONLY, "Enable Freeze Camera Feature for Props." }
@@ -198,6 +209,8 @@ CVAR["ph_allow_pickup_object"]				=	{ CTYPE_NUMBER, "3", CVAR_SERVER_ONLY, "Allo
 
 CVAR["ph_use_custom_mapvote"]				=	{ CTYPE_BOOL, 	"0", CVAR_SERVER_ONLY_NO_NOTIFY, "Use custom external Map votes system? Type help 'ph_custom_mv_func' for more info." }
 CVAR["ph_custom_mv_func"]					=	{ CTYPE_STRING, "MapVote.Start()", CVAR_SERVER_HIDDEN, "If 'ph_use_custom_mapvote' specified, what's the map vote function to call in LUA?\nNOTE: Case Sensitive! Local variable will not passed to the given code." }
+
+CVAR["ph_exp_rot_pitch"]					=	{ CTYPE_BOOL, 	"0", CVAR_SERVER_ONLY_NO_NOTIFY, "Allow use of pitch rotation on props" }
 
 -- Prop Chooser / Prop Menu
 CVAR["pcr_enable"]							=	{ CTYPE_BOOL, "1", CVAR_SERVER_ONLY, "Enable Prop Chooser Feature?"}

@@ -13,8 +13,10 @@ ENT.RenderGroup = RENDERGROUP_BOTH
 
 function ENT:SetupDataTables()
     self:NetworkVar( "Angle", 0, "FixAngles" )
+    self:NetworkVar( "Vector", 0, "TranslatePos" )
     if (SERVER) then
         self:SetFixAngles( Angle(0,0,0) )
+        self:SetTranslatePos( Vector(0,0,0) )
     end
 end
 
@@ -37,15 +39,24 @@ function ENT:Think()
     
     local pl = self:GetOwner()
     if IsValid(pl) && pl:Alive() then
-        local mins,maxs = pl:GetHull()
+        local maxs = 72
+        local pos = pl:GetPos()
+        local ph_prop = pl:GetPlayerPropEntity()
+        if IsValid(ph_prop) then
+            local center = ph_prop:OBBCenter().z
+            pos  = ph_prop:GetPos() + Vector(0,0,center)
+        end
         local fixAxis = self:GetFixAngles()
+        local fixPos  = self:GetTranslatePos()
         
-        local pos = pl:GetPos() + Vector(0,0,maxs.z*0.6)
         local ang = pl:EyeAngles()
+        
+        local xPos = ang:Forward() * fixPos.x + ang:Right() * fixPos.y + ang:Up() * fixPos.z
         ang:RotateAroundAxis(ang:Right(),   fixAxis.p)
         ang:RotateAroundAxis(ang:Up(),      fixAxis.y)
         ang:RotateAroundAxis(ang:Forward(), fixAxis.r)
-        self:SetPos(pos)
+        
+        self:SetPos(pos + xPos)
         self:SetAngles( ang )
     end
     

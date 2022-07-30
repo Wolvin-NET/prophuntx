@@ -78,7 +78,7 @@ if CLIENT then
             {"lps_mins_prop_players",   "slider",    {min=2,max=game.MaxPlayers(), init="DEF_CONVAR", dec=0, kind="SERVER"}, "LPS_MINIMUM_PROPS_TEAM" },
 			{"lps_enable_music", 	"check", "SERVER",	"LPS_ENABLE_MUSIC"},
             
-            {"", "label", false,    "LPS_APPEARANCES" },
+            {"", "label", false,    "LPS_APPEARANCES" },            
 			{"lps_show_weapon",     "check",     "SERVER", "LPS_SHOW_WEAPON"},
             {"lps_halo_enable",     "check",     "SERVER", "LPS_HALO_ENABLE"},
             {"lps_halo_walls",      "check",     "SERVER", "LPS_HALO_SEETHROUGHWALL"},
@@ -87,6 +87,7 @@ if CLIENT then
             {"lps_trail_color",     "textentry", "SERVER", "LPS_TRAILS_COLOUR"},
             {"lps_trail_texture",   "textentry", "SERVER", "LPS_TRAIL_TEXTURE"},
             
+            {"", "label", false,    "(DEV) Warning: Some NEW weapons don't have ConVars yet!" },
             {"", "label", false,    "LPS_WEAPON_SETTINGS" },
             {"lps_ammocount_revolver" , "slider", {min = -1, max = 500, init = "DEF_CONVAR", dec = 0, kind = "SERVER"}, "LPS_WEPSET_REV_AMMO"},
             {"lps_ammocount_smg" ,      "slider", {min = -1, max = 500, init = "DEF_CONVAR", dec = 0, kind = "SERVER"}, "LPS_WEPSET_SMG_AMMO"},

@@ -90,6 +90,7 @@ function PANEL:Paint()
 end
 
 local vgui_Splash = vgui.RegisterTable( PANEL, "DButton" )
+GM.VSplashScreen = vgui_Splash
 
 function GM:ShowSplash()
 

@@ -281,13 +281,21 @@ function GM:PlayerShouldTakeDamage(ply, attacker)
 	
 end
 
--- Called when player tries to pickup a weapon
+-- Called when player tries to pickup a weapon / items
 function GM:PlayerCanPickupWeapon(pl, ent)
-	if pl:Team() != TEAM_HUNTERS then
+	if pl:Team() ~= TEAM_HUNTERS then
 		return false
 	end
 	
 	return true
+end
+
+function GM:PlayerCanPickupItem(pl, item)
+    if pl:Team() ~= TEAM_HUNTERS then
+        return false
+    end
+    
+    return true
 end
 
 -- Don't use GM:DoPlayerDeath, we'll use hook instead.
@@ -518,62 +526,58 @@ function GM:PlayerExchangeProp(pl, ent)
 				pl.ph_prop:SetColor(color_white)
 			end
 			
-			pl:SetHealth(new_health)
+			pl:SetHealth(new_health)            
+            -- Free the rotation: This will prevent rare bug for Yaw-only rotation and bug for Pitch rotation.
+            pl:SetPlayerLockedRot( false )
+            pl:SendRotState( 0 )
+            pl:PrintCenter( "HUD_ROTFREE", Color(32,200,72) )
+            pl:EnablePropPitchRot( true )
 			
 			if PHX:GetCVar( "ph_sv_enable_obb_modifier" ) && ent:GetNWBool("hasCustomHull",false) then
 				local hmin	= ent.m_Hull[1]
 				local hmax 	= ent.m_Hull[2]
-				local dmin	= ent.m_dHull[1]
-				local dmax	= ent.m_dHull[2]
+				local dmin	= ent.m_dHull[1] -- warning! may deprecated" this will replaced to hmin and hmax in future.
+				local dmax	= ent.m_dHull[2] -- warning! may deprecated: this will replaced to hmin and hmax in future.
 				
-				if hmax.z < 24 || dmax.z < 24 then
-					pl:SetViewOffset(Vector(0,0,24))
-					pl:SetViewOffsetDucked(Vector(0,0,24))
-				elseif hmax.z > 84 || dmax.z > 84 then --what the heck Duck Size is 84? BigMomma.mdl?
-					pl:SetViewOffset(Vector(0,0,84))
-					pl:SetViewOffsetDucked(Vector(0,0,84))
+				if hmax.z < GAMEMODE.ViewCam.cHullzMins or dmax.z < GAMEMODE.ViewCam.cHullzMins then
+                    pl:PHAdjustView( GAMEMODE.ViewCam.cHullzMins, GAMEMODE.ViewCam.cHullzMins )
+				elseif hmax.z > GAMEMODE.ViewCam.cHullzMaxs || dmax.z > GAMEMODE.ViewCam.cHullzMaxs then --what the heck Duck Size is 84? BigMomma.mdl?
+                    pl:PHAdjustView( GAMEMODE.ViewCam.cHullzMaxs, GAMEMODE.ViewCam.cHullzMaxs )
 				else
-					pl:SetViewOffset(Vector(0,0,hmax.z))
-					pl:SetViewOffsetDucked(Vector(0,0,dmax.z))
+                    pl:PHAdjustView( hmax.z, dmax.z )
 				end
-				
-				pl:SetHull(hmin,hmax)
+                
+                pl:SetHull(hmin,hmax)
 				pl:SetHullDuck(dmin,dmax)
-				
-				net.Start("SetHull")
-					net.WriteInt(math.Round(math.Max(hmax.x,hmax.y)),32)
-					net.WriteInt(hmax.z,32)
-					net.WriteInt(dmax.z,32)
-					net.WriteInt(new_health,9)
-				net.Send(pl)
-			elseif ent:GetClass() == "prop_ragdoll" then -- Add: 'PHX:GetCVar( "ph_usable_prop_type" ) >= 3' for extra check.
-				-- Reset to default 72 normal and 36 for duck for ANY KIND OF RAGDOLLS. This doesn't mater how big or how small it is
-				-- because we don't want to fuck up Prop's bbox which is copied from Ragdoll's dynamic collission bounds/BBOX.
-				-- Use Ragdolls at your own risk!
-				
-				pl:SetHull(Vector(-16, -16, 0), Vector(16, 16, 72))
-				pl:SetHullDuck(Vector(-16, -16, 0), Vector(16, 16, 36))
-				
-				pl:SetViewOffset(Vector(0,0,72))
-				pl:SetViewOffsetDucked(Vector(0,0,36))
-				
-				pl:SetHealth(100)
-				pl.ph_prop:SetSolid(SOLID_BBOX)
-				pl.ph_prop.health 		= 100
-				pl.ph_prop.max_health 	= 100
-				
-				net.Start("SetHull")
-					net.WriteInt(16, 32) -- x/y width
-					net.WriteInt(72, 32) -- normal
-					net.WriteInt(36, 32) -- duck
-					net.WriteInt(100, 9) -- health
-				net.Send(pl)
-				
+                local xymax = math.Round(math.Max(hmax.x,hmax.y))
+                pl:PHSendHullInfo( xymax, hmax.z, dmax.z, new_health )
 			else
-				local hullxymax = math.Round(math.Max(ent:OBBMaxs().x, ent:OBBMaxs().y))
+                local hullxymax = math.Round(math.Max(ent:OBBMaxs().x, ent:OBBMaxs().y))
 				local hullxymin = hullxymax * -1
-				local hullz = math.Round(ent:OBBMaxs().z - ent:OBBMins().z)
+				local hullz     = math.Round(ent:OBBMaxs().z - ent:OBBMins().z)
+                
+                if ent:GetClass() == "prop_ragdoll" then -- Optional (but Better): Add 'PHX:GetCVar( "ph_usable_prop_type" ) >= 3' for extra checks.
+                    -- We'll use GetModelBounds() instead of using CollisionBounds or OBBMins/Maxs.
+                    -- Reason because is that ragdoll's Coll/OBBs bounds values are always changing when they move.
+                    local mins,maxs = ent:GetModelBounds()
+                    
+                    hullxymax   = math.Round( math.Max( maxs.x, maxs.y) )
+                    hullxymin   = hullxymax * -1
+                    hullz       = math.Round(maxs.z-mins.z)
+                    
+                    -- Override health back to 100 and set their solid back to BBOX.
+                    pl.ph_prop:SetSolid(SOLID_BBOX)
+                    pl:SetHealth(100)
+                    pl.ph_prop.health 		= 100
+                    pl.ph_prop.max_health 	= 100
+                    
+                    pl:EnablePropPitchRot( false ) --Do not use Pitch Rotation when prop_ragdoll being used.
+                    -- Bug Explanation: Bullet can still goes through if using SOLID_BBOX.
+                    -- Using SOLID_OBB **WILL NOT** Helps: This will produce ANOTHER bug that
+                    -- hunters are completely stucked when the prop is rotated. This appear to be engine's bug.
+                end
 				
+                --Todo: Duck Hull should not be important, right? Might remove this stuff in future though.
 				local dhullz = hullz
 				if hullz > 10 && hullz <= 30 then
 					dhullz = hullz-(hullz*0.5)
@@ -585,26 +589,18 @@ function GM:PlayerExchangeProp(pl, ent)
 					dhullz = hullz
 				end
 			
-				if hullz < 24 then
-					pl:SetViewOffset(Vector(0,0,24))
-					pl:SetViewOffsetDucked(Vector(0,0,24))
-				elseif hullz > 84 then
-					pl:SetViewOffset(Vector(0,0,84))
-					pl:SetViewOffsetDucked(Vector(0,0,84))
+				if hullz < GAMEMODE.ViewCam.cHullzMins then
+					pl:PHAdjustView( GAMEMODE.ViewCam.cHullzMins, GAMEMODE.ViewCam.cHullzMins )
+				elseif hullz > GAMEMODE.ViewCam.cHullzMaxs then
+					pl:PHAdjustView( GAMEMODE.ViewCam.cHullzMaxs, GAMEMODE.ViewCam.cHullzMaxs )
 				else
-					pl:SetViewOffset(Vector(0,0,hullz))
-					pl:SetViewOffsetDucked(Vector(0,0,dhullz))
+                    pl:PHAdjustView( hullz, dhullz )
 				end
-			
+                
 				pl:SetHull(Vector(hullxymin, hullxymin, 0), Vector(hullxymax, hullxymax, hullz))
 				pl:SetHullDuck(Vector(hullxymin, hullxymin, 0), Vector(hullxymax, hullxymax, dhullz))
-			
-				net.Start("SetHull")
-					net.WriteInt(hullxymax, 32)
-					net.WriteInt(hullz, 32)
-					net.WriteInt(dhullz, 32)
-					net.WriteInt(new_health, 9)
-				net.Send(pl)
+                pl:PHSendHullInfo( hullxymax, hullz, dhullz, new_health )
+
 			end
 		end
 		
@@ -620,9 +616,9 @@ function GM:PlayerUse(pl, ent)
 	-- Prevent Execution Spam by holding ['E'] button too long.
 	if pl:Team() == TEAM_PROPS && pl.UseTime <= CurTime() then
 		
-		local hmx, hz = ent:GetPropSize()
+		local hmx,hmy,hz = ent:GetPropSize()
         local proptype = PHX:GetCVar( "ph_usable_prop_type" )
-		if PHX:GetCVar( "ph_check_for_rooms" ) && !pl:CheckHull(hmx, hmx, hz) then
+		if PHX:GetCVar( "ph_check_for_rooms" ) && !pl:CheckHull(hmx, hmy, hz) then
             if (proptype <= 2 && PHX:IsUsablePropEntity( ent:GetClass() )) then
                 pl:PHXChatInfo("WARNING", "CHAT_PROP_NO_ROOM")
             end
@@ -657,12 +653,16 @@ function GM:PlayerUse(pl, ent)
 		return false
 	end
     
-    -- Sorry but Props not allowed to enter vehicle, this is due to new code fixes for ph_prop :(
+    pl.last_door_time = CurTime()
+    
+    -- Sorry, but Props are not allowed to enter vehicle, this is due to new code fixes for ph_prop :(
+    -- This is temporarily disabled and re-enabled again if there is a workaround
+    -- https://github.com/Facepunch/garrysmod-issues/issues/1150
+    -- https://github.com/Facepunch/garrysmod-issues/issues/2620
     if pl:Team() == TEAM_PROPS and ent:IsVehicle() then
         return false
     end
 	
-	pl.last_door_time = CurTime()
 	return true
 end
 
@@ -750,7 +750,7 @@ end )
 
 -- Called when the players spawns
 function PlayerSpawn(pl)
-	pl:SetNWBool("PlayerLockedRotation", false)
+	pl:SetPlayerLockedRot( false )
 	pl:SetNWBool("InFreezeCam", false)
 	pl:SetNWEntity("PlayerKilledByPlayerEntity", nil)
 	pl:Blind(false)
@@ -1077,8 +1077,8 @@ function PlayerPressedKey(pl, key)
 			if trace2.Entity && trace2.Entity:IsValid() && PHX:IsUsablePropEntity(trace2.Entity:GetClass()) then
 				if pl.UseTime <= CurTime() then
 					if !pl:IsHoldingEntity() then
-						local hmx, hz = trace2.Entity:GetPropSize()
-						if PHX:GetCVar( "ph_check_for_rooms" ) && !pl:CheckHull(hmx, hmx, hz) then
+						local hmx,hmy,hz = trace2.Entity:GetPropSize()
+						if PHX:GetCVar( "ph_check_for_rooms" ) && !pl:CheckHull(hmx, hmy, hz) then
 							pl:PHXChatInfo("WARNING", "CHAT_PROP_NO_ROOM")
 						else
 							GAMEMODE:PlayerExchangeProp(pl, trace2.Entity)
@@ -1159,17 +1159,13 @@ hook.Add("PlayerButtonDown", "PlayerButton_ControlTaunts", function(pl, key)
 		-- Lock rotation
 		if key == lockInfo then
 			if pl:GetPlayerLockedRot() then
-				pl:SetNWBool("PlayerLockedRotation", false)
+				pl:SetPlayerLockedRot( false )
+                pl:SendRotState(0)
 				pl:PrintCenter( "HUD_ROTFREE", Color(32,200,72) )
-				net.Start("PHX.rotateState")
-					net.WriteInt(0, 2)
-				net.Send(pl)
 			else
-				pl:SetNWBool("PlayerLockedRotation", true)
+				pl:SetPlayerLockedRot( true )
+                pl:SendRotState(1)
 				pl:PrintCenter( "HUD_ROTLOCK", Color(255,128,40) )
-				net.Start("PHX.rotateState")
-					net.WriteInt(1, 2)
-				net.Send(pl)
 			end
 		end
 		

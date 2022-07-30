@@ -1,5 +1,7 @@
 AddCSLuaFile()
 
+local player_manager = player_manager
+
 DEFINE_BASECLASS( "base_anim" )
 
 ENT.PrintName = "Prop Entity"
@@ -11,7 +13,13 @@ ENT.Spawnable = true
 ENT.AdminOnly = false
 ENT.RenderGroup = RENDERGROUP_BOTH
 
-function ENT:SetupDataTables() end
+ENT.PropAngle   = angle_zero
+ENT.PropPosition  = vector_origin
+
+function ENT:SetupDataTables() 
+	self:NetworkVar( "Angle", 0, "RotationAngle" )
+    self:NetworkVar( "Vector", 0, "EntityColor")
+end
 
 function ENT:Initialize()
 	if SERVER then
@@ -27,25 +35,62 @@ if CLIENT then
 		self:DrawModel()
 	end
 end
+
+ENT.GetPlayerColor = function( self )
+    return self:GetEntityColor()
+end
+
+function ENT:CalcRotation( ply, pos, ang, bLock )
+    local min       = self:OBBMins()
+    local info      = ply:GetInfo("cl_playermodel")
+	local rotMode   = GetGlobalBool( "ph_exp_rot_pitch", false )
+    
+	local z  
+    if !bLock then
+		if rotMode and ply:HasPropPitchRotAllowed() then
+            if ang.p >= -90 and ang.p <= 90 then self.PropAngle = ang end
+            self:SetAngles( self.PropAngle )
+            z = (( min.x - min.z ) * (( self.PropAngle.p < 0 and self.PropAngle.p * -1 or self.PropAngle.p) / 90 ) + min.z )
+        else 
+            self:SetAngles( ang )
+            z = min.z
+        end
+        self.PropPosition = Vector( 0, 0, z );
+    end
+    
+	local posx      = pos - self.PropPosition
+    local plyModel  = string.lower(self:GetModel())
+    if (info and info ~= nil) and plyModel == "models/player/kleiner.mdl" or plyModel == player_manager.TranslatePlayerModel( baseModel ) then
+        posx = pos
+    end
 	
--- Prop Movement and Rotation (CLIENT)
-function ENT:Think()
-	if CLIENT then
-		local pl = self:GetOwner()
-		if IsValid(pl) && pl:Alive() && pl == LocalPlayer() then
-			local me  = LocalPlayer()
-			local pos = me:GetPos()
-			local ang = me:EyeAngles()  -- for some reason, this one really smoth out the rotation.
-			local lockstate = pl:GetPlayerLockedRot()
-			
-			if self:GetModel() == "models/player/kleiner.mdl" || self:GetModel() == player_manager.TranslatePlayerModel(GetConVar("cl_playermodel"):GetString()) then
-				self:SetPos(pos)
-			else
-				self:SetPos(pos - Vector(0, 0, self:OBBMins().z))
-			end
-			if !lockstate then self:SetAngles(Angle(0,ang.y,0)) end
+	self:SetPos( posx )
+end
+	
+-- Prop Movement and Rotation
+function ENT:Think()    
+    local pl = self:GetOwner()
+    if IsValid(pl) && pl:Alive() then
+        local pos = pl:GetPos()
+        local ang = pl:EyeAngles()
+        local lockstate = pl:GetPlayerLockedRot()
+        
+		if GetGlobalBool( "ph_exp_rot_pitch", false ) and pl:HasPropPitchRotAllowed() then
+			self:SetRotationAngle( Angle( ang.p, ang.y, 0 ) )
+		else
+			-- switch back to old PH:E/Old "Yaw" rotation
+			self:SetRotationAngle( Angle( 0, ang.y, 0 ) )
 		end
-	end
+        self:CalcRotation( pl, pos, self:GetRotationAngle(), lockstate )
+    end
+    
+    if SERVER then
+        self:NextThink( CurTime() )
+    elseif CLIENT then
+        self:SetNextClientThink( CurTime() )
+    end
+    return true
+    
 end
 
 if SERVER then

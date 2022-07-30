@@ -38,11 +38,15 @@ include("cl_credits.lua")
 -- /!\ Convars are now moved on sh_convars.lua.
 
 -- Local Functions & Variables collection
+local cHullz 				= GM.ViewCam.cHullz
+local client_prop_light 	= false
+local blind 				= false
+local CL_GLIMPCAM 		    = 0
+local MAT_LASERDOT 		    = Material("sprites/glow04_noz")
 local IndicatorColor = {
-  ok = Color(20, 250, 0, 255),
-  no = Color(250, 250, 0, 255)
+  ok =      Color(20 , 250,  0, 255),
+  no =      Color(250, 250,  0, 255),
 }
-
 local mat 		= "prophunt_enhanced/sprites/luckyball"
 local pointer 	= "prophunt_enhanced/sprites/luckyball_pointer"
 local dmat		= "prophunt_enhanced/sprites/devilball"
@@ -143,24 +147,20 @@ end
 
 local function getIndicColor( trace, fallback, colorTrue, colorFalse )
     local color = fallback
-    local maxxy,maxz = trace.Entity:GetPropSize()
+    local hmx,hmy,hmz = trace.Entity:GetPropSize()
     
         if (!LocalPlayer():IsOnGround() or LocalPlayer():Crouching()) then return colorFalse end
-        if PHX:GetCVar( "ph_check_for_rooms" ) and not LocalPlayer():CheckHull(maxxy,maxxy,maxz) then return colorFalse end
+        if PHX:GetCVar( "ph_check_for_rooms" ) and not LocalPlayer():CheckHull(hmx,hmy,hmz) then return colorFalse end
         color = colorTrue
         
     return color
 end
 
 -- Called immediately after starting the gamemode 
-function Initialize()
-	cHullz 				= 64
-	client_prop_light 	= false
-	blind 				= false
-	CL_GLIMPCAM 		= 0
-	MAT_LASERDOT 		= Material("sprites/glow04_noz")
+--[[ local function Initialize()
+	
 end
-hook.Add("Initialize", "PH_Initialize", Initialize)
+hook.Add("Initialize", "PH_Initialize", Initialize) ]]
 
 -- ShowHelp is now moved to prop_hunt gamemodedir.
 function GM:ShowHelp()
@@ -211,6 +211,7 @@ end
 
 -- ShowTeam also moved in here.
 local TeamPanel = {}
+local Splash    = {}
 
 function GM:ShowTeam()
 
@@ -262,6 +263,17 @@ function GM:ShowTeam()
 	
 	TeamPanel:MakePopup()
 
+end
+
+function GM:ShowSplash()
+    if PHX:GetCVar( "ph_show_splash_screen" ) then
+        local pnl = vgui.CreateFromTable( GAMEMODE.VSplashScreen )
+        pnl:MakePopup()
+    end
+end
+
+function PHX:SetGlimpCam(int)
+    CL_GLIMPCAM = int
 end
 
 -- Decides where  the player view should be (forces third person for props)
@@ -356,11 +368,29 @@ function HUDPaint()
 		end
 		
 		if blindlock_time_left_msg then
-			surface.SetFont("HunterBlindLockFont")
+			--[[ surface.SetFont("HunterBlindLockFont")
 			local tw, th = surface.GetTextSize(blindlock_time_left_msg)
 			
 			draw.RoundedBox(8, 20, 20, tw + 20, 26, Color(0, 0, 0, 75))
-			draw.DrawText(blindlock_time_left_msg, "HunterBlindLockFont", 31, 26, Color(255, 255, 0, 255), TEXT_ALIGN_LEFT)
+			draw.DrawText(blindlock_time_left_msg, "HunterBlindLockFont", 31, 26, Color(255, 255, 0, 255), TEXT_ALIGN_LEFT) ]]
+            
+            local cX,cY = ScrW()*0.5,ScrH()*0.5
+            
+            if LocalPlayer():Team() == TEAM_HUNTERS and LocalPlayer():Alive() and blindlock_time_left > 1 then
+                --surface.DrawCircle( cX, cY, 100 + math.sin( CurTime() ) * 60, Color( 128, 128, 128 ) )
+                
+                local time = math.sin( CurTime() )
+                
+                surface.SetDrawColor( 0, 92, 132, 210 )
+                draw.NoTexture()
+                draw.Circle( cX,ScrH()*0.65, 50 + time * 30, time * 20 + 25 )
+            
+                draw.WordBox( 4, cX, cY, blindlock_time_left_msg, "PHX.TitleFont",
+                Color(0,0,0,75), Color(250,250,250,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM )
+            else
+                draw.WordBox( 8, 20, 20, blindlock_time_left_msg, "HunterBlindLockFont",
+                Color(0,0,0,75), Color(255,255,0,255), TEXT_ALIGN_LEFT )
+            end
 		end
 	end
 	
@@ -374,13 +404,14 @@ function HUDPaint()
 		DrawWaypointMarker( LocalPlayer(), dmat, dpointer, 'ph_devilball', 35 )
 	end
     
+    -- Draw Decoy Indicator Icon
     if PHX:GetCLCVar( "ph_cl_decoy_spawn_marker" ) && LocalPlayer():Team() == TEAM_PROPS then
         DrawWaypointMarker( LocalPlayer(), decoy.indicator, decoy.radial, 'ph_fake_prop', 50 )
     end
 	
 	-- Prop Crosshair
 	if PHX:GetCLCVar( "ph_show_custom_crosshair" ) && LocalPlayer():Team() == TEAM_PROPS && LocalPlayer():Alive() then
-		local color
+		local color = color_white
 		local trace = {}
 		
         trace = GAMEMODE.ViewCam:CommonCamCollEnabledView( LocalPlayer():EyePos(), LocalPlayer():EyeAngles(), cHullz )
@@ -395,10 +426,10 @@ function HUDPaint()
 		trace.filter = filter
 		
 		local trace2 = util.TraceLine(trace)
-		if trace2.Entity && trace2.Entity:IsValid() && PHX:IsUsablePropEntity( trace2.Entity:GetClass() ) then
-            color = getIndicColor( trace2, color_white, IndicatorColor.ok, IndicatorColor.no )
-		else
-			color = color_white
+		if trace2.Entity && trace2.Entity:IsValid() then
+            if PHX:IsUsablePropEntity( trace2.Entity:GetClass() ) then
+                color = getIndicColor( trace2, color_white, IndicatorColor.ok, IndicatorColor.no )
+            end
 		end
 		surface.SetDrawColor( color )
 		surface.SetMaterial( crosshair )
@@ -605,6 +636,18 @@ net.Receive( "PHX.DeathNoticeDecoy", function()
     
     PHX:DrawDecoyDeathNotice( attacker, inflictor )
 end )
+
+--[[ -- Restore Player color function
+net.Receive( "PHX.ChangePropColor", function()
+    local vectorColor = net.ReadVector()
+    local entity = net.ReadEntity()
+    
+    if IsValid(entity) then
+        entity.GetPlayerColor = function()
+            return vectorColor
+        end
+    end
+end ) ]]
 
 -- Language Preview Window
 function PHX:showLangPreview()

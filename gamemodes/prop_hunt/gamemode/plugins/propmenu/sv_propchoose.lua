@@ -101,8 +101,8 @@ function PCR.PopulateProp()
 			PHX.VerboseMsg("[PHX Prop Menu] Warning: Prop "..prop:GetModel().. " @Index #"..prop:EntIndex().." has no physics. Ignoring!")
 			continue
 		end
-		-- update: Do not include Forbidden models
-		if PHX.PROHIBITTED_MDLS[prop:GetModel()] then
+		-- update: Do not include Forbidden models that can cause server crashes or exploits
+		if PHX.PROHIBITTED_MDLS[ string.lower(prop:GetModel()) ] then
 			continue
 		end
 		if table.HasValue(PCR.PropList, string.lower(prop:GetModel())) then continue end
@@ -297,8 +297,8 @@ net.Receive("pcr.SetMetheProp",function(len,ply)
 		ent:Spawn()
 		
 		local usage = ply:CheckUsage()
-		local hmx,hz = ent:GetPropSize()
-		if ( PHX:QCVar( "pcr_use_room_check" ) and (not ply:CheckHull(hmx,hmx,hz)) ) then
+		local hmx,hmy,hz = ent:GetPropSize()
+		if ( PHX:QCVar( "pcr_use_room_check" ) and (not ply:CheckHull(hmx,hmy,hz)) ) then
 			if usage > 0 then
 				ply:PHXChatInfo("NOTICE", "PCR_NOROOM")
 			end

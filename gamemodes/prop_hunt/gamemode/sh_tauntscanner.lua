@@ -190,8 +190,8 @@ if SERVER then
 		ply.HasTauntScannedData = false
 	end)
 	
-	net.Receive( netReq, function( len, ply )
-		if !PHX:QCVar( "ph_enable_taunt_scanner" ) then
+    local function SendTauntsInfo( ply )
+        if !PHX:QCVar( "ph_enable_taunt_scanner" ) then
 			ply:PrintMessage(HUD_PRINTCONSOLE, "[PHX] Taunt Scanner is Disabled.")
 			return
 		end
@@ -207,6 +207,15 @@ if SERVER then
 			end)
 		end
 		-- you can't request anymore unless reconnect to get a refresh list!
+    end
+    
+	net.Receive( netReq, function( len, ply )
+		if ply:IsListenServerHost() then
+            timer.Simple(2, function() SendTauntsInfo( ply ) end)
+        else
+            -- send after next frame
+            timer.Simple(0, function() SendTauntsInfo( ply ) end)
+        end
 	end )
 end
 

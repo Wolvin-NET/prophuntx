@@ -26,7 +26,7 @@ local function StartLoadOut( pl )
     pl:Give("weapon_smg1")
     pl:Give("weapon_357")
 	
-    -- Only gives grenade if near round end feature is disabled.
+    -- Give grenades if "Give Grenade near round End time" feature is disabled
 	if (not PHX:GetCVar( "ph_give_grenade_near_roundend" )) then
         local numGrenade = PHX:GetCVar( "ph_smggrenadecounts" ) or 1
         pl:SetAmmo(numGrenade, "SMG1_Grenade")
@@ -37,11 +37,12 @@ local function StartLoadOut( pl )
  	if pl:HasWeapon(cl_defaultweapon) then 
  		pl:SelectWeapon(cl_defaultweapon)
 	else
-		-- Return to weapon_smg1. For some reason like ph_underwataaa, weapon might be removed soo....
+		-- Return to weapon_smg1.
+        -- Todo: Update ph_underwataaa weapon giving system.
 		if pl:HasWeapon("weapon_smg1") then
 			pl:SelectWeapon("weapon_smg1")
 		end
- 	end 
+ 	end
 end
 
 -- Called when player spawns with this class
@@ -53,9 +54,9 @@ function CLASS:OnSpawn(pl)
 	pl:SetAvoidPlayers(false)
 	pl:CrosshairEnable()
 	
-	pl:SetViewOffset(Vector(0,0,64))
-	pl:SetViewOffsetDucked(Vector(0,0,28))
-	
+    pl:PHResetView()
+	pl:PHSetColor()
+    
 	local unlock_time = GetGlobalInt("unBlind_Time", 0)
 	
 	local unblindfunc = function()
@@ -98,18 +99,15 @@ function CLASS:OnDeath(pl, attacker, dmginfo)
 	pl:UnLock()
 	
 	-- Always Reset the ViewOffset
-	pl:SetViewOffset(Vector(0,0,64))
-	pl:SetViewOffsetDucked(Vector(0,0,28))
+    pl:PHResetView()
 	
 	-- Spawn Devil Ball
 	local pos = pl:GetPos()
 	if PHX:GetCVar( "ph_enable_devil_balls" ) then
-		--if math.random() < 0.7 then --70% chance.
-			local dropent = ents.Create("ph_devilball")
-			dropent:SetPos(Vector(pos.x, pos.y, pos.z + 16)) -- to make sure the Devil Ball didn't spawn underground.
-			dropent:SetAngles(Angle(0,0,0))
-			dropent:Spawn()
-		--end
+        local dropent = ents.Create("ph_devilball")
+        dropent:SetPos(Vector(pos.x, pos.y, pos.z + 16)) -- to make sure the Devil Ball didn't spawn underground.
+        dropent:SetAngles(Angle(0,0,0))
+        dropent:Spawn()
 	end
 end
 

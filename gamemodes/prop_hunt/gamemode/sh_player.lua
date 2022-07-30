@@ -4,10 +4,30 @@ if !Player then return end
 if !Entity then return end
 
 function Entity:GetPropSize()
-	local hullxymax     = math.Round(math.Max(self:OBBMaxs().x - self:OBBMins().x, self:OBBMaxs().y - self:OBBMins().y) / 2)
-	local hullz         = math.Round(self:OBBMaxs().z - self:OBBMins().z)
+    local hullxymax,hullz
+    -- local hx,hy,hz
+    -- local mins = self:OBBMins()
+    -- local maxs = self:OBBMaxs()
+    
+    --[[ if self:GetClass() == "prop_ragdoll" then	--> Bug: this causes low framerate issues
+        hx = math.Round( maxs.x+mins.x )
+        hy = math.Round( maxs.y+mins.y )
+        hz = math.Round( maxs.z-mins.z )
+    else --> these are normal.
+        hx = math.Round(math.Max(maxs.x-mins.x, maxs.y-mins.y) / 2)
+        hy = hx
+        hz = math.Round(maxs.z - mins.z)
+    end ]]
+    
+    hullxymax     = math.Round(math.Max(self:OBBMaxs().x - self:OBBMins().x, self:OBBMaxs().y - self:OBBMins().y) / 2)
+    hullz         = math.Round(self:OBBMaxs().z - self:OBBMins().z)
 	
-	return hullxymax, hullz
+	--return hx, hy, hz
+	if self:GetClass() == "prop_ragdoll" then
+		return 0,0,0
+	end
+	
+	return hullxymax, hullxymax, hullz
 end
 
 function Player:CheckHull(hx,hy,hz)
@@ -36,7 +56,6 @@ function Player:GetBlindState()
 	return bool
 end
 
--- Player has locked prop rotation?
 function Player:GetPlayerLockedRot()
 	return self:GetNWBool("PlayerLockedRotation", false)
 end
@@ -101,7 +120,100 @@ function Player:HasFakePropEntity()
 	return self:GetNWBool("PlayerFakePropEnt",false)
 end
 
+function Player:HasPropPitchRotAllowed()
+    return self:GetNWBool("PlayerPitchRot",false)
+end
+
+function Player:PHSetColor( ColOverride )
+
+    --if !self:Alive() or self:Team() == TEAM_UNASSIGNED or self:Team() == TEAM_SPECTATOR then return end
+
+    local col = Vector( 0, 0, 0 )
+    col = Vector( self:GetInfo("cl_playercolor") )
+    
+    if ColOverride and ColOverride ~= nil and isvector(ColOverride) then col = ColOverride end
+    
+    if self:Team() == TEAM_HUNTERS then
+    
+        self:SetPlayerColor( col )
+        
+    elseif self:Team() == TEAM_PROPS then
+    
+        local ph_prop = self:GetPlayerPropEntity()
+        ph_prop:SetEntityColor( col )
+        
+        --[[ ph_prop.GetPlayerColor = function()
+            return col
+        end ]]
+        
+    end
+    
+end
+
 if SERVER then
+    function Player:EnablePropPitchRot( bool )
+        self:SetNWBool("PlayerPitchRot", bool)
+    end
+
+    function Player:CreatePlayerPropEntity()
+    
+        self:EnablePropPitchRot( false ) --don't allow pitch rotation. This is intentional because of bugs on ragdoll usable prop types.
+        -- Todo: if this causes issues, next time: Try make kleiner's physics using 1 single solid instead.
+        
+        self.ph_prop = ents.Create("ph_prop")
+        self.ph_prop:SetPos( self:GetPos() )
+        self.ph_prop:SetAngles( self:GetAngles() )
+        self.ph_prop:Spawn()
+        
+        if PHX:GetCVar( "ph_use_custom_plmodel_for_prop" ) then
+            self.m_shortHunterModel = player_manager.TranslatePlayerModel( self:GetInfo("cl_playermodel") )
+            
+            if table.HasValue( PHX.PROP_PLMODEL_BANS, string.lower( self.m_shortHunterModel ) ) then
+                self.ph_prop:SetModel("models/player/kleiner.mdl")
+                self:PHXChatInfo("WARNING", "PROP_PLAYERMDL_BANNED")
+            elseif table.HasValue( PHX.PROP_PLMODEL_BANS, string.lower( self:GetInfo("cl_playermodel") ) ) then
+                self.ph_prop:SetModel("models/player/kleiner.mdl")
+                self:PHXChatInfo("WARNING", "PROP_PLAYERMDL_BANNED")
+            else
+                self.ph_prop:SetModel( self.m_shortHunterModel )
+            end
+        end
+        
+        self.ph_prop:SetSolid(SOLID_BBOX)
+        self.ph_prop:SetOwner( self )
+        self:SetNWEntity("PlayerPropEntity", self.ph_prop)
+    
+    end
+
+    function Player:PHSendHullInfo( xymax, zmax, zdmax, health )
+        net.Start("SetHull")
+            net.WriteInt( xymax, 32)
+            net.WriteInt( zmax,  32)
+            net.WriteInt( zdmax, 32)
+            net.WriteInt( health, 9)
+        net.Send(self)
+    end
+    
+    function Player:SetPlayerLockedRot( bool )
+        self:SetNWBool("PlayerLockedRotation", bool)
+    end
+    
+    function Player:SendRotState( int )    
+        net.Start( "PHX.rotateState" )
+            net.WriteUInt(int, 1)
+        net.Send( self )
+    end
+    
+    function Player:PHAdjustView( hullz, dhullz )
+        self:SetViewOffset( Vector(0,0,hullz) )
+        self:SetViewOffsetDucked( Vector(0,0,dhullz) )
+    end
+    
+    function Player:PHResetView()
+        self:SetViewOffset( Vector(0,0,64) )
+        self:SetViewOffsetDucked( Vector(0,0,28) )
+    end
+
 	function Player:SubTauntRandMapPropCount()
 		local count = self:GetNWInt("iRandMapPropCount", 0)
 		if count <= 0 then return end
@@ -127,7 +239,6 @@ if SERVER then
 		end
 	
 		if self:HasFakePropEntity() and self:Alive() and self:Team() == TEAM_PROPS then
-			-- todo: See cl_init.lua @ 394, values must be match!
 			local trace = {}
 			local dist = PHX.DecoyDistance
             local min,max = self:GetHull()
@@ -155,7 +266,6 @@ if SERVER then
                 self.propdecoy:SetOwner( self )
                 
 				timer.Simple(0, function() 
-					--decoy:TakeModelFromMap()
 					self:SendSurfaceSound('buttons/lever4.wav')
 				end)
 				
