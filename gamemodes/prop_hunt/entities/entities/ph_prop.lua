@@ -37,13 +37,16 @@ if CLIENT then
 end
 
 ENT.GetPlayerColor = function( self )
-    return self:GetEntityColor()
+    if GetGlobalBool( "ph_enable_prop_player_color" , false ) then
+        return self:GetEntityColor()
+    end
 end
 
 function ENT:CalcRotation( ply, pos, ang, bLock )
     local min       = self:OBBMins()
     local info      = ply:GetInfo("cl_playermodel")
 	local rotMode   = GetGlobalBool( "ph_exp_rot_pitch", false )
+    local TranslatedModel = player_manager.TranslatePlayerModel( info )
     
 	local z  
     if !bLock then
@@ -59,8 +62,8 @@ function ENT:CalcRotation( ply, pos, ang, bLock )
     end
     
 	local posx      = pos - self.PropPosition
-    local plyModel  = string.lower(self:GetModel())
-    if (info and info ~= nil) and plyModel == "models/player/kleiner.mdl" or plyModel == player_manager.TranslatePlayerModel( baseModel ) then
+    local plyModel  = string.lower( self:GetModel() )
+    if (info and info ~= nil) and plyModel == "models/player/kleiner.mdl" or plyModel == TranslatedModel then
         posx = pos
     end
 	
@@ -78,7 +81,7 @@ function ENT:Think()
 		if GetGlobalBool( "ph_exp_rot_pitch", false ) and pl:HasPropPitchRotAllowed() then
 			self:SetRotationAngle( Angle( ang.p, ang.y, 0 ) )
 		else
-			-- switch back to old PH:E/Old "Yaw" rotation
+			-- switch back to Classic "Yaw" rotation
 			self:SetRotationAngle( Angle( 0, ang.y, 0 ) )
 		end
         self:CalcRotation( pl, pos, self:GetRotationAngle(), lockstate )

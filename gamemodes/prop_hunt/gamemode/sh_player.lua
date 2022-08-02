@@ -126,25 +126,21 @@ end
 
 function Player:PHSetColor( ColOverride )
 
-    --if !self:Alive() or self:Team() == TEAM_UNASSIGNED or self:Team() == TEAM_SPECTATOR then return end
+    if !self:Alive() or self:Team() == TEAM_UNASSIGNED or self:Team() == TEAM_SPECTATOR then return end
 
     local col = Vector( 0, 0, 0 )
     col = Vector( self:GetInfo("cl_playercolor") )
     
     if ColOverride and ColOverride ~= nil and isvector(ColOverride) then col = ColOverride end
     
-    if self:Team() == TEAM_HUNTERS then
+    if self:Team() == TEAM_HUNTERS and PHX:GetCVar( "ph_enable_hunter_player_color" ) then
     
         self:SetPlayerColor( col )
         
-    elseif self:Team() == TEAM_PROPS then
+    elseif self:Team() == TEAM_PROPS and PHX:GetCVar( "ph_enable_prop_player_color" ) then
     
         local ph_prop = self:GetPlayerPropEntity()
         ph_prop:SetEntityColor( col )
-        
-        --[[ ph_prop.GetPlayerColor = function()
-            return col
-        end ]]
         
     end
     

@@ -20,7 +20,6 @@ function draw.Circle( x, y, radius, seg )
 end
 
 include("sh_init.lua")
---include("sh_config.lua")
 CL_GLOBAL_LIGHT_STATE	= 0
 include("cl_lang.lua")
 include("cl_fb_core.lua")
@@ -43,23 +42,37 @@ local client_prop_light 	= false
 local blind 				= false
 local CL_GLIMPCAM 		    = 0
 local MAT_LASERDOT 		    = Material("sprites/glow04_noz")
-local IndicatorColor = {
-  ok =      Color(20 , 250,  0, 255),
-  no =      Color(250, 250,  0, 255),
-}
-local mat 		= "prophunt_enhanced/sprites/luckyball"
-local pointer 	= "prophunt_enhanced/sprites/luckyball_pointer"
-local dmat		= "prophunt_enhanced/sprites/devilball"
-local dpointer	= "prophunt_enhanced/sprites/devilball_pointer"
-local tutormat 	= "vgui/hud_control_help.png"
-local crosshair = Material("vgui/hud_crosshair")
+local mat 		            = "prophunt_enhanced/sprites/luckyball"
+local pointer 	            = "prophunt_enhanced/sprites/luckyball_pointer"
+local dmat		            = "prophunt_enhanced/sprites/devilball"
+local dpointer	            = "prophunt_enhanced/sprites/devilball_pointer"
+local tutormat 	            = "vgui/hud_control_help.png"
+local crosshair             = Material("vgui/hud_crosshair")
+local curshow 	            = 0
+local lgWind 	            = {}
 
+--[[]]--
 local decoy = {
     indicator   = "vgui/phehud/info_decoy",
     radial      = "vgui/phehud/info_decoy_orient"
 }
-local lgWind 	= {}
-local curshow 	= 0
+local DecoyColor = { -- for decoy indicator
+    invalid = Color(225,  25,  25),
+    far     = Color(220,  40,  25)
+}
+local WordBoxCol = {
+    bg      = Color(  0,   0,   0,  75),
+    generic = Color(250, 250, 250, 255),
+    hunter  = Color(255, 255,   0, 255)
+}
+local FZTextColor = {
+    fore    = Color(255,  10,  10, 255),
+    outline = Color(0  ,   0,   0, 255)
+}
+local IndicatorColor = {
+    ok      = Color( 20, 250,   0, 255),
+    no      = Color(250, 250,   0, 255)
+}
 
 -- // local functions \\
 local function DrawWaypointMarker( pl, matMarker, pointer, entToFind, offset )
@@ -127,10 +140,10 @@ local function DrawLine( pl, spriteMat, forTeam, dist, sizex, sizey, convarToChe
                 decoyCanBePlaced = PHX:FTranslate( "DECOY_INDICATOR_OK", input.GetKeyName(GetConVar("ph_cl_decoy_spawn_key"):GetInt()) )
             else
                 decoyCanBePlaced = PHX:FTranslate( "DECOY_INDICATOR_INVALID" )
-                colour = Color(225, 25, 25)
+                colour = DecoyColor.invalid
             end
         else
-            colour = Color(220, 40, 25)
+            colour = DecoyColor.far
             decoyCanBePlaced = PHX:FTranslate( "DECOY_INDICATOR_TOOFAR" )
         end
         
@@ -155,12 +168,6 @@ local function getIndicColor( trace, fallback, colorTrue, colorFalse )
         
     return color
 end
-
--- Called immediately after starting the gamemode 
---[[ local function Initialize()
-	
-end
-hook.Add("Initialize", "PH_Initialize", Initialize) ]]
 
 -- ShowHelp is now moved to prop_hunt gamemodedir.
 function GM:ShowHelp()
@@ -368,17 +375,10 @@ function HUDPaint()
 		end
 		
 		if blindlock_time_left_msg then
-			--[[ surface.SetFont("HunterBlindLockFont")
-			local tw, th = surface.GetTextSize(blindlock_time_left_msg)
-			
-			draw.RoundedBox(8, 20, 20, tw + 20, 26, Color(0, 0, 0, 75))
-			draw.DrawText(blindlock_time_left_msg, "HunterBlindLockFont", 31, 26, Color(255, 255, 0, 255), TEXT_ALIGN_LEFT) ]]
             
             local cX,cY = ScrW()*0.5,ScrH()*0.5
             
-            if LocalPlayer():Team() == TEAM_HUNTERS and LocalPlayer():Alive() and blindlock_time_left > 1 then
-                --surface.DrawCircle( cX, cY, 100 + math.sin( CurTime() ) * 60, Color( 128, 128, 128 ) )
-                
+            if LocalPlayer():Team() == TEAM_HUNTERS and LocalPlayer():Alive() and blindlock_time_left > 1 then                
                 local time = math.sin( CurTime() )
                 
                 surface.SetDrawColor( 0, 92, 132, 210 )
@@ -386,10 +386,10 @@ function HUDPaint()
                 draw.Circle( cX,ScrH()*0.65, 50 + time * 30, time * 20 + 25 )
             
                 draw.WordBox( 4, cX, cY, blindlock_time_left_msg, "PHX.TitleFont",
-                Color(0,0,0,75), Color(250,250,250,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM )
+                WordBoxCol.bg, WordBoxCol.generic, TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM )
             else
                 draw.WordBox( 8, 20, 20, blindlock_time_left_msg, "HunterBlindLockFont",
-                Color(0,0,0,75), Color(255,255,0,255), TEXT_ALIGN_LEFT )
+                WordBoxCol.bg, WordBoxCol.hunter, TEXT_ALIGN_LEFT )
             end
 		end
 	end
@@ -417,11 +417,14 @@ function HUDPaint()
         trace = GAMEMODE.ViewCam:CommonCamCollEnabledView( LocalPlayer():EyePos(), LocalPlayer():EyeAngles(), cHullz )
 		local filter = {}
 		
-		for k,v in pairs(ents.GetAll()) do
+        table.Add(filter, ents.FindByClass("ph_prop"))
+        table.Add(filter, player.GetAll())
+        
+		--[[ for k,v in pairs(ents.GetAll()) do
 			if v:GetClass() == "ph_prop" or string.lower(v:GetClass()) == "player" then
 				table.insert(filter, v)
 			end
-		end
+		end ]]
 
 		trace.filter = filter
 		
@@ -443,7 +446,7 @@ function HUDPaint()
 		local w1, h1 = surface.GetTextSize( transtext );
 		local textx = ScrW()/2
 		local steamx = (ScrW()/2) - 32
-		draw.SimpleTextOutlined(transtext , "TrebuchetBig", textx, ScrH()*0.75, Color(255, 10, 10, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1.5, Color(0, 0, 0, 255))
+		draw.SimpleTextOutlined(transtext , "TrebuchetBig", textx, ScrH()*0.75, FZTextColor.fore, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1.5, FZTextColor.outline)
 	end
     
     -- Draw a sprite
@@ -456,9 +459,15 @@ hook.Add("HUDPaint", "PH_HUDPaint", HUDPaint)
 -- After the player has been drawn
 function PH_PostPlayerDraw(pl)
 	-- Draw a line on hunters
-	if PHX:GetCLCVar( "ph_cl_spec_hunter_line" ) && (!LocalPlayer():Alive() || LocalPlayer():Team() == TEAM_SPECTATOR) then        
+	if PHX:GetCLCVar( "ph_cl_spec_hunter_line" ) && (!LocalPlayer():Alive() || LocalPlayer():Team() == TEAM_SPECTATOR) and pl:Team() == TEAM_HUNTERS then
+        local eyepos = pl:GetShootPos()
+        local eyeAtt = pl:GetAttachment( pl:LookupAttachment( "eyes" ) )
+        if (eyeAtt and eyeAtt ~= nil) and (eyeAtt.Pos and eyeAtt.Pos ~= nil) then
+            eyepos = eyeAtt.Pos
+        end
+    
         local trace = {}
-        trace.start = pl:GetShootPos()
+        trace.start = eyepos
         trace.endpos = pl:GetEyeTrace().HitPos
         
         render.DrawLine(trace.start, trace.endpos, team.GetColor(pl:Team()), true)
@@ -485,11 +494,15 @@ function drawPropSelectHalos()
             trace = GAMEMODE.ViewCam:CommonCamCollEnabledView( LocalPlayer():EyePos(), LocalPlayer():EyeAngles(), cHullz )
 			
 			local filter = {} -- We need to filter out players and the ph_prop.
-			for k,v in pairs(ents.GetAll()) do
-				if v:GetClass() == "ph_prop" or string.lower(v:GetClass()) == "player" then
-					table.insert(filter, v)
-				end
-			end
+            
+			table.Add(filter, ents.FindByClass("ph_prop"))
+            table.Add(filter, player.GetAll())
+            
+            --[[ for k,v in pairs(ents.GetAll()) do
+                if v:GetClass() == "ph_prop" or string.lower(v:GetClass()) == "player" then
+                    table.insert(filter, v)
+                end
+            end ]]
 			
 			trace.filter = filter
 			
@@ -636,18 +649,6 @@ net.Receive( "PHX.DeathNoticeDecoy", function()
     
     PHX:DrawDecoyDeathNotice( attacker, inflictor )
 end )
-
---[[ -- Restore Player color function
-net.Receive( "PHX.ChangePropColor", function()
-    local vectorColor = net.ReadVector()
-    local entity = net.ReadEntity()
-    
-    if IsValid(entity) then
-        entity.GetPlayerColor = function()
-            return vectorColor
-        end
-    end
-end ) ]]
 
 -- Language Preview Window
 function PHX:showLangPreview()

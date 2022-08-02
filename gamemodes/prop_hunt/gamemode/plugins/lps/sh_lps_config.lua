@@ -1,5 +1,5 @@
 -- Obsolete: Weapon class names to choose from (if using random weapons for Last Prop Standing):
-PHX.LPS.WEAPONS = { "weapon_357" } -- Obsolete, no longer used
+-- PHX.LPS.WEAPONS = { "weapon_357" } -- Obsolete, no longer used
 
 function PHX.LPS:GetHexColor( color, convar, isRainbow, alpha )
     
@@ -174,7 +174,13 @@ PHX.LPS.WEAPON_NEW = {
             ChargeFX:SetEntity( WepEnt )
             ChargeFX:SetAttachment(1)
             
-            WepEnt:EmitSound( blaster.ChargeSound )
+            --WepEnt:EmitSound( blaster.ChargeSound )
+            
+            local activewep = ply:GetActiveWeapon()
+            if IsValid(activewep) and activewep:GetClass() == PHX.LPS.DUMMYWEAPON then
+                activewep:EmitSound( blaster.ChargeSound )
+            end
+            
             util.Effect( "phx_blaster_charge", ChargeFX )
             
             timer.Simple(self.Delay, function()
@@ -205,8 +211,11 @@ PHX.LPS.WEAPON_NEW = {
                     util.Effect( "phx_blaster_muzzle", shootFX )
                     
                     ply:ViewPunch( Angle(math.Rand(-20,20), math.Rand(-10,25), 0) )
-                
-                    WepEnt:EmitSound( blaster.ShootSound )
+                    
+                    --WepEnt:EmitSound( blaster.ShootSound )
+                    if IsValid(activewep) and activewep:GetClass() == PHX.LPS.DUMMYWEAPON then
+                        activewep:EmitSound( blaster.ShootSound )
+                    end
                     
                     -- Disintegrate, the boom thingy
                     timer.Simple(delay, function()
@@ -279,13 +288,17 @@ PHX.LPS.WEAPON_NEW = {
             FireFX:SetEntity( WepEnt )
             FireFX:SetAttachment( PHX.LPS.RPG_AttachPos )
             
-            WepEnt:EmitSound( rpg.FireSound )
+            local activewep = ply:GetActiveWeapon()
+            if IsValid(activewep) and activewep:GetClass() == PHX.LPS.DUMMYWEAPON then
+                activewep:EmitSound( rpg.FireSound )
+            end
+            
             --"MuzzleFlash" don't have Data:GetAttachment apparently, instead it will always attach on attachment ID #1 and cannot be interchangable.
             util.Effect( "ChopperMuzzleFlash", FireFX )
 			
             timer.Simple(self.Delay, function()
                 if IsValid(ply) and ply:Alive() and IsValid( WepEnt ) then
-                  if ply.propLPSAmmo > 0 or ply.propLPSAmmo == -1 then
+                  if ply:GetLPSAmmo() > 0 or ply:GetLPSAmmo() == -1 then
                     ply:SetLPSWeaponState( LPS_WEAPON_READY )
                   else
                     ply:SetLPSWeaponState( LPS_WEAPON_OUTOFAMMO )
@@ -307,38 +320,140 @@ PHX.LPS.WEAPON_NEW = {
             local tr = util.TraceLine(trace)
 			local Forward = tr.Normal -- ply:EyeAngles():Forward()
             
-            local r = ents.Create("rpg_missile")
-            if (IsValid(r)) then
-                r:SetPos( ShootPos + Forward * 8 ) --( ply:GetShootPos() + Forward * 16 )
-                r:SetAngles( ply:EyeAngles() )
-                r:Spawn()
-                r:SetVelocity( Forward * 300 + Vector(0, 0, 128) )
-                r:SetSaveValue("m_flDamage", rpg.Damage)
-                r:SetOwner( ply )
+            if SERVER then
+                local r = ents.Create("rpg_missile")
+                if (IsValid(r)) then
+                    r:SetPos( ShootPos + Forward * 8 ) --( ply:GetShootPos() + Forward * 16 )
+                    r:SetAngles( ply:EyeAngles() )
+                    r:Spawn()
+                    r:SetVelocity( Forward * 300 + Vector(0, 0, 128) )
+                    r:SetSaveValue("m_flDamage", rpg.Damage)
+                    r:SetOwner( ply )
+                end
             end
         
         end
     },
     
-    --[[ ["laser"]   = {
-        Delay           = 0.01,
+    ["laser"]   = {
+        Delay           = 0.1,
         AmmoCount       = -1,
         WorldModel      = Model("models/weapons/w_irifle.mdl"),
         Type            = "custom",
         Reload          = false,
         
+        FixAngles       = Angle(0,180,0),
+        FixPos          = Vector(0,10,0),
+        
         Function        = function( self, ply )
-            -- todo: Looking for help writing laser codes.
+            
+            --[[ if SERVER then
+                if (!ply.LPSLaserFireSound or ply.LPSLaserFireSound == nil) then
+                    
+                    local Recip = RecipientFilter()
+                    Recip:AddAllPlayers()
+                    ply.LPSLaserFireSound   = CreateSound( ply, "lps/laser_loop.wav", Recip )
+                    
+                end
+            end ]]
+        
+            local Damage     = 3 --PHX:GetCVar( "lps_wepdamage_laser" ) or 3
+            
+            local WepEnt = ply:GetLPSWeaponEntity()
+            --local ShootPos = WepEnt:GetAttachment( 1 ).Pos
+            
+            local _,plmaxs = ply:GetHull() --Todo: OBBMaxs
+            
+            local trace = {}
+            trace          = GAMEMODE.ViewCam:CamColEnabled( ply:EyePos(), ply:EyeAngles(), trace, "start", "endpos", 32768/2, 32768, 32768/2, plmaxs.z )
+            trace.filter   = { ply:GetPlayerPropEntity() }
+            
+            ply:LagCompensation(true)
+            local tr = util.TraceLine(trace)
+            ply:LagCompensation(false)
+            
+            if SERVER then
+                if tr.Entity and tr.Entity:IsValid() then
+                    if tr.Entity:IsPlayer() and tr.Entity:Team() == TEAM_HUNTERS and 
+                    tr.Entity:Alive() and tr.Entity:Health() > 0 then
+                    
+                    tr.Entity:TakeDamage( Damage, ply, WepEnt )
+                    end
+                end
+            end
+            
+            local HitMark = EffectData()
+            HitMark:SetOrigin(tr.HitPos)
+            HitMark:SetNormal(tr.HitNormal)
+            util.Effect("AR2Impact", HitMark)
         end
-    },  ]]
+    },
 }
+
+-- Laser Hook Helper
+if CLIENT then
+    local LaserTexture  = Material( "trails/laser" )
+    local LaserColor    = Color( 250, 0, 0, 255 )
+    
+    -- Currently it's the only proper way to show laser
+    -- if Anyone had better solution, please let me know!
+    hook.Add("RenderScreenspaceEffects", "LPS.LaserBeamDraw", function()    
+        for _,v in pairs(team.GetPlayers(TEAM_PROPS)) do
+            if v:Alive() and v:IsLastStanding() and GetGlobalInt("InRound", false) then
+                if v:LPSFiringStatus() then                    
+                    local _,plmaxs = v:GetHull()
+                    local trace = GAMEMODE.ViewCam:CamColEnabled( v:EyePos(), v:EyeAngles(), {}, "start", "endpos", 32768/2, 32768, 32768/2, plmaxs.z )
+                    trace.filter = v:GetPlayerPropEntity()
+                    local tr = util.TraceLine(trace)
+                    
+                    local ent = v:GetLPSWeaponEntity()
+                    if IsValid(ent) then
+                        local att = ent:GetAttachment(1)
+                        local start = tr.StartPos
+                        if (att) then start = att.Pos end
+                        local endpos = tr.HitPos
+                        
+                        cam.Start3D()
+                            render.SetMaterial( LaserTexture )        
+                            render.DrawBeam( start, endpos, 32, 1, 0, LaserColor )
+                        cam.End3D()
+                    end
+                end
+            end
+        end
+    end)
+end
+
+--[[ if SERVER then
+    hook.Add("PlayerTick", "LPS.LaserSoundControl", function( ply, mv )
+        if (PHX:GetCVar( "lps_enable" ) and (ply.LPSLaserFireSound and ply.LPSLaserFireSound ~= nil) and
+            ply:Team() == TEAM_PROPS and ply:IsLastStanding() and ply:Alive() and GetGlobalInt("InRound", false) and !ply:InVehicle()) then
+            if !ply:LPSIsAllowedToFire() then
+                ply.LPSLaserFireSound:Stop()
+            else
+                ply.LPSLaserFireSound:Play()
+            end
+        end
+    end)
+
+    local function ClearLPSFireSound( ply )
+        if ply.LPSLaserFireSound and ply.LPSLaserFireSound ~= nil then
+            ply.LPSLaserFireSound:Stop()
+        end
+        ply.LPSLaserFireSound = nil
+    end
+
+    hook.Add("PostPlayerDeath", "LPS.LaserSoundControl.Death", ClearLPSFireSound)
+    hook.Add("PlayerSpawn", "LPS.LaserSoundControl.Spawn", ClearLPSFireSound)
+end ]]
+-- End of Laser Hook Helper
 
 hook.Add("Initialize", "LPS.Init_or_ExternalWeaponEntry", function()
     --[[
         Usage: list.Set("LPS.XCustomWeapon", "weapon name", { < LPS bullet structure > })
     ]]
     for name,data in pairs(list.Get("LPS.XCustomWeapon")) do
-        if !data or data == nil or table.IsEmpty(data) then
+        if (!data or data == nil) or table.IsEmpty(data) then
             PHX.VerboseMsg("[LPS] Weapon data entry of [".. name .."] is empty! Skipping...")
         else
             PHX.VerboseMsg("[LPS] Adding custom weapon entry of: " .. name)
@@ -350,11 +465,11 @@ end)
 concommand.Add("lps_weapon_list", function(ply)
     if (game.IsDedicated() and ply == NULL) or ply:CheckUserGroup() or ply:IsAdmin() or ply:IsSuperAdmin() then
 		local weps = table.GetKeys( PHX.LPS.WEAPON_NEW )
-		print("Showing all available LPS weapons:")
+		print("[PHX LPS] Showing all available LPS weapons:")
 		for _,v in pairs(weps) do
 			print("- name: ".. v .. ", type: ".. PHX.LPS.WEAPON_NEW[v].Type)
 		end	
 	else
-        print("Sorry, you can't access this command.")
+        print("[PHX LPS] Sorry, you can't access this command.")
     end
 end, nil, "List Weapon Info for Last Prop Standing.")

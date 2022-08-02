@@ -5,8 +5,8 @@ TEAM_PROPS 	 	= 2
 IS_PHX		 	= true	-- an easy check if PHX is installed.
 
 PHX.ConfigPath 	= "phx_data"
-PHX.VERSION		= "X2Z (DEV-BRANCH)"
-PHX.REVISION	= "dev-branch" --Format: dd/mm/yy.
+PHX.VERSION		= "X2Z"
+PHX.REVISION	= "25.06.22" --Format: dd/mm/yy.
 
 --[[ BEGIN OF SHARED INIT HEADERS ]]--
 
@@ -223,7 +223,7 @@ DeriveGamemode("fretta")
 IncludePlayerClasses()
 
 -- Information about the gamemode
-GM.Name		= "Prop Hunt X2Z (DEV BRANCH)"
+GM.Name		= "Prop Hunt X2Z"
 GM.Author	= "Wolvindra-Vinzuerio & D4UNKN0WNM4N"
 
 -- Versioning
@@ -265,8 +265,8 @@ local mark = utf8.char(9733)
 GM.PHXContributors			= {
 	"Galaxio "..mark.." (Support)",
 	"Godfather "..mark.." (Support)",
-    --"? "..mark.." (Support)",
-    --"? "..mark.." (PH:E+ Contributor)",
+    "? "..mark.." (Support)",
+    "? "..mark.." (PH:E+ Contributor)",
     "Fryman (Web Hosting)",
 	"Phyremaster (Last Prop Standing)",
 	"Berry (Russian Translation)",

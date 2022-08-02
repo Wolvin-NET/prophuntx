@@ -64,12 +64,3 @@ hook.Add("HUDPaint", "LPS.WeaponHUDIndicator", function()
             TextBox.Bcolor, TextBox.Fcolor, TEXT_ALIGN_CENTER )
     end
 end)
-
-hook.Add("SetupMove", "LPS.CLShootWeapon",function(ply,mv)
-    if not IsFirstTimePredicted() then return end
-    if not IsValid(ply) or ply != LocalPlayer() then return end
-    
-    if PHX:GetCVar( "lps_enable" ) and mv:KeyDown( IN_ATTACK ) and ply:Team() == TEAM_PROPS and ply:Alive() and GetGlobalInt("InRound", false) then
-        RunConsoleCommand("prop_shoot")
-    end
-end)

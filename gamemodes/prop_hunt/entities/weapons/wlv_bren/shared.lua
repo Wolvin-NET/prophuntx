@@ -13,7 +13,7 @@ Supported Weapon Base:
 ]]--
 
 -- Basic information
-SWEP.Category				= "Wolvin\'s PH:X Bonus Weapon"
+SWEP.Category				= "Prop Hunt: X"
 SWEP.Author					= "Wolvindra-Vinzuerio"
 SWEP.Contact				= "wolvindra.vinzuerio@gmail.com"
 SWEP.Purpose				= "Just aim and shot at those innocent props lol."

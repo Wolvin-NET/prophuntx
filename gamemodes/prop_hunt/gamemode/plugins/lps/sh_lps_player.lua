@@ -57,30 +57,169 @@ if SERVER then
         end
     end
     
-    --[[
-        LPS_WEAPON_UNARMED      = 0
-        LPS_WEAPON_READY        = 1
-        LPS_WEAPON_RELOAD       = 2
-        LPS_WEAPON_OUTOFAMMO    = 3
-    ]]--
-    function Player:SetLPSWeaponState( state )
-        self.LPSWepState = state
-        self:SetNWInt( "bLps.WeaponState", self.LPSWepState )
-    end
-    
-    function Player:SetLPSWeapon( strWeapon )
-        self.LPSWeapon = strWeapon
-        self:SetNWString( "bLps.WeaponName", self.LPSWeapon )
-    end
-    
+    --[[ -- unused
     function Player:SetLPSWeaponReloadType( bool )
         self:SetNWBool( "bLps.WeaponReloadType", bool )
+    end ]]
+
+end
+
+--[[ STATES
+    LPS_WEAPON_UNARMED      = 0
+    LPS_WEAPON_READY        = 1
+    LPS_WEAPON_RELOAD       = 2
+    LPS_WEAPON_OUTOFAMMO    = 3
+]]--
+function Player:SetLPSWeaponState( state )
+    self.LPSWepState = state
+    self:SetNWInt( "bLps.WeaponState", self.LPSWepState )
+end
+
+function Player:SetLPSWeapon( strWeapon )
+    self.LPSWeapon = strWeapon
+    self:SetNWString( "bLps.WeaponName", self.LPSWeapon )
+end
+
+function Player:SetLPSAmmoCount( intAmmo )
+    self:SetNWInt( "bLps.AmmoCount", intAmmo )
+end
+
+function Player:LPSFiringState( bool )
+    self:SetNWBool( "bLps.FiringState", bool )
+end
+
+function Player:LPSNextFire( delay )
+    self:SetNWFloat( "bLps.CurTime", CurTime() + delay )
+end
+
+function Player:LPSNextFireDelay()
+    return self:GetNWFloat( "bLps.CurTime", 0.0 )
+end
+
+function Player:LPSSubAmmoCount()
+    if SERVER then
+        local ammo = self:GetLPSAmmo()
+        ammo = ammo - 1
+        self:SetLPSAmmoCount( ammo )    
+    end
+end
+
+-- TODO: Test other custom weapon with reloads:
+-- See their Behaviours
+
+function Player:LPSShootBullets()
+
+    if !IsValid(self) and self:Team() ~= TEAM_PROPS and !self:Alive() then return end
+    if !PHX:GetCVar( "lps_enable" ) then return end
+    if !self:IsLastStanding() then return end
+    if self:GetLPSAmmo() == 0 then return end
+    
+    local plmins,plmaxs = self:GetHull()
+    local qt = GAMEMODE.ViewCam:CommonCamCollEnabledView( self:EyePos(), self:EyeAngles(), plmaxs.z )
+    local ph_prop = self:GetPlayerPropEntity()
+    qt.filter = { ph_prop }
+    local trx = util.TraceLine(qt)
+    if trx.Entity and trx.Entity:IsValid() and PHX:IsUsablePropEntity( trx.Entity:GetClass() ) then
+        return
     end
     
-    function Player:SetLPSAmmoCount( intAmmo )
-        -- do not use self.propLPSAmmo!
-        self:SetNWInt( "bLps.AmmoCount", intAmmo )
+    local name    = self:GetLPSWeaponName()
+    local wepdata = PHX.LPS.WEAPON_NEW[name]
+    if !name or name == "" or name =="No Weapon" or name == nil or 
+    !wepdata or wepdata == nil then 
+        return
     end
+    
+    local wepType = wepdata.Type
+    if wepType == "weapon" then
+        if ( self:LPSNextFireDelay() > CurTime() ) then return end
+        
+        self:LPSNextFire( wepdata.Delay )
+        self:SetLPSAmmoCount( self:GetLPSAmmo() )
+        
+        local wepEntity      = self:GetLPSWeaponEntity()
+        local att            = wepEntity:GetAttachment(1)
+        local shootOrg       = att.Pos
+        local shootAng       = self:EyeAngles()
+        local aimTraceResult = util.LPSgetAccurateAim( { ph_prop }, self:EyePos(), shootOrg, shootAng, plmaxs.z )
+        local AmmoCount      = util.LPSgetConValue( wepdata.AmmoCount )
+        local bullet = {}
+            bullet.Num          = wepdata.Num
+            bullet.Src          = shootOrg
+            bullet.Dir          = aimTraceResult.Normal
+            bullet.Spread       = util.LPSgetSpread( wepdata.Spread )
+            bullet.Tracer       = wepdata.Tracer
+            bullet.TracerName   = wepdata.TracerName
+            bullet.Force        = wepdata.Force
+            bullet.Damage       = util.LPSgetConValue( wepdata.Damage )
+            bullet.AmmoType     = wepdata.AmmoType
+            bullet.Attacker     = self
+            bullet.IgnoreEntity = ph_prop
+            bullet.Callback = function(atk,_,cDamage)
+                cDamage:SetInflictor( atk:GetLPSWeaponEntity() ) -- DON'T USE self ! let the CDamageInfo handles it.
+            end
+        
+        -- Fire Bullet and make us Lag Compesated
+        self:LagCompensation(true)
+        self:FireBullets( bullet )
+        self:LagCompensation(false)
+        
+        local curWep = self:GetActiveWeapon()
+        if self:HasWeapon( PHX.LPS.DUMMYWEAPON ) and curWep:GetClass() == PHX.LPS.DUMMYWEAPON then
+            -- Make Firing Sound to Weapon to prevent duplicated sound.
+            curWep:EmitSound( wepdata.ShootSound )
+        end
+        if wepdata.MuzzleFx and wepdata.MuzzleFx ~= nil then
+			-- arg: Entity, StartPos, EndPos (Origin), Angles
+            wepdata.MuzzleFx( wepEntity, shootOrg, aimTraceResult.HitPos, shootAng )
+        end
+        local viewpunchAng = wepdata.ViewPunch
+        if viewpunchAng and viewpunchAng ~= nil then
+            self:ViewPunch( Angle( math.random(viewpunchAng.x[1],viewpunchAng.x[2]), math.random(viewpunchAng.y[1],viewpunchAng.y[2]), 0 ) )
+        end
+        
+        if AmmoCount > 0 then
+            self:LPSSubAmmoCount()
+        end
+        
+        if self:GetLPSAmmo() == 0 then
+            self:SetLPSWeaponState( LPS_WEAPON_OUTOFAMMO )
+        end
+        
+    elseif wepType == "custom" then
+    
+        if ( self:LPSNextFireDelay() > CurTime() ) then
+            if wepdata.Reload then 
+                self:SetLPSWeaponState( LPS_WEAPON_RELOAD )
+            end
+            return
+        end
+		
+		self:LPSNextFire( wepdata.Delay )
+        self:SetLPSAmmoCount( self:GetLPSAmmo() )
+        
+        if !wepdata.Reload and self:GetLPSAmmo() > 0 or self:GetLPSAmmo() == -1 then
+            self:SetLPSWeaponState( LPS_WEAPON_READY )
+        end
+        
+        -- Judy, do the thing!
+        wepdata:Function( self )
+        
+        local AmmoCount = util.LPSgetConValue( wepdata.AmmoCount )
+        if AmmoCount > 0 then
+            self:LPSSubAmmoCount()
+        end
+        
+        if self:GetLPSAmmo() == 0 then
+            self:SetLPSWeaponState( LPS_WEAPON_OUTOFAMMO )
+        end
+        
+    end
+
+end
+
+function Player:LPSFiringStatus()
+    return self:GetNWBool( "bLps.FiringState", false )
 end
 
 function Player:IsLastStanding()
@@ -103,9 +242,9 @@ function Player:GetLPSWeaponName()
     return self:GetNWString( "bLps.WeaponName", "No Weapon" )
 end
 
-function Player:GetLPSWeaponReloadType()
+--[[ function Player:GetLPSWeaponReloadType()
     return self:GetNWBool( "bLps.WeaponReloadType", false )
-end
+end ]]
 
 function Player:GetLPSAmmo()
     return self:GetNWInt( "bLps.AmmoCount", 0 ) -- can also -1.

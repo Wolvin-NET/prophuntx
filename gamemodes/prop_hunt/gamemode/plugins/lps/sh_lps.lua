@@ -2,6 +2,7 @@ local cvar = {}
 
 math.randomseed(os.time())
 
+-- Public LPS Const
 LPS_WEAPON_UNARMED      = 0
 LPS_WEAPON_READY        = 1
 LPS_WEAPON_RELOAD       = 2
@@ -13,6 +14,7 @@ PHX.LPS.WEAPON2         = {
     NAME    = "",
     DATA    = {}
 }
+PHX.LPS.DUMMYWEAPON     = "weapon_lps"  -- Never change this Constant. It will break the whole LPS Predictions!
 
 cvar["lps_enable"]              = { CTYPE_BOOL,     "1",        CVAR_SERVER_ONLY, "Enable Last Prop Standing?" }
 cvar["lps_weapon"]              = { CTYPE_STRING,   "random",   CVAR_SERVER_ONLY, "If set, should the weapon given by 'random' or specific. See 'lps_weapon_list' for more info." }
@@ -78,7 +80,7 @@ if CLIENT then
             {"lps_mins_prop_players",   "slider",    {min=2,max=game.MaxPlayers(), init="DEF_CONVAR", dec=0, kind="SERVER"}, "LPS_MINIMUM_PROPS_TEAM" },
 			{"lps_enable_music", 	"check", "SERVER",	"LPS_ENABLE_MUSIC"},
             
-            {"", "label", false,    "LPS_APPEARANCES" },            
+            {"", "label", false,    "LPS_APPEARANCES" },
 			{"lps_show_weapon",     "check",     "SERVER", "LPS_SHOW_WEAPON"},
             {"lps_halo_enable",     "check",     "SERVER", "LPS_HALO_ENABLE"},
             {"lps_halo_walls",      "check",     "SERVER", "LPS_HALO_SEETHROUGHWALL"},
@@ -87,7 +89,6 @@ if CLIENT then
             {"lps_trail_color",     "textentry", "SERVER", "LPS_TRAILS_COLOUR"},
             {"lps_trail_texture",   "textentry", "SERVER", "LPS_TRAIL_TEXTURE"},
             
-            {"", "label", false,    "(DEV) Warning: Some NEW weapons don't have ConVars yet!" },
             {"", "label", false,    "LPS_WEAPON_SETTINGS" },
             {"lps_ammocount_revolver" , "slider", {min = -1, max = 500, init = "DEF_CONVAR", dec = 0, kind = "SERVER"}, "LPS_WEPSET_REV_AMMO"},
             {"lps_ammocount_smg" ,      "slider", {min = -1, max = 500, init = "DEF_CONVAR", dec = 0, kind = "SERVER"}, "LPS_WEPSET_SMG_AMMO"},
@@ -104,3 +105,28 @@ if CLIENT then
     
     list.Set("PHX.Plugins","Last Prop Standing",ADDON_INFO)
 end
+
+hook.Add("SetupMove", "LPS.CLShootWeapon",function( ply, mv )
+    if not IsFirstTimePredicted() then return end
+    if not IsValid(ply) then return end
+    if CLIENT then
+        if ply != LocalPlayer() then return end
+    end
+    
+    -- make sure 3 of these entities are exists!
+    local wepEnt    = ply:GetLPSWeaponEntity()
+    local hasWeapon = ply:HasWeapon( PHX.LPS.DUMMYWEAPON )
+    local ActiveWep = ply:GetActiveWeapon()
+    
+    if PHX:GetCVar( "lps_enable" ) and IsValid(wepEnt) and 
+        hasWeapon and ActiveWep:GetClass() == PHX.LPS.DUMMYWEAPON and
+        ply:Team() == TEAM_PROPS and ply:IsLastStanding() and ply:Alive() and GetGlobalInt("InRound", false) then
+        
+        if mv:KeyDown( IN_ATTACK ) then
+            ply:LPSShootBullets()
+            ply:LPSFiringState( true )  -- used for Lasers or any weapons that uses Think function.
+        else
+            ply:LPSFiringState( false ) -- used for Lasers or any weapons that uses Think function.
+        end
+    end
+end)

@@ -37,8 +37,6 @@ local nets = {
     
 	"PHX.scan_ReqTaunts",
 	"PHX.scan_SendTauntLists",
-	
-    "PHX.ChangePropColor",
     
     -- X2Z Very-first Tutorial Window
 	"phx_showVeryFirstTutorial"

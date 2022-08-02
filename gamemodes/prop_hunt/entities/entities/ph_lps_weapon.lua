@@ -12,8 +12,9 @@ ENT.AdminOnly 	= false
 ENT.RenderGroup = RENDERGROUP_BOTH
 
 function ENT:SetupDataTables()
-    self:NetworkVar( "Angle", 0, "FixAngles" )
-    self:NetworkVar( "Vector", 0, "TranslatePos" )
+    self:NetworkVar( "Angle", 0,    "FixAngles" )
+    self:NetworkVar( "Vector", 0,   "TranslatePos" )
+
     if (SERVER) then
         self:SetFixAngles( Angle(0,0,0) )
         self:SetTranslatePos( Vector(0,0,0) )
@@ -21,6 +22,7 @@ function ENT:SetupDataTables()
 end
 
 function ENT:Initialize()
+    self.propNextFire = 0
 	self.Entity:DrawShadow( false ) -- don't draw shadows.
 end
 

@@ -336,7 +336,7 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 			modelPreview:Dock(FILL)
 			modelPreview:SetFOV ( 50 )
 			modelPreview:SetModel ( mdlPath )
-            modelPreview.Entity.GetPlayerColor = function() return GetConVar( "cl_playercolor" ):GetString() end
+            modelPreview.Entity.GetPlayerColor = function() return Vector( GetConVar( "cl_playercolor" ):GetString() ) end
 			
             -- Model FOV Slider
 			local slider = vgui.Create("DNumSlider", panelpreview)
