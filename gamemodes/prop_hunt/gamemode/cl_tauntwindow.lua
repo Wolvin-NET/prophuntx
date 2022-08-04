@@ -48,10 +48,6 @@ local function MainFrame()
 	window.scrollpanel:Dock(FILL)
 	window.scrollpanel.VBar.Scroll = LocalPlayer():GetNWInt("tauntWindowScrolling",0)
 
-	function window.scrollpanel:Paint(w,h)
-		draw.RoundedBox(1, 0, 0, w, h, Color(255,0,0,255))
-	end
-
 	window.list = vgui.Create("DListView", window.scrollpanel)
 	window.list:SetMultiSelect(false)
 	window.list:AddColumn("soundlist") -- does nothing because header is invisible.
