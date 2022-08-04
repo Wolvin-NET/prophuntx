@@ -43,20 +43,32 @@ local function MainFrame()
 		hastaunt = false
 	end
 	
-	window.list = vgui.Create("DListView", window.frame)
-	
+	--Needed to do ScrollPanel because I was unable to modify the VBar.Scroll from a DListView
+	window.scrollpanel = vgui.Create("DScrollPanel", window.frame)
+	window.scrollpanel:Dock(FILL)
+	window.scrollpanel.VBar.Scroll = LocalPlayer():GetNWInt("tauntWindowScrolling",0)
+
+	function window.scrollpanel:Paint(w,h)
+		draw.RoundedBox(1, 0, 0, w, h, Color(255,0,0,255))
+	end
+
+	window.list = vgui.Create("DListView", window.scrollpanel)
 	window.list:SetMultiSelect(false)
 	window.list:AddColumn("soundlist") -- does nothing because header is invisible.
 	window.list.m_bHideHeaders = true
-	window.list:SetPos(10,52) --ignore?
-	--window.list:SetSize(0,505)
 	window.list:SetDataHeight(21)
-	window.list:Dock(FILL) --BOTTOM ?
+	window.list:Dock(TOP) -- TOP is the one working
+	window.list:DisableScrollbar()
 	
+
 	window.comb = vgui.Create("DComboBox", window.frame)
 	window.comb:Dock(TOP)
 	window.comb:SetSize(0, 20)
-	window.comb:SetValue( PHX.DEFAULT_CATEGORY )
+	if (PHX.TAUNTS[LocalPlayer():GetNWString("tauntWindowCategorie", PHX.DEFAULT_CATEGORY)][LocalPlayer():Team()]==nil) then
+		window.comb:SetValue(PHX.DEFAULT_CATEGORY)
+	else
+		window.comb:SetValue( LocalPlayer():GetNWString("tauntWindowCategorie", PHX.DEFAULT_CATEGORY) )
+	end
 	
 	window.input = vgui.Create("DTextEntry", window.frame)
 	window.input:Dock(TOP)
@@ -173,7 +185,11 @@ local function MainFrame()
 	end
 	
 	-- Let's Initialize the window.list.
-	local defaultList = PHX.TAUNTS[PHX.DEFAULT_CATEGORY]
+	local defaultList = PHX.TAUNTS[LocalPlayer():GetNWString("tauntWindowCategorie", PHX.DEFAULT_CATEGORY)]
+	--in case categorie isn't set for the 2 teams
+	if defaultList[LocalPlayer():Team()]==nil then
+		defaultList = PHX.TAUNTS[PHX.DEFAULT_CATEGORY]
+	end
 	
 	-- Make sure each category isn't empty and has lines.
 	local hasLines = false
@@ -181,7 +197,10 @@ local function MainFrame()
 	-- add default list
 	for name,_ in pairs( defaultList[LocalPlayer():Team()] ) do window.list:AddLine( name ) end
 	hasLines = true
-	
+
+	--init size
+	window.list:SetSize(0,table.getn(window.list:GetLines())*21)
+
 	-- add category list
 	for category,_ in pairs( PHX.TAUNTS ) do
 		-- don't add if team taunt data is empty!
@@ -232,6 +251,8 @@ local function MainFrame()
 				self.list:AddLine( name )
 			end
 			hasLines = true
+			window.list:SetSize(1,table.getn(self.list:GetLines())*21)
+			window.scrollpanel.VBar.Scroll = 0
 		else
 			self.list:AddLine( PHX:FTranslate("TM_NO_TAUNTS") )
 			hasLines = false
@@ -253,6 +274,8 @@ local function MainFrame()
 					self.list:AddLine( v )
 				end
 				hasLines = true
+				self.list:SetSize(0,table.getn(self.list:GetLines())*21)
+				window.scrollpanel.VBar.Scroll = 0
 			else
 				self.list:AddLine( PHX:FTranslate("TM_TAUNTS_SEARCH_NOTHING", strToFind) )
 				hasLines = false
@@ -286,6 +309,7 @@ local function MainFrame()
 		window.input:SetText("")
 			
 		local t = PHX.TAUNTS[val][LocalPlayer():Team()]
+		LocalPlayer():SetNWString("tauntWindowCategorie", val)
 		window:ResetList( t )
 			
 		self:SortAndStyle(window.list)
@@ -360,6 +384,8 @@ local function MainFrame()
 			local getline = TranslateTaunt(window.CurrentCategory, window.list:GetLine(window.list:GetSelectedLine()):GetValue(1))
 		
 			SendToServer(getline)
+			--Saving state of scrollbar
+			LocalPlayer():SetNWInt("tauntWindowScrolling",window.scrollpanel.VBar.Scroll)
 			window.frame:Close()
 		end
 	end)
@@ -387,6 +413,8 @@ local function MainFrame()
 		end
 	end)
 	CreateStyledButton(FILL,86,PHX:FTranslate("TM_TOOLTIP_CLOSE"),{5,5,5,5},"vgui/phehud/btn_close.vmt",FILL, function()
+	--Saving state of scrollbar
+		LocalPlayer():SetNWInt("tauntWindowScrolling",window.scrollpanel.VBar.Scroll)
 		window.frame:Close()
 	end)
 	
@@ -429,9 +457,20 @@ local function MainFrame()
 			end
 			
 			menu:AddOption(PHX:FTranslate("TM_TOOLTIP_PLAYTAUNT"), function() if hasLines then SendToServer(getline); end end):SetIcon("icon16/sound.png")
-			menu:AddOption(PHX:FTranslate("TM_TOOLTIP_PLAYCLOSE"), function() if hasLines then SendToServer(getline); window.frame:Close(); end end):SetIcon("icon16/sound_delete.png")
+			menu:AddOption(PHX:FTranslate("TM_TOOLTIP_PLAYCLOSE"), function()
+				if hasLines then 
+					SendToServer(getline)
+					--Saving state of scrollbar
+					LocalPlayer():SetNWInt("tauntWindowScrolling",window.scrollpanel.VBar.Scroll)
+					window.frame:Close()
+				end 
+			end):SetIcon("icon16/sound_delete.png")
 			menu:AddSpacer()
-			menu:AddOption(PHX:FTranslate("TM_MENU_CLOSE"), function() window.frame:Close(); end):SetIcon("icon16/cross.png")
+			menu:AddOption(PHX:FTranslate("TM_MENU_CLOSE"), function()
+				--Saving state of scrollbar
+				LocalPlayer():SetNWInt("tauntWindowScrolling",window.scrollpanel.VBar.Scroll)
+				window.frame:Close()
+			end):SetIcon("icon16/cross.png")
 			menu:Open()
 		end
 	end
@@ -442,6 +481,8 @@ local function MainFrame()
 	
 	window.list.DoDoubleClick = function(id,line)
 		hastaunt = true
+		--Saving state of scrollbar
+		LocalPlayer():SetNWInt("tauntWindowScrolling",window.scrollpanel.VBar.Scroll)
 		local getline = TranslateTaunt(window.CurrentCategory, window.list:GetLine(window.list:GetSelectedLine()):GetValue(1))
 		SendToServer(getline)
 		
@@ -450,12 +491,17 @@ local function MainFrame()
 	
 	window.frame:MakePopup()
 	window.frame:SetKeyboardInputEnabled(false)
+	
 end
 
 concommand.Add("ph_showtaunts", function(ply)
 if ply:Alive() and window.state and ply:GetObserverMode() == OBS_MODE_NONE then
 	if !window.CurrentlyOpen then
 		MainFrame()
+	else
+		--Saving state of scrollbar
+		LocalPlayer():SetNWInt("tauntWindowScrolling",window.scrollpanel.VBar.Scroll)
+		window.frame:Close()
 	end
 else
 	PHX:ChatInfo( PHX:Translate("TM_PLAY_ONLY_ALIVE"), "WARNING" )
