@@ -11,6 +11,11 @@ function PHX.UI:GetMutedStateIcon(bool)
 end
 
 function PHX.UI.BaseMainMenu(ply, cmd, args)
+
+    if (game.SinglePlayer()) then
+        chat.AddText(Color(255,0,0), "WARNING: Menu is not available in Single Player Mode!")
+        return
+    end
 	
 	if (PHX.LANGUAGES[PHX:GetCLCVar( "ph_cl_language" )] == nil or table.IsEmpty(PHX.LANGUAGES[PHX:GetCLCVar( "ph_cl_language" )])) then
 		PHX:AddChat("Error: Cannot open Prop Hunt X Menu because the language you're using is not available.", Color(255,0,0))
@@ -570,6 +575,7 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
         
 		PHX.UI:CreateVGUIType("ph_use_custom_plmodel", "check", "SERVER", grid, "PHXM_ADMIN_CUSTOM_MODEL")
 		PHX.UI:CreateVGUIType("ph_use_custom_plmodel_for_prop", "check", "SERVER", grid, "PHXM_ADMIN_CUSTOM_MODEL_PROP")
+        PHX.UI:CreateVGUIType("ph_allow_armor", "check", "SERVER", grid, "PHXM_ADMIN_ALLOWARMOR")
 		
         PHX.UI:CreateVGUIType("","spacer",nil,grid,"" )
 		PHX.UI:CreateVGUIType("", "label", "PHX.MenuCategoryLabel", grid, "PHXM_TAUNT_SETTINGS")
@@ -823,7 +829,7 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 	end)
 	
 	-- Verify if current player is Admin or not.
-	if ply:IsAdmin() then
+	if ply:IsSuperAdmin() or ply:CheckUserGroup() then
 		net.Start("CheckAdminFirst")
 		net.SendToServer()
 	end

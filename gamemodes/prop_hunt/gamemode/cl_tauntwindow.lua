@@ -1,3 +1,5 @@
+-- QoL Improvement by: Darktooth (Scrollbar improvement, taunt close by bind keys, and other enhancement)
+-- Special thanks for the idea and implementations!
 local window = {}
 
 local hastaunt = false

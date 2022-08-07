@@ -109,6 +109,9 @@ CVAR["ph_taunt_pitch_range_max"]		=	{ CTYPE_FLOAT, "200.0", CVAR_SERVER_ONLY, "M
 
 CVAR["ph_enable_taunt_scanner"]			=	{ CTYPE_BOOL, 	"1", CVAR_SERVER_ONLY, "(Require Map Restart) Enable Taunt Scanner?" }
 
+-- Convars for Armor
+CVAR["ph_allow_armor"]			        =	{ CTYPE_BOOL, 	"1", CVAR_SERVER_ONLY, "Allow use of Armor? May require round restart." }
+
 CVAR["ph_prop_jumppower"]				=	{ CTYPE_FLOAT, 	"1.5", CVAR_SERVER_ONLY, "Multipliers for Prop Jump Power (Do not confused with Prop's Gravity!). Default is 1.4. Min. 1.", nil,
 function(cvarname, val)
     cvars.AddChangeCallback( cvarname, function(_,_,new )    
@@ -151,7 +154,7 @@ CVAR["ph_usable_prop_type"]					=	{ CTYPE_NUMBER, "1", CVAR_SERVER_ONLY, "Usable
 			PHX:SetUsableEntity( tonumber(new) )
 			SetGlobalInt( cvarname, tonumber(new) )
 		end, "phx.cvnum_" .. cvarname )
-	end, "Usable Prop Type (1 to 4)" }
+	end }
 CVAR["ph_usable_prop_type_notice"]			= 	{ CTYPE_BOOL,	"1", CVAR_SERVER_ONLY, "Notify about certain entities cannot be replicated by pressing 'E'. This only works if 'ph_usable_prop_type' is set to '3' or '4'." }
 
 CVAR["ph_enable_lucky_balls"]				=	{ CTYPE_BOOL, 	"1", CVAR_SERVER_ONLY, "Spawn Lucky balls on breakable props?" }
@@ -164,7 +167,16 @@ CVAR["ph_hunter_blindlock_time"]			=	{ CTYPE_NUMBER, "30", CVAR_SERVER_ONLY, "Ho
 CVAR["ph_round_time"]						=	{ CTYPE_NUMBER, "300", CVAR_SERVER_ONLY, "(Require Map Restart) Time (in seconds) for each rounds." }
 CVAR["ph_rounds_per_map"]					=	{ CTYPE_NUMBER, "10", CVAR_SERVER_ONLY, "(Require Map Restart) Numbers of rounds played on a single map (Default: 10)" }
 CVAR["ph_waitforplayers"]					=	{ CTYPE_BOOL, 	"1", CVAR_SERVER_ONLY, 	"Should we wait for players for proper round?" }
-CVAR["ph_min_waitforplayers"]				=	{ CTYPE_NUMBER, "1", CVAR_SERVER_ONLY, 	"Numbers of mininum players that we should wait for round start. Value must not contain less than 1.", { min = 1, max = game.MaxPlayers() } }
+CVAR["ph_min_waitforplayers"]				=	{ CTYPE_NUMBER, "1", CVAR_SERVER_ONLY, 	"Numbers of mininum players that we should wait for round start. Value must not contain less than 1.", { min = 1, max = game.MaxPlayers() }, 
+function(cvarname, value)
+    cvars.AddChangeCallback(cvarname, function(_, _, new)
+        if tonumber(new) < 1 then
+            RunConsoleCommand("ph_min_waitforplayers", "1")
+            SetGlobalInt( cvarname, tonumber(new) )
+            print("[PHX] Warning: "..cvarname.." value cannot contain less than 0. Use 'ph_waitforplayers' 0 to disable!")
+        end
+    end, "phx.cvnum_" .. cvarname)
+end }
 
 CVAR["ph_sv_enable_obb_modifier"]			=	{ CTYPE_BOOL, 	"1",CVAR_SERVER_ONLY_NO_NOTIFY, "Developer: Enable OBB Model Data Override/Modifier" }
 CVAR["ph_reload_obb_setting_everyround"]	=	{ CTYPE_BOOL, 	"1",CVAR_SERVER_ONLY_NO_NOTIFY, "Developer: Reload OBB Model Data Override/Modifier Every round Restarts" }
@@ -216,23 +228,23 @@ CVAR["ph_custom_mv_func"]					=	{ CTYPE_STRING, "MapVote.Start()", CVAR_SERVER_H
 CVAR["ph_exp_rot_pitch"]					=	{ CTYPE_BOOL, 	"0", CVAR_SERVER_ONLY_NO_NOTIFY, "Allow use of pitch rotation on props" }
 
 -- Prop Chooser / Prop Menu
-CVAR["pcr_enable"]							=	{ CTYPE_BOOL, "1", CVAR_SERVER_ONLY, "Enable Prop Chooser Feature?"}
+CVAR["pcr_enable"]							=	{ CTYPE_BOOL, "1", CVAR_SERVER_ONLY, "Enable Prop Menu Feature?"}
 CVAR["pcr_allow_custom"]					=	{ CTYPE_BOOL, "0", CVAR_SERVER_ONLY, "Allow custom prop to be added in the lists?"}
-CVAR["pcr_enable_prop_ban"]					=	{ CTYPE_BOOL, "0", CVAR_SERVER_ONLY_NO_NOTIFY, "Allow prop banning before adding to the Prop Chooser Lists?"}
+CVAR["pcr_enable_prop_ban"]					=	{ CTYPE_BOOL, "0", CVAR_SERVER_ONLY_NO_NOTIFY, "Allow prop banning before adding to the Prop Menu Lists?"}
 CVAR["pcr_max_use"]							=	{ CTYPE_NUMBER, "3", CVAR_SERVER_ONLY, "Maximum usage limit. -1 means unlimited."}
-CVAR["pcr_delay_use"]						=	{ CTYPE_FLOAT, "2.00", CVAR_SERVER_ONLY_NO_NOTIFY, "Delay, in seconds before player able to use Prop Chooser in next N seconds. (default is 2) - This prevent spamming issues."}
+CVAR["pcr_delay_use"]						=	{ CTYPE_FLOAT, "2.00", CVAR_SERVER_ONLY_NO_NOTIFY, "Delay, in seconds before player able to use Prop Menu in next N seconds. (default is 2) - This prevent spamming issues."}
 
 CVAR["pcr_only_allow_certain_groups"]		=	{ CTYPE_BOOL,   "0", CVAR_SERVER_ONLY_NO_NOTIFY, "Should Prop Menu can only accessed by certain groups? (e.g: Donator, etc...)"}
 CVAR["pcr_use_ulx_menu"]					=	{ CTYPE_BOOL,   "0", CVAR_SERVER_ONLY_NO_NOTIFY, "Should Prop Menu can be accessed by Console command (0) or ULX command (1)?"}
 
-CVAR["pcr_notify_messages"]					=	{ CTYPE_BOOL, "0", CVAR_SERVER_ONLY, "Notify client about how to use Prop Chooser?"}
-CVAR["pcr_limit_enable"]					=	{ CTYPE_BOOL, "0", CVAR_SERVER_ONLY,"Enable limit into Maximum Prop Entries (see 'pcr_max_prop_list' for how many models you can limit."}
-CVAR["pcr_max_prop_list"]					=	{ CTYPE_NUMBER, "100", CVAR_SERVER_ONLY, "Maximum number to list register prop into Prop Menu."}
+CVAR["pcr_notify_messages"]					=	{ CTYPE_BOOL, "0", CVAR_SERVER_ONLY, "Notify client about how to use Prop Menu?"}
+CVAR["pcr_limit_enable"]					=	{ CTYPE_BOOL, "0", CVAR_SERVER_ONLY,"Enable limit of Maximum Prop addition count (see 'pcr_max_prop_list' for how many models you can limit."}
+CVAR["pcr_max_prop_list"]					=	{ CTYPE_NUMBER, "100", CVAR_SERVER_ONLY, "Maximum list of added prop into Prop Menu. (Default is 100)"}
 CVAR["pcr_kick_invalid"]					=	{ CTYPE_BOOL, "1", CVAR_SERVER_ONLY_NO_NOTIFY, "Kick any user attempt to access invalid model that does not exists in current map/custom list with threshold 4x max attempts."}
 CVAR["pcr_use_room_check"]					=	{ CTYPE_BOOL, "0", CVAR_SERVER_ONLY, "Use Room check before a player use other (larger) object? Disable this if you're facing with 'there is no room to change' message."}
-CVAR["pcr_enable_bbox_limit"]				=	{ CTYPE_BOOL, "0", CVAR_SERVER_ONLY_NO_NOTIFY, "Add BBox Limit (Hull Size) before adding to the Prop Chooser Lists (if any/configured)?"}
+CVAR["pcr_enable_bbox_limit"]				=	{ CTYPE_BOOL, "0", CVAR_SERVER_ONLY_NO_NOTIFY, "Add BBox Limit (Hull Size) before adding to the Prop Menu Lists (if any/configured)?"}
 CVAR["pcr_bbox_max_height"]					=	{ CTYPE_NUMBER, "96", CVAR_SERVER_ONLY_NO_NOTIFY, "BBOX CollissionBound Maximum Height Limit. Default is 96 (normally 72 is a standard hull size Kleiner models."}
-CVAR["pcr_bbox_max_width"]					=	{ CTYPE_NUMBER, "72", CVAR_SERVER_ONLY_NO_NOTIFY, "BBOX CollissionBound Maximum Width Limit. Default is 72, 56 or 48."}
+CVAR["pcr_bbox_max_width"]					=	{ CTYPE_NUMBER, "72", CVAR_SERVER_ONLY_NO_NOTIFY, "BBOX CollissionBound Maximum Width Limit. Either: 72, 56, 48, 36, 32, ..."}
 
 -- Load & init
 for name, data in pairs(CVAR) do

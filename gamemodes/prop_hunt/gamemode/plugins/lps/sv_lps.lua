@@ -9,6 +9,30 @@ local strAlertTimer     = "tmr_AlertSnd"
 -- Allow only LPS after hunters are unblinded. Set 'true' once the hook is called.
 local LPSAllowed = false
 
+PHX.LPS.ROUND_LEFT = 1
+
+function PHX.LPS:CheckTriggerableEvent()
+
+    local RN = GetGlobalInt( "RoundNumber", 0 )
+    local isRandom = PHX:GetCVar( "lps_start_random" )
+
+    if isRandom and RN >= 1 then
+        if math.random(0,1) == 1 then
+            return true
+        end
+    end
+
+    -- Warning: untested
+    local isDelayed =   PHX:GetCVar( "lps_start_delayed_rounds" )
+    local cvar      =   PHX:GetCVar( "lps_start_every_x_rounds" )
+    if isDelayed and PHX.LPS.ROUND_LEFT == RN then
+        PHX.LPS.ROUND_LEFT = RN + cvar
+        return true
+    end
+
+    return false
+end
+
 function PHX.LPS:CreateSound( ply )
 
     if IsValid( ply ) and ply:Alive() and ply:Team() == TEAM_PROPS then
@@ -62,18 +86,6 @@ function PHX.LPS:AddSound( tblKey, Directory )
 
 end
 
-hook.Add("Initialize", "LPS.CreateSoundHook", function()
-    PHX.LPS:AddSound( "ALERT", "alert" )
-    PHX.LPS:AddSound( "MUSIC", "music" )
-end)
-
-hook.Add("PlayerCanPickupWeapon", "LPS.GiveDummyWeapon", function( ply, wep )
-    if ply:Team() == TEAM_PROPS and ply:Alive() and ply:IsLastStanding() and GetGlobalBool( "InRound", false ) then
-        if ( ply:HasWeapon( wep:GetClass() ) ) then return false end
-        if wep:GetClass() == PHX.LPS.DUMMYWEAPON then return true end
-    end
-end)
-
 function PHX.LPS:RandomizeMusic()
     self.SOUND.CURRENT = self:GetMusic()
 end
@@ -101,10 +113,11 @@ function PHX.LPS:TrailColorTranslate( color )
 end
 
 local function ResetPlayerStat( ply )
-    ply.propLPSAmmo     = 0
-    ply.propNextFire    = 0
     ply:SetLPSWeapon( "No Weapon" )
-    if ply:IsLastStanding() then ply:SetLastStanding( false ) end
+    if ply:IsLastStanding() then 
+        ply:SetLastStanding( false )
+        SetGlobalBool("LPS.InLastPropStanding", false)
+    end
     
     -- In case of disconnect
     if PHX.LPS.SOUND.CURRENT and PHX.LPS.SOUND.CURRENT ~= nil and 
@@ -119,8 +132,20 @@ local function ResetPlayerStat( ply )
     ply:SetLPSWeaponState( LPS_WEAPON_UNARMED )
 end
 
+-- Hooks
+hook.Add("Initialize", "LPS.CreateSoundHook", function()
+    PHX.LPS:AddSound( "ALERT", "alert" )
+    PHX.LPS:AddSound( "MUSIC", "music" )
+end)
+
+hook.Add("PlayerCanPickupWeapon", "LPS.GiveDummyWeapon", function( ply, wep )
+    if ply:Team() == TEAM_PROPS and ply:Alive() and ply:IsLastStanding() and GetGlobalBool( "InRound", false ) then
+        if ( ply:HasWeapon( wep:GetClass() ) ) then return false end
+        if wep:GetClass() == PHX.LPS.DUMMYWEAPON then return true end
+    end
+end)
+
 hook.Add("PlayerInitialSpawn", "LPS.PrepareData", function( ply )
-    ply.propNextFire    = 0
     ResetPlayerStat( ply )
 end)
 
@@ -128,6 +153,8 @@ end)
 hook.Add("PlayerSpawn", "LPS.ResetWeaponState", function(ply)
     ResetPlayerStat( ply )
 end)
+
+-- End of Hooks
 
 local function StopMusic()
 
@@ -144,19 +171,22 @@ end
 
 hook.Add("PH_RoundEnd", "LPS.RER_ResetWeaponState", function()
     LPSAllowed = false
-    for _,ply in pairs( player.GetAll() ) do
+    for _,ply in ipairs( player.GetAll() ) do
         ResetPlayerStat( ply )
     end
     
     StopMusic()
 end)
-
 hook.Add("PostCleanupMap", "LPS.CheckRespawnUnblind", function() LPSAllowed = false end)
 hook.Add("PH_BlindTimeOver","LPS.BlindTimeOverAllow", function() LPSAllowed = true end)
 
 local function DoPlayerCheck(ply)
 
     if PHX:GetCVar( "lps_enable" ) and ply:Team() == TEAM_PROPS then
+    
+        if (not PHX.LPS.CheckTriggerableEvent()) then
+            return
+        end
         
         -- Gives delay in case hunter throws a grenade or something or 2 player prop were killed simultaneously
         timer.Simple(0.5, function()
@@ -186,15 +216,17 @@ local function DoPlayerCheck(ply)
                                 PHX.LPS.WEAPON2.NAME = SelWep
                             end
                         end
-                        -- Give the dummy weapon.
-                        timer.Simple(0, function() pl:Give( PHX.LPS.DUMMYWEAPON ) end)
                         local ammo = util.LPSgetConValue( PHX.LPS.WEAPON2.DATA.AmmoCount )
                         pl:SetLPSAmmoCount( ammo )
-                        
                         pl:SetLPSWeapon( PHX.LPS.WEAPON2.NAME )
                         pl:CreateLPSWeaponEntity( PHX.LPS.WEAPON2.DATA.WorldModel, PHX.LPS.WEAPON2.DATA.FixAngles, PHX.LPS.WEAPON2.DATA.FixPos )
                         pl:SetLastStanding( true )
+                        timer.Simple(0, function() pl:Give( PHX.LPS.DUMMYWEAPON ) end) -- Give the dummy weapon. We'll give it on the next frame.
                         pl:SetLPSWeaponState( LPS_WEAPON_READY )
+                        
+                        -- Health & Armor Options
+                        if PHX:GetCVar( "lps_use_normal_health" ) then pl:SetHealthProp(100) end
+                        if PHX:GetCVar( "ph_allow_armor" ) and PHX:GetCVar( "lps_use_armor" ) then pl:SetArmor(100) end
                         
                         pl:PrintCenter( "LASTPROP_ANNOUNCE", Color(240,72,82) )
                         
@@ -211,6 +243,9 @@ local function DoPlayerCheck(ply)
                         end
                         
                         stand = pl
+                        
+                        SetGlobalBool("LPS.InLastPropStanding", true) -- for Think
+                        hook.Call( "PHInLastPropStanding", nil, pl, PHX.LPS.WEAPON2.NAME, PHX.LPS.WEAPON2.DATA ) -- for Something you need to "hook.Add" it.
 			        end
                 end
 

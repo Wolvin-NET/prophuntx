@@ -74,13 +74,11 @@ local function ForceCloseTauntWindow(num)
 end
 
 local function ClearTimer()
-	if timer.Exists("tmr_handleUnblindHook") then
-		timer.Remove("tmr_handleUnblindHook")
-	end
+	if timer.Exists("tmr_handleUnblindHook") then timer.Remove("tmr_handleUnblindHook") end
+    if timer.Exists("phx.tmr_GiveGrenade") then timer.Remove("phx.tmr_GiveGrenade") end
     
-    if timer.Exists("phx.tmr_GiveGrenade") then
-        timer.Remove("phx.tmr_GiveGrenade")
-    end
+    -- this is due forced round end, we have to change it's behaviour on class_hunter.lua
+    if timer.Exists("phx.tmr_UnlockHunters") then timer.Remove("phx.tmr_UnlockHunters") end
 end
 
 -- Called alot
@@ -239,13 +237,16 @@ function EntityTakeDamage(ent, dmginfo)
 	end
 	
 	if GAMEMODE:InRound() && ent && (ent:GetClass() != "ph_prop" && !hunterdamagefix[ent:GetClass()] && PHX:IsUsablePropEntity(ent:GetClass()) && !ent:IsPlayer()) && 
-		(att && att:IsPlayer() && att:Team() == TEAM_HUNTERS && att:Alive()) then		
-		if att:Armor() >= 5 && PHX:GetCVar( "ph_hunter_fire_penalty" ) >= 5 then
-			att:SetHealth(att:Health() - (math.Round(PHX:GetCVar( "ph_hunter_fire_penalty" )/2)))
+		(att && att:IsPlayer() && att:Team() == TEAM_HUNTERS && att:Alive()) then
+        
+        local penalty = PHX:GetCVar( "ph_hunter_fire_penalty" )
+        local allow   = PHX:GetCVar( "ph_allow_armor" )
+		if allow and att:Armor() >= 5 && penalty >= 5 then
+			att:SetHealth(att:Health() - (math.Round( penalty/2 )))
 			att:SetArmor(att:Armor() - 15)
 			if att:Armor() < 0 then att:SetArmor(0) end
 		else
-			att:SetHealth(att:Health() - PHX:GetCVar( "ph_hunter_fire_penalty" ))
+			att:SetHealth(att:Health() - penalty)
 		end
 		if att:Health() <= 0 then
 			-- this is debug console, no need to be translated.
@@ -536,8 +537,8 @@ function GM:PlayerExchangeProp(pl, ent)
 			if PHX:GetCVar( "ph_sv_enable_obb_modifier" ) && ent:GetNWBool("hasCustomHull",false) then
 				local hmin	= ent.m_Hull[1]
 				local hmax 	= ent.m_Hull[2]
-				local dmin	= ent.m_dHull[1] -- warning! may deprecated" this will replaced to hmin and hmax in future.
-				local dmax	= ent.m_dHull[2] -- warning! may deprecated: this will replaced to hmin and hmax in future.
+				local dmin	= ent.m_dHull[1] -- Warning! may be deprecated: this will replaced to hmin and hmax in future!
+				local dmax	= ent.m_dHull[2] -- Warning! may be deprecated: this will replaced to hmin and hmax in future!
 				
 				if hmax.z < GAMEMODE.ViewCam.cHullzMins or dmax.z < GAMEMODE.ViewCam.cHullzMins then
                     pl:PHAdjustView( GAMEMODE.ViewCam.cHullzMins, GAMEMODE.ViewCam.cHullzMins )
@@ -577,7 +578,7 @@ function GM:PlayerExchangeProp(pl, ent)
                     -- hunters are completely stucked when the prop is rotated. This appear to be engine's bug.
                 end
 				
-                --Todo: Duck Hull should not be important, right? Might remove this stuff in future though.
+                --DEPRECATED: Duck Hull will no longer needed!
 				local dhullz = hullz
 				if hullz > 10 && hullz <= 30 then
 					dhullz = hullz-(hullz*0.5)
@@ -588,18 +589,18 @@ function GM:PlayerExchangeProp(pl, ent)
 				else
 					dhullz = hullz
 				end
-			
+            
 				if hullz < GAMEMODE.ViewCam.cHullzMins then
 					pl:PHAdjustView( GAMEMODE.ViewCam.cHullzMins, GAMEMODE.ViewCam.cHullzMins )
-				elseif hullz > GAMEMODE.ViewCam.cHullzMaxs then
+				elseif hullz > GAMEMODE.ViewCam.cHullzMaxs then                
 					pl:PHAdjustView( GAMEMODE.ViewCam.cHullzMaxs, GAMEMODE.ViewCam.cHullzMaxs )
 				else
-                    pl:PHAdjustView( hullz, dhullz )
+                    pl:PHAdjustView( hullz*0.8, hullz ) --#2nd: dhullz
 				end
                 
 				pl:SetHull(Vector(hullxymin, hullxymin, 0), Vector(hullxymax, hullxymax, hullz))
-				pl:SetHullDuck(Vector(hullxymin, hullxymin, 0), Vector(hullxymax, hullxymax, dhullz))
-                pl:PHSendHullInfo( hullxymax, hullz, dhullz, new_health )
+				pl:SetHullDuck(Vector(hullxymin, hullxymin, 0), Vector(hullxymax, hullxymax, hullz))   --dhullz
+                pl:PHSendHullInfo( hullxymax, hullz, hullz, new_health ) --_,_,dhullz,_
 
 			end
 		end
@@ -799,7 +800,7 @@ function RoundEnd()
 	end
 	
 	-- Give rewards for living props for a decoy
-    if GetGlobalInt("RoundNumber") > 2 then -- It should start giving after Round #2
+    if GetGlobalInt("RoundNumber") > 2 and (not IS_ROUND_FORCED_END) then -- It should start giving after 2nd Round and not forced round end.
         for _, pl in pairs(team.GetPlayers(TEAM_PROPS)) do
             if PHX:GetCVar( "ph_enable_decoy_reward" ) and pl:Alive() and pl:Health() > 0 and (not pl:HasFakePropEntity()) then
                 pl:SetFakePropEntity(true)
@@ -831,9 +832,32 @@ function GM:RoundTimerEnd()
 	hook.Call("PH_OnTimerEnd", nil)
 end
 
+-- Force End to current Round.
+IS_ROUND_FORCED_END = false
+local function ForceEndRound( ply )
+    if GAMEMODE:InRound() and (ply:CheckUserGroup() or ply:IsSuperAdmin() or (game.IsDedicated() and ply == NULL)) then
+    
+        IS_ROUND_FORCED_END = true
+    
+        GAMEMODE:RoundEndWithResult(1001, "HUD_LOSE")
+        PHX.VOICE_IS_END_ROUND = 1
+        ForceCloseTauntWindow(1)
+        
+        PHX:PlayWinningSound( 3 )
+        ClearTimer()    -- Always check if any timers running.
+        
+        MsgAll("Round was forced end. No one Wins!\n")
+    
+    else
+        ply:PrintMessage(HUD_PRINTTALK, "[PHX] Sorry, this command is unavailable.")
+    end
+end
+concommand.Add("ph_force_end_round", ForceEndRound, nil, "Force End Active Round")
 
 -- Called before start of round
 function GM:OnPreRoundStart(num)
+    IS_ROUND_FORCED_END = false
+
 	game.CleanUpMap()
 	
 	if GetGlobalInt("RoundNumber") != 1 && (PHX:GetCVar( "ph_swap_teams_every_round" ) || ((team.GetScore(TEAM_PROPS) + team.GetScore(TEAM_HUNTERS)) > 0)) then
@@ -865,18 +889,21 @@ function GM:OnPreRoundStart(num)
 		end
 		
 		-- Props will gain a Bonus Armor points Hunter teams has more than 4 players in it. More player means more armor they can get.
-		timer.Simple(1, function()
-			local NumHunter = table.Count(team.GetPlayers(TEAM_HUNTERS))
-			if NumHunter >= 4 && NumHunter <= 8 then
-				for _,prop in pairs(team.GetPlayers(TEAM_PROPS)) do
-					if IsValid(prop) then prop:SetArmor(math.random(1,3) * 15) end
-				end
-			elseif NumHunter > 8 then
-				for _,prop in pairs(team.GetPlayers(TEAM_PROPS)) do
-					if IsValid(prop) then prop:SetArmor(math.random(3,7) * 15) end
-				end
-			end
-		end)
+        local allow = PHX:GetCVar( "ph_allow_armor" )
+        if allow then
+            timer.Simple(1, function()
+                local NumHunter = table.Count(team.GetPlayers(TEAM_HUNTERS))
+                if NumHunter >= 4 && NumHunter <= 8 then
+                    for _,prop in pairs(team.GetPlayers(TEAM_PROPS)) do
+                        if IsValid(prop) then prop:SetArmor(math.random(1,3) * 15) end
+                    end
+                elseif NumHunter > 8 then
+                    for _,prop in pairs(team.GetPlayers(TEAM_PROPS)) do
+                        if IsValid(prop) then prop:SetArmor(math.random(3,7) * 15) end
+                    end
+                end
+            end)
+        end
 		
 		hook.Call("PH_OnPreRoundStart", nil, PHX:GetCVar( "ph_swap_teams_every_round" ))
 	end
@@ -965,14 +992,6 @@ function GM:PlayerSwitchFlashlight(pl, on)
 	
 	return false
 end
-
--- Round Control
-cvars.AddChangeCallback("ph_min_waitforplayers", function(cvar, old, new)
-	if tonumber(new) < 1 then
-		RunConsoleCommand("ph_min_waitforplayers", "1")
-		print("[PHX] Warning: Value must not be 0! Use ph_waitforplayers 0 to disable.")
-	end
-end)
 
 local bAlreadyStarted = false
 function GM:OnRoundEnd( num )

@@ -2,7 +2,7 @@
 
     LAST -- PROP -- STANDING
     
-    Originally implemented from Prop Hunt: Enhanced by: Phyremaster
+    Originally implemented from Prop Hunt Enhanced Plus by: Phyremaster
     https://steamcommunity.com/profiles/76561198154859523
     
     Ported as Plugin in Prop Hunt: X by: Wolvindra-Vinzuerio

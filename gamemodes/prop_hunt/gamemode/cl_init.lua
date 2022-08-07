@@ -222,6 +222,12 @@ local Splash    = {}
 
 function GM:ShowTeam()
 
+    -- Add Warning that if the game rans on singleplayer.
+    if (game.SinglePlayer()) then
+        chat.AddText(Color(255,0,0), "WARNING: This Game cannot be played on Single Player. You need to host a Multiplayer Game in order to play this game!")
+        return
+    end
+
 	if ( !IsValid( TeamPanel ) ) then 
 	
 		TeamPanel = vgui.CreateFromTable( GAMEMODE.VGUISplash )
@@ -351,6 +357,12 @@ function GM:CalcView(pl, origin, angles, fov)
 end
 
 function HUDPaint()
+    if (game.SinglePlayer()) then
+        draw.WordBox( 8, ScrW()/2, ScrH()/2, "[WARNING] Single Player Mode is not Supported! Please Host a Multiplayer to play!", "Trebuchet24",
+        Color(0,0,0,250), Color(220,10,10), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        return
+    end
+
 	-- Draw player texts
 	if PHX:GetCVar( "ph_enable_plnames" ) && PHX:GetCLCVar( "ph_cl_pltext" ) && LocalPlayer():Team() != TEAM_SPECTATOR then
 		for _, pl in pairs(player.GetAll()) do
@@ -613,8 +625,10 @@ net.Receive("SetHull", function()
 	local hulldz = net.ReadInt(32)
 	local new_health = net.ReadInt(9)
 	cHullz = huz
-	LocalPlayer():SetHull(Vector(hullxy * -1, hullxy * -1, 0), Vector(hullxy, hullxy, huz))
-	LocalPlayer():SetHullDuck(Vector(hullxy * -1, hullxy * -1, 0), Vector(hullxy, hullxy, hulldz))
+	
+    LocalPlayer():SetHull(Vector(hullxy * -1, hullxy * -1, 0), Vector(hullxy, hullxy, huz))
+	--LocalPlayer():SetHullDuck(Vector(hullxy * -1, hullxy * -1, 0), Vector(hullxy, hullxy, hulldz))
+    LocalPlayer():SetHullDuck(Vector(hullxy * -1, hullxy * -1, 0), Vector(hullxy, hullxy, huz))
 	LocalPlayer():SetHealth(new_health)
 end)
 

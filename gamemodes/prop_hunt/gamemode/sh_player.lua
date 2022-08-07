@@ -137,7 +137,7 @@ function Player:PHSetColor( ColOverride )
     
         self:SetPlayerColor( col )
         
-    elseif self:Team() == TEAM_PROPS and PHX:GetCVar( "ph_enable_prop_player_color" ) then
+    elseif self:Team() == TEAM_PROPS then -- and PHX:GetCVar( "ph_enable_prop_player_color" )
     
         local ph_prop = self:GetPlayerPropEntity()
         ph_prop:SetEntityColor( col )
@@ -202,12 +202,13 @@ if SERVER then
     
     function Player:PHAdjustView( hullz, dhullz )
         self:SetViewOffset( Vector(0,0,hullz) )
-        self:SetViewOffsetDucked( Vector(0,0,dhullz) )
+        --self:SetViewOffsetDucked( Vector(0,0,dhullz) )
+        self:SetViewOffsetDucked( Vector(0,0,hullz) )
     end
     
     function Player:PHResetView()
         self:SetViewOffset( Vector(0,0,64) )
-        self:SetViewOffsetDucked( Vector(0,0,28) )
+        self:SetViewOffsetDucked( Vector(0,0,36) )
     end
 
 	function Player:SubTauntRandMapPropCount()
@@ -238,6 +239,7 @@ if SERVER then
 			local trace = {}
 			local dist = PHX.DecoyDistance
             local min,max = self:GetHull()
+            local playercolor = self:GetInfo("cl_playercolor")
             
             trace           = GAMEMODE.ViewCam:CamColEnabled( self:EyePos(), self:EyeAngles(), trace, "start", "endpos", dist, dist, dist, max.z )
 			trace.mask		= MASK_PLAYERSOLID
@@ -256,6 +258,7 @@ if SERVER then
                     self.propdecoy:SetPos( pos - Vector(0,0, self.ph_prop:OBBMins().z ) ) 
                 end
 				self.propdecoy:SetAngles( self.ph_prop:GetAngles() )
+                self.propdecoy:SetfEntityColor( Vector( playercolor ) )
 				self.propdecoy:Spawn()
                 
 				self.propdecoy:ChangeModel( self.ph_prop )

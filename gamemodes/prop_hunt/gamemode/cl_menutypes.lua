@@ -176,6 +176,7 @@ end,
 	end
 end,
 
+-- Internal, do not use!
 ["mute"] = function( c, d, p, l )
 	if !d then
 		ThrowError(1, c)
@@ -216,7 +217,7 @@ end,
 		
 		button.DoClick = function()
 			if not IsValid(ply) then return end
-			if ply:IsAdmin() or table.HasValue(PHX.IgnoreMutedUserGroup, string.lower(ply:GetUserGroup())) then return end
+			if ply:IsSuperAdmin() or ply:CheckUserGroup() or table.HasValue(PHX.IgnoreMutedUserGroup, string.lower(ply:GetUserGroup())) then return end
 			
 			local mute = ply:IsMuted()
 			ply:SetMuted(not mute)
@@ -229,7 +230,7 @@ end,
 			button:SetVisible(true)
 		end
 		
-		if ply:IsAdmin() or table.HasValue( PHX.IgnoreMutedUserGroup, string.lower(ply:GetUserGroup()) ) then
+		if ply:IsSuperAdmin() or ply:CheckUserGroup() or table.HasValue( PHX.IgnoreMutedUserGroup, string.lower(ply:GetUserGroup()) ) then
 			button:SetVisible(false)
 		end
 		
@@ -271,6 +272,7 @@ end,
 	return pnl
 end,
 
+-- Internal, do not use!
 ["langcombobox"] = function( c, d, p, l )
 	if !l or l == "" or l == nil then l = false end
 	if !d or d == false or d == nil then d = false end
@@ -355,7 +357,6 @@ end,
 	return pnl
 end,
 
--- This will translated in future version.
 ["textentry"] = function( c, d, p, l )
 	local pnl = vgui.Create("DPanel")
 	pnl:SetSize(p:GetColWide() * 0.85,p:GetRowHeight())
@@ -422,8 +423,25 @@ end,
 	return pnl
 end,
 
--- todo: Add Customisable Combo Box in future version
-    -- todo: not yet
+-- Unfinished
+["combobox"] = function( c, d, p, l )
+    local pnl = vgui.Create("DPanel")
+	pnl:SetSize(p:GetColWide() * 0.85,p:GetRowHeight())
+	pnl:SetBackgroundColor( Color(0,0,0,0) )
+	
+	local label = vgui.Create("DLabel", pnl)
+	label:Dock(LEFT)
+	label:SetSize(pnl:GetWide()*0.6,0)
+	label:DockMargin(2,0,0,0)
+	label:SetFont("HudHintTextLarge")
+	label:SetText(PHX:QTrans(l))
+    
+    --...
+end,
 
--- Add More here :)
+-- ["admin_dlist"] = function( c, d, p, l )
+-- ...
+-- end,
+
+    -- Add More here.
 }

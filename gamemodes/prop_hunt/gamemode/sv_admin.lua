@@ -1,7 +1,7 @@
 -- Todo: Need a better improvement for command management...
 
 local function doAdminStrictCheck(ply)
-	if (ply:IsAdmin() or ply:CheckUserGroup()) then
+	if (ply:IsSuperAdmin() or ply:CheckUserGroup()) then
 		return true
 	else
 		return false
@@ -23,7 +23,7 @@ end
 -- man I wish lua has some-sort of switch/case .
 local net_functions = {
 	["CheckAdminFirst"] = function(ply)
-		if ( ply and IsValid(ply) and (ply:IsAdmin() or ply:CheckUserGroup()) ) then
+		if ( ply and IsValid(ply) and (ply:IsSuperAdmin() or ply:CheckUserGroup()) ) then
 			net.Start("CheckAdminResult")
 			net.Send(ply)
 		end

@@ -4,21 +4,27 @@ local player_manager = player_manager
 
 DEFINE_BASECLASS( "base_anim" )
 
-ENT.PrintName = "Prop Entity"
-ENT.Author = "Wolvindra-Vinzuerio"
-ENT.Information	= "A prop entity for Prop Hunt: Enhanced"
-ENT.Category = ""
-ENT.Editable = true
-ENT.Spawnable = true
-ENT.AdminOnly = false
+ENT.PrintName   = "Prop Entity"
+ENT.Author      = "Wolvindra-Vinzuerio"
+ENT.Information	= "A prop entity for Prop Hunt: X"
+ENT.Category    = ""
+ENT.Editable    = true
+ENT.Spawnable   = true
+ENT.AdminOnly   = false
 ENT.RenderGroup = RENDERGROUP_BOTH
 
 ENT.PropAngle   = angle_zero
 ENT.PropPosition  = vector_origin
+ENT.DefaultColor = Vector(1,1,1)
 
 function ENT:SetupDataTables() 
 	self:NetworkVar( "Angle", 0, "RotationAngle" )
     self:NetworkVar( "Vector", 0, "EntityColor")
+    
+    if SERVER then
+        self:SetEntityColor( self.DefaultColor )
+    end
+    
 end
 
 function ENT:Initialize()
@@ -26,8 +32,11 @@ function ENT:Initialize()
 		self:SetModel("models/player/kleiner.mdl")
 		self:SetLagCompensated(true)			
 		self:SetMoveType(MOVETYPE_NONE)
+
 		self.health = 100
 	end
+    
+    self.DefaultColor = util.ColorToVector( team.GetColor(TEAM_PROPS) )
 end
 
 if CLIENT then
@@ -37,8 +46,11 @@ if CLIENT then
 end
 
 ENT.GetPlayerColor = function( self )
-    if GetGlobalBool( "ph_enable_prop_player_color" , false ) then
+    local state = GetGlobalBool( "ph_enable_prop_player_color" , false )
+    if state then
         return self:GetEntityColor()
+    else
+        return self.DefaultColor
     end
 end
 
@@ -111,8 +123,9 @@ if SERVER then
 
 		-- Health
 		if GAMEMODE:InRound() && IsValid(pl) && pl:Alive() && pl:IsPlayer() && attacker:IsPlayer() && pl:Team() ~= attacker:Team() && dmg:GetDamage() > 0 then
-			if pl:Armor() >= 10 then
-				self.health = self.health - (math.Round(dmg:GetDamage()/2))
+            local allow = PHX:GetCVar( "ph_allow_armor" )
+			if allow and pl:Armor() >= 10 then
+				self.health = self.health - (math.Round( dmg:GetDamage()/2 ))
 				pl:SetArmor(pl:Armor() - 20)
 			else
 				self.health = self.health - dmg:GetDamage()

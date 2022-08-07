@@ -8,6 +8,7 @@ if SERVER then
     
     function Player:CreateLPSTrail( ... )
         self.lpstrail = util.SpriteTrail(self, ...)
+        -- can we set the color?
         
         local ph_prop = self:GetPlayerPropEntity()
         if ph_prop and IsValid(ph_prop) then
@@ -15,14 +16,13 @@ if SERVER then
         end
     end
     
-    -- In case if this needed.
+    -- In case if needed:
     function Player:RemoveLPSTrail()
         if IsValid(self.lpstrail) then
             self.lpstrail:Remove()
         end
     end
     
-    -- Only used if mode == 1
     function Player:CreateLPSWeaponEntity( model, hasFixAngle, hasFixPos )
     
         if !IsValid(self:GetPlayerPropEntity()) then return end
@@ -56,11 +56,6 @@ if SERVER then
             self._lpsWepEnt:Remove()
         end
     end
-    
-    --[[ -- unused
-    function Player:SetLPSWeaponReloadType( bool )
-        self:SetNWBool( "bLps.WeaponReloadType", bool )
-    end ]]
 
 end
 
@@ -104,33 +99,70 @@ function Player:LPSSubAmmoCount()
     end
 end
 
--- TODO: Test other custom weapon with reloads:
--- See their Behaviours
+function Player:LPSCheckEntityCanShoot( tblFilter )
+
+    if !tblFilter or tblFilter == nil then tblFilter = { self:GetPlayerPropEntity() } end -- make it default, if filter is empty.
+
+    local _,plmaxs = self:GetHull()
+    local qt = GAMEMODE.ViewCam:CommonCamCollEnabledView( self:EyePos(), self:EyeAngles(), plmaxs.z )
+    qt.filter = tblFilter
+    local trx = util.TraceLine(qt)
+    if trx.Entity and trx.Entity:IsValid() and PHX:IsUsablePropEntity( trx.Entity:GetClass() ) then
+        return false
+    end
+
+    return true
+    
+end
+
+function Player:LPSCreatePropTrace( tblFilter, startpos, angle, strStart, strEnd, small, big, normal )
+
+    if !tblFilter or tblFilter == nil then tblFilter = { self:GetPlayerPropEntity() } end
+    if !startpos or startpos == nil then startpos = self:EyePos() end
+    if !angle or angle == nil then angle = self:EyeAngles() end
+    if !strStart or strStart == nil then strStart = "start" end
+    if !strEnd or strEnd == nil then strEnd = "endpos" end
+    
+    local long = 32768
+    if !small or small == nil then small = long/2 end
+    if !big or big == nil then big = long end
+    if !normal or normal == nil then normal = long/2 end
+
+    if self:Team() ~= TEAM_PROPS or !self:Alive() then return nil end --return nil instead of table.
+
+    local _,plmaxs = self:GetHull() --Todo: OBBMaxs
+    local trace    = {}
+    trace          = GAMEMODE.ViewCam:CamColEnabled( startpos, angle, trace, strStart, strEnd, small, big, normal, plmaxs.z )
+    trace.filter   = tblFilter
+    
+    return util.TraceLine(trace)
+
+end
 
 function Player:LPSShootBullets()
 
     if !IsValid(self) and self:Team() ~= TEAM_PROPS and !self:Alive() then return end
+    if !GetGlobalBool("InRound", false) then return end
     if !PHX:GetCVar( "lps_enable" ) then return end
     if !self:IsLastStanding() then return end
     if self:GetLPSAmmo() == 0 then return end
     
-    local plmins,plmaxs = self:GetHull()
-    local qt = GAMEMODE.ViewCam:CommonCamCollEnabledView( self:EyePos(), self:EyeAngles(), plmaxs.z )
-    local ph_prop = self:GetPlayerPropEntity()
-    qt.filter = { ph_prop }
-    local trx = util.TraceLine(qt)
-    if trx.Entity and trx.Entity:IsValid() and PHX:IsUsablePropEntity( trx.Entity:GetClass() ) then
-        return
-    end
+    local _,plmaxs      = self:GetHull()
+    local ph_prop       = self:GetPlayerPropEntity()
     
-    local name    = self:GetLPSWeaponName()
-    local wepdata = PHX.LPS.WEAPON_NEW[name]
+    local CanShootEntity = self:LPSCheckEntityCanShoot()
+    if !CanShootEntity then return end
+    
+    local name          = self:GetLPSWeaponName()
+    local wepdata       = PHX.LPS.WEAPON_NEW[name]
     if !name or name == "" or name =="No Weapon" or name == nil or 
     !wepdata or wepdata == nil then 
         return
     end
     
     local wepType = wepdata.Type
+    
+    -- // Weapon is using Normal Bullets. e.g: SMG, Shotgun, etc...
     if wepType == "weapon" then
         if ( self:LPSNextFireDelay() > CurTime() ) then return end
         
@@ -166,7 +198,7 @@ function Player:LPSShootBullets()
         
         local curWep = self:GetActiveWeapon()
         if self:HasWeapon( PHX.LPS.DUMMYWEAPON ) and curWep:GetClass() == PHX.LPS.DUMMYWEAPON then
-            -- Make Firing Sound to Weapon to prevent duplicated sound.
+            -- Emit from Weapon to prevent Duplicated Effect
             curWep:EmitSound( wepdata.ShootSound )
         end
         if wepdata.MuzzleFx and wepdata.MuzzleFx ~= nil then
@@ -185,7 +217,8 @@ function Player:LPSShootBullets()
         if self:GetLPSAmmo() == 0 then
             self:SetLPSWeaponState( LPS_WEAPON_OUTOFAMMO )
         end
-        
+    
+    -- // Weapon is using Custom Bullets & Functions. e.g: Blaster, RPG, Lasers...
     elseif wepType == "custom" then
     
         if ( self:LPSNextFireDelay() > CurTime() ) then
@@ -202,10 +235,11 @@ function Player:LPSShootBullets()
             self:SetLPSWeaponState( LPS_WEAPON_READY )
         end
         
+        local AmmoCount = util.LPSgetConValue( wepdata.AmmoCount )
+        
         -- Judy, do the thing!
         wepdata:Function( self )
         
-        local AmmoCount = util.LPSgetConValue( wepdata.AmmoCount )
         if AmmoCount > 0 then
             self:LPSSubAmmoCount()
         end
@@ -241,10 +275,6 @@ end
 function Player:GetLPSWeaponName()
     return self:GetNWString( "bLps.WeaponName", "No Weapon" )
 end
-
---[[ function Player:GetLPSWeaponReloadType()
-    return self:GetNWBool( "bLps.WeaponReloadType", false )
-end ]]
 
 function Player:GetLPSAmmo()
     return self:GetNWInt( "bLps.AmmoCount", 0 ) -- can also -1.

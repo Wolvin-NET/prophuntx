@@ -45,6 +45,24 @@ local function StartLoadOut( pl )
  	end
 end
 
+local function ControlPlayer( ply, isLock )
+    if isLock == nil then isLock = false end
+    
+    if IsValid( ply ) then
+    
+        if isLock then
+            ply:Lock()
+            return
+        end
+    
+        ply:Blind(false)
+        ply:UnLock()
+        
+        StartLoadOut( ply )
+        
+    end
+end
+
 -- Called when player spawns with this class
 function CLASS:OnSpawn(pl)
 	if !pl:IsValid() then return end
@@ -59,27 +77,35 @@ function CLASS:OnSpawn(pl)
     
 	local unlock_time = GetGlobalInt("unBlind_Time", 0)
 	
-	local unblindfunc = function()
+--[[ 	local unblindfunc = function()
 		if pl:IsValid() then pl:Blind(false) end
 	end
     
     local lockfunc = function()
 		if pl:IsValid() then pl:Lock() end
 	end
+    
 	local unlockfunc = function()
 		if pl:IsValid() then
             pl:UnLock()
             -- Loadout are now moved here, to prevent bugs
             StartLoadOut( pl )
         end
-	end
+	end ]]
 	
 	if unlock_time > 2 then
         pl:Blind(true)
         
-        timer.Simple(unlock_time, unblindfunc)
-        timer.Simple(1, lockfunc)
-        timer.Simple(unlock_time, unlockfunc)
+        timer.Simple(1, function() ControlPlayer( pl, true ) end)
+        -- Unlock them after X seconds
+        -- This timer will be stopped if Forced Round occurs.
+        timer.Create("phx.tmr_UnlockHunters", unlock_time, 1, function() ControlPlayer( pl ) end
+        
+        --[[ -- Wait, what's the point??
+        timer.Simple(unlock_time, unblindfunc)  -- todo: change to timer.Create
+        timer.Simple(1, lockfunc)               -- todo: change to timer.Create
+        timer.Simple(unlock_time, unlockfunc)   -- todo: change to timer.Create 
+        ]]
 	end
 	
 end
@@ -96,6 +122,7 @@ end
 -- Called when a player dies with this class
 function CLASS:OnDeath(pl, attacker, dmginfo)
 	pl:CreateRagdoll()
+    pl:Blind(false)
 	pl:UnLock()
 	
 	-- Always Reset the ViewOffset

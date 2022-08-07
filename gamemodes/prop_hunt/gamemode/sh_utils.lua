@@ -14,5 +14,5 @@ function util.ColorToVector( tblColor )
         return Vector( tblColor.r/255, tblColor.g/255, tblColor.b/255 )
     end
     
-    return Vector( 255, 255, 255 )
+    return Vector( 1, 1, 1 )
 end

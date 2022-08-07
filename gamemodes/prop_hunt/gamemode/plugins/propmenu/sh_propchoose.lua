@@ -14,7 +14,7 @@ PCR.ConfigGroup = {
 	["vip"]			= true,
 }
 function PCR:CheckUserGroup( ply )
-	if self.ConfigGroup[string.lower( ply:GetUserGroup() )] or ply:IsAdmin() then
+	if ply:IsSuperAdmin() or ply:CheckUserGroup() or self.ConfigGroup[string.lower( ply:GetUserGroup() )] then
 		return true
 	end
 	return false
@@ -76,7 +76,6 @@ if CLIENT then
 			{"pcr_enable_prop_ban", "check", "SERVER", "PCR_PLUG_PROP_BAN" },
 			{"pcr_max_use" , "slider", {min = -1, max = 20, init = "DEF_CONVAR", dec = 0, kind = "SERVER"}, "PCR_PLUG_USAGE_LIMIT"},
 			{"pcr_limit_enable", "check", "SERVER", "PCR_PLUG_PROP_LIMIT"},
-			--{"pcr_max_prop_list" , "slider", {min = 20, max = 2048, init = 100, dec = 0, kind = "SERVER"}, "PCR_PLUG_PROP_LIMITMAX"},
 			{"pcr_max_prop_list" , "slider", {min = 20, max = 2048, dec = 0, kind = "SERVER"}, "PCR_PLUG_PROP_LIMITMAX"}, -- missing init, test
 			
 			{"", "label", false, "PCR_PLUG_LBL_TECHSET" },

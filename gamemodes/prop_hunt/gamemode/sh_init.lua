@@ -6,7 +6,7 @@ IS_PHX		 	= true	-- an easy check if PHX is installed.
 
 PHX.ConfigPath 	= "phx_data"
 PHX.VERSION		= "X2Z"
-PHX.REVISION	= "25.06.22" --Format: dd/mm/yy.
+PHX.REVISION	= "XX.06.22" --Format: dd/mm/yy.
 
 --[[ BEGIN OF SHARED INIT HEADERS ]]--
 
@@ -263,11 +263,11 @@ GM.ForceJoinBalancedTeams 	= GetGlobalInt( "ph_forcejoinbalancedteams", false )
 
 local mark = utf8.char(9733)
 GM.PHXContributors			= {
-	"Galaxio "..mark.." (Support)",
+	"Galaxio "..mark.." (Support+Translation)",
 	"Godfather "..mark.." (Support)",
-    "? "..mark.." (Support)",
-    "? "..mark.." (PH:E+ Contributor)",
-    "Fryman (Web Hosting)",
+    "Darktooth "..mark.." (Support+Contributor)",
+    "Antoine "..mark.." (PH:E+/Plus Contributor)",
+    "Fryman (Web & Game Hosting)",
 	"Phyremaster (Last Prop Standing)",
 	"Berry (Russian Translation)",
 	"Ph.X (Chinese Translation)",

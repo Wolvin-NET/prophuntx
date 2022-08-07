@@ -639,7 +639,7 @@ LANG["PCR_PLUG_ONLY_GROUPS"]	= "Should Prop Menu can only be accessed by certain
 LANG["PCR_PLUG_NOTIFYMSG"]		= "Notify player on how to use Prop Menu on every round start"
 
 LANG["PCR_EDITOR_MSG_ERROR"]	= "Your changes hasn't been saved due to Errors.\nPlease check on your server console!"
-LANG["PCR_EDITOR_MSG_SUCC"]		= "Your changes and Custom Prop data has has been saved and updated successfully."
+LANG["PCR_EDITOR_MSG_SUCC"]		= "Your changes and Custom Prop data has been saved and updated successfully." --Thanks galaxio! x)
 
 LANG["PHZ_generic_title"]		= "Custom Prop Inclusion Editor"
 LANG["PHZ_generic_helptext"]	= [[[How To Use:
@@ -690,5 +690,8 @@ If you close this editor, this will automatically removed.]]
 
 LANG["PHZ_pcr_fb_allcontent"] = "All Contents (Not All Players/Server will have same contents as you)"
 LANG["PHZ_pcr_fb_notmounted"] = "%s [Not Mounted]"
+
+-- Revision XX/08/2022
+LANG["PHXM_ADMIN_ALLOWARMOR"]  = "Allow Armor Addition for team Hunters and Props"
 
 PHX.LANGUAGES[LANG.code] = LANG

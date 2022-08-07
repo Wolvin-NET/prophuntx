@@ -141,8 +141,11 @@ balls.funclists = {
 	function(pl)
 		local rand
 		rand = math.random(15,100)
-		pl:SetArmor(pl:Armor() + rand)
-		pl:ChatPrint("[Lucky Ball] You gained armor points bonus : "..tostring(rand).."!")
+        local allow = PHX:GetCVar( "ph_allow_armor" )
+        if allow then
+            pl:SetArmor(pl:Armor() + rand)
+            pl:ChatPrint("[Lucky Ball] You gained armor points bonus : "..tostring(rand).."!")
+        end
 	end,
 	function(pl)
 		local ammo = {'SMG1', '357', 'Buckshot'}

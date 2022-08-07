@@ -149,10 +149,10 @@ PHX.IgnoreMutedUserGroup = {
 	"developer", "moderator", "donator", "vip"
 }
 PHX.SVAdmins = {
-	-- Admin/Superadmin level privileges only!
+	-- Superadmin is default level privileges. If you want to add admin, just add 'admin' here.
 	-- This will responsible to manage Prop Hunt: X's Configurations, Server Settings, Prop Menu Editor and others.
-	-- Put any staff you trust.
-	"admin", "superadmin", "owner"
+	-- Put any staff that you TRUST.
+	"superadmin", "owner", "founder" --, "admin", "co-admin", ...
 }
 -- Bootstrap 4 colour base. This only works on clientside :(
 PHX.info = {
