@@ -12,7 +12,7 @@ CLASS.DrawTeamRing			= false
 
 
 -- Called by spawn and sets loadout
--- Original: function CLASS:Loadout(pl), Bug: Hunters can still shoot before they get blinded!
+-- Original: function CLASS:Loadout(pl), This is bug prevention where Hunters can shoot before they got blinded!
 local function StartLoadOut( pl )
 
     if !pl:Alive() then return end
@@ -46,7 +46,6 @@ local function StartLoadOut( pl )
 end
 
 local function ControlPlayer( ply, isLock )
-    if isLock == nil then isLock = false end
     
     if IsValid( ply ) then
     
@@ -57,7 +56,7 @@ local function ControlPlayer( ply, isLock )
     
         ply:Blind(false)
         ply:UnLock()
-        
+
         StartLoadOut( ply )
         
     end
@@ -75,37 +74,18 @@ function CLASS:OnSpawn(pl)
     pl:PHResetView()
 	pl:PHSetColor()
     
+    -- Allow respawn without being blinded when the blind state is false.
+	-- Also immediately give weapons.
+    if !GetGlobalBool("BlindStatus", false) then
+		StartLoadOut( pl )
+		return
+	end
+    
 	local unlock_time = GetGlobalInt("unBlind_Time", 0)
-	
---[[ 	local unblindfunc = function()
-		if pl:IsValid() then pl:Blind(false) end
-	end
-    
-    local lockfunc = function()
-		if pl:IsValid() then pl:Lock() end
-	end
-    
-	local unlockfunc = function()
-		if pl:IsValid() then
-            pl:UnLock()
-            -- Loadout are now moved here, to prevent bugs
-            StartLoadOut( pl )
-        end
-	end ]]
-	
 	if unlock_time > 2 then
         pl:Blind(true)
-        
         timer.Simple(1, function() ControlPlayer( pl, true ) end)
-        -- Unlock them after X seconds
-        -- This timer will be stopped if Forced Round occurs.
-        timer.Create("phx.tmr_UnlockHunters", unlock_time, 1, function() ControlPlayer( pl ) end
-        
-        --[[ -- Wait, what's the point??
-        timer.Simple(unlock_time, unblindfunc)  -- todo: change to timer.Create
-        timer.Simple(1, lockfunc)               -- todo: change to timer.Create
-        timer.Simple(unlock_time, unlockfunc)   -- todo: change to timer.Create 
-        ]]
+        timer.Create("tmr.hunterUnblind:"..pl:EntIndex(), unlock_time, 1, function() ControlPlayer( pl, false ) end)
 	end
 	
 end
@@ -118,9 +98,11 @@ function CLASS:GetHandsModel()
 	end
 end
 
-
+ 
 -- Called when a player dies with this class
 function CLASS:OnDeath(pl, attacker, dmginfo)
+    -- force remove timer.
+    timer.Remove("tmr.hunterUnblind:"..pl:EntIndex())
 	pl:CreateRagdoll()
     pl:Blind(false)
 	pl:UnLock()
@@ -130,9 +112,9 @@ function CLASS:OnDeath(pl, attacker, dmginfo)
 	
 	-- Spawn Devil Ball
 	local pos = pl:GetPos()
-	if PHX:GetCVar( "ph_enable_devil_balls" ) then
+	if PHX:GetCVar( "ph_enable_devil_balls" ) and GAMEMODE:InRound() then
         local dropent = ents.Create("ph_devilball")
-        dropent:SetPos(Vector(pos.x, pos.y, pos.z + 16)) -- to make sure the Devil Ball didn't spawn underground.
+        dropent:SetPos(Vector(pos.x, pos.y, pos.z + 16)) -- Don't spawn Devil Ball underground.
         dropent:SetAngles(Angle(0,0,0))
         dropent:Spawn()
 	end

@@ -104,19 +104,28 @@ CVAR["ph_normal_taunt_delay"]			=	{ CTYPE_NUMBER, "2", CVAR_SERVER_ONLY, "How ma
 CVAR["ph_randtaunt_map_prop_enable"]	=	{ CTYPE_BOOL,	"1", CVAR_SERVER_ONLY, "Allow fake taunts to be played on random props in the maps. Can be accessed only through Custom Taunt menu." }
 CVAR["ph_randtaunt_map_prop_max"]		=	{ CTYPE_NUMBER, "6", CVAR_SERVER_ONLY, "Maximum usage for fake taunts to be used. -1 is unlimited (Be warned though,I don't recommend to set this as unlimited!)" }
 CVAR["ph_taunt_pitch_enable"]			=	{ CTYPE_BOOL,   "1", CVAR_SERVER_ONLY, "Enable or Disable Taunt Pitch" }
-CVAR["ph_taunt_pitch_range_min"]		=	{ CTYPE_FLOAT, "50.0", CVAR_SERVER_ONLY, "Minimum threshold/acceptable pitch range for taunt", {min = 1, max = 99} }
-CVAR["ph_taunt_pitch_range_max"]		=	{ CTYPE_FLOAT, "200.0", CVAR_SERVER_ONLY, "Maximum threshold/acceptable pitch range for taunt", {min = 100, max = 255} }
+CVAR["ph_taunt_pitch_range_min"]		=	{ CTYPE_FLOAT, "50.0", CVAR_SERVER_ONLY_NO_NOTIFY, "Minimum threshold/acceptable pitch range for taunt", {min = 1, max = 99} }
+CVAR["ph_taunt_pitch_range_max"]		=	{ CTYPE_FLOAT, "200.0", CVAR_SERVER_ONLY_NO_NOTIFY, "Maximum threshold/acceptable pitch range for taunt", {min = 100, max = 255} }
 
 CVAR["ph_enable_taunt_scanner"]			=	{ CTYPE_BOOL, 	"1", CVAR_SERVER_ONLY, "(Require Map Restart) Enable Taunt Scanner?" }
 
 -- Convars for Armor
 CVAR["ph_allow_armor"]			        =	{ CTYPE_BOOL, 	"1", CVAR_SERVER_ONLY, "Allow use of Armor? May require round restart." }
 
-CVAR["ph_prop_jumppower"]				=	{ CTYPE_FLOAT, 	"1.5", CVAR_SERVER_ONLY, "Multipliers for Prop Jump Power (Do not confused with Prop's Gravity!). Default is 1.4. Min. 1.", nil,
+CVAR["ph_prop_jumppower"]				=	{ CTYPE_FLOAT, 	"1.5", CVAR_SERVER_ONLY_NO_NOTIFY, "Multipliers for Prop Jump Power (Do not confused with Gravity!). Default is 1.4. Min. 1.", {min=1, max=50}, -- in menu, it only limits to 5.
 function(cvarname, val)
     cvars.AddChangeCallback( cvarname, function(_,_,new )    
-        -- Updates player jump power immediately. This also sets when the player spawns (see: player_class/class_prop.lua)
         for _,v in pairs(team.GetPlayers(TEAM_PROPS)) do
+            if v:Alive() then v:SetJumpPower(160 * tonumber(new)) end
+        end
+        SetGlobalFloat( cvarname, tonumber(new) )
+    end, "phx.cvflt_" .. cvarname)
+    
+end }
+CVAR["ph_hunter_jumppower"]		=	{ CTYPE_FLOAT, 	"1", CVAR_SERVER_ONLY_NO_NOTIFY, "Multipliers for Hunter Jump Power (Do not confused with Gravity!). Default is 1. Min. 1.", {min=1, max=25}, -- in menu, it only limits to 2.5.
+function(cvarname, val)
+    cvars.AddChangeCallback( cvarname, function(_,_,new )    
+        for _,v in pairs(team.GetPlayers(TEAM_HUNTERS)) do
             if v:Alive() then v:SetJumpPower(160 * tonumber(new)) end
         end
         SetGlobalFloat( cvarname, tonumber(new) )
@@ -207,7 +216,7 @@ function(cvarname, value)
 		print(cv .. " -> has changed. Please be sure to Restart the map to take effect!")
 		for _,v in pairs(player.GetHumans()) do
 			if v:CheckUserGroup() then
-				v:ChatPrint("["..cv.."] has changed. Please be sure to Restart the map to take effect!")
+				v:ChatPrint("NOTICE: Map restart required, a ConVar '"..cv.."' has been changed therefore a map change is needed.")
 			end
 		end
 		SetGlobalBool(cvarname, tobool(new))
@@ -218,14 +227,22 @@ CVAR["ph_new_chat_pos_sub"]					=	{ CTYPE_NUMBER, "50", CVAR_SERVER_ONLY_NO_NOTI
 CVAR["ph_allow_respawnonblind"]				=	{ CTYPE_BOOL, 	"1", CVAR_SERVER_ONLY, "Allow fast respawn during blind time?" }
 CVAR["ph_allow_respawnonblind_team_only"]	=	{ CTYPE_NUMBER, "0", CVAR_SERVER_ONLY, "If specified, what team should be allowed to respawn? 0 = ALL TEAMS, 1 = HUNTERS, 2 = PROPS", { min = 0, max = 2 } }
 CVAR["ph_allow_respawn_from_spectator"]		=	{ CTYPE_BOOL, 	"1", CVAR_SERVER_ONLY, "Allow Spectators join to any team and respawns during blind time?" }
-CVAR["ph_blindtime_respawn_percent"]		=	{ CTYPE_FLOAT, 	"0.75", CVAR_SERVER_ONLY, "How much time percentage to allow player Respawn during Blind time? Default is 0.75 (75%)", { min = 0.30, max = 1.00 } }
+CVAR["ph_blindtime_respawn_percent"]		=	{ CTYPE_FLOAT, 	"0.75", CVAR_SERVER_ONLY_NO_NOTIFY, "How much time percentage to allow player Respawn during Blind time? Default is 0.75 (75%)", { min = 0.30, max = 1.00 } }
 CVAR["ph_allow_respawnonblind_teamchange"]	=	{ CTYPE_BOOL, 	"0", CVAR_SERVER_ONLY, "Not recommended if allowed: Allow respawn during blind time FROM team changes (from props to hunters, vice versa).\nI don't recommend enabling this because players may able to use this to take advantage by sitting on Prop team everytime.\nEnable this ONLY if you know what you're doing!" }
 CVAR["ph_allow_pickup_object"]				=	{ CTYPE_NUMBER, "3", CVAR_SERVER_ONLY, "Allow pickup objects? 0=No, 1=Hunters Only, 2=Props Only, 3=Everyone", { min = 0, max = 3 } }
 
 CVAR["ph_use_custom_mapvote"]				=	{ CTYPE_BOOL, 	"0", CVAR_SERVER_ONLY_NO_NOTIFY, "Use custom external Map votes system? Type help 'ph_custom_mv_func' for more info." }
 CVAR["ph_custom_mv_func"]					=	{ CTYPE_STRING, "MapVote.Start()", CVAR_SERVER_HIDDEN, "If 'ph_use_custom_mapvote' specified, what's the map vote function to call in LUA?\nNOTE: Case Sensitive! Local variable will not passed to the given code." }
 
-CVAR["ph_exp_rot_pitch"]					=	{ CTYPE_BOOL, 	"0", CVAR_SERVER_ONLY_NO_NOTIFY, "Allow use of pitch rotation on props" }
+CVAR["ph_exp_rot_pitch"]					=	{ CTYPE_BOOL, 	"0", 	CVAR_SERVER_ONLY_NO_NOTIFY, "[Experimental!] Allow use of pitch rotation on props." }
+CVAR["ph_enable_thirdperson"]               =   { CTYPE_BOOL,   "1", 	CVAR_SERVER_ONLY, "Enable thirdperson mode for hunters." }
+CVAR["ph_sv_thirdperson_desired"]           =   { CTYPE_BOOL,   "0", 	CVAR_SERVER_ONLY, "Allow thirdperson mode to use Server's Desired Camera position (Disallow player custom position)" }
+CVAR["ph_sv_thirdperson_ddist"]             =   { CTYPE_NUMBER, "64", 	CVAR_SERVER_ONLY_NO_NOTIFY, "Thirdperson: Desired Camera Distance.", { min=32, max = 128 } }
+CVAR["ph_sv_thirdperson_dright"]            =   { CTYPE_NUMBER, "16", 	CVAR_SERVER_ONLY_NO_NOTIFY, "Thirdperson: Desired Camera Right Position.", { min=-128, max = 128 } }
+CVAR["ph_sv_thirdperson_dup"]               =   { CTYPE_NUMBER, "4", 	CVAR_SERVER_ONLY_NO_NOTIFY, "Thirdperson: Desired Camera Up Position.", { min=-32, max = 32 } }
+
+CVAR["ph_falldamage"]						=	{ CTYPE_BOOL,	"1",	CVAR_SERVER_ONLY, "Toggle Fall Damage. Applies for all teams." }
+CVAR["ph_falldamage_real"]					=	{ CTYPE_BOOL,	"0",	CVAR_SERVER_ONLY_NO_NOTIFY, "Should Fall Damage dealt by subtracting 10 or realistically."}
 
 -- Prop Chooser / Prop Menu
 CVAR["pcr_enable"]							=	{ CTYPE_BOOL, "1", CVAR_SERVER_ONLY, "Enable Prop Menu Feature?"}
@@ -351,8 +368,8 @@ end
 -- START OF CLIENT CONVAR
 
 if CLIENT then
-	
-	local CLCVAR = {}
+
+	local CLCVAR = {} -- Move outside "Client" Realm for convar dump. Once you're done, get back in.
 
 	CLCVAR["ph_cl_language"]				=	{ CTYPE_STRING, GetGlobalString("ph_default_lang", "en_us"), true, true, "Prefered language to use" }
 	
@@ -391,6 +408,13 @@ if CLIENT then
 	CLCVAR["ph_cl_decoy_spawn_key"]			=	{ CTYPE_NUMBER, KEY_1,	 true, true,  "What key should we use to spawn 'Decoy' prop? Default is Key number 1 ("..tostring(KEY_1)..")" }
     CLCVAR["ph_cl_decoy_spawn_helper"]      =   { CTYPE_BOOL,   "1",     true, false, "Show/Hide a Decoy placement helper? This will show a white dot with a text near on your crosshair." }
     CLCVAR["ph_cl_decoy_spawn_marker"]      =   { CTYPE_BOOL,   "1",     true, false, "Show/Hide Decoy marker?" }
+    
+    CLCVAR["ph_thirdperson_key"]            =   { CTYPE_NUMBER, KEY_N,   true, true, "Key for Third Person Mode. Only works for Hunters." }
+    CLCVAR["ph_tpcam_dist"]                 =   { CTYPE_NUMBER, "64",      true, true, "Forward distance for thirdperson camera.", { min=32, max = 128 } }
+    CLCVAR["ph_tpcam_right"]                =   { CTYPE_NUMBER, "16",      true, true, "Right/Left position for thirdperson camera.", { min=-128, max = 128 } }
+    CLCVAR["ph_tpcam_up"]                   =   { CTYPE_NUMBER, "5",       true, true, "Up position for thirdperson camera.", { min=-32, max = 32 } }
+	
+	CLCVAR["ph_cl_unstuck_key"]             =   { CTYPE_NUMBER, KEY_F6,    true, true, "Key to try to unstuck." }
 
 	local cTranslate = {}
 
@@ -443,3 +467,35 @@ if CLIENT then
 end
 
 -- END OF CLIENT
+
+
+-- ConVar Dump for Config File Generator.
+-- Do not use this or uncomment, unless if you're know what you're doing.
+--[[ function convardumpforcfg()
+	local f = PHX.ConfigPath .. "/convardump.txt"
+	if CLIENT then
+		f = PHX.ConfigPath .. "/convardump_cl.txt"
+	end
+	
+	local t = {}
+	local CVX = {}
+	if SERVER then
+		CVX = CVAR
+	else
+		CVX = CLCVAR
+	end
+	
+	for cvar,data in SortedPairs(CVX) do
+		local value = tostring(data[2])
+		local c = data[4] 
+		if CLIENT then c = data[5] end
+		local strhelp = string.Replace( c, "\n", " " )
+		local help  = "// " .. strhelp
+		
+		table.insert(t, help.."\n"..cvar.."\t"..value)
+	end
+	
+	local concat = table.concat(t,"\n\n")
+	
+	file.Write(f, concat)
+end ]]

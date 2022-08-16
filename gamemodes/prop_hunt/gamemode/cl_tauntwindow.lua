@@ -32,6 +32,7 @@ local function MainFrame()
 	window.frame:SetVisible(true)
 	window.frame:ShowCloseButton(true)
 	window.frame:Center()
+	window.frame:SetDraggable(true)
 	window.frame:SetMouseInputEnabled(true)
 	window.frame:SetKeyboardInputEnabled(true)
 	
@@ -41,41 +42,49 @@ local function MainFrame()
 	end
 	
 	window.frame.OnClose = function()
+		LocalPlayer():SetVar( "tauntWindowScrolling", window.list.VBar:GetScroll() )
 		window.CurrentlyOpen = false
 		hastaunt = false
 	end
-	
-	--Needed to do ScrollPanel because I was unable to modify the VBar.Scroll from a DListView
-	window.scrollpanel = vgui.Create("DScrollPanel", window.frame)
-	window.scrollpanel:Dock(FILL)
-	window.scrollpanel.VBar.Scroll = LocalPlayer():GetNWInt("tauntWindowScrolling",0)
 
-	window.list = vgui.Create("DListView", window.scrollpanel)
+	window.list = vgui.Create("DListView", window.frame)
 	window.list:SetMultiSelect(false)
 	window.list:AddColumn("soundlist") -- does nothing because header is invisible.
 	window.list.m_bHideHeaders = true
 	window.list:SetDataHeight(21)
-	window.list:Dock(TOP) -- TOP is the one working
-	window.list:DisableScrollbar()
+	window.list:Dock(FILL) -- TOP is the one working
+	-- it appears that works after setting it on next frame. Tried to paste on another location, it resets to 0.
+	timer.Simple(0, function()
+		window.list.VBar:SetScroll( LocalPlayer():GetVar( "tauntWindowScrolling", 0 )  )
+	end)
 	
+	window.toppanel = vgui.Create("DPanel", window.frame)
+	window.toppanel:Dock(TOP)
+	window.toppanel:DockPadding(4,2,4,2)
+	window.toppanel:SetBackgroundColor(Color(16,16,16,180))
 
-	window.comb = vgui.Create("DComboBox", window.frame)
+	window.comb = window.toppanel:Add("DComboBox")
 	window.comb:Dock(TOP)
 	window.comb:SetSize(0, 20)
-	if (PHX.TAUNTS[LocalPlayer():GetNWString("tauntWindowCategorie", PHX.DEFAULT_CATEGORY)][LocalPlayer():Team()]==nil) then
+	if (PHX.TAUNTS[ LocalPlayer():GetVar( "tauntWindowCategorie", PHX.DEFAULT_CATEGORY )][LocalPlayer():Team()] == nil) then
 		window.comb:SetValue(PHX.DEFAULT_CATEGORY)
 	else
-		window.comb:SetValue( LocalPlayer():GetNWString("tauntWindowCategorie", PHX.DEFAULT_CATEGORY) )
+		window.comb:SetValue( LocalPlayer():GetVar("tauntWindowCategorie", PHX.DEFAULT_CATEGORY) )
 	end
 	
-	window.input = vgui.Create("DTextEntry", window.frame)
+	window.input = window.toppanel:Add("DTextEntry")
 	window.input:Dock(TOP)
 	window.input:SetSize(0, 20)
-	window.input:DockMargin(0,5,0,0)
+	window.input:DockMargin(0,5,0,5)
 	window.input:SetPlaceholderText( PHX:FTranslate("TM_SEARCH_PLACEHOLDER") )
 	
+	window.pitchpanel = vgui.Create("DPanel", window.frame)
+	window.pitchpanel:Dock(TOP)
+	window.pitchpanel:DockPadding(4,2,4,4)
+	window.pitchpanel:SetBackgroundColor(Color(16,16,16,180))
+	
 	-- Checkbox Label & Slider for Pitch and stuff here
-	window.slider = vgui.Create("DNumSlider", window.frame)
+	window.slider = window.pitchpanel:Add("DNumSlider")
 	window.slider:Dock(TOP)
 	window.slider:SetSize(0,24)
 	window.slider:DockMargin(8,2,0,0)
@@ -87,7 +96,7 @@ local function MainFrame()
 	window.slider:SetDecimals(1)
     
 	-- Normal Custom Taunt pitch
-	window.ckpitch = vgui.Create("DCheckBoxLabel", window.frame)
+	window.ckpitch = window.pitchpanel:Add("DCheckBoxLabel")
 	window.ckpitch:Dock(TOP)
 	window.ckpitch:SetSize(0,20)
 	window.ckpitch:DockMargin(8,1,0,0)
@@ -97,7 +106,7 @@ local function MainFrame()
         window.ckpitrand:SetEnabled( bool )
     end
 	
-	window.ckpitrand = vgui.Create("DCheckBoxLabel", window.frame)
+	window.ckpitrand = window.pitchpanel:Add("DCheckBoxLabel")
 	window.ckpitrand:Dock(TOP)
 	window.ckpitrand:SetSize(0,20)
 	window.ckpitrand:DockMargin(8,1,0,0)
@@ -106,7 +115,7 @@ local function MainFrame()
     window.ckpitrand:SetEnabled( window.ckpitch:GetChecked() )
 	
 	-- The [F3] Random taunt pitch
-	window.ckPF3 = vgui.Create("DCheckBoxLabel", window.frame)
+	window.ckPF3 = window.pitchpanel:Add("DCheckBoxLabel")
 	window.ckPF3:Dock(TOP)
 	window.ckPF3:SetSize(0,20)
 	window.ckPF3:DockMargin(8,1,0,0)
@@ -116,7 +125,7 @@ local function MainFrame()
         window.ckPRandF3:SetEnabled( bool )
     end
 	
-	window.ckPRandF3 = vgui.Create("DCheckBoxLabel", window.frame)
+	window.ckPRandF3 = window.pitchpanel:Add("DCheckBoxLabel")
 	window.ckPRandF3:Dock(TOP)
 	window.ckPRandF3:SetSize(0,20)
 	window.ckPRandF3:DockMargin(8,1,0,0)
@@ -125,7 +134,7 @@ local function MainFrame()
     window.ckPRandF3:SetEnabled( window.ckPF3:GetChecked() )
 	
 	-- The Fake Taunts pitch
-	window.ckPFake = vgui.Create("DCheckBoxLabel", window.frame)
+	window.ckPFake = window.pitchpanel:Add("DCheckBoxLabel")
 	window.ckPFake:Dock(TOP)
 	window.ckPFake:SetSize(0,20)
 	window.ckPFake:DockMargin(8,1,0,0)
@@ -135,13 +144,29 @@ local function MainFrame()
         window.ckPRandFake:SetEnabled( bool )
     end
 	
-	window.ckPRandFake = vgui.Create("DCheckBoxLabel", window.frame)
+	window.ckPRandFake = window.pitchpanel:Add("DCheckBoxLabel")
 	window.ckPRandFake:Dock(TOP)
 	window.ckPRandFake:SetSize(0,20)
 	window.ckPRandFake:DockMargin(8,1,0,5)
 	window.ckPRandFake:SetText( PHX:FTranslate("PHX_CTAUNT_RANDPITCH_FOR_FAKE") )
     window.ckPRandFake:SetConVar( "ph_cl_pitch_fake_prop_random" )
     window.ckPRandFake:SetEnabled( window.ckPFake:GetChecked() )
+	
+	window.toppanel:InvalidateLayout(true)
+	window.toppanel:SizeToChildren(false,true)
+	window.pitchpanel:InvalidateLayout(true)
+	window.pitchpanel:SizeToChildren(false,true)
+	window.pitchpanel.Think = function()
+		local stat = GetConVar( "ph_taunt_pitch_enable" ):GetBool()
+		
+		if stat then
+			window.pitchpanel:SetVisible( true )
+			window.pitchpanel:InvalidateParent()
+		else
+			window.pitchpanel:SetVisible( false )
+			window.pitchpanel:InvalidateParent()
+		end
+	end
 
 	local btnpanel = vgui.Create("DPanel", window.frame)
 	btnpanel:Dock(TOP)
@@ -183,7 +208,7 @@ local function MainFrame()
 	end
 	
 	-- Let's Initialize the window.list.
-	local defaultList = PHX.TAUNTS[LocalPlayer():GetNWString("tauntWindowCategorie", PHX.DEFAULT_CATEGORY)]
+	local defaultList = PHX.TAUNTS[LocalPlayer():GetVar("tauntWindowCategorie", PHX.DEFAULT_CATEGORY)]
 	--in case categorie isn't set for the 2 teams
 	if defaultList[LocalPlayer():Team()]==nil then
 		defaultList = PHX.TAUNTS[PHX.DEFAULT_CATEGORY]
@@ -197,7 +222,7 @@ local function MainFrame()
 	hasLines = true
 
 	--init size
-	window.list:SetSize(0,table.getn(window.list:GetLines())*21)
+	-- window.list:SetSize(0,table.getn(window.list:GetLines())*21)
 
 	-- add category list
 	for category,_ in pairs( PHX.TAUNTS ) do
@@ -250,7 +275,7 @@ local function MainFrame()
 			end
 			hasLines = true
 			window.list:SetSize(1,table.getn(self.list:GetLines())*21)
-			window.scrollpanel.VBar.Scroll = 0
+			window.list.VBar:SetScroll( 0 )
 		else
 			self.list:AddLine( PHX:FTranslate("TM_NO_TAUNTS") )
 			hasLines = false
@@ -273,7 +298,7 @@ local function MainFrame()
 				end
 				hasLines = true
 				self.list:SetSize(0,table.getn(self.list:GetLines())*21)
-				window.scrollpanel.VBar.Scroll = 0
+				window.list.VBar:SetScroll( 0 )
 			else
 				self.list:AddLine( PHX:FTranslate("TM_TAUNTS_SEARCH_NOTHING", strToFind) )
 				hasLines = false
@@ -307,7 +332,7 @@ local function MainFrame()
 		window.input:SetText("")
 			
 		local t = PHX.TAUNTS[val][LocalPlayer():Team()]
-		LocalPlayer():SetNWString("tauntWindowCategorie", val)
+		LocalPlayer():SetVar("tauntWindowCategorie", val)
 		window:ResetList( t )
 			
 		self:SortAndStyle(window.list)
@@ -383,7 +408,7 @@ local function MainFrame()
 		
 			SendToServer(getline)
 			--Saving state of scrollbar
-			LocalPlayer():SetNWInt("tauntWindowScrolling",window.scrollpanel.VBar.Scroll)
+			LocalPlayer():SetVar("tauntWindowScrolling", window.list.VBar:GetScroll())
 			window.frame:Close()
 		end
 	end)
@@ -412,7 +437,7 @@ local function MainFrame()
 	end)
 	CreateStyledButton(FILL,86,PHX:FTranslate("TM_TOOLTIP_CLOSE"),{5,5,5,5},"vgui/phehud/btn_close.vmt",FILL, function()
 	--Saving state of scrollbar
-		LocalPlayer():SetNWInt("tauntWindowScrolling",window.scrollpanel.VBar.Scroll)
+		LocalPlayer():SetVar("tauntWindowScrolling",window.list.VBar:GetScroll())
 		window.frame:Close()
 	end)
 	
@@ -459,14 +484,14 @@ local function MainFrame()
 				if hasLines then 
 					SendToServer(getline)
 					--Saving state of scrollbar
-					LocalPlayer():SetNWInt("tauntWindowScrolling",window.scrollpanel.VBar.Scroll)
+					LocalPlayer():SetVar("tauntWindowScrolling",window.list.VBar:GetScroll())
 					window.frame:Close()
 				end 
 			end):SetIcon("icon16/sound_delete.png")
 			menu:AddSpacer()
 			menu:AddOption(PHX:FTranslate("TM_MENU_CLOSE"), function()
 				--Saving state of scrollbar
-				LocalPlayer():SetNWInt("tauntWindowScrolling",window.scrollpanel.VBar.Scroll)
+				LocalPlayer():SetVar("tauntWindowScrolling",window.list.VBar:GetScroll())
 				window.frame:Close()
 			end):SetIcon("icon16/cross.png")
 			menu:Open()
@@ -480,7 +505,7 @@ local function MainFrame()
 	window.list.DoDoubleClick = function(id,line)
 		hastaunt = true
 		--Saving state of scrollbar
-		LocalPlayer():SetNWInt("tauntWindowScrolling",window.scrollpanel.VBar.Scroll)
+		LocalPlayer():SetVar("tauntWindowScrolling",window.list.VBar:GetScroll())
 		local getline = TranslateTaunt(window.CurrentCategory, window.list:GetLine(window.list:GetSelectedLine()):GetValue(1))
 		SendToServer(getline)
 		
@@ -497,8 +522,6 @@ if ply:Alive() and window.state and ply:GetObserverMode() == OBS_MODE_NONE then
 	if !window.CurrentlyOpen then
 		MainFrame()
 	else
-		--Saving state of scrollbar
-		LocalPlayer():SetNWInt("tauntWindowScrolling",window.scrollpanel.VBar.Scroll)
 		window.frame:Close()
 	end
 else

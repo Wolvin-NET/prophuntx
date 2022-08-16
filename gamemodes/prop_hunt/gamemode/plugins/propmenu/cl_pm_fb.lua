@@ -50,7 +50,7 @@ net.Receive("phxpm.fb_openPM_Editor", function()
 
 	local ply = LocalPlayer()
 
-	if ply:CheckUserGroup() or ply:IsSuperAdmin() then
+	if ( ply:PHXIsStaff() ) then
 
 		if PHX:GetCVar( "pcr_allow_custom" ) then
 			local isFor = net.ReadTable()
@@ -67,7 +67,7 @@ net.Receive("phxpm.fb_UpdateConfirmed_Editor", function()
 	local isError = net.ReadBool()
 	local ply = LocalPlayer()
 	
-	if ply:CheckUserGroup() or ply:IsSuperAdmin() then
+	if ( ply:PHXIsStaff() ) then
 	
 	  local fail = false
 	

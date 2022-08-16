@@ -305,7 +305,7 @@ LANG["PHXM_ADMIN_SHOWPLNAMEHEAD"] = "플레이어 팀 이름이 화면에 표시
 LANG["PHXM_ADMIN_USESINGLE_FZCAM"] =
     "사운드 목록 대신 단일 Freezecam 사운드 사용 ('ph_fc_cue_path'를 사용하여 Freezecam 사운드 경로 확인)"
 LANG["PHXM_ADMIN_MODELLISTINGTYPE"] =
-    "이전 모델 목록 사용 : 0 = 모든 플레이어 모델 (AddValidModel), 1 = 이전 모델 사용 : list.Get('PlayerOptionsModel')"
+    "이전 모델 목록 사용 : 0: 모든 플레이어 모델, 1: 이전 모델 사용 : list.Get('PlayerOptionsModel')"
 LANG["PHXM_ADMIN_JUMPPOWER"] = "Prop 팀 플레이어의 추가 점프 파워 배율"
 LANG["PHXM_ADMIN_ENABLE_OBB"] =
     "개발자 : 구성 데이터에서 사용자 정의 된 Prop 엔티티 모델 경계 (OBB) 수정 자 사용"

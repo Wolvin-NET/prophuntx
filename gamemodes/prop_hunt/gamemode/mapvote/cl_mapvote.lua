@@ -63,7 +63,7 @@ function PANEL:Init()
     self.Canvas = vgui.Create("Panel", self)
     self.Canvas:MakePopup()
     self.Canvas:SetKeyboardInputEnabled(false)
-    
+	
     self.countDown = vgui.Create("DLabel", self.Canvas)
     self.countDown:SetTextColor(color_white)
     self.countDown:SetFont("RAM_VoteFontCountdown")
@@ -104,6 +104,16 @@ function PANEL:Init()
     self.minimButton.Paint = function(panel, w, h)
         derma.SkinHook("Paint", "WindowMinimizeButton", panel, w, h)
     end
+	
+	self.CancelBtn = vgui.Create("DButton", self.Canvas)
+	self.CancelBtn:SetPos(0,0)
+	self.CancelBtn:SetText("Cancel MapVote")
+	self.CancelBtn:SetSize(160,32)
+	self.CancelBtn.DoClick = function()
+		chat.AddText( "MapVote has been stopped." )
+		LocalPlayer():ConCommand("mv_stop")
+		self:SetVisible(false)
+	end
 
     self.Voters = {}
 end
@@ -118,12 +128,12 @@ function PANEL:PerformLayout()
     self.Canvas:StretchToParent(0, 0, 0, 0)
     self.Canvas:SetWide(640 + extra)
     // self.Canvas:SetTall(cy -60)
-	self.Canvas:SetTall(640)
-    self.Canvas:SetPos(0, 0)
+	self.Canvas:SetTall(self:GetTall())
+    self.Canvas:SetPos(0, 64)
     self.Canvas:CenterHorizontal()
     self.Canvas:SetZPos(0)
     
-    self.mapList:StretchToParent(0, 90, 0, 0)
+    self.mapList:StretchToParent(0, 90, 0, 220)
 
     local buttonPos = 640 + extra - 31 * 3
 
@@ -138,6 +148,14 @@ function PANEL:PerformLayout()
     self.minimButton:SetPos(buttonPos - 31 * 2, 4)
     self.minimButton:SetSize(31, 31)
     self.minimButton:SetVisible(true)
+	
+	self.CancelBtn:CenterHorizontal()
+	self.CancelBtn:SetY( self.CancelBtn:GetParent():GetTall() - 200 )
+	if ( LocalPlayer():PHXIsStaff() ) then
+		self.CancelBtn:SetVisible( true )
+	else
+		self.CancelBtn:SetVisible( false )
+	end
     
 end
 
@@ -292,6 +310,8 @@ function PANEL:Flash(id)
     self:SetVisible(true)
 
     local bar = self:GetMapButton(id)
+	
+	self.CancelBtn:SetEnabled(false)
     
     if(IsValid(bar)) then
         timer.Simple( 0.0, function() bar.bgColor = Color( 0, 255, 255 ) surface.PlaySound( "hl1/fvox/blip.wav" ) end )

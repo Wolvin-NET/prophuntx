@@ -43,14 +43,14 @@ function CLASS:OnSpawn(pl)
     -- Set Color
     pl:PHSetColor()
 	
-	-- Delay start the AutoTaunt stuff and Control Tutorial
+	-- Delay start the AutoTaunt stuff
 	timer.Simple(1, function()
 		if IsValid(pl) and pl:Alive() then
 			net.Start("AutoTauntSpawn")
 			net.Send(pl)
 			
-			net.Start("PH_ShowTutor")
-			net.Send(pl)
+			--[[ net.Start("PH_ShowTutor")
+			net.Send(pl) ]]
 		end
 	end)
 	

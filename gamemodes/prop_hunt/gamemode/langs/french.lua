@@ -312,7 +312,7 @@ LANG["PHXM_ADMIN_USENEWMKBREN"]		= "Utiliser le nouveau modèle de l'arme bonus 
 LANG["PHXM_ADMIN_BEVERBOSE"]		= "Développeur: Détails - Activer PH:X pour imprimer toutes les informations et tous les événements de manière détaillée?"
 LANG["PHXM_ADMIN_SHOWPLNAMEHEAD"]	= "Activer l’affichage des noms d’équipe des joueurs sur leur écran."
 LANG["PHXM_ADMIN_USESINGLE_FZCAM"]	= "Utilisez un seul son pour la Freeze Cam au lieu d’une liste de sons (utilisez 'ph_fc_cue_path' pour déterminer le chemin sonore Freezecam)"
-LANG["PHXM_ADMIN_MODELLISTINGTYPE"] = "Utiliser la liste des Models hérités : 0 = Tout les PlayerModels (AddValidModel), 1 = Hérité par: list.Get('PlayerOptionsModel')"
+LANG["PHXM_ADMIN_MODELLISTINGTYPE"] = "Utiliser la liste des Models hérités : 0: Tout les PlayerModels, 1: Hérité par: list.Get('PlayerOptionsModel')"
 LANG["PHXM_ADMIN_JUMPPOWER"]		= "Puissance de saut additionnel pour les Props"
 LANG["PHXM_ADMIN_ENABLE_OBB"]		= "Développeur: Activer le modificateur OBB (Prop Entities Model Boundaries) personnalisé à partir des données de configuration"
 LANG["PHXM_ADMIN_RELOAD_OBB"]		= "Développeur: Recharger les données du modificateur OBB à chaque redémarrage de la manche"

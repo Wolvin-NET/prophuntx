@@ -17,10 +17,10 @@ LANG["en_us"]   = {
     ["LPS_BTN_WEPLIST"]         = "Available Weapons List",
     ["LPS_MINIMUM_PROPS_TEAM"]  = "Minimum number of props on Team before LPS can be triggered. Minium: 2.",
     
-    ["LPS_START_RANDOM"]        = "Whether LPS should be started randomly.",
-    ["LPS_START_DELAYED"]       = "Should LPS be delayed-start after next X rounds?",
-    ["LPS_START_X_ROUNDS"]      = "If delayed-start enabled, in what rounds should be triggered?",
-    ["LPS_SET_USEHEALTH"]       = "Should LPS Players STARTS with 100 HP? Changing to other prop doesn't keep the health.",
+    ["LPS_START_RANDOM"]        = "Whether LPS should be started randomly. (Delayed Start will be overriden)",
+    ["LPS_START_DELAYED"]       = "Should LPS be Delayed-Start after X rounds?",
+    ["LPS_START_X_ROUNDS"]      = "If Delayed-Start enabled, increment to X rounds to trigger LPS.",
+    ["LPS_SET_USEHEALTH"]       = "Should LPS Players STARTS with 100 HP? Changing to other prop doesn't keep the health!",
     ["LPS_SET_USEARMOR"]        = "Should Give LPS Players an Armor? Starts with 100 AP.",
     
     ["LPS_WEPLIST"]             = "Available Weapons list:\n%s\nYou can use 'lps_weapon_list' in the console.",
@@ -54,7 +54,7 @@ LANG["en_us"]   = {
     
     -- More into stuff now.
     ["LASTPROP_ANNOUNCE"]       = "You are the Last Prop Standing!",
-    ["LASTPROP_ANNOUNCE_ALL"]   = "The Last Prop Standing is Resisting!",
+    ["LASTPROP_ANNOUNCE_ALL"]   = "The Last Prop is Resisting!",
     
     -- Weapon State
     ["WEAPON_STATE_READY"]      = "Ready",

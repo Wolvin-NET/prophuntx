@@ -142,17 +142,16 @@ Version: ]].. PHX.VERSION ..[[ Revision: ]].. PHX.REVISION ..[[
 
 Have Fun!]]
 
--- This is stock configuration. Please do not modify or change!
--- Use for External only.
 PHX.IgnoreMutedUserGroup = {
-	"owner","co-owner", "superadmin","admin",
-	"developer", "moderator", "donator", "vip"
+	-- Use from Group Edit in F1 Menu.
+	-- Do not modify. Use External script to add group.
+	["superadmin"] 	= true,
+	["admin"] 		= true
 }
 PHX.SVAdmins = {
-	-- Superadmin is default level privileges. If you want to add admin, just add 'admin' here.
-	-- This will responsible to manage Prop Hunt: X's Configurations, Server Settings, Prop Menu Editor and others.
-	-- Put any staff that you TRUST.
-	"superadmin", "owner", "founder" --, "admin", "co-admin", ...
+    -- Use from Group Edit in F1 Menu.
+    -- Do not modify. Use External script to add group.
+	["superadmin"] = true
 }
 -- Bootstrap 4 colour base. This only works on clientside :(
 PHX.info = {
@@ -165,23 +164,36 @@ PHX.info = {
 -- End of Stock Config
 
 function PHX:AddAdminGroup( strGroup )
-	if !strGroup then return end
+	if !strGroup or strGroup == nil or !isstring(strGroup) or strGroup == "" then return end
 	
-	if (table.HasValue(self.SVAdmins, strGroup)) then
+	if self.SVAdmins[strGroup] then
+        print("Failed. UserGroup was exists.")
 		PHX.VerboseMsg("[PHX] The usergroup you entered '" .. strGroup .. "' was exist. Ignoring...")
 	else
-		table.insert( self.SVAdmins, string.lower(strGroup) )
+		self.SVAdmins[strGroup] = true
 	end
 end
 
+function PHX:RemoveAdminGroup( strGroup )
+    if !strGroup or strGroup == nil or !isstring(strGroup) or strGroup == "" then return end
+    
+    self.SVAdmins[strGroup] = nil
+end
+
 function PHX:AddWhitelistMuted( strGroup )
-	if !strGroup then return end
+	if !strGroup or strGroup == nil or !isstring(strGroup) or strGroup == "" then return end
 	
-	if (table.HasValue(self.IgnoreMutedUserGroup, strGroup)) then
+	if self.IgnoreMutedUserGroup[strGroup] then
 		PHX.VerboseMsg("[PHX] The whitelisted mute usergroup you entered '" .. strGroup .. "' was exist. Ignoring...")
 	else
-		table.insert( self.IgnoreMutedUserGroup, string.lower(strGroup) )
+		self.IgnoreMutedUserGroup[strGroup] = true
 	end
+end
+
+function PHX:RemoveWhitelistMuted( strGroup )
+	if !strGroup or strGroup == nil or !isstring(strGroup) or strGroup == "" then return end
+	
+	self.IgnoreMutedUserGroup[strGroup] = nil
 end
 
 -- Banned Props models. Stock, use external lua script to add and use Initialize hook to start adding items.
@@ -232,7 +244,7 @@ if SERVER then
 	end
 end
 
---[[ // DO NOT MODIFY! These are stock taunts. Please add your custom taunt under /config/sh_ph_additional_taunts.lua. \\ ]]--
+--[[ // DO NOT MODIFY! These are stock taunts. Please add yourself by using taunt scanner! \\ ]]--
 PHX.TAUNTS[PHX.DEFAULT_CATEGORY][TEAM_HUNTERS] = {
 	["Come to Papa"]				=	"taunts/hunters/come_to_papa.wav",
 	["I am your Father"]			=	"taunts/hunters/father.wav",
@@ -256,7 +268,9 @@ PHX.TAUNTS[PHX.DEFAULT_CATEGORY][TEAM_HUNTERS] = {
 	["HACKS"]						=	"vo/npc/male01/thehacks01.wav",
 	["Over Here"]					=	"vo/npc/male01/overhere01.wav",
 	["Over There"]					=	"vo/npc/male01/overthere01.wav",
-	["Over There!!"]				=	"vo/npc/male01/overthere02.wav"
+	["Over There!!"]				=	"vo/npc/male01/overthere02.wav",
+	["Guuuh!"]						=	"vo/k_lab/ba_guh.wav",
+	["F You!"]						= 	"vo/streetwar/rubble/ba_tellbreen.wav"
 }
 
 --[[ // DO NOT MODIFY! use from taunts/props_taunts.lua or hunters_taunts.lua instead! \\ ]]--
@@ -378,19 +392,6 @@ PHX.TAUNTS[PHX.DEFAULT_CATEGORY][TEAM_PROPS] = {
 PHX.CachedTaunts = {}
 PHX.CachedTaunts[TEAM_HUNTERS]	= {}
 PHX.CachedTaunts[TEAM_PROPS]	= {}
-
-function table.KeyExists(tbl, key)
-    return tbl[key] ~= nil
-end
-
-function table.HasKey(tbl, keyName)
-	for k,_ in pairs(tbl) do
-		if k == keyName then
-			return true
-		end
-	end
-	return false
-end
 
 if SERVER then
 	function AddResources(t)
@@ -522,31 +523,35 @@ function PHX:GetAllTeamTaunt( teamid, category )
 	return taunt
 end
 
--- Deprecated, This may no longer used, use with your own risk.
+-- Use with your own risk.
 function PHX:RefreshTauntList()
 	local t = table.Copy(PHX.TAUNTS)
+	local getCategories = table.GetKeys(PHX.TAUNTS)
+	
+	print( "[PHX Taunt] Refreshing..." )
+	
 	-- Empty Table
 	PHX.TAUNTS = {}
 	
-	local max = table.Count(t) -- note: they are not sequential, using # may not work (# must be numeric index)
-	for i=1,max do
-		table.sort( t[i][TEAM_PROPS] )
-		table.sort( t[i][TEAM_HUNTERS] )
+	-- Resort them.
+	for _,Category in pairs( getCategories ) do
+		if t[Category][TEAM_PROPS]   ~= nil then table.sort( t[Category][TEAM_PROPS] ) 	 end
+		if t[Category][TEAM_HUNTERS] ~= nil then table.sort( t[Category][TEAM_HUNTERS] ) end
 	end
 	
 	PHX.TAUNTS = t
 end
 
--- if there was no  taunts loaded, uncomment these. For most cases, this almost never happened.
+-- if there was no  taunts loaded, uncomment these. For most cases, this should never happened.
 --[[
-	hook.Add("PostGamemodeLoaded", "PHX.RefreshTauntList", function()
+	hook.Add("InitPostEntity", "PHX.RefreshTauntList", function()
 		PHX:RefreshTauntList() 
 	end)
 ]]
 
-concommand.Add("ph_refresh_taunt_list", function() 
-	PHX:RefreshTauntList() 
-end, nil, "(Deprecated) Refresh Taunt List and Sort them.")
+concommand.Add("ph_refresh_taunt_list", function( ply ) 
+	if ( util.IsStaff( ply ) ) then PHX:RefreshTauntList() end
+end, nil, "(Deprecated: Use with your own risk) Refresh Taunt List and Sort them.")
 
 -- Add the custom player model bans for props AND prop banned models
 local config_path = PHX.ConfigPath
@@ -566,7 +571,7 @@ if SERVER then
 		end
 
 		-- Create actual config
-		if ( !file.Exists( dir.."/bans.txt", "DATA" ) ) then
+		if ( !file.Exists( dir.."/bans.txt", "DATA" ) or file.Size( dir.."/bans.txt", "DATA" ) <= 0 ) then
 			file.Write( dir.."/bans.txt", util.TableToJSON({"models/player.mdl", "custom_playermodel_name"}, true) )
 		end
 		
@@ -602,7 +607,7 @@ if SERVER then
 			file.CreateDir(dir)
 		end
 		
-		if ( !file.Exists(dir.."/model_bans.txt","DATA") ) then
+		if ( !file.Exists(dir.."/model_bans.txt","DATA") or file.Size( dir.."/model_bans.txt", "DATA" ) <= 0 ) then
 			file.Write( dir.."/model_bans.txt", util.TableToJSON( template, true ))
 		end
 		
@@ -634,24 +639,27 @@ if SERVER then
     AddBannedPropModels()
 	
 	-- Add ConCommands.
-	concommand.Add("ph_refresh_plmodel_ban", AddBadPLModels, nil, "Refresh Server Playermodel Ban Lists, read from prop_plymodel_bans/bans.txt data.")
-	concommand.Add("ph_refresh_propmodel_ban", AddBannedPropModels, nil, "Refresh Server Prop Models Ban Lists, read from prop_model_bans/model_bans.txt data.")
+	concommand.Add("ph_refresh_plmodel_ban", function(ply)
+		if ( util.IsStaff( ply ) ) then AddBadPLModels() end
+	end, nil, "Refresh Server Playermodel Ban Lists (Auto-update on round restart) and read from prop_plymodel_bans/bans.txt")
+	
+	concommand.Add("ph_refresh_propmodel_ban", function(ply)
+		if ( util.IsStaff( ply ) ) then AddBannedPropModels() end
+	end, nil, "Refresh Server Prop Models Ban Lists (Auto-update on round restart) and read from prop_model_bans/model_bans.txt")
 end
 
 local function UpdatePropBansInfo( PHXKey, tbl )
-	local json = util.TableToJSON( tbl )
-	local compress = util.Compress(json)
-	local len = compress:len()
+	local compress,len = util.PHXQuickCompress( tbl )
 	
 	net.Start( "PHX.UpdatePropbanInfo" )
 		net.WriteString( PHXKey )
-		net.WriteUInt( len, 32 )
+		net.WriteUInt( len, 16 )
 		net.WriteData( compress, len )
 	net.Broadcast()
 end
 
 hook.Add("PostCleanupMap", "PHX.UpdateUsablePropEnt", function()
-	-- Update Prop Enttiies Type
+	-- Update Prop Entities Type
 	PHX.USABLE_PROP_ENTITIES = PHX.CVARUseAbleEnts[ PHX:GetCVar( "ph_usable_prop_type" ) ]
 	
 	if SERVER then
@@ -672,15 +680,15 @@ hook.Add("PostCleanupMap", "PHX.UpdateUsablePropEnt", function()
 	end
 end)
 
-local function InitializeTaunts()
+local function InitializeConfig()
 
 	PHX.VerboseMsg("[PH Taunts] Initializing Taunts...")
 	
-	PHX.VerboseMsg("[PH Taunts] Precaching taunt base..." )
-	PHX:AddToCache( TEAM_PROPS, PHX.TAUNTS[PHX.DEFAULT_CATEGORY][TEAM_PROPS] )
-	PHX:AddToCache( TEAM_HUNTERS, PHX.TAUNTS[PHX.DEFAULT_CATEGORY][TEAM_HUNTERS] )
+	PHX.VerboseMsg("[PH Taunts] Precaching stock taunts..." )
+	PHX:AddToCache( TEAM_PROPS, 	PHX.TAUNTS[PHX.DEFAULT_CATEGORY][TEAM_PROPS] )
+	PHX:AddToCache( TEAM_HUNTERS, 	PHX.TAUNTS[PHX.DEFAULT_CATEGORY][TEAM_HUNTERS] )
 	
-	PHX.VerboseMsg("[PHX Taunts] Adding Custom Taunts, if any...")
+	PHX.VerboseMsg("[PHX Taunts] Adding External Custom Taunts, if any...")
 	for category,tauntData in SortedPairs( list.Get("PHX.CustomTaunts") ) do 
 		
 		PHX.VerboseMsg("[PH Taunts] Working on category: [" .. category .. "]...")
@@ -694,7 +702,7 @@ local function InitializeTaunts()
     PHX.USABLE_PROP_ENTITIES = PHX.CVARUseAbleEnts[ PHX:QCVar( "ph_usable_prop_type" ) ]
 	
 end
-hook.Add("Initialize", "PHX.InitializeTaunts", InitializeTaunts)
+hook.Add("Initialize", "PHX.InitializeTaunts", InitializeConfig)
 -- use this if taunts are not properly added.
 -- hook.Add("PostGamemodeLoaded", "PHX.InitializeTaunts", InitializeTaunts)
 

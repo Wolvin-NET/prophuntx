@@ -4,30 +4,17 @@ if !Player then return end
 if !Entity then return end
 
 function Entity:GetPropSize()
-    local hullxymax,hullz
-    -- local hx,hy,hz
-    -- local mins = self:OBBMins()
-    -- local maxs = self:OBBMaxs()
-    
-    --[[ if self:GetClass() == "prop_ragdoll" then	--> Bug: this causes low framerate issues
-        hx = math.Round( maxs.x+mins.x )
-        hy = math.Round( maxs.y+mins.y )
-        hz = math.Round( maxs.z-mins.z )
-    else --> these are normal.
-        hx = math.Round(math.Max(maxs.x-mins.x, maxs.y-mins.y) / 2)
-        hy = hx
-        hz = math.Round(maxs.z - mins.z)
-    end ]]
-    
+    local hullxymax=0
+    local hullz=0
     hullxymax     = math.Round(math.Max(self:OBBMaxs().x - self:OBBMins().x, self:OBBMaxs().y - self:OBBMins().y) / 2)
     hullz         = math.Round(self:OBBMaxs().z - self:OBBMins().z)
 	
-	--return hx, hy, hz
+    -- don't do a hull check. It's kinda bugged and causing low framerate problems.
 	if self:GetClass() == "prop_ragdoll" then
 		return 0,0,0
 	end
 	
-	return hullxymax, hullxymax, hullz
+	return hullxymax, hullxymax, hullz --this is intentional. We might to re-add "Y" in the future for ragdolls.
 end
 
 function Player:CheckHull(hx,hy,hz)
@@ -106,7 +93,13 @@ function Player:AddHealthProp( num )
 end
 
 function Player:CheckUserGroup()
-	if table.HasValue( PHX.SVAdmins, string.lower( self:GetUserGroup() ) ) then
+    local group = self:GetUserGroup()
+    if PHX.SVAdmins[group] then return true end
+	return false
+end
+
+function Player:PHXIsStaff()
+	if (self:CheckUserGroup() or self:IsSuperAdmin()) then
 		return true
 	end
 	return false
@@ -162,16 +155,16 @@ if SERVER then
         self.ph_prop:Spawn()
         
         if PHX:GetCVar( "ph_use_custom_plmodel_for_prop" ) then
-            self.m_shortHunterModel = player_manager.TranslatePlayerModel( self:GetInfo("cl_playermodel") )
+            self.m_ShortToModel = player_manager.TranslatePlayerModel( self:GetInfo("cl_playermodel") )
             
-            if table.HasValue( PHX.PROP_PLMODEL_BANS, string.lower( self.m_shortHunterModel ) ) then
+            if table.HasValue( PHX.PROP_PLMODEL_BANS, string.lower( self.m_ShortToModel ) ) then
                 self.ph_prop:SetModel("models/player/kleiner.mdl")
                 self:PHXChatInfo("WARNING", "PROP_PLAYERMDL_BANNED")
             elseif table.HasValue( PHX.PROP_PLMODEL_BANS, string.lower( self:GetInfo("cl_playermodel") ) ) then
                 self.ph_prop:SetModel("models/player/kleiner.mdl")
                 self:PHXChatInfo("WARNING", "PROP_PLAYERMDL_BANNED")
             else
-                self.ph_prop:SetModel( self.m_shortHunterModel )
+                self.ph_prop:SetModel( self.m_ShortToModel )
             end
         end
         
@@ -181,12 +174,13 @@ if SERVER then
     
     end
 
-    function Player:PHSendHullInfo( xymax, zmax, zdmax, health )
-        net.Start("SetHull")
-            net.WriteInt( xymax, 32)
-            net.WriteInt( zmax,  32)
-            net.WriteInt( zdmax, 32)
-            net.WriteInt( health, 9)
+    function Player:PHSendHullInfo( xymin, xymax, zmax, zdmax, health )
+        net.Start( "SetHull" )
+			net.WriteVector( Vector(xymin, xymin, 0) ) --Hull Mins
+			net.WriteVector( Vector(xymax, xymax, zmax) ) --Hull Mins
+			net.WriteVector( Vector(xymin, xymin, 0) ) --DuckHull
+			net.WriteVector( Vector(xymax, xymax, zdmax) ) --DuckHull
+            net.WriteInt( health, 9 )
         net.Send(self)
     end
     

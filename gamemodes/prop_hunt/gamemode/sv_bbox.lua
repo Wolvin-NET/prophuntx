@@ -92,9 +92,13 @@ end)
 
 concommand.Add("refresh_obb_map_setting", function(ply)
 
-	PHX.VerboseMsg("[PHX] Refreshing OBB Model Data Modifier...")
-	CUR_MAP_DATA = LoadOBBConfig()
-	
-	DoConfig()
+	if ( util.IsStaff( ply ) ) then
 
-end, nil, "Reload PHX OBB/Collission Bound Model Data Modifier on this map.", FCVAR_SERVER_CAN_EXECUTE)
+		PHX.VerboseMsg("[PHX] Refreshing OBB Model Data Modifier...")
+		CUR_MAP_DATA = LoadOBBConfig()
+	
+		DoConfig()
+		
+	end
+
+end, nil, "Reload PHX OBB/Collission Bound Model Data Modifier on this map.")

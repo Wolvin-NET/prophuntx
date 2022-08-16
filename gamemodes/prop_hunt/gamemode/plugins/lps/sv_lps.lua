@@ -11,28 +11,6 @@ local LPSAllowed = false
 
 PHX.LPS.ROUND_LEFT = 1
 
-function PHX.LPS:CheckTriggerableEvent()
-
-    local RN = GetGlobalInt( "RoundNumber", 0 )
-    local isRandom = PHX:GetCVar( "lps_start_random" )
-
-    if isRandom and RN >= 1 then
-        if math.random(0,1) == 1 then
-            return true
-        end
-    end
-
-    -- Warning: untested
-    local isDelayed =   PHX:GetCVar( "lps_start_delayed_rounds" )
-    local cvar      =   PHX:GetCVar( "lps_start_every_x_rounds" )
-    if isDelayed and PHX.LPS.ROUND_LEFT == RN then
-        PHX.LPS.ROUND_LEFT = RN + cvar
-        return true
-    end
-
-    return false
-end
-
 function PHX.LPS:CreateSound( ply )
 
     if IsValid( ply ) and ply:Alive() and ply:Team() == TEAM_PROPS then
@@ -46,7 +24,6 @@ function PHX.LPS:CreateSound( ply )
                 filter:AddPlayer( v )
             end
         end
-        --filter:AddAllPlayers()
         
         local snd = CreateSound( ply, self.SOUND.CURRENT.sound, filter )
         self.SOUND.CURRENT.sndObj = snd
@@ -153,7 +130,6 @@ end)
 hook.Add("PlayerSpawn", "LPS.ResetWeaponState", function(ply)
     ResetPlayerStat( ply )
 end)
-
 -- End of Hooks
 
 local function StopMusic()
@@ -183,14 +159,26 @@ hook.Add("PH_BlindTimeOver","LPS.BlindTimeOverAllow", function() LPSAllowed = tr
 local function DoPlayerCheck(ply)
 
     if PHX:GetCVar( "lps_enable" ) and ply:Team() == TEAM_PROPS then
-    
-        if (not PHX.LPS.CheckTriggerableEvent()) then
-            return
-        end
         
         -- Gives delay in case hunter throws a grenade or something or 2 player prop were killed simultaneously
         timer.Simple(0.5, function()
 	        if team.NumPlayers(TEAM_PROPS) >= PHX:GetCVar( "lps_mins_prop_players" ) and LPSAllowed and GAMEMODE:GetTeamAliveCounts()[TEAM_PROPS] == 1 and GAMEMODE:InRound() then
+				
+				local RN = GetGlobalInt( "RoundNumber", 0 )
+				local XR = PHX:GetCVar( "lps_start_every_x_rounds" )
+				
+				if PHX:GetCVar( "lps_start_random" ) then
+					if math.random(0,1) == 0 then 
+						return
+					end
+				elseif PHX:GetCVar( "lps_start_delayed_rounds" ) then
+					if PHX.LPS.ROUND_LEFT == RN then 
+						PHX.LPS.ROUND_LEFT = RN + XR
+						-- continue.
+					else
+						return
+					end
+				end
                 
                 local stand = NULL
                 

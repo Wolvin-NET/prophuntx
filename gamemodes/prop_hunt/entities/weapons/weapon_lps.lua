@@ -32,7 +32,7 @@ function SWEP:Initialize()
     self:SetWeaponHoldType( "normal" )
     
     if CLIENT then
-        self:SetNoDraw( false )
+        self:SetNoDraw( true )
     end
 end
 

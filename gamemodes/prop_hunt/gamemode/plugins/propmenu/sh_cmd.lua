@@ -1,9 +1,8 @@
 concommand.Add( "pcr_debug_model_list",function( ply )
-	if ply == NULL then -- assume it's dedicated server.
+	if ( (game.IsDedicated() and ply == NULL) ) then
 		PrintTable(PCR.PropList)
-		print("[pcr] debug: running on server cmd")
 	else
-		if ( ply:IsSuperAdmin() or ply:CheckUserGroup() ) then
+		if ( ply:PHXIsStaff() ) then
 			ply:ChatPrint("[Prop Menu] Check on your Console!")
 			PrintTable(PCR.PropList)
 			print("[pcr] debug: running on client cmd")

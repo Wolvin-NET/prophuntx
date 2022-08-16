@@ -29,6 +29,7 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 	PHX.UI.MainForm = vgui.Create("DFrame")
 	PHX.UI.MainForm:SetSize(ScrW(),ScrH())
 	PHX.UI.MainForm:SetTitle( PHX:FTranslate("PHXM_WINDOW_TITLE") )
+    PHX.UI.MainForm.lblTitle:SetFont('HudHintTextLarge')
 	PHX.UI.MainForm.Paint = function(self,w,h)
 		surface.SetDrawColor(20,20,20,200)
 		surface.DrawRect(0,0,w,h)
@@ -324,6 +325,8 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 			<internal::call>
 	]]
 	function PHX.UI:PlayerModelSelections()
+        --local mdl = {}
+    
 		local panel = vgui.Create("DPanel", PHX.UI.PnlTab)
 		panel:SetBackgroundColor(Color(40,40,40,120))
 		panel:Dock(FILL)
@@ -386,7 +389,7 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 			
 			-- ^dito, grid dimensions 66x66 w/ Coloumn 7.
 			local pnl = vgui.Create( "DGrid", scroll )
-			pnl:Dock(FILL)
+			--pnl:Dock(FILL)
 			pnl:SetCols( 9 )
 			pnl:SetColWide( 68 )
 			pnl:SetRowHeight( 68 )
@@ -451,17 +454,11 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 				
 				pnl:AddItem(icon)
 			end
-			return pnl
+			--return pnl
+			return panelpreview,pnList
 		end
 		
-		-- Self Explanationary.
-		if PHX:GetCVar( "ph_use_custom_plmodel" ) then
-			-- Call the VGUI Properties of PlayerModelAdditions().
-			PlayerModelAdditions()
-            
-			local PanelModify = PHX.UI.PnlTab:AddSheet("", panel, "vgui/ph_iconmenu/m_plmodel.png")
-			PHX.UI.PaintTabButton(PanelModify, PHX:FTranslate("PHXM_TAB_MODEL"))
-		else
+		local function PlayerModelDisabledPanel()
 			-- Show small message instead
 			local scroll = vgui.Create( "DScrollPanel", panel )
 			scroll:Dock(FILL)
@@ -473,14 +470,35 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 			gridmdl:SetColWide(800)
 			gridmdl:SetRowHeight(32)
 			
-			PHX.UI:CreateVGUIType("", "label", false, gridmdl, "PHXM_MODEL_DISABLED")
+			PHX.UI:CreateVGUIType("", "label", "PHX.MenuCategoryLabel", gridmdl, "PHXM_MODEL_DISABLED")
 			
 			-- this hook is intended to use for custom player model outside from PHX Menu. (like Custom Donator Model window or something).
 			hook.Call("PH_CustomPlayermdlButton", nil, panel, gridmdl, function(cmd,typ,data,panel,text) PHX.UI:CreateVGUIType(cmd,typ,data,panel,text) end)
 			
-			local PanelModify = PHX.UI.PnlTab:AddSheet("", panel, "vgui/ph_iconmenu/m_plmodel.png")
-			PHX.UI.PaintTabButton(PanelModify, PHX:FTranslate("PHXM_TAB_MODEL"))
+			return scroll
 		end
+		
+		local pmv,pmlist=PlayerModelAdditions()
+		local pmdisabled=PlayerModelDisabledPanel()
+		
+		pmv:SetVisible(false)
+		pmlist:SetVisible(false)
+		pmdisabled:SetVisible(false)
+		
+		panel.Think = function(  )
+			if PHX:GetCVar( "ph_use_custom_plmodel" ) then
+				pmv:SetVisible(true)
+				pmlist:SetVisible(true)
+				pmdisabled:SetVisible(false)
+			else
+				pmv:SetVisible(false)
+				pmlist:SetVisible(false)
+				pmdisabled:SetVisible(true)
+			end
+		end
+		
+		local PanelModify = PHX.UI.PnlTab:AddSheet("", panel, "vgui/ph_iconmenu/m_plmodel.png")
+		PHX.UI.PaintTabButton(PanelModify, PHX:FTranslate("PHXM_TAB_MODEL"))
 	end
 	
 	--[[
@@ -513,7 +531,15 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 		PHX.UI:CreateVGUIType("ph_prop_menu_key", "binder", false, gridpl, "PHXM_PLAYER_PROP_CHOOSER_KEY")
 		PHX.UI:CreateVGUIType("ph_prop_midair_freeze_key", "binder", false, gridpl, "PHXM_PROP_FREEZE_MIDAIR")
 		PHX.UI:CreateVGUIType("ph_cl_decoy_spawn_key", "binder", false, gridpl, "PHXM_CL_DECOY_KEYBIND")
+        PHX.UI:CreateVGUIType("ph_thirdperson_key", "binder", false, gridpl, "PHXM_CL_THIRDPERSON")
 		
+        PHX.UI:CreateVGUIType("", "btn", {
+			[1] = {"PHX_TP_ADJUSTVIEW_BTN" ,
+			function(self)
+				PHX:TPSAdjust( PHX.UI.MainForm, { x=GetConVar("ph_tpcam_dist"):GetInt(), y=GetConVar("ph_tpcam_right"):GetInt(), z=GetConVar("ph_tpcam_up"):GetInt(), } )
+			end}
+			}, gridpl ,"")
+        
         PHX.UI:CreateVGUIType("","spacer",nil,gridpl,"" )
 		PHX.UI:CreateVGUIType("", "label", "PHX.MenuCategoryLabel", gridpl, "PHXM_PLAYER_OPTIONS")
         
@@ -553,7 +579,7 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 	function PHX.UI:PlayerMute()
 		local panel,gridmute = PHX.UI:CreateBasicLayout(Color(40,40,40,180),PHX.UI.PnlTab,64)
 	
-		PHX.UI:CreateVGUIType("","label",false,gridmute, "PHXM_MUTE_SELECT")
+		PHX.UI:CreateVGUIType("","label","PHX.MenuCategoryLabel",gridmute, "PHXM_MUTE_SELECT")
 		for _,Plys in pairs(player.GetAll()) do
 			PHX.UI:CreateVGUIType("","mute",Plys,gridmute,"")
 		end
@@ -564,7 +590,7 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 	
 	function PHX.UI:ShowAdminMenu()
 		local panel,grid = PHX.UI:CreateBasicLayout(Color(40,40,40,180),PHX.UI.PnlTab,36)
-
+        
 		PHX.UI:CreateVGUIType("", "label", "PHX.MenuCategoryLabel", grid, "PHXM_ADMIN_LANGOVERRIDE")
 		PHX.UI:CreateVGUIType("ph_use_lang", "check", "SERVER", grid, "PHXM_ADMIN_FORCELANG")
 		PHX.UI:CreateVGUIType("ph_force_lang", "langcombobox", true, grid, "PHXM_ADMIN_LANGTOUSE")
@@ -575,6 +601,8 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
         
 		PHX.UI:CreateVGUIType("ph_use_custom_plmodel", "check", "SERVER", grid, "PHXM_ADMIN_CUSTOM_MODEL")
 		PHX.UI:CreateVGUIType("ph_use_custom_plmodel_for_prop", "check", "SERVER", grid, "PHXM_ADMIN_CUSTOM_MODEL_PROP")
+		PHX.UI:CreateVGUIType("ph_enable_prop_player_color", "check", "SERVER", grid, "PHXM_ADMIN_MDLCOLOR_PROP")
+		PHX.UI:CreateVGUIType("ph_enable_hunter_player_color", "check", "SERVER", grid, "PHXM_ADMIN_MDLCOLOR_HUNTER")
         PHX.UI:CreateVGUIType("ph_allow_armor", "check", "SERVER", grid, "PHXM_ADMIN_ALLOWARMOR")
 		
         PHX.UI:CreateVGUIType("","spacer",nil,grid,"" )
@@ -652,7 +680,6 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
         PHX.UI:CreateVGUIType("","spacer",nil,grid,"" )
 		PHX.UI:CreateVGUIType("", "label", "PHX.MenuCategoryLabel", grid, "PHXM_DECOY_SETTINGS")
 		PHX.UI:CreateVGUIType("ph_enable_decoy_reward", "check", "SERVER", grid, "PHXM_DECOY_ENABLE")
-		PHX.UI:CreateVGUIType("", "label", false, grid, "PHXM_DECOY_HEALTH")
 		PHX.UI:CreateVGUIType("ph_decoy_health", "slider", {min = 1, max = 200, init = "DEF_CONVAR", dec = 0, kind = "SERVER"}, grid, "PHXM_DECOY_HEALTH")
 		
 		PHX.UI:CreateVGUIType("","spacer",nil,grid,"" )
@@ -660,8 +687,15 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
         
 		PHX.UI:CreateVGUIType("ph_notify_player_join_leave", "check", "SERVER", grid, "PHXM_ENABLE_PLAYER_JOIN_LEAVE")
         PHX.UI:CreateVGUIType("ph_props_disable_footstep", "check", "SERVER", grid, "PHXM_DISABLE_FOOTSTEP")
+		PHX.UI:CreateVGUIType("ph_enable_thirdperson", "check", "SERVER", grid, "PHXM_ADMIN_ALLOW3P")
+		PHX.UI:CreateVGUIType("ph_sv_thirdperson_desired", "check", "SERVER", grid, "PHXM_ADMIN_ALLOW3P_SVDESIRED")
+		PHX.UI:CreateVGUIType("ph_sv_thirdperson_ddist", 	"slider", {min=32,  max=128,dec=0,kind="SERVER"}, grid, "PHXM_ADMIN_ALLOW3P_DIST")
+		PHX.UI:CreateVGUIType("ph_sv_thirdperson_dright", 	"slider", {min=-128,max=128,dec=0,kind="SERVER"}, grid, "PHXM_ADMIN_ALLOW3P_RIGHT")
+		PHX.UI:CreateVGUIType("ph_sv_thirdperson_dup", 		"slider", {min=-32, max=32, dec=0,kind="SERVER"}, grid, "PHXM_ADMIN_ALLOW3P_UP")
         PHX.UI:CreateVGUIType("ph_give_grenade_near_roundend", "check", "SERVER", grid, "PHXM_ADMIN_GIVEGRENADE_NEAREND")
         PHX.UI:CreateVGUIType("ph_give_grenade_roundend_before_time", "slider", {min = 3, max = GAMEMODE.RoundLength, init = PHX:GetCVar( "ph_give_grenade_roundend_before_time" ), dec = 2, float = true, kind = "SERVER"}, grid, "PHXM_ADMIN_GIVEGRENADE_TIME")
+		PHX.UI:CreateVGUIType("ph_falldamage", "check", "SERVER", grid, "PHXM_ADMIN_FALLDMG")
+		PHX.UI:CreateVGUIType("ph_falldamage_real", "check", "SERVER", grid, "PHXM_ADMIN_FALLDMG_REAL")
 		PHX.UI:CreateVGUIType("ph_notice_prop_rotation", "check", "SERVER", grid, "PHXM_ADMIN_NOTICE_ROTATION")
 		PHX.UI:CreateVGUIType("ph_prop_camera_collisions", "check", "SERVER", grid, "PHXM_ADMIN_CAMERA_COLLIDE")
 		PHX.UI:CreateVGUIType("ph_freezecam", "check", "SERVER", grid, "PHXM_ADMIN_FREEZECAM")
@@ -683,27 +717,46 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 		PHX.UI:CreateVGUIType("devspacer","spacer",nil,grid,"" )
 		PHX.UI:CreateVGUIType("", "label", "PHX.MenuCategoryLabel", grid, "PHXM_ADMIN_DEVSECTION")
         
+        PHX.UI:CreateVGUIType("ph_print_verbose", "combobox", { kind="SERVER", data=
+            {
+                ["0"] = { name="PHXM_DROP_VBS_DISABLE", icon="icon16/application_delete.png" },
+                ["1"] = { name="PHXM_DROP_VBS_ENABLE",  icon="icon16/application_xp_terminal.png" },
+            }
+        }, grid, "PHXM_ADMIN_BEVERBOSE")
 		PHX.UI:CreateVGUIType("ph_check_for_rooms", "check", "SERVER", grid, "PHXM_ADMIN_ROOMCHECK")
 		PHX.UI:CreateVGUIType("ph_mkbren_use_new_mdl","check","SERVER",grid, "PHXM_ADMIN_USENEWMKBREN")
-		PHX.UI:CreateVGUIType("ph_print_verbose", "check", "SERVER", grid, "PHXM_ADMIN_BEVERBOSE")
 		PHX.UI:CreateVGUIType("ph_enable_plnames", "check", "SERVER", grid, "PHXM_ADMIN_SHOWPLNAMEHEAD")
 		PHX.UI:CreateVGUIType("ph_fc_use_single_sound", "check", "SERVER", grid, "PHXM_ADMIN_USESINGLE_FZCAM")
 		PHX.UI:CreateVGUIType("ph_fc_cue_path","textentry","SERVER", grid, "TEXTENTRY_FZ_SINGLE")
-		PHX.UI:CreateVGUIType("ph_use_playermodeltype", "check", "SERVER", grid, "PHXM_ADMIN_MODELLISTINGTYPE")
-		PHX.UI:CreateVGUIType("ph_prop_jumppower", "slider", {min = 1, max = 3, init = PHX:GetCVar( "ph_prop_jumppower" ), dec = 2, float = true, kind = "SERVER"}, grid, "PHXM_ADMIN_JUMPPOWER")
+         PHX.UI:CreateVGUIType("ph_use_playermodeltype", "combobox", { kind="SERVER", data=
+            {
+                ["0"] = { name="PHXM_DROP_MDL_INCLUDEALL", icon="icon16/group.png" },
+                ["1"] = { name="PHXM_DROP_MDL_CUSTOMLIST", icon="icon16/user_add.png" },
+            }
+        }, grid, "PHXM_ADMIN_MODELLISTINGTYPE")
+		PHX.UI:CreateVGUIType("ph_prop_jumppower", "slider", {min = 1, max = 5, init = "DEF_CONVAR", dec = 2, float = true, kind = "SERVER"}, grid, "PHXM_ADMIN_JUMPPOWER")
+		PHX.UI:CreateVGUIType("ph_hunter_jumppower", "slider", {min = 1, max = 2.5, init = "DEF_CONVAR", dec = 2, float = true, kind = "SERVER"}, grid, "PHXM_ADMIN_JUMPPOWER_H")
 		PHX.UI:CreateVGUIType("ph_sv_enable_obb_modifier","check","SERVER",grid, "PHXM_ADMIN_ENABLE_OBB")
 		PHX.UI:CreateVGUIType("ph_reload_obb_setting_everyround","check","SERVER",grid, "PHXM_ADMIN_RELOAD_OBB")
 		
 		PHX.UI:CreateVGUIType("","spacer",nil,grid,"" )
 		PHX.UI:CreateVGUIType("", "label", "PHX.MenuCategoryLabel", grid, "PHXM_ADMLBL_USABLE_ENTS")
 		PHX.UI:CreateVGUIType("", "label", false, grid, "PHXM_ADMLBL_USABLE_ENTS_REF")
-		PHX.UI:CreateVGUIType("ph_usable_prop_type", "slider", {min = 1, max = 4, init = PHX:GetCVar( "ph_usable_prop_type" ), dec = 0, kind = "SERVER"}, grid, "PHXM_ADMIN_USABLE_ENT_TYPE")
+         PHX.UI:CreateVGUIType("ph_usable_prop_type", "combobox", { kind="SERVER", data=
+            {
+                ["1"] = { name="PHXM_DROP_MDLTYPE_PROP" },
+                ["2"] = { name="PHXM_DROP_MDLTYPE_PROPDYN" },
+                ["3"] = { name="PHXM_DROP_MDLTYPE_ANYENTS" },
+                ["4"] = { name="PHXM_DROP_MDLTYPE_CUSTOM" },
+            }
+        }, grid, "PHXM_ADMIN_USABLE_ENT_TYPE")
 		PHX.UI:CreateVGUIType("ph_usable_prop_type_notice", "check", "SERVER", grid, "PHXM_ADMIN_NOTIFY_ENT_TYPE")
 		
 		PHX.UI:CreateVGUIType("","spacer",nil,grid,"" )
 		PHX.UI:CreateVGUIType("", "label", "PHX.MenuCategoryLabel", grid, "PHXM_ADMIN_EXPERIMENTALPHX")
-
+		
 		PHX.UI:CreateVGUIType("ph_add_hla_combine", "check", "SERVER", grid, "PHXM_ADMIN_HLA_COMBINE")
+		PHX.UI:CreateVGUIType("ph_exp_rot_pitch", "check", "SERVER", grid, "PHXM_ADMIN_PITCH_ROTATION")
 		
 		PHX.UI:CreateVGUIType("", "label", "PHX.MenuCategoryLabel", grid, "PHXM_ADMIN_CHATSETTING")
 		PHX.UI:CreateVGUIType("ph_use_new_chat", "check", "SERVER", grid, "PHXM_ADMIN_USENEWCHAT")
@@ -711,7 +764,13 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 
 		PHX.UI:CreateVGUIType("", "label", "PHX.MenuCategoryLabel", grid, "PHXM_ADMIN_HUNTERBLIND")
 		PHX.UI:CreateVGUIType("ph_allow_respawnonblind", "check", "SERVER", grid, "PHXM_ADMIN_RESPAWNONBLIND")
-		PHX.UI:CreateVGUIType("ph_allow_respawnonblind_team_only", "slider", {min = 0, max = 2, init = PHX:GetCVar( "ph_allow_respawnonblind_team_only" ), dec = 0, kind = "SERVER"}, grid, "PHXM_ADMIN_RESPAWNONBLIND_TEAM")
+        PHX.UI:CreateVGUIType("ph_allow_respawnonblind_team_only", "combobox", { kind="SERVER", data=
+            {
+                ["0"] = { name="PHXM_DROP_RESPAWNBLIND_BOTH" },
+                ["1"] = { name="PHX_TEAM_HUNTERS" },
+                ["2"] = { name="PHX_TEAM_PROPS" },
+            }
+        }, grid, "PHXM_ADMIN_RESPAWNONBLIND_TEAM")
 		PHX.UI:CreateVGUIType("ph_allow_respawn_from_spectator", "check", "SERVER", grid, "PHXM_ADMIN_ALLOWRESPAWN_SPECTATOR")
 		PHX.UI:CreateVGUIType("ph_blindtime_respawn_percent", "slider", {min = 0, max = 1, init = PHX:GetCVar( "ph_blindtime_respawn_percent" ), dec = 2, float = true, kind = "SERVER"}, grid, "PHXM_ADMIN_REWSPANTIMEPERCENT")
 		
@@ -829,7 +888,7 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 	end)
 	
 	-- Verify if current player is Admin or not.
-	if ply:IsSuperAdmin() or ply:CheckUserGroup() then
+	if ( ply:PHXIsStaff() ) then
 		net.Start("CheckAdminFirst")
 		net.SendToServer()
 	end

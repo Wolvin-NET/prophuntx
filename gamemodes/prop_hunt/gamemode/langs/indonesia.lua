@@ -317,8 +317,8 @@ LANG["PHXM_ADMIN_USENEWMKBREN"]		= "Gunakan skin baru untuk senjata 'Bren MK II'
 LANG["PHXM_ADMIN_BEVERBOSE"]		= "Developer: Be Verbose - Aktifkan fitur 'verbose' sehingga akan meginformasikan segala hal event."
 LANG["PHXM_ADMIN_SHOWPLNAMEHEAD"]	= "Tampilkan nama player diatas kepala"
 LANG["PHXM_ADMIN_USESINGLE_FZCAM"]	= "Gunakan satu suara 'Freeze Cam'"
-LANG["PHXM_ADMIN_MODELLISTINGTYPE"] = "Tampilkan skin dalam mode : 0 = Semua Playermodel (AddValidModel), 1 = Gunakan metode Lawas: list.Get('PlayerOptionsModel')"
-LANG["PHXM_ADMIN_JUMPPOWER"]		= "Tambahan penggandaan tinggi lompat pada Prop"
+LANG["PHXM_ADMIN_MODELLISTINGTYPE"] = "Tampilkan Skin dari: 0: Semua Playermodel, 1: Kustom: list.Get('PlayerOptionsModel')"
+LANG["PHXM_ADMIN_JUMPPOWER"]		= "Tambahan penggandaan tinggi lompat pada tim Prop"
 LANG["PHXM_ADMIN_ENABLE_OBB"]		= "Developer: Aktifkan Enable Customized Prop Entities Model Boundaries (OBB) Modifier from config data" --Untranslateable
 LANG["PHXM_ADMIN_RELOAD_OBB"]		= "Developer: Reload OBB Modifier data every round restarts" --Untranslateable
 

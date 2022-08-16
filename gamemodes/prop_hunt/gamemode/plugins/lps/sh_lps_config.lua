@@ -52,8 +52,8 @@ end
 if CLIENT then
     -- forcefully stop laser sound in clientside.
     function LPSStopLaserSound()
-        LocalPlayer():SetNWBool("LPS.LaserSoundPlayed",false)
         LocalPlayer():StopSound("PHX.WeaponLaser.Loop")
+        LocalPlayer():SetNWBool("LPS.LaserSoundPlayed",false)
         
         -- I know this is due to prediction from PlayerTick hook. Recalling them just to make sure it's completely stops.
         timer.Simple(LASERFIREDELAY, function() LocalPlayer():StopSound("PHX.WeaponLaser.Loop") end)
@@ -382,7 +382,8 @@ PHX.LPS.WEAPON_NEW = {
                         if v == ply then continue end
                         Recip:AddPlayer( v )
                     end
-                    ply.LPSLaserFireSound   = CreateSound( ply, "lps/laser_loop.wav", Recip )
+                    ply.LPSLaserFireSound = CreateSound( ply, "lps/laser_loop.wav", Recip )
+					ply.LPSLaserFireSound:SetSoundLevel( 140 )
                     
                 end
             else
@@ -402,7 +403,6 @@ PHX.LPS.WEAPON_NEW = {
             local tr = ply:LPSCreatePropTrace()
             ply:LagCompensation(false)
             
-            -- Should LagCompensation be occured here?
             if SERVER then
                 if (tr.Entity and tr.Entity:IsValid()) and
                     (SafeEntityToDamage[tr.Entity:GetClass()]) or 
@@ -444,7 +444,7 @@ if CLIENT then
     
     -- Currently it's the only proper way to show lasers.
     -- if Anyone had better solution, please let me know!
-    hook.Add("RenderScreenspaceEffects", "LPS.LaserBeamDraw", function()    
+    hook.Add("PreDrawEffects", "LPS.LaserBeamDraw", function()    
         
         if GetGlobalBool("LPS.InLastPropStanding", false) and GetGlobalBool("InRound", false) then
         
@@ -463,10 +463,10 @@ if CLIENT then
                     if (att) then start = att.Pos end
                     local endpos = tr.HitPos
                     
-                    cam.Start3D()
-                        render.SetMaterial( LaserTexture )        
-                        render.DrawBeam( start, endpos, 32, 1, 0, LaserColor )
-                    cam.End3D()
+                    --cam.Start3D()
+                    render.SetMaterial( LaserTexture )        
+                    render.DrawBeam( start, endpos, 32, 1, 0, LaserColor )
+                    --cam.End3D()
                 end
                     
             end
@@ -476,6 +476,7 @@ if CLIENT then
     end)
 end
 
+-- TODO HELP WANTED: Does GM:SetupMove is better or should I use GM:Move instead?
 hook.Add("PlayerTick", "LPS.LaserSoundControl", function( ply, mv )
     if not IsFirstTimePredicted() then return end
     if not IsValid(ply) then return end
@@ -490,7 +491,7 @@ hook.Add("PlayerTick", "LPS.LaserSoundControl", function( ply, mv )
             if !ply:LPSFiringStatus() or !ply:LPSCheckEntityCanShoot() then 
                 ply.LPSLaserFireSound:Stop()
             else 
-                ply.LPSLaserFireSound:Play()
+                ply.LPSLaserFireSound:PlayEx(0.95,100)
             end
           end
           
@@ -510,43 +511,27 @@ end)
 
 if SERVER then
     local function ClearLPSFireSound( ply )
-    
-        -- Force clear laser fire sound.
-        if ply:IsLastStanding() and (ply.LPSLaserFireSound and ply.LPSLaserFireSound ~= nil) then
+	
+        -- Force clear laser fire sound.		
+        if ply:Team() == TEAM_PROPS and (ply.LPSLaserFireSound and ply.LPSLaserFireSound ~= nil) then
             ply.LPSLaserFireSound:Stop()
             ply.LPSLaserFireSound = nil
         end
         
     end
 
-    -- This isn't very healthy...
     hook.Add("PostPlayerDeath", "LPS.LaserSoundControl.Death", ClearLPSFireSound)
-    hook.Add("PlayerSpawn", "LPS.LaserSoundControl.Spawn", ClearLPSFireSound)
+    hook.Add("PlayerDisconnected", "LPS.LaserSoundControl.Disconnect", ClearLPSFireSound)
     hook.Add("PH_RoundEnd", "LPS.LaserSoundControl.RoundEnd", function()
-          for _,ply in pairs( team.GetPlayers(TEAM_PROPS) ) do
+        for _,ply in pairs( team.GetPlayers(TEAM_PROPS) ) do
             ClearLPSFireSound( ply )
             timer.Simple(0, function() 
-                -- can I enforce?
                 ply:SetNWBool( "LPS.LaserSoundPlayed", false )
                 ply:SendLua("LPSStopLaserSound()") 
             end)
         end
     end)
-    
-    -- CSoundPatch can't be stopped because player is removed and PlayerDisconnected was called after it was removed. We'll use a dirty hack below.
-    -- hook.Add("PlayerDisconnected", "LPS.LaserSoundControl.Disconnect", ClearLPSFireSound)
-    
-    -- Bug: It seems only occurs on Cleint's Full Update
-    -- However Cleanup Map will do the thing.
-    hook.Add("EntityRemoved", "LPS.CSoundPatchKiller.Hack", function( ent )
-        if IsValid(ent) and ent:IsPlayer() and ent:IsLastStanding() then
-            SetGlobalBool("LPS.InLastPropStanding", false) -- Force Stop the event status
-            if (ent.LPSLaserFireSound and ent.LPSLaserFireSound ~= nil) then
-                ent.LPSLaserFireSound:Stop() -- Stop the sound
-                --ent.LPSLaserFireSound = nil -- Enable this to deference the object.
-            end
-        end
-    end)
+
 end
 -- End of Laser Hook Helper
 
@@ -565,7 +550,7 @@ hook.Add("Initialize", "LPS.Init_or_ExternalWeaponEntry", function()
 end)
 
 concommand.Add("lps_weapon_list", function(ply)
-    if (game.IsDedicated() and ply == NULL) or ply:IsSuperAdmin() or ply:CheckUserGroup() then
+    if (SERVER and util.IsStaff( ply )) or (CLIENT and ply:PHXIsStaff()) then
 		local weps = table.GetKeys( PHX.LPS.WEAPON_NEW )
 		print("[PHX LPS] Showing all available LPS weapons:")
 		for _,v in pairs(weps) do

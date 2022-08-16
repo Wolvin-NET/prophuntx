@@ -23,7 +23,7 @@ cvar["lps_show_weapon"]			= { CTYPE_BOOL,		"1",		CVAR_SERVER_ONLY, "Make Last Pr
 cvar["lps_start_random"]        = { CTYPE_BOOL,		"1",		CVAR_SERVER_ONLY, "Should LPS will begin Randomly? This will overrides 'lps_start_every_x_rounds' ConVar.",
 function(cvarname,value)
     cvars.AddChangeCallback(cvarname, function(_,_,new)
-        if tonumber(new) and new == 0 then
+        if tonumber(new) and tonumber(new) == 0 then
             PHX.LPS.ROUND_LEFT = GetGlobalInt("RoundNumber",0) + GetGlobalInt( "lps_start_every_x_rounds", 0 )
         end
         SetGlobalBool(cvarname, tobool(new))
@@ -32,7 +32,7 @@ end }
 cvar["lps_start_delayed_rounds"] = { CTYPE_BOOL,    "0",        CVAR_SERVER_ONLY, "Should LPS Start on Every X Rounds? If so, see 'lps_start_every_x_rounds' ConVar.",
 function(cvarname,value)
     cvars.AddChangeCallback(cvarname, function(_,_,new)
-        if tonumber(new) and new == 1 then
+        if tonumber(new) and tonumber(new) == 1 then
             PHX.LPS.ROUND_LEFT = GetGlobalInt("RoundNumber",0) + GetGlobalInt( "lps_start_every_x_rounds", 0 )
         end
         SetGlobalBool(cvarname, tobool(new))
@@ -117,14 +117,13 @@ if CLIENT then
             {"", "label", false,    "LPS_TRIGGER_CONDITION" },
             {"lps_start_random", 	        "check", "SERVER",	"LPS_START_RANDOM"},
             {"lps_start_delayed_rounds", 	"check", "SERVER",	"LPS_START_DELAYED"},
-            {"lps_start_every_x_rounds", 	"slider", {min=2,max=PHX:GetCVar( "ph_rounds_per_map" ), init="DEF_CONVAR", dec=0, kind="SERVER"},	"LPS_START_X_ROUNDS"},
+            {"lps_start_every_x_rounds", 	"slider", {min=2,max=PHX:GetCVar( "ph_rounds_per_map" ), dec=0, kind="SERVER"},	"LPS_START_X_ROUNDS"},
             
             {"", "label", false,    "LPS_HEALTH_ARMOR" },
             {"lps_use_normal_health",       "check", "SERVER", "LPS_SET_USEHEALTH" },
             {"lps_use_armor",               "check", "SERVER", "LPS_SET_USEARMOR" },
             
-            {"", "label", false,    "LPS_MINIMUM_PROPS_TEAM" },
-            {"lps_mins_prop_players",   "slider",    {min=2,max=game.MaxPlayers(), init="DEF_CONVAR", dec=0, kind="SERVER"}, "LPS_MINIMUM_PROPS_TEAM" },            
+            {"lps_mins_prop_players",   "slider",    {min=2,max=game.MaxPlayers(), dec=0, kind="SERVER"}, "LPS_MINIMUM_PROPS_TEAM" },            
 			{"lps_enable_music", 	"check", "SERVER",	"LPS_ENABLE_MUSIC"},
             
             {"", "label", false,    "LPS_APPEARANCES" },
@@ -138,22 +137,22 @@ if CLIENT then
             {"lps_laser_color",     "textentry", "SERVER", "LPS_LASER_COLOUR" },
             
             {"", "label", false,    "LPS_WEAPON_SETTINGS" },
-            {"lps_ammocount_revolver" ,     "slider", {min = -1, max = 500, init = "DEF_CONVAR", dec = 0, kind = "SERVER"}, "LPS_WEPSET_REV_AMMO"},
-            {"lps_ammocount_smg" ,          "slider", {min = -1, max = 500, init = "DEF_CONVAR", dec = 0, kind = "SERVER"}, "LPS_WEPSET_SMG_AMMO"},
+            {"lps_ammocount_revolver" ,     "slider", {min = -1, max = 500, dec = 0, kind = "SERVER"}, "LPS_WEPSET_REV_AMMO"},
+            {"lps_ammocount_smg" ,          "slider", {min = -1, max = 500, dec = 0, kind = "SERVER"}, "LPS_WEPSET_SMG_AMMO"},
             
-            {"lps_ammocount_airboat",       "slider", {min = -1, max = 500, init = "DEF_CONVAR", dec = 0, kind = "SERVER"}, "LPS_WEPSET_AIR_AMMO"},
-            {"lps_ammocount_shotgun",       "slider", {min = -1, max = 500, init = "DEF_CONVAR", dec = 0, kind = "SERVER"}, "LPS_WEPSET_SHOT_AMMO"},
-            {"lps_ammocount_rocket",        "slider", {min = -1, max = 500, init = "DEF_CONVAR", dec = 0, kind = "SERVER"}, "LPS_WEPSET_RPG_AMMO"},
+            {"lps_ammocount_airboat",       "slider", {min = -1, max = 500, dec = 0, kind = "SERVER"}, "LPS_WEPSET_AIR_AMMO"},
+            {"lps_ammocount_shotgun",       "slider", {min = -1, max = 500, dec = 0, kind = "SERVER"}, "LPS_WEPSET_SHOT_AMMO"},
+            {"lps_ammocount_rocket",        "slider", {min = -1, max = 500, dec = 0, kind = "SERVER"}, "LPS_WEPSET_RPG_AMMO"},
             
             {"", "label", false,    "LPS_WEAPON_DMG_SETTINGS" },
-            {"lps_wepdamage_blaster" ,      "slider", {min = 5,  max = 200, init = "DEF_CONVAR", dec = 0, kind = "SERVER"}, "LPS_WEPSET_DAMAGE_BLAST"},
-            {"lps_wepdamage_revolver" ,     "slider", {min = 5,  max = 100, init = "DEF_CONVAR", dec = 0, kind = "SERVER"}, "LPS_WEPSET_DAMAGE_REV"},
-            {"lps_wepdamage_smg" ,          "slider", {min = 5,  max = 100, init = "DEF_CONVAR", dec = 0, kind = "SERVER"}, "LPS_WEPSET_DAMAGE_SMG"},
+            {"lps_wepdamage_blaster" ,      "slider", {min = 5,  max = 200, dec = 0, kind = "SERVER"}, "LPS_WEPSET_DAMAGE_BLAST"},
+            {"lps_wepdamage_revolver" ,     "slider", {min = 5,  max = 100, dec = 0, kind = "SERVER"}, "LPS_WEPSET_DAMAGE_REV"},
+            {"lps_wepdamage_smg" ,          "slider", {min = 5,  max = 100, dec = 0, kind = "SERVER"}, "LPS_WEPSET_DAMAGE_SMG"},
             
-            {"lps_wepdamage_airboat",       "slider", {min = 5,  max = 100, init = "DEF_CONVAR", dec = 0, kind = "SERVER"}, "LPS_WEPSET_DAMAGE_AIR"},
-            {"lps_wepdamage_shotgunpelet",  "slider", {min = 5,  max = 100, init = "DEF_CONVAR", dec = 0, kind = "SERVER"}, "LPS_WEPSET_DAMAGE_SHOT"},
-            {"lps_wepdamage_rocket",        "slider", {min = 5,  max = 200, init = "DEF_CONVAR", dec = 0, kind = "SERVER"}, "LPS_WEPSET_DAMAGE_RPG"},
-            {"lps_wepdamage_laser",         "slider", {min = 5,  max = 100, init = "DEF_CONVAR", dec = 0, kind = "SERVER"}, "LPS_WEPSET_DAMAGE_LASER"},
+            {"lps_wepdamage_airboat",       "slider", {min = 5,  max = 100, dec = 0, kind = "SERVER"}, "LPS_WEPSET_DAMAGE_AIR"},
+            {"lps_wepdamage_shotgunpelet",  "slider", {min = 5,  max = 100, dec = 0, kind = "SERVER"}, "LPS_WEPSET_DAMAGE_SHOT"},
+            {"lps_wepdamage_rocket",        "slider", {min = 5,  max = 200, dec = 0, kind = "SERVER"}, "LPS_WEPSET_DAMAGE_RPG"},
+            {"lps_wepdamage_laser",         "slider", {min = 5,  max = 100, dec = 0, kind = "SERVER"}, "LPS_WEPSET_DAMAGE_LASER"},
             
         },
         

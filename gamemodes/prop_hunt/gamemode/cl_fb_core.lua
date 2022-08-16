@@ -2,7 +2,6 @@ local function checkmodel( fPath, label )
 	local mdlInfo = util.GetModelInfo( fPath )
 	
 	if mdlInfo == nil then
-		-- label:SetText(string.format(formatText, fPath, "NO"))
 		label:SetText( PHX:FTranslate("PHZ_generic_mdlinfo", fPath, PHX:FTranslate("MISC_NO")) )
 		return false 
 	end
@@ -14,16 +13,13 @@ local function checkmodel( fPath, label )
 			if (info[2] and info[2] ~= nil) and info[2]["Key"] == "solid" then -- Asume it's Ragdoll.
 				-- We currently do not support Ragdolls until further testing. 
 				-- If we found that ragdoll can no longer server/client crashes, this feature will be re-enabled.
-				-- label:SetText(string.format(formatText, fPath, "NO: Ragdoll"))
 				label:SetText( PHX:FTranslate("PHZ_generic_mdlinfo", fPath, PHX:FTranslate("PHZ_generic_no_ragdoll")) )
 			elseif (info[1] and info[1] ~= nil) and info[1]["Key"] == "solid" then
-				--label:SetText(string.format(formatText, fPath, "YES"))
 				label:SetText( PHX:FTranslate("PHZ_generic_mdlinfo", fPath, PHX:FTranslate("MISC_YES")) )
 				return true
 			end
 		end
 	else
-		--label:SetText(string.format(formatText, fPath, "NO"))
 		label:SetText( PHX:FTranslate("PHZ_generic_mdlinfo", fPath, PHX:FTranslate("MISC_NO")) )
 	end
 	
@@ -34,7 +30,7 @@ local f = {}
 f.__index = f
 function PHXPM_openFileBrowser( ply, global, sub, svContents, wTitle )
 
-	if !ply:CheckUserGroup() or !ply:IsSuperAdmin() then return end
+	if ( !ply:PHXIsStaff() ) then return end
 
 	if !isstring(global) then return end
 	if !isstring(sub) then return end
@@ -387,7 +383,6 @@ function PHXPM_openFileBrowser( ply, global, sub, svContents, wTitle )
 		end
 		
 		function f.fb.Tree:OnNodeSelected( pnl )
-			--f.lbl:SetText(PHX:FTranslate("PHZ_generic_mdlinfo", PHX:FTranslate("PHX_SELECT_LEFT"), PHX:FTranslate("MISC_NA")))
 			f.lbwarn:SetText("")
 		end
 		

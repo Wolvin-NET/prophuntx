@@ -1,0 +1,121 @@
+// Use new PHX HUD
+ph_hud_use_new	1
+
+// Prefered language to use. You can go to F1 -> Prop Hunt Menu -> Player settings -> and select from Language Drop Down.
+ph_cl_language	en_us
+
+// Enable 'Devil ball' icon to be displayed once they spawned
+cl_enable_devilballs_icon	1
+
+// Enable 'Lucky ball' icon to be displayed once they spawned
+cl_enable_luckyballs_icon	1
+
+// Show/Hide a Decoy placement helper? This will show a white dot with a text near on your crosshair.
+ph_cl_decoy_spawn_helper	1
+
+// Show/Hide Decoy marker?
+ph_cl_decoy_spawn_marker	1
+
+// --------------------------------------------------------
+// 		Last Prop Standing
+// --------------------------------------------------------
+
+// Draw/Hide halo, even server sets it.
+lps_cl_draw_halo	1
+
+// Play Background music when LPS event begin.
+lps_cl_listen_music	1
+
+// --------------------------------------------------------
+// 		Taunt Options
+// --------------------------------------------------------
+
+// Auto close taunt window (When Double Clicking on them)
+ph_cl_autoclose_taunt	1
+
+// Apply pitch for fake taunts.
+ph_cl_pitch_apply_fake_prop	0
+
+// Apply for random taunts as well.
+ph_cl_pitch_apply_random	0
+
+// Randomize taunt pitch for FAKE taunt regardless from the preferred pitch level.
+ph_cl_pitch_fake_prop_random	0
+
+// Current pitch level used for.
+ph_cl_pitch_level	100.0
+
+// Randomize taunt pitch for CUSTOM taunt regardless from the preferred pitch level.
+ph_cl_pitch_randomized	0
+
+// Randomize taunt pitch for RANDOM taunt regardless from the preferred pitch level.
+ph_cl_pitch_randomized_random	0
+
+// Enable pitch level for custom taunts?
+ph_cl_pitch_taunt_enable	1
+
+// Should Prop also able to Taunt by pressing Right Click?
+ph_prop_right_mouse_taunt	0
+
+// --------------------------------------------------------
+// 		Miscellaneous
+// --------------------------------------------------------
+
+// Options for Text above players. 0 = Disable. 1 = Enable.
+ph_cl_pltext	1
+
+// Draw a line on hunters so we can see their aim in spectator mode.
+ph_cl_spec_hunter_line	1
+
+// Show custom crosshair for props
+ph_show_custom_crosshair	1
+
+// Play a sound when round ends? 0 to disable.
+ph_cl_endround_sound	1
+
+// Toggle Enable/Disable Halo effects when choosing a prop.
+ph_cl_halos	1
+
+// Show total alive team players bar on the top left
+ph_show_team_topbar	1
+
+// Show 'Game Control' pop up notification on everytime player re-spawns. This only show 4x and resets until map changes/user disconnected.
+ph_show_tutor_control	1
+
+// --------------------------------------------------------
+// 		Key Binding
+// --------------------------------------------------------
+
+// What key should we use to spawn 'Decoy' prop? Default is Key number 1 (2) - Note: Not Numpad 1
+ph_cl_decoy_spawn_key	2
+
+// Default custom taunt key to be used. Default is C (13)
+ph_default_customtaunt_key	13
+
+// Default Rotation lock key to be used. Default is R (28)
+ph_default_rotation_lock_key	28
+
+// Default random taunt key to be used. Default is F3 (94)
+ph_default_taunt_key	94
+
+// Default key to open Prop Menu. Default is F8 (99)
+ph_prop_menu_key	99
+
+// Default key to freeze your prop while in mid-air. Default is M (23)
+ph_prop_midair_freeze_key	23
+
+// Key for Third Person Mode. Only works for Hunters.
+ph_thirdperson_key	24
+
+// --------------------------------------------------------
+// 		Thirdperson Adjust
+// --------------------------------------------------------
+
+// Forward distance for thirdperson camera.
+ph_tpcam_dist	64
+
+// Right/Left position for thirdperson camera.
+ph_tpcam_right	16
+
+// Up position for thirdperson camera.
+ph_tpcam_up	5

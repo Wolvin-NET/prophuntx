@@ -75,6 +75,25 @@ function GM.ViewCam.CommonCamCollEnabledView( self, origin, angles, entZ )
     return trace
 end
 
+-- Used for Hunters.
+function GM.ViewCam.Hunter3pCollEnabled( self, origin, angles, forward, right, up )
+    local trace = {}
+    
+    if !forward or forward == nil then forward = 50 end
+    if !right or right == nil then right = 0 end
+    if !up or up == nil then up = 0 end
+    
+    trace.start = origin
+    trace.endpos = origin - (angles:Forward()*forward) + (angles:Right()*right) + (angles:Up()*up)
+    trace.filter = player.GetAll()
+    trace.maxs = Vector(4,4,4)
+    trace.mins = trace.maxs*-1
+    
+    local tr = util.TraceHull( trace )
+    
+    return tr
+end
+
 -- Inclusions. Requires absolute path. These does not include plugins!
 -- No trailing "/" please on "path" argument.
 function PHX:Includes( path, name, isExternal )
@@ -129,14 +148,12 @@ end
 -- Standard Inclusion
 AddCSLuaFile("cl_lang.lua")
 AddCSLuaFile("config/sh_init.lua")
-AddCSLuaFile("sh_drive_prop.lua")
 AddCSLuaFile("ulx/modules/sh/sh_phx_mapvote.lua")
 AddCSLuaFile("sh_config.lua")
 AddCSLuaFile("sh_player.lua")
 AddCSLuaFile("sh_chatbox.lua")
 AddCSLuaFile("sh_tauntscanner.lua")
 include("config/sh_init.lua")
-include("sh_drive_prop.lua")
 include("ulx/modules/sh/sh_phx_mapvote.lua")
 include("sh_config.lua")
 include("sh_player.lua")
@@ -372,28 +389,31 @@ end
 hook.Add("Initialize", "PHX.LoadPlugins", function() -- Origin: PostGamemodeLoaded
 	PHX:InitializePlugin()
 end)
+hook.Add("OnReloaded", "PHX.ReLoadPlugins", function()
+	PHX:InitializePlugin()
+end)
 
 if CLIENT then	
 	hook.Add("PH_CustomTabMenu", "PHX.NewPlugins", function(tab, pVgui, paintPanelFunc)
-	
+		--local tabW,tabH = tab:GetWide(),tab:GetTall()
+		local tabW,tabH = tab.Content:GetWide(),tab.Content:GetTall()
 		local main = {}
 	
-		main.panel = vgui.Create("DPanel", tab)
+		main.panel = tab:Add("DPanel")
 		main.panel:Dock(FILL)
 		main.panel:SetBackgroundColor(Color(40,40,40,120))
 			
-		main.scroll = vgui.Create( "DScrollPanel", main.panel )
+		main.scroll = main.panel:Add("DScrollPanel")
 		main.scroll:Dock(FILL)
 		
-		main.grid = vgui.Create("DGrid", main.scroll)
+		main.grid = main.scroll:Add("DGrid")
 		main.grid:SetPos(10,10)
-		main.grid:SetSize(tab:GetWide()*0.85,320)
 		main.grid:SetCols(1)
-		main.grid:SetColWide(tab:GetWide()*0.8)
-		main.grid:SetRowHeight(340)
+		main.grid:SetColWide( tabW - 16 )
+		main.grid:SetRowHeight( tabH * 0.75 )
 		
 		if table.IsEmpty(PHX.PLUGINS) then
-			if (LocalPlayer():IsSuperAdmin() or LocalPlayer():CheckUserGroup()) then
+			if ( LocalPlayer():PHXIsStaff() ) then
 				local lbl = vgui.Create("DLabel",main.panel)
 				lbl:SetPos(40,60)
 				lbl:SetText(PHX:FTranslate("PLUGINS_NO_PLUGINS"))
@@ -418,32 +438,34 @@ if CLIENT then
 		else
 			for plName,Data in pairs(PHX.PLUGINS) do
 				local section = {}
-				section.main = vgui.Create("DPanel",main.grid)
-				section.main:SetSize(main.grid:GetWide()*0.9,main.grid:GetTall())
+				local gW,gH = main.grid:GetColWide(),main.grid:GetRowHeight()
+				
+				section.main = main.grid:Add("DPanel")
+				section.main:SetSize(gW-12,gH-24)
 				section.main:SetBackgroundColor(Color(20,20,20,150))
 				
-				section.roll = vgui.Create("DScrollPanel",section.main)
+				section.roll = section.main:Add("DScrollPanel")
 				section.roll:SetSize(section.main:GetWide(),section.main:GetTall())
 				
-				section.grid = vgui.Create("DGrid",section.roll)
+				section.grid = section.roll:Add("DGrid")
 				section.grid:SetPos(20,20)
-				section.grid:SetSize(section.roll:GetWide()-20,section.roll:GetTall())
 				section.grid:SetCols(1)
-				section.grid:SetColWide(section.roll:GetWide()-32)
+				section.grid:SetColWide(section.roll:GetWide() + 96)
 				section.grid:SetRowHeight(40)
 				
-				pVgui("","label","Trebuchet24",section.grid, { "PLUG_NAME_VER", Data.name, Data.version } )
-				pVgui("","label",false,section.grid, { "PLUG_DESCRIPTION", Data.info } )
-				if (LocalPlayer():IsSuperAdmin() or LocalPlayer():CheckUserGroup()) then
+				pVgui("","label","PHX.TitleFont",section.grid, { "PLUG_NAME_VER", Data.name, Data.version } )
+				pVgui("","label","PHX.MenuCategoryLabel",section.grid, { "PLUG_DESCRIPTION", Data.info } )
+				
+				if ( LocalPlayer():PHXIsStaff() ) then
 					if !table.IsEmpty(Data.settings) then
-						pVgui("","label",false,section.grid, "PLUGINS_SERVER_SETTINGS" )
+						pVgui("","label","PHX.MenuCategoryLabel",section.grid, "PLUGINS_SERVER_SETTINGS" )
 						for _,val in pairs(Data.settings) do
 							pVgui(val[1],val[2],val[3],section.grid,val[4])
 						end
 					end
-				end
+				end      
 				if !table.IsEmpty(Data.client) then
-					pVgui("","label",false,section.grid, "PLUGINS_CLIENT_SETTINGS" )
+					pVgui("","label","PHX.MenuCategoryLabel",section.grid, "PLUGINS_CLIENT_SETTINGS" )
 					for _,val in pairs(Data.client) do
 						pVgui(val[1],val[2],val[3],section.grid,val[4])
 					end

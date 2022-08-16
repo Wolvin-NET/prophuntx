@@ -265,8 +265,8 @@ LANG["PHXM_ADMIN_LANGTOUSE"]				= "Forced Language to use."
 LANG["PHXM_ADMIN_PLAYERDEFAULTLANG"] 		= "Default player language when joining on first time play."
 
 -- Gameplay settings
-LANG["PHXM_ADMIN_CUSTOM_MODEL"]				= "Enable custom models for Hunters"
-LANG["PHXM_ADMIN_CUSTOM_MODEL_PROP"]		= "Enable custom models for Props - Make sure to enable for Hunter too."
+LANG["PHXM_ADMIN_CUSTOM_MODEL"]				= "Enable custom models for Hunters. This will enable [Model Browser] tab."
+LANG["PHXM_ADMIN_CUSTOM_MODEL_PROP"]		= "Enable custom models for Props (Require Hunter Custom Models to be enabled)"
 LANG["PHXM_ADMIN_TAUNT_DELAY_CUSTOM"]		= "Custom Taunts Delay (Seconds)"
 LANG["PHXM_ADMIN_TAUNT_DELAY_RANDOM"]		= "Normal Taunts Delay (Seconds)"
 LANG["PHXM_ADMIN_TAUNT_DELAY_AUTO"]			= "Auto Taunts Delay (Seconds)"
@@ -317,7 +317,7 @@ LANG["PHXM_ADMIN_USENEWMKBREN"]		= "Use new model for Bren MK II bonus weapon (R
 LANG["PHXM_ADMIN_BEVERBOSE"]		= "Developer: Be Verbose - Enable PH:X to print all information and events verbosely?"
 LANG["PHXM_ADMIN_SHOWPLNAMEHEAD"]	= "Enable Player team names to appear on their screen."
 LANG["PHXM_ADMIN_USESINGLE_FZCAM"]	= "Use single Freezecam sound instead of sound list (Use 'ph_fc_cue_path' to determine Freezecam sound path)"
-LANG["PHXM_ADMIN_MODELLISTINGTYPE"] = "Use Legacy Model List : 0 = All Playermodels (AddValidModel), 1 = Use Legacy: list.Get('PlayerOptionsModel')"
+LANG["PHXM_ADMIN_MODELLISTINGTYPE"] = "Player Models Listing Method: 0: Include Everything, 1: Use list.Get('PlayerOptionsModel')"
 LANG["PHXM_ADMIN_JUMPPOWER"]		= "Additional Jump Power multiplier for Props"
 LANG["PHXM_ADMIN_ENABLE_OBB"]		= "Developer: Enable Customized Prop Entities Model Boundaries (OBB) Modifier from config data"
 LANG["PHXM_ADMIN_RELOAD_OBB"]		= "Developer: Reload OBB Modifier data every round restarts"
@@ -634,7 +634,7 @@ LANG["PCR_PLUG_KICK_INVALID"]	= "Kick any user attempt to access Invalid Model (
 LANG["PCR_PLUG_SPACE_CHECK"]	= "Check for space for a room before player use another prop to prevent Stuck"
 LANG["PCR_PLUG_X_BBOX"]			= "(Require Map Restart) Check Entity BBox Limit before adding to Prop Menu list"
 LANG["PCR_PLUG_X_BBOX_MAX"]		= "BBox CollisionBound Maximum Height limit. Mins will be auto-calculated."
-LANG["PCR_PLUG_X_BBOX_MIN"]		= "BBox CollisionBound Maximum Width limit. ins will be auto-calculated."
+LANG["PCR_PLUG_X_BBOX_MIN"]		= "BBox CollisionBound Maximum Width limit. Mins will be auto-calculated."
 LANG["PCR_PLUG_ONLY_GROUPS"]	= "Should Prop Menu can only be accessed by certain groups e.g. Donator?"
 LANG["PCR_PLUG_NOTIFYMSG"]		= "Notify player on how to use Prop Menu on every round start"
 
@@ -692,6 +692,93 @@ LANG["PHZ_pcr_fb_allcontent"] = "All Contents (Not All Players/Server will have 
 LANG["PHZ_pcr_fb_notmounted"] = "%s [Not Mounted]"
 
 -- Revision XX/08/2022
-LANG["PHXM_ADMIN_ALLOWARMOR"]  = "Allow Armor Addition for team Hunters and Props"
+LANG["PHX_PROP_TOO_THIN"]           = "Cannot Replicate: Prop is too thin!"
+LANG["PHX_PROP_IS_BANNED"]			= "The prop you're trying to use is banned from server!"
+
+LANG["PHXM_ADMIN_ALLOWARMOR"]       = "Allow Armor Addition for team Hunters and Props"
+LANG["PHXM_ADMIN_ALLOW3P"]          = "Allow thirdperson mode for Hunters"
+LANG["PHXM_ADMIN_ALLOW3P_SVDESIRED"]= "Allow thirdperson mode to use Server's Desired Camera position (Disallow player custom position)"
+LANG["PHXM_ADMIN_ALLOW3P_DIST"]     = "Thirdperson: Desired Camera Distance"
+LANG["PHXM_ADMIN_ALLOW3P_RIGHT"]    = "Thirdperson: Desired Camera Right Position"
+LANG["PHXM_ADMIN_ALLOW3P_UP"]     	= "Thirdperson: Desired Camera Up Position"
+LANG["PHXM_ADMIN_JUMPPOWER_H"]		= "Additional Jump Power multiplier for Hunters"
+LANG["PHXM_ADMIN_MDLCOLOR_PROP"]	= "Enable Player Color for team Props (Require Hunter Custom Models to be enabled)"
+LANG["PHXM_ADMIN_MDLCOLOR_HUNTER"]	= "Enable Player Color for team Hunters (Require Hunter Custom Models to be enabled)"
+LANG["PHXM_ADMIN_PITCH_ROTATION"]	= "[Experimental] Allow to use pitch rotation for props. This may be buggy."
+LANG["PHXM_ADMIN_FALLDMG"]			= "Enable Fall Damage (Applies on All Teams)"
+LANG["PHXM_ADMIN_FALLDMG_REAL"]		= "Enable 'Realistic' Fall Damage"
+
+LANG["PHXM_DROP_VBS_DISABLE"]       = "Disable Verbose"
+LANG["PHXM_DROP_VBS_ENABLE"]        = "Enable Verbose"
+LANG["PHXM_DROP_MDL_INCLUDEALL"]    = "Include Everything ( %d )"
+LANG["PHXM_DROP_MDL_CUSTOMLIST"]    = "Seperate/Custom List ( %d )"
+LANG["PHXM_DROP_MDLTYPE_PROP"]      = "Physics Only ( %d )"
+LANG["PHXM_DROP_MDLTYPE_PROPDYN"]   = "Physics & Dynamic Props ( %d )"
+LANG["PHXM_DROP_MDLTYPE_ANYENTS"]   = "Any Compatible Entities ( %d )"
+LANG["PHXM_DROP_MDLTYPE_CUSTOM"]    = "Custom Entities ( %d )"
+LANG["PHXM_DROP_RESPAWNBLIND_BOTH"] = "Both Teams"
+
+LANG["PHXM_TAB_ADMINGROUPS"]        = "Group & Access Option"
+
+LANG["PHXM_ADMIN_ACCESS_GROUP"]     = "Select groups to allow access PH:X Admin Settings page"
+LANG["PHXM_ADMIN_ACCESS_GROUP_HINT"] = "Please note that \"superadmins\" cannot be revoked."
+LANG["PHXM_ADMIN_ACCESS_GROUP_NOULX"] = "Error: ULib & ULX is not installed on your server."
+LANG["PHXM_ADMIN_ACCESS_NOREVOKE"]  = " (Cannot be revoked)"
+LANG["PHXM_ADMIN_GROUP_WHOCANACC"]	= "Select groups to allow access [Admin Settings]."
+LANG["PHXM_ADMIN_GROUP_MUTEABLE"]	= "Select groups to disallow Voice Mute in [Player Muting]. (User is always mute-able)."
+
+LANG["PHXM_ADMIN_ACCESS_CHATINFO"]  = "There was a configuration update for Prop Hunt Menu window. Reopening..."
+LANG["PHXM_ADMIN_ACCMSG_BODY"]      = "Do you want to save selection and proceed the changes?\nPlease note that any previous groups you revoked will no longer have the access.\nThis will restart the Prop Hunt Menu if they're still opened."
+LANG["PHXM_ADMIN_ACCMSG_TITLE"]     = "Apply Group Access"
+LANG["PHXM_ADMIN_ACCCFG_SUCC"]      = "Group Access data successfully saved."
+LANG["PHXM_ADMIN_ACCCFG_FAIL"]      = "There was an error saving Group Access data. Check your server console!"
+LANG["PHXM_ADMIN_MUTCFG_SUCC"]      = "Mutedable Group Access data successfully saved."
+LANG["PHXM_ADMIN_MUTCFG_FAIL"]      = "There was an error saving Muteable Group data. Check your server console!"
+
+LANG["PHXM_ADMIN_ACCESS_APPLY"]     = "Apply Selected Groups"
+
+LANG["MISC_SEL_APPLY"]  = "Apply Selections"
+LANG["MISC_RESET_SEL"]  = "Reset Selections"
+LANG["MISC_RESET"]      = "Reset"
+LANG["MISC_CANCEL"]     = "Cancel"
+LANG["MISC_SEL_ALL"]    = "Select All"
+LANG["MISC_SEL_NONE"]   = "Select None"
+
+LANG["PHXM_CL_THIRDPERSON"]     = "Key for Toggling thirdperson mode"
+LANG["CL_THIRDPERSON_ENABLED"]  = "Thirdperson Enabled"
+LANG["CL_THIRDPERSON_DISABLED"] = "Thirdperson Disabled"
+
+LANG["PHX_TP_ADJUSTVIEW_BTN"]	= "Adjust Thirdperson View" --Button, as well as window title.
+LANG["PHX_TPS_ADJ_TITLE"]		= "Thirdperson Warning"
+LANG["PHX_TPS_ADJ_SVDESIRED"]	= "Thirdperson Customization disabled: Using Server's desired position."
+LANG["PHX_TPS_ADJ_3PDIS"]		= "Thirdperson mode is disabled."
+LANG["PHX_TPS_ADJ_BLIND"]		= "You're blinded. Try again later."
+LANG["PHX_TPS_ADJ_NEEDALIVE"]	= "You need to be on Alive Hunter Team to do this."
+
+LANG["ANG_AXIS_DIST"]	= "Distance" -- or Forward
+LANG["ANG_AXIS_RIGHT"]	= "Right"
+LANG["ANG_AXIS_UP"]		= "Up"
+LANG["VEC_POS_LEFT"]	= "Left" --X
+LANG["VEC_POS_FRONT"]	= "Front" --Y?
+LANG["VEC_POS_TOP"]		= "Top"  --Z
+
+-- Key Hints
+LANG["KEYHINT_HUNTER3P"] 	= "Hunter Thirdperson"
+LANG["KEYHINT_SHOOT"]		= "Fire Weapon"
+LANG["KEYHINT_SEC"]			= "Fire Secondary"
+LANG["KEYHINT_PICKUP"]		= "Pickup Object/Interact"
+
+LANG["KEYHINT_LMB"]			= "Replicate Prop"
+LANG["KEYHINT_RMB"]			= "Prop Taunt/Special Ability"
+LANG["KEYHINT_RANDTAUNT"] 	= "Random Taunt"
+LANG["KEYHINT_TAUNTMENU"] 	= "Toggle Taunt Menu"
+LANG["KEYHINT_ROTATION"] 	= "Toggle Rotation Lock"
+LANG["KEYHINT_PROPMENU"] 	= "Toggle Prop Menu"
+LANG["KEYHINT_FREEZEAIR"] 	= "Toggle Prop Freeze"
+LANG["KEYHINT_SPAWNDECOY"] 	= "Spawn Decoy"
+
+LANG["MISC_TEAM_NAME"]		= "TEAM: %s" -- TEAM PROPS, TEAM HUNTERS, but in 1 sentence.
+LANG["NOTIFY_HEADER_TITLE"]	= "Game Controls"
+
 
 PHX.LANGUAGES[LANG.code] = LANG
