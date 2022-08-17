@@ -274,7 +274,7 @@ local function MainFrame()
 				self.list:AddLine( name )
 			end
 			hasLines = true
-			window.list:SetSize(1,table.getn(self.list:GetLines())*21)
+			--window.list:SetSize(1,table.getn(self.list:GetLines())*21)
 			window.list.VBar:SetScroll( 0 )
 		else
 			self.list:AddLine( PHX:FTranslate("TM_NO_TAUNTS") )
@@ -297,7 +297,7 @@ local function MainFrame()
 					self.list:AddLine( v )
 				end
 				hasLines = true
-				self.list:SetSize(0,table.getn(self.list:GetLines())*21)
+				--self.list:SetSize(0,table.getn(self.list:GetLines())*21)
 				window.list.VBar:SetScroll( 0 )
 			else
 				self.list:AddLine( PHX:FTranslate("TM_TAUNTS_SEARCH_NOTHING", strToFind) )
@@ -343,7 +343,11 @@ local function MainFrame()
 		RunConsoleCommand( "ph_cl_pitch_level", tostring( value ) )
 	end
 	
-	window.CurrentCategory = PHX.DEFAULT_CATEGORY
+	window.CurrentCategory = LocalPlayer():GetVar("tauntWindowCategorie", PHX.DEFAULT_CATEGORY)
+	--[[ if !window.CurrentCategory or window.CurrentCategory == nil then
+		print("category is nil. fallback")
+		window.CurrentCategory = PHX.DEFAULT_CATEGORY --fallback
+	end ]]
 	window.comb:SortAndStyle(window.list)
 	
 	local function TranslateTaunt(category, linename)

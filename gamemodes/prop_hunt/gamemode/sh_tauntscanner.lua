@@ -154,31 +154,27 @@ if SERVER then
 					...
 	]]--
 	
-	if PHX:QCVar( "ph_enable_taunt_scanner" ) then	-- Disabled = no operation will be done. You also need to restart map to enable this feature!
-		-- Add Default path
-		PHX:TauntScanFolder( DefaultPath )
-		
-		-- Add External paths, if any.
-		for tauntName, tauntFolder in SortedPairs( list.Get("PHX.TauntScanFolder") ) do	-- please sort.
-			PHX.VerboseMsg("[PHX] [Addon: ".. tauntName .."] Scanning custom Taunt folder: 'sound/"..tauntFolder.."'...")
-			PHX:TauntScanFolder( tauntFolder )
-		end
-	end
-	
 	--Add to PHX Taunt Table. Use "Initialize" instead.
-	local data,lz,size
+	local CompressedTaunt,CompressedTauntSize
 	hook.Add("Initialize", "PHX.InitScannedTauntData", function()
-		if PHX:QCVar( "ph_enable_taunt_scanner" ) then
-			-- Start Adding.
+		if PHX:QCVar( "ph_enable_taunt_scanner" ) then	-- Disabled = no operation will be done. You also need to restart map to enable this feature!
+			-- Scan default taunts
+			PHX:TauntScanFolder( DefaultPath )
+			-- And then, add external taunts directories, if any.
+			for tauntName, tauntFolder in SortedPairs( list.Get("PHX.TauntScanFolder") ) do	-- please sort.
+				PHX.VerboseMsg("[PHX] [Addon: ".. tauntName .."] Scanning custom Taunt folder: 'sound/"..tauntFolder.."'...")
+				PHX:TauntScanFolder( tauntFolder )
+			end
+			
+			-- Start adding.
 			for category, data in SortedPairs( Taunts ) do
 				PHX:ManageTaunt( category, data )
 			end
 			
 			-- Prepare data and compress tables to clients. This is only available after the map is fully loaded.
 			-- Do Not Re-broadcast!
-			data = util.TableToJSON( Taunts )
-			lz 	 = util.Compress( data )
-			size = lz:len()
+			
+			CompressedTaunt,CompressedTauntSize = util.PHXQuickCompress( Taunts )
 		else
 			print("[PHX] Taunt Scanner Status: Disabled.")
 		end		
@@ -200,11 +196,13 @@ if SERVER then
 			PHX.VerboseMsg("[PHX] Sending Taunt Data to player: " .. ply:Nick() .. ", Size: " .. tostring(size) .. " Bytes")
 		    timer.Simple(0.1, function()
 				net.Start(netRecv)
-				net.WriteUInt(size, 32)
-				net.WriteData(lz, size)
+				net.WriteUInt(CompressedTauntSize, 16)
+				net.WriteData(CompressedTaunt, CompressedTauntSize)
 				net.Send(ply)
 				ply.HasTauntScannedData = true
 			end)
+		else
+			ply:PrintMessage(HUD_PRINTCONSOLE, "[PH:X] Request Rejected: You have requested Taunt Scanner data. To refresh, please reconnect to the server!")
 		end
 		-- you can't request anymore unless reconnect to get a refresh list!
     end
@@ -228,9 +226,9 @@ if CLIENT then
 	
 	net.Receive(netRecv, function()
 		PHX.VerboseMsg("[PHX] Received taunt data, Processing...")
-		local size = net.ReadUInt(32)
-		local json = util.Decompress( net.ReadData(size) )
-		local Conv = util.JSONToTable( json )
+		local size = net.ReadUInt(16)
+		local taunts = net.ReadData(size)
+		local Conv = util.PHXQuickDecompress( taunts )
 		
 		if PHX and PHX.ManageTaunt ~= nil then
 			for cat, data in pairs(Conv) do
