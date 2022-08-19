@@ -190,7 +190,7 @@ local function getIndicColor( trace, fallback, colorTrue, colorFalse )
     local color = fallback
     local hmx,hmy,hmz = trace.Entity:GetPropSize()
     
-        if (!LocalPlayer():IsOnGround() or LocalPlayer():Crouching()) then return colorFalse end
+        --if (!LocalPlayer():IsOnGround() or LocalPlayer():Crouching()) then return colorFalse end
         if PHX:GetCVar( "ph_check_for_rooms" ) and not LocalPlayer():CheckHull(hmx,hmy,hmz) then return colorFalse end
         color = colorTrue
         
@@ -797,15 +797,16 @@ end)
 net.Receive("SetHull", function()	
 	local HullMins = net.ReadVector()
 	local HullMaxs = net.ReadVector()
-	--DuckHull may ocassionally used if there's custom OBB is enabled.
-	local DuckHullMins = net.ReadVector()
-	local DuckHullMaxs = net.ReadVector()
+	--DuckHull no longer needed...
+	--[[ local DuckHullMins = net.ReadVector()
+	local DuckHullMaxs = net.ReadVector() ]]
 	
 	local new_health = net.ReadInt(9)
 	cHullz = HullMaxs.z
 	
 	LocalPlayer():SetHull(HullMins, HullMaxs)
-	LocalPlayer():SetHullDuck(DuckHullMins, DuckHullMaxs)
+	--LocalPlayer():SetHullDuck(DuckHullMins, DuckHullMaxs)
+	LocalPlayer():SetHullDuck(HullMins, HullMaxs)
 	LocalPlayer():SetHealth(new_health)
 end)
 

@@ -512,10 +512,12 @@ end
 -- The [E] & Mouse Click 1 behaviour is now moved in here!
 function GM:PlayerExchangeProp(pl, ent)
 
+	if !self:InRound() then return; end
 	if !IsValid(pl) then return; end
 	if !IsValid(ent) then return; end
 
-	if pl:Team() == TEAM_PROPS && pl:IsOnGround() && !pl:Crouching() && PHX:IsUsablePropEntity(ent:GetClass()) && ent:GetModel() then
+	--if pl:Team() == TEAM_PROPS && pl:IsOnGround() && !pl:Crouching() && PHX:IsUsablePropEntity(ent:GetClass()) && ent:GetModel() then
+	if pl:Team() == TEAM_PROPS && PHX:IsUsablePropEntity(ent:GetClass()) && ent:GetModel() then
 		if table.HasValue(PHX.BANNED_PROP_MODELS, ent:GetModel()) then
 			pl:PHXChatInfo("ERROR", "PHX_PROP_IS_BANNED")
 		elseif IsValid(ent:GetPhysicsObject()) && (pl.ph_prop:GetModel() != ent:GetModel() || pl.ph_prop:GetSkin() != ent:GetSkin()) then
@@ -554,21 +556,32 @@ function GM:PlayerExchangeProp(pl, ent)
 			if PHX:GetCVar( "ph_sv_enable_obb_modifier" ) && ent:GetNWBool("hasCustomHull",false) then
 				local hmin	= ent.m_Hull[1]
 				local hmax 	= ent.m_Hull[2]
-				local dmin	= ent.m_dHull[1] -- Warning! may be deprecated: this will replaced to hmin and hmax in future!
-				local dmax	= ent.m_dHull[2] -- Warning! may be deprecated: this will replaced to hmin and hmax in future!
+				--[[ 
+					-- Sorry, duck hulls is no longer needed :(
+					local dmin	= ent.m_dHull[1]
+					local dmax	= ent.m_dHull[2] 
+				]]
 				
-				if hmax.z < GAMEMODE.ViewCam.cHullzMins or dmax.z < GAMEMODE.ViewCam.cHullzMins then
-                    pl:PHAdjustView( GAMEMODE.ViewCam.cHullzMins, GAMEMODE.ViewCam.cHullzMins )
-				elseif hmax.z > GAMEMODE.ViewCam.cHullzMaxs || dmax.z > GAMEMODE.ViewCam.cHullzMaxs then --what the heck Duck Size is 84? BigMomma.mdl?
-                    pl:PHAdjustView( GAMEMODE.ViewCam.cHullzMaxs, GAMEMODE.ViewCam.cHullzMaxs )
+				--[[ if hmax.z < self.ViewCam.cHullzMins or dmax.z < self.ViewCam.cHullzMins then
+                    pl:PHAdjustView( self.ViewCam.cHullzMins, self.ViewCam.cHullzMins )
+				elseif hmax.z > self.ViewCam.cHullzMaxs || dmax.z > self.ViewCam.cHullzMaxs then
+                    pl:PHAdjustView( self.ViewCam.cHullzMaxs, self.ViewCam.cHullzMaxs )
 				else
                     pl:PHAdjustView( hmax.z, dmax.z )
+				end ]]
+				
+				if hmax.z < self.ViewCam.cHullzMins then
+                    pl:PHAdjustView( self.ViewCam.cHullzMins, self.ViewCam.cHullzMins )
+				elseif hmax.z > self.ViewCam.cHullzMaxs then
+                    pl:PHAdjustView( self.ViewCam.cHullzMaxs, self.ViewCam.cHullzMaxs )
+				else
+                    pl:PHAdjustView( hmax.z*0.8, hmax.z*0.8 )
 				end
                 
                 pl:SetHull(hmin,hmax)
-				pl:SetHullDuck(dmin,dmax)
+				pl:SetHullDuck(hmin,hmax) --pl:SetHullDuck(dmin,dmax)
                 local xymax = math.Round(math.Max(hmax.x,hmax.y))
-                pl:PHSendHullInfo( xymax*-1, xymax, hmax.z, dmax.z, new_health )
+                pl:PHSendHullInfo( xymax*-1, xymax, hmax.z, new_health )
 			else
                 local hullxymax = math.Round(math.Max(ent:OBBMaxs().x, ent:OBBMaxs().y))
 				local hullxymin = hullxymax * -1
@@ -591,12 +604,12 @@ function GM:PlayerExchangeProp(pl, ent)
                     
                     pl:EnablePropPitchRot( false ) --Do not use Pitch Rotation when prop_ragdoll being used.
                     -- Bug Explanation: Bullet can still goes through if using SOLID_BBOX.
-                    -- Using SOLID_OBB **WILL NOT** Helps: This will produce ANOTHER bug that
+                    -- Using SOLID_OBB **DOES NOT** Helps: This will produce ANOTHER bug that
                     -- hunters are completely stucked when the prop is rotated. This appear to be engine's bug.
                 end
 				
                 --DEPRECATED: Duck Hull will no longer needed!
-				local dhullz = hullz
+				--[[ local dhullz = hullz
 				if hullz > 10 && hullz <= 30 then
 					dhullz = hullz-(hullz*0.5)
 				elseif hullz > 30 && hullz <= 40 then
@@ -605,19 +618,19 @@ function GM:PlayerExchangeProp(pl, ent)
 					dhullz = hullz-(hullz*0.1)
 				else
 					dhullz = hullz
-				end
+				end ]]
             
-				if hullz < GAMEMODE.ViewCam.cHullzMins then
-					pl:PHAdjustView( GAMEMODE.ViewCam.cHullzMins, GAMEMODE.ViewCam.cHullzMins )
-				elseif hullz > GAMEMODE.ViewCam.cHullzMaxs then                
-					pl:PHAdjustView( GAMEMODE.ViewCam.cHullzMaxs, GAMEMODE.ViewCam.cHullzMaxs )
+				if hullz < self.ViewCam.cHullzMins then
+					pl:PHAdjustView( self.ViewCam.cHullzMins, self.ViewCam.cHullzMins )
+				elseif hullz > self.ViewCam.cHullzMaxs then                
+					pl:PHAdjustView( self.ViewCam.cHullzMaxs, self.ViewCam.cHullzMaxs )
 				else
-                    pl:PHAdjustView( hullz*0.8, hullz ) --#2nd: dhullz
+                    pl:PHAdjustView( hullz*0.8, hullz*0.8 ) --#2nd: dhullz
 				end
                 
 				pl:SetHull(Vector(hullxymin, hullxymin, 0), Vector(hullxymax, hullxymax, hullz))
 				pl:SetHullDuck(Vector(hullxymin, hullxymin, 0), Vector(hullxymax, hullxymax, hullz))   --dhullz
-                pl:PHSendHullInfo( hullxymin, hullxymax, hullz, hullz, new_health ) --_,_,dhullz,_
+                pl:PHSendHullInfo( hullxymin, hullxymax, hullz, new_health ) --_,_,dhullz,_
 
 			end
 		end
@@ -714,7 +727,6 @@ hook.Add("PlayerInitialSpawn", "PHX.SetupInitData", function(ply)
 	if not PHX.cvarsynced then PHX:InitCVar() end
 
 	ply.LastPickupEnt	= NULL
-	--ply.UseTime			= 0
 	ply.ChangeLimit		= 0
 	
 	-- Player Switch Teams Initialisations	
@@ -789,18 +801,14 @@ hook.Add("PlayerSpawn", "PH_PlayerSpawn", function(pl)
 	pl:SetColor(Color(255,255,255,255))
 	pl:SetRenderMode(RENDERMODE_TRANSALPHA)
 	pl:UnLock()
-	pl:ResetHull()
     -- Reset Fake taunts
 	pl:ResetTauntRandMapCount()
 	
 	pl:SetLastTauntTime( "LastTauntTime", CurTime() )
 	pl:SetLastTauntTime( "CLastTauntTime", CurTime() )
-	
-	--[[ pl:SetNWFloat("LastTauntTime", CurTime())
-	pl:SetVar( "CLastTauntTime", 0 )
-	pl:SetVar( "LastTauntTime", 0 ) ]]
     pl.propdecoy = nil -- don't link to your decoy prop
 	
+	pl:ResetHull() -- Always call this.
 	net.Start("ResetHull")
 	net.Send(pl)
 	
