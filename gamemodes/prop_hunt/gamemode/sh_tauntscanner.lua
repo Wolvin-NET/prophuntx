@@ -29,7 +29,7 @@ local TeamName = {
 
 if SERVER then	
 	local function AddToTable( idTeam, tauntCat, data )
-		PHX.VerboseMsg("[PHX] Adding to Taunt Table: Team[" .. idTeam .. "], Category:" .. tauntCat .. ", Total Taunt Data: " .. tostring(table.Count(data)))
+		PHX.VerboseMsg("[PHX Taunt Scanner] Adding to Taunt Table: Team[" .. TeamName[idTeam] .. "], Category:" .. tauntCat .. ", Total Taunt Data: " .. tostring(table.Count(data)))
 		Taunts[tauntCat] = {}
 		Taunts[tauntCat][idTeam] = data
 	end
@@ -193,7 +193,7 @@ if SERVER then
 		end
 	
 		if !ply.HasTauntScannedData then
-			PHX.VerboseMsg("[PHX] Sending Taunt Data to player: " .. ply:Nick() .. ", Size: " .. tostring(size) .. " Bytes")
+			PHX.VerboseMsg("[PHX] Sending Taunt Scanner Data to player: " .. ply:Nick() .. ", Size: " .. tostring(CompressedTauntSize) .. " Bytes")
 		    timer.Simple(0.1, function()
 				net.Start(netRecv)
 				net.WriteUInt(CompressedTauntSize, 16)
@@ -202,7 +202,7 @@ if SERVER then
 				ply.HasTauntScannedData = true
 			end)
 		else
-			ply:PrintMessage(HUD_PRINTCONSOLE, "[PH:X] Request Rejected: You have requested Taunt Scanner data. To refresh, please reconnect to the server!")
+			ply:PrintMessage(HUD_PRINTCONSOLE, "[PHX] Request Rejected: You have requested Taunt Scanner data ONCE. To refresh, please reconnect to the server!")
 		end
 		-- you can't request anymore unless reconnect to get a refresh list!
     end
@@ -225,7 +225,7 @@ if CLIENT then
 	end )
 	
 	net.Receive(netRecv, function()
-		PHX.VerboseMsg("[PHX] Received taunt data, Processing...")
+		PHX.VerboseMsg("[PHX] Received taunt scanner data, Processing...")
 		local size = net.ReadUInt(16)
 		local taunts = net.ReadData(size)
 		local Conv = util.PHXQuickDecompress( taunts )

@@ -853,6 +853,7 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 				else
 					LocalPlayer():ConCommand("mv_start")
 				end
+				PHX.UI.MainForm:Close()
 			end
 			},
 			[2] = {"PHXM_MV_STOP", function(self)

@@ -2,12 +2,11 @@
 	Auto Taunt Section 
 	------------------  */
 
--- Props will autotaunt at specified intervals (put this crap on the server because the old way was all on the client and that's silly)
 local function TauntTimeLeft(ply)
 	-- Always return 1 when the conditions are not met
 	if !IsValid(ply) || !ply:Alive() || ply:Team() != TEAM_PROPS then return 1; end
 	
-	local lastTauntTime = ply:GetNWFloat("LastTauntTime")
+	local lastTauntTime = ply:GetLastTauntTime( "LastTauntTime" )
 	local nextTauntTime = lastTauntTime + PHX:GetCVar( "ph_autotaunt_delay" )
 	local currentTime = CurTime()
 	return nextTauntTime - currentTime
@@ -22,24 +21,15 @@ local function AutoTauntThink()
 			
 			if IsValid(ply) && ply:Alive() && ply:Team() == TEAM_PROPS && timeLeft <= 0 then
 				local pitch = 100
-				local isPitchEnabled 	= PHX:GetCVar( "ph_taunt_pitch_enable" )
 				local pitchRandEnabled 	= ply:GetInfoNum( "ph_cl_pitch_apply_random", 0 )
-				local isRandomized 		= ply:GetInfoNum( "ph_cl_pitch_randomized_random", 0 )
 				local pitchlevel 		= ply:GetInfoNum( "ph_cl_pitch_level", 100 )
+				local isRandomized 		= ply:GetInfoNum( "ph_cl_pitch_randomized_random", 0 )
 				local rand_taunt 		= table.Random(PHX.CachedTaunts[TEAM_PROPS])
 				
 				if !isstring(rand_taunt) then rand_taunt = tostring(rand_taunt); end
 				
-				if isPitchEnabled and tobool(pitchRandEnabled) then
-					if tobool(isRandomized) then
-						pitch = math.random( PHX:GetCVar("ph_taunt_pitch_range_min"), PHX:GetCVar("ph_taunt_pitch_range_max") )
-                    else
-                        pitch = math.Clamp( pitchlevel, PHX:GetCVar("ph_taunt_pitch_range_min"), PHX:GetCVar("ph_taunt_pitch_range_max") )
-					end
-				end
-				
-				ply:EmitSound(rand_taunt, 100, pitch)
-				ply:SetNWFloat("LastTauntTime", CurTime())
+				PHX:PlayTaunt( ply, rand_taunt, pitchRandEnabled, pitchlevel, isRandomized, "LastTauntTime" )
+
 			end
 		end
 		
@@ -53,24 +43,20 @@ timer.Create("PHX.AutoTauntThinkTimer", 1, 0, AutoTauntThink)
 
 -- Validity check to prevent some sort of spam
 local function IsDelayed(ply)
-	local delay = ply.lastCTauntTime + PHX:GetCVar( "ph_customtaunts_delay" )
+	local delay = ply:GetLastTauntTime( "CLastTauntTime" ) + PHX:GetCVar( "ph_customtaunts_delay" )
 	return { delay > CurTime(), delay - CurTime() }
 end
-
-local function CheckValidity( sndFile, plyTeam )
-	return file.Exists("sound/"..sndFile, "GAME") and table.HasValue( PHX.CachedTaunts[plyTeam], sndFile )
+local function CheckValidity( tauntName, sndFile, plyTeam )
+	return file.Exists("sound/"..sndFile, "GAME") and (PHX.CachedTaunts[plyTeam][tauntName] ~= nil) and table.HasValue( PHX.CachedTaunts[plyTeam], sndFile )
 end
 
 local function SetLastTauntDelay( ply )
-	ply.lastCTauntTime = CurTime()
-	ply:SetNWFloat("CTaunt.LastTauntTime", CurTime())
-	
-	-- This affects random & auto taunt as well
-	ply.last_taunt_time = CurTime()
-	ply:SetNWFloat("LastTauntTime", CurTime())
+	ply:SetLastTauntTime( "CLastTauntTime", CurTime() )
+	ply:SetLastTauntTime( "LastTauntTime", CurTime() )
 end
 
 net.Receive("CL2SV_PlayThisTaunt", function(len, ply)
+	local name		= net.ReadString()
 	local snd 		= net.ReadString()
 	local bool 		= net.ReadBool()	-- enable fake taunt
 	
@@ -101,7 +87,8 @@ net.Receive("CL2SV_PlayThisTaunt", function(len, ply)
 					
 					if Count > 0 or PHX:GetCVar( "ph_randtaunt_map_prop_max" ) == -1 then
 						
-						if CheckValidity( snd, playerTeam ) then							
+						-- Don't use PHX:PlayTaunt here. This is NOT player entity!!
+						if CheckValidity( name, snd, playerTeam ) then							
 							if isPitchEnabled and tobool( plApplyOnFake ) then
                                 if tobool( randFakePitch ) then
                                     pitch = math.random(PHX:GetCVar( "ph_taunt_pitch_range_min" ), PHX:GetCVar( "ph_taunt_pitch_range_max" ))
@@ -128,18 +115,11 @@ net.Receive("CL2SV_PlayThisTaunt", function(len, ply)
 					end
 				end
 			else	-- if it's Player Taunt
-				if CheckValidity( snd, playerTeam ) then
+				if CheckValidity( name, snd, playerTeam ) then
 				
-					if isPitchEnabled and tobool( plPitchOn ) then
-                        if tobool( plPitchRandomized ) then
-                            pitch = math.random(PHX:GetCVar( "ph_taunt_pitch_range_min" ), PHX:GetCVar( "ph_taunt_pitch_range_max" ))
-                        else
-                            pitch = math.Clamp(desiredPitch, PHX:GetCVar( "ph_taunt_pitch_range_min" ), PHX:GetCVar( "ph_taunt_pitch_range_max" ))
-                        end
-					end
-				
-					ply:EmitSound(snd, 100, pitch)
-					SetLastTauntDelay( ply )
+					PHX:PlayTaunt( ply, snd, plPitchOn, desiredPitch, plPitchRandomized, "CLastTauntTime" )
+					ply:SetLastTauntTime( "LastTauntTime", CurTime() )
+					
 				else
 					ply:PHXChatInfo( "WARNING", "TM_DELAYTAUNT_NOT_EXIST" )
 				end

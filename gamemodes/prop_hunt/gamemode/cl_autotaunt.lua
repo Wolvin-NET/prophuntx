@@ -19,7 +19,7 @@ local state
 
 local function TimeLeft()
 	local ply = LocalPlayer()
-	local lastTauntTime = ply:GetNWFloat("LastTauntTime")
+	local lastTauntTime = ply:GetLastTauntTime( "LastTauntTime" ) --ply:GetNWFloat("LastTauntTime")
 	local nextTauntTime = lastTauntTime + delay
 	local currentTime = CurTime()
 	return nextTauntTime - currentTime
@@ -27,7 +27,7 @@ end
 
 local function TimeleftRTaunt()
 	local ply = LocalPlayer()
-	local lastTauntTime = ply:GetNWFloat("LastTauntTime")
+	local lastTauntTime = ply:GetLastTauntTime( "LastTauntTime" ) --ply:GetNWFloat("LastTauntTime")
 	local nextRandomTime = lastTauntTime + PHX:GetCVar( "ph_normal_taunt_delay" )
 	local curTime = CurTime()
 	return nextRandomTime - curTime
@@ -35,7 +35,7 @@ end
 
 local function TimeleftCTaunt()
 	local ply = LocalPlayer()
-	local lastTauntTime = ply:GetNWFloat("CTaunt.LastTauntTime", 0)
+	local lastTauntTime = ply:GetLastTauntTime( "CLastTauntTime" ) --ply:GetNWFloat("CTaunt.LastTauntTime", 0)
 	local nextCustomTime = lastTauntTime + PHX:GetCVar( "ph_customtaunts_delay" )
 	local curTime = CurTime()
 	return nextCustomTime - curTime

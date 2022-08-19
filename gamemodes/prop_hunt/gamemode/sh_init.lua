@@ -367,23 +367,32 @@ function PHX:InitializePlugin()
 	]]
 	
 	-- Add Legacy Plugins or Addons, if any.
+	local STATE = "SERVER"
+	if CLIENT then
+		STATE = "CLIENT"
+	end
+	
+	self.VerboseMsg( "[PHX Plugin] Initializing Plugins..." )
 	for name,plugin in pairs( list.Get("PHX.Plugins") ) do
 		if (self.PLUGINS[name] ~= nil) then
 			self.VerboseMsg("[PHX Plugin] Not adding "..name.." because it was exists in table. Use different name instead!")
 		else
-			self.VerboseMsg("[PHX Plugin] Adding Plugin: "..name)
+			self.VerboseMsg("[PHX Plugin] Adding & Loading Plugin: "..name)
 			self.PLUGINS[name] = plugin
 		end
 	end
 	
-	if !table.IsEmpty(self.PLUGINS) then
-		for pName,pData in pairs(self.PLUGINS) do
-			self.VerboseMsg("[PHX Plugin] Loading Plugin "..pName)
-			self.VerboseMsg("--> Loaded Plugins: "..pData.name.."\n--> Version: "..pData.version.."\n--> Info: "..pData.info)
+	timer.Simple(0, function()
+		if !table.IsEmpty( self.PLUGINS ) then
+			self.VerboseMsg( string.format("[PHX Plugin] --------- Listing loaded %s SIDE plugins ---------", STATE ) )
+			for pName,pData in SortedPairs(self.PLUGINS) do
+				self.VerboseMsg("[PHX Plugin] Loaded Plugin:"..pName)
+				self.VerboseMsg("--> Name: "..pData.name.."\n--> Version: "..pData.version.."\n--> Info: "..pData.info)
+			end
+		else
+			self.VerboseMsg( string.format("[PHX Plugin] No %s Plugins Loaded...", STATE) )
 		end
-	else
-		self.VerboseMsg("[PHX Plugin] No plugins detected, skipping...")
-	end
+	end)
 end
 -- Initialize Plugins
 hook.Add("Initialize", "PHX.LoadPlugins", function() -- Origin: PostGamemodeLoaded

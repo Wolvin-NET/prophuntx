@@ -13,7 +13,7 @@
         1
 		{
 			"name"		"ph_dummy_settings"
-			"text"		"Settings are now moved to [F1] > Prop Hunt Menu. There are alot of things to be written in here."
+			"text"		"Settings are now moved to [F1] > Prop Hunt Menu. Not going to add here because they're too many."
 			"help"		"Settings are now moved to [F1] > Prop Hunt Menu."
 			"type"		"CheckBox"
 		}
