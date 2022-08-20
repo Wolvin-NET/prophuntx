@@ -201,12 +201,10 @@ if SERVER then
     
     end
 
-    function Player:PHSendHullInfo( xymin, xymax, zmax, health ) --zdmax before health
+    function Player:PHSendHullInfo( xymin, xymax, zmax, health )
         net.Start( "SetHull" )
-			net.WriteVector( Vector(xymin, xymin, 0) ) --Hull Mins
-			net.WriteVector( Vector(xymax, xymax, zmax) ) --Hull Mins
-			--[[ net.WriteVector( Vector(xymin, xymin, 0) ) --DuckHull
-			net.WriteVector( Vector(xymax, xymax, zdmax) ) --DuckHull ]]
+			net.WriteVector( Vector(xymin, xymin, 0) )
+			net.WriteVector( Vector(xymax, xymax, zmax) )
             net.WriteInt( health, 9 )
         net.Send(self)
     end
@@ -221,9 +219,8 @@ if SERVER then
         net.Send( self )
     end
     
-    function Player:PHAdjustView( hullz, dhullz )
+    function Player:PHAdjustView( hullz )
         self:SetViewOffset( Vector(0,0,hullz) )
-        --self:SetViewOffsetDucked( Vector(0,0,dhullz) )
         self:SetViewOffsetDucked( Vector(0,0,hullz) )
     end
     

@@ -190,7 +190,7 @@ local function getIndicColor( trace, fallback, colorTrue, colorFalse )
     local color = fallback
     local hmx,hmy,hmz = trace.Entity:GetPropSize()
     
-        --if (!LocalPlayer():IsOnGround() or LocalPlayer():Crouching()) then return colorFalse end
+        if PHX:GetCVar( "ph_prop_must_standing" ) and (!LocalPlayer():IsOnGround() or LocalPlayer():Crouching()) then return colorFalse end
         if PHX:GetCVar( "ph_check_for_rooms" ) and not LocalPlayer():CheckHull(hmx,hmy,hmz) then return colorFalse end
         color = colorTrue
         
@@ -203,7 +203,7 @@ function GM:ShowHelp()
 	if GAMEMODE.VGUISplash and GAMEMODE.VGUISplash ~= nil and istable(GAMEMODE.VGUISplash) then
 	
 		local Help = vgui.CreateFromTable( GAMEMODE.VGUISplash )
-		Help:SetHeaderText( GAMEMODE.Name or "Prop Hunt: X" )
+		Help:SetHeaderText( GAMEMODE.Name or "Prop Hunt: X2Z" )
 		Help:SetForHelp( "HELP_F1", GAMEMODE.PHXContributors )
 		
 		Help.lblFooterText.Think = function( panel ) 
@@ -333,6 +333,7 @@ hook.Add("PlayerButtonDown", "PHX.EnableThirdPerson", function(ply,btn)
 end)
 
 -- Decides where  the player view should be (forces third person for props)
+local cameradist = 0
 function GM:CalcView(pl, origin, angles, fov)
 	local view = {} 
 	
@@ -359,12 +360,15 @@ function GM:CalcView(pl, origin, angles, fov)
 			trace.filter = filterent
             
             trace.maxs = Vector(4,4,4)
-            local prop = LocalPlayer():GetPlayerPropEntity()
-            
+			
+            local prop = pl:GetPlayerPropEntity()
             if IsValid(prop) then
                 local xymax = math.Round( math.Max(prop:OBBMaxs().x, prop:OBBMaxs().y) )
-                if xymax >= 1 and xymax < 4 then
+				local z = prop:OBBMaxs().z
+                if (xymax >= 1 and xymax < 4) then
                     trace.maxs = Vector(xymax,xymax,xymax)
+				elseif (z >= 1 and z < 4) then
+					trace.maxs = Vector(z,z,z)
                 end
             end
             
@@ -373,6 +377,7 @@ function GM:CalcView(pl, origin, angles, fov)
             local tr = util.TraceHull(trace)
 			view.origin = tr.HitPos
 		else
+			
 			self.ViewCam:CamColDisabled( origin, angles, view, "origin", -80, -80, -80, cHullz )
 
 		end
@@ -402,14 +407,14 @@ function GM:CalcView(pl, origin, angles, fov)
 				tp.r=GetConVar("ph_tpcam_right"):GetInt()
 				tp.up=GetConVar("ph_tpcam_up"):GetInt()
 			end
-            local tr = self.ViewCam:Hunter3pCollEnabled( origin, angles, tp.f, tp.r, tp.up )
+            local tr = self.ViewCam:Hunter3pCollEnabled( pl:Crouching(), origin, angles, tp.f, tp.r, tp.up )
             view.drawviewer = true
             view.origin = tr.HitPos
         end
         
 		-- hunter glimpse of thirdperson
 		if !tpOn and CL_GLIMPCAM > CurTime() then
-            local tr = self.ViewCam:Hunter3pCollEnabled( origin, angles, 80 )
+            local tr = self.ViewCam:Hunter3pCollEnabled( pl:Crouching(), origin, angles, 80 )
 			view.drawviewer = true
 			view.origin = tr.HitPos
 		end
@@ -796,16 +801,11 @@ end)
 
 net.Receive("SetHull", function()	
 	local HullMins = net.ReadVector()
-	local HullMaxs = net.ReadVector()
-	--DuckHull no longer needed...
-	--[[ local DuckHullMins = net.ReadVector()
-	local DuckHullMaxs = net.ReadVector() ]]
-	
+	local HullMaxs = net.ReadVector()	
 	local new_health = net.ReadInt(9)
 	cHullz = HullMaxs.z
 	
 	LocalPlayer():SetHull(HullMins, HullMaxs)
-	--LocalPlayer():SetHullDuck(DuckHullMins, DuckHullMaxs)
 	LocalPlayer():SetHullDuck(HullMins, HullMaxs)
 	LocalPlayer():SetHealth(new_health)
 end)

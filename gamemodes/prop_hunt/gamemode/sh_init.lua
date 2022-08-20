@@ -21,12 +21,12 @@ include("sh_convar.lua")
 GM.ViewCam = {}
 -- Vector: Crouch Hull Z (Height) limit
 GM.ViewCam.cHullz      = 64    -- Fallback/Default Value.
-GM.ViewCam.cHullzMins  = 24    -- Limit Minimums Height in BBox
+GM.ViewCam.cHullzMins  = 8     -- Limit Minimums Height in BBox
 GM.ViewCam.cHullzMaxs  = 84    -- Limit Maximums Height in BBox
-GM.ViewCam.cHullzLow   = 8     -- Limit everything below this height
+GM.ViewCam.cHullzLow   = 4     -- Limit everything below this height
 
 -- Can also internally used for CalcView but you can use anywhere in serverside realm.
-function GM.ViewCam.CamColEnabled( self, origin, Endpos, trace, traceStart, traceEnd, distMin, distMax, distNorm, entHullz )
+function GM.ViewCam.CamColEnabled( self, origin, ang, trace, traceStart, traceEnd, distMin, distMax, distNorm, entHullz )
 	
     -- don't allow 0.
     if (!entHullz or entHullz == nil) then entHullz = self.cHullz end
@@ -34,31 +34,31 @@ function GM.ViewCam.CamColEnabled( self, origin, Endpos, trace, traceStart, trac
     
 	if entHullz < self.cHullzMins then
 		trace[traceStart] 	= origin + Vector(0, 0, entHullz + (self.cHullzMins - entHullz))
-		trace[traceEnd] 	= origin + Vector(0, 0, entHullz + (self.cHullzMins - entHullz)) + (Endpos:Forward() * distMin)
+		trace[traceEnd] 	= origin + Vector(0, 0, entHullz + (self.cHullzMins - entHullz)) + (ang:Forward() * distMin)
 	elseif entHullz > self.cHullzMaxs then
 		trace[traceStart] 	= origin + Vector(0, 0, entHullz - self.cHullzMaxs)
-		trace[traceEnd] 	= origin + Vector(0, 0, entHullz - self.cHullzMaxs) + (Endpos:Forward() * distMax)
+		trace[traceEnd] 	= origin + Vector(0, 0, entHullz - self.cHullzMaxs) + (ang:Forward() * distMax)
 	else
 		trace[traceStart] 	= origin + Vector(0, 0, self.cHullzLow)
-		trace[traceEnd] 	= origin + Vector(0, 0, self.cHullzLow) + (Endpos:Forward() * distNorm)
+		trace[traceEnd] 	= origin + Vector(0, 0, self.cHullzLow) + (ang:Forward() * distNorm)
 	end
 	
 	return trace
 end
 
 -- Internally used for CalcView.
-function GM.ViewCam.CamColDisabled( self, origin, Endpos, trace, traceStart, distMin, distMax, distNorm, entHullz )
+function GM.ViewCam.CamColDisabled( self, origin, ang, trace, traceStart, distMin, distMax, distNorm, entHullz )
 
     -- don't allow 0.
     if (!entHullz or entHullz == nil) then entHullz = self.cHullz end
     if !trace or trace == nil then trace = {} end
-
+	
 	if entHullz < self.cHullzMins then
-		trace[traceStart] = origin + Vector(0, 0, entHullz + (self.cHullzMins - entHullz)) + (Endpos:Forward() * distMin)
+		trace[traceStart] = origin + Vector(0, 0, entHullz + (self.cHullzMins - entHullz)) + (ang:Forward() * distMin)
 	elseif entHullz > self.cHullzMaxs then
-		trace[traceStart] = origin + Vector(0, 0, entHullz - self.cHullzMaxs) + (Endpos:Forward() * distMax)
+		trace[traceStart] = origin + Vector(0, 0, entHullz - self.cHullzMaxs) + (ang:Forward() * distMax)
 	else
-		trace[traceStart] = origin + Vector(0, 0, self.cHullzLow) + (Endpos:Forward() * distNorm)
+		trace[traceStart] = origin + Vector(0, 0, self.cHullzLow) + (ang:Forward() * distNorm)
 	end
 
 	return trace
@@ -76,18 +76,23 @@ function GM.ViewCam.CommonCamCollEnabledView( self, origin, angles, entZ )
 end
 
 -- Used for Hunters.
-function GM.ViewCam.Hunter3pCollEnabled( self, origin, angles, forward, right, up )
+function GM.ViewCam.Hunter3pCollEnabled( self, isduck, origin, angles, forward, right, up )
     local trace = {}
     
     if !forward or forward == nil then forward = 50 end
     if !right or right == nil then right = 0 end
     if !up or up == nil then up = 0 end
+	if isduck == nil then isduck = false end
     
     trace.start = origin
     trace.endpos = origin - (angles:Forward()*forward) + (angles:Right()*right) + (angles:Up()*up)
     trace.filter = player.GetAll()
-    trace.maxs = Vector(4,4,4)
-    trace.mins = trace.maxs*-1
+	trace.maxs = Vector(4,4,4)
+	trace.mins = trace.maxs*-1
+	if isduck then
+		trace.maxs = trace.maxs/2
+		trace.mins = trace.mins/2
+	end
     
     local tr = util.TraceHull( trace )
     
@@ -240,7 +245,7 @@ DeriveGamemode("fretta")
 IncludePlayerClasses()
 
 -- Information about the gamemode
-GM.Name		= "Prop Hunt X2Z"
+GM.Name		= "Prop Hunt: X2Z"
 GM.Author	= "Wolvindra-Vinzuerio & D4UNKN0WNM4N"
 
 -- Versioning

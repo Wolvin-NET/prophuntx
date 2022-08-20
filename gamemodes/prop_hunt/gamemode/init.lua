@@ -516,7 +516,6 @@ function GM:PlayerExchangeProp(pl, ent)
 	if !IsValid(pl) then return; end
 	if !IsValid(ent) then return; end
 
-	--if pl:Team() == TEAM_PROPS && pl:IsOnGround() && !pl:Crouching() && PHX:IsUsablePropEntity(ent:GetClass()) && ent:GetModel() then
 	if pl:Team() == TEAM_PROPS && PHX:IsUsablePropEntity(ent:GetClass()) && ent:GetModel() then
 		if table.HasValue(PHX.BANNED_PROP_MODELS, ent:GetModel()) then
 			pl:PHXChatInfo("ERROR", "PHX_PROP_IS_BANNED")
@@ -527,6 +526,11 @@ function GM:PlayerExchangeProp(pl, ent)
                 pl:PHXChatInfo("ERROR", "PHX_PROP_TOO_THIN")
                 return
             end
+			
+			-- Restriction to enable/disable prop crouch/isonground.
+			if PHX:GetCVar( "ph_prop_must_standing" ) and ( pl:Crouching() or (not pl:IsOnGround()) ) then
+				return
+			end
         
 			local ent_health = math.Clamp(ent:GetPhysicsObject():GetVolume() / 250, 1, 200)
 			local new_health = math.Clamp((pl.ph_prop.health / pl.ph_prop.max_health) * ent_health, 1, 200)
@@ -553,39 +557,28 @@ function GM:PlayerExchangeProp(pl, ent)
             pl:PrintCenter( "HUD_ROTFREE", Color(32,200,72) )
             pl:EnablePropPitchRot( true )
 			
+			local OffsetMult = PHX:GetCVar( "ph_prop_viewoffset_mult" )
+			
 			if PHX:GetCVar( "ph_sv_enable_obb_modifier" ) && ent:GetNWBool("hasCustomHull",false) then
 				local hmin	= ent.m_Hull[1]
-				local hmax 	= ent.m_Hull[2]
-				--[[ 
-					-- Sorry, duck hulls is no longer needed :(
-					local dmin	= ent.m_dHull[1]
-					local dmax	= ent.m_dHull[2] 
-				]]
-				
-				--[[ if hmax.z < self.ViewCam.cHullzMins or dmax.z < self.ViewCam.cHullzMins then
-                    pl:PHAdjustView( self.ViewCam.cHullzMins, self.ViewCam.cHullzMins )
-				elseif hmax.z > self.ViewCam.cHullzMaxs || dmax.z > self.ViewCam.cHullzMaxs then
-                    pl:PHAdjustView( self.ViewCam.cHullzMaxs, self.ViewCam.cHullzMaxs )
-				else
-                    pl:PHAdjustView( hmax.z, dmax.z )
-				end ]]
+				local hmax 	= ent.m_Hull[2] * OffsetMult
 				
 				if hmax.z < self.ViewCam.cHullzMins then
                     pl:PHAdjustView( self.ViewCam.cHullzMins, self.ViewCam.cHullzMins )
 				elseif hmax.z > self.ViewCam.cHullzMaxs then
                     pl:PHAdjustView( self.ViewCam.cHullzMaxs, self.ViewCam.cHullzMaxs )
 				else
-                    pl:PHAdjustView( hmax.z*0.8, hmax.z*0.8 )
+                    pl:PHAdjustView( hmax.z )
 				end
                 
                 pl:SetHull(hmin,hmax)
-				pl:SetHullDuck(hmin,hmax) --pl:SetHullDuck(dmin,dmax)
+				pl:SetHullDuck(hmin,hmax)
                 local xymax = math.Round(math.Max(hmax.x,hmax.y))
                 pl:PHSendHullInfo( xymax*-1, xymax, hmax.z, new_health )
 			else
                 local hullxymax = math.Round(math.Max(ent:OBBMaxs().x, ent:OBBMaxs().y))
 				local hullxymin = hullxymax * -1
-				local hullz     = math.Round(ent:OBBMaxs().z - ent:OBBMins().z)
+				local hullz     = math.Round(ent:OBBMaxs().z-ent:OBBMins().z) * OffsetMult
                 
                 if ent:GetClass() == "prop_ragdoll" then -- Optional (but Better): Add 'PHX:GetCVar( "ph_usable_prop_type" ) >= 3' for extra checks.
                     -- We'll use GetModelBounds() instead of using CollisionBounds or OBBMins/Maxs.
@@ -594,7 +587,7 @@ function GM:PlayerExchangeProp(pl, ent)
                     
                     hullxymax   = math.Round( math.Max( maxs.x, maxs.y) )
                     hullxymin   = hullxymax * -1
-                    hullz       = math.Round(maxs.z-mins.z)
+                    hullz       = math.Round(maxs.z-mins.z) * OffsetMult
                     
                     -- Override health back to 100 and set their solid back to BBOX.
                     pl.ph_prop:SetSolid(SOLID_BBOX)
@@ -607,30 +600,18 @@ function GM:PlayerExchangeProp(pl, ent)
                     -- Using SOLID_OBB **DOES NOT** Helps: This will produce ANOTHER bug that
                     -- hunters are completely stucked when the prop is rotated. This appear to be engine's bug.
                 end
-				
-                --DEPRECATED: Duck Hull will no longer needed!
-				--[[ local dhullz = hullz
-				if hullz > 10 && hullz <= 30 then
-					dhullz = hullz-(hullz*0.5)
-				elseif hullz > 30 && hullz <= 40 then
-					dhullz = hullz-(hullz*0.2)
-				elseif hullz > 40 && hullz <= 50 then
-					dhullz = hullz-(hullz*0.1)
-				else
-					dhullz = hullz
-				end ]]
             
 				if hullz < self.ViewCam.cHullzMins then
 					pl:PHAdjustView( self.ViewCam.cHullzMins, self.ViewCam.cHullzMins )
 				elseif hullz > self.ViewCam.cHullzMaxs then                
 					pl:PHAdjustView( self.ViewCam.cHullzMaxs, self.ViewCam.cHullzMaxs )
 				else
-                    pl:PHAdjustView( hullz*0.8, hullz*0.8 ) --#2nd: dhullz
+                    pl:PHAdjustView( hullz )
 				end
                 
 				pl:SetHull(Vector(hullxymin, hullxymin, 0), Vector(hullxymax, hullxymax, hullz))
-				pl:SetHullDuck(Vector(hullxymin, hullxymin, 0), Vector(hullxymax, hullxymax, hullz))   --dhullz
-                pl:PHSendHullInfo( hullxymin, hullxymax, hullz, new_health ) --_,_,dhullz,_
+				pl:SetHullDuck(Vector(hullxymin, hullxymin, 0), Vector(hullxymax, hullxymax, hullz))
+                pl:PHSendHullInfo( hullxymin, hullxymax, hullz, new_health )
 
 			end
 		end
