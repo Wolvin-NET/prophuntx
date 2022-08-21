@@ -3,6 +3,7 @@
 local window = {}
 
 local hastaunt = false
+local favoriteTaunts = {}
 
 window.state = false
 window.CurrentlyOpen = false
@@ -52,9 +53,9 @@ local function MainFrame()
 	window.list:AddColumn("soundlist") -- does nothing because header is invisible.
 	window.list.m_bHideHeaders = true
 	window.list:SetDataHeight(21)
-	window.list:Dock(FILL) -- TOP is the one working
+	window.list:Dock(FILL) -- FILL is the one working on DListView
 	-- it appears that works after setting it on next frame. Tried to paste on another location, it resets to 0.
-	timer.Simple(0, function()
+	timer.Simple(0.12, function()
 		window.list.VBar:SetScroll( LocalPlayer():GetVar( "tauntWindowScrolling", 0 )  )
 	end)
 	
@@ -66,7 +67,7 @@ local function MainFrame()
 	window.comb = window.toppanel:Add("DComboBox")
 	window.comb:Dock(TOP)
 	window.comb:SetSize(0, 20)
-	if (PHX.TAUNTS[ LocalPlayer():GetVar( "tauntWindowCategorie", PHX.DEFAULT_CATEGORY )][LocalPlayer():Team()] == nil) then
+	if (PHX.TAUNTS[ LocalPlayer():GetVar( "tauntWindowCategorie", PHX.DEFAULT_CATEGORY )] != nil && PHX.TAUNTS[ LocalPlayer():GetVar( "tauntWindowCategorie", PHX.DEFAULT_CATEGORY )][LocalPlayer():Team()] == nil) then
 		window.comb:SetValue(PHX.DEFAULT_CATEGORY)
 	else
 		window.comb:SetValue( LocalPlayer():GetVar("tauntWindowCategorie", PHX.DEFAULT_CATEGORY) )
@@ -206,19 +207,106 @@ local function MainFrame()
 	window.input.OnLoseFocus = function(self)
 		window.frame:SetKeyboardInputEnabled(false)
 	end
+
+	--Load favorite taunts stored locally (clientside)
+	--Between servers they will be the same
+	local function loadFavoriteTaunts()
+		local ply = LocalPlayer()
+
+		if not file.Exists("favoriteTaunts", "DATA") then
+			file.CreateDir("favoriteTaunts")
+		end
+
+		if not file.Exists( "favoriteTaunts/"..ply:SteamID64()..".json", "DATA" ) then
+			file.Write( "favoriteTaunts/"..ply:SteamID64()..".json", "{}" )
+			favoriteTaunts = {}
+		else
+			local readingFile = file.Read("favoriteTaunts/"..ply:SteamID64()..".json", "DATA")
+			if readingFile != nil then
+				favoriteTaunts = util.JSONToTable(readingFile)
+			else
+				favoriteTaunts = {}
+			end
+		end
+	end
+
+	--Check if taunt is favorite
+	local function isTauntFavorite(taunt)
+		if favoriteTaunts[taunt] == nil || favoriteTaunts[taunt] == false then
+			return false
+		elseif favoriteTaunts[taunt] == true then
+			return true
+		end
+	end
+
+	--Icon creation
+	local function createIconForLine(linePanel, name)
+		local tmpIcon = vgui.Create("DImageButton", linePanel)
+
+		if isTauntFavorite(name) then
+			tmpIcon:SetColor(Color(255,255,255))
+		else
+			tmpIcon:SetColor(Color(120,120,120))
+		end
+		tmpIcon:SetImage("icon16/star.png")
+		tmpIcon:SetSize(16,16)
+		tmpIcon:SetPos(window.frame:GetWide()-45,2)
+		function tmpIcon:DoClick()
+			if isTauntFavorite(name) then
+				self:SetColor(Color(120,120,120))
+				favoriteTaunts[name] = nil
+			else
+				self:SetColor(Color(255,255,255))
+				favoriteTaunts[name] = true
+			end
+		end
+		linePanel:Add(tmpIcon)
+	end
 	
+
 	-- Let's Initialize the window.list.
-	local defaultList = PHX.TAUNTS[LocalPlayer():GetVar("tauntWindowCategorie", PHX.DEFAULT_CATEGORY)]
+	local defaultList = {}
+	--If it's favorite tabs, we manage it differently
+	if (LocalPlayer():GetVar("tauntWindowCategorie", PHX.DEFAULT_CATEGORY) == "Favorite Taunts") then
+		for k,v in pairs(PHX.TAUNTS) do
+		--Making sure that the v[Team_ID] is not nil
+			if v[LocalPlayer():Team()]!=nil then
+				for k2,v2 in pairs(v[LocalPlayer():Team()]) do
+					--Initialise table
+					if defaultList[LocalPlayer():Team()]==nil then
+						defaultList[LocalPlayer():Team()] = {}
+					end
+					if isTauntFavorite(k2) then
+						defaultList[LocalPlayer():Team()][k2] = v2
+					end
+				end
+			end
+		end
+	else
+		defaultList = PHX.TAUNTS[LocalPlayer():GetVar("tauntWindowCategorie", PHX.DEFAULT_CATEGORY)]
+	end
+	
 	--in case categorie isn't set for the 2 teams
-	if defaultList[LocalPlayer():Team()]==nil then
+	if defaultList[LocalPlayer():Team()]==nil && type(defaultList[LocalPlayer():Team()]) != "table" then
 		defaultList = PHX.TAUNTS[PHX.DEFAULT_CATEGORY]
 	end
 	
 	-- Make sure each category isn't empty and has lines.
 	local hasLines = false
 	
-	-- add default list
-	for name,_ in pairs( defaultList[LocalPlayer():Team()] ) do window.list:AddLine( name ) end
+	--Load favorite taunts before usage in loop below
+	loadFavoriteTaunts()
+	
+	-- add default list and check if there is a taunt inside the category
+	if !table.IsEmpty(defaultList[LocalPlayer():Team()]) then
+		for name,_ in pairs( defaultList[LocalPlayer():Team()] ) do
+			local newCreatedLine = window.list:AddLine( name )
+			createIconForLine(newCreatedLine,name)
+		end
+	else
+		window.list:AddLine( PHX:FTranslate("TM_NO_TAUNTS") )
+	end
+	
 	hasLines = true
 
 	--init size
@@ -231,6 +319,9 @@ local function MainFrame()
 			window.comb:AddChoice( category )
 		end
 	end
+
+	--Favorite choice for the combobox
+	window.comb:AddChoice( "Favorite Taunts" )
 	
 	function window.comb:SortAndStyle( pnl )
 		pnl:SortByColumn(1,false)
@@ -271,7 +362,8 @@ local function MainFrame()
 	function window:ResetList( ls )
 		if !table.IsEmpty(ls) then
 			for name,_ in pairs( ls ) do
-				self.list:AddLine( name )
+				local newCreatedLine = self.list:AddLine( name )
+				createIconForLine(newCreatedLine,name)
 			end
 			hasLines = true
 			--window.list:SetSize(1,table.getn(self.list:GetLines())*21)
@@ -294,7 +386,8 @@ local function MainFrame()
 			
 			if !table.IsEmpty(tTemp) then
 				for _,v in pairs(tTemp) do
-					self.list:AddLine( v )
+					local newCreatedLine = self.list:AddLine( v )
+					createIconForLine(newCreatedLine,v)
 				end
 				hasLines = true
 				--self.list:SetSize(0,table.getn(self.list:GetLines())*21)
@@ -330,8 +423,23 @@ local function MainFrame()
 		hastaunt = false
 		window.CurrentCategory = val
 		window.input:SetText("")
-			
-		local t = PHX.TAUNTS[val][LocalPlayer():Team()]
+		local t = {}
+
+		if (val != "Favorite Taunts") then
+			t = PHX.TAUNTS[val][LocalPlayer():Team()]
+		else
+			for k,v in pairs(PHX.TAUNTS) do
+				--Making sure that the v[Team_ID] is not nil
+				if v[LocalPlayer():Team()] != nil then
+					for k2,v2 in pairs(v[LocalPlayer():Team()]) do
+						if isTauntFavorite(k2) then
+							t[k2] = v2
+						end
+					end
+				end
+			end 
+		end
+		
 		LocalPlayer():SetVar("tauntWindowCategorie", val)
 		window:ResetList( t )
 			
@@ -413,6 +521,8 @@ local function MainFrame()
 			SendToServer(getline)
 			--Saving state of scrollbar
 			LocalPlayer():SetVar("tauntWindowScrolling", window.list.VBar:GetScroll())
+			local favoritesInJSON = util.TableToJSON(favoriteTaunts)
+			file.Write("favoriteTaunts/"..LocalPlayer():SteamID64()..".json", favoritesInJSON)
 			window.frame:Close()
 		end
 	end)
@@ -440,8 +550,10 @@ local function MainFrame()
 		end
 	end)
 	CreateStyledButton(FILL,86,PHX:FTranslate("TM_TOOLTIP_CLOSE"),{5,5,5,5},"vgui/phehud/btn_close.vmt",FILL, function()
-	--Saving state of scrollbar
+		--Saving state of scrollbar
 		LocalPlayer():SetVar("tauntWindowScrolling",window.list.VBar:GetScroll())
+		local favoritesInJSON = util.TableToJSON(favoriteTaunts)
+		file.Write("favoriteTaunts/"..LocalPlayer():SteamID64()..".json", favoritesInJSON)
 		window.frame:Close()
 	end)
 	
@@ -489,13 +601,17 @@ local function MainFrame()
 					SendToServer(getline)
 					--Saving state of scrollbar
 					LocalPlayer():SetVar("tauntWindowScrolling",window.list.VBar:GetScroll())
+					local favoritesInJSON = util.TableToJSON(favoriteTaunts)
+					file.Write("favoriteTaunts/"..LocalPlayer():SteamID64()..".json", favoritesInJSON)
 					window.frame:Close()
 				end 
 			end):SetIcon("icon16/sound_delete.png")
 			menu:AddSpacer()
 			menu:AddOption(PHX:FTranslate("TM_MENU_CLOSE"), function()
-				--Saving state of scrollbar
+				--Saving state of scrollbar & favorite taunts
 				LocalPlayer():SetVar("tauntWindowScrolling",window.list.VBar:GetScroll())
+				local favoritesInJSON = util.TableToJSON(favoriteTaunts)
+				file.Write("favoriteTaunts/"..LocalPlayer():SteamID64()..".json", favoritesInJSON)
 				window.frame:Close()
 			end):SetIcon("icon16/cross.png")
 			menu:Open()
@@ -508,8 +624,10 @@ local function MainFrame()
 	
 	window.list.DoDoubleClick = function(id,line)
 		hastaunt = true
-		--Saving state of scrollbar
+		--Saving state of scrollbar & favorite taunts
 		LocalPlayer():SetVar("tauntWindowScrolling",window.list.VBar:GetScroll())
+		local favoritesInJSON = util.TableToJSON(favoriteTaunts)
+		file.Write("favoriteTaunts/"..LocalPlayer():SteamID64()..".json", favoritesInJSON)
 		local getline = TranslateTaunt(window.CurrentCategory, window.list:GetLine(window.list:GetSelectedLine()):GetValue(1))
 		SendToServer(getline)
 		
@@ -522,13 +640,18 @@ local function MainFrame()
 end
 
 concommand.Add("ph_showtaunts", function(ply)
-if ply:Alive() and window.state and ply:GetObserverMode() == OBS_MODE_NONE then
+-- if ply:Alive() and window.state and ply:GetObserverMode() == OBS_MODE_NONE then
 	if !window.CurrentlyOpen then
 		MainFrame()
 	else
+		--Saving state of scrollbar & favorite taunts
+		LocalPlayer():SetVar("tauntWindowScrolling",window.list.VBar:GetScroll())
+		local favoritesInJSON = util.TableToJSON(favoriteTaunts)
+		file.Write("favoriteTaunts/"..LocalPlayer():SteamID64()..".json", favoritesInJSON)
 		window.frame:Close()
+		
 	end
-else
-	PHX:ChatInfo( PHX:Translate("TM_PLAY_ONLY_ALIVE"), "WARNING" )
-end
+-- else
+	-- PHX:ChatInfo( PHX:Translate("TM_PLAY_ONLY_ALIVE"), "WARNING" )
+-- end
 end, nil, "Show Prop Hunt taunt menu")
