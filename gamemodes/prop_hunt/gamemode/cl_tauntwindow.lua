@@ -456,7 +456,20 @@ local function MainFrame()
 	
 	local function TranslateTaunt(category, linename)
 		local tm = LocalPlayer():Team()
-		return linename, PHX.TAUNTS[category][tm][linename]
+		if category!= "Favorite Taunts" then
+			return linename, PHX.TAUNTS[category][tm][linename]
+		else
+			--Easier method would be to save taunt path into favoriteTaunt table and only have to get it from there
+			for k,v in pairs(PHX.TAUNTS) do
+				if v[tm]!=nil then
+					for k2,v2 in pairs(v[tm]) do
+						if k2==linename then
+							return linename, v2
+						end
+					end
+				end
+			end
+		end
 	end
 	
 	local function SendToServer(name, snd, bFakeTaunt)
