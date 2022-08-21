@@ -29,7 +29,9 @@ function CLASS:OnSpawn(pl)
 	pl:CrosshairEnable()
 	
 	-- Initial Setup during Prop choosing a props. Jump-Duck may still required somehow.
-    pl:PHAdjustView( 48, 28 ) -- Original: ( 64,28 )
+	-- do not use PHSetView!
+	pl:SetViewOffset( Vector(0,0,64) )
+    pl:SetViewOffsetDucked( Vector(0,0,28) )
 	
 	-- Prevent 'mod_studio: MOVETYPE_FOLLOW with No Models error.'
 	pl:DrawViewModel( false )
@@ -48,9 +50,6 @@ function CLASS:OnSpawn(pl)
 		if IsValid(pl) and pl:Alive() then
 			net.Start("AutoTauntSpawn")
 			net.Send(pl)
-			
-			--[[ net.Start("PH_ShowTutor")
-			net.Send(pl) ]]
 		end
 	end)
 	

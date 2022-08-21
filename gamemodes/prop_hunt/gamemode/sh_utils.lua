@@ -31,14 +31,10 @@ function util.PHXQuickDecompress( data )
     return t
 end
 
--- Rarely used, from sh_config.lua, but I'll put them here anyway....
-function table.KeyExists(tbl, key)
-    return (tbl[key] ~= nil)
-end
-
 function table.HasKey(tbl, keyName)
-	for k,_ in pairs(tbl) do
-		if k == keyName then return true end
+	for k,_ in SortedPairs(tbl) do
+		print("looking for "..keyName)
+		if k == keyName then print("found! : "..keyName) return true end
 	end
 	return false
 end

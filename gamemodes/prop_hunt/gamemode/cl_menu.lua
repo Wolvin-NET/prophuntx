@@ -723,6 +723,8 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
                 ["1"] = { name="PHXM_DROP_VBS_ENABLE",  icon="icon16/application_xp_terminal.png" },
             }
         }, grid, "PHXM_ADMIN_BEVERBOSE")
+		PHX.UI:CreateVGUIType("ph_prop_viewoffset_mult", "slider", {min=0.6,max=1.2,dec=1,float=true,kind="SERVER"}, grid, "PHXM_ADMIN_PROPOFFSET")
+		PHX.UI:CreateVGUIType("ph_prop_must_standing", "check", "SERVER", grid, "PHXM_ADMIN_REPL_MUST_STAND")
 		PHX.UI:CreateVGUIType("ph_check_for_rooms", "check", "SERVER", grid, "PHXM_ADMIN_ROOMCHECK")
 		PHX.UI:CreateVGUIType("ph_mkbren_use_new_mdl","check","SERVER",grid, "PHXM_ADMIN_USENEWMKBREN")
 		PHX.UI:CreateVGUIType("ph_enable_plnames", "check", "SERVER", grid, "PHXM_ADMIN_SHOWPLNAMEHEAD")
@@ -853,6 +855,7 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 				else
 					LocalPlayer():ConCommand("mv_start")
 				end
+				PHX.UI.MainForm:Close()
 			end
 			},
 			[2] = {"PHXM_MV_STOP", function(self)

@@ -302,7 +302,7 @@ net.Receive("pcr.SetMetheProp",function(len,ply)
     end
 	
 	-- Make sure that the player is On Ground and Not crouching.
-	if ( ply:Crouching() or (not ply:IsOnGround()) ) then
+	if PHX:GetCVar( "ph_prop_must_standing" ) and ( ply:Crouching() or (not ply:IsOnGround()) ) then
 		ply:PHXChatInfo("NOTICE", "PCR_STAY_ON_GROUND")
 		return
 	end

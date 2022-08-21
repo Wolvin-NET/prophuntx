@@ -139,6 +139,33 @@ function Player:PHSetColor( ColOverride )
     
 end
 
+function Player:SetLastTauntTime( idStringID, int )
+	if !idStringID or idStringID == nil then print("[:SetLastTauntTime] Error: idStringID is empty!"); return end
+	if !int or int == nil or !isnumber(int) then int = 0 end
+	
+	if SERVER then --make this only available on serverside. in clientside, this can be unreliable.
+		self:SetVar( idStringID, int )
+	end
+	self:SetNWFloat( idStringID, int )
+end
+
+function Player:GetLastTauntTime( idStringID, useNet )
+
+	if useNet == nil then useNet = false end
+	
+	if ( useNet or CLIENT ) then
+		return self:GetNWFloat( idStringID, 0.00 )
+	end
+	
+	-- Force it
+	if SERVER then
+		return self:GetVar( idStringID, 0.00 )
+	end
+	
+	-- if anything does not match any criteria:
+	return 0
+end
+
 if SERVER then
     function Player:EnablePropPitchRot( bool )
         self:SetNWBool("PlayerPitchRot", bool)
@@ -174,12 +201,10 @@ if SERVER then
     
     end
 
-    function Player:PHSendHullInfo( xymin, xymax, zmax, zdmax, health )
+    function Player:PHSendHullInfo( xymin, xymax, zmax, health )
         net.Start( "SetHull" )
-			net.WriteVector( Vector(xymin, xymin, 0) ) --Hull Mins
-			net.WriteVector( Vector(xymax, xymax, zmax) ) --Hull Mins
-			net.WriteVector( Vector(xymin, xymin, 0) ) --DuckHull
-			net.WriteVector( Vector(xymax, xymax, zdmax) ) --DuckHull
+			net.WriteVector( Vector(xymin, xymin, 0) )
+			net.WriteVector( Vector(xymax, xymax, zmax) )
             net.WriteInt( health, 9 )
         net.Send(self)
     end
@@ -194,9 +219,8 @@ if SERVER then
         net.Send( self )
     end
     
-    function Player:PHAdjustView( hullz, dhullz )
+    function Player:PHAdjustView( hullz )
         self:SetViewOffset( Vector(0,0,hullz) )
-        --self:SetViewOffsetDucked( Vector(0,0,dhullz) )
         self:SetViewOffsetDucked( Vector(0,0,hullz) )
     end
     

@@ -512,10 +512,11 @@ end
 -- The [E] & Mouse Click 1 behaviour is now moved in here!
 function GM:PlayerExchangeProp(pl, ent)
 
+	if !self:InRound() then return; end
 	if !IsValid(pl) then return; end
 	if !IsValid(ent) then return; end
 
-	if pl:Team() == TEAM_PROPS && pl:IsOnGround() && !pl:Crouching() && PHX:IsUsablePropEntity(ent:GetClass()) && ent:GetModel() then
+	if pl:Team() == TEAM_PROPS && PHX:IsUsablePropEntity(ent:GetClass()) && ent:GetModel() then
 		if table.HasValue(PHX.BANNED_PROP_MODELS, ent:GetModel()) then
 			pl:PHXChatInfo("ERROR", "PHX_PROP_IS_BANNED")
 		elseif IsValid(ent:GetPhysicsObject()) && (pl.ph_prop:GetModel() != ent:GetModel() || pl.ph_prop:GetSkin() != ent:GetSkin()) then
@@ -525,6 +526,11 @@ function GM:PlayerExchangeProp(pl, ent)
                 pl:PHXChatInfo("ERROR", "PHX_PROP_TOO_THIN")
                 return
             end
+			
+			-- Restriction to enable/disable prop crouch/isonground.
+			if PHX:GetCVar( "ph_prop_must_standing" ) and ( pl:Crouching() or (not pl:IsOnGround()) ) then
+				return
+			end
         
 			local ent_health = math.Clamp(ent:GetPhysicsObject():GetVolume() / 250, 1, 200)
 			local new_health = math.Clamp((pl.ph_prop.health / pl.ph_prop.max_health) * ent_health, 1, 200)
@@ -551,28 +557,28 @@ function GM:PlayerExchangeProp(pl, ent)
             pl:PrintCenter( "HUD_ROTFREE", Color(32,200,72) )
             pl:EnablePropPitchRot( true )
 			
+			local OffsetMult = PHX:GetCVar( "ph_prop_viewoffset_mult" )
+			
 			if PHX:GetCVar( "ph_sv_enable_obb_modifier" ) && ent:GetNWBool("hasCustomHull",false) then
 				local hmin	= ent.m_Hull[1]
-				local hmax 	= ent.m_Hull[2]
-				local dmin	= ent.m_dHull[1] -- Warning! may be deprecated: this will replaced to hmin and hmax in future!
-				local dmax	= ent.m_dHull[2] -- Warning! may be deprecated: this will replaced to hmin and hmax in future!
+				local hmax 	= ent.m_Hull[2] * OffsetMult
 				
-				if hmax.z < GAMEMODE.ViewCam.cHullzMins or dmax.z < GAMEMODE.ViewCam.cHullzMins then
-                    pl:PHAdjustView( GAMEMODE.ViewCam.cHullzMins, GAMEMODE.ViewCam.cHullzMins )
-				elseif hmax.z > GAMEMODE.ViewCam.cHullzMaxs || dmax.z > GAMEMODE.ViewCam.cHullzMaxs then --what the heck Duck Size is 84? BigMomma.mdl?
-                    pl:PHAdjustView( GAMEMODE.ViewCam.cHullzMaxs, GAMEMODE.ViewCam.cHullzMaxs )
+				if hmax.z < self.ViewCam.cHullzMins then
+                    pl:PHAdjustView( self.ViewCam.cHullzMins, self.ViewCam.cHullzMins )
+				elseif hmax.z > self.ViewCam.cHullzMaxs then
+                    pl:PHAdjustView( self.ViewCam.cHullzMaxs, self.ViewCam.cHullzMaxs )
 				else
-                    pl:PHAdjustView( hmax.z, dmax.z )
+                    pl:PHAdjustView( hmax.z )
 				end
                 
                 pl:SetHull(hmin,hmax)
-				pl:SetHullDuck(dmin,dmax)
+				pl:SetHullDuck(hmin,hmax)
                 local xymax = math.Round(math.Max(hmax.x,hmax.y))
-                pl:PHSendHullInfo( xymax*-1, xymax, hmax.z, dmax.z, new_health )
+                pl:PHSendHullInfo( xymax*-1, xymax, hmax.z, new_health )
 			else
                 local hullxymax = math.Round(math.Max(ent:OBBMaxs().x, ent:OBBMaxs().y))
 				local hullxymin = hullxymax * -1
-				local hullz     = math.Round(ent:OBBMaxs().z - ent:OBBMins().z)
+				local hullz     = math.Round(ent:OBBMaxs().z-ent:OBBMins().z) * OffsetMult
                 
                 if ent:GetClass() == "prop_ragdoll" then -- Optional (but Better): Add 'PHX:GetCVar( "ph_usable_prop_type" ) >= 3' for extra checks.
                     -- We'll use GetModelBounds() instead of using CollisionBounds or OBBMins/Maxs.
@@ -581,7 +587,7 @@ function GM:PlayerExchangeProp(pl, ent)
                     
                     hullxymax   = math.Round( math.Max( maxs.x, maxs.y) )
                     hullxymin   = hullxymax * -1
-                    hullz       = math.Round(maxs.z-mins.z)
+                    hullz       = math.Round(maxs.z-mins.z) * OffsetMult
                     
                     -- Override health back to 100 and set their solid back to BBOX.
                     pl.ph_prop:SetSolid(SOLID_BBOX)
@@ -591,33 +597,21 @@ function GM:PlayerExchangeProp(pl, ent)
                     
                     pl:EnablePropPitchRot( false ) --Do not use Pitch Rotation when prop_ragdoll being used.
                     -- Bug Explanation: Bullet can still goes through if using SOLID_BBOX.
-                    -- Using SOLID_OBB **WILL NOT** Helps: This will produce ANOTHER bug that
+                    -- Using SOLID_OBB **DOES NOT** Helps: This will produce ANOTHER bug that
                     -- hunters are completely stucked when the prop is rotated. This appear to be engine's bug.
                 end
-				
-                --DEPRECATED: Duck Hull will no longer needed!
-				local dhullz = hullz
-				if hullz > 10 && hullz <= 30 then
-					dhullz = hullz-(hullz*0.5)
-				elseif hullz > 30 && hullz <= 40 then
-					dhullz = hullz-(hullz*0.2)
-				elseif hullz > 40 && hullz <= 50 then
-					dhullz = hullz-(hullz*0.1)
-				else
-					dhullz = hullz
-				end
             
-				if hullz < GAMEMODE.ViewCam.cHullzMins then
-					pl:PHAdjustView( GAMEMODE.ViewCam.cHullzMins, GAMEMODE.ViewCam.cHullzMins )
-				elseif hullz > GAMEMODE.ViewCam.cHullzMaxs then                
-					pl:PHAdjustView( GAMEMODE.ViewCam.cHullzMaxs, GAMEMODE.ViewCam.cHullzMaxs )
+				if hullz < self.ViewCam.cHullzMins then
+					pl:PHAdjustView( self.ViewCam.cHullzMins, self.ViewCam.cHullzMins )
+				elseif hullz > self.ViewCam.cHullzMaxs then                
+					pl:PHAdjustView( self.ViewCam.cHullzMaxs, self.ViewCam.cHullzMaxs )
 				else
-                    pl:PHAdjustView( hullz*0.8, hullz ) --#2nd: dhullz
+                    pl:PHAdjustView( hullz )
 				end
                 
 				pl:SetHull(Vector(hullxymin, hullxymin, 0), Vector(hullxymax, hullxymax, hullz))
-				pl:SetHullDuck(Vector(hullxymin, hullxymin, 0), Vector(hullxymax, hullxymax, hullz))   --dhullz
-                pl:PHSendHullInfo( hullxymin, hullxymax, hullz, hullz, new_health ) --_,_,dhullz,_
+				pl:SetHullDuck(Vector(hullxymin, hullxymin, 0), Vector(hullxymax, hullxymax, hullz))
+                pl:PHSendHullInfo( hullxymin, hullxymax, hullz, new_health )
 
 			end
 		end
@@ -632,7 +626,7 @@ function GM:PlayerUse(pl, ent)
 	if !pl:Alive() || pl:Team() == TEAM_SPECTATOR || pl:Team() == TEAM_UNASSIGNED then return false; end
 	
 	-- Prevent Execution Spam by holding ['E'] button too long.
-	if pl:Team() == TEAM_PROPS && pl.UseTime <= CurTime() then
+	if pl:Team() == TEAM_PROPS && pl:GetVar("UseTime",0) <= CurTime() then
 		
 		local hmx,hmy,hz = ent:GetPropSize()
         local proptype = PHX:GetCVar( "ph_usable_prop_type" )
@@ -650,7 +644,7 @@ function GM:PlayerUse(pl, ent)
 			end
 		end
 		
-		pl.UseTime = CurTime() + 1
+		pl:SetVar("UseTime",CurTime()+1)
 		
 	end
 	
@@ -667,11 +661,11 @@ function GM:PlayerUse(pl, ent)
 	
 	
 	-- Prevent the door exploit
-	if PHX.EXPLOITABLE_DOORS[ent:GetClass()] && pl.last_door_time && pl.last_door_time + 1 > CurTime() then
+	if PHX.EXPLOITABLE_DOORS[ent:GetClass()] && pl:GetVar("LastDoorUseTime",0) + 1 > CurTime() then
 		return false
 	end
     
-    pl.last_door_time = CurTime()
+    pl:SetVar("LastDoorUseTime", CurTime())
     
     -- Sorry, but Props are not allowed to enter vehicle, this is due to new code fixes for ph_prop :(
     -- This is temporarily disabled and re-enabled again if there is a workaround
@@ -714,7 +708,6 @@ hook.Add("PlayerInitialSpawn", "PHX.SetupInitData", function(ply)
 	if not PHX.cvarsynced then PHX:InitCVar() end
 
 	ply.LastPickupEnt	= NULL
-	ply.UseTime			= 0
 	ply.ChangeLimit		= 0
 	
 	-- Player Switch Teams Initialisations	
@@ -789,15 +782,14 @@ hook.Add("PlayerSpawn", "PH_PlayerSpawn", function(pl)
 	pl:SetColor(Color(255,255,255,255))
 	pl:SetRenderMode(RENDERMODE_TRANSALPHA)
 	pl:UnLock()
-	pl:ResetHull()
-	pl:SetNWFloat("LastTauntTime", CurTime())
     -- Reset Fake taunts
 	pl:ResetTauntRandMapCount()
 	
-    pl.last_taunt_time 	= 0
-	pl.lastCTauntTime 	= 0
+	pl:SetLastTauntTime( "LastTauntTime", CurTime() )
+	pl:SetLastTauntTime( "CLastTauntTime", CurTime() )
     pl.propdecoy = nil -- don't link to your decoy prop
 	
+	pl:ResetHull() -- Always call this.
 	net.Start("ResetHull")
 	net.Send(pl)
 	
@@ -1106,7 +1098,7 @@ hook.Add("KeyPress", "PlayerPressedKey", function( pl, key )
 			
 			local trace2 = util.TraceLine(trace) 
 			if trace2.Entity && trace2.Entity:IsValid() && PHX:IsUsablePropEntity(trace2.Entity:GetClass()) then
-				if pl.UseTime <= CurTime() then
+				if pl:GetVar("UseTime",0) <= CurTime() then
 					if !pl:IsHoldingEntity() then
 						local hmx,hmy,hz = trace2.Entity:GetPropSize()
 						if PHX:GetCVar( "ph_check_for_rooms" ) && !pl:CheckHull(hmx, hmy, hz) then
@@ -1115,14 +1107,54 @@ hook.Add("KeyPress", "PlayerPressedKey", function( pl, key )
 							GAMEMODE:PlayerExchangeProp(pl, trace2.Entity)
 						end
 					end
-					pl.UseTime = CurTime() + 1
+					pl:SetVar("UseTime",CurTime()+1)
 				end
 			end
 		end
 	end
 end)
 
+function PHX:PlayTaunt( pl, sndTaunt, bIsPitchEnabled, iPitchLevel, bIsRandomized, LastTauntTimeID )
+	if !pl or !IsValid(pl) then
+		print("[PHX:PlayTaunt] A Player Entity is Required.")
+		return
+	end
+
+	-- Re-strict team check.
+	
+	if (pl:Team() == TEAM_PROPS or pl:Team() == TEAM_HUNTERS) then
+		-- sndTaunt can be either boolean or string.
+		local taunt
+		
+		if isbool(sndTaunt) and (sndTaunt) then
+			repeat
+				taunt = PHX:GetRandomTaunt( pl:Team() )
+			until taunt != pl.last_taunt
+			--pl.last_taunt_time  = CurTime()
+			pl.last_taunt = taunt
+			
+		elseif isstring(sndTaunt) then
+			taunt = sndTaunt
+		end
+		
+		local pitch = 100
+		if PHX:GetCVar( "ph_taunt_pitch_enable" ) and tobool( bIsPitchEnabled ) then		
+			if tobool( bIsRandomized ) then
+				pitch = math.random( PHX:GetCVar("ph_taunt_pitch_range_min"), PHX:GetCVar("ph_taunt_pitch_range_max") )
+			else
+				pitch = math.Clamp( iPitchLevel, PHX:GetCVar("ph_taunt_pitch_range_min"), PHX:GetCVar("ph_taunt_pitch_range_max") )
+			end
+		end
+		pl:EmitSound( taunt, 100, pitch )
+		pl:SetLastTauntTime( LastTauntTimeID, CurTime() )
+		
+	end
+
+end
+
 hook.Add("PlayerButtonDown", "PlayerButton_ControlTaunts", function(pl, key)
+	if !GAMEMODE:InRound() then return end
+
 	local info 	 		= pl:GetInfoNum("ph_default_taunt_key", 0)
 	local ctInfo 		= pl:GetInfoNum("ph_default_customtaunt_key", 0)
 	local lockInfo 		= pl:GetInfoNum("ph_default_rotation_lock_key", 0)
@@ -1136,72 +1168,61 @@ hook.Add("PlayerButtonDown", "PlayerButton_ControlTaunts", function(pl, key)
 	local decoyKey		= pl:GetInfoNum("ph_cl_decoy_spawn_key", 0)			-- Used for spawning decoy
     local isRightClickMode = pl:GetInfoNum("ph_prop_right_mouse_taunt", 0)  -- Right Click for taunt. Changed to clientside convar instead
 	
-	-- Freeze Prop while midair
-	if pl:Alive() and pl:Team() == TEAM_PROPS and (key == freezePropKey) then
-		pl:FreezePropMidAir()
-	end
-	
-	-- if you're excluding custom taunts not to be played on random taunts or use them *only* for specific 'groups', you're evil. jk it's good tho :)
-	-- update: I know this is a fucking mess, but I'll optimize this later.
-	if pl and pl:IsValid() and pl:Alive() and (key == info or (pl:Team() == TEAM_PROPS and ( tobool(isRightClickMode) and key == MOUSE_RIGHT ))) then
-		if (PHX:GetCVar( "ph_custom_taunt_mode" ) == 1) && GAMEMODE:InRound() then
-			pl:ConCommand("ph_showtaunts")
-		elseif ((PHX:GetCVar( "ph_custom_taunt_mode" ) == 0) or (PHX:GetCVar( "ph_custom_taunt_mode" ) == 2)) and
-			GAMEMODE:InRound() and pl:Alive() and (pl:Team() == TEAM_HUNTERS || pl:Team() == TEAM_PROPS) and 
-			pl.last_taunt_time + PHX:GetCVar( "ph_normal_taunt_delay" ) <= CurTime() and
-			-- for Random taunts, we'll use Cached taunts instead so EVERY taunts (including Customs) will also played. NO EXCEPTION.
-			(!table.IsEmpty(PHX.CachedTaunts[TEAM_PROPS]) and !table.IsEmpty(PHX.CachedTaunts[TEAM_HUNTERS])) then
-			
-			local rand_taunt
-			
-			repeat
-				if pl:Team() == TEAM_HUNTERS then
-					rand_taunt = PHX:GetRandomTaunt( TEAM_HUNTERS )
-				else
-					rand_taunt = PHX:GetRandomTaunt( TEAM_PROPS )
-				end
-			until rand_taunt != pl.last_taunt
-			pl.last_taunt_time  = CurTime()
-			pl.last_taunt = rand_taunt
-			
-			local pitch = 100
-			if PHX:GetCVar("ph_taunt_pitch_enable") then
-				if tobool(pitchApplyRand) then	-- is it Specified?
-                    if tobool( isRandomPitch ) then 	-- is it Randomized?
-                        pitch = math.random(PHX:GetCVar("ph_taunt_pitch_range_min"), PHX:GetCVar("ph_taunt_pitch_range_max"))
-                    else
-                        pitch = math.Clamp(plPitchLevel,PHX:GetCVar("ph_taunt_pitch_range_min"), PHX:GetCVar("ph_taunt_pitch_range_max"))
-                    end
-				end
-			end
-			pl:EmitSound(rand_taunt, 100, pitch)
-			pl:SetNWFloat("LastTauntTime", CurTime())
-			
-		end
-	end
-	
-	if pl and pl:IsValid() and pl:Alive() and (key == ctInfo) then
-		pl:ConCommand("ph_showtaunts")
-	end
-	
-	-- Prop rotation lock key, and spawn decoy key
-	if pl && pl:IsValid() && pl:Alive() && pl:Team() == TEAM_PROPS then
-		-- Lock rotation
-		if key == lockInfo then
-			if pl:GetPlayerLockedRot() then
-				pl:SetPlayerLockedRot( false )
-                pl:SendRotState(0)
-				pl:PrintCenter( "HUD_ROTFREE", Color(32,200,72) )
-			else
-				pl:SetPlayerLockedRot( true )
-                pl:SendRotState(1)
-				pl:PrintCenter( "HUD_ROTLOCK", Color(255,128,40) )
+	if pl && pl:IsValid() && pl:Alive() && (pl:Team() == TEAM_PROPS or pl:Team() == TEAM_HUNTERS) then
+		
+		-- Taunt Access
+		-- if you're excluding custom taunts not to be played on random taunts or use them *only* for specific 'groups', you're evil. jk it's good tho :)	
+		local tauntmode  = PHX:GetCVar( "ph_custom_taunt_mode" )
+		local tauntdelay = PHX:GetCVar( "ph_normal_taunt_delay" )
+		if (key == info or (pl:Team() == TEAM_PROPS and ( tobool(isRightClickMode) and key == MOUSE_RIGHT ) )) then
+			if tauntmode == 1 then
+				pl:ConCommand("ph_showtaunts")
+			elseif tauntmode == 0 or tauntmode == 2 and pl:GetLastTauntTime( "LastTauntTime" ) + tauntdelay <= CurTime() and
+				-- Random taunts rules: Use Cached; includes range from: [custom, stock, externals]. That's it.
+				-- Make sure both team's cached taunts are not empty.
+					(!table.IsEmpty(PHX.CachedTaunts[TEAM_PROPS]) and !table.IsEmpty(PHX.CachedTaunts[TEAM_HUNTERS])) then
+				
+				PHX:PlayTaunt( pl, true, pitchApplyRand, plPitchLevel, isRandomPitch, "LastTauntTime" )
+				
 			end
 		end
 		
-		-- Spawn Decoy
-		if GAMEMODE:InRound() and pl:HasFakePropEntity() and key == decoyKey then
-			pl:PlaceDecoyProp()
+		-- Both Team goes here.
+		if (key == ctInfo) then
+			pl:ConCommand("ph_showtaunts")
+		end
+	
+		-- Team Props
+		if pl:Team() == TEAM_PROPS then
+	
+			-- Lock rotation
+			if (key == lockInfo) then
+				if pl:GetPlayerLockedRot() then
+					pl:SetPlayerLockedRot( false )
+					pl:SendRotState(0)
+					pl:PrintCenter( "HUD_ROTFREE", Color(32,200,72) )
+				else
+					pl:SetPlayerLockedRot( true )
+					pl:SendRotState(1)
+					pl:PrintCenter( "HUD_ROTLOCK", Color(255,128,40) )
+				end
+			end
+			
+			-- Freeze Prop while midair
+			if (key == freezePropKey) then
+				pl:FreezePropMidAir()
+			end
+			
+			-- Spawn Decoy
+			if pl:HasFakePropEntity() and (key == decoyKey) then
+				pl:PlaceDecoyProp()
+			end
+			
+		-- Team Hunters
+		elseif pl:Team() == TEAM_HUNTERS then
+			
+			-- Add Something here for hunters. Sometime in future I think.
+			
 		end
 	end
 end)

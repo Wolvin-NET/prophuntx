@@ -452,29 +452,28 @@ local function MainFrame()
 	end
 	
 	window.CurrentCategory = LocalPlayer():GetVar("tauntWindowCategorie", PHX.DEFAULT_CATEGORY)
-	--[[ if !window.CurrentCategory or window.CurrentCategory == nil then
-		print("category is nil. fallback")
-		window.CurrentCategory = PHX.DEFAULT_CATEGORY --fallback
-	end ]]
 	window.comb:SortAndStyle(window.list)
 	
 	local function TranslateTaunt(category, linename)
 		local tm = LocalPlayer():Team()
-		return PHX.TAUNTS[category][tm][linename]
+		return linename, PHX.TAUNTS[category][tm][linename]
 	end
 	
-	local function SendToServer(snd, bFakeTaunt)
+	local function SendToServer(name, snd, bFakeTaunt)
 	
 		if bFakeTaunt == nil then bFakeTaunt = false end
 	
-		local lastCTauntTime = LocalPlayer():GetNWFloat("CTaunt.LastTauntTime", 0)
-		local lastRTauntTime = LocalPlayer():GetNWFloat("LastTauntTime",0)
+		local lastCTauntTime = LocalPlayer():GetLastTauntTime( "CLastTauntTime" ) --LocalPlayer():GetNWFloat("CTaunt.LastTauntTime", 0)
+		local lastRTauntTime = LocalPlayer():GetLastTauntTime( "LastTauntTime" ) --LocalPlayer():GetNWFloat("LastTauntTime",0)
 		
 		local delay = lastCTauntTime + PHX:GetCVar( "ph_customtaunts_delay" )
 		local delayR = lastRTauntTime + PHX:GetCVar( "ph_normal_taunt_delay" )
 	
 		if (delay <= CurTime() and delayR <= CurTime()) then
+		
+			print(name, snd)
 			net.Start("CL2SV_PlayThisTaunt")
+				net.WriteString(tostring(name))
 				net.WriteString(tostring(snd))
 				net.WriteBool(bFakeTaunt)
 			net.SendToServer();
@@ -494,14 +493,13 @@ local function MainFrame()
 	
 	CreateStyledButton(LEFT,86,PHX:FTranslate("TM_TOOLTIP_PLAYTAUNT"),{5,5,5,5},"vgui/phehud/btn_playpub.vmt",FILL, function()
 		if hastaunt and hasLines then
-			local getline = TranslateTaunt(window.CurrentCategory, window.list:GetLine(window.list:GetSelectedLine()):GetValue(1))
-			SendToServer(getline)
+			local Name,getline = TranslateTaunt(window.CurrentCategory, window.list:GetLine(window.list:GetSelectedLine()):GetValue(1))
+			SendToServer(Name,getline)
 		end
 	end)
 	CreateStyledButton(LEFT,86,PHX:FTranslate("TM_TOOLTIP_PREVIEW"),{5,5,5,5}, "vgui/phehud/btn_play.vmt",FILL, function()
 		if hastaunt and hasLines then
-			local getline = TranslateTaunt(window.CurrentCategory, window.list:GetLine(window.list:GetSelectedLine()):GetValue(1))
-			--surface.PlaySound(getline)
+			local Name,getline = TranslateTaunt(window.CurrentCategory, window.list:GetLine(window.list:GetSelectedLine()):GetValue(1))
             local pt = 100
             if window.ckpitch:GetChecked() then
                 if window.ckpitrand:GetChecked() then
@@ -511,14 +509,14 @@ local function MainFrame()
                 end
             end
             LocalPlayer():EmitSound( getline, 0, pt )
-			PHX:AddChat(PHX:Translate("TM_NOTICE_PLAYPREVIEW", getline), Color(20,220,0))
+			PHX:AddChat(PHX:Translate("TM_NOTICE_PLAYPREVIEW", "["..Name.."] : "..getline), Color(20,220,0))
 		end
 	end)
 	CreateStyledButton(LEFT,86,PHX:FTranslate("TM_TOOLTIP_PLAYCLOSE"),{5,5,5,5},"vgui/phehud/btn_playx.vmt",FILL, function()
 		if hastaunt and hasLines then
-			local getline = TranslateTaunt(window.CurrentCategory, window.list:GetLine(window.list:GetSelectedLine()):GetValue(1))
+			local Name,getline = TranslateTaunt(window.CurrentCategory, window.list:GetLine(window.list:GetSelectedLine()):GetValue(1))
 		
-			SendToServer(getline)
+			SendToServer(Name,getline)
 			--Saving state of scrollbar
 			LocalPlayer():SetVar("tauntWindowScrolling", window.list.VBar:GetScroll())
 			local favoritesInJSON = util.TableToJSON(favoriteTaunts)
@@ -529,17 +527,17 @@ local function MainFrame()
 	CreateStyledButton(LEFT,86,PHX:FTranslate("TM_TOOLTIP_PLAYRANDOM"),{5,5,5,5},"vgui/phehud/btn_playrandom.vmt",FILL, function()
 		if hasLines then
 			local getRandom = table.Random(window.list:GetLines())
-			local getline = TranslateTaunt(window.CurrentCategory, getRandom:GetValue(1))
-			SendToServer(getline)
+			local Name,getline = TranslateTaunt(window.CurrentCategory, getRandom:GetValue(1))
+			SendToServer(Name,getline)
 		end
 	end)
 	CreateStyledButton(LEFT,86,PHX:FTranslate("TM_TOOLTIP_FAKETAUNT"),{5,5,5,5},"vgui/phehud/btn_faketaunt.vmt",FILL, function( btn )    
 		if hastaunt and hasLines then
             if LocalPlayer():Team() == TEAM_PROPS then
-                local getline = TranslateTaunt(window.CurrentCategory, window.list:GetLine(window.list:GetSelectedLine()):GetValue(1))
+                local Name,getline = TranslateTaunt(window.CurrentCategory, window.list:GetLine(window.list:GetSelectedLine()):GetValue(1))
 			
                 if PHX:GetCVar( "ph_randtaunt_map_prop_enable" ) then
-                    SendToServer(getline, true)
+                    SendToServer(Name,getline, true)
                     PHX:AddChat(PHX:Translate("PHX_CTAUNT_PLAYED_ON_RANDPROP"), Color(20,220,0))
                 else
                     PHX:AddChat(PHX:Translate("PHX_CTAUNT_RANDPROP_DISABLED"), Color(220,20,0))
@@ -560,7 +558,7 @@ local function MainFrame()
 	window.list.OnRowRightClick = function(panel,line)
 		if !PHX:GetCLCVar( "ph_prop_right_mouse_taunt" ) then
 			hastaunt = true
-			local getline = TranslateTaunt(window.CurrentCategory, window.list:GetLine(window.list:GetSelectedLine()):GetValue(1))
+			local Name,getline = TranslateTaunt(window.CurrentCategory, window.list:GetLine(window.list:GetSelectedLine()):GetValue(1))
 			
 			local textRandProp = { "PHX_CTAUNT_ON_RAND_PROPS", LocalPlayer():GetTauntRandMapPropCount() }
 			if PHX:GetCVar( "ph_randtaunt_map_prop_max" ) == -1 then textRandProp = "PHX_CTAUNT_ON_RAND_PROPS_UNLI" end
@@ -578,7 +576,7 @@ local function MainFrame()
                         end
                     end
                     LocalPlayer():EmitSound( getline, 0, pt )
-                    PHX:AddChat(PHX:Translate("TM_NOTICE_PLAYPREVIEW", getline), Color(20,220,0)); 
+                    PHX:AddChat(PHX:Translate("TM_NOTICE_PLAYPREVIEW", "["..Name.."] : "..getline), Color(20,220,0)); 
                 end 
             end):SetIcon("icon16/control_play.png")
 			
@@ -586,7 +584,7 @@ local function MainFrame()
 				menu:AddOption(PHX:QTrans( textRandProp ), function()
 					if hasLines then
                         if LocalPlayer():GetTauntRandMapPropCount() >= 0 then
-                            SendToServer(getline, true)
+                            SendToServer(Name,getline, true)
                             PHX:AddChat(PHX:Translate("PHX_CTAUNT_PLAYED_ON_RANDPROP"), Color(20,220,0))
                         else
                             PHX:AddChat(PHX:Translate("PHX_CTAUNT_RAND_PROPS_LIMIT"), Color(220,150,30))
@@ -595,10 +593,10 @@ local function MainFrame()
 				end):SetIcon("icon16/feed.png")
 			end
 			
-			menu:AddOption(PHX:FTranslate("TM_TOOLTIP_PLAYTAUNT"), function() if hasLines then SendToServer(getline); end end):SetIcon("icon16/sound.png")
+			menu:AddOption(PHX:FTranslate("TM_TOOLTIP_PLAYTAUNT"), function() if hasLines then SendToServer(Name,getline); end end):SetIcon("icon16/sound.png")
 			menu:AddOption(PHX:FTranslate("TM_TOOLTIP_PLAYCLOSE"), function()
 				if hasLines then 
-					SendToServer(getline)
+					SendToServer(Name,getline)
 					--Saving state of scrollbar
 					LocalPlayer():SetVar("tauntWindowScrolling",window.list.VBar:GetScroll())
 					local favoritesInJSON = util.TableToJSON(favoriteTaunts)
@@ -628,9 +626,8 @@ local function MainFrame()
 		LocalPlayer():SetVar("tauntWindowScrolling",window.list.VBar:GetScroll())
 		local favoritesInJSON = util.TableToJSON(favoriteTaunts)
 		file.Write("favoriteTaunts/"..LocalPlayer():SteamID64()..".json", favoritesInJSON)
-		local getline = TranslateTaunt(window.CurrentCategory, window.list:GetLine(window.list:GetSelectedLine()):GetValue(1))
-		SendToServer(getline)
-		
+		local Name,getline = TranslateTaunt(window.CurrentCategory, window.list:GetLine(window.list:GetSelectedLine()):GetValue(1))
+		SendToServer(Name,getline)
 		if PHX:GetCLCVar( "ph_cl_autoclose_taunt" ) then window.frame:Close(); end
 	end
 	
@@ -640,7 +637,7 @@ local function MainFrame()
 end
 
 concommand.Add("ph_showtaunts", function(ply)
--- if ply:Alive() and window.state and ply:GetObserverMode() == OBS_MODE_NONE then
+if ply:Alive() and window.state and ply:GetObserverMode() == OBS_MODE_NONE then
 	if !window.CurrentlyOpen then
 		MainFrame()
 	else
@@ -651,7 +648,7 @@ concommand.Add("ph_showtaunts", function(ply)
 		window.frame:Close()
 		
 	end
--- else
-	-- PHX:ChatInfo( PHX:Translate("TM_PLAY_ONLY_ALIVE"), "WARNING" )
--- end
+else
+	PHX:ChatInfo( PHX:Translate("TM_PLAY_ONLY_ALIVE"), "WARNING" )
+end
 end, nil, "Show Prop Hunt taunt menu")
