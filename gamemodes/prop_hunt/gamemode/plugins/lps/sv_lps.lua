@@ -9,6 +9,8 @@ local strAlertTimer     = "tmr_AlertSnd"
 -- Allow only LPS after hunters are unblinded. Set 'true' once the hook is called.
 local LPSAllowed = false
 
+PHX.LPS.ROUND_LEFT = 1
+
 function PHX.LPS:CreateSound( ply )
 
     if IsValid( ply ) and ply:Alive() and ply:Team() == TEAM_PROPS then
@@ -22,7 +24,6 @@ function PHX.LPS:CreateSound( ply )
                 filter:AddPlayer( v )
             end
         end
-        --filter:AddAllPlayers()
         
         local snd = CreateSound( ply, self.SOUND.CURRENT.sound, filter )
         self.SOUND.CURRENT.sndObj = snd
@@ -62,11 +63,6 @@ function PHX.LPS:AddSound( tblKey, Directory )
 
 end
 
-hook.Add("Initialize", "LPS.CreateSoundHook", function()
-    PHX.LPS:AddSound( "ALERT", "alert" )
-    PHX.LPS:AddSound( "MUSIC", "music" )
-end)
-
 function PHX.LPS:RandomizeMusic()
     self.SOUND.CURRENT = self:GetMusic()
 end
@@ -94,10 +90,11 @@ function PHX.LPS:TrailColorTranslate( color )
 end
 
 local function ResetPlayerStat( ply )
-    ply.propLPSAmmo     = 0
-    ply.propNextFire    = 0
     ply:SetLPSWeapon( "No Weapon" )
-    if ply:IsLastStanding() then ply:SetLastStanding( false ) end
+    if ply:IsLastStanding() then 
+        ply:SetLastStanding( false )
+        SetGlobalBool("LPS.InLastPropStanding", false)
+    end
     
     -- In case of disconnect
     if PHX.LPS.SOUND.CURRENT and PHX.LPS.SOUND.CURRENT ~= nil and 
@@ -112,8 +109,20 @@ local function ResetPlayerStat( ply )
     ply:SetLPSWeaponState( LPS_WEAPON_UNARMED )
 end
 
+-- Hooks
+hook.Add("Initialize", "LPS.CreateSoundHook", function()
+    PHX.LPS:AddSound( "ALERT", "alert" )
+    PHX.LPS:AddSound( "MUSIC", "music" )
+end)
+
+hook.Add("PlayerCanPickupWeapon", "LPS.GiveDummyWeapon", function( ply, wep )
+    if ply:Team() == TEAM_PROPS and ply:Alive() and ply:IsLastStanding() and GetGlobalBool( "InRound", false ) then
+        if ( ply:HasWeapon( wep:GetClass() ) ) then return false end
+        if wep:GetClass() == PHX.LPS.DUMMYWEAPON then return true end
+    end
+end)
+
 hook.Add("PlayerInitialSpawn", "LPS.PrepareData", function( ply )
-    ply.propNextFire    = 0
     ResetPlayerStat( ply )
 end)
 
@@ -121,6 +130,7 @@ end)
 hook.Add("PlayerSpawn", "LPS.ResetWeaponState", function(ply)
     ResetPlayerStat( ply )
 end)
+-- End of Hooks
 
 local function StopMusic()
 
@@ -137,149 +147,12 @@ end
 
 hook.Add("PH_RoundEnd", "LPS.RER_ResetWeaponState", function()
     LPSAllowed = false
-    for _,ply in pairs( player.GetAll() ) do
+    for _,ply in ipairs( player.GetAll() ) do
         ResetPlayerStat( ply )
     end
     
     StopMusic()
 end)
-
-local function getSpread( val )
-    if isnumber(val) then
-        return Vector(val, val, 0)
-    elseif istable(val) then
-        return Vector(math.random(val[1],val[2]), math.random(val[1],val[2]), 0)
-    end
-    
-    return Vector(0,0,0)
-end
-
-local function getConValue( val )
-    if isstring(val) then
-        if ConVarExists( val ) then
-            return GetConVar(val):GetInt()
-        else
-            print("[LPS] WARNING: Damage ConVar `".. val.."` was not found! Reverting to 1!")
-            return 1
-        end
-    elseif isnumber( val ) then
-        return val
-    end
-    
-    return 1
-end
-
-local function PropFireBullet( ply, cmd, args )
-    if !IsValid(ply) and ply:Team() ~= TEAM_PROPS and !ply:Alive() then return end
-    if !PHX:GetCVar( "lps_enable" ) then return end
-    if !ply:IsLastStanding() then return end
-    if ply.propLPSAmmo == 0 then return end
-    
-    -- im sorry i know this is really not optimized...
-    local plmins,plmaxs = ply:GetHull()
-    local qt = GAMEMODE.ViewCam:CommonCamCollEnabledView( ply:EyePos(), ply:EyeAngles(), plmaxs.z )
-    qt.filter = { ply:GetPlayerPropEntity() }
-    local trx = util.TraceLine(qt)
-    if trx.Entity and trx.Entity:IsValid() and PHX:IsUsablePropEntity( trx.Entity:GetClass() ) then
-        -- don't shoot if you close to selectable props
-        return
-    end
-    
-    local name    = PHX.LPS.WEAPON2.NAME
-    local wepdata = PHX.LPS.WEAPON2.DATA
-    if !name or name == nil or !wepdata or wepdata == nil then return end
-    
-    local wepEntity = ply:GetLPSWeaponEntity()
-    if !wepEntity or wepEntity == NULL then return end
-    
-    local wepType = wepdata.Type
-    if wepType == "weapon" then
-        if ( ply.propNextFire > CurTime() ) then return end
-        ply.propNextFire = CurTime() + wepdata.Delay
-        
-        ply:SetLPSAmmoCount( ply.propLPSAmmo )
-        
-        local att = wepEntity:GetAttachment(1)
-        local shootOrg = att.Pos
-        local shootAng = ply:EyeAngles()
-        local shootDir = shootAng:Forward()
-        --[[]]--
-        local eyeTrace = {}
-        local aimTrace = {}
-        local eyeTrace  = GAMEMODE.ViewCam:CamColEnabled( ply:EyePos(), shootAng, trace, "start", "endpos", 32768/2, 32768, 32768/2, plmaxs.z )
-        eyeTrace.filter = { ply:GetPlayerPropEntity() }
-        aimTrace.filter = { ply:GetPlayerPropEntity() }
-        local eyeResult = util.TraceLine(eyeTrace)
-        aimTrace.start  = shootOrg
-        aimTrace.endpos = eyeResult.HitPos
-        local aimTraceResult = util.TraceLine( aimTrace )
-        --[[]]--
-        local AmmoCount = getConValue( wepdata.AmmoCount )
-        local bullet = {}
-            bullet.Num          = wepdata.Num
-            bullet.Src          = shootOrg
-            bullet.Dir          = aimTraceResult.Normal --shootDir
-            bullet.Spread       = getSpread( wepdata.Spread )
-            bullet.Tracer       = wepdata.Tracer
-            bullet.TracerName   = wepdata.TracerName
-            bullet.Force        = wepdata.Force
-            bullet.Damage       = getConValue( wepdata.Damage )
-            bullet.AmmoType     = wepdata.AmmoType
-            bullet.Attacker     = ply
-            bullet.IgnoreEntity = ply:GetPlayerPropEntity()
-            bullet.Callback = function(atk,_,cDamage)
-                cDamage:SetInflictor(atk:GetLPSWeaponEntity())
-            end
-        wepEntity:FireBullets( bullet )
-        
-        local muzz = EffectData()
-        muzz:SetOrigin( shootOrg )
-        muzz:SetAngles( shootAng )
-        muzz:SetScale( 1.2 )
-        util.Effect( "MuzzleEffect", muzz )
-        
-        wepEntity:EmitSound( wepdata.ShootSound )
-        local viewpunchAng = wepdata.ViewPunch
-        ply:ViewPunch( Angle( math.random(viewpunchAng.x[1],viewpunchAng.x[2]), math.random(viewpunchAng.y[1],viewpunchAng.y[2]), 0 ) )
-        
-        if AmmoCount > 0 then
-            ply.propLPSAmmo = ply.propLPSAmmo - 1
-            ply:SetLPSAmmoCount( ply.propLPSAmmo )
-        end
-        
-        if ply.propLPSAmmo == 0 then
-            ply:SetLPSWeaponState( LPS_WEAPON_OUTOFAMMO )
-        end
-        
-    elseif wepType == "custom" then
-    
-        if ( ply.propNextFire > CurTime() ) then
-            if wepdata.Reload then 
-                ply:SetLPSWeaponState( LPS_WEAPON_RELOAD )
-                return
-            else
-                ply:SetLPSWeaponState( LPS_WEAPON_READY )
-            end
-        end
-        
-        ply.propNextFire = CurTime() + wepdata.Delay
-        
-        -- do the thing!
-        wepdata:Function( ply )
-        
-        local AmmoCount = getConValue( wepdata.AmmoCount )
-        if AmmoCount > 0 then
-            ply.propLPSAmmo = ply.propLPSAmmo - 1
-        end
-        
-        if ply.propLPSAmmo == 0 then
-            ply:SetLPSWeaponState( LPS_WEAPON_OUTOFAMMO )
-        end
-        
-    end
-end
-concommand.Add("prop_shoot", PropFireBullet)
-
 hook.Add("PostCleanupMap", "LPS.CheckRespawnUnblind", function() LPSAllowed = false end)
 hook.Add("PH_BlindTimeOver","LPS.BlindTimeOverAllow", function() LPSAllowed = true end)
 
@@ -289,7 +162,25 @@ local function DoPlayerCheck(ply)
         
         -- Gives delay in case hunter throws a grenade or something or 2 player prop were killed simultaneously
         timer.Simple(0.5, function()
-	        if team.NumPlayers(TEAM_PROPS) >= PHX:GetCVar( "lps_mins_prop_players" ) and LPSAllowed and GAMEMODE:GetTeamAliveCounts()[TEAM_PROPS] == 1 and GAMEMODE:InRound() then
+	        if team.NumPlayers(TEAM_PROPS) >= PHX:GetCVar( "lps_mins_prop_players" ) and LPSAllowed and GAMEMODE:GetTeamAliveCounts()[TEAM_PROPS] == 1 and GAMEMODE:InRound() and (not GetGlobalBool("LPS.InLastPropStanding", false)) then
+				
+				local RN = GetGlobalInt( "RoundNumber", 0 )
+				local XR = PHX:GetCVar( "lps_start_every_x_rounds" )
+				
+				if PHX:GetCVar( "lps_start_random" ) then
+					if math.random(0,1) == 0 then 
+						return
+					end
+				elseif PHX:GetCVar( "lps_start_delayed_rounds" ) then
+					if PHX.LPS.ROUND_LEFT == RN then 
+						PHX.LPS.ROUND_LEFT = RN + XR
+						-- continue.
+					else
+						return
+					end
+				end
+				
+				print("am I get called twice?")
                 
                 local stand = NULL
                 
@@ -315,13 +206,17 @@ local function DoPlayerCheck(ply)
                                 PHX.LPS.WEAPON2.NAME = SelWep
                             end
                         end
-                        pl.propLPSAmmo = getConValue( PHX.LPS.WEAPON2.DATA.AmmoCount )
-                        
-                        pl:SetLPSAmmoCount( pl.propLPSAmmo )
+                        local ammo = util.LPSgetConValue( PHX.LPS.WEAPON2.DATA.AmmoCount )
+                        pl:SetLPSAmmoCount( ammo )
                         pl:SetLPSWeapon( PHX.LPS.WEAPON2.NAME )
-                        pl:CreateLPSWeaponEntity( PHX.LPS.WEAPON2.DATA.WorldModel, PHX.LPS.WEAPON2.DATA.FixAngles )
+                        pl:CreateLPSWeaponEntity( PHX.LPS.WEAPON2.DATA.WorldModel, PHX.LPS.WEAPON2.DATA.FixAngles, PHX.LPS.WEAPON2.DATA.FixPos )
                         pl:SetLastStanding( true )
+                        timer.Simple(0, function() pl:Give( PHX.LPS.DUMMYWEAPON ) end) -- Give the dummy weapon. We'll give it on the next frame.
                         pl:SetLPSWeaponState( LPS_WEAPON_READY )
+                        
+                        -- Health & Armor Options
+                        if PHX:GetCVar( "lps_use_normal_health" ) then pl:SetHealthProp(100) end
+                        if PHX:GetCVar( "ph_allow_armor" ) and PHX:GetCVar( "lps_use_armor" ) then pl:SetArmor(100) end
                         
                         pl:PrintCenter( "LASTPROP_ANNOUNCE", Color(240,72,82) )
                         
@@ -340,6 +235,9 @@ local function DoPlayerCheck(ply)
                         stand = pl
 			        end
                 end
+				
+				SetGlobalBool("LPS.InLastPropStanding", true) -- for Think
+				hook.Call( "PHInLastPropStanding", nil, pl, PHX.LPS.WEAPON2.NAME, PHX.LPS.WEAPON2.DATA ) -- for Something you need to "hook.Add" it.
 
                 for _,p in pairs(player.GetAll()) do                    
                     if p:IsLastStanding() then

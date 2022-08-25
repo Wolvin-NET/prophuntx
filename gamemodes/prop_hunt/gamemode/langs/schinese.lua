@@ -316,7 +316,7 @@ LANG["PHXM_ADMIN_USENEWMKBREN"]		= "布伦 MK II 奖励武器使用新模型(需
 LANG["PHXM_ADMIN_BEVERBOSE"]		= "开发人员: 详细 - 开启打印PH:X详细信息和事件吗?"
 LANG["PHXM_ADMIN_SHOWPLNAMEHEAD"]	= "显示玩家队伍名称."
 LANG["PHXM_ADMIN_USESINGLE_FZCAM"]	= "使用单个死亡特写的声音，而不是声音列表(使用'ph_fc_cue_path'来确认定格镜头的声音路径)"
-LANG["PHXM_ADMIN_MODELLISTINGTYPE"] = "使用旧版模型清单: 0 = 所有玩家模型(AddValidModel), 1 = 使用旧版: list.Get('PlayerOptionsModel')"
+LANG["PHXM_ADMIN_MODELLISTINGTYPE"] = "使用旧版模型清单: 0: 所有玩家模型, 1: 使用旧版: list.Get('PlayerOptionsModel')"
 LANG["PHXM_ADMIN_JUMPPOWER"]		= "物品额外弹跳力倍数"
 LANG["PHXM_ADMIN_ENABLE_OBB"]		= "开发人员: 从配置数据开启自订物品实体模型边界(OBB)编辑器"
 LANG["PHXM_ADMIN_RELOAD_OBB"]		= "开发人员: 每次重新启动时刷新OBB编辑器数据"

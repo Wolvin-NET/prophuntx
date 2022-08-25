@@ -1,7 +1,3 @@
--- Shared includes
-AddCSLuaFile("sh_additional_taunts.lua")
-include("sh_additional_taunts.lua")
-
 -- Server includes
 if SERVER then
 	

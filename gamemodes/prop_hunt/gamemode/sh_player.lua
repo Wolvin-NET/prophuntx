@@ -4,10 +4,17 @@ if !Player then return end
 if !Entity then return end
 
 function Entity:GetPropSize()
-	local hullxymax     = math.Round(math.Max(self:OBBMaxs().x - self:OBBMins().x, self:OBBMaxs().y - self:OBBMins().y) / 2)
-	local hullz         = math.Round(self:OBBMaxs().z - self:OBBMins().z)
+    local hullxymax=0
+    local hullz=0
+    hullxymax     = math.Round(math.Max(self:OBBMaxs().x - self:OBBMins().x, self:OBBMaxs().y - self:OBBMins().y) / 2)
+    hullz         = math.Round(self:OBBMaxs().z - self:OBBMins().z)
 	
-	return hullxymax, hullz
+    -- don't do a hull check. It's kinda bugged and causing low framerate problems.
+	if self:GetClass() == "prop_ragdoll" then
+		return 0,0,0
+	end
+	
+	return hullxymax, hullxymax, hullz --this is intentional. We might to re-add "Y" in the future for ragdolls.
 end
 
 function Player:CheckHull(hx,hy,hz)
@@ -23,6 +30,43 @@ function Player:CheckHull(hx,hy,hz)
 	return true
 end
 
+-- From Enhanced Plus
+
+function Player:IsPlaying()
+	return self:Team() == TEAM_HUNTERS or self:Team() == TEAM_PROPS
+end
+
+-- Do this act as a quick trace?
+function Player:TraceLineFromPlayer(endpos, usehull)
+	local trace = {}
+	trace.filter = {self, self.ph_prop}
+	trace.start = self:GetPos()
+	trace.endpos = endpos
+	trace.mask = MASK_PLAYERSOLID
+	
+	local traceResult = util.TraceLine(trace)
+	
+	if (usehull) then
+		trace.mins = self.ph_prop:OBBMins()
+		trace.maxs = self.ph_prop:OBBMaxs()
+	
+		traceResult = util.TraceHull(trace)
+	end
+	return traceResult
+end
+
+function Player:SetForceAsProp( bool )
+	if PHX:GetCVar( "ph_enable_teambalance" ) and !PHX:GetCVar( "ph_rotateteams" ) then
+		self:SetNWBool("bPHX.ForcedAsProp", bool)
+	end
+end
+
+function Player:IsCurrentlyForcedAsProp()
+	return self:GetNWBool("bPHX.ForcedAsProp", false)
+end
+
+-- End of Enhanced Plus
+
 -- Blinds the player by setting view out into the void
 function Player:Blind(bool)
 	if !self:IsValid() then return end
@@ -36,7 +80,6 @@ function Player:GetBlindState()
 	return bool
 end
 
--- Player has locked prop rotation?
 function Player:GetPlayerLockedRot()
 	return self:GetNWBool("PlayerLockedRotation", false)
 end
@@ -87,7 +130,13 @@ function Player:AddHealthProp( num )
 end
 
 function Player:CheckUserGroup()
-	if table.HasValue( PHX.SVAdmins, string.lower( self:GetUserGroup() ) ) then
+    local group = self:GetUserGroup()
+    if PHX.SVAdmins[group] then return true end
+	return false
+end
+
+function Player:PHXIsStaff()
+	if (self:CheckUserGroup() or self:IsSuperAdmin()) then
 		return true
 	end
 	return false
@@ -101,7 +150,122 @@ function Player:HasFakePropEntity()
 	return self:GetNWBool("PlayerFakePropEnt",false)
 end
 
+function Player:HasPropPitchRotAllowed()
+    return self:GetNWBool("PlayerPitchRot",false)
+end
+
+function Player:PHSetColor( ColOverride )
+
+    if !self:Alive() or self:Team() == TEAM_UNASSIGNED or self:Team() == TEAM_SPECTATOR then return end
+
+    local col = Vector( 0, 0, 0 )
+    col = Vector( self:GetInfo("cl_playercolor") )
+    
+    if ColOverride and ColOverride ~= nil and isvector(ColOverride) then col = ColOverride end
+    
+    if self:Team() == TEAM_HUNTERS and PHX:GetCVar( "ph_enable_hunter_player_color" ) then
+    
+        self:SetPlayerColor( col )
+        
+    elseif self:Team() == TEAM_PROPS then -- and PHX:GetCVar( "ph_enable_prop_player_color" )
+    
+        local ph_prop = self:GetPlayerPropEntity()
+        ph_prop:SetEntityColor( col )
+        
+    end
+    
+end
+
+function Player:SetLastTauntTime( idStringID, int )
+	if !idStringID or idStringID == nil then print("[:SetLastTauntTime] Error: idStringID is empty!"); return end
+	if !int or int == nil or !isnumber(int) then int = 0 end
+	
+	if SERVER then --make this only available on serverside. in clientside, this can be unreliable.
+		self:SetVar( idStringID, int )
+	end
+	self:SetNWFloat( idStringID, int )
+end
+
+function Player:GetLastTauntTime( idStringID, useNet )
+
+	if useNet == nil then useNet = false end
+	
+	if ( useNet or CLIENT ) then
+		return self:GetNWFloat( idStringID, 0.00 )
+	end
+	
+	-- Force it
+	if SERVER then
+		return self:GetVar( idStringID, 0.00 )
+	end
+	
+	-- if anything does not match any criteria:
+	return 0
+end
+
 if SERVER then
+    function Player:EnablePropPitchRot( bool )
+        self:SetNWBool("PlayerPitchRot", bool)
+    end
+
+    function Player:CreatePlayerPropEntity()
+    
+        self:EnablePropPitchRot( false ) --don't allow pitch rotation. This is intentional because of bugs on ragdoll usable prop types.
+        -- Todo: if this causes issues, next time: Try make kleiner's physics using 1 single solid instead.
+        
+        self.ph_prop = ents.Create("ph_prop")
+        self.ph_prop:SetPos( self:GetPos() )
+        self.ph_prop:SetAngles( self:GetAngles() )
+        self.ph_prop:Spawn()
+        
+        if PHX:GetCVar( "ph_use_custom_plmodel_for_prop" ) then
+            self.m_ShortToModel = player_manager.TranslatePlayerModel( self:GetInfo("cl_playermodel") )
+            
+            if table.HasValue( PHX.PROP_PLMODEL_BANS, string.lower( self.m_ShortToModel ) ) then
+                self.ph_prop:SetModel("models/player/kleiner.mdl")
+                self:PHXChatInfo("WARNING", "PROP_PLAYERMDL_BANNED")
+            elseif table.HasValue( PHX.PROP_PLMODEL_BANS, string.lower( self:GetInfo("cl_playermodel") ) ) then
+                self.ph_prop:SetModel("models/player/kleiner.mdl")
+                self:PHXChatInfo("WARNING", "PROP_PLAYERMDL_BANNED")
+            else
+                self.ph_prop:SetModel( self.m_ShortToModel )
+            end
+        end
+        
+        self.ph_prop:SetSolid(SOLID_BBOX)
+        self.ph_prop:SetOwner( self )
+        self:SetNWEntity("PlayerPropEntity", self.ph_prop)
+    
+    end
+
+    function Player:PHSendHullInfo( xymin, xymax, zmax, health )
+        net.Start( "SetHull" )
+			net.WriteVector( Vector(xymin, xymin, 0) )
+			net.WriteVector( Vector(xymax, xymax, zmax) )
+            net.WriteInt( health, 9 )
+        net.Send(self)
+    end
+    
+    function Player:SetPlayerLockedRot( bool )
+        self:SetNWBool("PlayerLockedRotation", bool)
+    end
+    
+    function Player:SendRotState( int )    
+        net.Start( "PHX.rotateState" )
+            net.WriteUInt(int, 1)
+        net.Send( self )
+    end
+    
+    function Player:PHAdjustView( hullz )
+        self:SetViewOffset( Vector(0,0,hullz) )
+        self:SetViewOffsetDucked( Vector(0,0,hullz) )
+    end
+    
+    function Player:PHResetView()
+        self:SetViewOffset( Vector(0,0,64) )
+        self:SetViewOffsetDucked( Vector(0,0,36) )
+    end
+
 	function Player:SubTauntRandMapPropCount()
 		local count = self:GetNWInt("iRandMapPropCount", 0)
 		if count <= 0 then return end
@@ -127,10 +291,10 @@ if SERVER then
 		end
 	
 		if self:HasFakePropEntity() and self:Alive() and self:Team() == TEAM_PROPS then
-			-- todo: See cl_init.lua @ 394, values must be match!
 			local trace = {}
 			local dist = PHX.DecoyDistance
             local min,max = self:GetHull()
+            local playercolor = self:GetInfo("cl_playercolor")
             
             trace           = GAMEMODE.ViewCam:CamColEnabled( self:EyePos(), self:EyeAngles(), trace, "start", "endpos", dist, dist, dist, max.z )
 			trace.mask		= MASK_PLAYERSOLID
@@ -149,13 +313,13 @@ if SERVER then
                     self.propdecoy:SetPos( pos - Vector(0,0, self.ph_prop:OBBMins().z ) ) 
                 end
 				self.propdecoy:SetAngles( self.ph_prop:GetAngles() )
+                self.propdecoy:SetfEntityColor( Vector( playercolor ) )
 				self.propdecoy:Spawn()
                 
 				self.propdecoy:ChangeModel( self.ph_prop )
                 self.propdecoy:SetOwner( self )
                 
 				timer.Simple(0, function() 
-					--decoy:TakeModelFromMap()
 					self:SendSurfaceSound('buttons/lever4.wav')
 				end)
 				

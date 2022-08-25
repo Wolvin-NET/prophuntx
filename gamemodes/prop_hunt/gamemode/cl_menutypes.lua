@@ -10,9 +10,7 @@ local function CvarChangedMessage( ... )
 	PHX:AddChat( PHX:Translate("PHXM_CVAR_CHANGED", ... ), Color(255, 194, 14) )
 end
 
--- [!] VarArgs as Table
 local function ConfirmMessage( cvar, value )
-	--Derma_Message( PHX:Translate("PHXM_CVAR_CHANGED", ... ), "INFO", "OK" )
 	PHX:MsgBox( {"PHXM_CVAR_CHANGED", cvar, value}, "MISC_INFO", "MISC_OK" )
 end
 
@@ -26,13 +24,12 @@ PHX.CLUI = {
 	if ( d and type(d) == "string" ) then
         local pnl = vgui.Create("DPanel")
 		pnl:SetSize(p:GetColWide() * 0.85,p:GetRowHeight())
-		pnl:SetBackgroundColor( Color(0,0,0,0) )
+		pnl:SetPaintBackground(false)
     
 		local chk = vgui.Create("DCheckBoxLabel", pnl)
         chk:Dock(FILL)
-		--chk:SetPos(0,0)
 		chk:SetSize(p:GetColWide() * 0.85,p:GetRowHeight())
-		chk:SetText(PHX:QTrans(l))	--chk:SetText(l)
+		chk:SetText(PHX:QTrans(l))
 		chk:SetFont("HudHintTextLarge")
 		chk:SetValue( GetConVar(c):GetBool() ) -- forcebool, don't use PHX:CLCVar()
 		function chk:OnChange(bool)
@@ -63,7 +60,7 @@ end,
 ["label"] = function( c, d, p, l )
 	local txt = vgui.Create("DLabel")
 	txt:SetSize(p:GetColWide() * 0.85,p:GetRowHeight())
-	txt:SetText(PHX:QTrans(l)) --txt:SetText(l)
+	txt:SetText(PHX:QTrans(l))
 	if !d then
 		txt:SetFont("HudHintTextLarge")
 	else
@@ -76,7 +73,7 @@ end,
 ["spacer"] = function( c, d, p, l )
 	local pnl = vgui.Create("DPanel")
 	pnl:SetSize(p:GetColWide() * 0.85,p:GetRowHeight())
-	pnl:SetBackgroundColor(Color(0,0,0,0))
+	pnl:SetPaintBackground( false )
 	
 	return pnl
 end,
@@ -93,16 +90,14 @@ end,
 		
 		local pnl = vgui.Create("DPanel")
 		pnl:SetSize(p:GetColWide() * 0.85,p:GetRowHeight())
-		pnl:SetBackgroundColor( Color(0,0,0,0) )
+		pnl:SetPaintBackground(false)
 		
 		local function m_btncreation( m_panel, m_panelText, m_func )
 			local btn = vgui.Create("DButton", m_panel)
-			btn:SetText(PHX:QTrans(m_panelText)) --btn:SetText(m_panelText)
+			btn:SetText(PHX:QTrans(m_panelText))
 			btn:Dock(LEFT)
 			btn:DockMargin(0,2,8,2)
-			-- If this looks stupid, but it working, it ain't stupid!
-			btn:SizeToContents()
-			btn:SetSize(btn:GetWide()+16,btn:GetTall())
+            btn:SizeToContentsX(16)
 			btn.DoClick = m_func
 		end
 		
@@ -124,32 +119,50 @@ end,
 	if ( d and type(d) == "table" ) then
 		local min = d.min
 		local max = d.max
-		local dval = 0 -- this is fail-safe value, we can't guarantee the value of `d.init` yet.
+		local dval = 0
 		local dec = d.dec
 		local kind = d.kind
 		local float = d.float
 		
-		if d.init == nil then
-			dval = c	-- use from 'c' instead.
+		if !d.init or d.init == nil then
+			dval = PHX:QCVar(c)	-- use from 'c' instead.
 		elseif isstring(dval) or d.init == "DEF_CONVAR" then
-			dval = PHX:QCVar(c)	-- we can now enable default initialization value from the 'ConVar' (c) argument. See sh_propchooser.lua at ADDON_INFO.
+			dval = PHX:QCVar(c)	-- any string, will revert to 'c' anyway.
 		else
 			dval = d.init -- assume it's correct number value. We keep this because there are still GetCVar() being used in cl_menu.lua
 		end
 		
 		local pnl = vgui.Create("DPanel")
 		pnl:SetSize(p:GetColWide() * 0.85,p:GetRowHeight()-6)
-		pnl:SetBackgroundColor(Color(120,120,120,200))
+		pnl:SetPaintBackground(false)
+        
+        local label = vgui.Create("DLabel", pnl)
+        local tt = PHX:QTrans(l)
+        label:Dock(LEFT)
+        label:SetSize(pnl:GetWide()*0.6,0)
+        label:DockMargin(2,0,0,0)
+        label:SetFont("HudHintTextLarge")
+        label:SetText(tt)
+		label:SetWrap(true)
+		--label:SetAutoStretchVertical(true)
 		
-		local slider = vgui.Create("DNumSlider",pnl)
-		slider:SetPos(10,0)
-		slider:SetSize(pnl:GetWide()*0.9,pnl:GetTall())
-		slider:SetText(PHX:QTrans(l))		--slider:SetText(l)
-		slider:SetToolTip(PHX:QTrans(l))	--slider:SetToolTip(l)
+        local pnlslider = vgui.Create("DPanel",pnl)
+        pnlslider:Dock(LEFT)
+        pnlslider:SetSize(pnl:GetWide()*0.4,pnl:GetTall())
+        pnlslider:SetBackgroundColor(Color(120,120,120,200))
+        
+		local slider = vgui.Create("DNumSlider",pnlslider)
+        slider:Dock(FILL)
+        slider:SetText("")
+		slider:SetToolTip(PHX:QTrans(l))
 		slider:SetMin(min)
 		slider:SetMax(max)
 		slider:SetValue(dval)
 		slider:SetDecimals(dec)
+        function slider:PerformLayout()
+            slider.Label:SetWide( 32 )
+        end
+        
 		slider.OnValueChanged = function(self,value)
 			self:SetValue(value)
 			if kind == "SERVER" then
@@ -176,6 +189,7 @@ end,
 	end
 end,
 
+-- Internal, do not use!
 ["mute"] = function( c, d, p, l )
 	if !d then
 		ThrowError(1, c)
@@ -216,7 +230,7 @@ end,
 		
 		button.DoClick = function()
 			if not IsValid(ply) then return end
-			if ply:IsAdmin() or table.HasValue(PHX.IgnoreMutedUserGroup, string.lower(ply:GetUserGroup())) then return end
+			if ply:PHXIsStaff() or PHX.IgnoreMutedUserGroup[ply:GetUserGroup()] then return end
 			
 			local mute = ply:IsMuted()
 			ply:SetMuted(not mute)
@@ -229,7 +243,7 @@ end,
 			button:SetVisible(true)
 		end
 		
-		if ply:IsAdmin() or table.HasValue( PHX.IgnoreMutedUserGroup, string.lower(ply:GetUserGroup()) ) then
+		if ply:PHXIsStaff() or PHX.IgnoreMutedUserGroup[ply:GetUserGroup()] then
 			button:SetVisible(false)
 		end
 		
@@ -246,14 +260,16 @@ end,
 ["binder"] = function( c, d, p, l )	
 	local pnl = vgui.Create("DPanel")
 	pnl:SetSize(p:GetColWide() * 0.85,p:GetRowHeight())
-	pnl:SetBackgroundColor( Color(0,0,0,0) )
+	pnl:SetPaintBackground(false)
 	
 	local label = vgui.Create("DLabel", pnl)
 	label:Dock(LEFT)
 	label:SetSize(pnl:GetWide()*0.75,0)
 	label:DockMargin(2,0,0,0)
 	label:SetFont("HudHintTextLarge")
-	label:SetText(PHX:QTrans(l)) --label:SetText(l)
+	label:SetText(PHX:QTrans(l))
+	label:SetWrap(true) -- juuuust in case....?
+	--label:SetAutoStretchVertical(true)
 	
 	local bind = vgui.Create("DBinder", pnl)
 	bind:Dock(LEFT)
@@ -271,13 +287,14 @@ end,
 	return pnl
 end,
 
+-- Internal, do not use!
 ["langcombobox"] = function( c, d, p, l )
 	if !l or l == "" or l == nil then l = false end
 	if !d or d == false or d == nil then d = false end
 
 	local pnl = vgui.Create("DPanel")
 	pnl:SetSize(p:GetColWide(),p:GetRowHeight())
-	pnl:SetBackgroundColor( Color(0,0,0,0) )
+	pnl:SetPaintBackground(false)
 	
 	local label = vgui.Create("DLabel", pnl)
 	label:Dock(LEFT)
@@ -355,11 +372,10 @@ end,
 	return pnl
 end,
 
--- This will translated in future version.
 ["textentry"] = function( c, d, p, l )
 	local pnl = vgui.Create("DPanel")
 	pnl:SetSize(p:GetColWide() * 0.85,p:GetRowHeight())
-	pnl:SetBackgroundColor( Color(0,0,0,0) )
+	pnl:SetPaintBackground(false)
 	
 	local label = vgui.Create("DLabel", pnl)
 	label:Dock(LEFT)
@@ -367,6 +383,8 @@ end,
 	label:DockMargin(2,0,0,0)
 	label:SetFont("HudHintTextLarge")
 	label:SetText(PHX:QTrans(l))
+	label:SetWrap(true)
+	--label:SetAutoStretchVertical(true)
 	
 	local textEntry = vgui.Create("DTextEntry", pnl)
     local cvar = GetConVar(c):GetString()
@@ -385,7 +403,7 @@ end,
 	btn:Dock(LEFT)
 	btn:SetSize(64,0)
 	btn:DockMargin(4,2,0,2)
-	btn:SetText(PHX:QTrans("MISC_SET")) --btn:SetText("Set")
+	btn:SetText(PHX:QTrans("MISC_SET"))
 	
 	textEntry.EnteredText = ""
 	
@@ -422,8 +440,79 @@ end,
 	return pnl
 end,
 
--- todo: Add Customisable Combo Box in future version
-    -- todo: not yet
+["combobox"] = function( c, d, p, l )
+    local pnl = vgui.Create("DPanel")
+	pnl:SetSize(p:GetColWide() * 0.85,p:GetRowHeight())
+	pnl:SetPaintBackground(false)
+	
+	local label = vgui.Create("DLabel", pnl)
+    local tt = PHX:QTrans(l)
+	label:Dock(LEFT)
+	label:SetSize(pnl:GetWide()*0.6,0)
+	label:DockMargin(2,0,0,0)
+	label:SetFont("HudHintTextLarge")
+	label:SetText(tt)
+	label:SetWrap(true)
+	--label:SetAutoStretchVertical(true)
+    
+    local cbox = vgui.Create("DComboBox", pnl)
+	cbox:Dock(LEFT)
+	cbox:SetSize(pnl:GetWide()*0.25, 0)
+	cbox:DockMargin(4,2,0,2)
+    cbox:SetToolTip(tt)
+    cbox:SetSortItems(false)
+    
+    if d and d ~= nil and istable(d) then
+    
+    cbox.IsFor = "CLIENT"
+    if d.kind and d.kind ~= nil and d.kind == "SERVER" then
+        cbox.IsFor = "SERVER"
+    end
+    
+        local cvar = GetConVar(c):GetString()
+        cbox:SetValue( PHX:QTrans( { d.data[cvar].name, cvar } ) )
 
--- Add More here :)
+        for val,data in SortedPairs(d.data) do
+            if istable(data) then
+                local icon = nil
+                if data.icon and data.icon ~= nil then icon = data.icon end            
+                cbox:AddChoice( PHX:QTrans( { data.name, val } ), { val, data.f }, false, icon )
+            else
+                print("!!PHX.UI.CreateVGUIType() --> Warning: menutype[combobox]: 'data' is not a table.")
+            end
+        end
+    
+    end
+    
+    function cbox:OnSelect(id, name, data)
+    
+        local v = data[1]
+        local For = self.IsFor
+        local func = function() end
+        
+        if data[2] and data[2] ~= nil and isfunction(data[2]) then
+            func = data[2]
+        end
+        
+        -- Executes a function.
+        func()
+        
+        if For == "SERVER" then
+            net.Start("SvCheckboxReq")
+              net.WriteString(c)
+              net.WriteString(tostring(v))
+            net.SendToServer()
+        else
+            RunConsoleCommand(c, tostring(v))
+            CvarChangedMessage(c, tostring(v))
+            surface.PlaySound("buttons/button9.wav")
+        end
+        
+        self:SetText( name )
+    end
+    
+    return pnl
+end,
+
+    -- Add More here.
 }

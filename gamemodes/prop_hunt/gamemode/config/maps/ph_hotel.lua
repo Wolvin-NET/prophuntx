@@ -24,13 +24,13 @@ local function FixTallModelHulls()
 				local bounds = {
 					min 	= Vector(-1.3, -4.3, 0),
 					max 	= Vector(1.3, 4.3, 96),
-					dmin 	= Vector(-1.3, -4.3, 0),
-					dmax 	= Vector(1.3, 4.3, 32)
+					--[[ dmin 	= Vector(-1.3, -4.3, 0),
+					dmax 	= Vector(1.3, 4.3, 32) ]]
 				}
 	
 				ent:SetNWBool("hasCustomHull", true)
 				ent.m_Hull 	= { bounds.min, bounds.max }
-				ent.m_dHull = { bounds.dmin, bounds.dmax }
+				-- ent.m_dHull = { bounds.dmin, bounds.dmax }
 			
 			end
 		

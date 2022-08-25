@@ -16,7 +16,7 @@ for _,v in pairs(netstr) do
 end
 
 local function CheckUser(ply)
-	if ply:CheckUserGroup() or ply:IsSuperAdmin() then return true end
+	if ( ply:PHXIsStaff() ) then return true end
 	return false
 end
 
@@ -122,7 +122,7 @@ local function SavePropData( tblToAdd )
 		end
 	end
 	
-	PCR.CustomProp = ValidModels
+	PCR.CustomProp = table.Copy( ValidModels )
 	local json = util.TableToJSON( ValidModels, true )
 	file.Write( path.."/models.txt", json )
 	
@@ -169,28 +169,14 @@ net.Receive("PCR.EditedCustomPropData", function(len, ply)
 		local stat = SavePropData( DataTable )
 		
 		if stat then
-			-- Empty PropList because we'll Repopulate the Data
-			PCR.PropList = {}
-			PCR.PopulateProp()
 			
-			timer.Simple(1.5, function()
-				
-				local json = util.TableToJSON(PCR.PropList)
-				PCR.propDatajson = util.Compress(json)
-				PCR.propDataSize = PCR.propDatajson:len()
-				
-				if !table.IsEmpty(PCR.CustomProp) then
-					local jsc = util.TableToJSON(PCR.CustomProp)
-					PCR.customPropJson = util.Compress(jsc)
-					PCR.customPropSize = PCR.customPropJson:len()
-				end
-				
+			timer.Simple(1, function()
+				PCR:PopulateProp( true )
 				-- Broadcast to Players First
 				net.Start("pcr.PropListData")
 				net.WriteUInt(PCR.propDataSize, 32)
 				net.WriteData(PCR.propDatajson, PCR.propDataSize)
 				net.Broadcast()
-				
 				-- Send Custom Props for Editing
 				if !table.IsEmpty(PCR.CustomProp) then
 					net.Start("pcr.EditorCustomData")
@@ -198,7 +184,6 @@ net.Receive("PCR.EditedCustomPropData", function(len, ply)
 					net.WriteData(PCR.customPropJson, PCR.customPropSize)
 					net.Broadcast()
 				end
-				
 				-- Confirm To Last Editor
 				InformEditor(ply, false)
 			end)
@@ -218,7 +203,7 @@ end)
 
 if SERVER then
 	local function checkifsomeoneediting(ply)
-		if game.IsDedicated() and ply == NULL then
+		if ( game.IsDedicated() and ply == NULL ) then
 			print( "Is someone editing?: " .. tostring(inEditing == true) )
 			return
 		end

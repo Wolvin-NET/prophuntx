@@ -10,6 +10,15 @@ ENT.Editable 	= true
 ENT.Spawnable 	= true
 ENT.AdminOnly 	= false
 ENT.RenderGroup = RENDERGROUP_BOTH
+ENT.DefaultColor = Vector(1,1,1)
+
+function ENT:SetupDataTables()
+    self:NetworkVar( "Vector", 0, "fEntityColor" )
+    
+    if SERVER then
+        self:SetfEntityColor( self.DefaultColor )
+    end
+end
 
 function ENT:Initialize()
 	if SERVER then
@@ -18,14 +27,26 @@ function ENT:Initialize()
         self.Entity:SetSolid(SOLID_BBOX)
 		self.Entity:SetMoveType(MOVETYPE_NONE)
         self.Entity.owner = NULL
+        
 		self.health = GetConVar( "ph_decoy_health" ):GetInt() or 10
 	end
+    
+    self.DefaultColor = util.ColorToVector( team.GetColor(TEAM_PROPS) )
 end
 
 if CLIENT then
 	function ENT:Draw()
 		self.Entity:DrawModel()
 	end
+end
+
+ENT.GetPlayerColor = function( self )
+    local state = GetGlobalBool( "ph_enable_prop_player_color" , false )
+    if state then
+        return self:GetfEntityColor()
+    else
+        return self.DefaultColor
+    end
 end
 
 ENT.LaughsSound = {

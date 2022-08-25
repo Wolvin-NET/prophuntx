@@ -316,7 +316,7 @@ LANG["PHXM_ADMIN_USENEWMKBREN"]		= "對Bren MK II獎勵武器使用新模型(需
 LANG["PHXM_ADMIN_BEVERBOSE"]		= "開發人員: 詳細 - 開啟打印PH:X詳細訊息和事件嗎?"
 LANG["PHXM_ADMIN_SHOWPLNAMEHEAD"]	= "開啟隊伍玩家名稱顯示在螢幕上."
 LANG["PHXM_ADMIN_USESINGLE_FZCAM"]	= "使用獨一死亡特寫的聲音，而不是聲音清單(使用'ph_fc_cue_path'來確認死亡特寫的聲音路徑)"
-LANG["PHXM_ADMIN_MODELLISTINGTYPE"] = "使用舊版模型清單: 0 = 所有玩家模型(AddValidModel), 1 = 使用舊版: list.Get('PlayerOptionsModel')"
+LANG["PHXM_ADMIN_MODELLISTINGTYPE"] = "使用舊版模型清單: 0: 所有玩家模型, 1: 使用舊版: list.Get('PlayerOptionsModel')"
 LANG["PHXM_ADMIN_JUMPPOWER"]		= "物品額外跳躍力倍數"
 LANG["PHXM_ADMIN_ENABLE_OBB"]		= "開發人員: 從配置數據開啟自訂物品實體模型邊界(OBB)編輯器"
 LANG["PHXM_ADMIN_RELOAD_OBB"]		= "開發人員: 每次重新啟動時重新載入OBB編輯器數據"

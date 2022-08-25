@@ -1,0 +1,458 @@
+// --------------------------------------------------------
+// 		Last Prop Standing
+// --------------------------------------------------------
+
+// Ammo for Airboat Gun given by Last Standing Prop. -1 = Unlimited
+lps_ammocount_airboat	500
+
+// Ammo for Revolver gun given by Last Standing prop. -1 = Unlimited.
+lps_ammocount_revolver	120
+
+// Ammo for RPG given by Last Standing Prop. -1 = Unlimited
+lps_ammocount_rocket	30
+
+// Ammo for Shotgun given by Last Standing Prop. -1 = Unlimited
+lps_ammocount_shotgun	150
+
+// Ammo for SMG gun given by Last Standing prop. -1 = Unlimited.
+lps_ammocount_smg	300
+
+// Enable Last Prop Standing?
+lps_enable	1
+
+// Enable background music when LPS begins. Require round restart to take effect.
+lps_enable_music	1
+
+// Halo Effect Color (use "rainbow" or hex code)
+lps_halo_color	#14FA00
+
+// Draw a halo effect around the last prop?
+lps_halo_enable	1
+
+// Draw the halo effect through walls?
+lps_halo_walls	0
+
+// Laser Beam Color for Laser Gun (use "rainbow" or hex code)
+lps_laser_color	#CC0000
+
+// Minimum player counts on prop team. Minimum is 2.
+lps_mins_prop_players	2
+
+// Make Last Prop Standing's weapon visible or not
+lps_show_weapon	1
+
+// Should LPS Start on Every X Rounds? If so, see 'lps_start_every_x_rounds' ConVar.
+lps_start_delayed_rounds	0
+
+// Numbers of X rounds that should make the event starts
+lps_start_every_x_rounds	2
+
+// Should LPS will begin Randomly? This will overrides 'lps_start_every_x_rounds' ConVar.
+lps_start_random	1
+
+// Trail Color (use hex code)
+lps_trail_color	#FFFFFF
+
+// Draw a trail behind the last prop?
+lps_trail_enable	1
+
+// Draw a trail with what texture?
+lps_trail_texture	trails/laser
+
+// Should Give LPS Players an Armor? (Default is 100 armor points)
+lps_use_armor	0
+
+// Should LPS Players STARTS with 100 HP? Changing to other props doesn't keep this.
+lps_use_normal_health	0
+
+// If set, should the weapon given by 'random' or specific. See 'lps_weapon_list' for more info.
+lps_weapon	random
+
+// Damage for 'Airboat Gun' gun used by Last Standing prop.
+lps_wepdamage_airboat	8
+
+// Damage for 'Blaster' gun used by Last Standing prop.
+lps_wepdamage_blaster	60
+
+// Damage for 'Laser' in per Tick Delay (0.1s) used by Last Standing prop.
+lps_wepdamage_laser	8
+
+// Damage for 'Revolver' gun used by Last Standing prop.
+lps_wepdamage_revolver	40
+
+// Damage for 'RPG' gun used by Last Standing prop.
+lps_wepdamage_rocket	80
+
+// Damage per 1 Pellet for 'Shotgun' gun used by Last Standing prop. The shotgun will fires 8 pellets.
+lps_wepdamage_shotgunpelet	6
+
+// Damage for 'SMG' gun used by Last Standing prop.
+lps_wepdamage_smg	10
+
+// --------------------------------------------------------
+// 		Prop Menu (Previously: Prop Chooser)
+// --------------------------------------------------------
+
+// Enable Prop Menu Feature?
+pcr_enable	1
+
+// [REQUIRE MAP CHANGE/RESTART!] Allow custom prop to be added in the lists?
+pcr_allow_custom	0
+
+// BBOX CollissionBound Maximum Height Limit. Default is 96 (normally 72 is a standard hull size Kleiner models.
+pcr_bbox_max_height	96
+
+// BBOX CollissionBound Maximum Width Limit. Either: 72, 56, 48, 36, 32, ...
+pcr_bbox_max_width	72
+
+// Delay, in seconds before player able to use Prop Menu in next N seconds. (default is 2) - This prevent spamming issues.
+pcr_delay_use	2.00
+
+// Add BBox Limit (Hull Size) before adding to the Prop Menu Lists (if any/configured)?
+pcr_enable_bbox_limit	0
+
+// Allow prop banning before adding to the Prop Menu Lists?
+pcr_enable_prop_ban	0
+
+// Kick any user attempt to access invalid model that does not exists in current map/custom list with threshold 4x max attempts.
+pcr_kick_invalid	1
+
+// Enable limit of Maximum Prop addition count (see 'pcr_max_prop_list' for how many models you can limit.
+pcr_limit_enable	0
+
+// Maximum list of added prop into Prop Menu. (Default is 100)
+pcr_max_prop_list	100
+
+// Maximum usage limit. -1 means unlimited.
+pcr_max_use	3
+
+// Notify client about how to use Prop Menu?
+pcr_notify_messages	0
+
+// Should Prop Menu can only accessed by certain groups? (e.g: Donator, RespectedMembers, etc...)
+pcr_only_allow_certain_groups	0
+
+// Use Room check before a player use other (larger) object to prevent to get stucked? Disable this if you're facing with 'there is no room to change' messages.
+pcr_use_room_check	1
+
+// Should Prop Menu can be accessed by Console command (0) or ULX command (1)?
+pcr_use_ulx_menu	0
+
+// --------------------------------------------------------
+// 		General Gameplay
+// --------------------------------------------------------
+
+// What language should be set for the first-time player joined to your server. You should always leave this as 'en_us'.
+ph_default_lang	en_us
+
+// Enable forced server-side Language.
+// THIS WILL OVERRIDE THE PLAYER LANGUAGES TO USE SERVER'S PICKED LANGUAGE!!!
+// It should be better to turn this off, unless if your is dedicated for specific country only.
+ph_use_lang	0
+
+// Default language to force.
+ph_force_lang	en_us
+
+// Dis/Allow use the Restricted Models (Banned Props). Does not include from Prohibitted Models, which they're always deleted on round restart.
+ph_banned_models 1
+
+// Add HLA Combine to default combine models? [REQUIRE MAP RESTART!]
+ph_add_hla_combine	1
+
+// Allow use of Armor? May require round restart.
+ph_allow_armor	1
+
+// Allow pickup objects? 0=No, 1=Hunters Only, 2=Props Only, 3=Everyone
+ph_allow_pickup_object	3
+
+// Allow Spectators join to any team and respawns during blind time?
+ph_allow_respawn_from_spectator	1
+
+// Allow fast respawn during blind time?
+ph_allow_respawnonblind	1
+
+// If specified, what team should be allowed to respawn? 0 = ALL TEAMS, 1 = HUNTERS, 2 = PROPS
+ph_allow_respawnonblind_team_only	0
+
+// Not recommended if allowed: Allow respawn during blind time FROM team changes (from props to hunters, vice versa). I don't recommend enabling this because players may able to use this to take advantage by sitting on Prop team everytime. Enable this ONLY if you know what you're doing!
+ph_allow_respawnonblind_teamchange	0
+
+// Enable Team Balance during round restart?
+ph_enable_teambalance	1
+
+// Define how many times player can change team to another. Default is 5. -1 means disabled.
+ph_max_teamchange_limit	8
+
+// Force players to even out teams upon joining? Setting 0 means do not force to join in balanced teams.
+ph_forcejoinbalancedteams	0
+
+// How much time percentage to allow player Respawn during Blind time? Default is 0.75 (75%)
+ph_blindtime_respawn_percent	0.75
+
+// Check for rooms before replicating? This will prevent you to get stuck with other objects (such as prop, wall, etc)
+ph_check_for_rooms	1
+
+// How much health points for your decoy. Default is 10.
+ph_decoy_health	10
+
+// Enable a decoy reward? Reward will be given if any prop player is alive on every round ends.
+ph_enable_decoy_reward	1
+
+// Spawn Devil balls when hunter dies?
+ph_enable_devil_balls	1
+
+// Enable Player Color for team Hunters
+ph_enable_hunter_player_color	0
+
+// Spawn Lucky balls on breakable props?
+ph_enable_lucky_balls	1
+
+// Enable Player Color for team Props
+ph_enable_prop_player_color	0
+
+// (Require Map Restart) Maximum Time Left (in minutes) - Default is 30 minutes.
+ph_game_time	30
+
+// Should grenades will be given near round end? If Yes, see 'ph_give_grenade_roundend_before_time' also.
+ph_give_grenade_near_roundend	0
+
+// Time in seconds to give grenades before Round Ends. This is typically between 10 to 30 seconds.
+ph_give_grenade_roundend_before_time	15
+
+// How long hunters are blinded (in seconds)
+ph_hunter_blindlock_time	30
+
+// Health points removed from hunters when they shoot.
+ph_hunter_fire_penalty	5
+
+// How much health to give back to the Hunter after killing a prop.
+ph_hunter_kill_bonus	100
+
+// Attempts to stop props from viewing inside walls.
+ph_prop_camera_collisions	0
+
+// Should Team Props collide with each other?
+ph_prop_collision	0
+
+// Multipliers for Prop Jump Power (Do not confused with Gravity!). Default is 1.4. Min. 1.
+ph_prop_jumppower	1.5
+
+// Multipliers for Hunter Jump Power (Do not confused with Gravity!). Default is 1. Min. 1.
+ph_hunter_jumppower	1
+
+// Toggle Mute player footstep for Prop players.
+ph_props_disable_footstep	1
+
+// (Require Map Restart) Time (in seconds) for each rounds.
+ph_round_time	300
+
+// (Require Map Restart) Numbers of rounds played on a single map (Default: 10)
+ph_rounds_per_map	10
+
+// How many grenades for SMG1 served on spawn?
+ph_smggrenadecounts	1
+
+// Usable Prop Types. 1 = Physics only, 2 = Dynamics, Ragdolls & Physics, 3 = Almost Anything, 4 = Custom
+ph_usable_prop_type	1
+
+// Notify about certain entities cannot be replicated by pressing 'E'. This only works if 'ph_usable_prop_type' is set to '3' or '4'.
+ph_usable_prop_type_notice	1
+
+// Should use a custom player model available for Hunters? Please note that you must have to activate 'ph_use_custom_plmodel_for_prop' too!
+ph_use_custom_plmodel	0
+
+// Should use a custom Player's Model for Props when the round begins?
+ph_use_custom_plmodel_for_prop	0
+
+// Which model list that should deliver from? 0 = All Playermodels availale, 1 = Use Legacy method: list.Get('PlayerOptionsModel') (Recommended if you want to custom your model list)
+ph_use_playermodeltype	0
+
+// Inform Unassigned/Spectators with static text advice to join the game.
+ph_spect_inform_join_team	1
+
+// Enable or Disable Fall Damage.
+ph_falldamage	1
+
+// Enable Fall Damage, but Realistically.
+ph_falldamage_real	0
+
+// Enable Built-in Unstuck Features. If you have other version from Addon, Disable this.
+ph_enable_unstuck 1
+
+// Allowed range for the unstuck process (default = 250, should be a multiple of 5)
+ph_unstuckrange	250
+
+// Disable last-resort unstuck teleportations to spawnpoints outside of the hiding phase
+ph_disabletpunstuckinround	0
+
+// How much in seconds must pass between each unstuck attempt
+ph_unstuck_waittime	5
+
+// Use default PH:X original auto-balancing (disables all following team-related options)
+ph_originalteambalance	1
+
+// Disable shuffle mode and rotate players instead
+ph_rotateteams	0
+
+// Hunter count to be used for Rotate teams. Use 0 for automatic.
+ph_huntercount	0
+
+// Prevent players from being a Hunter twice in a row (shuffle mode only)
+ph_preventconsecutivehunting 1
+
+// Force spectators to play by including them when balancing teams
+ph_forcespectatorstoplay	0
+
+// --------------------------------------------------------
+// 		Miscellaneous
+// --------------------------------------------------------
+
+// Inform Unassigned/Spectators with static text advice to join the game.
+ph_spect_inform_join_team 1
+
+// Use new model for Bren MK II Bonus Weapon (Require Map Restart!!)
+ph_mkbren_use_new_mdl	1
+
+// [REQUIRE MAP RESTART!] Use new (temporary) chat box? This will replace default chatbox and prevent new HUD overlap.
+ph_use_new_chat	0
+
+// Notify Player Join and Leave in the Chat?
+ph_notify_player_join_leave	1
+
+// Notify Prop Rotation every time Prop Team Respawns.
+ph_notice_prop_rotation	1
+
+// Move (in pixels) by substracting chat position Y pixels high. Negative (-) means to move it lower.
+ph_new_chat_pos_sub	50
+
+// Show Splash Screen upon joining.
+ph_show_splash_screen	1
+
+// Serverside control for if a clients see client's team player names through walls.
+ph_enable_plnames	0
+
+// Enable thirdperson mode for hunters.
+ph_enable_thirdperson	1
+
+// Thirdperson: Desired Camera Distance.
+ph_sv_thirdperson_ddist	64
+
+// Allow thirdperson mode to use Server's Desired Camera position (Disallow player custom position)
+ph_sv_thirdperson_desired	0
+
+// Thirdperson: Desired Camera Right Position.
+ph_sv_thirdperson_dright	16
+
+// Thirdperson: Desired Camera Up Position.
+ph_sv_thirdperson_dup	4
+
+// Should we wait for players for proper round? -- Keep this to always enabled.
+ph_waitforplayers		1
+
+// Numbers of mininum players that we should wait for round start. Value must not contain less than 1.
+ph_min_waitforplayers	1
+
+// Should teams swapped on every round? -- Keep this to always enabled.
+ph_swap_teams_every_round	1
+
+// --------------------------------------------------------
+// 		Taunts Configuration
+// --------------------------------------------------------
+
+// Enable custom taunts for prop teams by pressing C? (Default 2) 0: Random Only, 1: Custom Taunt Mode, 2: Both. You must have a list of custom taunts to enable this.
+ph_custom_taunt_mode	2
+
+// How many in seconds delay for props to play custom taunt again? (Default is 6)
+ph_customtaunts_delay	6
+
+// (Only Applies after New Round has started) Should auto taunting be enabled
+ph_autotaunt_enabled	1
+
+// Delay in seconds for auto taunt feature
+ph_autotaunt_delay	45
+
+// How many delays in seconds for props to play normal [F3] taunt again? (Default is 2)
+ph_normal_taunt_delay	2
+
+// Allow fake taunts to be played on random props in the maps. Can be accessed only through Custom Taunt menu.
+ph_randtaunt_map_prop_enable	1
+
+// Maximum usage for fake taunts to be used. -1 is unlimited (Be warned though,I don't recommend to set this as unlimited!)
+ph_randtaunt_map_prop_max	6
+
+// Enable or Disable Taunt Pitch
+ph_taunt_pitch_enable	1
+
+// Maximum threshold/acceptable pitch range for taunt
+ph_taunt_pitch_range_max	200.0
+
+// Minimum threshold/acceptable pitch range for taunt
+ph_taunt_pitch_range_min	50.0
+
+// [REQUIRE MAP RESTART!] Enable Taunt Scanner?
+ph_enable_taunt_scanner	1
+
+
+// --------------------------------------------------------
+// 		Developer/Experimental Features
+// --------------------------------------------------------
+
+// Developer Verbose. Some printed messages will only appear if this is enabled.
+ph_print_verbose	0
+
+// [Experimental!] Allow use of pitch rotation on props.
+ph_exp_rot_pitch	0
+
+// Enable Freeze Camera Feature for Props.
+ph_freezecam	1
+
+// Enable Freeze Camera Feature for Hunters.
+ph_freezecam_hunter	1
+
+// Use single Freezecam sound instead of sound list?
+ph_fc_use_single_sound	0
+
+// Path for single Freezecam sound.
+ph_fc_cue_path	misc/freeze_cam.wav
+
+// Developer: Enable OBB Model Data Override/Modifier
+ph_sv_enable_obb_modifier	1
+
+// Developer: Reload OBB Model Data Override/Modifier Every round Restarts
+ph_reload_obb_setting_everyround	1
+
+// --------------------------------------------------------
+// 		MapVote
+// --------------------------------------------------------
+
+// Use custom external Map votes system? Type help 'ph_custom_mv_func' for more info.
+ph_use_custom_mapvote	0
+
+// This convar is hidden so you have to set it in server side console.
+// If 'ph_use_custom_mapvote' is specified, what's the map vote function to call in LUA? NOTE: Case Sensitive! Local variable will not passed to the given code.
+ph_custom_mv_func	MapVote.Start()
+
+// Allow current map to be listed or not
+mv_allowcurmap		1
+
+// Enable map cooldown
+mv_cooldown			1
+
+// Number of each map should be cooldown and reapear again
+mv_mapbeforerevote	2
+
+// How many maps that should be listed in mapvotes
+mv_maplimit			30
+
+// Minimum players to allow Rock the Vote
+mv_rtvcount			3
+
+// Time in seconds for voting
+mv_timelimit		30
+
+// Use map listing from ULX Map Votemap List? This convar will grab any whitelisted maps from your ULX Map Votemap List.
+// 1 = Use from ULX Votemap list (which you can whitelist them), 0 = scan to default maps/*.bsp directory.
+mv_use_ulx_votemaps	0
+
+// Map Prefixes to start with. For example: ph_ stands for Prop Hunt, de_ stands for CSS, etc...
+mv_mapprefix		"phx_,ph_"

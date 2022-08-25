@@ -29,8 +29,8 @@ local function DoConfig()
 			{
 				"min": [0, 0, 0],
 				"max": [16, 16, 72],
-				"dmin": [0, 0, 0],
-				"dmax": [16, 16, 28]
+				"dmin": [0, 0, 0],	 -- No longer needed
+				"dmax": [16, 16, 28] -- No longer needed
 			}
 		]
 	]
@@ -41,27 +41,22 @@ local function DoConfig()
 		2:
 			min 	= {-0,-0,-0}
 			max 	= {16,16,72}
-			dmin	= {-0,-0,-0}
-			dmax	= {16,16,28}
+			dmin	= {-0,-0,-0} -- no longer needed
+			dmax	= {16,16,28} -- no longer needed
 	]]
-	
-	local function SetEntityData(ent, tab1, tab2)
-		ent:SetNWBool("hasCustomHull",true)
-		ent.m_Hull 	= tab1
-		ent.m_dHull = tab2
-	end
 	
 	for i=1,#data do
 		local tent = ents.FindByModel(data[i][1])
 		local min 	= Vector(data[i][2]["min"][1],data[i][2]["min"][2],data[i][2]["min"][3])
 		local max 	= Vector(data[i][2]["max"][1],data[i][2]["max"][2],data[i][2]["max"][3])
-		local dmin 	= Vector(data[i][2]["dmin"][1],data[i][2]["dmin"][2],data[i][2]["dmin"][3])
-		local dmax 	= Vector(data[i][2]["dmax"][1],data[i][2]["dmax"][2],data[i][2]["dmax"][3])
+		--[[ local dmin 	= Vector(data[i][2]["dmin"][1],data[i][2]["dmin"][2],data[i][2]["dmin"][3])
+		local dmax 	= Vector(data[i][2]["dmax"][1],data[i][2]["dmax"][2],data[i][2]["dmax"][3]) ]]
 		
 		for _,found in pairs(tent) do
 			if IsValid(found) then
-				PHX.VerboseMsg("[PHX] OBB MODIFIER: Setting up Vector Value for Entity ["..found:EntIndex().."]["..found:GetModel().."] =\n   >Hull-Vector: min "..tostring(min).." max "..tostring(max).."\n   >Duck-Hull Vector: dmin "..tostring(dmin).." dmax "..tostring(dmax))
-				SetEntityData(found,{min,max},{dmin,dmax})
+				PHX.VerboseMsg( "[PHX] OBB MODIFIER: Setting up OBB Value for Entity ["..found:EntIndex().."]["..found:GetModel().."]: \n   >Hull-Vector: min "..tostring(min).." max "..tostring(max) )
+				found:SetNWBool("hasCustomHull",true)
+				found.m_Hull 	= {min,max}
 			end
 		end
 	end
@@ -92,9 +87,13 @@ end)
 
 concommand.Add("refresh_obb_map_setting", function(ply)
 
-	PHX.VerboseMsg("[PHX] Refreshing OBB Model Data Modifier...")
-	CUR_MAP_DATA = LoadOBBConfig()
-	
-	DoConfig()
+	if ( util.IsStaff( ply ) ) then
 
-end, nil, "Reload PHX OBB/Collission Bound Model Data Modifier on this map.", FCVAR_SERVER_CAN_EXECUTE)
+		PHX.VerboseMsg("[PHX] Refreshing OBB Model Data Modifier...")
+		CUR_MAP_DATA = LoadOBBConfig()
+	
+		DoConfig()
+		
+	end
+
+end, nil, "Force Reload PHX OBB/Collission Bound Model Data Modifier on this map.")

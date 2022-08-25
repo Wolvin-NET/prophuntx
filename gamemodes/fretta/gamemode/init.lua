@@ -332,16 +332,17 @@ function GM:PlayerJoinTeam( ply, teamid )
 		else
 
 			ply.m_fnCallAfterClassChoose = function() 
-												ply.DeathTime = CurTime()
-												GAMEMODE:OnPlayerChangedTeam( ply, iOldTeam, teamid ) 
-												ply:EnableRespawn() 
-											end
+				ply.DeathTime = CurTime()
+				GAMEMODE:OnPlayerChangedTeam( ply, iOldTeam, teamid ) 
+				ply:EnableRespawn() 
+			end
 
 			ply:SendLua( "GAMEMODE:ShowClassChooser( ".. teamid .." )" )
 			ply:DisableRespawn()
 			ply:SetRandomClass() // put the player in a VALID class in case they don't choose and get spawned
+			
 			return
-					
+
 		end
 		
 	end
@@ -482,12 +483,8 @@ function GM:FindLeastCommittedPlayerOnTeam( teamid )
 		end
 
 	end
-	
-	if worstteamswapper then
-		return worstteamswapper
-	end
 
-	return worst
+	return worstteamswapper or worst
 	
 end
 

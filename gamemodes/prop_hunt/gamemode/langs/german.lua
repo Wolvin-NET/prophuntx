@@ -307,7 +307,7 @@ LANG["PHXM_ADMIN_USENEWMKBREN"]		= "Bentze das nue model für die Bren MK II bon
 LANG["PHXM_ADMIN_BEVERBOSE"]		= "Entwickler: Sei Ausführlich - Ak PH:X Alle informationen und events Ausfürhlich drucken?"
 LANG["PHXM_ADMIN_SHOWPLNAMEHEAD"]	= "Aktivire das team namen auf dem bildschirm erscheinen."
 LANG["PHXM_ADMIN_USESINGLE_FZCAM"]	= "Benutze einen einziges Freezecam geräusch Anstatt von der liste (Nutze 'ph_fc_cue_path' Um das Geräusch zu bestimmen)"
-LANG["PHXM_ADMIN_MODELLISTINGTYPE"] = "Benutze Verebrte Model Liste : 0 = Alle Spielermodele (FügeValidesModellhinzu), 1 = Benutze Erbe: Liste.hole('SpielerOptionsModel')"
+LANG["PHXM_ADMIN_MODELLISTINGTYPE"] = "Benutze Verebrte Model Liste: 0: Alle Spielermodele, 1: Benutze Erbe: list.Get('PlayerOptionsModel')"
 LANG["PHXM_ADMIN_JUMPPOWER"]		= "Additional Jump Power multiplier for Props"
 LANG["PHXM_ADMIN_ENABLE_OBB"]		= "Developer: Enable Customized Prop Entities Model Boundaries (OBB) Modifier from config data"
 LANG["PHXM_ADMIN_RELOAD_OBB"]		= "Developer: Reload OBB Modifier data every round restarts"

@@ -1,9 +1,8 @@
 concommand.Add( "pcr_debug_model_list",function( ply )
-	if ply == NULL then -- assume it's dedicated server.
+	if ( (game.IsDedicated() and ply == NULL) ) then
 		PrintTable(PCR.PropList)
-		print("[pcr] debug: running on server cmd")
 	else
-		if ( ply:IsSuperAdmin() or ply:IsAdmin() ) then
+		if ( ply:PHXIsStaff() ) then
 			ply:ChatPrint("[Prop Menu] Check on your Console!")
 			PrintTable(PCR.PropList)
 			print("[pcr] debug: running on client cmd")
@@ -24,7 +23,7 @@ local CATEGORY_NAME = "Prop Hunt: X"
 local function PHX_PropMenu( calling_ply )
 	if PCR and PCR ~= nil then		  
 		if PHX:QCVar( "pcr_use_ulx_menu" ) then
-			calling_ply:SendLua("PCR:AddProps()")
+			calling_ply:SendLua("PCR:OpenPropMenu()")
 		else
 		    local btn = calling_ply:GetInfoNum( "ph_prop_menu_key", 0 )
 			calling_ply:PHXChatInfo("NOTICE", "PCR_CMD_ULX_DISABLED", btn)

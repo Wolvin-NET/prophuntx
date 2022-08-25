@@ -46,7 +46,7 @@ local bar = {
 }
 
 local Rstate = 0
-net.Receive("PHX.rotateState", function() Rstate = net.ReadInt(2) end)
+net.Receive("PHX.rotateState", function() Rstate = net.ReadUInt(1) end)
 
 local function PopulateAliveTeam(tm)
 	local tim = team.GetPlayers(tm)

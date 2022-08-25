@@ -29,42 +29,26 @@ function CLASS:OnSpawn(pl)
 	pl:CrosshairEnable()
 	
 	-- Initial Setup during Prop choosing a props. Jump-Duck may still required somehow.
-	pl:SetViewOffset(Vector(0,0,64))
-	pl:SetViewOffsetDucked(Vector(0,0,28))
+	-- do not use PHSetView!
+	pl:SetViewOffset( Vector(0,0,64) )
+    pl:SetViewOffsetDucked( Vector(0,0,28) )
 	
 	-- Prevent 'mod_studio: MOVETYPE_FOLLOW with No Models error.'
 	pl:DrawViewModel( false )
+    
+    -- Create Prop Entity
+    pl:CreatePlayerPropEntity()
 	
-	pl.ph_prop = ents.Create("ph_prop")
-	pl.ph_prop:SetPos(pl:GetPos())
-	pl.ph_prop:SetAngles(pl:GetAngles())	
-	pl.ph_prop:Spawn()
+	-- Do not allow Pitch Rotation until the prop is changing to a new prop.
+	pl:EnablePropPitchRot( false )
+    
+    -- Set Color
+    pl:PHSetColor()
 	
-	if PHX:GetCVar( "ph_use_custom_plmodel_for_prop" ) then
-		pl.m_shortHunterModel = player_manager.TranslatePlayerModel( pl:GetInfo("cl_playermodel") )
-		
-		if table.HasValue( PHX.PROP_PLMODEL_BANS, string.lower( pl.m_shortHunterModel ) ) then
-			pl.ph_prop:SetModel("models/player/kleiner.mdl")
-			pl:PHXChatInfo("WARNING", "PROP_PLAYERMDL_BANNED")
-		elseif table.HasValue( PHX.PROP_PLMODEL_BANS, string.lower( pl:GetInfo("cl_playermodel") ) ) then
-			pl.ph_prop:SetModel("models/player/kleiner.mdl")
-			pl:PHXChatInfo("WARNING", "PROP_PLAYERMDL_BANNED")
-		else
-			pl.ph_prop:SetModel( pl.m_shortHunterModel )
-		end
-	end
-	
-	pl.ph_prop:SetSolid(SOLID_BBOX)
-	pl.ph_prop:SetOwner(pl)
-	pl:SetNWEntity("PlayerPropEntity", pl.ph_prop)
-	
-	-- Delay start the AutoTaunt stuff and Control Tutorial
+	-- Delay start the AutoTaunt stuff
 	timer.Simple(1, function()
-		if IsValid(pl) then
+		if IsValid(pl) and pl:Alive() then
 			net.Start("AutoTauntSpawn")
-			net.Send(pl)
-			
-			net.Start("PH_ShowTutor")
 			net.Send(pl)
 		end
 	end)
@@ -83,12 +67,8 @@ end
 function CLASS:OnDeath(pl, attacker, dmginfo)
 	pl:RemoveProp()
 	-- reset the Prop Rotating State.
-	net.Start("PHX.rotateState")
-	net.WriteInt(0, 2)
-	net.Send(pl)
-	
-	pl:SetViewOffset(Vector(0,0,64))
-	pl:SetViewOffsetDucked(Vector(0,0,28))
+	pl:SendRotState(0)
+    pl:PHResetView()
 end
 
 

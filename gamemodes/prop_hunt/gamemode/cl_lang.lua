@@ -27,9 +27,8 @@ function PHX:InsertToLanguage( tbl, code )
 	end
 end
 
-hook.Add("Initialize", "PHX.AddExternalLanguage", function()
-    
-    -- Let's add language from list.Get, if any.
+local function addExtLang()
+	-- Let's add language from list.Get, if any.
     for langName,tblLangExt in pairs(list.Get("PHX.CustomExternalLanguage")) do
         if !tblLangExt or tblLangExt == nil or table.IsEmpty(tblLangExt) then
             PHX.VerboseMsg("[PHX External Language] Ignoring " .. langName .. " because it contains nothing.")
@@ -57,8 +56,9 @@ hook.Add("Initialize", "PHX.AddExternalLanguage", function()
     else
         print("[PHX] Language Table: OK! Got " .. table.Count(PHX.LANGUAGES) .. " total Language Codes.")
     end
-
-end)
+end
+hook.Add("Initialize", "PHX.AddExternalLanguage", addExtLang)
+hook.Add("OnReloaded", "PHX.ReLoadExternalLang", addExtLang)
 
 -- Normal Translation. 
 -- This will output error and does not revert the original text from textToFind.

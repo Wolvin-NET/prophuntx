@@ -141,8 +141,11 @@ balls.funclists = {
 	function(pl)
 		local rand
 		rand = math.random(15,100)
-		pl:SetArmor(pl:Armor() + rand)
-		pl:ChatPrint("[Lucky Ball] You gained armor points bonus : "..tostring(rand).."!")
+        local allow = PHX:GetCVar( "ph_allow_armor" )
+        if allow then
+            pl:SetArmor(pl:Armor() + rand)
+            pl:ChatPrint("[Lucky Ball] You gained armor points bonus : "..tostring(rand).."!")
+        end
 	end,
 	function(pl)
 		local ammo = {'SMG1', '357', 'Buckshot'}
@@ -229,7 +232,7 @@ balls.funclists = {
 		 if not (pl:GetModel() == "models/player.mdl") then
 			 pl:ChatPrint("[Lucky Ball] I saw it once. The player.mdl will get its revenge one day. -D4")
 			 pl:SetModel("models/player.mdl")
-			 pl:SendLua("CL_GLIMPCAM = CurTime() + 3")
+			 pl:SendLua("PHX:SetGlimpCam(CurTime()+3)")
 		 else
 			 pl:ChatPrint(balls:randomizeText())
 		 end
@@ -238,8 +241,8 @@ balls.funclists = {
 		for _, plph in pairs(player.GetAll()) do
 			if plph:SteamID() == "STEAM_0:0:49332102" && plph:Alive() && plph:Team() == TEAM_HUNTERS then
 				pl:ChatPrint("[Lucky Ball] You put "..plph:Name().." on the stage.")
-				plph:SendLua("CL_GLIMPCAM = CurTime() + 10")
-				plph:SendLua("RunConsoleCommand(\"act\", \"dance\")")
+				plph:SendLua("PHX:SetGlimpCam(CurTime()+10)")
+				plph:SendLua("RunConsoleCommand(\"act\",\"dance\")")
 				plph:EmitSound("taunts/props/hardbass.wav", 100)
 			end
 		end

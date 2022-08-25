@@ -1,11 +1,127 @@
--- Todo: Need a better improvement for command management...
+-- User Management
+function PHX:ManageGroupInfo( bLoadSave, bUseNet, stblKey, fileName, netName )
 
-local function doAdminStrictCheck(ply)
-	if (ply:IsAdmin() or ply:CheckUserGroup()) then
-		return true
-	else
-		return false
+	if !stblKey or stblKey == nil or
+		!fileName or fileName == nil then
+			ErrorNoHalt( "Table Key and File Name is required!" )
+			return
 	end
+
+	local data = nil
+	local cfg = PHX.ConfigPath .. "/"..fileName..".txt"
+	
+	if !file.Exists( cfg, "DATA" ) or file.Size( cfg, "DATA" ) <= 0 then
+		file.Write( cfg, util.TableToJSON( self[stblKey], true ) )
+	end
+	
+	if (bLoadSave) then -- load the file
+		local f = file.Read( cfg, "DATA" )
+		local t = util.JSONToTable(f)
+		
+		if t and t ~= nil then
+			
+			data = t
+			
+			if (bUseNet) then
+			
+				if netName or netName ~= nil then
+			
+					local c = util.Compress(f)
+					local len = c:len()
+					
+					net.Start( netName )
+					  net.WriteUInt(len,16)
+					  net.WriteData(c,len)
+					net.Broadcast()
+					
+				else
+				
+					ErrorNoHalt( "sv_admin.lua -> 'netName' is empty or invalid. Not pooling any network messages!" )
+					
+				end
+			end
+			
+			self[stblKey] = data
+		end
+		
+		return data
+	end
+	
+	-- Save to file.
+	local s = util.TableToJSON( self[stblKey], true )
+	file.Write( cfg, s )
+	
+	if !file.Exists( cfg, "DATA" ) or file.Size( cfg, "DATA" ) <= 0 then
+		print("[PHX] Error Saving configuration file: ".. cfg .." - File was not saved or file size is 0. Are you sure that '/garrysmod/data' directory is Writeable?")
+		return 0
+	end
+	
+	return 1
+	
+end
+
+-- Admin Group Access
+net.Receive("PHX.CLAdminGroupInfo", function( l, ply )
+	if ( ply:PHXIsStaff() ) then
+		
+		local byte = net.ReadUInt(16)
+		local data = net.ReadData(byte)
+		
+		local t = util.PHXQuickDecompress( data )
+		
+		if t and t ~= nil and istable(t) then
+		
+			--Replacing
+			PHX.SVAdmins = t
+			local result = PHX:ManageGroupInfo( false, false, "SVAdmins", "admins", "PHX.AdminGroupInfo" )
+			if result == 1 then
+				ply:PHXChatInfo("GOOD", "PHXM_ADMIN_ACCCFG_SUCC")
+				--Update
+				PHX:ManageGroupInfo( true, true, "SVAdmins", "admins", "PHX.AdminGroupInfo" )
+			else
+				ply:PHXChatInfo("ERROR", "PHXM_ADMIN_ACCCFG_FAIL")
+			end
+			
+		end
+		
+	end
+end)
+
+-- Mute Group Control
+net.Receive("PHX.CLMutedGroupInfo", function( l, ply )
+	if ( ply:PHXIsStaff() ) then
+		
+		local byte = net.ReadUInt(16)
+		local data = net.ReadData(byte)
+		
+		local t = util.PHXQuickDecompress( data )
+		
+		if t and t ~= nil and istable(t) then
+		
+			--Replacing
+			PHX.IgnoreMutedUserGroup = t
+			local result = PHX:ManageGroupInfo( false, false, "IgnoreMutedUserGroup", "muted_groups", "PHX.MutedGroupInfo" )
+			if result == 1 then
+				ply:PHXChatInfo("GOOD", "PHXM_ADMIN_MUTCFG_SUCC")
+				--Update
+				PHX:ManageGroupInfo( true, true, "IgnoreMutedUserGroup", "muted_groups", "PHX.MutedGroupInfo" )
+			else
+				ply:PHXChatInfo("ERROR", "PHXM_ADMIN_MUTCFG_FAIL")
+			end
+			
+		end
+		
+	end
+end)
+
+
+-- Todo: Need a better improvement for command management...
+local function doAdminStrictCheck(ply)
+	if ( ply:PHXIsStaff() ) then
+		return true
+	end
+		
+	return false
 end
 
 local function doCommand(ply, cmd, value, identifier)
@@ -16,18 +132,16 @@ local function doCommand(ply, cmd, value, identifier)
 end
 
 local function doKickInvalidAccess(ply, cmd, identifier)
-	game.KickID(ply:SteamID(), "PHX Illegal server command access found from: "..ply:Nick())
-	PHX.VerboseMsg("[PHX ADMIN CVAR "..identifier.." NOTIFY] Player "..ply:Nick().." (".. ply:SteamID() ..") is attempting to access "..cmd..", kicked!")
+	if GetConVar("ph_kick_non_admin_access"):GetBool() then
+		game.KickID(ply:SteamID(), "[PH:X - NOT ADMIN] Illegal server command access found from: "..ply:Nick())
+	else
+		ply:PHXChatInfo( "ERROR", "PHX_ADMIN_ACCESS_ONLY", ply:Nick() )
+	end
+	PHX.VerboseMsg("[PHX ADMIN CVAR "..identifier.." NOTIFY] Player "..ply:Nick().." (".. ply:SteamID() ..") is attempting to access "..cmd.."!")
 end
 
 -- man I wish lua has some-sort of switch/case .
 local net_functions = {
-	["CheckAdminFirst"] = function(ply)
-		if ( ply and IsValid(ply) and (ply:IsAdmin() or ply:CheckUserGroup()) ) then
-			net.Start("CheckAdminResult")
-			net.Send(ply)
-		end
-	end,
 	["SvCommandReq"] = function(ply, data)
 		local cmd = data[1]
 		local valbool = data[2]
@@ -89,17 +203,23 @@ local net_functions = {
 		else
 			doKickInvalidAccess(ply, cmd, "TEXTENTRY")
 		end
-	end
+	end,
+    ["SvCheckboxReq"] = function(ply, data)
+		local cmd       = data[1]
+		local val       = data[2]
+		
+		if doAdminStrictCheck(ply) then
+			doCommand(ply, cmd, val, "CHECKBOX" )
+		else
+			doKickInvalidAccess(ply, cmd, "CHECKBOX")
+		end
+	end,
 }
 
 
 local function ManageNetMessages(ply, netStr, data)
 	net_functions[netStr](ply, data)
 end
-
-net.Receive("CheckAdminFirst", function(len, ply)
-	ManageNetMessages(ply, "CheckAdminFirst")
-end)
 
 net.Receive("SvCommandReq", function(len, ply)
 	local cmd = net.ReadString()
@@ -143,4 +263,10 @@ net.Receive("SvCommandTextEntry", function(len, ply)
 	
 	ManageNetMessages(ply, "SvCommandTextEntry", {value, cmd})
 	
+end)
+net.Receive("SvCheckboxReq", function(len, ply)
+	local cmd       = net.ReadString()
+	local val       = net.ReadString()
+	
+	ManageNetMessages(ply, "SvCheckboxReq", {cmd, val})
 end)

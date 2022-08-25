@@ -1,39 +1,32 @@
 PHX = PHX or {}
 
--- Utils
-function util.IsHexColor( str )
-
-    if str == nil then return false end
-
-    if string.find( str,'^#?%x%x%x%x%x%x$') then
-        return true
-    end
-    return false
-    
-end
-
 TEAM_HUNTERS 	= 1
 TEAM_PROPS 	 	= 2
 IS_PHX		 	= true	-- an easy check if PHX is installed.
 
 PHX.ConfigPath 	= "phx_data"
 PHX.VERSION		= "X2Z"
-PHX.REVISION	= "25.06.22" --Format: dd/mm/yy.
+PHX.REVISION	= "25.08.22" --Format: dd/mm/yy.
 
--- Fonts
+--[[ BEGIN OF SHARED INIT HEADERS ]]--
+
+-- Add important stuffs
 AddCSLuaFile("cl_fonts.lua")
+AddCSLuaFile("sh_utils.lua")
+AddCSLuaFile("sh_convar.lua")
+include("sh_utils.lua")
+include("sh_convar.lua")
 
 -- Global Trace ViewControl for Props
 GM.ViewCam = {}
-
 -- Vector: Crouch Hull Z (Height) limit
-GM.ViewCam.cHullz      = 64    -- Fallback Value. Currently 64 for default value.
-GM.ViewCam.cHullzMins  = 24    -- Used for duck: Limit Minimums Height in BBox
-GM.ViewCam.cHullzMaxs  = 84    -- Limit Maximum Height in BBox
-GM.ViewCam.cHullzLow   = 8     -- Limit everything below this height
+GM.ViewCam.cHullz      = 64    -- Fallback/Default Value.
+GM.ViewCam.cHullzMins  = 8     -- Limit Minimums Height in BBox
+GM.ViewCam.cHullzMaxs  = 84    -- Limit Maximums Height in BBox
+GM.ViewCam.cHullzLow   = 8     -- Clam view to this height.
 
 -- Can also internally used for CalcView but you can use anywhere in serverside realm.
-function GM.ViewCam.CamColEnabled( self, origin, Endpos, trace, traceStart, traceEnd, distMin, distMax, distNorm, entHullz )
+function GM.ViewCam.CamColEnabled( self, origin, ang, trace, traceStart, traceEnd, distMin, distMax, distNorm, entHullz )
 	
     -- don't allow 0.
     if (!entHullz or entHullz == nil) then entHullz = self.cHullz end
@@ -41,31 +34,31 @@ function GM.ViewCam.CamColEnabled( self, origin, Endpos, trace, traceStart, trac
     
 	if entHullz < self.cHullzMins then
 		trace[traceStart] 	= origin + Vector(0, 0, entHullz + (self.cHullzMins - entHullz))
-		trace[traceEnd] 	= origin + Vector(0, 0, entHullz + (self.cHullzMins - entHullz)) + (Endpos:Forward() * distMin)
+		trace[traceEnd] 	= origin + Vector(0, 0, entHullz + (self.cHullzMins - entHullz)) + (ang:Forward() * distMin)
 	elseif entHullz > self.cHullzMaxs then
 		trace[traceStart] 	= origin + Vector(0, 0, entHullz - self.cHullzMaxs)
-		trace[traceEnd] 	= origin + Vector(0, 0, entHullz - self.cHullzMaxs) + (Endpos:Forward() * distMax)
+		trace[traceEnd] 	= origin + Vector(0, 0, entHullz - self.cHullzMaxs) + (ang:Forward() * distMax)
 	else
 		trace[traceStart] 	= origin + Vector(0, 0, self.cHullzLow)
-		trace[traceEnd] 	= origin + Vector(0, 0, self.cHullzLow) + (Endpos:Forward() * distNorm)
+		trace[traceEnd] 	= origin + Vector(0, 0, self.cHullzLow) + (ang:Forward() * distNorm)
 	end
 	
 	return trace
 end
 
 -- Internally used for CalcView.
-function GM.ViewCam.CamColDisabled( self, origin, Endpos, trace, traceStart, distMin, distMax, distNorm, entHullz )
+function GM.ViewCam.CamColDisabled( self, origin, ang, trace, traceStart, distMin, distMax, distNorm, entHullz )
 
     -- don't allow 0.
     if (!entHullz or entHullz == nil) then entHullz = self.cHullz end
     if !trace or trace == nil then trace = {} end
-
+	
 	if entHullz < self.cHullzMins then
-		trace[traceStart] = origin + Vector(0, 0, entHullz + (self.cHullzMins - entHullz)) + (Endpos:Forward() * distMin)
+		trace[traceStart] = origin + Vector(0, 0, entHullz + (self.cHullzMins - entHullz)) + (ang:Forward() * distMin)
 	elseif entHullz > self.cHullzMaxs then
-		trace[traceStart] = origin + Vector(0, 0, entHullz - self.cHullzMaxs) + (Endpos:Forward() * distMax)
+		trace[traceStart] = origin + Vector(0, 0, entHullz - self.cHullzMaxs) + (ang:Forward() * distMax)
 	else
-		trace[traceStart] = origin + Vector(0, 0, self.cHullzLow) + (Endpos:Forward() * distNorm)
+		trace[traceStart] = origin + Vector(0, 0, self.cHullzLow) + (ang:Forward() * distNorm)
 	end
 
 	return trace
@@ -82,8 +75,32 @@ function GM.ViewCam.CommonCamCollEnabledView( self, origin, angles, entZ )
     return trace
 end
 
--- Inclusions. These exclude plugins!
--- Do not end with "/"
+-- Used for Hunters.
+function GM.ViewCam.Hunter3pCollEnabled( self, isduck, origin, angles, forward, right, up )
+    local trace = {}
+    
+    if !forward or forward == nil then forward = 50 end
+    if !right or right == nil then right = 0 end
+    if !up or up == nil then up = 0 end
+	if isduck == nil then isduck = false end
+    
+    trace.start = origin
+    trace.endpos = origin - (angles:Forward()*forward) + (angles:Right()*right) + (angles:Up()*up)
+    trace.filter = player.GetAll()
+	trace.maxs = Vector(4,4,4)
+	trace.mins = trace.maxs*-1
+	if isduck then
+		trace.maxs = trace.maxs/2
+		trace.mins = trace.mins/2
+	end
+    
+    local tr = util.TraceHull( trace )
+    
+    return tr
+end
+
+-- Inclusions. Requires absolute path. These does not include plugins!
+-- No trailing "/" please on "path" argument.
 function PHX:Includes( path, name, isExternal )
     local root = engine.ActiveGamemode() .. "/gamemode/"
     local pathToSearch = root .. path .. "/*.lua"
@@ -102,10 +119,6 @@ function PHX:Includes( path, name, isExternal )
         end
     end
 end
-
--- Init Convars first!
-AddCSLuaFile("sh_convar.lua")
-include("sh_convar.lua")
 
 function PHX.VerboseMsg( text )
 	-- Very stupid checks: PHX:GetCVar() will only sets after 1st player is joined. This is intentional
@@ -138,16 +151,16 @@ function PHX:SoundDuration( snd )
 end
 
 -- Standard Inclusion
+AddCSLuaFile("enhancedplus/sh_enhancedplus.lua")
 AddCSLuaFile("cl_lang.lua")
 AddCSLuaFile("config/sh_init.lua")
-AddCSLuaFile("sh_drive_prop.lua")
 AddCSLuaFile("ulx/modules/sh/sh_phx_mapvote.lua")
 AddCSLuaFile("sh_config.lua")
 AddCSLuaFile("sh_player.lua")
 AddCSLuaFile("sh_chatbox.lua")
 AddCSLuaFile("sh_tauntscanner.lua")
+include("enhancedplus/sh_enhancedplus.lua")
 include("config/sh_init.lua")
-include("sh_drive_prop.lua")
 include("ulx/modules/sh/sh_phx_mapvote.lua")
 include("sh_config.lua")
 include("sh_player.lua")
@@ -172,9 +185,10 @@ AddCSLuaFile("sh_httpupdates.lua")
 include("sh_httpupdates.lua")
 
 -- Plugins and other modules
+
 local _,folder = file.Find(engine.ActiveGamemode() .. "/gamemode/plugins/*", "LUA")
 for _,plugfolder in SortedPairs( folder ) do
-	PHX.VerboseMsg("[PHX] [PLUGINS] Loading plugin: ".. plugfolder)
+	PHX.VerboseMsg("[PHX] [PLUGINS] Loading plugin: "..plugfolder)
 	AddCSLuaFile("plugins/" .. plugfolder .. "/sh_load.lua")
 	include("plugins/" .. plugfolder .. "/sh_load.lua")
 end
@@ -186,12 +200,11 @@ strteam[TEAM_PROPS]			= "PHX_TEAM_PROPS"
 strteam[TEAM_UNASSIGNED]	= "PHX_TEAM_UNASSIGNED"
 strteam[TEAM_SPECTATOR]		= "PHX_TEAM_SPECTATOR"
 
--- Team Translate Name. Might not optimized at the moment.
 function PHX.TranslateName( self, teamID, ply )
 	local strID = strteam[teamID]
 	
 	if SERVER then	-- self:F/Translate() DON'T EXIST on Serverside!
-		-- Note: DO NOT use this on expensive operations such as Think Hook, PlayerTick Hook, etc.
+		-- Note: DO NOT use this on expensive operations on Think, PlayerTick, and other hooks.
 		-- You  have been warned!
 		if self:GetCVar( "ph_use_lang" ) then
 			local lang = self:GetCVar( "ph_force_lang" )			
@@ -228,12 +241,14 @@ function PHX.TranslateName( self, teamID, ply )
 	end
 end
 
+--[[ END OF SHARED INIT HEADERS ]]--
+
 -- Fretta!
 DeriveGamemode("fretta")
 IncludePlayerClasses()
 
 -- Information about the gamemode
-GM.Name		= "Prop Hunt X"
+GM.Name		= "Prop Hunt: X2Z"
 GM.Author	= "Wolvindra-Vinzuerio & D4UNKN0WNM4N"
 
 -- Versioning
@@ -247,6 +262,8 @@ GM.UPDATEURLBACKUP 	= "https://raw.githubusercontent.com/Wolvin-NET/prophuntx/ma
 
 -- unused
 GM.Help			= ""
+
+GM.IS_PROPER_PHX_INSTALLED 	= true
 
 -- Fretta configuration
 -- Note: NEVER USE PHX:GetCVar() on ANY EARLY VARIABLES or else Settings won't work!
@@ -269,18 +286,18 @@ GM.RoundPreStartTime		= 0
 GM.SuicideString			= "dead" -- obsolete
 GM.TeamBased 				= true
 
-GM.ForceJoinBalancedTeams 	= GetGlobalInt( "ph_forcejoinbalancedteams", false )
-
 local mark = utf8.char(9733)
 GM.PHXContributors			= {
-	"Galaxio "..mark.." (Support)",
+	"Galaxio "..mark.." (Support+Translation)",
 	"Godfather "..mark.." (Support)",
-    "Fryman (Web Hosting)",
+    "Darktooth "..mark.." (Support+Contributor)",
+    "Antoine "..mark.." (PH:E+/Plus Contributor)",
+    "Fryman (Web & Game Hosting)",
 	"Phyremaster (Last Prop Standing)",
 	"Berry (Russian Translation)",
 	"Ph.X (Chinese Translation)",
 	"Trigstur (Dutch Translation)",
-	"Haeiven, TR1NITY (French Translation)",
+	"Galaxio, Haeiven, TR1NITY (French Translation)",
 	"Major Nick (German Translation)",
 	"KamFretoZ (Indonesian Translation)",
 	"So-chiru (Korean Translation)", 
@@ -358,50 +375,62 @@ function PHX:InitializePlugin()
 	]]
 	
 	-- Add Legacy Plugins or Addons, if any.
+	local STATE = "SERVER"
+	if CLIENT then
+		STATE = "CLIENT"
+	end
+	
+	self.VerboseMsg( "[PHX Plugin] Initializing Plugins..." )
 	for name,plugin in pairs( list.Get("PHX.Plugins") ) do
 		if (self.PLUGINS[name] ~= nil) then
 			self.VerboseMsg("[PHX Plugin] Not adding "..name.." because it was exists in table. Use different name instead!")
 		else
-			self.VerboseMsg("[PHX Plugin] Adding Plugin: "..name)
+			self.VerboseMsg("[PHX Plugin] Adding & Loading Plugin: "..name)
 			self.PLUGINS[name] = plugin
 		end
 	end
 	
-	if !table.IsEmpty(self.PLUGINS) then
-		for pName,pData in pairs(self.PLUGINS) do
-			self.VerboseMsg("[PHX Plugin] Loading Plugin "..pName)
-			self.VerboseMsg("--> Loaded Plugins: "..pData.name.."\n--> Version: "..pData.version.."\n--> Info: "..pData.info)
+	timer.Simple(0, function()
+		if !table.IsEmpty( self.PLUGINS ) then
+			self.VerboseMsg( string.format("[PHX Plugin] --------- Listing loaded %s SIDE plugins ---------", STATE ) )
+			for pName,pData in SortedPairs(self.PLUGINS) do
+				self.VerboseMsg("[PHX Plugin] Loaded Plugin:"..pName)
+				self.VerboseMsg("--> Name: "..pData.name.."\n--> Version: "..pData.version.."\n--> Info: "..pData.info)
+			end
+		else
+			self.VerboseMsg( string.format("[PHX Plugin] No %s Plugins Loaded...", STATE) )
 		end
-	else
-		self.VerboseMsg("[PHX Plugin] No plugins detected, skipping...")
-	end
+	end)
 end
--- Initialize?
+-- Initialize Plugins
 hook.Add("Initialize", "PHX.LoadPlugins", function() -- Origin: PostGamemodeLoaded
+	PHX:InitializePlugin()
+end)
+hook.Add("OnReloaded", "PHX.ReLoadPlugins", function()
 	PHX:InitializePlugin()
 end)
 
 if CLIENT then	
 	hook.Add("PH_CustomTabMenu", "PHX.NewPlugins", function(tab, pVgui, paintPanelFunc)
-	
+		--local tabW,tabH = tab:GetWide(),tab:GetTall()
+		local tabW,tabH = tab.Content:GetWide(),tab.Content:GetTall()
 		local main = {}
 	
-		main.panel = vgui.Create("DPanel", tab)
+		main.panel = tab:Add("DPanel")
 		main.panel:Dock(FILL)
 		main.panel:SetBackgroundColor(Color(40,40,40,120))
 			
-		main.scroll = vgui.Create( "DScrollPanel", main.panel )
+		main.scroll = main.panel:Add("DScrollPanel")
 		main.scroll:Dock(FILL)
 		
-		main.grid = vgui.Create("DGrid", main.scroll)
+		main.grid = main.scroll:Add("DGrid")
 		main.grid:SetPos(10,10)
-		main.grid:SetSize(tab:GetWide()*0.85,320)
 		main.grid:SetCols(1)
-		main.grid:SetColWide(tab:GetWide()*0.8)
-		main.grid:SetRowHeight(340)
+		main.grid:SetColWide( tabW - 16 )
+		main.grid:SetRowHeight( tabH * 0.75 )
 		
 		if table.IsEmpty(PHX.PLUGINS) then
-			if (LocalPlayer():IsSuperAdmin() or LocalPlayer():CheckUserGroup()) then
+			if ( LocalPlayer():PHXIsStaff() ) then
 				local lbl = vgui.Create("DLabel",main.panel)
 				lbl:SetPos(40,60)
 				lbl:SetText(PHX:FTranslate("PLUGINS_NO_PLUGINS"))
@@ -426,32 +455,34 @@ if CLIENT then
 		else
 			for plName,Data in pairs(PHX.PLUGINS) do
 				local section = {}
-				section.main = vgui.Create("DPanel",main.grid)
-				section.main:SetSize(main.grid:GetWide()*0.9,main.grid:GetTall())
+				local gW,gH = main.grid:GetColWide(),main.grid:GetRowHeight()
+				
+				section.main = main.grid:Add("DPanel")
+				section.main:SetSize(gW-12,gH-24)
 				section.main:SetBackgroundColor(Color(20,20,20,150))
 				
-				section.roll = vgui.Create("DScrollPanel",section.main)
+				section.roll = section.main:Add("DScrollPanel")
 				section.roll:SetSize(section.main:GetWide(),section.main:GetTall())
 				
-				section.grid = vgui.Create("DGrid",section.roll)
+				section.grid = section.roll:Add("DGrid")
 				section.grid:SetPos(20,20)
-				section.grid:SetSize(section.roll:GetWide()-20,section.roll:GetTall())
 				section.grid:SetCols(1)
-				section.grid:SetColWide(section.roll:GetWide()-32)
+				section.grid:SetColWide(section.roll:GetWide() + 96)
 				section.grid:SetRowHeight(40)
 				
-				pVgui("","label","Trebuchet24",section.grid, { "PLUG_NAME_VER", Data.name, Data.version } )
-				pVgui("","label",false,section.grid, { "PLUG_DESCRIPTION", Data.info } )
-				if (LocalPlayer():IsSuperAdmin() or LocalPlayer():CheckUserGroup()) then
+				pVgui("","label","PHX.TitleFont",section.grid, { "PLUG_NAME_VER", Data.name, Data.version } )
+				pVgui("","label","PHX.MenuCategoryLabel",section.grid, { "PLUG_DESCRIPTION", Data.info } )
+				
+				if ( LocalPlayer():PHXIsStaff() ) then
 					if !table.IsEmpty(Data.settings) then
-						pVgui("","label",false,section.grid, "PLUGINS_SERVER_SETTINGS" )
+						pVgui("","label","PHX.MenuCategoryLabel",section.grid, "PLUGINS_SERVER_SETTINGS" )
 						for _,val in pairs(Data.settings) do
 							pVgui(val[1],val[2],val[3],section.grid,val[4])
 						end
 					end
-				end
+				end      
 				if !table.IsEmpty(Data.client) then
-					pVgui("","label",false,section.grid, "PLUGINS_CLIENT_SETTINGS" )
+					pVgui("","label","PHX.MenuCategoryLabel",section.grid, "PLUGINS_CLIENT_SETTINGS" )
 					for _,val in pairs(Data.client) do
 						pVgui(val[1],val[2],val[3],section.grid,val[4])
 					end

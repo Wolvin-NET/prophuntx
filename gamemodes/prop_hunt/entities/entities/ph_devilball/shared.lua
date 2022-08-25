@@ -17,8 +17,10 @@ function ENT:ShowEffects(ent, fx_name, v_start, v_origin)
 end
 
 function ENT:Think()
-	-- make it rotate from client only.
+	-- make it rotate. client only.
 	if CLIENT then
 		self.Entity:SetAngles(self.Entity:GetAngles() + Angle(0,1,0))
+        self:SetNextClientThink( CurTime() )
+        return true
 	end
 end

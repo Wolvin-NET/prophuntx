@@ -1,6 +1,9 @@
-function PHX.LPS:HaloColorTranslate( color )
+function PHX.LPS:HaloColorTranslate()
+    
+    local color = PHX:GetCVar( "lps_halo_color" )
+
     if color == "rainbow" then
-        return false
+        return ColorRand()
     else
         local c = self:GetHexColor( color, "lps_halo_color", true )
         return Color(c.R, c.G, c.B)
@@ -13,12 +16,8 @@ hook.Add("PreDrawHalos", "LPS.PropHalos", function()
     if PHX:GetCVar( "lps_enable" ) and PHX:GetCVar( "lps_halo_enable" ) and PHX:GetCLCVar( "lps_cl_draw_halo" ) then
         local lpsActive = {}
         local ThroughWall = PHX:GetCVar( "lps_halo_walls" )
-        
-        if PHX:GetCVar( "lps_halo_color" ) == "rainbow" then
-            ColHalo = Color(math.random(0, 255), math.random(0, 255), math.random(0, 255))
-        else
-            ColHalo = PHX.LPS:HaloColorTranslate( PHX:GetCVar( "lps_halo_color" ) )
-        end
+
+        ColHalo = PHX.LPS:HaloColorTranslate()
         
         for _, ply in pairs(team.GetPlayers(TEAM_PROPS)) do
             if ply:IsLastStanding() then
@@ -46,7 +45,7 @@ local TextBox = {
     Bcolor = Color(20,20,20,210)
 }
 hook.Add("HUDPaint", "LPS.WeaponHUDIndicator", function()
-    if GetGlobalInt("InRound", false) and LocalPlayer():IsLastStanding() and LocalPlayer():Team() == TEAM_PROPS and LocalPlayer():Alive() then
+    if GetGlobalBool("InRound", false) and LocalPlayer():IsLastStanding() and LocalPlayer():Team() == TEAM_PROPS and LocalPlayer():Alive() then
         local WeaponName    = LocalPlayer():GetLPSWeaponName()
         local WeaponState   = LocalPlayer():GetLPSWeaponState()
         local Ammo          = LocalPlayer():GetLPSAmmo()
@@ -59,17 +58,8 @@ hook.Add("HUDPaint", "LPS.WeaponHUDIndicator", function()
         end
         local state = Translate( WeaponState )
         
-        draw.WordBox( 8, ScrW()*0.5, ScrH()*0.5+32, 
+        draw.WordBox( 8, ScrW()*0.5, ScrH()*0.7+32,  --orig: 0.5
             string.format(TextBox.Template, WeaponName:upper(), tostring(AmmoString), state ), "PHX.LPS.IndicatorFont", 
             TextBox.Bcolor, TextBox.Fcolor, TEXT_ALIGN_CENTER )
-    end
-end)
-
-hook.Add("SetupMove", "LPS.CLShootWeapon",function(ply,mv)
-    if not IsFirstTimePredicted() then return end
-    if not IsValid(ply) or ply != LocalPlayer() then return end
-    
-    if PHX:GetCVar( "lps_enable" ) and mv:KeyDown( IN_ATTACK ) and ply:Team() == TEAM_PROPS and ply:Alive() and GetGlobalInt("InRound", false) then
-        RunConsoleCommand("prop_shoot")
     end
 end)

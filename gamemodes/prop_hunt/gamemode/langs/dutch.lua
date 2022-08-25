@@ -308,7 +308,7 @@ LANG["PHXM_ADMIN_USENEWMKBREN"]		= "Gebruik een nieuw model voor het bonuswapen 
 LANG["PHXM_ADMIN_BEVERBOSE"]		= "Ontwikkelaar: Be Verbose - PH: X inschakelen om alle informatie en evenementen woordelijk af te drukken?"
 LANG["PHXM_ADMIN_SHOWPLNAMEHEAD"]	= "Schakel spelers team namen in om op het scherm te laten zien."
 LANG["PHXM_ADMIN_USESINGLE_FZCAM"]	= "Gebruik een Freezecam geluid in plaats van een geluids lijst (Gebruik 'ph_fc_cue_path' om het pad naar de freeze sound te bepalen)"
-LANG["PHXM_ADMIN_MODELLISTINGTYPE"] = "Gebruik Legacy Modelen Lijst: 0 = Alle Playermodels (AddValidModel), 1 = Gebruik Legacy: list.Get ('PlayerOptionsModel')"
+LANG["PHXM_ADMIN_MODELLISTINGTYPE"] = "Gebruik Legacy Modelen Lijst: 0: Alle Playermodels, 1: Gebruik Legacy: list.Get ('PlayerOptionsModel')"
 LANG["PHXM_ADMIN_JUMPPOWER"]		= "Extra sprongkrachtvermenigvuldiger voor Props"
 LANG["PHXM_ADMIN_ENABLE_OBB"]		= "Ontwikkelaar: Enable Customized Prop Entities Model Boundaries (OBB) Modifier from config data"
 LANG["PHXM_ADMIN_RELOAD_OBB"]		= "Ontwikkelaar: herlaad de OBB-modificatiegegevens, elke ronde wordt opnieuw gestart"

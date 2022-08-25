@@ -48,7 +48,7 @@ an additional button for showing Server's ULX Motd and Rules.
 
 ### 2. Player Settings
 
-![Help & Guide Section](/assets/2_player_settings.jpg)
+![Player Settings Section](/assets/2_player_settings.jpg)
 
 #### Language and Key Bindings
 
@@ -61,6 +61,8 @@ Here you can assign and change the Prop Hunt X2Z Default keybindings to your lik
 #### Player Options
 Here you can control your gameplay experience such as changing the HUD behaviour, colours, etc.
 
+- (Button) Adjust Thirdperson View  
+A button to allow you to customize & adjust your thirdperson view. Only Works on Hunters.
 - Toggle Halo effect when choosing a prop  
 Toggle Glowing effect when aiming to a prop. Helpful to focus which props that you want to replicate.
 - Show Team players names' above their heads instead (and appear through wall too)  
@@ -90,7 +92,7 @@ Toggle visibility to show how many team players alive remainings in active round
 
 ### 3. Server Admin & Game Mode Settings
 
-![Help & Guide Section](/assets/3_admin_settings.jpg)
+![Admin & Server related settings Section](/assets/3_admin_settings.jpg)
 
 #### Force Language Overrides
 
@@ -108,6 +110,9 @@ This will set to "English" as default for any new player joins to the server. Th
 Allow custom player skins & models to use. This will enable "Model Browser" and lists available player models that can be used by anyone.  
 - Enable custom models for Props - Make sure to enable for Hunter too.
 Self Explanationary, but for props. Custom models for hunter must be enable to make "Model Browser" menu to be appear.
+- Enable Player Color for Team Props
+- Enable Player Color for Team Hunters  
+Self Explanationary - Make sure to enable "Enable Custom models for Hunters" too.
 
 #### Taunts Settings
 
@@ -142,14 +147,28 @@ Self Explanationary. Decoy should be set between 5 to 20.
 
 #### General Settings
 
+- Dis/Allow the use of Restricted Models (Banned Models). This does not include from Prohibited Models.  
+Checked means you cannot use banned models, and vice versa.
+- Inform Unassigned/Spectators with static (notification) text advice to join the game.  
+A small static text that to remind Unassigned/Spectators to join their game. Uncheck to disable this notification.
+- Allow Armor Addition for team Hunters and Props  
+Allow use of Armor for both teams.
 - Enable chat notification for player join and leave?  
 Self Explanationary. Set this unchecked if you prefer to use with your own Custom Chat addon.
 - Toggle Silent prop team footsteps  
 Toggle Mute for Prop's footsteps. This will silence their movement and can't be heard by anyone.
+- Allow Thirdperson mode for Hunters  
+Allow Thirdperson mode to be used for Hunters. This will also enable their preferred thirdperson view settings.
+- Allow Thirdperson mode to use Server's Desired Camera Position (Disallow player custom position)  
+Completely disable player's prefered settings and use from Server's prefered instead. To adjust the camera settings, there are 3 Desired camera settings that you can adjust.
 - Should grenades will be given near round end?  
 Give SMG Grenades (for Hunters) when Round is about to end soon. If yes, Set how long in seconds for the grenade that should be given.
 - Time in seconds to give grenades before Round Ends.  
 This is typically set between 10 to 30 seconds before the round ends. For example: If round lenght is 5 seconds, the grenades will be given at 4:45 if you set "15 Seconds" before the round ends.
+- Enable Fall Damage  
+Checked means Fall Damage is enabled for Both Teams. Unchecked means you're gained no fall damage. _Stronk_.
+- Enable 'Realistic' Fall Damage  
+If Fall Damage is Enabled, use the Realistic Fall Damage instead.
 - Display 'Prop Rotation' notification on every Prop Spawns  
 Display a notice if Prop Rotation is enabled or not.
 - Enable Prop Camera collision to the wall  
@@ -187,12 +206,16 @@ Self Explanationary.
 
 #### Developer Sections
 
+- Substract/Add Prop View Offset Height by using Multiplier  
+Higher/Lower Prop's View Offset. Default is 0.8.
+- (Experimental) Restrict Props Replication only when they're standing.  
+Disabling this means to allow replicating object when ducking, jumping, or mid air.
+- Developer: Be Verbose  
+PH:X will print every information and events verbosely through the console, as well as client's console. Useful for Debugging.
 - Enable Boundaries Check?  
 Enable "Check for Rooms" before replicating an object. This helps to prevent you getting stuck with any objects/walls nearby.
 - Use new model for Bren MK II bonus weapon (Require Map Restart)  
 Self Explanationary. This weapon is only obtainable through Lucky Ball.
-- Developer: Be Verbose  
-PH:X will print every information and events verbosely through the console, as well as client's console.
 - Enable Player team names to appear on their screen  
 Toggle Visibility of Player Team Names to appear on player HUD screen.
 - Use single Freezecam sound instead of sound list  
@@ -200,7 +223,9 @@ Unchecked means will use multiple sounds from a Freeze Cam's Configuration on `s
 - Use Legacy Model List  
 Determine on How Model Browser will *list* the models. `[0]` = All Playermodels (by using `player_manager.AddValidModel()`) or `[1]` = Use Legacy List from `list.Get('PlayerOptionsModel')`. You might have to create a custom List if you're using List `(1)` to make them appears on *Model Browser* menu.
 - Additional Jump Power multiplier for Props  
-Set a Multiplier How High for Props to jump. Default is `1.4`. This is caused due to Player's Hull difference that causes the jump height become decreased for small props.
+Set a Multiplier How High for Props to jump. Default is `1.5`. This is caused due to Player's Hull difference that causes the jump height become decreased for small props.
+- Additional Jump Power multiplier for Hunters  
+Same as above, but for Hunters. Default is `1`.
 - Developer: Enable Customized Prop Entities Model Hull/Boundaries (OBB) Modifier from config data  
 Enable a overrides for Entities' OBB Hulls/Boundaries (Mins/Max). This helps to fix any taller or wider props to use a fixed Player-sized Hulls for example.
 - Developer: Reload OBB Modifier data every round restarts  
@@ -222,6 +247,8 @@ https://steamcommunity.com/sharedfiles/filedetails/?id=2064138107
 https://steamcommunity.com/sharedfiles/filedetails/?id=2059548654  
 https://steamcommunity.com/sharedfiles/filedetails/?id=2035168341  
 This is COMPLETELY optional.
+- [Experimental] Allow to use Pitch Rotation for Props.  
+This feature is currently work in progress and may be buggy. Does not applies to any Ragdoll/Human Prop Types. This feature is playable but not 100% perfect yet.
 - Use new Chat Box (eChat)  
 This is temporary replacement. If you have any custom chat box addons already, leave this remain unchecked.
 - New Chat Box Position: Substract Height (Y) Position by N pixels.  
@@ -247,7 +274,7 @@ Allow any specific teams to pick up objects. `[0]` = Dont Allow, `[1]` Hunters O
 
 ### 4. MapVote Settings
 
-![Help & Guide Section](/assets/5_mapvotes.jpg)
+![MapVote Section](/assets/5_mapvotes.jpg)
 
 Here you can configure the Integrated MapVote system.
 
@@ -273,7 +300,7 @@ Or use `ulx map_vote` or `ulx unmap_vote` if you use ULX Admin Mod.
 
 ### 5. Player Skins & Model Browser
 
-![Help & Guide Section](/assets/4_model_settings.jpg)
+![Model Settings](/assets/4_model_settings.jpg)
 
 This section allows you to set your custom player models provided from the server and you can choose anything from here.
 
@@ -282,24 +309,65 @@ This section allows you to set your custom player models provided from the serve
 - Server may have it disabled and therefore you may unable to use custom skins. This probably intended for anyone who wants to use a skin from Pointshop instead.
 - If you are setting up for props as well, make sure the "Enable custom models for Props" is enabled.
 
-### 6. About PH:X
+### 6. Enhanced Plus Settings
 
-![Help & Guide Section](/assets/6_about_info.jpg)
+![Enhanced Plus Section](/assets/10_enhanced_plus.jpg)
+
+Here you can configure any additional settings such as Integrated Unstuck, Team Rotation, and others related settings from Enhanced Plus.
+
+**Unstuck Settings**
+  
+- Toggle Enable/Disable Built-in unstuck feature. If you use an unstuck addon, disable this.  
+Self Explanationary. However if you prefer to use external unstuck addon, you may have to set this unchecked.
+- How much in seconds must pass between each unstuck attempt  
+Sort of delay when success. if It's not, try again in after X seconds. Default is 5.
+- Disable last-resort unstuck teleportations to spawnpoints outside of the hiding phase  
+Do not allow to find place for unstuck to the nearest spawn points after hunter is unblinded.
+
+**More Team Options & Settings**
+  
+- Use PH:X's original auto-balancing.  
+The Original Team Balancing, without team rotating and so on. Enabling this **Will** Disable all following team-related options such as Suffle Rotation, Team Rotation, and other related settings.
+- (Starting from this point, if you disabled 'Original Auto-Balancing' option, the next options will be visible)
+- Force Spectators to play by including them when balancing teams.  
+Force include every spectators to join the team when balancing team occurs.
+- Hunter Count (0 = automatic)  
+A slider to use to determine how much hunters alive in active rounds. This is where you can control for example 3 Hunters vs 8 Props. Setting to 0 means automatic.
+- Prevent players from being a Hunter twice in a row (only works in suffle mode)  
+Do not allow being hunter twice in a row when Suffling mode is enabled. Disable this to allow this. _Note: Only Works in Suffle Mode._
+- Disable 'Shuffle mode' and Rotate Players instead.  
+Rotate players instead of shuffling them.
+- Restart Rotations from the beggining  
+Reset Rotations, in case if you've started them, stopped, then started again and/or current rotation does not satisfy you.
+- Force Hunter(s) to be a Prop Next time  
+A list of alive hunters ready to be forced as a Prop. Double click them to apply/reset. There is also a reset button below the list. Note: _Only Works in Suffle Mode._
+
+### 7. Group & Access Settings
+
+![Group & Access Section](/assets/9_group_access.jpg)
+
+Here you can configure which group can access the 'Admin Settings' and which group to disallow Voice Muted in Player Muting Section.
+
+Do Note that User is always mute-able, while certain of default admins are not mute-able. Superadmins cannot be revoked from accessing Admin Settings.
+
+### 8. About PH:X
+
+![About & Info](/assets/6_about_info.jpg)
 
 This menu shows several information about the gamemode that installed on the server, along with the contributors and other informations.
 
 It is important to note that you have to pay attention with the version of PH:X you are using. PH:X might often receive alot of updates and therefore you should
 check the updates periodically.
 
-## 7. Player Mutes
+### 9. Player Mutes
 
-![Help & Guide Section](/assets/8_player_mutes.jpg)
+![Player Mutes](/assets/8_player_mutes.jpg)
 
 You can toggle mute player's voice in this section. Simply just click on the speaker icon to toggle mute or unmute.  
 
-## 8. Plugins
+### 10. Plugins
 
-![Help & Guide Section](/assets/7_plugins.jpg)
+![Plugins](/assets/7_plugins.jpg)
 
 ### 1. Prop Menu (Prop Chooser) Plugin
 
@@ -379,7 +447,7 @@ Draw a trailing line on the Last Prop.
 - Colour for the Last Prop's trail (hex code)  
 Colour for the trailing line. Hex colour code only. Example: `#FFFF00` (Yellow)
 - Trail colour texture for Last Prop's player  
-The Trailin Line texture to be used. Texture must be present in the game.
+The Trailing Line texture to be used. Texture must be present in the game.
 
 **Weapon Settings**
 
@@ -394,6 +462,6 @@ Whether server sets the halo effect, Toggle visibility of glowing effect for the
 
 ## 9. Donate Section
 
-![Help & Guide Section](/assets/0_donation_menu.jpg)
+![Donate Section](/assets/0_donation_menu.jpg)
 
 This section shows the Donation Link options for Prop Hunt: X Development.

@@ -215,7 +215,7 @@ LANG["PHXM_ADMIN_USENEWMKBREN"]		        = "Использовать новую 
 LANG["PHXM_ADMIN_BEVERBOSE"]		        = "Разработчик: Будьте многословны - Включить PH:X печатать всю информацию и события подробно?"
 LANG["PHXM_ADMIN_SHOWPLNAMEHEAD"]	        = "Разрешить названия команд игроков отображаться на их экране."
 LANG["PHXM_ADMIN_USESINGLE_FZCAM"]	        = "Использовать один звук заморозки камеры вместо списка звуков (Используйте 'ph_fc_cue_path', чтобы определить путь прохождения звука для заморозки камеры)"
-LANG["PHXM_ADMIN_MODELLISTINGTYPE"]         = "Использовать устаревший список моделей : 0 = Все модели игрока (AddValidModel), 1 = Использовать Legacy: list.Get('PlayerOptionsModel')"
+LANG["PHXM_ADMIN_MODELLISTINGTYPE"]         = "Использовать устаревший список моделей: 0: Все модели игрока, 1: Использовать Legacy: list.Get('PlayerOptionsModel')"
 LANG["PHXM_ADMIN_JUMPPOWER"]		        = "Дополнительный множитель силы прыжка для Объектов"
 LANG["PHXM_ADMIN_ENABLE_OBB"]		        = "Разработчик: Включить настраиваемые границы модели энтити для Объектов (OBB) Модификатор из данных конфигурации"
 LANG["PHXM_ADMIN_RELOAD_OBB"]		        = "Разработчик: Перезагрузить модификатор данных OBB, при каждом перезапуске раунда"

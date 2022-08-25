@@ -305,7 +305,7 @@ LANG["PHXM_ADMIN_USENEWMKBREN"]		= "Usar novo modelo para arma bônus Bren MK II
 LANG["PHXM_ADMIN_BEVERBOSE"]		= "Desenvolvimento: Seja claro - Enable PH:X para mostrar toda informação e eventos claramente?"
 LANG["PHXM_ADMIN_SHOWPLNAMEHEAD"]	= "Habilitar nomes dos times dos jogadores para aparecer em suas telas."
 LANG["PHXM_ADMIN_USESINGLE_FZCAM"]	= "Usar câmera de congelamento ao invés da lista de sons (Use 'ph_fc_cue_path' para determinar o diretório do som)"
-LANG["PHXM_ADMIN_MODELLISTINGTYPE"] = "Usar lista de modelos legada : 0 = Todos os modelos (AddValidModel), 1 = Usar legado: list.Get('PlayerOptionsModel')"
+LANG["PHXM_ADMIN_MODELLISTINGTYPE"] = "Usar lista de modelos legada: 0: Todos os modelos, 1: Usar legado: list.Get('PlayerOptionsModel')"
 LANG["PHXM_ADMIN_JUMPPOWER"]		= "Poder de pulo adicional para Props"
 LANG["PHXM_ADMIN_ENABLE_OBB"]		= "Desenvolvedor: Habilitar bordas de entidade de modelo customizadas"
 LANG["PHXM_ADMIN_RELOAD_OBB"]		= "Desenvolvedor: Recarregar bordas de entidade de modelo customizadas todo reinicio de rodada"

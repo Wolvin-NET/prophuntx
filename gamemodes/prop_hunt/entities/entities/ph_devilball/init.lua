@@ -191,8 +191,11 @@ ENT.funclists = {
 	function(pl)
 		local rand
 		rand = math.random(20,60)
-		pl:SetArmor(pl:Armor() + rand)
-		pl:ChatPrint("[Devil Crystal] You gained armor points bonus : "..tostring(rand).."!")
+        local allow = PHX:GetCVar( "ph_allow_armor" )
+        if allow then
+            pl:SetArmor(pl:Armor() + rand)
+            pl:ChatPrint("[Devil Crystal] You gained armor points bonus : "..tostring(rand).."!")
+        end
 	end,
 	function(pl)
 		if !pl.ph_slowspeed then
