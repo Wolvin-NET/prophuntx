@@ -115,6 +115,8 @@ window.state = false
 window.CurrentlyOpen = false
 
 net.Receive("PH_ForceCloseTauntWindow", function()
+	-- Reset Category upon team change or death
+	LocalPlayer():SetVar("tauntWindowCategorie", PHX.DEFAULT_CATEGORY)
 	if window.CurrentlyOpen then
 		window.frame:Close()
 	end

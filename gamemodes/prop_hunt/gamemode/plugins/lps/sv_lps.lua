@@ -179,8 +179,6 @@ local function DoPlayerCheck(ply)
 						return
 					end
 				end
-				
-				print("am I get called twice?")
                 
                 local stand = NULL
                 

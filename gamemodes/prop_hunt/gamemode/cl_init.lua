@@ -279,11 +279,12 @@ function GM:ShowTeam()
 				local btn = TeamPanel:AddSelectButton( strName, func )
 				btn.m_colBackground = TeamInfo.Color
 				btn.Think = function( self ) 
-								self:SetText( Format( "%s (%i)", strName, team.NumPlayers( ID ) ))
-								if ID ~= TEAM_SPECTATOR then -- skip player ammount check
-									self:SetDisabled( GAMEMODE:TeamHasEnoughPlayers( ID ) ) 
-								end
-							end
+					self:SetText( Format( "%s (%i)", strName, team.NumPlayers( ID ) ))
+					--[[ if ID ~= TEAM_SPECTATOR then
+						self:SetDisabled( GAMEMODE:TeamHasEnoughPlayers( ID ) ) 
+					end ]]
+					self:SetDisabled(GAMEMODE:CustomTeamHasEnoughPlayers(ID, LocalPlayer()))
+				end
 				
 				if (  IsValid( LocalPlayer() ) && LocalPlayer():Team() == ID ) then
 					btn:SetDisabled( true )
@@ -653,6 +654,8 @@ net.Receive("PHX.UpdatePropbanInfo", function()
 end)
 
 function PHX:ShowTutorPopup()
+
+	if (not IsValid(LocalPlayer())) then return end
 
 	if self:GetCLCVar( "ph_show_tutor_control" ) && LocalPlayer():Alive() && (LocalPlayer():Team() == TEAM_PROPS or LocalPlayer():Team() == TEAM_HUNTERS) then
 	

@@ -1,6 +1,18 @@
 ## A new major updates to Prop Hunt: X has been released.
 For now, the Prop Hunt X will change it's version to "X2Z" following with date-formatted revisions.
 
+## Revision 27.08.2022
+- Fixed Team Rotation related bug that being unable to join. You need to disable `ph_force_join_balanced_teams` to `0` to join to any Suffled Team/Rotation mode otherwise you won't be able to join to any team.
+- Changed `ph_forcejoinbalancedteam` to `ph_force_join_balanced_teams` ConVar to reset this behaviour.
+- Added Callbacks to `ph_originalteambalance` to disable `ph_force_join_balanced_teams` when Team Shuffle/Rotation mode is enabled. You have to Re-enable this once the Team Shuffle/Rotation is Turned-off.
+- Fixed Enhanced Plus Panels doesn't update immediately after a ConVar changes
+- Fixed "LocalPlayer()" becoming NULL when trying to get a "Game Control" notification upon Joining
+- Fixed Taunt Menu being disabled after being respawned from Hunter Blind phase
+- Removed Debug Message in Serverside LPS Code
+- Fixed Map Config file for `ph_kliener_v2` to use a default color instead (No Player color will be allowed if 'kleiner' model is present).
+- Added `Entity:SetEntColorEnabled( boolean )`, `Entity:GetEntColorEnabled()` for Prop Entity to force enable or disable of Player Colour function.
+- Updated "Indonesian" Translation and updated Language Untranslated Text to prevent Errors text from displaying
+
 ## Revision 25.08.2022
 - **Fixed where some PH:X Admin-only Console Commands can be *still* accessed without Admin Checks (e.g. OBB Reload, Taunt Reload, etc). This issue existed since PH:E v15~v16 and PH:X before August Update.** However, this issues has been fixed **on August Revision Update (25.08.2022)**.
 - `GM:ShowTeam()` and `GM:ShowSplash()` are now moved to Prop Hunt Gamemode Base (Originally from Fretta's base).

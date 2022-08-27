@@ -2,7 +2,7 @@
 ## X2Z - Road to Zero
 
 ### Versioning
-Version: X2Z, Revision: 25/08/2022 (dd/mm/yyyy)
+Version: X2Z, Revision: 27/08/2022 (dd/mm/yyyy)
 
 ### Public Servers
 - Server #1 [U.S]: **74.91.120.8:27015**

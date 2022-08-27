@@ -208,11 +208,14 @@ function plus:CreatePanel( tab )
 	self.chkOrigTeamBal:DockMargin(8,4,8,4)
 	self.chkOrigTeamBal:SetText( PHX:QTrans( "PHXM_ADMIN_TEAMBAL_ORIG" ) )
     self.chkOrigTeamBal:SetFont( "HudHintTextLarge" )
-	self.chkOrigTeamBal:SetValue( GetConVar("ph_originalteambalance"):GetBool() )
-	function self.chkOrigTeamBal:OnChange(bool)		
+	self.chkOrigTeamBal:SetValue( PHX:GetCVar( "ph_originalteambalance" ) )
+	function self.chkOrigTeamBal:OnChange(bool)
+		local v = "0"
+		if (bool) then v = "1" end
+	
 		net.Start( "SvCommandReq" )
 			net.WriteString( "ph_originalteambalance" )
-			net.WriteString( bool and "1" or "0" )
+			net.WriteString( v )
 		net.SendToServer()
 	end
 	

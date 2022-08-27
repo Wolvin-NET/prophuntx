@@ -291,7 +291,7 @@ LANG["PHXM_ADMIN_WAIT_PLAYERS"]				= "Wait for Players to begin the gameplay"
 LANG["PHXM_ADMIN_WAIT_MIN_PLAYERS"]			= "Mininum Players to Wait before the game starts (default: 1)"
 LANG["PHXM_ENABLE_PLAYER_JOIN_LEAVE"] 		= "Enable chat notification for player join and leave? Set this 0 if you prefer to use with your own Custom Chat addon."
 
-LANG["PHXM_ADMIN_FORCEJOINBALANCE"]			= "Force players to even out teams upon joining"
+LANG["PHXM_ADMIN_FORCEJOINBALANCE"]			= "Force players to even out teams upon joining (Disable This if Team Rotation is ON)"
 LANG["PHXM_ADMIN_ENABLETEAMBALANCE"]		= "Enable Team Balance: Automatically even out teams at the start of a round."
 LANG["PHXM_ADMIN_PICKUP_PROPS"] 			= "Allow pick up of small props? 0: Dont Allow, 1: Hunters Only, 2: Props Only, 3: Allow Everyone."
 
@@ -691,17 +691,18 @@ If you close this editor, this will automatically removed.]]
 LANG["PHZ_pcr_fb_allcontent"] = "All Contents (Not All Players/Server will have same contents as you)"
 LANG["PHZ_pcr_fb_notmounted"] = "%s [Not Mounted]"
 
--- Revision XX/08/2022
+-- Revision 25-27/08/2022
 LANG["PHX_ADMIN_ACCESS_ONLY"]		= "Access Denied: only Admins can do that, %s !"
 LANG["PHX_PROP_TOO_THIN"]           = "Cannot Replicate: Prop is too thin!"
 LANG["PHX_PROP_IS_BANNED"]			= "The prop you're trying to use is banned from server!"
 LANG["PHX_SPECT_JOINGAME"]			= "To join the game, Press [F2] then select a team to join."
 LANG["PHX_TEAM_IS_FULL"]			= "That team is full!"
+LANG["FORCE_JOIN_TEAM_IS_DISABLED"]	= "Even-out Team Balance is disabled (Team Shuffle/Rotation is Enabled)"
 
 LANG["PHX_TM_MNBAR_OPTIONS"]		= "Options"
 LANG["PHX_TM_MNBAR_SAVEFAV"]		= "Save Favorites"
 LANG["PHX_TM_MNBAR_LOADFAV"]		= "Reload Favorites"
-LANG["PHX_TM_MNBAR_SETTINGS"]		= "Settings"
+LANG["PHX_TM_MNBAR_SETTINGS"]		= "Others"
 LANG["PHX_TM_MNBAR_RESET"]			= "Reset Favorites"
 
 LANG["PHX_TM_WARN_CLEARFAV"]		= "WARNING: This will CLEAR ALL your previously saved Favorite Taunts. Are you sure you want to continue?"
@@ -773,7 +774,7 @@ LANG["PHXM_ADMIN_ENABLEUNSTUCK"]		= "Toggle Enable/Disable Built-in unstuck feat
 LANG["PHXM_ADMIN_NOTPUNSTUCKINROUND"]	= "Disable last-resort unstuck teleportations to spawnpoints outside of the hiding phase" --ph_disabletpunstuckinround
 LANG["PHXM_ADMIN_UNSTUCK_WAITTIME"]		= "How much seconds must pass between each unstuck attempt" --ph_unstuck_waittime
 LANG["PHXM_ADMIN_TEAMBAL_ORIG"] 		= "Use PH:X's original auto-balancing (disables all following team-related options below)" --ph_originalteambalance
-LANG["PHXM_ADMIN_TEAMBAL_UNCHECK"] 		= "Uncheck the previous checkbox to access the advanced team balance options." --ph_originalteambalance_uncheck
+LANG["PHXM_ADMIN_TEAMBAL_UNCHECK"] 		= "Uncheck the previous checkbox to access the advanced team balance options." --ph_originalteambalance_uncheck [UNUSED]
 LANG["PHXM_ADMIN_FORCESPECTOPLAY"]		= "Force spectators to play by including them when balancing teams" --ph_forcespectatorstoplay
 LANG["PHXM_ADMIN_NO_H_CONSECUTIVE"]		= "Prevent players from being a Hunter twice in a row (only works in shuffle mode)" --ph_preventconsecutivehunting
 LANG["PHXM_ADMIN_HUNTER_COUNT"] 		= "Hunter count (0 = automatic)" --ph_huntercount
@@ -783,15 +784,15 @@ LANG["PHXM_ADMIN_RESET_ROTTEAM_WARN"]	= "Restart rotations from the beginning (i
 LANG["PHXM_ADMIN_RESET_MSG"]			= "Rotation Team has been Reset!"
 LANG["PHXM_ADMIN_FORCEH2P_WARN"]		= "Force a Hunter to be a Prop next time (only works in shuffle mode):" --ForceHunterAsProp_warning
 LANG["PHXM_ADMIN_FORCEH2P_RANDONLY"]	= "This action is only available in shuffle mode." --ForceHunterAsProp_randomonly
-LANG["PHXM_ADMIN_FORCEH2P_NOHUNT"]		= "[NO HUNTERS]" --ForceHunterAsProp_nohunters
-LANG["PHXM_ADMIN_FORCEH2P_NOHUNTMSG"] 	= "There are no hunters goddammit, it's written on the button!" --ForceHunterAsProp_nohuntersmsg
+LANG["PHXM_ADMIN_FORCEH2P_NOHUNT"]		= "[NO HUNTERS]" --ForceHunterAsProp_nohunters [UNUSED]
+LANG["PHXM_ADMIN_FORCEH2P_NOHUNTMSG"] 	= "There are no hunters goddammit, it's written on the button!" --ForceHunterAsProp_nohuntersmsg [UNUSED]
 
 LANG["FORCEH2P_WILL_BE"]				= "%s will be a Prop next round."
 LANG["FORCEH2P_IS_CANCELED"]			= "%s won't be a Prop next round."
 LANG["FORCEH2P_IS_RESET"]				= "All Hunters won't be Forced as a Prop next round."
 LANG["FORCEH2P_PLAYER_NOT_FOUND"]		= "Selected player was not found, probably they were disconnected."
 LANG["PHX_ROTATE_TEAM_RESET"]			= "Rotation Team Offset has been reset."
-LANG["FORCEH2P_ALREADY"]				= "%s has already been defined as a Prop for next round." -- Obsolete
+LANG["FORCEH2P_ALREADY"]				= "%s has already been defined as a Prop for next round." -- [UNUSED]
 
 LANG["UNSTUCK_YOURE_UNSTUCK"]			= "You should be unstuck!"
 LANG["UNSTUCK_BAD_SPAWNPOINT"]			= "Error: The closest spawnpoint might get you stuck again. If it does, try to unstuck again."

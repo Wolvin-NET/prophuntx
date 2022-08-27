@@ -394,10 +394,11 @@ local function AutoRespawnCheck(ply)
 					local tim = PHX:GetCVar( "ph_allow_respawnonblind_team_only" )
 					if tim > 0 and ply:Team() == tim then
 						ply:Spawn()
-						--ply:PHXChatInfo( "NOTICE", "BLIND_RESPAWN_TEAM", team.GetName( tim ), math.Round(phx_blind_unlocktime - CurTime()) )
+						ControlTauntWindow(0)
 						ply:PHXChatInfo( "NOTICE", "BLIND_RESPAWN_TEAM", PHX:TranslateName( tim, ply ), math.Round(phx_blind_unlocktime - CurTime()) )
 					elseif tim == 0 then
 						ply:Spawn()
+						ControlTauntWindow(0)
 						ply:PHXChatInfo( "NOTICE", "BLIND_RESPAWN", math.Round(phx_blind_unlocktime - CurTime()) )
 					end
 				end 

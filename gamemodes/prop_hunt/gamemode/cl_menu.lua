@@ -764,7 +764,7 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 		
 		PHX.UI:CreateVGUIType("", "label", "PHX.MenuCategoryLabel", grid, "PHXM_ADMIN_TEAMBALANCE")
 		PHX.UI:CreateVGUIType("ph_enable_teambalance", "check", "SERVER", grid, "PHXM_ADMIN_ENABLETEAMBALANCE")
-		PHX.UI:CreateVGUIType("ph_forcejoinbalancedteams", "check", "SERVER", grid, "PHXM_ADMIN_FORCEJOINBALANCE")
+		PHX.UI:CreateVGUIType("ph_force_join_balanced_teams", "check", "SERVER", grid, "PHXM_ADMIN_FORCEJOINBALANCE")
 		PHX.UI:CreateVGUIType("ph_max_teamchange_limit", "slider", {min = 3, max = 50, init = PHX:GetCVar( "ph_max_teamchange_limit" ), dec = 0, kind = "SERVER"}, grid, "PHXM_ADMIN_CHANGETEAM_LIMIT")
 		PHX.UI:CreateVGUIType("ph_allow_respawnonblind_teamchange", "check", "SERVER", grid, "PHXM_ADMIN_ALLOWRESPAWN_TEAMCHANGE")
 		

@@ -6,7 +6,20 @@ PHEPLUSCVAR["ph_unstuckrange"] 					= { CTYPE_NUMBER, 	"250", FCVAR_SERVER_ONLY_
 PHEPLUSCVAR["ph_disabletpunstuckinround"] 		= { CTYPE_BOOL, 	"0", FCVAR_SERVER_ONLY, "Disable last-resort unstuck teleportations to spawnpoints outside of the hiding phase" }
 PHEPLUSCVAR["ph_unstuck_waittime"] 				= { CTYPE_NUMBER, 	"5", FCVAR_SERVER_ONLY, "How much in seconds must pass between each unstuck attempt" }
 
-PHEPLUSCVAR["ph_originalteambalance"] 			= { CTYPE_BOOL, 	"0", FCVAR_SERVER_ONLY, "Use default PH:X/E+ original auto-balancing (disables all following team-related options)" }
+PHEPLUSCVAR["ph_originalteambalance"] 			= { CTYPE_BOOL, 	"0", FCVAR_SERVER_ONLY, "Use default PH:X/E+ original auto-balancing (disables all following team-related options)", 
+function(cvarname, value)
+	cvars.AddChangeCallback( cvarname, function(cv, _, new)
+		
+		if (not tobool(new)) then
+			for _,v in pairs(player.GetAll()) do
+				v:PHXChatInfo("NOTICE", "FORCE_JOIN_TEAM_IS_DISABLED")
+			end
+			RunConsoleCommand("ph_force_join_balanced_teams", "0")
+		end
+		
+		SetGlobalBool(cvarname, tobool(new))
+	end, "phx.cvbool_" .. cvarname)
+end }
 PHEPLUSCVAR["ph_rotateteams"] 					= { CTYPE_BOOL, 	"0", FCVAR_SERVER_ONLY, "Disable shuffle mode and rotate players instead" }
 PHEPLUSCVAR["ph_huntercount"] 					= { CTYPE_NUMBER, 	"0", FCVAR_SERVER_ONLY, "Hunter count (0 = automatic)" }
 PHEPLUSCVAR["ph_preventconsecutivehunting"] 	= { CTYPE_BOOL, 	"1", FCVAR_SERVER_ONLY, "Prevent players from being a Hunter twice in a row (shuffle mode only)" }
@@ -23,7 +36,7 @@ function GM:TeamHasEnoughPlayers( teamid )
 	local PlayerCount = team.NumPlayers( teamid )
 
 	-- Don't let them join a team if it has more players than another team
-	if PHX:GetCVar( "ph_forcejoinbalancedteams" ) then
+	if PHX:GetCVar( "ph_force_join_balanced_teams" ) then
 	
 		for id, tm in pairs( team.GetAllTeams() ) do
 			if ( id > 0 && id < 1000 && team.NumPlayers( id ) < PlayerCount && team.Joinable(id) ) then return true end
@@ -65,7 +78,7 @@ function GM:CustomTeamHasEnoughPlayers(teamid, pl)
 		return GAMEMODE:TeamHasEnoughPlayers(teamid)
 	end
 
-	if PHX:GetCVar( "ph_forcejoinbalancedteams" ) then
+	if PHX:GetCVar( "ph_force_join_balanced_teams" ) then
 		local playerCount = GAMEMODE:GetPlayingCount(pl)
 		local teamPlayerCount = team.NumPlayers(teamid)
 		local hunterCount = GAMEMODE:GetHunterCount(playerCount)
