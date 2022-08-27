@@ -846,6 +846,9 @@ LANG["KEYHINT_FREEZEAIR"] 	= "Toggle Prop Freeze"
 LANG["KEYHINT_SPAWNDECOY"] 	= "Spawn Decoy"
 LANG["KEYHINT_UNSTUCK"]		= "Unstuck Key"
 
+LANG["KEY_LMB"]				= "LMB" -- Left Mouse Button, Short version
+LANG["KEY_RMB"]				= "RMB" -- Right Mouse Button, Short version
+
 LANG["MISC_TEAM_NAME"]		= "TEAM: %s" -- TEAM PROPS, TEAM HUNTERS, but in 1 sentence.
 LANG["NOTIFY_HEADER_TITLE"]	= "Game Controls"
 

@@ -4,10 +4,14 @@ local matBlueBeam	= Material("Effects/blueblacklargebeam")
 
 function EFFECT:Init(data)
 	
-	self.Shooter        = data:GetEntity():GetOwner()
+	self.Ent        = data:GetEntity()
+	if (not IsValid(self.Ent)) then return end
+	self.Shooter	= self.Ent:GetOwner()
+	if (not IsValid(self.Shooter)) then return end
+	
 	self.EndPos         = data:GetOrigin()
 	self.Attachment     = data:GetAttachment()
-	self.WeaponEnt      = self.Shooter:GetLPSWeaponEntity()
+	self.WeaponEnt      = self.Ent
 	self.KillTime       = 0
 	self.ShouldRender   = false
 	
@@ -35,8 +39,11 @@ end
 
 
 function EFFECT:Think()
-
+	
+	if (not self.KillTime) or self.KillTime == nil then return false end
 	if CurTime() > self.KillTime then return false end
+	if (not IsValid(self.Ent)) then return end
+	if (not IsValid(self.Shooter)) then return end
 	return true
 	
 end

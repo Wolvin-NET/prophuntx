@@ -379,13 +379,11 @@ function GM:CheckTeamBalance( bDontKillPlayer )
 					
 					ply:SetTeam( id )
 					
-					if (PHX and PHX ~= nil) then
-						for _, listener in ipairs(player.GetAll()) do
-							if listener == ply then
-								listener:PHXChatInfo("NOTICE", "CHAT_SWAPBALANCEYOU")
-							else
-								listener:PHXChatInfo("NOTICE", "CHAT_SWAPBALANCE", ply:Name(), PHX:TranslateName( id ))
-							end
+					for _, listener in ipairs(player.GetAll()) do
+						if listener == ply then
+							listener:PHXChatInfo("NOTICE", "CHAT_SWAPBALANCEYOU")
+						else
+							listener:PHXChatInfo("NOTICE", "CHAT_SWAPBALANCE", ply:Name(), PHX:TranslateName( id, ply ))
 						end
 					end
 					

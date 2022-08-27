@@ -1,12 +1,12 @@
 -- ConVars
 
 local PHEPLUSCVAR = {}
-PHEPLUSCVAR["ph_enable_unstuck"]				= { CTYPE_BOOL, 	"1", FCVAR_SERVER_ONLY, "Toggle Enable/Disable Built-in unstuck feature. If you use an Addon, disable this." }
-PHEPLUSCVAR["ph_unstuckrange"] 					= { CTYPE_NUMBER, 	"250", FCVAR_SERVER_ONLY_NO_NOTIFY, "Allowed range for the unstuck process (default = 250, should be a multiple of 5)" } --This is hidden by default.
-PHEPLUSCVAR["ph_disabletpunstuckinround"] 		= { CTYPE_BOOL, 	"0", FCVAR_SERVER_ONLY, "Disable last-resort unstuck teleportations to spawnpoints outside of the hiding phase" }
-PHEPLUSCVAR["ph_unstuck_waittime"] 				= { CTYPE_NUMBER, 	"5", FCVAR_SERVER_ONLY, "How much in seconds must pass between each unstuck attempt" }
+PHEPLUSCVAR["ph_enable_unstuck"]				= { CTYPE_BOOL, 	"1", CVAR_SERVER_ONLY, "Toggle Enable/Disable Built-in unstuck feature. If you use an Addon, disable this." }
+PHEPLUSCVAR["ph_unstuckrange"] 					= { CTYPE_NUMBER, 	"250", CVAR_SERVER_ONLY_NO_NOTIFY, "Allowed range for the unstuck process (default = 250, should be a multiple of 5)" } --This is hidden by default.
+PHEPLUSCVAR["ph_disabletpunstuckinround"] 		= { CTYPE_BOOL, 	"0", CVAR_SERVER_ONLY, "Disable last-resort unstuck teleportations to spawnpoints outside of the hiding phase" }
+PHEPLUSCVAR["ph_unstuck_waittime"] 				= { CTYPE_NUMBER, 	"5", CVAR_SERVER_ONLY, "How much in seconds must pass between each unstuck attempt" }
 
-PHEPLUSCVAR["ph_originalteambalance"] 			= { CTYPE_BOOL, 	"0", FCVAR_SERVER_ONLY, "Use default PH:X/E+ original auto-balancing (disables all following team-related options)", 
+PHEPLUSCVAR["ph_originalteambalance"] 			= { CTYPE_BOOL, 	"0", CVAR_SERVER_ONLY, "Use default PH:X/E+ original auto-balancing (disables all following team-related options)", 
 function(cvarname, value)
 	cvars.AddChangeCallback( cvarname, function(cv, _, new)
 		
@@ -20,13 +20,13 @@ function(cvarname, value)
 		SetGlobalBool(cvarname, tobool(new))
 	end, "phx.cvbool_" .. cvarname)
 end }
-PHEPLUSCVAR["ph_rotateteams"] 					= { CTYPE_BOOL, 	"0", FCVAR_SERVER_ONLY, "Disable shuffle mode and rotate players instead" }
-PHEPLUSCVAR["ph_huntercount"] 					= { CTYPE_NUMBER, 	"0", FCVAR_SERVER_ONLY, "Hunter count (0 = automatic)" }
-PHEPLUSCVAR["ph_preventconsecutivehunting"] 	= { CTYPE_BOOL, 	"1", FCVAR_SERVER_ONLY, "Prevent players from being a Hunter twice in a row (shuffle mode only)" }
-PHEPLUSCVAR["ph_forcespectatorstoplay"] 		= { CTYPE_BOOL, 	"0", FCVAR_SERVER_ONLY, "Force spectators to play by including them when balancing teams" }
+PHEPLUSCVAR["ph_rotateteams"] 					= { CTYPE_BOOL, 	"0", CVAR_SERVER_ONLY, "Disable shuffle mode and rotate players instead" }
+PHEPLUSCVAR["ph_huntercount"] 					= { CTYPE_NUMBER, 	"0", CVAR_SERVER_ONLY, "Hunter count (0 = automatic)" }
+PHEPLUSCVAR["ph_preventconsecutivehunting"] 	= { CTYPE_BOOL, 	"1", CVAR_SERVER_ONLY, "Prevent players from being a Hunter twice in a row (shuffle mode only)" }
+PHEPLUSCVAR["ph_forcespectatorstoplay"] 		= { CTYPE_BOOL, 	"0", CVAR_SERVER_ONLY, "Force spectators to play by including them when balancing teams" }
 
 for ConVar,data in pairs( PHEPLUSCVAR ) do
-    PHX:AddCVar( data[1], ConVar, data[2], data[3], data[4] )
+    PHX:AddCVar( data[1], ConVar, data[2], data[3], data[4], data[5] )
 end
 
 -- All Fretta Modified codes are moved here!

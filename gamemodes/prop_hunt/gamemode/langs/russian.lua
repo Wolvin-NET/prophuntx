@@ -654,8 +654,10 @@ LANG["KEYHINT_FREEZEAIR"] 	= "Заморозка объекта"
 LANG["KEYHINT_SPAWNDECOY"] 	= "Использ. приманку"
 LANG["KEYHINT_UNSTUCK"]		= "Клавиша при застревании"
 
+LANG["KEY_LMB"] 			= "ЛКМ"
+LANG["KEY_RMB"] 			= "ПКМ"
+
 LANG["MISC_TEAM_NAME"]		= "КОМАНДА: %s" -- TEAM PROPS, TEAM HUNTERS, but in 1 sentence.
 LANG["NOTIFY_HEADER_TITLE"]	= "Управление"
-
 
 PHX.LANGUAGES[LANG.code] = LANG

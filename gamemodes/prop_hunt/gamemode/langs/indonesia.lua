@@ -848,6 +848,9 @@ LANG["KEYHINT_FREEZEAIR"] 	= "Prop Freeze"
 LANG["KEYHINT_SPAWNDECOY"] 	= "Taruh Decoy (Jika Ada)"
 LANG["KEYHINT_UNSTUCK"]		= "Unstuck"
 
+LANG["KEY_LMB"]				= "LMB" --Indo keknya ndak usah
+LANG["KEY_RMB"]				= "RMB" --Indo keknya ndak usah
+
 LANG["MISC_TEAM_NAME"]		= "TIM: %s"
 LANG["NOTIFY_HEADER_TITLE"]	= "Informasi Kontrol"
 
