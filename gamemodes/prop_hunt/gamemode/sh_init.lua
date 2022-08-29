@@ -1,3 +1,18 @@
+--[[
+
+( This License Applies to all files writen in "fretta and prop_hunt" gamemode directories )
+
+You are free to use, modify, contribute, or distribute the Prop Hunt: X ("SOFTWARE") as long as it stated exclusively for Garry's Mod.
+Any changes or modification you have made publicly on Steam Workshop must include this license and a link back to this page in your credits page.
+You are, however, not permitted to use for:
+- Commercial Purposes, including selling the source code.
+- Using, copying, alter (porting) the source code OUTSIDE of "Garry's Mod" Game WITHOUT Permission.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+]]--
+
 PHX = PHX or {}
 
 TEAM_HUNTERS 	= 1

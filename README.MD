@@ -40,7 +40,7 @@ with some extra changes and several new features such as:
 - And many other stuff!
 
 ### Change Logs
-To see what things are changed, see `CHANGES.MD`
+To see what things are changed, see [`CHANGES.MD`](/CHANGES.MD)
 
 ### Download
 **Via Steam Workshop**  
@@ -74,13 +74,24 @@ https://github.com/Exho1/eChat (Exho1)
 - May require of use of an additional game contents for specific maps & server-customized gamemodes.
 
 ### Contributors
-See `CONTRIBUTORS.TXT`
+See [`CONTRIBUTORS.TXT`](/CONTRIBUTORS.TXT)
 
 ### License & Rules
+
+**Rules**
+- This gamemode **Will No Longer support Single Player** because it's becoming useless. The reason is that there were some function that are made available only for Multiplayer Games.  
+If you want to use this to test with your Prop Hunt Map, consider creating a multiplayer server and use `sv_lan 1` in there.
+- **Please keep the `cl_credits.lua` and `Contributors` table as original as possible.** Except if you want to add yourself as contributors.
+- Any changes or modification you have made publicly available on Steam Workshop must include the license below and a link back to: https://gmodgameservers.com/prophuntx/rules or Prop Hunt: X's Repository Git Page
+in your 'credits' page (e.g. Workshop Description, About, etc...)  
+_This does not apply if you modify the gamemode without submitting to the workshop, meaning that modification is solely for personal or "server side" use only._
+
+**License**
+
 ```
-You are free to use, modify, contribute, or distribute the Prop Hunt: X, "SOFTWARE" and making it only exclusively for Garry's Mod.  
-Any changes or modification you have made publicly on Steam Workshop must include this license and a link back to this page in your credits page.  
-You are, however, not permitted to use for: (but not limitted to)
+You are free to use, modify, contribute, or distribute the Prop Hunt: X ("SOFTWARE") as long as it stated exclusively for Garry's Mod.
+Any changes or modification you have made publicly on Steam Workshop must include this license and a link back to this page in your credits page.
+You are, however, not permitted to use for:
 - Commercial Purposes, including selling the codes.
 - Using, copying, alter (porting) the code OUTSIDE from "Garry's Mod" Game WITHOUT Permission.
 
