@@ -281,7 +281,7 @@ local function FETCH_CONFLICT_WSID()
 		print("[PH:X Integrity Check] Checking Addon Conflict Database...")
 		
 		http.Fetch(
-			"https://raw.githubusercontent.com/Wolvin-NET/prophuntx/blob/master/AddonsConflicts.json",
+			"https://raw.githubusercontent.com/Wolvin-NET/prophuntx/master/AddonsConflicts.json",
 			function(body,len,_,code)
 				if tonumber(code) < 400 and (body ~= "" and tonumber(len) > 0) then
 					print( "[PH:X Integrity Check] Retreiving Database Info and Saving to Local Cache." )
