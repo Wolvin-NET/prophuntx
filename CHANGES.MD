@@ -12,13 +12,16 @@ For now, the Prop Hunt X will change it's version to "X2Z" following with date-f
 - Fixed Map Config file for `ph_kliener_v2` to use a default color instead (No Player color will be allowed if 'kleiner' model is present).
 - Added `Entity:SetEntColorEnabled( boolean )`, `Entity:GetEntColorEnabled()` for Prop Entity to force enable or disable of Player Colour function.
 
-**Minor Changes: (A)**
+**Minor Changes: **
 - Fixed Taunt Category being non existence (becoming nil) after switching teams. This will reset to Default Category instead
 - Fixed Error for Blaster Muzzle Flash Effect that trying to Display the Effect outside of Player's PVS
 - Fixed FCVAR Flags Typo for Unstuck and Team Options on Enhanced Plus settings
 - Crosshair, Indicator Icons, Markers, and Glowing Effect will no longer renders to HUD if Proper Round has Ended.
 - Prop can no longer replicate to object if Proper Round has Ended. (A Prevention for Very Rare Bug upon team switching occurs)
 - Updated "Indonesian" Translation and updated Language Untranslated Text to prevent Errors text from displaying
+- Rule & License Update
+- Update to Integrity Checker (Addon Conflict Detection)
+- Fix on `sh_enhancedprophunt.lua` Error after `Original team balance` has changed.
 
 ## Revision 25.08.2022
 - **Fixed where some PH:X Admin-only Console Commands can be *still* accessed without Admin Checks (e.g. OBB Reload, Taunt Reload, etc). This issue existed since PH:E v15~v16 and PH:X before August Update.** However, this issues has been fixed **on August Revision Update (25.08.2022)**.

@@ -10,11 +10,13 @@ PHEPLUSCVAR["ph_originalteambalance"] 			= { CTYPE_BOOL, 	"0", CVAR_SERVER_ONLY,
 function(cvarname, value)
 	cvars.AddChangeCallback( cvarname, function(cv, _, new)
 		
-		if (not tobool(new)) then
-			for _,v in pairs(player.GetAll()) do
-				v:PHXChatInfo("NOTICE", "FORCE_JOIN_TEAM_IS_DISABLED")
+		if SERVER then
+			if (not tobool(new)) then
+				for _,v in pairs(player.GetAll()) do
+					v:PHXChatInfo("NOTICE", "FORCE_JOIN_TEAM_IS_DISABLED")
+				end
+				RunConsoleCommand("ph_force_join_balanced_teams", "0")
 			end
-			RunConsoleCommand("ph_force_join_balanced_teams", "0")
 		end
 		
 		SetGlobalBool(cvarname, tobool(new))
