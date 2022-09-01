@@ -334,7 +334,7 @@ function GM:CreateTeams()
 	
 	-- hunters
 	team.SetUp(TEAM_HUNTERS, "Hunters", Color(150, 205, 255, 255))
-	team.SetSpawnPoint(TEAM_HUNTERS, {"info_player_counterterrorist", "info_player_combine", "info_player_deathmatch", "info_player_axis", "info_player_hunter"})
+	team.SetSpawnPoint(TEAM_HUNTERS, {"info_player_counterterrorist", "info_player_combine", "info_player_deathmatch", "info_player_axis", "info_player_hunters"})
 	team.SetClass(TEAM_HUNTERS, {"Hunter"})
 
 	-- props
