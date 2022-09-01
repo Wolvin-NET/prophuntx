@@ -1,6 +1,6 @@
 # Quick Guide of Prop Hunt X Menu
 
-## Accessing Prop Hunt: Menu
+## Accessing The "Prop Hunt X Settings & Menu"
 
 1. Press [F1] button on your keyboard
 2. Click "[Prop Hunt Menu]" button
@@ -8,36 +8,42 @@
 
 ![How to Access Prop Hunt Menu](/assets/how_to_open.jpg)
 
-## The "Prop Hunt X Settings & Menu"
+## Table of Contents
 
-There are few menus in **Prop Hunt X Settings & Menu** window:
+There are some menus in **Prop Hunt X Settings & Menu** window:
 
-[ Donation Menu ]   
-This menu contains information about donation.
-
-[ Help & Guide ]   
+[**1. Help & Guide**](#1-help--guide)   
 Contains tutorial on how to play Prop Hunt: X2Z
 
-[ Player Muting ]   
-Controls player voice mute by toggling them.
-
-[ Player Settings ]   
+[**2. Player Settings**](#2-player-settings)   
 General player settings, contains: HUD settings, Key Binding, Languages, etc.
 
-[ Model Browser ]   
-Player Custom Skin browser. Note: you must set "Enable custom models for Hunters" under Admin Settings
-
-[ Admin Settings ]   
+[**3. Admin Settings**](#3-server-admin--game-mode-settings)   
 General Admin settings for Prop Hunt: X. This is where all server related settings that can be configured.
 
-[ MapVote ]   
+[**4. MapVote**](#4-mapvote-settings)   
 MapVote system configuration
 
-[ About PH:X ]   
+[**5. Model Browser**](#5-player-skins--model-browser)   
+Player Custom Skin browser. Note: you must set "Enable custom models for Hunters" under Admin Settings
+
+[**6. Enhanced Plus Settings**](#6-enhanced-plus-settings)   
+Additional Settings from Enhanced Plus. This is where you can configure the Team Rotation, Team Shuffle, Unstuck and others.
+
+[**7. Group & Access Settings**](#7-group--access-settings)   
+Group & Access Settings to allow which group(s) can access the Admin Settings Panel and Mute Options.
+
+[**8. About PH:X**](#8-about-phx)   
 Shows information about Prop Hunt X Versions, Contributors, etc.
 
-[ Addons/Plugins ]   
+[**9. Player Muting**](#9-player-mutes)   
+Controls player voice mute by toggling them.
+
+[**10. Addons/Plugins**](#10-plugins)   
 Addons or Plugins that loaded to Prop Hunt: X. There are Server and Client sided settings for each plugins to configure.
+
+[**11. Donation Menu**](#11-donate-section)   
+This menu contains information about donation.
 
 ### 1. Help & Guide
 
@@ -431,6 +437,19 @@ Weapon that should be given for Last Prop Standing player. See "Available Weapon
 Required minimum players before LPS can be triggered. **Must be >= 2 players in Prop Team**. Default is 2.
 - Enable Music when LPS occurs  
 Enable Music event for LPS. Require Round Restart to take effect (Only if you're disabling it when LPS occurs)
+- Should LPS Players STARTS with 100 HP? Changing to other props **does not keep the health**!  
+Self Explanationary.
+- Should Give LPS Players an Armor? Starts with 100 AP.  
+Self Explanationary, however armor will be useless if "Start with 100 HP" is disabled (It depends on how big the prop is).
+
+**Trigger Event Condition**  
+
+- Whether LPS should be started randomly. (Random Start)  
+Whether Last Prop Standing should be started randomly on random round. Enabling this will override (and thus disabling) the "Delayed Start" below.
+- Should LPS be Delayed-Start after X rounds? (Delayed Start/Round Skipping)  
+Whether Last Prop Standing should be started by skipping after X rounds. You have to disable Random Start to enable this.
+- If Delayed-Start enabled, increment to X rounds to trigger LPS.  
+What numbers to increment to skip/delay the event. For example: If you set `2`, meaning every 2 rounds skips will be triggered. (Round 2, 4, 6, 8, and so on...)
 
 **Appearances**  
 
@@ -458,9 +477,9 @@ unless if you'd like to change the Blaster Damage Settings.
 - Play Background Music when LPS Event begin. (Only applies on next music)  
 Toggle Play Background music when LPS event started. This only applies after the next music queue is played.
 - Show/Hide Halo, even server sets it.  
-Whether server sets the halo effect, Toggle visibility of glowing effect for the Last Prop standing. Use this if you need to avoid FPS lag when this is enabled.
+Whether server sets the halo effect, Toggle visibility of glowing effect for the Last Prop standing. Use this if you need to avoid FPS lag when this was enabled on Servers.
 
-## 9. Donate Section
+### 11. Donate Section
 
 ![Donate Section](/assets/0_donation_menu.jpg)
 

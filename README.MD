@@ -6,7 +6,7 @@ Version: X2Z, Revision: 27/08/2022 (dd/mm/yyyy)
 
 ### Public Servers
 - Server #1 [U.S]: **74.91.120.8:27015**
-- Server #2 [U.S]: _Offline_
+- Other Servers: https://gmodgameservers.com/prophuntx/servers
 
 ### Support the PH:X2Z Development
 Please help me to support the project by donating or buying me a coffee:
@@ -61,7 +61,7 @@ https://steamcommunity.com/sharedfiles/filedetails/?id=2851968180
 Read the manuals here: https://gmodgameservers.com/wiki/prophuntx/  
 **Note:** Wiki page is currently **outdated**. We're still writing some Wiki Topics on our WikiMedia pages and soon will be published.
 
-### Website (Still Working on Progress)
+### Official Website
 https://gmodgameservers.com/prophuntx/
 
 ### Additional Notes
