@@ -23,6 +23,8 @@ For now, the Prop Hunt X will change it's version to "X2Z" following with date-f
 - Update to Integrity Checker (Addon Conflict Detection)
 - Fix on `sh_enhancedprophunt.lua` Error after `Original team balance` has changed.
 - Fixed PHX's Hunter Player Spawn entity name in `sh_init.lua`
+- Fixed rare bug for Freeze Cam (ClientSide) where trying to use Attacker Entity: `NULL`
+- Added new Map Config `ph_motel_blacke_v3`: Added More Player Spawn and fixed stuck issue
 
 ## Revision 25.08.2022
 - **Fixed where some PH:X Admin-only Console Commands can be *still* accessed without Admin Checks (e.g. OBB Reload, Taunt Reload, etc). This issue existed since PH:E v15~v16 and PH:X before August Update.** However, this issues has been fixed **on August Revision Update (25.08.2022)**.

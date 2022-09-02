@@ -549,12 +549,17 @@ function HUDPaint()
 	
 	-- The 'You were Killed By' text, or the Freeze Cam text.
 	if LocalPlayer():GetNWBool("InFreezeCam", false) then
-		local transtext = PHX:FTranslate("HUD_KILLEDBY", LocalPlayer():GetNWEntity("PlayerKilledByPlayerEntity", nil):Name())
+		local Attacker = LocalPlayer():GetNWEntity("PlayerKilledByPlayerEntity", nil)
+		if IsValid(Attacker) and Attacker:IsPlayer() then
+	
+			local transtext = PHX:FTranslate("HUD_KILLEDBY", Attacker:Name())
 		
-		local w1, h1 = surface.GetTextSize( transtext );
-		local textx = ScrW()/2
-		local steamx = (ScrW()/2) - 32
-		draw.SimpleTextOutlined(transtext , "TrebuchetBig", textx, ScrH()*0.75, FZTextColor.fore, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1.5, FZTextColor.outline)
+			local w1, h1 = surface.GetTextSize( transtext );
+			local textx = ScrW()/2
+			local steamx = (ScrW()/2) - 32
+			draw.SimpleTextOutlined(transtext , "TrebuchetBig", textx, ScrH()*0.75, FZTextColor.fore, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1.5, FZTextColor.outline)
+			
+		end
 	end
 end
 hook.Add("HUDPaint", "PH_HUDPaint", HUDPaint)

@@ -14,8 +14,8 @@ list.Set("LPS.XCustomWeapon", "awesomegun", { -- name "my awesome gun" must be l
 		y = {-0.025,0.3}
 	},
 	
-	FixAngles       = Angle(0,180,0),
-    FixPos          = Vector(0,5,0),
+	FixAngles		= Angle(0,180,0), --Fix Local Angles, if any.
+	FixPos          = Vector(0,8,0), -- Fix Local Position, if any.
 	MuzzleFx        = function( ent, pos, endpos, ang )
 		local m = EffectData()
 		m:SetEntity( ent )
