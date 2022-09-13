@@ -685,162 +685,162 @@ LANG["PHZ_pcr_fb_allcontent"] = "Tout le contenu (Tout les Serveurs/Joueurs n'on
 LANG["PHZ_pcr_fb_notmounted"] = "%s [!N'est pas monté]"
 
 -- Revision 25-27/08/2022
-LANG["PHX_ADMIN_ACCESS_ONLY"]		= "Access Denied: only Admins can do that, %s !"
-LANG["PHX_PROP_TOO_THIN"]           = "Cannot Replicate: Prop is too thin!"
-LANG["PHX_PROP_IS_BANNED"]			= "The prop you're trying to use is banned from server!"
-LANG["PHX_SPECT_JOINGAME"]			= "To join the game, Press [F2] then select a team to join."
-LANG["PHX_TEAM_IS_FULL"]			= "That team is full!"
-LANG["FORCE_JOIN_TEAM_IS_DISABLED"]	= "Even-out Team Balance is disabled (Team Shuffle/Rotation is Enabled)"
+LANG["PHX_ADMIN_ACCESS_ONLY"]		= "Accès refusé: seul les Admins peuvent y accéder, %s !"
+LANG["PHX_PROP_TOO_THIN"]           = "Impossible de répliquer: ce Prop est trop fin!"
+LANG["PHX_PROP_IS_BANNED"]			= "Le Prop que vous essayez d'utiliser est banni du serveur"
+LANG["PHX_SPECT_JOINGAME"]			= "Pour rejoindre la partie, appuyez sur [F2] puis sélectionnez une équipe à rejoindre."
+LANG["PHX_TEAM_IS_FULL"]			= "Cette équipe est pleine!"
+LANG["FORCE_JOIN_TEAM_IS_DISABLED"]	= "L'équilibrage de l'équipe est désactivé (le mélange/rotation de l'équipe est activé)"
 
 LANG["PHX_TM_MNBAR_OPTIONS"]		= "Options"
-LANG["PHX_TM_MNBAR_SAVEFAV"]		= "Save Favorites"
-LANG["PHX_TM_MNBAR_LOADFAV"]		= "Reload Favorites"
-LANG["PHX_TM_MNBAR_SETTINGS"]		= "Others"
-LANG["PHX_TM_MNBAR_RESET"]			= "Reset Favorites"
+LANG["PHX_TM_MNBAR_SAVEFAV"]		= "Sauvergarder les Favoris"
+LANG["PHX_TM_MNBAR_LOADFAV"]		= "Recharger les Favoris"
+LANG["PHX_TM_MNBAR_SETTINGS"]		= "Autres"
+LANG["PHX_TM_MNBAR_RESET"]			= "Réinitialiser les Favoris"
 
-LANG["PHX_TM_WARN_CLEARFAV"]		= "WARNING: This will CLEAR ALL your previously saved Favorite Taunts. Are you sure you want to continue?"
+LANG["PHX_TM_WARN_CLEARFAV"]		= "AVERTISSEMENT : cela EFFACERA TOUT vos taunts préférées précédemment enregistrées. Etes-vous sur de vouloir continuer?"
 
-LANG["PHXM_BANNED_MODELS"]			= "Dis/Allow the use of Restricted Models (Banned Models). This does not include from Prohibitted Models (They're always deleted)."
-LANG["PHXM_ADMIN_ALLOWARMOR"]       = "Allow Armor Addition for team Hunters and Props"
-LANG["PHXM_ADMIN_ALLOW3P"]          = "Allow thirdperson mode for Hunters"
-LANG["PHXM_ADMIN_ALLOW3P_SVDESIRED"]= "Allow thirdperson mode to use Server's Desired Camera position (Disallow player custom position)"
-LANG["PHXM_ADMIN_ALLOW3P_DIST"]     = "Thirdperson: Desired Camera Distance"
-LANG["PHXM_ADMIN_ALLOW3P_RIGHT"]    = "Thirdperson: Desired Camera Right Position"
-LANG["PHXM_ADMIN_ALLOW3P_UP"]     	= "Thirdperson: Desired Camera Up Position"
-LANG["PHXM_ADMIN_JUMPPOWER_H"]		= "Additional Jump Power multiplier for Hunters"
-LANG["PHXM_ADMIN_MDLCOLOR_PROP"]	= "Enable Player Color for team Props (Require Hunter Custom Models to be enabled)"
-LANG["PHXM_ADMIN_MDLCOLOR_HUNTER"]	= "Enable Player Color for team Hunters (Require Hunter Custom Models to be enabled)"
-LANG["PHXM_ADMIN_PITCH_ROTATION"]	= "[Experimental] Allow to use pitch rotation for props. This may be buggy."
-LANG["PHXM_ADMIN_FALLDMG"]			= "Enable Fall Damage (Applies on All Teams)"
-LANG["PHXM_ADMIN_FALLDMG_REAL"]		= "Enable 'Realistic' Fall Damage"
-LANG["PHXM_INFORM_TO_JOIN"]			= "Inform Unassigned/Spectators with static text advice to join the game."
-LANG["PHXM_ADMIN_PROPOFFSET"]		= "Substract/Add Prop View Offset Height using multiplier. Min: 0.6, Max: 1.2. Default: 0.8."
-LANG["PHXM_ADMIN_REPL_MUST_STAND"]	= "[Experimental] Restrict props replication only when they're standing. Disable this to allow replicating when ducking or jumping."
+LANG["PHXM_BANNED_MODELS"]			= "Interdire/Autoriser l'utilisation des Props restreints (Props interdits). Cela n'inclut pas les Props interdits (ils sont toujours supprimés)."
+LANG["PHXM_ADMIN_ALLOWARMOR"]       = "Autoriser l'ajout d'armure pour les Hunters et les Props"
+LANG["PHXM_ADMIN_ALLOW3P"]          = "Autoriser le mode Troisième personne pour les Hunters"
+LANG["PHXM_ADMIN_ALLOW3P_SVDESIRED"]= "Autoriser le mode Troisième personne à utiliser la position de caméra souhaitée du serveur (interdire la position personnalisée du joueur)"
+LANG["PHXM_ADMIN_ALLOW3P_DIST"]     = "Troisième personne: Distance de la caméra souhaité"
+LANG["PHXM_ADMIN_ALLOW3P_RIGHT"]    = "Troisième personne: Position droite de la caméra souhaité"
+LANG["PHXM_ADMIN_ALLOW3P_UP"]     	= "Troisième personne: Position haute de la caméra souhaité"
+LANG["PHXM_ADMIN_JUMPPOWER_H"]		= "Puissance de saut supplémentaire pour les Hunters"
+LANG["PHXM_ADMIN_MDLCOLOR_PROP"]	= "Activer la couleur du joueur pour les Props (nécessite l'activation des playermodels pour Props)"
+LANG["PHXM_ADMIN_MDLCOLOR_HUNTER"]	= "Activer la couleur du joueur pour les Hunters (nécessite l'activation des playermodels pour Hunters)"
+LANG["PHXM_ADMIN_PITCH_ROTATION"]	= "[Experimental] Autoriser la rotation des Props. Cela peux causer des bugs."
+LANG["PHXM_ADMIN_FALLDMG"]			= "Activer les dégats de chute (Pour les deux équipes)"
+LANG["PHXM_ADMIN_FALLDMG_REAL"]		= "Activer les dégâts de chute 'Réaliste'"
+LANG["PHXM_INFORM_TO_JOIN"]			= "Informez les non-assignés/spectateurs avec des conseils textuels statiques pour rejoindre la partie."
+LANG["PHXM_ADMIN_PROPOFFSET"]		= "Soustraire/Ajouter la hauteur de décalage de la vue des Props. Min: 0.6, Max: 1.2. Par défaut: 0.8."
+LANG["PHXM_ADMIN_REPL_MUST_STAND"]	= "[Experimental] Limiter la réplication des Props uniquement lorsqu'ils sont debout. Désactivez cette option pour permettre la réplication pendant un saut ou quand vous êtes accroupi."
 
-LANG["PHXM_DROP_VBS_DISABLE"]       = "Disable Verbose"
-LANG["PHXM_DROP_VBS_ENABLE"]        = "Enable Verbose"
-LANG["PHXM_DROP_MDL_INCLUDEALL"]    = "Include Everything ( %d )"
-LANG["PHXM_DROP_MDL_CUSTOMLIST"]    = "Seperate/Custom List ( %d )"
-LANG["PHXM_DROP_MDLTYPE_PROP"]      = "Physics Only ( %d )"
-LANG["PHXM_DROP_MDLTYPE_PROPDYN"]   = "Physics & Dynamic Props ( %d )"
-LANG["PHXM_DROP_MDLTYPE_ANYENTS"]   = "Any Compatible Entities ( %d )"
-LANG["PHXM_DROP_MDLTYPE_CUSTOM"]    = "Custom Entities ( %d )"
-LANG["PHXM_DROP_RESPAWNBLIND_BOTH"] = "Both Teams"
+LANG["PHXM_DROP_VBS_DISABLE"]       = "Désactiver Verbose"
+LANG["PHXM_DROP_VBS_ENABLE"]        = "Activer Verbose"
+LANG["PHXM_DROP_MDL_INCLUDEALL"]    = "Tout inclure ( %d )"
+LANG["PHXM_DROP_MDL_CUSTOMLIST"]    = "Liste séparé/personnalisée ( %d )"
+LANG["PHXM_DROP_MDLTYPE_PROP"]      = "Prop_physics uniquement ( %d )"
+LANG["PHXM_DROP_MDLTYPE_PROPDYN"]   = "Prop_physics et prop_dynamic ( %d )"
+LANG["PHXM_DROP_MDLTYPE_ANYENTS"]   = "Toute les entités compatibles ( %d )"
+LANG["PHXM_DROP_MDLTYPE_CUSTOM"]    = "Entités personnalisées ( %d )"
+LANG["PHXM_DROP_RESPAWNBLIND_BOTH"] = "Les deux équipes"
 
-LANG["PHXM_TAB_ADMINGROUPS"]        = "Group & Access Option"
-LANG["PHXM_TAB_PHEPLUS"]			= "Enhanced Plus Settings"
+LANG["PHXM_TAB_ADMINGROUPS"]        = "Option d'accès aux groupes et admins"
+LANG["PHXM_TAB_PHEPLUS"]			= "Paramètres Enhanced Plus"
 
-LANG["PHXM_ADMIN_ACCESS_GROUP"]     = "Select groups to allow access PH:X Admin Settings, Enhanced Plus & Plugin Settings page."
-LANG["PHXM_ADMIN_ACCESS_GROUP_HINT"] = "Please note that \"superadmins\" cannot be revoked."
-LANG["PHXM_ADMIN_ACCESS_GROUP_NOULX"] = "Error: ULib & ULX is not installed on your server."
-LANG["PHXM_ADMIN_ACCESS_NOREVOKE"]  = " (Cannot be revoked)"
-LANG["PHXM_ADMIN_GROUP_WHOCANACC"]	= "Select groups to allow access [Admin Settings]."
-LANG["PHXM_ADMIN_GROUP_MUTEABLE"]	= "Select groups to disallow Voice Mute in [Player Muting]. (User is always mute-able)."
+LANG["PHXM_ADMIN_ACCESS_GROUP"]     = "Sélectionner les groupes qui peuvent avoir accès au PH:X Admin Settings, Enhanced Plus et la page Plugins."
+LANG["PHXM_ADMIN_ACCESS_GROUP_HINT"] = "SVP, les \"superadmins\" ne peuvent pas être revoqué."
+LANG["PHXM_ADMIN_ACCESS_GROUP_NOULX"] = "Error: ULib & ULX ne sont pas installés sur le serveur."
+LANG["PHXM_ADMIN_ACCESS_NOREVOKE"]  = " (Ne peux pas être révoqué)"
+LANG["PHXM_ADMIN_GROUP_WHOCANACC"]	= "Sélectionner les groupes qui peuvent avoir accès [Admin Settings]."
+LANG["PHXM_ADMIN_GROUP_MUTEABLE"]	= "Sélectionner les groupes qui peuvent être refusé a être muté dans [Player Muting])."
 
-LANG["PHXM_ADMIN_ACCESS_CHATINFO"]  = "There was a configuration update for Prop Hunt Menu window. Reopening..."
-LANG["PHXM_ADMIN_ACCMSG_BODY"]      = "Do you want to save selection and proceed the changes?\nPlease note that any previous groups you revoked will no longer have the access.\nThis will restart the Prop Hunt Menu if they're still opened."
-LANG["PHXM_ADMIN_ACCMSG_TITLE"]     = "Apply Group Access"
-LANG["PHXM_ADMIN_ACCCFG_SUCC"]      = "Group Access data successfully saved."
-LANG["PHXM_ADMIN_ACCCFG_FAIL"]      = "There was an error saving Group Access data. Check your server console!"
-LANG["PHXM_ADMIN_MUTCFG_SUCC"]      = "Mutedable Group Access data successfully saved."
-LANG["PHXM_ADMIN_MUTCFG_FAIL"]      = "There was an error saving Muteable Group data. Check your server console!"
+LANG["PHXM_ADMIN_ACCESS_CHATINFO"]  = "Il y a eu une mise à jour de la configuration de la fenêtre Prop Hunt Menu. Réouverture..."
+LANG["PHXM_ADMIN_ACCMSG_BODY"]      = "Voulez-vous enregistrer la sélection et procéder aux modifications ? Veuillez noter que tous les groupes précédents que vous avez révoqués n'auront plus l'accès. Cela redémarrera le menu Prop Hunt s'ils sont toujours ouverts."
+LANG["PHXM_ADMIN_ACCMSG_TITLE"]     = "Appliquer les groupes d'accès"
+LANG["PHXM_ADMIN_ACCCFG_SUCC"]      = "L'accès des groupes a bien été enregistré."
+LANG["PHXM_ADMIN_ACCCFG_FAIL"]      = "Une erreur s'est produite lors de l'enregistrement des données d'accès de groupe. Vérifiez la console de votre serveur !"
+LANG["PHXM_ADMIN_MUTCFG_SUCC"]      = "L'accès des groupes anti-mute a bien été enregistré."
+LANG["PHXM_ADMIN_MUTCFG_FAIL"]      = "Une erreur s'est produite lors de l'enregistrement des données d'accès de groupe anti-mute. Vérifiez la console de votre serveur !"
 
-LANG["PHXM_ADMIN_ACCESS_APPLY"]     = "Apply Selected Groups"
+LANG["PHXM_ADMIN_ACCESS_APPLY"]     = "Appliquer les groupes sélectionnés"
 
 -- PHE/Plus
-LANG["PHXM_ADMIN_PLUSSETTING"]		= "Plus+ Settings"
-LANG["PHXM_PLUSSETTING_HINT"]		= "Configure Team Balance or any other additional settings."
-LANG["PHXM_HEADER_UNSTUCK"]			= "Unstuck Settings"
-LANG["PHXM_HEADER_TEAMSETTING"]		= "More Team Options & Settings"
+LANG["PHXM_ADMIN_PLUSSETTING"]		= "Paramètres Plus+"
+LANG["PHXM_PLUSSETTING_HINT"]		= "Configurer l'équilibrage des équipes ou autres paramètres additionnels."
+LANG["PHXM_HEADER_UNSTUCK"]			= "Paramètres Unstuck"
+LANG["PHXM_HEADER_TEAMSETTING"]		= "Plus de paramètres d'équipe"
 
-LANG["LIST_PLAYER"]					= "Players"
-LANG["LIST_FORCEDASPROP"]			= "Forced As Prop?"
-LANG["LIST_MARKEDASPROP"]			= "Marked to be forced as Prop"
-LANG["LIST_NOHUNTERS"]				= "No Hunters are currently playing."
+LANG["LIST_PLAYER"]					= "Joueurs"
+LANG["LIST_FORCEDASPROP"]			= "Forcé a être un Prop"
+LANG["LIST_MARKEDASPROP"]			= "MArqué comme forcé a être un Prop"
+LANG["LIST_NOHUNTERS"]				= "Aucun Hunters est entrain de jouer."
 
-LANG["PHXM_PLUS_MSG_NO_HUNTERS"]	= "There are no hunters to reset."
+LANG["PHXM_PLUS_MSG_NO_HUNTERS"]	= "Il y a aucun Hunters a reinitialiser."
 
-LANG["PHXM_PLUS_BTNRESET"]			= "Clear Selections (and Reset All Forced)"
-LANG["PHXM_PLUS_LISTTIPS"]			= "Tips: Double Click to toggle Force Player as Prop."
+LANG["PHXM_PLUS_BTNRESET"]			= "Effacer les sélections (et tout reinitialiser)"
+LANG["PHXM_PLUS_LISTTIPS"]			= "Note: Double Clic pour forcer un joueur a être un Prop."
 
-LANG["PHXM_ADMIN_ENABLEUNSTUCK"]		= "Toggle Enable/Disable Built-in unstuck feature. If you use an addon, disable this."
-LANG["PHXM_ADMIN_NOTPUNSTUCKINROUND"]	= "Disable last-resort unstuck teleportations to spawnpoints outside of the hiding phase" --ph_disabletpunstuckinround
-LANG["PHXM_ADMIN_UNSTUCK_WAITTIME"]		= "How much seconds must pass between each unstuck attempt" --ph_unstuck_waittime
-LANG["PHXM_ADMIN_TEAMBAL_ORIG"] 		= "Use PH:X's original auto-balancing (disables all following team-related options below)" --ph_originalteambalance
-LANG["PHXM_ADMIN_FORCESPECTOPLAY"]		= "Force spectators to play by including them when balancing teams" --ph_forcespectatorstoplay
-LANG["PHXM_ADMIN_NO_H_CONSECUTIVE"]		= "Prevent players from being a Hunter twice in a row (only works in shuffle mode)" --ph_preventconsecutivehunting
-LANG["PHXM_ADMIN_HUNTER_COUNT"] 		= "Hunter count (0 = automatic)" --ph_huntercount
-LANG["PHXM_ADMIN_ROTATETEAM"] 			= "Disable shuffle mode and rotate players instead" --ph_rotateteams
-LANG["PHXM_ADMIN_RESET_ROTTEAM"] 		= "Reset rotations" --ResetRotateTeams
-LANG["PHXM_ADMIN_RESET_ROTTEAM_WARN"]	= "Restart rotations from the beginning (in case you've started them, stopped, then started again and the current rotation does not satisfy you):" --ResetRotateTeams_warning
-LANG["PHXM_ADMIN_RESET_MSG"]			= "Rotation Team has been Reset!"
-LANG["PHXM_ADMIN_FORCEH2P_WARN"]		= "Force a Hunter to be a Prop next time (only works in shuffle mode):" --ForceHunterAsProp_warning
-LANG["PHXM_ADMIN_FORCEH2P_RANDONLY"]	= "This action is only available in shuffle mode." --ForceHunterAsProp_randomonly
+LANG["PHXM_ADMIN_ENABLEUNSTUCK"]		= "Activer/désactiver la fonction de déblocage intégrée. Si vous utilisez un addon, désactivez-le."
+LANG["PHXM_ADMIN_NOTPUNSTUCKINROUND"]	= "Désactiver les téléportations débloquées de dernier recours vers les points d'apparition en dehors de la phase de dissimulation" --ph_disabletpunstuckinround
+LANG["PHXM_ADMIN_UNSTUCK_WAITTIME"]		= "Combien de secondes doivent s'écouler entre chaque tentative de déblocage" --ph_unstuck_waittime
+LANG["PHXM_ADMIN_TEAMBAL_ORIG"] 		= "Utiliser l'équilibrage automatique PH:X (désactive toutes les options suivantes liées à l'équipe ci-dessous)" --ph_originalteambalance
+LANG["PHXM_ADMIN_FORCESPECTOPLAY"]		= "Forcer les spectateurs à jouer en les incluant lors de l'équilibrage des équipes" --ph_forcespectatorstoplay
+LANG["PHXM_ADMIN_NO_H_CONSECUTIVE"]		= "Empêcher les joueurs d'être un Hunter deux fois de suite (ne fonctionne qu'en mode aléatoire)" --ph_preventconsecutivehunting
+LANG["PHXM_ADMIN_HUNTER_COUNT"] 		= "Nombre de Hunters (0 = automatic)" --ph_huntercount
+LANG["PHXM_ADMIN_ROTATETEAM"] 			= "Désactiver le mode aléatoire et faire pivoter les joueurs à la place" --ph_rotateteams
+LANG["PHXM_ADMIN_RESET_ROTTEAM"] 		= "Réinitialiser les rotations" --ResetRotateTeams
+LANG["PHXM_ADMIN_RESET_ROTTEAM_WARN"]	= "Recommencer les rotations depuis le début (au cas où vous les auriez commencées, arrêtées, puis recommencées et que la rotation en cours ne vous satisfait pas):" --ResetRotateTeams_warning
+LANG["PHXM_ADMIN_RESET_MSG"]			= "La rotation des équipes a été reinitialisé"
+LANG["PHXM_ADMIN_FORCEH2P_WARN"]		= "Forcer un Hunter a être un Prop au prochain round (n fonctionne qu'en mode aléatoire):" --ForceHunterAsProp_warning
+LANG["PHXM_ADMIN_FORCEH2P_RANDONLY"]	= "Cette action est disponible seulement en mode aléatoire" --ForceHunterAsProp_randomonly
 
-LANG["FORCEH2P_WILL_BE"]				= "%s will be a Prop next round."
-LANG["FORCEH2P_IS_CANCELED"]			= "%s won't be a Prop next round."
-LANG["FORCEH2P_IS_RESET"]				= "All Hunters won't be Forced as a Prop next round."
-LANG["FORCEH2P_PLAYER_NOT_FOUND"]		= "Selected player was not found, probably they were disconnected."
-LANG["PHX_ROTATE_TEAM_RESET"]			= "Rotation Team Offset has been reset."
+LANG["FORCEH2P_WILL_BE"]				= "%s sera un Prop au prochain round."
+LANG["FORCEH2P_IS_CANCELED"]			= "%s ne sera pas un Prop au prochain round."
+LANG["FORCEH2P_IS_RESET"]				= "Tout les Hunters ne seront pas forcé a être un Prop au prochin round."
+LANG["FORCEH2P_PLAYER_NOT_FOUND"]		= "Le joueur sélectionné n'a pas été trouvé, probable qu'il soit déconnecté."
+LANG["PHX_ROTATE_TEAM_RESET"]			= "Le décalage de la rotation du Prop a été réinitialisé."
 
-LANG["UNSTUCK_YOURE_UNSTUCK"]			= "You should be unstuck!"
-LANG["UNSTUCK_BAD_SPAWNPOINT"]			= "Error: The closest spawnpoint might get you stuck again. If it does, try to unstuck again."
-LANG["UNSTUCK_RESCUE_SPAWNPOINT"]		= "This spawnpoint is extremely close, so you might still be stuck. Try unstucking again if you are."
-LANG["UNSTUCK_NO_SPAWNPOINTS"]			= "For unknown reasons, no spawnpoint could be found. As a backup strategy, you will be teleported to (0, 0, 0). There is a very high chance that you will be stuck, so if you are please try unstucking again."
-LANG["UNSTUCK_PLEASE_WAIT"]				= "Please wait %d seconds between each unstuck attempt."
-LANG["UNSTUCK_NOT_ON_GROUND"] 			= "Not on ground, checking..."
-LANG["UNSTUCK_NOT_STUCK_JITTER"]		= "You're not stuck. If you really are, wait until your prop no longer moves/jitters (try pressing ALT) then try again."
-LANG["UNSTUCK_NOT_STUCK_TOOBAD"]		= "You're not stuck. If you really are, sorry, you'll have to wait until the end of the round."
-LANG["UNSTUCK_CANNOT_FIND_SPOT"]		= "Cannot find a place to move you to, teleporting to closest spawnpoint."
-LANG["UNSTUCK_SPAWNPOINTS_DISABLED"]	= "You were going to be teleported to a close spawnpoint, but this server disallows it outside of the hiding/hunter blind period. Sorry!"
+LANG["UNSTUCK_YOURE_UNSTUCK"]			= "Vous êtes décoincé!"
+LANG["UNSTUCK_BAD_SPAWNPOINT"]			= "Erreur: Le point d'apparition le plus proche pourrait vous coincer à nouveau. Si c'est le cas, essayez à nouveau."
+LANG["UNSTUCK_RESCUE_SPAWNPOINT"]		= "Ce point d'apparition est extrêmement proche, possible d'être toujours bloqué. Essayez à nouveau unstuck si vous l'êtes."
+LANG["UNSTUCK_NO_SPAWNPOINTS"]			= "Pour des raisons inconnues, aucun point d'apparition n'a pu être trouvé. En tant que stratégie de sauvegarde, vous serez téléporté à (0, 0, 0). Il y a de fortes chances que vous soyez bloqué, alors si c'est le cas, essayez à nouveau de vous débloquer."
+LANG["UNSTUCK_PLEASE_WAIT"]				= "SVP veuillez attendre %d secondes entre chaque unstuck utilisé"
+LANG["UNSTUCK_NOT_ON_GROUND"] 			= "Pas au sol, vérification..."
+LANG["UNSTUCK_NOT_STUCK_JITTER"]		= "Vous n'êtes pas coincé. Si vous l'êtes vraiment, attendez que votre Prop ne bouge plus/scintille (essayez d'appuyer sur ALT) puis réessayez."
+LANG["UNSTUCK_NOT_STUCK_TOOBAD"]		= "Vous n'êtes pas coincé. Si vous l'êtes vraiment, désolé, vous devrez attendre la fin du round."
+LANG["UNSTUCK_CANNOT_FIND_SPOT"]		= "Impossible de trouver un endroit où vous déplacer, téléportation au point d'apparition le plus proche."
+LANG["UNSTUCK_SPAWNPOINTS_DISABLED"]	= "Vous alliez être téléporté vers un point d'apparition proche, mais ce serveur l'interdit en dehors de la période des Hunters aveuglé. Pardon!"
 -- End of PHE/Plus
 
-LANG["MISC_SEL_APPLY"]  = "Apply Selections"
-LANG["MISC_RESET_SEL"]  = "Reset Selections"
-LANG["MISC_RESET"]      = "Reset"
-LANG["MISC_CANCEL"]     = "Cancel"
-LANG["MISC_SEL_ALL"]    = "Select All"
-LANG["MISC_SEL_NONE"]   = "Select None"
+LANG["MISC_SEL_APPLY"]  = "Aplliquer les sélections"
+LANG["MISC_RESET_SEL"]  = "Réinitialiser les séléctions"
+LANG["MISC_RESET"]      = "Réinitialiser"
+LANG["MISC_CANCEL"]     = "Retour"
+LANG["MISC_SEL_ALL"]    = "Tout séléctionner"
+LANG["MISC_SEL_NONE"]   = "Désélectionner"
 
-LANG["PHXM_CL_THIRDPERSON"]     = "Key for Toggling thirdperson mode"
-LANG["PHXM_CL_UNSTUCK"]			= "Key for Unstuck"
-LANG["CL_THIRDPERSON_ENABLED"]  = "Thirdperson Enabled"
-LANG["CL_THIRDPERSON_DISABLED"] = "Thirdperson Disabled"
+LANG["PHXM_CL_THIRDPERSON"]     = "Touche pour activer la Troisième personne"
+LANG["PHXM_CL_UNSTUCK"]			= "Touche pour !unstuck"
+LANG["CL_THIRDPERSON_ENABLED"]  = "Troisème personne Activé"
+LANG["CL_THIRDPERSON_DISABLED"] = "Troisème personne Désactivé"
 
-LANG["PHX_TP_ADJUSTVIEW_BTN"]	= "Adjust Thirdperson View" --Button, as well as window title.
-LANG["PHX_TPS_ADJ_TITLE"]		= "Thirdperson Warning"
-LANG["PHX_TPS_ADJ_SVDESIRED"]	= "Thirdperson Customization disabled: Using Server's desired position."
-LANG["PHX_TPS_ADJ_3PDIS"]		= "Thirdperson mode is disabled."
-LANG["PHX_TPS_ADJ_BLIND"]		= "You're blinded. Try again later."
-LANG["PHX_TPS_ADJ_NEEDALIVE"]	= "You need to be on Alive Hunter Team to do this."
+LANG["PHX_TP_ADJUSTVIEW_BTN"]	= "Ajuster la vue Mode Troisème personnne" --Button, as well as window title.
+LANG["PHX_TPS_ADJ_TITLE"]		= "Alerte Mode Troisième personne"
+LANG["PHX_TPS_ADJ_SVDESIRED"]	= "Mode Troisième personne personnalisé désactivé: Configuration du serveur utilisé."
+LANG["PHX_TPS_ADJ_3PDIS"]		= "Mode Troisième personne est désactivé."
+LANG["PHX_TPS_ADJ_BLIND"]		= "Tu es aveuglé. Une prochaine fois."
+LANG["PHX_TPS_ADJ_NEEDALIVE"]	= "Il  faut être vivant dans l'équipe Hunters pour pouvoir faire cela."
 
 LANG["ANG_AXIS_DIST"]	= "Distance" -- or Forward
-LANG["ANG_AXIS_RIGHT"]	= "Right"
-LANG["ANG_AXIS_UP"]		= "Up"
-LANG["VEC_POS_LEFT"]	= "Left" --X
-LANG["VEC_POS_FRONT"]	= "Front" --Y?
-LANG["VEC_POS_TOP"]		= "Top"  --Z
+LANG["ANG_AXIS_RIGHT"]	= "Droite (Right)"
+LANG["ANG_AXIS_UP"]		= "Haut (Up)"
+LANG["VEC_POS_LEFT"]	= "Gauche (Left)" --X
+LANG["VEC_POS_FRONT"]	= "Face (Front)" --Y?
+LANG["VEC_POS_TOP"]		= "Dessus (Top)"  --Z
 
 -- Key Hints
-LANG["KEYHINT_HUNTER3P"] 	= "Hunter Thirdperson"
-LANG["KEYHINT_SHOOT"]		= "Fire Weapon"
-LANG["KEYHINT_SEC"]			= "Fire Secondary"
-LANG["KEYHINT_PICKUP"]		= "Pickup Object/Interact"
+LANG["KEYHINT_HUNTER3P"] 	= "Troisième personne"
+LANG["KEYHINT_SHOOT"]		= "Tirer"
+LANG["KEYHINT_SEC"]			= "Tir secondaire"
+LANG["KEYHINT_PICKUP"]		= "Prendre un Prop/Intéragir"
 
-LANG["KEYHINT_LMB"]			= "Replicate Prop"
-LANG["KEYHINT_RMB"]			= "Prop Taunt/Special Ability"
-LANG["KEYHINT_RANDTAUNT"] 	= "Random Taunt"
-LANG["KEYHINT_TAUNTMENU"] 	= "Toggle Taunt Menu"
-LANG["KEYHINT_ROTATION"] 	= "Toggle Rotation Lock"
-LANG["KEYHINT_PROPMENU"] 	= "Toggle Prop Menu"
-LANG["KEYHINT_FREEZEAIR"] 	= "Toggle Prop Freeze"
-LANG["KEYHINT_SPAWNDECOY"] 	= "Spawn Decoy"
-LANG["KEYHINT_UNSTUCK"]		= "Unstuck Key"
+LANG["KEYHINT_LMB"]			= "Répliquer le Prop"
+LANG["KEYHINT_RMB"]			= "Taunt/Capacité Spéciale"
+LANG["KEYHINT_RANDTAUNT"] 	= "Taunt aléatoire"
+LANG["KEYHINT_TAUNTMENU"] 	= "Ouvrir le menu des Taunts"
+LANG["KEYHINT_ROTATION"] 	= "Bloquer la rotation du Prop"
+LANG["KEYHINT_PROPMENU"] 	= "Ouvrir le menu Propchooser"
+LANG["KEYHINT_FREEZEAIR"] 	= "Freeze son prop dans les airs"
+LANG["KEYHINT_SPAWNDECOY"] 	= "Poser un leurre"
+LANG["KEYHINT_UNSTUCK"]		= "Touche Unstuck"
 
-LANG["KEY_LMB"]				= "LMB" -- Left Mouse Button, Short version
-LANG["KEY_RMB"]				= "RMB" -- Right Mouse Button, Short version
+LANG["KEY_LMB"]				= "LMB" -- Clic gauche , version courte
+LANG["KEY_RMB"]				= "RMB" -- Clic droit , version courte
 
-LANG["MISC_TEAM_NAME"]		= "TEAM: %s" -- TEAM PROPS, TEAM HUNTERS, but in 1 sentence.
-LANG["NOTIFY_HEADER_TITLE"]	= "Game Controls"
+LANG["MISC_TEAM_NAME"]		= "TEAM: %s" -- EQUIPE PROPS, EQUIPE HUNTERS.
+LANG["NOTIFY_HEADER_TITLE"]	= "Configuration des touches"
 
 PHX.LANGUAGES[LANG.code] = LANG
