@@ -12,7 +12,7 @@ RTV.Wait = 60 -- The wait time in seconds. This is how long a player has to wait
 
 RTV._ActualWait = CurTime() + RTV.Wait
 
-RTV.PlayerCount = MapVote.Config.RTVPlayerCount or 3
+RTV.PlayerCount = MapVote.PHXConfig.RTVPlayerCount or 3
 
 function RTV.ChatPrint( mType, ply, bBroadcast, msg, ... )
 	
@@ -33,7 +33,7 @@ function RTV.ChatPrint( mType, ply, bBroadcast, msg, ... )
 end
 
 function RTV.ShouldChange()
-	return RTV.TotalVotes >= math.Round(#player.GetAll()*0.66)
+	return RTV.TotalVotes >= math.Round(player.GetCount()*0.66)
 end
 
 function RTV.RemoveVote()
@@ -43,7 +43,8 @@ end
 function RTV.Start()
 	RTV.ChatPrint( "NOTICE", nil, true, "PHXM_MV_VOTEROCKED_IMMINENT" )
 	timer.Simple(4, function()
-		MapVote.Start(nil, nil, nil, nil)
+		--MapVote.PHXStart(nil, nil, nil, nil)
+		PHX.StartMapVote()
 	end)
 end
 
@@ -55,7 +56,7 @@ function RTV.AddVote( ply )
 		ply.RTVoted = true
 		MsgN( ply:Nick().." has voted to Rock the Vote." )
 		
-		RTV.ChatPrint( "NOTICE", nil, true, "PHXM_MV_VOTEROCKED_PLY_TOTAL", ply:Nick(), RTV.TotalVotes, math.Round(#player.GetAll()*0.66) )
+		RTV.ChatPrint( "NOTICE", nil, true, "PHXM_MV_VOTEROCKED_PLY_TOTAL", ply:Nick(), RTV.TotalVotes, math.Round(player.GetCount()*0.66) )
 		
 		if RTV.ShouldChange() then
 			RTV.Start()
@@ -71,10 +72,11 @@ hook.Add( "PlayerDisconnected", "Remove RTV", function( ply )
 	end
 
 	timer.Simple( 0.1, function()
-		if (#player.GetAll() < 1 && !GetConVar("mv_change_when_no_player"):GetBool()) then 
+		if (player.GetCount() < 1 && !GetConVar("mv_change_when_no_player"):GetBool()) then 
 			print("MapVote: There is no player to force change map...")
 		else
 			if RTV.ShouldChange() then
+				print("MapVote: Server is Emptied, attempting to force change map and voting random map in 28 seconds...!")
 				RTV.Start()
 			end
 		end

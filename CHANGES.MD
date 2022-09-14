@@ -1,7 +1,44 @@
 ## A new major updates to Prop Hunt: X has been released.
 For now, the Prop Hunt X will change it's version to "X2Z" following with date-formatted revisions.
 
-## Revision 27.08.2022/A
+## Revision 14.09.2022
+- Updated French Language (by: GalaxioFr)
+- Added ConVar `phx_enable_checker` to enable/disable Addon Conflict Detection (PH:X Integrity Checker). **You need to set this manually by editing your `server.cfg` file!**
+- Added Map FGD file: `fgd/prophuntx.fgd` for Hammer Editor
+- New Improved entity: `ph_teamitem_spawner` - Spawn Lucky Ball or Devil Crystal in Hammer.
+- Prop Decoy (`ph_fake_prop`) entity are now spawnable in Hammer... for fun.
+- Fixed missing 'The Bomb!' sound in Lucky Ball events
+- Changed & Renamed `MapVote.Start()` into `MapVote.PHXStart()` (Inc. `MapVote.PHXStop()`) to prevent the mapvote being overwritten by other addon.
+- All MapVote events (inc. End Round, RTV, ULX MapVote Calls) will now triggered by using `PHX.StartMapVote()`, which will be automatically managed if you're using external addon (a custom ConVar still needed to trigger this, see **MapVote Changes** section below) No need to edit the core file anymore.
+- Changed MapVote's Recent Maps File Path from `"mapvotes/recentmaps.txt"` to `"phx_data/mapvote_recentmaps.txt"` in order to prevent being overrided by other Fretta-like MapVote addons.
+- Stopping MapVotes will now close the [F1] > [Prop Hunt Menu] Window, if you're calling it from there.
+- Fixed MapVote Cooldown. You still need to disable map cooldown if you have only fewer maps (< 10 maps). Set `mv_cooldown 0` to disable this feature.
+
+### MapVote Changes
+
+**These Speciallized MapVotes ConVars & Settings may not be available on [F1] > [Prop Hunt Menu] > [Admin Settings] due to Security Reason.**  
+You needs to edit them through your `server.cfg` file!
+
+- Added ConVar: `ph_enable_mapvote` Enable or Disable internal PH:X MapVote system. This will call `PH_OverrideMapVote` hooks if you want to call the Map Votes event to be triggered with your MapVote addon.
+- Improved ConVar: `ph_use_custom_mapvote` Use custom external Map votes system (e.g. Addon MapVote). **This will override the built-in PH:X MapVote, even though it's enabled or disabled**
+- Added ConVar: `ph_use_custom_mapvote_cmd` Use custom external Map votes by calling from Console Command. **This will override built-in PH:X MapVote (even though it's enabled or disabled) AND 'ph_use_custom_mapvote' ConVar.**
+- Improved ConVar: `ph_custom_mv_func` If 'ph_use_custom_mapvote' is set, Use a function to call non-built-in Map Vote system (Example: `AwesomeMapVote:StartVoting()`). Only Works if the Function is on Global Scope. This is Case Sensitive and do not work for Local Functions!
+- Added ConVar: `ph_custom_mv_concmd` If 'ph_use_custom_mapvote_cmd' is set, use this to call mapvote by using from their console command. **Overrides `ph_use_custom_mapvote` and `ph_custom_mv_func`**. If it has arguments supply them too (Example: `start_mapvote 15` (*15* means in seconds)).
+- Added New Hook: `PH_OverrideMapVote` This will be called only if PH:X MapVote is disabled.
+
+Using `PH_OverrideMapVote` hook to override PH:X MapVote:
+```lua
+hook.Add("PH_OverrideMapVote", "PH Override MapVote by Addon", function()
+	-- Note: You need to set both `ph_use_custom_mapvote` and `ph_use_custom_mapvote_cmd` to 0 to prevent MapVote duplication call. 
+	-- Simply just set `ph_enable_mapvote 0` and this hook will be called!
+
+	-- For Example: if we have "Awesome MapVote Addon" installed and there is a function called 'AwesomeMapVote:Start()', then we'll use that.
+	AwesomeMapVote:Start()
+	-- This way, we'll use AwesomeMapVote's instead of PH:X's MapVote.
+end)
+```
+
+## Revision 27.08.2022
 - Fixed Team Rotation related bug that being unable to join. You need to disable `ph_force_join_balanced_teams` to `0` to join to any Suffled Team/Rotation mode otherwise you won't be able to join to any team.
 - Changed `ph_forcejoinbalancedteam` to `ph_force_join_balanced_teams` ConVar to reset this behaviour.
 - Added Callbacks to `ph_originalteambalance` to disable `ph_force_join_balanced_teams` when Team Shuffle/Rotation mode is enabled. You have to Re-enable this once the Team Shuffle/Rotation is Turned-off.

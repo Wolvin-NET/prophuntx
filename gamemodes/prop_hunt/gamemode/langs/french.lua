@@ -843,4 +843,7 @@ LANG["KEY_RMB"]				= "RMB" -- Clic droit , version courte
 LANG["MISC_TEAM_NAME"]		= "TEAM: %s" -- EQUIPE PROPS, EQUIPE HUNTERS.
 LANG["NOTIFY_HEADER_TITLE"]	= "Configuration des touches"
 
+-- Revision 14/09/2022
+LANG["PHXM_MV_CHANGEMAP_NOPLAYER"]	= "Force change the map after there are no players in the server?"
+
 PHX.LANGUAGES[LANG.code] = LANG

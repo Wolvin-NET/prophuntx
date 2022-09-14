@@ -39,8 +39,8 @@ balls.sounds = {
 }
 
 balls.MineSpawnSound = {
-    "taunts/ph_enhanced/dx_thebomb2.wav",
-    "taunts/ph_enhanced/dx_thebomb.wav"
+    "taunts_phx/2/prop_hunt_x_originals/deus_ex_the_bomb.wav",
+    "taunts_phx/2/prop_hunt_x_originals/deus_ex_the_bomb_jock.wav"
 }
 
 balls.randomtext = {

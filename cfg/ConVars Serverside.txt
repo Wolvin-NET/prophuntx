@@ -425,13 +425,6 @@ ph_reload_obb_setting_everyround	1
 // 		MapVote
 // --------------------------------------------------------
 
-// Use custom external Map votes system? Type help 'ph_custom_mv_func' for more info.
-ph_use_custom_mapvote	0
-
-// This convar is hidden so you have to set it in server side console.
-// If 'ph_use_custom_mapvote' is specified, what's the map vote function to call in LUA? NOTE: Case Sensitive! Local variable will not passed to the given code.
-ph_custom_mv_func	MapVote.Start()
-
 // Allow current map to be listed or not
 mv_allowcurmap		1
 
@@ -456,3 +449,28 @@ mv_use_ulx_votemaps	0
 
 // Map Prefixes to start with. For example: ph_ stands for Prop Hunt, de_ stands for CSS, etc...
 mv_mapprefix		"phx_,ph_"
+
+// ------------------------------------------------------------------------------
+// Speciallized MapVote ConVar (YOU NEED TO EDIT THEM IN YOUR SERVER.CFG FILE!)
+// ------------------------------------------------------------------------------
+
+// Enable/Disable Built-in PH:X Map votes system? Set this 0 to disable this and use from map vote addon and calls 'PH_OverrideMapVote' Hooks.
+// If 'ph_use_custom_mapvote' or 'ph_use_custom_mapvote_cmd' set to 1, it will use from there instead of Built-in ones.
+ph_enable_mapvote			1
+
+// Use custom external Map votes system.
+// This will override built-in mapvote. See help 'ph_custom_mv_func' for more info.
+ph_use_custom_mapvote		0
+
+// Use custom external Map votes by calling from Console Command.
+// THIS will override built-in PH:X MapVote AND 'ph_use_custom_mapvote' ConVar. See help 'ph_custom_mv_concmd' for more info.
+ph_use_custom_mapvote_cmd	0
+
+// If 'ph_use_custom_mapvote' is set to 1, Use a function to call non-built-in Map Vote system (e.g: From Addons).
+// NOTE: 'Case Sensitive' and only works if the function caller is available globally.
+ph_custom_mv_func			"MapVote.PHXStart()"
+
+// If 'ph_use_custom_mapvote_cmd' is set to 1, use this to call mapvote by using from their console command.
+// THIS Will overrides PH:X MapVote, 'ph_use_custom_mapvote' AND 'ph_custom_mv_func'. 
+// If it has arguments, supply them as well. (e.g: start_mapvote 15 (15 by meaning in seconds))
+ph_custom_mv_concmd			"mv_start 20"

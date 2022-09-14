@@ -831,6 +831,7 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 		PHX.UI:CreateVGUIType("mv_cooldown","check","SERVER",grid,"PHXM_MV_COOLDOWN")
 		PHX.UI:CreateVGUIType("mv_use_ulx_votemaps","check","SERVER",grid,"PHXM_MV_USE_ULX_VOTEMAPS")
 		PHX.UI:CreateVGUIType("mv_map_prefix","textentry","SERVER",grid, "TEXTENTRY_MV_PREFIX")
+		PHX.UI:CreateVGUIType("mv_change_when_no_player","check","SERVER",grid, "PHXM_MV_CHANGEMAP_NOPLAYER")
         PHX.UI:CreateVGUIType("","spacer",nil,grid,"" )
 		PHX.UI:CreateVGUIType("mv_maplimit", "slider", 	{min = 2, max = 80, init = GetConVar("mv_maplimit"):GetInt(), dec = 0, kind = "SERVER"}, grid, "PHXM_MV_MAPLIMIT")
 		PHX.UI:CreateVGUIType("mv_timelimit", "slider", {min = 15, max = 90, init = GetConVar("mv_timelimit"):GetInt(), dec = 0, kind = "SERVER"}, grid, "PHXM_MV_TIMELIMIT")
@@ -858,6 +859,7 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 				else
 					LocalPlayer():ConCommand("mv_stop")
 				end
+				PHX.UI.MainForm:Close()
 			end}
 			}, grid,"")
 	

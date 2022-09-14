@@ -13,6 +13,15 @@ IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMA
 
 if engine.ActiveGamemode() ~= "prop_hunt" then return end
 
+local EnableChecker = false
+
+local CheckCVar = CreateConVar( "phx_enable_checker", "1", FCVAR_REPLICATED + FCVAR_ARCHIVE + FCVAR_NOTIFY, "Enable PH:X Integrity Checker.", 0, 1 )
+cvars.AddChangeCallback("phx_enable_checker", function(cvar,old,new)
+	if (new) && new ~= nil then
+		EnableChecker = tobool(new)
+	end
+end)
+
 local Errors = 0
 local ErrorList = {}
 
@@ -312,6 +321,13 @@ hook.Add("InitPostEntity", "PHX.CheckIntegrity", function()
 	-- Check Important Variables
 	
 	if engine.ActiveGamemode() ~= "prop_hunt" then return end
+	
+	EnableChecker = CheckCVar:GetBool()
+	
+	if (not EnableChecker) then
+		print("[PH:X Integrity Check] WARNING: Integrity Checker is DISABLED! We won't warn clients about conflicting addons.")
+		return
+	end
 	
 	local CachedWSID = ManageData( false )
 	

@@ -521,12 +521,9 @@ function GM:EndOfGame( bGamemodeVote )
 		end
 		
 		timer.Simple( GAMEMODE.VotingDelay, function()
-			if GetConVar("ph_use_custom_mapvote"):GetBool() then
-				local f = GetConVar("ph_custom_mv_func"):GetString()
-				RunString(f, "MapVote_CVAR")
-			else
-				MapVote.Start()
-			end
+		
+			PHX.StartMapVote()
+
 		end )
 		
 	end

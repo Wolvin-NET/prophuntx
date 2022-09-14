@@ -854,4 +854,7 @@ LANG["KEY_RMB"]				= "RMB" --Indo keknya ndak usah
 LANG["MISC_TEAM_NAME"]		= "TIM: %s"
 LANG["NOTIFY_HEADER_TITLE"]	= "Informasi Kontrol"
 
+-- Revision 14/09/2022
+LANG["PHXM_MV_CHANGEMAP_NOPLAYER"]	= "Paksakan ganti map ketika server sudah kosong?"
+
 PHX.LANGUAGES[LANG.code] = LANG

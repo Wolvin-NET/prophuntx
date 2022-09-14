@@ -4,6 +4,7 @@ util.AddNetworkString("RAM_MapVoteCancel")
 util.AddNetworkString("RTV_Delay")
 
 MapVote.Continued = false
+local RecentMapsFile = PHX.ConfigPath .. "/mapvote_recentmaps.txt"
 
 net.Receive("RAM_MapVoteUpdate", function(len, ply)
     if(MapVote.Allow) then
@@ -27,61 +28,63 @@ net.Receive("RAM_MapVoteUpdate", function(len, ply)
     end
 end)
 
-if file.Exists( "mapvote/recentmaps.txt", "DATA" ) then
-    recentmaps = util.JSONToTable(file.Read("mapvote/recentmaps.txt", "DATA"))
+local RecentMaps = {}
+if file.Exists( RecentMapsFile, "DATA" ) then
+    RecentMaps = util.JSONToTable(file.Read( RecentMapsFile, "DATA" ))
 else
-    recentmaps = {}
+    RecentMaps = {}
 end
 
 if ConVarExists("mv_maplimit") then
 	PHX.VerboseMsg("[MapVote] Loading ConVars...")
-	MapVote.Config = {
+	MapVote.PHXConfig = {
 		MapLimit 		= GetConVar("mv_maplimit"):GetInt(),
 		TimeLimit 		= GetConVar("mv_timelimit"):GetInt(),
 		AllowCurrentMap = GetConVar("mv_allowcurmap"):GetBool(),
 		EnableCooldown 	= GetConVar("mv_cooldown"):GetBool(),
-		MapsBeforeRevote = GetConVar("mv_mapbeforerevote"):GetBool(),
+		MapsBeforeRevote = GetConVar("mv_mapbeforerevote"):GetInt(), --omfg it has been like, spent 8 years to realise, it was "GetBool", NOT "GetInt", damn it...
 		RTVPlayerCount 	= GetConVar("mv_rtvcount"):GetInt(),
 		MapPrefixes 	= string.Explode(",", GetConVar("mv_map_prefix"):GetString():lower())
 	}
 else
-	MapVote.Config = {}
+	ErrorNoHaltWithStack( "[PH: X MapVote] Warning: ConVar `mv_maplimit` DOES NOT exist! Returning to default Values!!" )
+	MapVote.PHXConfig = MapVoteConfigDefault
 end
 
 local conv = {
 	["mv_maplimit"]		= function(cvar,old,new)
 		if new && (new != nil || new != "") then
-			MapVote.Config.MapLimit = tonumber(new)
+			MapVote.PHXConfig.MapLimit = tonumber(new)
 		end
 	end,
 	["mv_timelimit"]	= function(cvar,old,new)
 		if new && (new != nil || new != "") then
-			MapVote.Config.TimeLimit = tonumber(new)
+			MapVote.PHXConfig.TimeLimit = tonumber(new)
 		end
 	end,
 	["mv_allowcurmap"]	= function(cvar,old,new)
 		if new && (new != nil || new != "") then
-			MapVote.Config.AllowCurrentMap = tobool(new)
+			MapVote.PHXConfig.AllowCurrentMap = tobool(new)
 		end
 	end,
 	["mv_cooldown"]		= function(cvar,old,new)
 		if new && (new != nil || new != "") then
-			MapVote.Config.EnableCooldown = tobool(new)
+			MapVote.PHXConfig.EnableCooldown = tobool(new)
 		end
 	end,
 	["mv_mapbeforerevote"]	= function(cvar,old,new)
 		if new && (new != nil || new != "") then
-			MapVote.Config.MapsBeforeRevote = tobool(new)
+			MapVote.PHXConfig.MapsBeforeRevote = tonumber(new) -- was "tobool", how the fuck that I can be so this less careful
 		end
 	end,
 	["mv_rtvcount"]		= function(cvar,old,new)
 		if new && (new != nil || new != "") then
-			MapVote.Config.RTVPlayerCount = tonumber(new)
+			MapVote.PHXConfig.RTVPlayerCount = tonumber(new)
 		end
 	end,
 	["mv_map_prefix"]	= function(cvar,old,new)
 		if new && (new != nil || new != "") then
-			MapVote.Config.MapPrefixes = string.Explode(",", new:lower())
+			MapVote.PHXConfig.MapPrefixes = string.Explode(",", new:lower())
 		end
 	end
 }
@@ -92,20 +95,28 @@ for cvar,func in pairs(conv) do
 	cvars.AddChangeCallback(cvar, func)
 end
 
-function CoolDownDoStuff()
-    cooldownnum = MapVote.Config.MapsBeforeRevote or 3
+function PHX.CoolDownDoStuff()
+    local cooldownnum = MapVote.PHXConfig.MapsBeforeRevote or 3
 
-    if table.getn(recentmaps) == cooldownnum then 
-        table.remove(recentmaps)
+	if #RecentMaps > cooldownnum then
+		-- Remove the rest of table to prevent map being added overgrowingly to cooldown
+		-- This occurs when the convar changes in active round.
+		for i=cooldownnum+1,#RecentMaps,1 do
+			table.remove(RecentMaps) --last arg = #RecentMaps
+		end
+	end
+	
+    if #RecentMaps == cooldownnum then
+        table.remove(RecentMaps) --last arg = #RecentMaps
     end
 
     local curmap = game.GetMap():lower()..".bsp"
 
-    if not table.HasValue(recentmaps, curmap) then
-        table.insert(recentmaps, 1, curmap)
+    if not table.HasValue(RecentMaps, curmap) then
+        table.insert(RecentMaps, 1, curmap)
     end
 
-    file.Write("mapvote/recentmaps.txt", util.TableToJSON(recentmaps))
+    file.Write(RecentMapsFile, util.TableToJSON(RecentMaps))
 end
 
 function MapVote.GetFromULX()
@@ -117,12 +128,22 @@ function MapVote.GetFromULX()
 	return ulx.votemaps
 end
 
-function MapVote.Start(length, current, limit, prefix)
-    current = current or MapVote.Config.AllowCurrentMap or false
-    length = length or MapVote.Config.TimeLimit or 28
-    limit = limit or MapVote.Config.MapLimit or 24
-    cooldown = MapVote.Config.EnableCooldown or true
-    prefix = prefix or MapVote.Config.MapPrefixes
+-- Original: MapVote.Start
+function MapVote.PHXStart(length, current, limit, prefix)
+
+	if (not PHX:GetCVar( "ph_enable_mapvote" )) then
+		MsgAll("PH:X MapVote is disabled!\n")
+		for _,v in pairs(player.GetAll()) do
+			v:ChatPrint("Warning: MapVote is disabled.")
+		end
+		return
+	end
+
+    current 	= current or MapVote.PHXConfig.AllowCurrentMap or false
+    length 		= length or MapVote.PHXConfig.TimeLimit or 28
+    limit 		= limit or MapVote.PHXConfig.MapLimit or 24
+    cooldown 	= MapVote.PHXConfig.EnableCooldown or MapVote.PHXConfig.EnableCooldown == nil and true
+    prefix 		= prefix or MapVote.PHXConfig.MapPrefixes
 
     local is_expression = false
 	local ulxmap = MapVote.GetFromULX()
@@ -161,7 +182,7 @@ function MapVote.Start(length, current, limit, prefix)
     for k, map in RandomPairs(maps) do
         local mapstr = map:sub(1, -5):lower()
         if(not current and game.GetMap():lower()..".bsp" == map) then continue end
-        if(cooldown and table.HasValue(recentmaps, map)) then continue end
+        if(cooldown and table.HasValue(RecentMaps, map)) then continue end
 
         if is_expression then
             if(string.find(map, prefix)) then -- This might work (from gamemode.txt)
@@ -216,7 +237,7 @@ function MapVote.Start(length, current, limit, prefix)
             
         end
         
-        CoolDownDoStuff()
+        PHX.CoolDownDoStuff()
 
         local winner = table.GetWinningKey(map_results) or 1
         
@@ -228,8 +249,6 @@ function MapVote.Start(length, current, limit, prefix)
         
         local map = MapVote.CurrentMaps[winner]
 
-        
-        
         timer.Simple(4, function()
             hook.Run("MapVoteChange", map)
             RunConsoleCommand("changelevel", map)
@@ -238,12 +257,19 @@ function MapVote.Start(length, current, limit, prefix)
 end
 
 hook.Add( "Shutdown", "RemoveRecentMaps", function()
-        if file.Exists( "mapvote/recentmaps.txt", "DATA" ) then
-            file.Delete( "mapvote/recentmaps.txt" )
+        if file.Exists( RecentMapsFile, "DATA" ) then
+            file.Delete( RecentMapsFile )
         end
 end )
 
-function MapVote.Cancel()
+-- Original: MapVote.Cancel()
+function MapVote.PHXCancel()
+
+	if (not PHX:GetCVar( "ph_enable_mapvote" )) then
+		MsgAll("PH:X MapVote is disabled.\n")
+		return
+	end
+
     if MapVote.Allow then
         MapVote.Allow = false
 
@@ -252,4 +278,28 @@ function MapVote.Cancel()
 
         timer.Destroy("RAM_MapVote")
     end
+end
+
+function PHX.StartMapVote()
+	
+	if PHX:GetCVar( "ph_use_custom_mapvote_cmd" ) then	-- Overrides the function mode below.
+		local c = PHX:GetCVar( "ph_custom_mv_concmd" )
+		game.ConsoleCommand( c .. "\n" )
+		return
+	end
+
+	if PHX:GetCVar( "ph_use_custom_mapvote" ) then
+		local f = PHX:GetCVar( "ph_custom_mv_func" )
+		RunString(f, "MapVote_CVAR")
+		return
+	end
+	
+	if (not PHX:GetCVar( "ph_enable_mapvote" )) then
+		hook.Call( "PH_OverrideMapVote", nil )
+		MsgAll("PH:X MapVote is disabled. Calling MapVote Overrides... \n")
+		return
+	end
+	
+	MapVote.PHXStart()
+
 end

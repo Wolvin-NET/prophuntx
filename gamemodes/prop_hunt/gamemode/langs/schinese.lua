@@ -866,4 +866,7 @@ LANG["KEY_RMB"]				= "RMB" -- Right Mouse Button, Short version
 LANG["MISC_TEAM_NAME"]		= "TEAM: %s" -- TEAM PROPS, TEAM HUNTERS, but in 1 sentence.
 LANG["NOTIFY_HEADER_TITLE"]	= "Game Controls"
 
+-- Revision 14/09/2022
+LANG["PHXM_MV_CHANGEMAP_NOPLAYER"]	= "Force change the map after there are no players in the server?"
+
 PHX.LANGUAGES[LANG.code] = LANG
