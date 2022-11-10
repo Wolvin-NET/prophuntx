@@ -14,9 +14,11 @@
 - Change "Team Selection" Appearance
 - Total Map Conversion to PH:X : Underwataaa Extended, Marketbattle V2, Restaurant 2022, Industry
 - Other Plugins Optimizations
+- Bug: Map "Prop Decoy" Entity will have weird collission if spawned and `SetSolid(SOLID_BBOX)` isn't get called.
 
-### Scrap
+### Scrap/Possibly Added
 - Working on HUD UI Scaling, if possible.
+- Update Collission for **Pitch Rotation** by using AABB collission detection (Either use `Entity:GetSurroundingBounds` OR `Entity:GetRotatedAABB`)
 
 ### Other Notes:
 ⏱ Development will continue after Mid December (by the latest)
