@@ -58,7 +58,7 @@ hook.Add("HUDPaint", "LPS.WeaponHUDIndicator", function()
         end
         local state = Translate( WeaponState )
         
-        draw.WordBox( 8, ScrW()*0.5, ScrH()*0.5+32, 
+        draw.WordBox( 8, ScrW()*0.5, ScrH()*0.7+32,  --orig: 0.5
             string.format(TextBox.Template, WeaponName:upper(), tostring(AmmoString), state ), "PHX.LPS.IndicatorFont", 
             TextBox.Bcolor, TextBox.Fcolor, TEXT_ALIGN_CENTER )
     end

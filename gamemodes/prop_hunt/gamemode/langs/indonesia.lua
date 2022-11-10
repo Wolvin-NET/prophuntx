@@ -318,7 +318,7 @@ LANG["PHXM_ADMIN_BEVERBOSE"]		= "Developer: Be Verbose - Aktifkan fitur 'verbose
 LANG["PHXM_ADMIN_SHOWPLNAMEHEAD"]	= "Tampilkan nama player diatas kepala"
 LANG["PHXM_ADMIN_USESINGLE_FZCAM"]	= "Gunakan satu suara 'Freeze Cam'"
 LANG["PHXM_ADMIN_MODELLISTINGTYPE"] = "Tampilkan Skin dari: 0: Semua Playermodel, 1: Kustom: list.Get('PlayerOptionsModel')"
-LANG["PHXM_ADMIN_JUMPPOWER"]		= "Tambahan penggandaan tinggi lompat pada tim Prop"
+LANG["PHXM_ADMIN_JUMPPOWER"]		= "Tambahan tinggi lompat pada tim Prop"
 LANG["PHXM_ADMIN_ENABLE_OBB"]		= "Developer: Aktifkan Enable Customized Prop Entities Model Boundaries (OBB) Modifier from config data" --Untranslateable
 LANG["PHXM_ADMIN_RELOAD_OBB"]		= "Developer: Reload OBB Modifier data every round restarts" --Untranslateable
 
@@ -694,5 +694,167 @@ Jika kamu menutup editor ini, prop tersebut akan dihapus.]]
 
 LANG["PHZ_pcr_fb_allcontent"] = "Semua Kontent (Tidak semua pemain/server mempunyai konten yang sama)"
 LANG["PHZ_pcr_fb_notmounted"] = "%s [Tidak Aktif]"
+
+-- Revision XX/08/2022
+LANG["PHX_ADMIN_ACCESS_ONLY"]		= "Akses Ditolak: hanya Admin yang bisa mengakses, %s !"
+LANG["PHX_PROP_TOO_THIN"]           = "Tidak bisa ganti prop: Prop terlalu tipis!"
+LANG["PHX_PROP_IS_BANNED"]			= "Prop yang kamu coba gunakan telah di Ban dari server!"
+LANG["PHX_SPECT_JOINGAME"]			= "Untuk bermain, Tekan [F2] lalu pilih tim untuk Masuk."
+LANG["PHX_TEAM_IS_FULL"]			= "Waduh, timnya penuh!"
+LANG["FORCE_JOIN_TEAM_IS_DISABLED"]	= "Penggenapan Team telah di non-aktifkan (Tim Acak/Rotasi di Aktifkan)"
+
+LANG["PHX_TM_MNBAR_OPTIONS"]		= "Opsi"
+LANG["PHX_TM_MNBAR_SAVEFAV"]		= "Simpan Favorit"
+LANG["PHX_TM_MNBAR_LOADFAV"]		= "Muat Favorite"
+LANG["PHX_TM_MNBAR_SETTINGS"]		= "Lainnya"
+LANG["PHX_TM_MNBAR_RESET"]			= "Reset Favorit"
+
+LANG["PHX_TM_WARN_CLEARFAV"]		= "PERHATIAN: Ini akan MENGHAPUS SEMUA taunt yang tersimpan Lanjut?"
+
+LANG["PHXM_BANNED_MODELS"]			= "Perboleh/Tidak dalam menggunakan Model yang dilarang (Banned Models)."
+LANG["PHXM_ADMIN_ALLOWARMOR"]       = "Perbolehkan Tambahan Armor untuk tim Pemburu and Prop"
+LANG["PHXM_ADMIN_ALLOW3P"]          = "Perbolehkan mode thirdperson untuk Pemburu"
+LANG["PHXM_ADMIN_ALLOW3P_SVDESIRED"]= "Gunakan mode thirdperson dengan Kamera yang disediakan dari Server"
+LANG["PHXM_ADMIN_ALLOW3P_DIST"]     = "Thirdperson: Jarak Kamera Jauh Dekat"
+LANG["PHXM_ADMIN_ALLOW3P_RIGHT"]    = "Thirdperson: Jarak Kamera Kiri Kanan"
+LANG["PHXM_ADMIN_ALLOW3P_UP"]     	= "Thirdperson: Jarak Kamera Atas Bawah"
+LANG["PHXM_ADMIN_JUMPPOWER_H"]		= "Tambahan tinggi lompat pada tim Hunter"
+LANG["PHXM_ADMIN_MDLCOLOR_PROP"]	= "Aktifkan Warna Player pada tim Props (Aktifkan Kustom Model untuk Hunter)"
+LANG["PHXM_ADMIN_MDLCOLOR_HUNTER"]	= "Aktifkan Warna Player pada tim Hunters (Aktifkan Kustom Model untuk Hunter)"
+LANG["PHXM_ADMIN_PITCH_ROTATION"]	= "[Eksperimen] Perbolehkan untuk menggunakan Rotasi Atas/Bawah pada prop. (Mungkin sedikit bug)."
+LANG["PHXM_ADMIN_FALLDMG"]			= "Aktifkan fitur Fall Damage (Semua Tim)"
+LANG["PHXM_ADMIN_FALLDMG_REAL"]		= "Aktifkan fitur Fall Damage 'Secara Realistis' (Jika Fall Damage Aktif)"
+LANG["PHXM_INFORM_TO_JOIN"]			= "Beri tahu Penonton dengan teks untuk masuk ke-game."
+LANG["PHXM_ADMIN_PROPOFFSET"]		= "Tambah/Kurang Tinggi offset kamera pada prop. Min: 0.6, Max: 1.2. Default: 0.8."
+LANG["PHXM_ADMIN_REPL_MUST_STAND"]	= "[Eksperimen] Hanya boleh Replikasi prop ketika saat Berdiri. Matikan untuk Replikasi saat jongkok atau lompat."
+
+LANG["PHXM_DROP_VBS_DISABLE"]       = "Matikan Verbose"
+LANG["PHXM_DROP_VBS_ENABLE"]        = "Aktifkan Verbose"
+LANG["PHXM_DROP_MDL_INCLUDEALL"]    = "Masukan Semua ( %d )"
+LANG["PHXM_DROP_MDL_CUSTOMLIST"]    = "Pisah/Daftar Kustom ( %d )"
+LANG["PHXM_DROP_MDLTYPE_PROP"]      = "Hanya Fisik ( %d )"
+LANG["PHXM_DROP_MDLTYPE_PROPDYN"]   = "Fisik & Prop Dinamis ( %d )"
+LANG["PHXM_DROP_MDLTYPE_ANYENTS"]   = "Semua Entitas Kompatibel ( %d )"
+LANG["PHXM_DROP_MDLTYPE_CUSTOM"]    = "Entitas Kustom ( %d )"
+LANG["PHXM_DROP_RESPAWNBLIND_BOTH"] = "Semua Team"
+
+LANG["PHXM_TAB_ADMINGROUPS"]        = "Grup & Akses"
+LANG["PHXM_TAB_PHEPLUS"]			= "Tambahan Plus"
+
+LANG["PHXM_ADMIN_ACCESS_GROUP"]     = "Pilih grup untuk perbolehkan akses ke halaman Peraturan Admin, Tambahan Plus dan Plugins."
+LANG["PHXM_ADMIN_ACCESS_GROUP_HINT"] = "Catatan: tidak bisa untuk \"superadmin\"."
+LANG["PHXM_ADMIN_ACCESS_GROUP_NOULX"] = "Error: ULib & ULX tidak terinstall!"
+LANG["PHXM_ADMIN_ACCESS_NOREVOKE"]  = " (Tidak bisa di hapus)"
+LANG["PHXM_ADMIN_GROUP_WHOCANACC"]	= "Pilih grup untuk memperoleh akses ke [Peraturan Admin]."
+LANG["PHXM_ADMIN_GROUP_MUTEABLE"]	= "Pilih grup untuk tidak perbolehkan bisu suara di [Bisukan Pemain]. (Pemain biasa selalu bisa di-bisukan)."
+
+LANG["PHXM_ADMIN_ACCESS_CHATINFO"]  = "Barusan ada update konfigurasi, Membuka kembali..."
+LANG["PHXM_ADMIN_ACCMSG_BODY"]      = "Anda yakin dengan pilihan tersebut?\nHarap dicatat bahwa grup sebelumnya akan tidak dapat mengakses kembali.\nJendela Prop Hunt Menu akan dibuka kembali."
+LANG["PHXM_ADMIN_ACCMSG_TITLE"]     = "Terapkan Akses"
+LANG["PHXM_ADMIN_ACCCFG_SUCC"]      = "Data untuk Grup Akses telah tersimpan."
+LANG["PHXM_ADMIN_ACCCFG_FAIL"]      = "Ada error ketika menyimpan data Grup Akses. Mohon cek console kamu!"
+LANG["PHXM_ADMIN_MUTCFG_SUCC"]      = "Data untuk Pembisuan Grup telah tersimpan."
+LANG["PHXM_ADMIN_MUTCFG_FAIL"]      = "Ada error ketika menyimpan data Pembisuan Grup. Mohon cek console kamu!"
+
+LANG["PHXM_ADMIN_ACCESS_APPLY"]     = "Terapkan Grup yang dipilih"
+
+-- PHE/Plus
+LANG["PHXM_ADMIN_PLUSSETTING"]		= "Peraturan Plus+"
+LANG["PHXM_PLUSSETTING_HINT"]		= "Atur Penyeimbang Tim atau Peraturan lainnya."
+LANG["PHXM_HEADER_UNSTUCK"]			= "Peraturan Unstuck"
+LANG["PHXM_HEADER_TEAMSETTING"]		= "Peraturam Tim Tambahan"
+
+LANG["LIST_PLAYER"]					= "Pemain"
+LANG["LIST_FORCEDASPROP"]			= "Jadikan Prop?"
+LANG["LIST_MARKEDASPROP"]			= "Ditandai sebagai Prop!"
+LANG["LIST_NOHUNTERS"]				= "Tidak ada hunters yang sedang bermain..."
+
+LANG["PHXM_PLUS_MSG_NO_HUNTERS"]	= "Tidak ada hunters untuk direset!"
+
+LANG["PHXM_PLUS_BTNRESET"]			= "Hapus Pilihan (dan Tunda sebagai Prop)"
+LANG["PHXM_PLUS_LISTTIPS"]			= "Tips: Dobel-Klik untuk menandai pemain sebagai prop."
+
+LANG["PHXM_ADMIN_ENABLEUNSTUCK"]		= "Aktifkan fitur unstuck. Jika kamu menggunakan fitur addon unstuck, matikan ini."
+LANG["PHXM_ADMIN_NOTPUNSTUCKINROUND"]	= "Jangan unstuck ke spawnpoint ketika Waktu Pengejaman mata telah berakhir"
+LANG["PHXM_ADMIN_UNSTUCK_WAITTIME"]		= "Berapa lama untuk mengulang unstuck jika berhasil" --ph_unstuck_waittime
+LANG["PHXM_ADMIN_TEAMBAL_ORIG"] 		= "Gunakan Penyeimbang Tim PH:X yang Asli (Fitur Tim dibawah akan di nonaktifkan)" --ph_originalteambalance
+LANG["PHXM_ADMIN_FORCESPECTOPLAY"]		= "Masukan Juka Penonton untuk bermain ketika saat menyeimbangkan tim" --ph_forcespectatorstoplay
+LANG["PHXM_ADMIN_NO_H_CONSECUTIVE"]		= "Hindari pemain menjadi Hunter 2x berturut-turut (hanya berlaku untuk tim acak)" --ph_preventconsecutivehunting
+LANG["PHXM_ADMIN_HUNTER_COUNT"] 		= "Jumlah Hunter (0 = otomatis)" --ph_huntercount
+LANG["PHXM_ADMIN_ROTATETEAM"] 			= "Matikan rotasi acak dan rotasi pemain sekalian" --ph_rotateteams
+LANG["PHXM_ADMIN_RESET_ROTTEAM"] 		= "Reset rotasi" --ResetRotateTeams
+LANG["PHXM_ADMIN_RESET_ROTTEAM_WARN"]	= "Restart rotasi dari awal (Seumpama kamu memulainya, berhenti, dan memulainya lagi dan rotasi saat ini tidak terpenuhi):" --ResetRotateTeams_warning
+LANG["PHXM_ADMIN_RESET_MSG"]			= "Rotasi tim telah di reset!"
+LANG["PHXM_ADMIN_FORCEH2P_WARN"]		= "Paksa Pemain Hunter untuk menjadi Prop di round berikutnya (hanya berlaku untuk tim acak):" --ForceHunterAsProp_warning
+LANG["PHXM_ADMIN_FORCEH2P_RANDONLY"]	= "Hanya berlaku di tim acak!" --ForceHunterAsProp_randomonly
+
+LANG["FORCEH2P_WILL_BE"]				= "%s akan menjadi Prop di round berikutnya."
+LANG["FORCEH2P_IS_CANCELED"]			= "%s tidak akan menjadi Prop di round berikutnya."
+LANG["FORCEH2P_IS_RESET"]				= "Semua Pemburu tidak akan menjadi Prop di round berikutnya."
+LANG["FORCEH2P_PLAYER_NOT_FOUND"]		= "Prop yang terpilih tidak ditemukan, mungkin tidak terhubung dari server."
+LANG["PHX_ROTATE_TEAM_RESET"]			= "Offset Tim Rotasi telah di reset."
+
+LANG["UNSTUCK_YOURE_UNSTUCK"]			= "Kamu seharusnya telah bebas."
+LANG["UNSTUCK_BAD_SPAWNPOINT"]			= "Galat: Spawn paling terdekat akan membuat mu stuck. Jika iya, coba unstuck kembali."
+LANG["UNSTUCK_RESCUE_SPAWNPOINT"]		= "Spawn ini sangat terlalu dekat, jadi kamu masih stuck. Coba lagi."
+LANG["UNSTUCK_NO_SPAWNPOINTS"]			= "Sepertinya tidak ada spawnpoint jadi saya akan teleport anda ditengah dunia. Coba unstuck kembali."
+LANG["UNSTUCK_PLEASE_WAIT"]				= "Tunggu %d detik dan coba lagi."
+LANG["UNSTUCK_NOT_ON_GROUND"] 			= "Tidak menyentuh tanah, checking..."
+LANG["UNSTUCK_NOT_STUCK_JITTER"]		= "Kamu tidak stuck, jika iya, tunggu hingga prop tidak bergerak atau coba tekan ALT/CTRL dan coba lagi."
+LANG["UNSTUCK_NOT_STUCK_TOOBAD"]		= "Kamu tidak stuck, jika iya, maaf kamu harus tunggu hingga round berakhir :("
+LANG["UNSTUCK_CANNOT_FIND_SPOT"]		= "Tidak menemukan tempat untuk unstuck, Teleport ke spawn terdekat."
+LANG["UNSTUCK_SPAWNPOINTS_DISABLED"]	= "Kamu sebenernya akan di teleport ke spawn terdekat tapi server tidak memperbolehkan pada saat hunter sudah dilepaskan."
+-- End of PHE/Plus
+
+LANG["MISC_SEL_APPLY"]  = "Terapkan Pilihan"
+LANG["MISC_RESET_SEL"]  = "Reset Pilihan"
+LANG["MISC_RESET"]      = "Reset"
+LANG["MISC_CANCEL"]     = "Tidak Jadi"
+LANG["MISC_SEL_ALL"]    = "Pilih Semua"
+LANG["MISC_SEL_NONE"]   = "Kosongkan"
+
+LANG["PHXM_CL_THIRDPERSON"]     = "Tombol untuk mode thirdperson"
+LANG["PHXM_CL_UNSTUCK"]			= "Tombol untuk unstuck"
+LANG["CL_THIRDPERSON_ENABLED"]  = "Third Person Aktif"
+LANG["CL_THIRDPERSON_DISABLED"] = "Third Person Non-Aktif"
+
+LANG["PHX_TP_ADJUSTVIEW_BTN"]	= "Atur mode Thirdperson" --Button, as well as window title.
+LANG["PHX_TPS_ADJ_TITLE"]		= "Peringatan mode Thirdperson"
+LANG["PHX_TPS_ADJ_SVDESIRED"]	= "Pengaturan Thirdperson dinon-aktifkan: Menggunakan yang telah disediakan dari server."
+LANG["PHX_TPS_ADJ_3PDIS"]		= "Mode Thirdperson dinon-aktifkan."
+LANG["PHX_TPS_ADJ_BLIND"]		= "Kamu sedang dipejamkan. Coba lagi nanti."
+LANG["PHX_TPS_ADJ_NEEDALIVE"]	= "Kamu harus menjadi Hunter untuk bisa mengatur ini."
+
+LANG["ANG_AXIS_DIST"]	= "Jarak" -- or Forward
+LANG["ANG_AXIS_RIGHT"]	= "Kanan"
+LANG["ANG_AXIS_UP"]		= "Atas"
+LANG["VEC_POS_LEFT"]	= "Kiri" --X
+LANG["VEC_POS_FRONT"]	= "Depan" --Y?
+LANG["VEC_POS_TOP"]		= "Atas"  --Z
+
+-- Key Hints
+LANG["KEYHINT_HUNTER3P"] 	= "Pemburu Thirdperson"
+LANG["KEYHINT_SHOOT"]		= "Tembak Senjata"
+LANG["KEYHINT_SEC"]			= "Tembak Cadangan"
+LANG["KEYHINT_PICKUP"]		= "Ambil Objek/Interaksi"
+
+LANG["KEYHINT_LMB"]			= "Replikasi Prop"
+LANG["KEYHINT_RMB"]			= "Taunt/Ability Spesial"
+LANG["KEYHINT_RANDTAUNT"] 	= "Taunt Acak"
+LANG["KEYHINT_TAUNTMENU"] 	= "Buka Taunt Menu"
+LANG["KEYHINT_ROTATION"] 	= "Kunci Rotation"
+LANG["KEYHINT_PROPMENU"] 	= "Prop Menu"
+LANG["KEYHINT_FREEZEAIR"] 	= "Prop Freeze"
+LANG["KEYHINT_SPAWNDECOY"] 	= "Taruh Decoy (Jika Ada)"
+LANG["KEYHINT_UNSTUCK"]		= "Unstuck"
+
+LANG["KEY_LMB"]				= "LMB" --Indo keknya ndak usah
+LANG["KEY_RMB"]				= "RMB" --Indo keknya ndak usah
+
+LANG["MISC_TEAM_NAME"]		= "TIM: %s"
+LANG["NOTIFY_HEADER_TITLE"]	= "Informasi Kontrol"
+
+-- Revision 14/09/2022
+LANG["PHXM_MV_CHANGEMAP_NOPLAYER"]	= "Paksakan ganti map ketika server sudah kosong?"
 
 PHX.LANGUAGES[LANG.code] = LANG

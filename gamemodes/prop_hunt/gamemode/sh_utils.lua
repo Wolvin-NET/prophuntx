@@ -39,6 +39,17 @@ function table.HasKey(tbl, keyName)
 	return false
 end
 
+-- https://stackoverflow.com/a/17120745
+function table.CustomShuffle(array)
+	local counter = #array
+
+	while counter > 1 do
+		local index = math.random(counter)
+		array[index], array[counter] = array[counter], array[index]
+		counter = counter - 1
+	end
+end
+
 if SERVER then
 	function util.IsStaff( ply )
 		if ( (game.IsDedicated() and ply == NULL) or (ply ~= NULL and ply:PHXIsStaff()) ) then

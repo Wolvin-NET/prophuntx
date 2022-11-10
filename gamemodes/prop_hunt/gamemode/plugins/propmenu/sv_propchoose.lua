@@ -334,10 +334,10 @@ net.Receive("pcr.SetMetheProp",function(len,ply)
 		local usage = ply:CheckUsage()
 		local hmx,hmy,hz = ent:GetPropSize()
 		if ( PHX:QCVar( "pcr_use_room_check" ) and (not ply:CheckHull(hmx,hmy,hz)) ) then
-			if usage > 0 then
+			if usage > 0 or usage == -1 then
 				ply:PHXChatInfo("NOTICE", "PCR_NOROOM")
 			end
-		elseif table.HasValue( PHX.BANNED_PROP_MODELS, ent:GetModel() ) then
+		elseif PHX:GetCVar( "ph_banned_models" ) and table.HasValue( PHX.BANNED_PROP_MODELS, ent:GetModel() ) then
 			ply:PHXChatInfo("WARNING", "PCR_PROPBANNED")
 		else
 			if usage <= -1 then

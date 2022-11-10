@@ -4,9 +4,13 @@ matBlueMuzzle:SetInt("$spriterendermode",9) -- 8 ?
 
 function EFFECT:Init(data)
 	
-	self.Shooter        = data:GetEntity():GetOwner()
+	self.Ent        = data:GetEntity()
+	if (not IsValid(self.Ent)) then return end
+	self.Shooter	= self.Ent:GetOwner()
+	if (not IsValid(self.Shooter)) then return end
+	
 	self.Attachment     = data:GetAttachment()
-	self.WeaponEnt      = self.Shooter:GetLPSWeaponEntity()
+	self.WeaponEnt      = self.Ent
 	self.KillTime       = 0
 	self.ShouldRender   = false
 	
@@ -26,6 +30,7 @@ end
 
 function EFFECT:Think()
 
+	if (not self.KillTime) or self.KillTime == nil then return false end
 	if CurTime() > self.KillTime then return false end
 	if not self.Shooter then return false end
 	if not IsValid(self.WeaponEnt) then return false end

@@ -24,7 +24,7 @@ PHX.CLUI = {
 	if ( d and type(d) == "string" ) then
         local pnl = vgui.Create("DPanel")
 		pnl:SetSize(p:GetColWide() * 0.85,p:GetRowHeight())
-		pnl:SetBackgroundColor( Color(0,0,0,0) )
+		pnl:SetPaintBackground(false)
     
 		local chk = vgui.Create("DCheckBoxLabel", pnl)
         chk:Dock(FILL)
@@ -73,7 +73,7 @@ end,
 ["spacer"] = function( c, d, p, l )
 	local pnl = vgui.Create("DPanel")
 	pnl:SetSize(p:GetColWide() * 0.85,p:GetRowHeight())
-	pnl:SetBackgroundColor(Color(0,0,0,0))
+	pnl:SetPaintBackground( false )
 	
 	return pnl
 end,
@@ -90,7 +90,7 @@ end,
 		
 		local pnl = vgui.Create("DPanel")
 		pnl:SetSize(p:GetColWide() * 0.85,p:GetRowHeight())
-		pnl:SetBackgroundColor( Color(0,0,0,0) )
+		pnl:SetPaintBackground(false)
 		
 		local function m_btncreation( m_panel, m_panelText, m_func )
 			local btn = vgui.Create("DButton", m_panel)
@@ -134,7 +134,7 @@ end,
 		
 		local pnl = vgui.Create("DPanel")
 		pnl:SetSize(p:GetColWide() * 0.85,p:GetRowHeight()-6)
-		pnl:SetBackgroundColor(Color(0,0,0,0))
+		pnl:SetPaintBackground(false)
         
         local label = vgui.Create("DLabel", pnl)
         local tt = PHX:QTrans(l)
@@ -260,7 +260,7 @@ end,
 ["binder"] = function( c, d, p, l )	
 	local pnl = vgui.Create("DPanel")
 	pnl:SetSize(p:GetColWide() * 0.85,p:GetRowHeight())
-	pnl:SetBackgroundColor( Color(0,0,0,0) )
+	pnl:SetPaintBackground(false)
 	
 	local label = vgui.Create("DLabel", pnl)
 	label:Dock(LEFT)
@@ -294,7 +294,7 @@ end,
 
 	local pnl = vgui.Create("DPanel")
 	pnl:SetSize(p:GetColWide(),p:GetRowHeight())
-	pnl:SetBackgroundColor( Color(0,0,0,0) )
+	pnl:SetPaintBackground(false)
 	
 	local label = vgui.Create("DLabel", pnl)
 	label:Dock(LEFT)
@@ -375,7 +375,7 @@ end,
 ["textentry"] = function( c, d, p, l )
 	local pnl = vgui.Create("DPanel")
 	pnl:SetSize(p:GetColWide() * 0.85,p:GetRowHeight())
-	pnl:SetBackgroundColor( Color(0,0,0,0) )
+	pnl:SetPaintBackground(false)
 	
 	local label = vgui.Create("DLabel", pnl)
 	label:Dock(LEFT)
@@ -443,7 +443,7 @@ end,
 ["combobox"] = function( c, d, p, l )
     local pnl = vgui.Create("DPanel")
 	pnl:SetSize(p:GetColWide() * 0.85,p:GetRowHeight())
-	pnl:SetBackgroundColor( Color(0,0,0,0) )
+	pnl:SetPaintBackground(false)
 	
 	local label = vgui.Create("DLabel", pnl)
     local tt = PHX:QTrans(l)

@@ -20,6 +20,7 @@ function draw.Circle( x, y, radius, seg )
 end
 
 include("sh_init.lua")
+include("enhancedplus/cl_enhancedplus.lua")
 CL_GLOBAL_LIGHT_STATE	= 0
 include("cl_lang.lua")
 include("cl_fb_core.lua")
@@ -65,7 +66,8 @@ local DecoyColor = { -- for decoy indicator
 local WordBoxCol = {
     bg      = Color(  0,   0,   0,  75),
     generic = Color(250, 250, 250, 255),
-    hunter  = Color(255, 255,   0, 255)
+    hunter  = Color(255, 255,   0, 255),
+	spectator = Color(255,200,16,255)
 }
 local FZTextColor = {
     fore    = Color(255,  10,  10, 255),
@@ -78,8 +80,8 @@ local IndicatorColor = {
 local DefaultKeysTut = {
 	[TEAM_HUNTERS] = {
 		Default = {
-			["LMB"]	= "KEYHINT_SHOOT",
-			["RMB"] = "KEYHINT_SEC",
+			["KEY_LMB"]	= "KEYHINT_SHOOT",
+			["KEY_RMB"] = "KEYHINT_SEC",
 			["E"] = "KEYHINT_PICKUP"
 			},
 		ConVars = {
@@ -88,8 +90,8 @@ local DefaultKeysTut = {
 	},
 	[TEAM_PROPS] = {
 		Default = {
-		["LMB"]	= "KEYHINT_LMB",
-		["RMB"]	= "KEYHINT_RMB",
+		["KEY_LMB"]	= "KEYHINT_LMB",
+		["KEY_RMB"]	= "KEYHINT_RMB",
 		},
 		ConVars = {
 			["ph_default_taunt_key"]		=  "KEYHINT_RANDTAUNT",
@@ -98,6 +100,7 @@ local DefaultKeysTut = {
 			["ph_prop_menu_key"]			=  "KEYHINT_PROPMENU" ,
 			["ph_prop_midair_freeze_key"]	=  "KEYHINT_FREEZEAIR",
 			["ph_cl_decoy_spawn_key"]		=  "KEYHINT_SPAWNDECOY",
+			["ph_cl_unstuck_key"]			=  "KEYHINT_UNSTUCK"
 		}
 	}
 }
@@ -276,11 +279,12 @@ function GM:ShowTeam()
 				local btn = TeamPanel:AddSelectButton( strName, func )
 				btn.m_colBackground = TeamInfo.Color
 				btn.Think = function( self ) 
-								self:SetText( Format( "%s (%i)", strName, team.NumPlayers( ID ) ))
-								if ID ~= TEAM_SPECTATOR then -- skip player ammount check
-									self:SetDisabled( GAMEMODE:TeamHasEnoughPlayers( ID ) ) 
-								end
-							end
+					self:SetText( Format( "%s (%i)", strName, team.NumPlayers( ID ) ))
+					--[[ if ID ~= TEAM_SPECTATOR then
+						self:SetDisabled( GAMEMODE:TeamHasEnoughPlayers( ID ) ) 
+					end ]]
+					self:SetDisabled(GAMEMODE:CustomTeamHasEnoughPlayers(ID, LocalPlayer()))
+				end
 				
 				if (  IsValid( LocalPlayer() ) && LocalPlayer():Team() == ID ) then
 					btn:SetDisabled( true )
@@ -443,6 +447,14 @@ function HUDPaint()
 	
 	-- Hunter Blindlock Time
 	if GetGlobalBool("InRound", false) then
+	
+		local cX,cY = ScrW()*0.5,ScrH()*0.5
+	
+		if PHX:GetCVar( "ph_spect_inform_join_team" ) and (LocalPlayer():Team() == TEAM_SPECTATOR or LocalPlayer():Team() == TEAM_UNASSIGNED) then
+			draw.WordBox( 8, cX, ScrH()*0.125, PHX:FTranslate("PHX_SPECT_JOINGAME"), "HunterBlindLockFont",
+			WordBoxCol.bg, WordBoxCol.spectator, TEXT_ALIGN_CENTER )
+		end
+	
 		local blindlock_time_left = (PHX:GetCVar( "ph_hunter_blindlock_time" ) - (CurTime() - GetGlobalFloat("RoundStartTime", 0))) + 1
 		
 		if blindlock_time_left < 1 && blindlock_time_left > -6 then
@@ -454,8 +466,6 @@ function HUDPaint()
 		end
 		
 		if blindlock_time_left_msg then
-            
-            local cX,cY = ScrW()*0.5,ScrH()*0.5
             
             if LocalPlayer():Team() == TEAM_HUNTERS and LocalPlayer():Alive() and blindlock_time_left > 1 then                
                 local time = math.sin( CurTime() )
@@ -473,74 +483,83 @@ function HUDPaint()
 		end
 	end
 	
-	-- Draw Lucky Balls Icon
-	if PHX:GetCLCVar( "cl_enable_luckyballs_icon" ) && LocalPlayer():Team() == TEAM_HUNTERS then
-		DrawWaypointMarker( LocalPlayer(), mat, pointer, 'ph_luckyball', 45 )
-	end
+	if (GetGlobalBool("InRound", false)) then
 	
-	-- Draw Devil Ball Icon
-	if PHX:GetCLCVar( "cl_enable_devilballs_icon" ) && LocalPlayer():Team() == TEAM_PROPS then
-		DrawWaypointMarker( LocalPlayer(), dmat, dpointer, 'ph_devilball', 35 )
-	end
-    
-    -- Draw Decoy Indicator Icon
-    if PHX:GetCLCVar( "ph_cl_decoy_spawn_marker" ) && LocalPlayer():Team() == TEAM_PROPS then
-        DrawWaypointMarker( LocalPlayer(), decoy.indicator, decoy.radial, 'ph_fake_prop', 50 )
-    end
-	
-	-- Custom Crosshair
-	if PHX:GetCLCVar( "ph_show_custom_crosshair" ) and LocalPlayer():Alive() and (LocalPlayer():Team() == TEAM_PROPS or LocalPlayer():Team() == TEAM_HUNTERS) then
-		local color = color_white
-        local XX,XY = ScrW()/2-32,ScrH()/2-32
-        
-        if LocalPlayer():Team() == TEAM_PROPS then
-            local trace = {}
-            trace = GAMEMODE.ViewCam:CommonCamCollEnabledView( LocalPlayer():EyePos(), LocalPlayer():EyeAngles(), cHullz )
-            local filter = {}
+		-- Draw Lucky Balls Icon
+		if PHX:GetCLCVar( "cl_enable_luckyballs_icon" ) && LocalPlayer():Team() == TEAM_HUNTERS then
+			DrawWaypointMarker( LocalPlayer(), mat, pointer, 'ph_luckyball', 45 )
+		end
 		
-            table.Add(filter, ents.FindByClass("ph_prop"))
-            table.Add(filter, player.GetAll())
+		-- Draw Devil Ball Icon
+		if PHX:GetCLCVar( "cl_enable_devilballs_icon" ) && LocalPlayer():Team() == TEAM_PROPS then
+			DrawWaypointMarker( LocalPlayer(), dmat, dpointer, 'ph_devilball', 35 )
+		end
+		
+		-- Draw Decoy Indicator Icon
+		if PHX:GetCLCVar( "ph_cl_decoy_spawn_marker" ) && LocalPlayer():Team() == TEAM_PROPS then
+			DrawWaypointMarker( LocalPlayer(), decoy.indicator, decoy.radial, 'ph_fake_prop', 50 )
+		end
+		
+		-- Custom Crosshair
+		if PHX:GetCLCVar( "ph_show_custom_crosshair" ) and LocalPlayer():Alive() and (LocalPlayer():Team() == TEAM_PROPS or LocalPlayer():Team() == TEAM_HUNTERS) then
+			local color = color_white
+			local XX,XY = ScrW()/2-32,ScrH()/2-32
+			
+			if LocalPlayer():Team() == TEAM_PROPS then
+				local trace = {}
+				trace = GAMEMODE.ViewCam:CommonCamCollEnabledView( LocalPlayer():EyePos(), LocalPlayer():EyeAngles(), cHullz )
+				local filter = {}
+			
+				table.Add(filter, ents.FindByClass("ph_prop"))
+				table.Add(filter, player.GetAll())
 
-            trace.filter = filter
+				trace.filter = filter
+			
+				local trace2 = util.TraceLine(trace)
+				if trace2.Entity && trace2.Entity:IsValid() then
+					if PHX:IsUsablePropEntity( trace2.Entity:GetClass() ) then
+						color = getIndicColor( trace2, color_white, IndicatorColor.ok, IndicatorColor.no )
+					end
+				end
+			elseif LocalPlayer():Team() == TEAM_HUNTERS then
+				
+				if PHX:GetCVar( "ph_enable_thirdperson" ) and tpOn then
+					local tr = LocalPlayer():GetEyeTrace()
+					local pos = tr.HitPos:ToScreen()
+					
+					XX = pos.x-32
+					XY = pos.y-32
+				end
+				
+			end
+			
+			if !blind then
+				surface.SetDrawColor( color )
+				surface.SetMaterial( crosshair )
+				surface.DrawTexturedRect( XX, XY, 64, 64 )
+			end
+		end
 		
-            local trace2 = util.TraceLine(trace)
-            if trace2.Entity && trace2.Entity:IsValid() then
-                if PHX:IsUsablePropEntity( trace2.Entity:GetClass() ) then
-                    color = getIndicColor( trace2, color_white, IndicatorColor.ok, IndicatorColor.no )
-                end
-            end
-        elseif LocalPlayer():Team() == TEAM_HUNTERS then
-            
-            if PHX:GetCVar( "ph_enable_thirdperson" ) and tpOn then
-                local tr = LocalPlayer():GetEyeTrace()
-                local pos = tr.HitPos:ToScreen()
-                
-                XX = pos.x-32
-                XY = pos.y-32
-            end
-            
-        end
-        
-        if !blind then
-            surface.SetDrawColor( color )
-            surface.SetMaterial( crosshair )
-            surface.DrawTexturedRect( XX, XY, 64, 64 )
-        end
+		-- Draw a sprite
+		if LocalPlayer():HasFakePropEntity() and LocalPlayer():Alive() then
+			DrawLine(LocalPlayer(), MAT_LASERDOT, TEAM_PROPS, PHX.DecoyDistance, 24, 24, "ph_cl_decoy_spawn_helper" )
+		end
+	
 	end
 	
 	-- The 'You were Killed By' text, or the Freeze Cam text.
 	if LocalPlayer():GetNWBool("InFreezeCam", false) then
-		local transtext = PHX:FTranslate("HUD_KILLEDBY", LocalPlayer():GetNWEntity("PlayerKilledByPlayerEntity", nil):Name())
+		local Attacker = LocalPlayer():GetNWEntity("PlayerKilledByPlayerEntity", nil)
+		if IsValid(Attacker) and Attacker:IsPlayer() then
+	
+			local transtext = PHX:FTranslate("HUD_KILLEDBY", Attacker:Name())
 		
-		local w1, h1 = surface.GetTextSize( transtext );
-		local textx = ScrW()/2
-		local steamx = (ScrW()/2) - 32
-		draw.SimpleTextOutlined(transtext , "TrebuchetBig", textx, ScrH()*0.75, FZTextColor.fore, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1.5, FZTextColor.outline)
-	end
-    
-    -- Draw a sprite
-    if GetGlobalBool("InRound", false) and LocalPlayer():HasFakePropEntity() and LocalPlayer():Alive() then
-		DrawLine(LocalPlayer(), MAT_LASERDOT, TEAM_PROPS, PHX.DecoyDistance, 24, 24, "ph_cl_decoy_spawn_helper" )
+			local w1, h1 = surface.GetTextSize( transtext );
+			local textx = ScrW()/2
+			local steamx = (ScrW()/2) - 32
+			draw.SimpleTextOutlined(transtext , "TrebuchetBig", textx, ScrH()*0.75, FZTextColor.fore, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1.5, FZTextColor.outline)
+			
+		end
 	end
 end
 hook.Add("HUDPaint", "PH_HUDPaint", HUDPaint)
@@ -574,7 +593,7 @@ end)
 function drawPropSelectHalos()
 	local halocol = IndicatorColor.ok
 	
-	if PHX:GetCLCVar( "ph_cl_halos" ) then
+	if PHX:GetCLCVar( "ph_cl_halos" ) and GetGlobalBool("InRound", false) then
 		-- Something to tell if the prop is selectable
 		if LocalPlayer():Team() == TEAM_PROPS && LocalPlayer():Alive() then
 		
@@ -645,6 +664,8 @@ end)
 
 function PHX:ShowTutorPopup()
 
+	if (not IsValid(LocalPlayer())) then return end
+
 	if self:GetCLCVar( "ph_show_tutor_control" ) && LocalPlayer():Alive() && (LocalPlayer():Team() == TEAM_PROPS or LocalPlayer():Team() == TEAM_HUNTERS) then
 	
 		if curshow <= 4 then
@@ -674,7 +695,7 @@ function PHX:ShowTutorPopup()
 			local function createItems( w,h,key,text,iH )
 				local p = vgui.Create("DPanel")
 				p:SetSize(w,h)
-				p:SetPaintBackground(false) --TODO TODO TODO: On Next update, All DPanels this needs to be changed; instead of using SetBackgroundColor!!!!
+				p:SetPaintBackground(false)
 				
 				local pKey = p:Add("DPanel")
 				pKey:Dock(LEFT)
@@ -716,7 +737,8 @@ function PHX:ShowTutorPopup()
 			local TeamHeader = TeamHeaderPanel:Add("DLabel")
 			TeamHeader:Dock(FILL)
 			TeamHeader:SetContentAlignment(5)
-			TeamHeader:SetText( PHX:FTranslate("MISC_TEAM_NAME", team.GetName( LocalPlayer():Team() ):upper()) )
+			--TeamHeader:SetText( PHX:FTranslate("MISC_TEAM_NAME", team.GetName( LocalPlayer():Team() ):upper()) )
+			TeamHeader:SetText( PHX:FTranslate("MISC_TEAM_NAME", self:TranslateName( LocalPlayer():Team() ):upper()) )
 			TeamHeader:SetFont( "GModNotify" )
 			TeamHeader:SetTextColor(color_white)
 			
@@ -730,14 +752,19 @@ function PHX:ShowTutorPopup()
 				gr:AddItem( item )
 			end
 			for id,text in pairs(DefaultKeysTut[LocalPlayer():Team()].Default) do
-				local item = createItems(grW,grH,id:upper(),text)
+				local var = id:upper()
+				if (string.find(id, "^KEY_")) then -- if a string *starts* with "KEY_" will be translated. This especially for LMB and RMB keys.
+					var = self:FTranslate(id):upper()
+				end
+				local item = createItems(grW,grH,var,text)
+				
 				incH=incH+32
 				gr:AddItem( item )
 			end
 			--[[ Usage: 
-				list.Set("PHX.ControlHintList",  KEY_F7, 			 { team = TEAM_PROPS or 1, type = "number",  text = "TRANSLATION_ID_HERE" }) --Number
+				list.Set("PHX.ControlHintList",  KEY_F7, 			 { team = TEAM_PROPS or 2, type = "number",  text = "TRANSLATION_ID_HERE" }) --Number
 				list.Set("PHX.ControlHintList", "ph_my_default_key", { team = TEAM_HUNTERS or 1, type = "convar",  text = "TRANSLATION_ID_HERE" }) --ConVar
-				list.Set("PHX.ControlHintList", "PS3 DualShock", 	 { team = TEAM_PROPS or 1, type = "default", text = "TRANSLATION_ID_HERE" }) --Default
+				list.Set("PHX.ControlHintList", "KEYHINT_CUSTOM", 	 { team = TEAM_PROPS or 2, type = "default", text = "TRANSLATION_ID_HERE" }) --Default, KEYHINT_CUSTOM can be Translation ID
 			]]
 			for eId,eData in pairs(list.Get("PHX.ControlHintList")) do
 				local var = "?"
@@ -749,7 +776,11 @@ function PHX:ShowTutorPopup()
 					elseif eData.type == "convar" then
 						var = input.GetKeyName( GetConVar(eId):GetInt() ):upper()
 					elseif eData.type == "default" then
-						var = eId:upper()
+						if (string.find(id, "^KEY_")) then
+							var = PHX:FTranslate(eId):upper()
+						else
+							var = eId:upper()
+						end
 					end
 					if eData.team and eData.team ~= nil then Team = eData.team end
 					if eData.text and eData.text ~= nil then text = eData.text end
@@ -1030,12 +1061,12 @@ local function ShowVeryFirstTutorial()
 		fh.pBottom = vgui.Create("DPanel", fh.panel)
 		fh.pBottom:Dock(BOTTOM)
 		fh.pBottom:SetSize(0,40)
-		fh.pBottom:SetBackgroundColor(Color(0,0,0,0))
+		fh.pBottom:SetPaintBackground(false)
 		
 		fh.center = vgui.Create("DPanel", fh.pBottom)
 		fh.center:Dock(FILL)
 		fh.center:SetSize(0,40)
-		fh.center:SetBackgroundColor(Color(0,0,0,0))
+		fh.center:SetPaintBackground(false)
 		
 		fh.bnext = vgui.Create("DButton", fh.pBottom)
 		fh.bnext:Dock(RIGHT)

@@ -104,8 +104,11 @@ ph_prop_menu_key	99
 // Default key to freeze your prop while in mid-air. Default is M (23)
 ph_prop_midair_freeze_key	23
 
-// Key for Third Person Mode. Only works for Hunters.
+// Key for Third Person Mode. Only works for Hunters. Default is N (24)
 ph_thirdperson_key	24
+
+// Key to try for unstuck. Default is F6 (97)
+ph_cl_unstuck_key	97
 
 // --------------------------------------------------------
 // 		Thirdperson Adjust

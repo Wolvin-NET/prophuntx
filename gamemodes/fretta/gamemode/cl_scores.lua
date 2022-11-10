@@ -66,7 +66,7 @@ function GM:AddScoreboardDeaths( ScoreBoard )
 
 	local f = function( ply ) return ply:Deaths() end
 	ScoreBoard:AddColumn( PHX:FTranslate("DERMA_DEATHS") or "Deaths", 60, f, 0.5, nil, 6, 6 )
-
+	
 end
 
 function GM:AddScoreboardPing( ScoreBoard )
@@ -107,6 +107,10 @@ function GM:AddScoreboardWantsChange( ScoreBoard )
 
 end
 
+function GM:AddScoreboardCustom( ScoreBoard, ... )
+	ScoreBoard:AddColumn( ... )
+end
+
 function GM:CreateScoreboard( ScoreBoard )
 
 	// This makes it so that it's behind chat & hides when you're in the menu
@@ -129,6 +133,11 @@ function GM:CreateScoreboard( ScoreBoard )
 	self:AddScoreboardAvatar( ScoreBoard )		// 1
 	self:AddScoreboardWantsChange( ScoreBoard )	// 2
 	self:AddScoreboardName( ScoreBoard )		// 3
+	-- Include custom column externally. Set after Player's Name.
+	hook.Call("PH_AddColumnScoreboard", nil, ScoreBoard, function( Name, Fixed, Func, Rate, TeamID, HAlign, VAlign, Font )
+		GAMEMODE:AddScoreboardCustom( ScoreBoard, Name, Fixed, Func, Rate, TeamID, HAlign, VAlign, Font )
+	end)
+	-- Add the Rest.
 	self:AddScoreboardKills( ScoreBoard )		// 4
 	self:AddScoreboardDeaths( ScoreBoard )		// 5
 	self:AddScoreboardPing( ScoreBoard )		// 6

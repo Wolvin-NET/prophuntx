@@ -139,7 +139,7 @@ function PCR:MainWindow()
 			local pan = vgui.Create("DPanel")
 			local tooltext = PHX:FTranslate( "PCR_CL_TOOLTIP_MODEL", p )
 			pan:SetSize(64,64)
-			if table.HasValue( PHX.BANNED_PROP_MODELS, p ) then
+			if PHX:GetCVar( "ph_banned_models" ) and table.HasValue( PHX.BANNED_PROP_MODELS, p ) then
 				tooltext = PHX:FTranslate("PCR_CL_TOOLTIP_BANNED")
 				pan:SetBackgroundColor(Color(120,20,20))
 			elseif table.HasValue( PCR.CustomProp, p ) then

@@ -43,6 +43,7 @@ if CLIENT then
 end
 
 function SWEP:PrimaryAttack() return end
+function SWEP:SecondaryAttack() return end
 
 -- Remove the weapon once dropped. In case if someone uses :DropWeapon() addon
 function SWEP:OnDrop()

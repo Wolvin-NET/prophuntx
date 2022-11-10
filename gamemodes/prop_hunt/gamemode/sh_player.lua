@@ -30,6 +30,43 @@ function Player:CheckHull(hx,hy,hz)
 	return true
 end
 
+-- From Enhanced Plus
+
+function Player:IsPlaying()
+	return self:Team() == TEAM_HUNTERS or self:Team() == TEAM_PROPS
+end
+
+-- Do this act as a quick trace?
+function Player:TraceLineFromPlayer(endpos, usehull)
+	local trace = {}
+	trace.filter = {self, self.ph_prop}
+	trace.start = self:GetPos()
+	trace.endpos = endpos
+	trace.mask = MASK_PLAYERSOLID
+	
+	local traceResult = util.TraceLine(trace)
+	
+	if (usehull) then
+		trace.mins = self.ph_prop:OBBMins()
+		trace.maxs = self.ph_prop:OBBMaxs()
+	
+		traceResult = util.TraceHull(trace)
+	end
+	return traceResult
+end
+
+function Player:SetForceAsProp( bool )
+	if PHX:GetCVar( "ph_enable_teambalance" ) and !PHX:GetCVar( "ph_rotateteams" ) then
+		self:SetNWBool("bPHX.ForcedAsProp", bool)
+	end
+end
+
+function Player:IsCurrentlyForcedAsProp()
+	return self:GetNWBool("bPHX.ForcedAsProp", false)
+end
+
+-- End of Enhanced Plus
+
 -- Blinds the player by setting view out into the void
 function Player:Blind(bool)
 	if !self:IsValid() then return end

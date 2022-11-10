@@ -119,9 +119,9 @@ end)
 local function doAdminStrictCheck(ply)
 	if ( ply:PHXIsStaff() ) then
 		return true
-	else
-		return false
 	end
+		
+	return false
 end
 
 local function doCommand(ply, cmd, value, identifier)
@@ -132,18 +132,16 @@ local function doCommand(ply, cmd, value, identifier)
 end
 
 local function doKickInvalidAccess(ply, cmd, identifier)
-	game.KickID(ply:SteamID(), "PHX Illegal server command access found from: "..ply:Nick())
-	PHX.VerboseMsg("[PHX ADMIN CVAR "..identifier.." NOTIFY] Player "..ply:Nick().." (".. ply:SteamID() ..") is attempting to access "..cmd..", kicked!")
+	if GetConVar("ph_kick_non_admin_access"):GetBool() then
+		game.KickID(ply:SteamID(), "[PH:X - NOT ADMIN] Illegal server command access found from: "..ply:Nick())
+	else
+		ply:PHXChatInfo( "ERROR", "PHX_ADMIN_ACCESS_ONLY", ply:Nick() )
+	end
+	PHX.VerboseMsg("[PHX ADMIN CVAR "..identifier.." NOTIFY] Player "..ply:Nick().." (".. ply:SteamID() ..") is attempting to access "..cmd.."!")
 end
 
 -- man I wish lua has some-sort of switch/case .
 local net_functions = {
-	["CheckAdminFirst"] = function(ply)
-		if ( ply and IsValid(ply) and ( ply:PHXIsStaff() ) ) then
-			net.Start("CheckAdminResult")
-			net.Send(ply)
-		end
-	end,
 	["SvCommandReq"] = function(ply, data)
 		local cmd = data[1]
 		local valbool = data[2]
@@ -222,10 +220,6 @@ local net_functions = {
 local function ManageNetMessages(ply, netStr, data)
 	net_functions[netStr](ply, data)
 end
-
-net.Receive("CheckAdminFirst", function(len, ply)
-	ManageNetMessages(ply, "CheckAdminFirst")
-end)
 
 net.Receive("SvCommandReq", function(len, ply)
 	local cmd = net.ReadString()

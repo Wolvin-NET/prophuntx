@@ -17,7 +17,6 @@ function util.LPSgetSpread( val )
     elseif istable(val) then
         return Vector(math.random(val[1],val[2]), math.random(val[1],val[2]), 0)
     end
-    
     return Vector(0,0,0)
 end
 
@@ -32,7 +31,6 @@ function util.LPSgetConValue( val )
     elseif isnumber( val ) then
         return val
     end
-    
     return 1
 end
 
@@ -52,7 +50,6 @@ function util.LPSgetAccurateAim( tblEntity, pos, WeaponPos, ang, maxsz )
 end
 
 -- End of Utilities
-
 
 sound.Add(
 {
@@ -75,16 +72,16 @@ sound.Add(
 })
 
 if CLIENT then
-    surface.CreateFont("PHX.LPS.IndicatorFont", 
-    {
-        font = "Roboto",
-        size = 17,
-        weight = 750,
-        antialias = true
-    })
-    
-    language.Add("ph_lps_weapon", "Prop LPS Gun")
-    killicon.Add("ph_lps_weapon", "vgui/hud/ph_lps_weapon", Color(248,200,0,255))
+	surface.CreateFont("PHX.LPS.IndicatorFont", 
+	{
+		font = "Roboto",
+		size = 17,
+		weight = 750,
+		antialias = true
+	})
+
+	language.Add("ph_lps_weapon", "Prop LPS Gun")
+	killicon.Add("ph_lps_weapon", "vgui/hud/ph_lps_weapon", Color(248,200,0,255))
 end
 
 AddCSLuaFile("sh_lps.lua")

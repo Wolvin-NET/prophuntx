@@ -89,6 +89,7 @@ if CLIENT then
     PHX:AddCLCVar( CTYPE_BOOL, "lps_cl_draw_halo",  "1", true, false, "Draw/Hide halo, even server sets it." )
     
     -- Store Settings Info
+	
     local ADDON_INFO = {
         name    = "Last Prop Standing for PH:X",
         version = "1.3",
@@ -99,6 +100,7 @@ if CLIENT then
             {"",                        "label",     false,    "LPS_GENERAL_SETTINGS" },
             {"lps_enable",              "check",     "SERVER", "LPS_MENU_ENABLE" },
             {"lps_weapon",              "textentry", "SERVER", "LPS_WEAPON_SELECT" },
+			
             {"", "btn", {
 				[1] = {"LPS_BTN_WEPLIST", function()
                 

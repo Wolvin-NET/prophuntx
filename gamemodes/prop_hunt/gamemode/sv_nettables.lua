@@ -1,7 +1,9 @@
+-- Wolvin: Warning: there are already like 250+ net tables in PH:X.
+-- Mostly those are occupied by GetGlobals* from ConVars.
+-- Reduce Next Time!
+
 local nets = {
-	-- sv_admins: --13
-	"CheckAdminFirst",
-	"CheckAdminResult",
+	-- // start of sv_admins: \\ --
 	"SvCommandReq",
 	"SvCommandSliderReq",
 	"SendTauntStateCmd",
@@ -13,14 +15,18 @@ local nets = {
     "PHX.CLAdminGroupInfo",
 	"PHX.MutedGroupInfo",
 	"PHX.CLMutedGroupInfo",
-	-- end of sv_admins
+	-- Enhanced Plus
+	"PHX.ResetRotateTeams",
+	"PHX.ForceHunterAsProp",
+	"PHX.ForceResetHunterAsProp",
+	"ResetHunterForceAsPropList",
+	-- // end of sv_admins \\ --
 
 	"ResetHull",
 	"SetHull",
 	"PlayFreezeCamSound",
 	"PlayerSwitchDynamicLight",
 	"DisableDynamicLight",
-	--"PH_ShowTutor",
 	
 	"CL2SV_PlayThisTaunt", 
 	

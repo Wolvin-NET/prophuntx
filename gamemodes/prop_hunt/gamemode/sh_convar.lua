@@ -1,7 +1,7 @@
 -- phx's global cvar constants
-CVAR_SERVER_ONLY			= { FCVAR_SERVER_CAN_EXECUTE, FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY }
-CVAR_SERVER_ONLY_NO_NOTIFY 	= { FCVAR_SERVER_CAN_EXECUTE, FCVAR_REPLICATED, FCVAR_ARCHIVE }
-CVAR_SERVER_HIDDEN 			= { FCVAR_SERVER_CAN_EXECUTE, 0x10, FCVAR_DONTRECORD }
+CVAR_SERVER_ONLY			= FCVAR_REPLICATED + FCVAR_ARCHIVE + FCVAR_NOTIFY	-- Apprently, this two may looks better.
+CVAR_SERVER_ONLY_NO_NOTIFY 	= FCVAR_REPLICATED + FCVAR_ARCHIVE
+CVAR_SERVER_HIDDEN 			= { 0x10, FCVAR_DONTRECORD } --,FCVAR_UNREGISTERED ?
 
 -- global constant type
 CTYPE_STRING	= 1
@@ -80,9 +80,14 @@ local ConVarTranslate = {
 	}
 }
 
+-- Server only purpose.
+CreateConVar( "ph_kick_non_admin_access", "0", {FCVAR_SERVER_CAN_EXECUTE,FCVAR_ARCHIVE}, "Should Kick Non-Admin user when trying to access Admin Commands? If Not, Throw a message instead.", 0, 1 )
+
 local CVAR = {}
 CVAR["ph_print_verbose"]			    =	{ CTYPE_BOOL,	"0", CVAR_SERVER_ONLY_NO_NOTIFY, "Developer Verbose. Some printed messages will only appear if this is enabled." }
 CVAR["ph_show_splash_screen"]           =   { CTYPE_BOOL,   "1", CVAR_SERVER_ONLY, "Show Splash Screen upon joining." }
+
+CVAR["ph_banned_models"]				=	{ CTYPE_BOOL,	"1", CVAR_SERVER_ONLY, "Ban/Unban the use of Restricted Models. This does not include from Prohibitted Models!"}
 
 CVAR["ph_use_lang"]						=	{ CTYPE_BOOL, 	"0", 	 CVAR_SERVER_ONLY, "Enable forced-language to display. THIS WILL BYPASS USER-PREFERED LANGUAGE!" }
 CVAR["ph_force_lang"]					=	{ CTYPE_STRING, "en_us", CVAR_SERVER_ONLY, "Default language to force." }
@@ -190,18 +195,18 @@ end }
 
 CVAR["ph_sv_enable_obb_modifier"]			=	{ CTYPE_BOOL, 	"1",CVAR_SERVER_ONLY_NO_NOTIFY, "Developer: Enable OBB Model Data Override/Modifier" }
 CVAR["ph_reload_obb_setting_everyround"]	=	{ CTYPE_BOOL, 	"1",CVAR_SERVER_ONLY_NO_NOTIFY, "Developer: Reload OBB Model Data Override/Modifier Every round Restarts" }
-CVAR["ph_prop_viewoffset_mult"]					=	{ CTYPE_FLOAT,	"0.9", CVAR_SERVER_ONLY_NO_NOTIFY, "Substract/Add Prop View Offset Height using multiplier. Min: 0.6, Max: 1.2. Default: 0.9 or 1.", { min=0.6,max=1.2 } }
+CVAR["ph_prop_viewoffset_mult"]				=	{ CTYPE_FLOAT,	"0.8", CVAR_SERVER_ONLY_NO_NOTIFY, "Substract/Add Prop View Offset Height using multiplier. Min: 0.6, Max: 1.2. Default: 0.8.", { min=0.6,max=1.2 } }
 CVAR["ph_mkbren_use_new_mdl"]				=	{ CTYPE_BOOL, 	"1", CVAR_SERVER_ONLY_NO_NOTIFY, "Use new model for Bren MK II Bonus Weapon (Require Map Restart!!)" }
 CVAR["ph_check_for_rooms"]					=	{ CTYPE_BOOL, 	"1", CVAR_SERVER_ONLY, "Check for rooms before replicating? This will prevent you to get stuck with other objects (such as prop, wall, etc)" }
 CVAR["ph_enable_plnames"]					=	{ CTYPE_BOOL, 	"0", CVAR_SERVER_ONLY, "Serverside control for if a clients see client\'s team player names through walls." }
-CVAR["ph_prop_camera_collisions"]			=	{ CTYPE_BOOL, 	"0", CVAR_SERVER_ONLY, "Attempts to stop props from viewing inside walls." }
+CVAR["ph_prop_camera_collisions"]			=	{ CTYPE_BOOL, 	"1", CVAR_SERVER_ONLY, "Attempts to stop props from viewing inside walls. (Camera Collision)" }
 CVAR["ph_prop_collision"]					=	{ CTYPE_BOOL, 	"0", CVAR_SERVER_ONLY, "Should Team Props collide with each other?" }
 CVAR["ph_add_hla_combine"]					=	{ CTYPE_BOOL, 	"1", CVAR_SERVER_ONLY, "Add HLA Combine to default combine models? [REQUIRE MAP RESTART!]" }
 CVAR["ph_swap_teams_every_round"]			=	{ CTYPE_BOOL, 	"1", CVAR_SERVER_ONLY, "Should teams swapped on every round?" }
 CVAR["ph_max_teamchange_limit"]				=	{ CTYPE_NUMBER, "8", CVAR_SERVER_ONLY_NO_NOTIFY, "Define how many times player can change team to another. Default is 5. -1 means disabled." }
 CVAR["ph_enable_teambalance"]				=	{ CTYPE_BOOL, 	"1", CVAR_SERVER_ONLY_NO_NOTIFY, "Enable Team Balance during round restart?" }
 -- Taken from PH:E v16. This addition was made by Fafy
-CVAR["ph_forcejoinbalancedteams"]			=	{ CTYPE_BOOL, 	"0", CVAR_SERVER_ONLY, "Force players to even out teams upon joining? Setting 0 means do not force to join in balanced teams." }
+CVAR["ph_force_join_balanced_teams"]			=	{ CTYPE_BOOL, 	"0", CVAR_SERVER_ONLY, "Force players to even out teams upon joining? Setting 0 means do not force to join in balanced teams." }
 
 CVAR["ph_enable_decoy_reward"]				=	{ CTYPE_BOOL,	"1", CVAR_SERVER_ONLY_NO_NOTIFY, "Enable a decoy reward? Reward will be given if any prop player is alive on every round ends." }
 CVAR["ph_decoy_health"]						=	{ CTYPE_NUMBER,	"10", CVAR_SERVER_ONLY_NO_NOTIFY, "How much health points does the decoy has. Default is 10.", { min = 1, max = 200 } }
@@ -232,8 +237,13 @@ CVAR["ph_blindtime_respawn_percent"]		=	{ CTYPE_FLOAT, 	"0.75", CVAR_SERVER_ONLY
 CVAR["ph_allow_respawnonblind_teamchange"]	=	{ CTYPE_BOOL, 	"0", CVAR_SERVER_ONLY, "Not recommended if allowed: Allow respawn during blind time FROM team changes (from props to hunters, vice versa).\nI don't recommend enabling this because players may able to use this to take advantage by sitting on Prop team everytime.\nEnable this ONLY if you know what you're doing!" }
 CVAR["ph_allow_pickup_object"]				=	{ CTYPE_NUMBER, "3", CVAR_SERVER_ONLY, "Allow pickup objects? 0=No, 1=Hunters Only, 2=Props Only, 3=Everyone", { min = 0, max = 3 } }
 
-CVAR["ph_use_custom_mapvote"]				=	{ CTYPE_BOOL, 	"0", CVAR_SERVER_ONLY_NO_NOTIFY, "Use custom external Map votes system? Type help 'ph_custom_mv_func' for more info." }
-CVAR["ph_custom_mv_func"]					=	{ CTYPE_STRING, "MapVote.Start()", CVAR_SERVER_HIDDEN, "If 'ph_use_custom_mapvote' specified, what's the map vote function to call in LUA?\nNOTE: Case Sensitive! Local variable will not passed to the given code." }
+-- MapVotes, these aren't listed on F1 Prop Hunt Menu, this needs to be set manually through your server.cfg!!
+CVAR["ph_enable_mapvote"]					=	{ CTYPE_BOOL, 	"1", CVAR_SERVER_ONLY, "Enable/Disable Built-in PH:X Map votes system? Set this 0 to disable this and use from map vote addon and will call 'PH_OverrideMapVote' Hooks.\nIf 'ph_use_custom_mapvote' and 'ph_use_custom_mapvote_cmd' set to 1 they are still called however." }
+CVAR["ph_use_custom_mapvote"]				=	{ CTYPE_BOOL, 	"0", CVAR_SERVER_ONLY_NO_NOTIFY, "Use custom external Map votes system? This will override built-in mapvote. See help 'ph_custom_mv_func' for more info." }
+CVAR["ph_use_custom_mapvote_cmd"]			=	{ CTYPE_BOOL, 	"0", CVAR_SERVER_ONLY_NO_NOTIFY, "Use custom external Map votes by calling from Console Command instead? This will override built-in mapvote AND 'ph_use_custom_mapvote'. See help 'ph_custom_mv_concmd' for more info." }
+CVAR["ph_custom_mv_func"]					=	{ CTYPE_STRING, "MapVote.PHXStart()", CVAR_SERVER_ONLY_NO_NOTIFY, "If 'ph_use_custom_mapvote' is set, Use a function to call non-built-in Map Vote system (e.g: From Addons).\nNOTE: 'Case Sensitive' & Local variable will not passed to the given code!" }
+CVAR["ph_custom_mv_concmd"]					=	{ CTYPE_STRING, "mv_start", 		  CVAR_SERVER_ONLY_NO_NOTIFY, "If 'ph_use_custom_mapvote_cmd' is set, use this to call mapvote by using from their console command instead. Overrides 'ph_use_custom_mapvote'. If it has arguments, supply them as well. (e.g: start_mapvote 15 (15 by meaning in seconds))" }
+-- End of MapVotes
 
 CVAR["ph_exp_rot_pitch"]					=	{ CTYPE_BOOL, 	"0", 	CVAR_SERVER_ONLY_NO_NOTIFY, "[Experimental!] Allow use of pitch rotation on props." }
 CVAR["ph_enable_thirdperson"]               =   { CTYPE_BOOL,   "1", 	CVAR_SERVER_ONLY, "Enable thirdperson mode for hunters." }
@@ -243,7 +253,8 @@ CVAR["ph_sv_thirdperson_dright"]            =   { CTYPE_NUMBER, "16", 	CVAR_SERV
 CVAR["ph_sv_thirdperson_dup"]               =   { CTYPE_NUMBER, "4", 	CVAR_SERVER_ONLY_NO_NOTIFY, "Thirdperson: Desired Camera Up Position.", { min=-32, max = 32 } }
 
 CVAR["ph_falldamage"]						=	{ CTYPE_BOOL,	"1",	CVAR_SERVER_ONLY, "Toggle Fall Damage. Applies for all teams." }
-CVAR["ph_falldamage_real"]					=	{ CTYPE_BOOL,	"0",	CVAR_SERVER_ONLY_NO_NOTIFY, "Should Fall Damage dealt by subtracting 10 or realistically."}
+CVAR["ph_falldamage_real"]					=	{ CTYPE_BOOL,	"0",	CVAR_SERVER_ONLY_NO_NOTIFY, "Should Fall Damage dealt by subtracting 10 or realistically." }
+CVAR["ph_spect_inform_join_team"]			=	{ CTYPE_BOOL,	"1",	CVAR_SERVER_ONLY, "Inform Unassigned/Spectators with a static text by giving advice to join the game."}
 
 -- Prop Chooser / Prop Menu
 CVAR["pcr_enable"]							=	{ CTYPE_BOOL, "1", CVAR_SERVER_ONLY, "Enable Prop Menu Feature?"}
@@ -259,7 +270,7 @@ CVAR["pcr_notify_messages"]					=	{ CTYPE_BOOL, "0", CVAR_SERVER_ONLY, "Notify c
 CVAR["pcr_limit_enable"]					=	{ CTYPE_BOOL, "0", CVAR_SERVER_ONLY,"Enable limit of Maximum Prop addition count (see 'pcr_max_prop_list' for how many models you can limit."}
 CVAR["pcr_max_prop_list"]					=	{ CTYPE_NUMBER, "100", CVAR_SERVER_ONLY, "Maximum list of added prop into Prop Menu. (Default is 100)"}
 CVAR["pcr_kick_invalid"]					=	{ CTYPE_BOOL, "1", CVAR_SERVER_ONLY_NO_NOTIFY, "Kick any user attempt to access invalid model that does not exists in current map/custom list with threshold 4x max attempts."}
-CVAR["pcr_use_room_check"]					=	{ CTYPE_BOOL, "0", CVAR_SERVER_ONLY, "Use Room check before a player use other (larger) object? Disable this if you're facing with 'there is no room to change' message."}
+CVAR["pcr_use_room_check"]					=	{ CTYPE_BOOL, "1", CVAR_SERVER_ONLY, "Use Room check before a player use other (larger) object?"}
 CVAR["pcr_enable_bbox_limit"]				=	{ CTYPE_BOOL, "0", CVAR_SERVER_ONLY_NO_NOTIFY, "Add BBox Limit (Hull Size) before adding to the Prop Menu Lists (if any/configured)?"}
 CVAR["pcr_bbox_max_height"]					=	{ CTYPE_NUMBER, "96", CVAR_SERVER_ONLY_NO_NOTIFY, "BBOX CollissionBound Maximum Height Limit. Default is 96 (normally 72 is a standard hull size Kleiner models."}
 CVAR["pcr_bbox_max_width"]					=	{ CTYPE_NUMBER, "72", CVAR_SERVER_ONLY_NO_NOTIFY, "BBOX CollissionBound Maximum Width Limit. Either: 72, 56, 48, 36, 32, ..."}

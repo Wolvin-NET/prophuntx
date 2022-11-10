@@ -3,6 +3,7 @@ resource.AddWorkshop("2176546751")
 
 -- Send required file to clients
 AddCSLuaFile("sh_init.lua")
+AddCSLuaFile("enhancedplus/cl_enhancedplus.lua")
 AddCSLuaFile("cl_fb_core.lua")
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("cl_chat.lua")
@@ -19,6 +20,7 @@ AddCSLuaFile("cl_credits.lua")
 -- Include the required lua files
 include("sv_nettables.lua")
 include("sh_init.lua")
+include("enhancedplus/sv_enhancedplus.lua")
 include("sh_config.lua")
 include("sv_admin.lua")
 include("sv_tauntmgr.lua")
@@ -67,27 +69,9 @@ local HLAModels = {
 }
 local bAlreadyStarted = false
 
--- Player Join/Leave message
-gameevent.Listen( "player_connect" )
-hook.Add( "player_connect", "AnnouncePLJoin", function( data )
-	if PHX:GetCVar( "ph_notify_player_join_leave" ) then
-		for k, v in pairs( player.GetAll() ) do
-			v:PHXChatInfo( "NOTICE", "EV_PLAYER_CONNECT", data.name )
-		end
-	end
-end )
-
-gameevent.Listen( "player_disconnect" )
-hook.Add( "player_disconnect", "AnnouncePLLeave", function( data )
-	if PHX:GetCVar( "ph_notify_player_join_leave" ) then
-		for k,v in pairs( player.GetAll() ) do
-			v:PHXChatInfo( "NOTICE", "EV_PLAYER_DISCONNECT", data.name, data.reason )
-		end
-	end
-end )
-
--- Force Close taunt window function, determined whenever the round ends, or team winning.
-local function ForceCloseTauntWindow(num)
+-- Control Taunt Window whether it should be Forced Close or Allow to be used.
+-- Used for checking if player is dead, round is ended, or any other meaning.
+local function ControlTauntWindow(num)
 	if num == 1 then
 		net.Start("PH_ForceCloseTauntWindow")
 		net.Broadcast()
@@ -125,6 +109,25 @@ local function sendGroupInfo( ply )
     net.Send( ply )
 end
 
+-- Player Join/Leave message
+gameevent.Listen( "player_connect" )
+hook.Add( "player_connect", "AnnouncePLJoin", function( data )
+	if PHX:GetCVar( "ph_notify_player_join_leave" ) then
+		for k, v in pairs( player.GetAll() ) do
+			v:PHXChatInfo( "NOTICE", "EV_PLAYER_CONNECT", data.name )
+		end
+	end
+end )
+
+gameevent.Listen( "player_disconnect" )
+hook.Add( "player_disconnect", "AnnouncePLLeave", function( data )
+	if PHX:GetCVar( "ph_notify_player_join_leave" ) then
+		for k,v in pairs( player.GetAll() ) do
+			v:PHXChatInfo( "NOTICE", "EV_PLAYER_DISCONNECT", data.name, data.reason )
+		end
+	end
+end )
+
 -- Called alot
 function GM:CheckPlayerDeathRoundEnd()
 	if !GAMEMODE.RoundBased || !GAMEMODE:InRound() then 
@@ -137,7 +140,7 @@ function GM:CheckPlayerDeathRoundEnd()
 		
 		GAMEMODE:RoundEndWithResult(1001, "HUD_LOSE")
 		PHX.VOICE_IS_END_ROUND = 1
-		ForceCloseTauntWindow(1)
+		ControlTauntWindow(1)
 		
 		PHX:PlayWinningSound( 3 ) -- 3 because for lose. You can set this to 0 or 1001 tho.
 		
@@ -158,7 +161,7 @@ function GM:CheckPlayerDeathRoundEnd()
 			GAMEMODE:RoundEndWithResult(TeamID, "HUD_TEAMWIN")
 			
 			PHX.VOICE_IS_END_ROUND = 1
-			ForceCloseTauntWindow(1)
+			ControlTauntWindow(1)
 			
 			-- send the win notification
 			PHX:PlayWinningSound( TeamID )
@@ -335,7 +338,7 @@ function GM:PlayerCanPickupItem(pl, item)
     return true
 end
 
--- Don't use GM:DoPlayerDeath, we'll use hook instead.
+-- Don't use "GM:DoPlayerDeath" and we'll use a hook version instead.
 -- Freeze Cam Fix for Hunters
 hook.Add("DoPlayerDeath", "HunterFreezeCam", function(ply, attacker, dmginfo)
 	if ( PHX:GetCVar( "ph_freezecam_hunter" ) && 
@@ -391,16 +394,23 @@ local function AutoRespawnCheck(ply)
 					local tim = PHX:GetCVar( "ph_allow_respawnonblind_team_only" )
 					if tim > 0 and ply:Team() == tim then
 						ply:Spawn()
-						--ply:PHXChatInfo( "NOTICE", "BLIND_RESPAWN_TEAM", team.GetName( tim ), math.Round(phx_blind_unlocktime - CurTime()) )
+						ControlTauntWindow(0)
 						ply:PHXChatInfo( "NOTICE", "BLIND_RESPAWN_TEAM", PHX:TranslateName( tim, ply ), math.Round(phx_blind_unlocktime - CurTime()) )
 					elseif tim == 0 then
 						ply:Spawn()
+						ControlTauntWindow(0)
 						ply:PHXChatInfo( "NOTICE", "BLIND_RESPAWN", math.Round(phx_blind_unlocktime - CurTime()) )
 					end
 				end 
 			end)
 		end
 	
+	end
+	
+	-- Force Close the Taunt Menu whenever the player is dead.
+	if ply:Team() == TEAM_PROPS or ply:Team() == TEAM_HUNTERS then
+		net.Start( "PH_ForceCloseTauntWindow" )
+		net.Send(ply)
 	end
 	
 end
@@ -447,7 +457,7 @@ end)
 
 hook.Add("PostCleanupMap", "PH_ResetCustomTauntWindow", function()
 	-- Force close any taunt menu windows
-	ForceCloseTauntWindow(0)
+	ControlTauntWindow(0)
 	PHX.VOICE_IS_END_ROUND = 0
 	
 	-- Called every round restart: make sure this was set publicly and make it synced accross clients.
@@ -517,7 +527,7 @@ function GM:PlayerExchangeProp(pl, ent)
 	if !IsValid(ent) then return; end
 
 	if pl:Team() == TEAM_PROPS && PHX:IsUsablePropEntity(ent:GetClass()) && ent:GetModel() then
-		if table.HasValue(PHX.BANNED_PROP_MODELS, ent:GetModel()) then
+		if PHX:GetCVar( "ph_banned_models" ) and table.HasValue(PHX.BANNED_PROP_MODELS, ent:GetModel()) then
 			pl:PHXChatInfo("ERROR", "PHX_PROP_IS_BANNED")
 		elseif IsValid(ent:GetPhysicsObject()) && (pl.ph_prop:GetModel() != ent:GetModel() || pl.ph_prop:GetSkin() != ent:GetSkin()) then
         
@@ -698,10 +708,35 @@ hook.Add("PlayerDisconnected", "PH_PlayerDisconnected", function( ply )
 	end
 end)
 
-hook.Add("Initialize", "PHX.Init", function()
+function GM:Initialize()
     PHX:ManageGroupInfo( true, false, "SVAdmins", "admins", "PHX.AdminGroupInfo" )
 	PHX:ManageGroupInfo( true, false, "IgnoreMutedUserGroup", "muted_groups", "PHX.MutedGroupInfo" )
-end)
+	
+	if GAMEMODE.RoundBased then
+		timer.Simple(3, function()
+			GAMEMODE:StartRoundBasedGame()
+		end)
+	end
+end
+
+function GM:Think()
+	self.BaseClass:Think() --... required?
+	
+	for k,v in pairs( player.GetAll() ) do
+	
+		local Class = v:GetPlayerClass()
+		if Class and istable(Class) then
+			v:CallClassFunction( "Think" )
+		end
+		
+	end
+
+	-- Game time related
+	if( !GAMEMODE.IsEndOfGame && ( !GAMEMODE.RoundBased || ( GAMEMODE.RoundBased && GAMEMODE:CanEndRoundBasedGame() ) ) && CurTime() >= GAMEMODE.GetTimeLimit() ) then
+		GAMEMODE:EndOfGame( true )
+	end
+	
+end
 
 -- Set specific variable for checking in player initial spawn, then use Player:IsHoldingEntity()
 hook.Add("PlayerInitialSpawn", "PHX.SetupInitData", function(ply)
@@ -767,7 +802,7 @@ end)
 
 -- Spray Controls
 hook.Add( "PlayerSpray", "PH.GeneralSprayFunc", function( ply )
-	if ( ( !ply:Alive() ) || ( ply:Team() == TEAM_SPECTATOR ) ) then
+	if ( ( !ply:Alive() ) || ( ply:Team() == TEAM_SPECTATOR ) || ( ply:Team() == TEAM_UNASSIGNED ) ) then
 		return true
 	end
 end )
@@ -843,7 +878,7 @@ function GM:RoundTimerEnd()
 
 	GAMEMODE:RoundEndWithResult(TEAM_PROPS, "HUD_TEAMWIN")
 	PHX.VOICE_IS_END_ROUND = 1
-	ForceCloseTauntWindow(1)
+	ControlTauntWindow(1)
 	
 	PHX:PlayWinningSound( TEAM_PROPS )
 	
@@ -858,7 +893,7 @@ local function ForceEndRound( ply )
     
         GAMEMODE:RoundEndWithResult(1001, "HUD_LOSE")
         PHX.VOICE_IS_END_ROUND = 1
-        ForceCloseTauntWindow(1)
+        ControlTauntWindow(1)
         
         PHX:PlayWinningSound( 3 )
         ClearTimer()    -- Always check if any timers running.
@@ -905,29 +940,34 @@ function GM:OnPreRoundStart(num)
 			end
 		end
 		
-		-- Props will gain a Bonus Armor points Hunter teams has more than 4 players in it. More player means more armor they can get.
+		-- Props will gain a Bonus Armor points if Hunter teams has more than 4 players in it. More player means more armor they can get.
+		-- Tweaked from PHE:Plus
         local allow = PHX:GetCVar( "ph_allow_armor" )
         if allow then
             timer.Simple(1, function()
-                local NumHunter = table.Count(team.GetPlayers(TEAM_HUNTERS))
-                if NumHunter >= 4 && NumHunter <= 8 then
-                    for _,prop in pairs(team.GetPlayers(TEAM_PROPS)) do
-                        if IsValid(prop) then prop:SetArmor(math.random(1,3) * 15) end
-                    end
-                elseif NumHunter > 8 then
-                    for _,prop in pairs(team.GetPlayers(TEAM_PROPS)) do
-                        if IsValid(prop) then prop:SetArmor(math.random(3,7) * 15) end
-                    end
-                end
+                local NumHunter = team.NumPlayers( TEAM_HUNTERS )
+				
+				if NumHunter < 4 then return end
+				
+				local min,max = 1,3
+				if NumHunter >= 8 then min,max = 3,7 end
+				
+                for _,prop in pairs( team.GetPlayers(TEAM_PROPS) ) do
+					if IsValid(prop) then prop:SetArmor(math.random(min,max) * 15) end
+				end
             end)
         end
 		
 		hook.Call("PH_OnPreRoundStart", nil, PHX:GetCVar( "ph_swap_teams_every_round" ))
 	end
 	
-	-- temporary team balance option, we set "TRUE" to make sure player isn't killed during team switch.
+	-- Balance teams. We need to set this "TRUE" to make sure the switched player isn't killed during team switch.
 	if PHX:GetCVar( "ph_enable_teambalance" ) then
-		GAMEMODE:CheckTeamBalance(true)
+		if PHX:GetCVar( "ph_originalteambalance" ) then
+			GAMEMODE:CheckTeamBalance( true )
+		else
+			GAMEMODE:CheckTeamBalanceCustom()
+		end
 	end
     
     -- Timer to give grenades, if ph_give_grenade_near_roundend is set.
@@ -975,19 +1015,6 @@ hook.Add("PropBreak", "Props_OnBreak_WithDrops", function( ply, ent )
 			end
 		end
 	end
-end)
-
--- Force Close the Taunt Menu whenever the prop is being killed.
-local function close_PlayerKilledSilently(ply)
-	net.Start( "PH_ForceCloseTauntWindow" )
-	net.Send(ply)
-end
--- DoPlayerDeath...?
-hook.Add("PlayerSilentDeath", "Silent.Taunt_ForceClose", function(ply)
-	if ply:Team() == TEAM_PROPS then close_PlayerKilledSilently(ply) end
-end)
-hook.Add("PlayerDeath", "Taunt_ForceClose", function(ply)
-	if ply:Team() == TEAM_HUNTERS then close_PlayerKilledSilently(ply) end
 end)
 
 -- Flashlight toggling
@@ -1162,13 +1189,13 @@ hook.Add("PlayerButtonDown", "PlayerButton_ControlTaunts", function(pl, key)
 	
 	local pitchApplyRand = pl:GetInfoNum("ph_cl_pitch_apply_random", 0)		-- Also applies for random taunt, specified with pitch level
 	local plPitchLevel	= pl:GetInfoNum("ph_cl_pitch_level", 100)			-- Pitch level to use
-	
 	local isRandomPitch = pl:GetInfoNum("ph_cl_pitch_randomized_random", 0)	-- Use Randomized pitch for Random Taunts instead of specified level
-	
-	local decoyKey		= pl:GetInfoNum("ph_cl_decoy_spawn_key", 0)			-- Used for spawning decoy
     local isRightClickMode = pl:GetInfoNum("ph_prop_right_mouse_taunt", 0)  -- Right Click for taunt. Changed to clientside convar instead
 	
-	if pl && pl:IsValid() && pl:Alive() && (pl:Team() == TEAM_PROPS or pl:Team() == TEAM_HUNTERS) then
+	local decoyKey		= pl:GetInfoNum("ph_cl_decoy_spawn_key", 0)			-- Used for spawning decoy
+	local unstuckKey	= pl:GetInfoNum("ph_cl_unstuck_key", 0)				-- The Unstuck Key
+	
+	if IsValid(pl) and pl:Alive() and (pl:Team() == TEAM_PROPS or pl:Team() == TEAM_HUNTERS) then
 		
 		-- Taunt Access
 		-- if you're excluding custom taunts not to be played on random taunts or use them *only* for specific 'groups', you're evil. jk it's good tho :)	
@@ -1190,6 +1217,10 @@ hook.Add("PlayerButtonDown", "PlayerButton_ControlTaunts", function(pl, key)
 		-- Both Team goes here.
 		if (key == ctInfo) then
 			pl:ConCommand("ph_showtaunts")
+		end
+		
+		if (PHX:GetCVar( "ph_enable_unstuck" ) and key == unstuckKey) then
+			GAMEMODE:UnstuckPlayer(pl)
 		end
 	
 		-- Team Props
@@ -1221,7 +1252,7 @@ hook.Add("PlayerButtonDown", "PlayerButton_ControlTaunts", function(pl, key)
 		-- Team Hunters
 		elseif pl:Team() == TEAM_HUNTERS then
 			
-			-- Add Something here for hunters. Sometime in future I think.
+			-- Add Something here for hunters. Sometimes in future I think.
 			
 		end
 	end

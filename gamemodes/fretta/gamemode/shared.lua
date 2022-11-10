@@ -10,7 +10,7 @@ include( "player_extension.lua" )
 include( "class_default.lua" )
 include( "player_colours.lua" )
 
-SetGlobalBool("bJoinBalancedTeam", GetConVar("ph_forcejoinbalancedteams"):GetBool() or false)
+--SetGlobalBool("bJoinBalancedTeam", GetConVar("ph_forcejoinbalancedteams"):GetBool() or false)
 
 GM.Name 	= "Simple Game Base"
 GM.Author 	= "Anonymous"
@@ -40,7 +40,7 @@ GM.TakeFragOnSuicide = false		// -1 frag on suicide
 GM.MaximumDeathLength = 0			// Player will repspawn if death length > this (can be 0 to disable)
 GM.MinimumDeathLength = 2			// Player has to be dead for at least this long
 GM.AutomaticTeamBalance = false     // Teams will be periodically balanced 
-GM.ForceJoinBalancedTeams = GetGlobalBool("bJoinBalancedTeam", false)	// Players won't be allowed to join a team if it has more players than another team
+GM.ForceJoinBalancedTeams = true --GetGlobalBool("bJoinBalancedTeam", false)	// Players won't be allowed to join a team if it has more players than another team
 GM.RealisticFallDamage = false		// Set to true if you want realistic fall damage instead of the fix 10 damage.
 GM.AddFragsToTeamScore = false		// Adds player's individual kills to team score (must be team based)
 
@@ -114,7 +114,8 @@ function GM:TeamHasEnoughPlayers( teamid )
 	local PlayerCount = team.NumPlayers( teamid )
 
 	// Don't let them join a team if it has more players than another team
-	if ( GetGlobalBool("bJoinBalancedTeam", false) ) then
+	--if ( GetGlobalBool("bJoinBalancedTeam", false) ) then
+	if GAMEMODE.ForceJoinBalancedTeams then
 	
 		for id, tm in pairs( team.GetAllTeams() ) do
 			if ( id > 0 && id < 1000 && team.NumPlayers( id ) < PlayerCount && team.Joinable(id) ) then return true end

@@ -13,13 +13,15 @@ ENT.Spawnable   = true
 ENT.AdminOnly   = false
 ENT.RenderGroup = RENDERGROUP_BOTH
 
-ENT.PropAngle   = angle_zero
-ENT.PropPosition  = vector_origin
-ENT.DefaultColor = Vector(1,1,1)
+ENT.PropAngle   	= angle_zero
+ENT.PropPosition  	= vector_origin
+ENT.DefaultColor 	= Vector(1,1,1)
+ENT.FallBackColor	= Vector( 62 / 255, 88 / 255, 106 / 255 ) --lua/matproxy/player_color.lua
 
 function ENT:SetupDataTables() 
 	self:NetworkVar( "Angle", 0, "RotationAngle" )
-    self:NetworkVar( "Vector", 0, "EntityColor")
+    self:NetworkVar( "Vector", 0, "EntityColor" )
+	self:NetworkVar( "Bool", 0, "EntColorEnabled" )
     
     if SERVER then
         self:SetEntityColor( self.DefaultColor )
@@ -30,8 +32,9 @@ end
 function ENT:Initialize()
 	if SERVER then
 		self:SetModel("models/player/kleiner.mdl")
-		self:SetLagCompensated(true)			
+		self:SetLagCompensated(true)
 		self:SetMoveType(MOVETYPE_NONE)
+		self:SetEntColorEnabled( true )
 
 		self.health = 100
 	end
@@ -46,12 +49,22 @@ if CLIENT then
 end
 
 ENT.GetPlayerColor = function( self )
-    local state = GetGlobalBool( "ph_enable_prop_player_color" , false )
-    if state then
-        return self:GetEntityColor()
-    else
-        return self.DefaultColor
-    end
+
+	if self:GetEntColorEnabled() then
+
+		local state = GetGlobalBool( "ph_enable_prop_player_color" , false )
+		if state then
+			return self:GetEntityColor()
+		else
+			return self.DefaultColor
+		end
+		
+	else
+	
+		return self.FallBackColor
+	
+	end
+	
 end
 
 function ENT:CalcRotation( ply, pos, ang, bLock )

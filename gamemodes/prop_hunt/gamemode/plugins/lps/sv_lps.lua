@@ -162,7 +162,7 @@ local function DoPlayerCheck(ply)
         
         -- Gives delay in case hunter throws a grenade or something or 2 player prop were killed simultaneously
         timer.Simple(0.5, function()
-	        if team.NumPlayers(TEAM_PROPS) >= PHX:GetCVar( "lps_mins_prop_players" ) and LPSAllowed and GAMEMODE:GetTeamAliveCounts()[TEAM_PROPS] == 1 and GAMEMODE:InRound() then
+	        if team.NumPlayers(TEAM_PROPS) >= PHX:GetCVar( "lps_mins_prop_players" ) and LPSAllowed and GAMEMODE:GetTeamAliveCounts()[TEAM_PROPS] == 1 and GAMEMODE:InRound() and (not GetGlobalBool("LPS.InLastPropStanding", false)) then
 				
 				local RN = GetGlobalInt( "RoundNumber", 0 )
 				local XR = PHX:GetCVar( "lps_start_every_x_rounds" )
@@ -231,11 +231,11 @@ local function DoPlayerCheck(ply)
                         end
                         
                         stand = pl
-                        
-                        SetGlobalBool("LPS.InLastPropStanding", true) -- for Think
-                        hook.Call( "PHInLastPropStanding", nil, pl, PHX.LPS.WEAPON2.NAME, PHX.LPS.WEAPON2.DATA ) -- for Something you need to "hook.Add" it.
 			        end
                 end
+				
+				SetGlobalBool("LPS.InLastPropStanding", true) -- for Think
+				hook.Call( "PHInLastPropStanding", nil, pl, PHX.LPS.WEAPON2.NAME, PHX.LPS.WEAPON2.DATA ) -- for Something you need to "hook.Add" it.
 
                 for _,p in pairs(player.GetAll()) do                    
                     if p:IsLastStanding() then

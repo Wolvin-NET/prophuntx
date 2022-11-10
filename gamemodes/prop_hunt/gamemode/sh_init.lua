@@ -1,3 +1,18 @@
+--[[
+
+( This License Applies to all files writen in "fretta and prop_hunt" gamemode directories )
+
+You are free to use, modify, contribute, or distribute the Prop Hunt: X ("SOFTWARE") as long as it stated exclusively for Garry's Mod.
+Any changes or modification you have made publicly on Steam Workshop must include this license and a link back to this page in your credits page.
+You are, however, not permitted to use for:
+- Commercial Purposes, including selling the source code.
+- Using, copying, alter (porting) the source code OUTSIDE of "Garry's Mod" Game WITHOUT Permission.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+]]--
+
 PHX = PHX or {}
 
 TEAM_HUNTERS 	= 1
@@ -6,7 +21,7 @@ IS_PHX		 	= true	-- an easy check if PHX is installed.
 
 PHX.ConfigPath 	= "phx_data"
 PHX.VERSION		= "X2Z"
-PHX.REVISION	= "XX.06.22" --Format: dd/mm/yy.
+PHX.REVISION	= "XX.XX.23" --Format: dd/mm/yy.
 
 --[[ BEGIN OF SHARED INIT HEADERS ]]--
 
@@ -23,7 +38,7 @@ GM.ViewCam = {}
 GM.ViewCam.cHullz      = 64    -- Fallback/Default Value.
 GM.ViewCam.cHullzMins  = 8     -- Limit Minimums Height in BBox
 GM.ViewCam.cHullzMaxs  = 84    -- Limit Maximums Height in BBox
-GM.ViewCam.cHullzLow   = 4     -- Limit everything below this height
+GM.ViewCam.cHullzLow   = 8     -- Clam view to this height.
 
 -- Can also internally used for CalcView but you can use anywhere in serverside realm.
 function GM.ViewCam.CamColEnabled( self, origin, ang, trace, traceStart, traceEnd, distMin, distMax, distNorm, entHullz )
@@ -151,6 +166,7 @@ function PHX:SoundDuration( snd )
 end
 
 -- Standard Inclusion
+AddCSLuaFile("enhancedplus/sh_enhancedplus.lua")
 AddCSLuaFile("cl_lang.lua")
 AddCSLuaFile("config/sh_init.lua")
 AddCSLuaFile("ulx/modules/sh/sh_phx_mapvote.lua")
@@ -158,6 +174,7 @@ AddCSLuaFile("sh_config.lua")
 AddCSLuaFile("sh_player.lua")
 AddCSLuaFile("sh_chatbox.lua")
 AddCSLuaFile("sh_tauntscanner.lua")
+include("enhancedplus/sh_enhancedplus.lua")
 include("config/sh_init.lua")
 include("ulx/modules/sh/sh_phx_mapvote.lua")
 include("sh_config.lua")
@@ -183,9 +200,10 @@ AddCSLuaFile("sh_httpupdates.lua")
 include("sh_httpupdates.lua")
 
 -- Plugins and other modules
+
 local _,folder = file.Find(engine.ActiveGamemode() .. "/gamemode/plugins/*", "LUA")
 for _,plugfolder in SortedPairs( folder ) do
-	PHX.VerboseMsg("[PHX] [PLUGINS] Loading plugin: ".. plugfolder)
+	PHX.VerboseMsg("[PHX] [PLUGINS] Loading plugin: "..plugfolder)
 	AddCSLuaFile("plugins/" .. plugfolder .. "/sh_load.lua")
 	include("plugins/" .. plugfolder .. "/sh_load.lua")
 end
@@ -260,6 +278,8 @@ GM.UPDATEURLBACKUP 	= "https://raw.githubusercontent.com/Wolvin-NET/prophuntx/ma
 -- unused
 GM.Help			= ""
 
+GM.IS_PROPER_PHX_INSTALLED 	= true
+
 -- Fretta configuration
 -- Note: NEVER USE PHX:GetCVar() on ANY EARLY VARIABLES or else Settings won't work!
 GM.GameLength				= PHX:QCVar( "ph_game_time" ) -- Same as GetConVar but it's a wrapper and quicker version.
@@ -281,8 +301,6 @@ GM.RoundPreStartTime		= 0
 GM.SuicideString			= "dead" -- obsolete
 GM.TeamBased 				= true
 
-GM.ForceJoinBalancedTeams 	= GetGlobalInt( "ph_forcejoinbalancedteams", false )
-
 local mark = utf8.char(9733)
 GM.PHXContributors			= {
 	"Galaxio "..mark.." (Support+Translation)",
@@ -294,7 +312,7 @@ GM.PHXContributors			= {
 	"Berry (Russian Translation)",
 	"Ph.X (Chinese Translation)",
 	"Trigstur (Dutch Translation)",
-	"Haeiven, TR1NITY (French Translation)",
+	"Galaxio, Haeiven, TR1NITY (French Translation)",
 	"Major Nick (German Translation)",
 	"KamFretoZ (Indonesian Translation)",
 	"So-chiru (Korean Translation)", 
@@ -316,7 +334,7 @@ function GM:CreateTeams()
 	
 	-- hunters
 	team.SetUp(TEAM_HUNTERS, "Hunters", Color(150, 205, 255, 255))
-	team.SetSpawnPoint(TEAM_HUNTERS, {"info_player_counterterrorist", "info_player_combine", "info_player_deathmatch", "info_player_axis", "info_player_hunter"})
+	team.SetSpawnPoint(TEAM_HUNTERS, {"info_player_counterterrorist", "info_player_combine", "info_player_deathmatch", "info_player_axis", "info_player_hunters"})
 	team.SetClass(TEAM_HUNTERS, {"Hunter"})
 
 	-- props

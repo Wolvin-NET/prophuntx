@@ -2,10 +2,10 @@ PHX.DEFAULT_CATEGORY = "Prop Hunt X Classics"
 
 -- Permanently banned models.
 local phx_PermaBannedModels = {
-    -- Props that can cause server crash. Please DO NOT REMOVE as this is for your own safety sake!
+    -- Props that can cause server crash. Please DO NOT REMOVE THIS as for your own safety sake!
     "models/props/ph_gas_stationrc7/piepan.mdl",
     
-    -- General Tiny / Exploitable Props.
+    -- Tiny / Exploitable Props which often cause game breaking
     "models/props/cs_assault/money.mdl",
     "models/props/cs_assault/dollar.mdl",
     "models/props/cs_office/snowman_arm.mdl",
@@ -122,9 +122,9 @@ PHX.PROHIBITTED_MDLS = {
 	["models/props_collectables/piepan.mdl"]	    = true,
     ["models/props/ph_gas_stationrc7/piepan.mdl"]   = true,
     
-    -- This props are tiny that can be exploited almost in any objects!
+    -- This props is so tiny that can be exploited to almost in any objects!
 	["models/foodnhouseholditems/egg.mdl"]		= true,
-    -- Not crashing problem, but upon rotation, the prop will get inside into a wall.
+    -- Not crashing problem, but with rotation, it can go through to the wall, almost made entirely invisible.
 	["models/sims/lightwall2.mdl"]				= true
 }
 
@@ -398,13 +398,14 @@ function PHX:ManageTaunt( category, tauntData )
 			if tauntData[i] and tauntData[i] ~= nil then
 				for name,path in pairs(tauntData[i]) do
 					-- Double Check, if somehow found any duplicates
-					if (!self.TAUNTS[category][i][name] and !self.CachedTaunts[i][name]) and
-					(!table.HasValue( self.TAUNTS[category][i], path ) and !table.HasValue( self.CachedTaunts[i], path )) then
-						self.VerboseMsg(string.format("[PH Taunts] Adding taunt %s (Cat: %s, path: %s) to their Taunt Table and Cache.", name,category,path))
+					if ( self.TAUNTS[category][i][name] ) or ( self.CachedTaunts[i][name] ) then
+						self.VerboseMsg(string.format("[PH Taunts] Skipping taunt NAME '%s' (Cat: %s) because it exist in Taunt Table & Cache.", name,category))
+					elseif (table.HasValue( self.TAUNTS[category][i], path )) and (table.HasValue( self.CachedTaunts[i], path )) then
+						self.VerboseMsg(string.format("[PH Taunts] Skipping taunt PATH '%s' (Cat: %s, path: %s) because it exist in Taunt Table & Cache.", name,category,path))
+					else
+						self.VerboseMsg(string.format("[PH Taunts] Adding taunt '%s' (Cat: %s) to their Existing Taunt Table and Cache.", name,category))
 						self.TAUNTS[category][i][name] 	= path
 						self.CachedTaunts[i][name] 		= path
-					else
-						self.VerboseMsg(string.format("[PH Taunts] Skipping taunt %s (Cat: %s, path: %s) because it exist in Taunt Table & Cache.", name,category,path))
 					end
 				end
 			end

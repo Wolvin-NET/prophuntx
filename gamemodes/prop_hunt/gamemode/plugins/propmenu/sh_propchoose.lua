@@ -1,7 +1,6 @@
-PCR = {}
-PCR.__index = PCR
+PCR = PCR or {}
 
-PCR._VERSION = "X2Z.v2"
+PCR._VERSION = "X2Z.2"
 
 PCR.BannedProp = {}
 PCR.CustomProp = {}
