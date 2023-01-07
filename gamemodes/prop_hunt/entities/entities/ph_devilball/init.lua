@@ -273,12 +273,20 @@ ENT.funclists = {
 			
 			local failsafe = pl.tmr_itemnotice
 			
-			local msg = "Press [RIGHT CLICK] to shoot ".. name .."!"
+			-- NEED OPTIMIZATION --
+			local msg = "Press [%s] to shoot %s !"
+			local btn = "RIGHT CLICK"
+			if pl:IsLastStanding() then btn = "MIDDLE CLICK" end
+			-- NEED OPTIMIZATION --
 			
-			pl:PrintMessage(HUD_PRINTCENTER, msg)
+			pl:PrintMessage(HUD_PRINTCENTER, string.format( msg, btn, name ))
 			timer.Create(pl.tmr_itemnotice, 3, 0, function()
 				if IsValid(pl) and pl:Alive() then
-					pl:PrintMessage(HUD_PRINTCENTER, msg)
+					-- NEED OPTIMIZATION --
+					btn = "RIGHT CLICK"
+					if pl:IsLastStanding() then btn = "MIDDLE CLICK" end
+					-- NEED OPTIMIZATION --
+					pl:PrintMessage(HUD_PRINTCENTER, string.format( msg, btn, name ))
 				else
 					print("[PHX Devil Crystal] Removing Timer '" .. failsafe .. "' because player was dead or disconnected!")
 					timer.Remove(failsafe)
@@ -420,11 +428,16 @@ local function DoPropRevenge( pl, amount )
 	end
 end
 
-hook.Add("PlayerTick", "PHX.PlayerPropDoRevenge", function(pl, mv)
-	if GAMEMODE:InRound() and pl:Alive() and pl:Team() == TEAM_PROPS and pl:KeyPressed(IN_ATTACK2) then
-		if pl.prop_revenge_item and pl.prop_revenge_item ~= nil and pl.prop_revenge_item > 0 and 
-			pl.has_uniqueitem and pl.has_uniqueitem ~= nil and !pl.has_uniqueitem_shoot then
+hook.Add("PlayerButtonDown", "PHX.PlayerPropDoRevenge", function(pl, key)
+	if GAMEMODE:InRound() and pl:Alive() and pl:Team() == TEAM_PROPS then
+		
+		if ((pl:IsLastStanding() and key == MOUSE_MIDDLE) or (!pl:IsLastStanding() and key == MOUSE_RIGHT)) and
+			(pl.prop_revenge_item) and pl.prop_revenge_item > 0 and 
+			(pl.has_uniqueitem) and !pl.has_uniqueitem_shoot then
+			
 			DoPropRevenge(pl, math.random(6,10))	-- 2nd argument is only for flechette.
+			
 		end
+		
 	end
 end)

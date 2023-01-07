@@ -22,6 +22,7 @@ LANG["id"]   = {
     ["LPS_START_X_ROUNDS"]      = "Jika jeda diaktifkan, Berapa Jeda yang harus dilompati?",
     ["LPS_SET_USEHEALTH"]       = "Perbolehkan Player LPS DIBERI 100 HP secara AWAL? Tidak berlaku jika mereka ganti prop baru.",
     ["LPS_SET_USEARMOR"]        = "Perbolehkan Player LPS Diberi Tameng? Dimulai dari 100 AP.",
+	["LPS_ALLOW_HOLSTER"]		= "Bolehkan untuk Simpan Senjata. Fitur ini juga menonaktifkan efek Halo dan Garis Jejak.",
     
     ["LPS_WEPLIST"]             = "Daftar Senjata untuk Prop:\n%s\nKamu bisa menggunakan 'lps_weapon_list' di console untuk lebih lanjut.",
     
@@ -60,7 +61,10 @@ LANG["id"]   = {
     ["WEAPON_STATE_READY"]      = "Siap",
     ["WEAPON_STATE_RELOAD"]     = "Reload...",
     ["WEAPON_STATE_OUTOFAMMO"]  = "Habis!",
-    ["WEAPON_STATE_UNARMED"]    = "Ga ada Senjata",
+    ["WEAPON_STATE_UNARMED"]    = "Tanpa Senjata",
+	["WEAPON_STATE_HOLSTER"]	= "<DISIMPAN>",
+	
+	["LPS_HOLSTER_HELPER_TEXT"] = "[KLIK] Tembak - [KLIK-KANAN] Simpan",
     
     ["WEAPON_AMMO_UNLI"]        = "Tanpa Batas"
 }

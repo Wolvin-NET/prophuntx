@@ -218,7 +218,7 @@ local function DoPlayerCheck(ply)
                         
                         pl:PrintCenter( "LASTPROP_ANNOUNCE", Color(240,72,82) )
                         
-                        if PHX:GetCVar("lps_trail_enable") then
+                        if PHX:GetCVar("lps_trail_show") then
                             local TrailCol = PHX.LPS:TrailColorTranslate( PHX:GetCVar( "lps_trail_color" ) )
                             local TrailTex = PHX:GetCVar( "lps_trail_texture" )
                             

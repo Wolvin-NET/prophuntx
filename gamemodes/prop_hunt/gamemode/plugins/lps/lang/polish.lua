@@ -22,6 +22,7 @@ LANG["pl_pl"]   = {
     ["LPS_START_X_ROUNDS"]      = "If Delayed-Start enabled, increment to X rounds to trigger LPS.",
     ["LPS_SET_USEHEALTH"]       = "Should LPS Players STARTS with 100 HP? Changing to other prop doesn't keep the health!",
     ["LPS_SET_USEARMOR"]        = "Should Give LPS Players an Armor? Starts with 100 AP.",
+	["LPS_ALLOW_HOLSTER"]		= "Allow Weapon Holstering. This will hide Halo and Trails effect when enabled.",
     
     ["LPS_WEPLIST"]             = "Lista dostępnych broni:\n%s\nMożesz użyć komendy 'lps_weapon_list' w konsoli.",
     
@@ -61,6 +62,9 @@ LANG["pl_pl"]   = {
     ["WEAPON_STATE_RELOAD"]     = "Przeładowywanie...",
     ["WEAPON_STATE_OUTOFAMMO"]  = "Brak amunicji",
     ["WEAPON_STATE_UNARMED"]    = "Brak broni",
+	["WEAPON_STATE_HOLSTER"]	= "<HOLSTERED>",
+	
+	["LPS_HOLSTER_HELPER_TEXT"] = "[CLICK] to Fire - [R-CLICK] to Holster weapon",
     
     ["WEAPON_AMMO_UNLI"]        = "Nielimitowana"
 }

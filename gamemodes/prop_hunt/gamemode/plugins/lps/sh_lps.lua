@@ -7,6 +7,7 @@ LPS_WEAPON_UNARMED      = 0
 LPS_WEAPON_READY        = 1
 LPS_WEAPON_RELOAD       = 2
 LPS_WEAPON_OUTOFAMMO    = 3
+LPS_WEAPON_HOLSTER		= 4
 
 PHX.LPS = {}
 PHX.LPS._pluginname     = "lps"         -- Make sure this name is similar to the plugin folder's name. Otherwise language will not work!
@@ -49,11 +50,12 @@ end }
 
 cvar["lps_use_normal_health"]   = { CTYPE_BOOL,     "0",        CVAR_SERVER_ONLY, "Should LPS Players STARTS with 100 HP? Changing to other props doesn't keep this." }
 cvar["lps_use_armor"]           = { CTYPE_BOOL,     "0",        CVAR_SERVER_ONLY, "Should Give LPS Players an Armor? (Default is 100 armor points)" }
+cvar["lps_allow_holster"]		= { CTYPE_BOOL,		"1",		CVAR_SERVER_ONLY, "Allow prop to holster their weapon. This also temporarily hide trails and halo effects when enabled." }
 
-cvar["lps_halo_enable"]         = { CTYPE_BOOL,     "1",        CVAR_SERVER_ONLY, "Draw a halo effect around the last prop?" }
+cvar["lps_halo_show"]         = { CTYPE_BOOL,     "0",        CVAR_SERVER_ONLY, "Draw a halo effect around the last prop?" }
 cvar["lps_halo_walls"]          = { CTYPE_BOOL,     "0",        CVAR_SERVER_ONLY, "Draw the halo effect through walls?" }
 cvar["lps_halo_color"]          = { CTYPE_STRING,   "#14FA00",  CVAR_SERVER_ONLY, "Halo Effect Color (use \"rainbow\" or hex code)" }
-cvar["lps_trail_enable"]        = { CTYPE_BOOL,     "1",        CVAR_SERVER_ONLY, "Draw a trail behind the last prop?" }
+cvar["lps_trail_show"]        = { CTYPE_BOOL,     "0",        CVAR_SERVER_ONLY, "Draw a trail behind the last prop?" }
 cvar["lps_trail_color"]         = { CTYPE_STRING,   "#FFFFFF",  CVAR_SERVER_ONLY, "Trail Color (use hex code)" }
 cvar["lps_trail_texture"]       = { CTYPE_STRING,   "trails/laser", CVAR_SERVER_ONLY, "Draw a trail with what texture?" }
 cvar["lps_enable_music"]		= { CTYPE_BOOL,		"1",		CVAR_SERVER_ONLY, "Enable background music when LPS begins. Require round restart to take effect." }
@@ -124,16 +126,17 @@ if CLIENT then
             {"", "label", false,    "LPS_HEALTH_ARMOR" },
             {"lps_use_normal_health",       "check", "SERVER", "LPS_SET_USEHEALTH" },
             {"lps_use_armor",               "check", "SERVER", "LPS_SET_USEARMOR" },
+			{"lps_allow_holster", 			"check", "SERVER", "LPS_ALLOW_HOLSTER" },
             
             {"lps_mins_prop_players",   "slider",    {min=2,max=game.MaxPlayers(), dec=0, kind="SERVER"}, "LPS_MINIMUM_PROPS_TEAM" },            
 			{"lps_enable_music", 	"check", "SERVER",	"LPS_ENABLE_MUSIC"},
             
             {"", "label", false,    "LPS_APPEARANCES" },
 			{"lps_show_weapon",     "check",     "SERVER", "LPS_SHOW_WEAPON"},
-            {"lps_halo_enable",     "check",     "SERVER", "LPS_HALO_ENABLE"},
+            {"lps_halo_show",     "check",     "SERVER", "LPS_HALO_ENABLE"},
             {"lps_halo_walls",      "check",     "SERVER", "LPS_HALO_SEETHROUGHWALL"},
             {"lps_halo_color",      "textentry", "SERVER", "LPS_HALO_COLOUR"},
-            {"lps_trail_enable",    "check",     "SERVER", "LPS_TRAILS_ENABLE"},
+            {"lps_trail_show",    "check",     "SERVER", "LPS_TRAILS_ENABLE"},
             {"lps_trail_color",     "textentry", "SERVER", "LPS_TRAILS_COLOUR"},
             {"lps_trail_texture",   "textentry", "SERVER", "LPS_TRAIL_TEXTURE"},
             {"lps_laser_color",     "textentry", "SERVER", "LPS_LASER_COLOUR" },
@@ -167,6 +170,7 @@ if CLIENT then
     list.Set("PHX.Plugins","Last Prop Standing",ADDON_INFO)
 end
 
+-- How about PlayerTick ?
 hook.Add("SetupMove", "LPS.CLShootWeapon",function( ply, mv ) --Move ?
     if not IsFirstTimePredicted() then return end
     if not IsValid(ply) then return end
@@ -182,8 +186,45 @@ hook.Add("SetupMove", "LPS.CLShootWeapon",function( ply, mv ) --Move ?
     if PHX:GetCVar( "lps_enable" ) and IsValid(wepEnt) and 
         hasWeapon and ActiveWep:GetClass() == PHX.LPS.DUMMYWEAPON and
         ply:Team() == TEAM_PROPS and ply:IsLastStanding() and ply:Alive() and GetGlobalBool("InRound", false) then
+		
+		if mv:KeyPressed( IN_ATTACK2 ) and ply:LPSHolsterTime() <= CurTime() then
+		
+			if ( ply:GetLPSWeaponState() == LPS_WEAPON_RELOAD ) then return end
+			--if ( ply:LPSNextFireDelay()+0.1 > CurTime() ) then return end
+		
+			if !ply:IsLPSHolstered() then
+				ply:SetLPSWeaponState( LPS_WEAPON_HOLSTER )
+				ply:LPSFiringState( false )
+				
+				if SERVER and IsValid( ply.lpstrail ) then
+					ply.lpstrail:SetNoDraw( true )
+				end
+				
+				if CLIENT then
+					surface.PlaySound( "weapons/smg1/switch_single.wav" )
+				end
+				
+			elseif ply:IsLPSHolstered() then
+				if ply:GetLPSAmmo() == 0 then
+					ply:SetLPSWeaponState( LPS_WEAPON_OUTOFAMMO )
+				else
+					ply:SetLPSWeaponState( LPS_WEAPON_READY )
+				end
+				
+				if SERVER and IsValid( ply.lpstrail ) then
+					ply.lpstrail:SetNoDraw( false )
+				end
+				
+				if CLIENT then
+					surface.PlaySound( "weapons/smg1/switch_burst.wav" )
+				end
+			end
+			
+			ply:SetLPSHolsterDelay()
+			
+		end
         
-        if mv:KeyDown( IN_ATTACK ) then
+        if mv:KeyDown( IN_ATTACK ) and !ply:IsLPSHolstered() then
             ply:LPSShootBullets()
             ply:LPSFiringState( true )  -- used for Lasers or any weapons that uses Think function.
         else

@@ -22,6 +22,7 @@ LANG["ru"]   = {
     ["LPS_START_X_ROUNDS"]      = "Если включена функция отложенного старта, увеличить до X раундов до запуска последнего объекта.",
     ["LPS_SET_USEHEALTH"]       = "Должны ли игроки-последние объекты НАЧИНАТЬ со 100 ед. здоровья? Переход на другой объект не сохранит здоровье!",
     ["LPS_SET_USEARMOR"]        = "Стоит ли давать игрокам-последним объектам броню? Начинать со 100 ед. брони.",
+	["LPS_ALLOW_HOLSTER"]		= "Allow Weapon Holstering. This will hide Halo and Trails effect when enabled.",
     
     ["LPS_WEPLIST"]             = "Список доступного оружия:\n%s\nВы можете использовать 'lps_weapon_list' в консоли.",
     
@@ -61,6 +62,9 @@ LANG["ru"]   = {
     ["WEAPON_STATE_RELOAD"]     = "Перезарядка...",
     ["WEAPON_STATE_OUTOFAMMO"]  = "Нет патронов",
     ["WEAPON_STATE_UNARMED"]    = "Нет оружия",
+	["WEAPON_STATE_HOLSTER"]	= "<HOLSTERED>",
+	
+	["LPS_HOLSTER_HELPER_TEXT"] = "[CLICK] to Fire - [R-CLICK] to Holster weapon",
     
     ["WEAPON_AMMO_UNLI"]        = "Бесконечно"
 }

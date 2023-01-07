@@ -64,6 +64,7 @@ end
     LPS_WEAPON_READY        = 1
     LPS_WEAPON_RELOAD       = 2
     LPS_WEAPON_OUTOFAMMO    = 3
+	LPS_WEAPON_HOLSTER		= 4
 ]]--
 function Player:SetLPSWeaponState( state )
     self.LPSWepState = state
@@ -85,6 +86,10 @@ end
 
 function Player:LPSNextFire( delay )
     self:SetNWFloat( "bLps.CurTime", CurTime() + delay )
+end
+
+function Player:SetLPSHolsterDelay()
+	self:SetNWFloat( "bLps.NextHolster", CurTime()+1.0 )
 end
 
 function Player:LPSNextFireDelay()
@@ -145,6 +150,7 @@ function Player:LPSShootBullets()
     if !GetGlobalBool("InRound", false) then return end
     if !PHX:GetCVar( "lps_enable" ) then return end
     if !self:IsLastStanding() then return end
+	if self:IsLPSHolstered() then return end
     if self:GetLPSAmmo() == 0 then return end
     
     local _,plmaxs      = self:GetHull()
@@ -278,4 +284,12 @@ end
 
 function Player:GetLPSAmmo()
     return self:GetNWInt( "bLps.AmmoCount", 0 ) -- can also -1.
+end
+
+function Player:IsLPSHolstered()
+	return self:GetLPSWeaponState() == LPS_WEAPON_HOLSTER
+end
+
+function Player:LPSHolsterTime()
+	return self:GetNWFloat( "bLps.NextHolster", 0.0 )
 end

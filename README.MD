@@ -1,8 +1,13 @@
 # Prop Hunt: X
 ## X2Z - Road to Zero
 
+### PLEASE NOTE
+#### This gamemode DOES NOT AFFILIATE NOR COLLABORATE TO ANY OTHER GAMES OUTSIDE OF GARRY'S MOD! THEREFORE IS NOT CREATED BY ME!
+
+**"Prop Hunt: X" Was Originally given and created by Wolvindra-Vinzuerio and Only Available Exclusively for Garry's Mod.**
+
 ### Versioning
-Version: X2Z, Revision: 14/09/2022 (dd/mm/yyyy)
+Version: X2Z, Revision: 07/01/2023 (dd/mm/yyyy)
 
 ### Public Servers
 - Server #1 [U.S]: **74.91.120.8:27015**

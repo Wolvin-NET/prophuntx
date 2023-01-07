@@ -22,6 +22,7 @@ LANG["ko_kr"]   = {
     ["LPS_START_X_ROUNDS"]      = "If Delayed-Start enabled, increment to X rounds to trigger LPS.",
     ["LPS_SET_USEHEALTH"]       = "Should LPS Players STARTS with 100 HP? Changing to other prop doesn't keep the health!",
     ["LPS_SET_USEARMOR"]        = "Should Give LPS Players an Armor? Starts with 100 AP.",
+	["LPS_ALLOW_HOLSTER"]		= "Allow Weapon Holstering. This will hide Halo and Trails effect when enabled.",
     
     ["LPS_WEPLIST"]             = "사용 가능 무기 목록:\n%s\n콘솔에'lps_weapon_list'를 입력하시기 바랍니다.",
     
@@ -61,6 +62,9 @@ LANG["ko_kr"]   = {
     ["WEAPON_STATE_RELOAD"]     = "재장전중...",
     ["WEAPON_STATE_OUTOFAMMO"]  = "탄약 없음",
     ["WEAPON_STATE_UNARMED"]    = "무기 없음",
+	["WEAPON_STATE_HOLSTER"]	= "<HOLSTERED>",
+	
+	["LPS_HOLSTER_HELPER_TEXT"] = "[CLICK] to Fire - [R-CLICK] to Holster weapon",
     
     ["WEAPON_AMMO_UNLI"]        = "무제한"
 }

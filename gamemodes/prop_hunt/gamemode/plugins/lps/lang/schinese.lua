@@ -22,6 +22,7 @@ LANG["zh-CN"]   = {
     ["LPS_START_X_ROUNDS"]      = "If Delayed-Start enabled, increment to X rounds to trigger LPS.",
     ["LPS_SET_USEHEALTH"]       = "Should LPS Players STARTS with 100 HP? Changing to other prop doesn't keep the health!",
     ["LPS_SET_USEARMOR"]        = "Should Give LPS Players an Armor? Starts with 100 AP.",
+	["LPS_ALLOW_HOLSTER"]		= "Allow Weapon Holstering. This will hide Halo and Trails effect when enabled.",
     
     ["LPS_WEPLIST"]             = "可用武器列表:\n%s\n你可以在控制台使用 'lps_weapon_list' 命令.",
     
@@ -61,6 +62,9 @@ LANG["zh-CN"]   = {
     ["WEAPON_STATE_RELOAD"]     = "装弹中...",
     ["WEAPON_STATE_OUTOFAMMO"]  = "弹药耗尽",
     ["WEAPON_STATE_UNARMED"]    = "没有武器",
+	["WEAPON_STATE_HOLSTER"]	= "<HOLSTERED>",
+	
+	["LPS_HOLSTER_HELPER_TEXT"] = "[CLICK] to Fire - [R-CLICK] to Holster weapon",
     
     ["WEAPON_AMMO_UNLI"]        = "无限"
 }

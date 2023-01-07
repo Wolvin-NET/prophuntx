@@ -21,7 +21,7 @@ IS_PHX		 	= true	-- an easy check if PHX is installed.
 
 PHX.ConfigPath 	= "phx_data"
 PHX.VERSION		= "X2Z"
-PHX.REVISION	= "14.09.22" --Format: dd/mm/yy.
+PHX.REVISION	= "07.01.23" --Format: dd/mm/yy.
 
 --[[ BEGIN OF SHARED INIT HEADERS ]]--
 

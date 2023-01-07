@@ -1,5 +1,17 @@
 ## A new major updates to Prop Hunt: X has been released.
-For now, the Prop Hunt X will change it's version to "X2Z" following with date-formatted revisions.
+Note: Prop Hunt X will change it's version to "X2Z" following with date-formatted revisions.
+
+## Revision 07.01.2023
+This is a quick feature update for Last Prop Standing (**LPS**) and other fixes. A core gamemode hasn't patched yet (this patch was highly requested and therefore you should update your gamemode!)
+- LPS will now allow you to Holster Weapon. To toggle holster (hide) LPS weapon, simply just right click on it.
+- Holstering Weapon **WILL** also hides Glowing and Trail Effects.
+- Added Text HUD to inform player when LPS is active: CLICK for Shoot, MOUSE2 for Holster
+- Added LPS Weapon State 'HOLSTERED' to inform the weapon is being holstered. This networked value can be accessed via `Player:GetLPSWeaponState() == LPS_WEAPON_HOLSTER` OR `(boolean) Player:IsLPSHolstered()`
+- Added sounds when holstering LPS weapons
+- Devil Ball Fix: Fixed RPG, Grenade, and Flachette Launcher Bound Keys when a Player is in Last Prop Standing. A default RIGHT CLICK key will be changed temporarily to MIDDLE CLICK key when LPS is active.
+- Updated Underwater Weapons to be more reliable (SMG, AR2, and Shotgun Water for use to any Underwater Maps) 
+- Added Weapon Select & Kill Icons for Underwater Weapons (Applies to: SMG, AR2, and Shotgun Water)
+- Added `env_embers_controller` helper function for Mappers. Allows you to Turn On/Off this entity.
 
 ## Revision 14.09.2022
 - Updated French Language (by: GalaxioFr)
