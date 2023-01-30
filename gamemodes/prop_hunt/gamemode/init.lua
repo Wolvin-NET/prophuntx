@@ -901,7 +901,11 @@ local function ForceEndRound( ply )
         MsgAll("Round was forced end. No one Wins!\n")
     
     else
-        ply:PrintMessage(HUD_PRINTTALK, "[PHX] Sorry, this command is unavailable.")
+        if ply == NULL then
+			print( "[PHX] Cannot Restart round: Not in active round!" )
+		else
+			ply:PrintMessage(HUD_PRINTTALK, "[PHX] Sorry, this command is unavailable.")
+		end
     end
 end
 concommand.Add("ph_force_end_round", ForceEndRound, nil, "Force End Active Round")

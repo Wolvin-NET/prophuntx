@@ -1,6 +1,10 @@
 ## A new major updates to Prop Hunt: X has been released.
 Note: Prop Hunt X will change it's version to "X2Z" following with date-formatted revisions.
 
+## Revision 30.01.2023
+- HotFix: Fixed Error for calling `PHInLastPropStanding` hook where is `Player` argument returns `nil`. This is **REQUIRED** if you use "AK47 LPS Weapon" addon.
+- HotFix: Fixed Error when trying to run `ph_force_end_round` on Dedicated Server console.
+
 ## Revision 07.01.2023
 This is a quick feature update for Last Prop Standing (**LPS**) and other fixes. A core gamemode hasn't patched yet (this patch was highly requested and therefore you should update your gamemode!)
 - LPS will now allow you to Holster Weapon. To toggle holster (hide) LPS weapon, simply just right click on it.

@@ -7,10 +7,11 @@
 **"Prop Hunt: X" Was Originally given and created by Wolvindra-Vinzuerio and Only Available Exclusively for Garry's Mod.**
 
 ### Versioning
-Version: X2Z, Revision: 07/01/2023 (dd/mm/yyyy)
+Version: X2Z, Revision: 30/01/2023 (dd/mm/yyyy)
 
 ### Public Servers
-- Server #1 [U.S]: **74.91.120.8:27015**
+- Server #1 [U.S]: **74.91.120.8:27015** (Public Stable Server)
+- Server #2 [U.S]: **maelstrom94.duckdns.org:27016** (Public Dev Server)
 - Other Servers: https://gmodgameservers.com/prophuntx/servers
 
 ### Support the PH:X2Z Development
