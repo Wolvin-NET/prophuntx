@@ -31,7 +31,7 @@ LANG.SUICIDEMSG = {  -- Fix me: there was addition text here but feel free to ad
 	"Arka odalara geçti.",
 	"soyunu kurutmayı deniyor.",
 	"öldürdü.",
-	"bütün nesnelerı öldürecekken panikledi.",
+	"bütün nesneleri öldürecekken panikledi.",
 	"dur artık, yardıma ihtiyacın var.",
 	"paçavra oldu.",
 }
