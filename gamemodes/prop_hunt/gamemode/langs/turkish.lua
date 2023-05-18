@@ -27,7 +27,7 @@ LANG.SUICIDEMSG = {  -- Fix me: there was addition text here but feel free to ad
 	"ayağı kayıp düştü.",
 	"baskıdan öldü.",
 	"öldü. Ltfn F'e basın.",
-	"Masum nesneları öldürdükten sonra pişmanlık duyuyor.",
+	"Masum nesneleri öldürdükten sonra pişmanlık duyuyor.",
 	"Arka odalara geçti.",
 	"soyunu kurutmayı deniyor.",
 	"öldürdü.",
