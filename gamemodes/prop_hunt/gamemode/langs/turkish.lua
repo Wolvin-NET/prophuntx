@@ -103,7 +103,7 @@ Nesne Avını daha modern ve özelleştirilebilir hale getiren bir proje.
 Daha fazla bilgi şu adreste bulunabilir:
 https://www.buymeacoffee.com/wolvindra
 
-Daha fazla bilgi, yardım ve kılavuz görmek için [F1] tuşuna basın ve ardından [Eşya Avı Menüsü] düğmesine tıklayın.
+Daha fazla bilgi, yardım ve kılavuz görmek için [F1] tuşuna basın ve ardından [Nesne Avı Menüsü] düğmesine tıklayın.
 
 Version: ]].. PHX.VERSION ..[[ Revision: ]].. PHX.REVISION ..[[
 
