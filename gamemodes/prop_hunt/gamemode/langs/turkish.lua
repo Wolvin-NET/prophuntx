@@ -27,11 +27,11 @@ LANG.SUICIDEMSG = {  -- Fix me: there was addition text here but feel free to ad
 	"ayağı kayıp düştü.",
 	"baskıdan öldü.",
 	"öldü. Ltfn F'e basın.",
-	"Masum nesneları öldürdükten sonra pişmanlık duyuyor.",
+	"Masum nesneleri öldürdükten sonra pişmanlık duyuyor.",
 	"Arka odalara geçti.",
 	"soyunu kurutmayı deniyor.",
-	"öldüdü.",
-	"bütün nesneları öldürecekken panikledi.",
+	"öldürdü.",
+	"bütün nesneleri öldürecekken panikledi.",
 	"dur artık, yardıma ihtiyacın var.",
 	"paçavra oldu.",
 }
@@ -96,18 +96,18 @@ LANG["SPASHSCREEN_BY_X"]		= "%s tarafından"
 LANG["HELP_DONATORS_AND_CONTRIBUTORS"]  = "\n\nBağışçılar & Katkıda Bulunanlar:\n- %s"
 -- // END OF FRETTA SECTION \\
 
-LANG["HELP_F1"] 				= [[A Prop Hunt X Project.
+LANG["HELP_F1"] 				= [[Bir Nesne Avı X Projesi.
 
-A project to make Prop Hunt be more modern and customisable.
+Nesne Avını daha modern ve özelleştirilebilir hale getiren bir proje.
 
-More info can be found at:
+Daha fazla bilgi şu adreste bulunabilir:
 https://www.buymeacoffee.com/wolvindra
 
-To See more info, help and guide, Press [F1] key and then click [Prop Hunt Menu] button.
+Daha fazla bilgi, yardım ve kılavuz görmek için [F1] tuşuna basın ve ardından [Nesne Avı Menüsü] düğmesine tıklayın.
 
 Version: ]].. PHX.VERSION ..[[ Revision: ]].. PHX.REVISION ..[[
 
-Have Fun!]]
+İyi Eğlenceler!]]
 
 LANG["LANGUAGE_CHANGED"]		= "Tercih edilen dil %s'yle değiştirildi."
 
@@ -186,8 +186,8 @@ LANG["TM_DELAYTAUNT_PLSWAIT"]	= "%s saniye bekleyiniz!"
 --[[
 	PHX Menu window
 ]]
-LANG["PHXM_WINDOW_TITLE"]		= "Nesne Avı X - Gelişmiş Ayarlar & Menü"
-LANG["SERVER_INFO_MOTD"]		= "SUNUCU BİLGİSİ & KURALLARI [GM]"
+LANG["PHXM_WINDOW_TITLE"]		= "Nesne Avı X - Gelişmiş Ayarlar ve Menü"
+LANG["SERVER_INFO_MOTD"]		= "SUNUCU BİLGİSİ ve KURALLARI [GM]"
 
 LANG["PHXM_TAB_HELP"]			= "Yardım & Rehber"
 LANG["PHXM_TAB_MUTE"]			= "Oyuncu Susturma"
@@ -279,11 +279,11 @@ LANG["PHXM_ADMIN_SWAP_TEAM"] 				= "Her raunt takım değiştir - Bu ayar devre 
 LANG["PHXM_ADMIN_HUNTER_PENALTY"]			= "Avcı can cezası"
 LANG["PHXM_ADMIN_HUNTER_KILL_BONUS"]		= "Avcı leş bonusu "
 LANG["PHXM_ADMIN_HUNTER_SMG_GRENADES"]		= "Avcı SMG bombaları"
-LANG["PHXM_ADMIN_GAME_TIME"]				= "(Haritayı Yeniden Başlatma Gerektirir) Toplam oyun süresi(Dakika)"
+LANG["PHXM_ADMIN_GAME_TIME"]				= "(Haritayı Yeniden Başlatma Gerektirir) Toplam oyun süresi (Dakika)"
 LANG["PHXM_ADMIN_BLINDLOCK_TIME"]			= "Avcı yumma zamanı (Saniye)"
-LANG["PHXM_ADMIN_ROUND_TIME"]				= "(Haritayı Yeniden Başlatma Gerektirir) Oyun raunt süresi(Saniye)"
+LANG["PHXM_ADMIN_ROUND_TIME"]				= "(Haritayı Yeniden Başlatma Gerektirir) Oyun raunt süresi (Saniye)"
 LANG["PHXM_ADMIN_ROUNDS_PER_MAP"]			= "(Haritayı Yeniden Başlatma Gerektirir) Harita başı toplam oyun raundu"
-LANG["PHXM_ADMIN_ENABLE_LUCKYBALL"]			= "Şanslı Topların kırılabilir nesnelerde çıkmasına izin ver (Çıkma şansı 8%)"
+LANG["PHXM_ADMIN_ENABLE_LUCKYBALL"]			= "Şanslı Topların kırılabilir nesnelerde çıkmasına izin ver (Çıkma şansı %8)"
 LANG["PHXM_ADMIN_ENABLE_CRYSTAL"]			= "Şeytan Toplarının avcı öldüğünde çıkmasına izin ver (Her zaman çıkar)"
 LANG["PHXM_ADMIN_WAIT_PLAYERS"]				= "Oyuna başlamak için oyuncuları bekle"
 LANG["PHXM_ADMIN_WAIT_MIN_PLAYERS"]			= "Oyunun başlaması için gereken en az oyuncu sayısı (varsayılan: 1)"
@@ -317,7 +317,7 @@ LANG["PHXM_ADMIN_SHOWPLNAMEHEAD"]	= "Oyuncu takım adlarının ekranda belirmesi
 LANG["PHXM_ADMIN_USESINGLE_FZCAM"]	= "Ses listesi kullanmak yerine tek bir Sabit Kamera sesi kullan. (Sabit Kamera sesini belirlemek için 'ph_fc_cue_path' yolunu kullan)"
 LANG["PHXM_ADMIN_MODELLISTINGTYPE"] = "Oyuncu Modeli Listeleme Metodu: 0: Her Şeyi Dahil Et, 1: list.Get('PlayerOptionsModel')'i kullan"
 LANG["PHXM_ADMIN_JUMPPOWER"]		= "Nesneler için ek zıplama gücü katsayısı"
-LANG["PHXM_ADMIN_ENABLE_OBB"]		= "Geliştirici: Özelleştirilmiş Nesne Varlık Modelinin Sınırları değiştiricisini config verisinden etkinleştir (OBB)"
+LANG["PHXM_ADMIN_ENABLE_OBB"]		= "Geliştirici: Özelleştirilmiş Nesne Varlık Modelinin Sınırları değiştiricisini konfig verisinden etkinleştir (OBB)"
 LANG["PHXM_ADMIN_RELOAD_OBB"]		= "Geliştirici: Her raunt yeniden başlatıldığında OBB değiştiricisini yeniden yükle"
 
 --[[
