@@ -30,7 +30,7 @@ LANG.SUICIDEMSG = {  -- Fix me: there was addition text here but feel free to ad
 	"Masum nesneleri öldürdükten sonra pişmanlık duyuyor.",
 	"Arka odalara geçti.",
 	"soyunu kurutmayı deniyor.",
-	"öldürdü.",
+	"çok fena öldü.",
 	"bütün nesneleri öldürecekken panikledi.",
 	"dur artık, yardıma ihtiyacın var.",
 	"paçavra oldu.",
@@ -133,8 +133,8 @@ LANG["HUD_ROTLOCK"]				= "Nesne Döndürme: Kitli"
 LANG["HUD_ROTFREE"]				= "Nesne Döndürme: Serbest"
 LANG["HUD_KILLEDBY"]			= "%s tarafından öldürüldün"
 
-LANG["HUD_AUTOTAUNT"]			= "Oto Taunt'a %d saniye"
-LANG["HUD_AUTOTAUNT_ALT"]		= "Oto Taunt'a %d"
+LANG["HUD_AUTOTAUNT"]			= "Otomatik Alaya %d saniye"
+LANG["HUD_AUTOTAUNT_ALT"]		= "Otomatik Alaya %d"
 
 LANG["HUD_TargetID"]			= "Oyuncu: %s (%d%%)"
 
@@ -165,22 +165,22 @@ LANG["NOTIFY_IN_PROP_TEAM"]		= "Dönme özelliğinle Nesne Takımındasın! Fare
 LANG["NOTIFY_ROTATE_NOTICE"]	= "[R] tuşuna basarak dönmeyi kitleyebilirsiniz!"
 
 -- Custom Taunt Window
-LANG["TM_WARNING_CT_DISABLE"]	= "[NAX - Tauntlar] Uyarı: Bu sunucu özel tauntları devre dışı bırakmıştır."
-LANG["TM_NO_TAUNTS"]			= "Uyarı: Bu kategoride tauntlar bulunamadı."
-LANG["TM_PLAY_ONLY_ALIVE"] 		= "Özel tauntları sadece canlıyken çalabilirsin."
+LANG["TM_WARNING_CT_DISABLE"]	= "[NAX - Alaylar] Uyarı: Bu sunucu özel alayları devre dışı bırakmıştır."
+LANG["TM_NO_TAUNTS"]			= "Uyarı: Bu kategoride alaylar bulunamadı."
+LANG["TM_PLAY_ONLY_ALIVE"] 		= "Özel alayları sadece canlıyken çalabilirsin."
 
-LANG["TM_WINDOW_TITLE"]			= "Nesne Avı Özel Taunt Penceresi"
-LANG["TM_NOTICE_PLSWAIT"]		= "Lütfen rastgele taunt bitene kadar %s saniye bekleyiniz!"
-LANG["TM_NOTICE_PLAYPREVIEW"]	= "Taunt Önizleniyor: %s"
+LANG["TM_WINDOW_TITLE"]			= "Nesne Avı Özel Alay Penceresi"
+LANG["TM_NOTICE_PLSWAIT"]		= "Lütfen rastgele alay bitene kadar %s saniye bekleyiniz!"
+LANG["TM_NOTICE_PLAYPREVIEW"]	= "Alay Önizleniyor: %s"
 
-LANG["TM_TOOLTIP_PLAYTAUNT"] 	= "Taunt Çal"
-LANG["TM_TOOLTIP_PREVIEW"]		= "Taunt Önizle"
-LANG["TM_TOOLTIP_PLAYCLOSE"]	= "Taunt Çal ve Kapat"
-LANG["TM_TOOLTIP_PLAYRANDOM"]	= "Rastgele Taunt Çal"
+LANG["TM_TOOLTIP_PLAYTAUNT"] 	= "Alay Et"
+LANG["TM_TOOLTIP_PREVIEW"]		= "Alay Önizle"
+LANG["TM_TOOLTIP_PLAYCLOSE"]	= "Alay Et ve Kapat"
+LANG["TM_TOOLTIP_PLAYRANDOM"]	= "Rastgele Alay Et"
 LANG["TM_TOOLTIP_CLOSE"]		= "Kapat"
 LANG["TM_MENU_CLOSE"]			= "Menüyü Kapat"
 
-LANG["TM_DELAYTAUNT_NOT_EXIST"] = "Seçtiğin taunt sunucuda bulunamadı!"
+LANG["TM_DELAYTAUNT_NOT_EXIST"] = "Seçtiğin alay sunucuda bulunamadı!"
 LANG["TM_DELAYTAUNT_PLSWAIT"]	= "%s saniye bekleyiniz!"
 
 --[[
@@ -214,14 +214,14 @@ LANG["PHXM_PLAYER_LANG"]		= "Diller"
 LANG["PHXM_PLAYER_BIND"]		= "Tuş Atamaları"
 LANG["PHXM_PLAYER_HUDSETTINGS"]	= "Arayüz Ayarları"
 
-LANG["PHXM_PLAYER_TAUNT_KEY"]			= "Rastgele Taunt Tuşu"
-LANG["PHXM_PLAYER_TAUNTWINDOW_KEY"]		= "Taunt Menü Tuşu"
+LANG["PHXM_PLAYER_TAUNT_KEY"]			= "Rastgele Alay Tuşu"
+LANG["PHXM_PLAYER_TAUNTWINDOW_KEY"]		= "Alay Menü Tuşu"
 LANG["PHXM_PLAYER_ROTATLOCK_KEY"]		= "Dönme Kilidi Tuşu"
 
 LANG["PHXM_PLAYER_TOGGLE_HALOS"]		= "Nesne seçerken parlama efektini etkinleştir"
 LANG["PHXM_PLAYER_IDNAMES"]				= "Takım oyuncularının adlarını başlarının üstünde göster (ayrıca duvar arkası gözükür)"
 LANG["PHXM_PLAYER_ENDROUND_CUE"]		= "Raunt sonu işareti sesini çal"
-LANG["PHXM_PLAYER_TAUNTMENU_AUTOCLOSE"]	= "Çift tıklandığında taunt penceresini otomatik kapatma seçeneği"
+LANG["PHXM_PLAYER_TAUNTMENU_AUTOCLOSE"]	= "Çift tıklandığında alay penceresini otomatik kapatma seçeneği"
 LANG["PHXM_PLAYER_SEE_HUNTER_LINE"]		= "İzleyici modunda avcıların nereye nişan aldığını görmek için ışın çizer."
 LANG["PHXM_PLAYER_SEE_LBALL_ICONS"]		= "'Şanslı top' düştüğünde simgesini görünür yap."
 LANG["PHXM_PLAYER_SEE_CRYSTAL_ICONS"]	= " 'Şeytan top' düştüğünde simgesini görünür yap."
@@ -265,10 +265,10 @@ LANG["PHXM_ADMIN_PLAYERDEFAULTLANG"] 		= "İlk girişte varsayılan oyuncu dili.
 -- Gameplay settings
 LANG["PHXM_ADMIN_CUSTOM_MODEL"]				= "Avcılar özel modellere erişebilir. Bu [Model Tarayıcı] menüsünü etkinleştirir."
 LANG["PHXM_ADMIN_CUSTOM_MODEL_PROP"]		= "Nesneler özel modellere erişebilir (Avcıların özel modellere erişimi olmasını gerektirir.)"
-LANG["PHXM_ADMIN_TAUNT_DELAY_CUSTOM"]		= "Özel Taunt Gecikmesi (Saniye)"
-LANG["PHXM_ADMIN_TAUNT_DELAY_RANDOM"]		= "Normal Taunt Gecikmesi (Saniye)"
-LANG["PHXM_ADMIN_TAUNT_DELAY_AUTO"]			= "Oto Taunt Gecikmesi (Saniye)"
-LANG["PHXM_ADMIN_AUTOTAUNT_ENABLE"]			= "Oto Taunt Özelliklerini Etkinleştir. (Süre bir sonraki raunt düzelecektir)"
+LANG["PHXM_ADMIN_TAUNT_DELAY_CUSTOM"]		= "Özel Alay Gecikmesi (Saniye)"
+LANG["PHXM_ADMIN_TAUNT_DELAY_RANDOM"]		= "Normal Alay Gecikmesi (Saniye)"
+LANG["PHXM_ADMIN_TAUNT_DELAY_AUTO"]			= "Otomatik Alay Gecikmesi (Saniye)"
+LANG["PHXM_ADMIN_AUTOTAUNT_ENABLE"]			= "Otomatik Alay Özelliklerini Etkinleştir. (Süre bir sonraki raunt düzelecektir)"
 
 LANG["PHXM_ADMIN_NOTICE_ROTATION"]			= "Her doğulduğunda 'Nesne Dönme' bildirimini göster."
 LANG["PHXM_ADMIN_CAMERA_COLLIDE"]			= "Nesne kamerasının duvarlara değmesini etkinleştir."
@@ -293,12 +293,12 @@ LANG["PHXM_ADMIN_FORCEJOINBALANCE"]			= "Oyuncular katıldıklarında takımlar�
 LANG["PHXM_ADMIN_ENABLETEAMBALANCE"]		= "Takım Dengesini Etkinleştir: Raunt başında otomatik olarak takımları eşitle."
 LANG["PHXM_ADMIN_PICKUP_PROPS"] 			= "Küçük nesnelerle etkileşime izin ver? 0: İzin Verme, 1: Sadece Avcılar, 2: Sadece Nesneler, 3: Herkese izin ver."
 
-LANG["PHXM_ADMIN_TAUNTMODES"]			= "Taunt Modları"
-LANG["PHXM_ADMIN_TAUNTMODE_MODE"]		= "--[Mevcut Taunt Modu: %d ]--"
-LANG["PHXM_ADMIN_TAUNTMODE0"]			= "Mod [0]: F3/Rastgele Taunt"
-LANG["PHXM_ADMIN_TAUNTMODE1"]			= "Mod [1]: C/Özel Taunt"
+LANG["PHXM_ADMIN_TAUNTMODES"]			= "Alay Modları"
+LANG["PHXM_ADMIN_TAUNTMODE_MODE"]		= "--[Mevcut Alay Modu: %d ]--"
+LANG["PHXM_ADMIN_TAUNTMODE0"]			= "Mod [0]: F3/Rastgele Alay"
+LANG["PHXM_ADMIN_TAUNTMODE1"]			= "Mod [1]: C/Özel Alay"
 LANG["PHXM_ADMIN_TAUNTMODE2"]			= "Mod [2]: Her İkiside"
-LANG["PHXM_ADMIN_TAUNTSOPEN"]			= "Taunt Penceresini Aç"
+LANG["PHXM_ADMIN_TAUNTSOPEN"]			= "Alay Penceresini Aç"
 
 LANG["PHXM_MODE_DEFAULT"] 				= "--[ Etkileşim modu %d'ya ayarlandı ]--"
 LANG["PHXM_MODE0"]						= "Mode [0]: İzin Verme"
@@ -392,8 +392,8 @@ LANG["HUD_YOUDIED"]		= "Öldün!"
 LANG["CHAT_STARTING_MAPVOTE"] = "Raunt bitti. Harita oylaması başlatılıyor..."
 
 -- This used for HUD Taunt Timer
-LANG["HUD_PROP_TAUNT_TIME"]	= "Rastgele Taunt"
-LANG["HUD_PROP_CTAUNT_TIME"] = "Özel Taunt"
+LANG["HUD_PROP_TAUNT_TIME"]	= "Rastgele Alay"
+LANG["HUD_PROP_CTAUNT_TIME"] = "Özel Alay"
 
 -- Plugins Section
 LANG["PLUGINS_NO_PLUGINS"]				= "Yüklü eklenti yok. Burada daha fazla eklentiye göz atın!"
@@ -420,8 +420,8 @@ LANG["PHXM_ABOUT_BTN_WIKI"]			= "NAX Wiki & Kılavuzlar"
 	Auto Taunt: Late Addition: Revision: 16.09.21/X2Z
 ]]
 
-LANG["HUD_AUTOTAUNT_DISABLED"]		= 	"Oto Taunt devre dışı."
-LANG["HUD_AUTOTAUNT_WAITFORUPDATE"]	=	"Oto Taunt senkronize ediliyor..."
+LANG["HUD_AUTOTAUNT_DISABLED"]		= 	"Otomatik Alay devre dışı."
+LANG["HUD_AUTOTAUNT_WAITFORUPDATE"]	=	"Otomatik Alay senkronize ediliyor..."
 
 --[[
 	MapVote: Late Addition: Revision: 16.09.21/X2Z
@@ -487,7 +487,7 @@ LANG["PCR_EDT_NO_RIGHTS"]		= "Bu özelliğe erişme hakkınız yok."
 ]]
 LANG["PHXM_PLAYER_PROP_CHOOSER_KEY"]	= "Nesne Menüsünü açmak için varsayılan tuş."
 LANG["PHXM_PROP_FREEZE_MIDAIR"]			= "Bir nesne olarak havadayken hareketi dondurmak için varsayılan tuş"
-LANG["PHXM_ADMIN_TAUNT_SCANNER"]		= "(Haritayı Yeniden Başlatma Gerektirir) taunt tarayıcısını etkinleştir?"
+LANG["PHXM_ADMIN_TAUNT_SCANNER"]		= "(Haritayı Yeniden Başlatma Gerektirir) alay tarayıcısını etkinleştir?"
 LANG["PHXM_ADMLBL_USABLE_ENTS"]			= "Kullanılabilir Nesne Varlık Türleri"
 LANG["PHXM_ADMLBL_USABLE_ENTS_REF"]		= "Türler: 1: Yalnızca Fizik, 2: Fizik & Dinamikler, 3: Neredeyse Her şey (cesetler dahil), 4: Özel Varlıklar."
 LANG["PHXM_ADMIN_USABLE_ENT_TYPE"]		= "Nesnenin dönüşebileceği varlık türleri"
@@ -498,7 +498,7 @@ LANG["NOTIFY_CUST_ENT_TYPE_IS_ON"]		= "[NAX] Uyarı: Etkileşime girmek için [E
 --[[
 	Custom Taunts, Revision: 16.09.21/X2Z
 ]]
-LANG["TM_TAUNTS_SEARCH_NOTHING"]		= "'%s' içeren taunt bulunamadı..."
+LANG["TM_TAUNTS_SEARCH_NOTHING"]		= "'%s' içeren alay bulunamadı..."
 LANG["TM_SEARCH_PLACEHOLDER"]			= "Bu kategoride ara: sözcük gir, küçük harf & joker karakter yok. Boş=Hepsini Göster."
 LANG["PHXM_MSG_INPUT_IS_EMPTY"]			= "Metin boş veya ENTER tuşuna basmadınız."
 
@@ -525,17 +525,17 @@ LANG["NOTICE_GRENADE_SMG_GIVEN"]        = "SMG bombaları edindin."
 --[[
 	ADMIN PANEL, Revision 10.06/2022/X2Z
 ]]--
-LANG["PHXM_TAUNT_SETTINGS"]				= "Taunt Ayarları"
+LANG["PHXM_TAUNT_SETTINGS"]				= "Alay Ayarları"
 LANG["PHXM_GENERAL_SETTINGS"]			= "Genel Ayarlar"
-LANG["PHXM_FAKE_TAUNT_SETTINGS"]		= "Sahte Taunt Ayarları"
-LANG["PHXM_FAKE_TAUNT_ENABLE"]			= "Sahte tauntların haritada rastgele bir şekilde nesnelerin üzerinde çalınmasına izin ver. Sadece Özel Taunt Menüsünden erişilebilir."
-LANG["PHXM_FAKE_TAUNT_MAXUSAGE"]		= "En fazla kullanılabilir sahte taunt; -1 sınırsızdır."
-LANG["PHXM_TAUNT_RIGHT_CLICK"]		    = "Taunt için sağ tıkla. Bu özel menüde sağ tıkı devre dışı bırakacaktır!"
+LANG["PHXM_FAKE_TAUNT_SETTINGS"]		= "Sahte Alay Ayarları"
+LANG["PHXM_FAKE_TAUNT_ENABLE"]			= "Sahte alayların haritada rastgele bir şekilde nesnelerin üzerinde çalınmasına izin ver. Sadece Özel Alay Menüsünden erişilebilir."
+LANG["PHXM_FAKE_TAUNT_MAXUSAGE"]		= "En fazla kullanılabilir sahte alay; -1 sınırsızdır."
+LANG["PHXM_TAUNT_RIGHT_CLICK"]		    = "Alay için sağ tıkla. Bu özel menüde sağ tıkı devre dışı bırakacaktır!"
 
-LANG["PHXM_TAUNT_PITCH_SETTINGS"]		= "Taunt Ses Perdeleme Ayarları"
-LANG["PHXM_TAUNT_PITCH_ENABLE"]			= "Taunt Ses Perdesini Ayarla"
-LANG["PHXM_TAUNT_PITCH_RANGE_MIN"]		= "Bir taunt için en az kabul edilebilir ses perdeleme aralığı. 1'den 99'a kadar."
-LANG["PHXM_TAUNT_PITCH_RANGE_MAX"]		= "Bir taunt için en fazla kabul edilebilir ses perdeleme aralığı. 100'den 255'e kadar."
+LANG["PHXM_TAUNT_PITCH_SETTINGS"]		= "Alay Ses Perdeleme Ayarları"
+LANG["PHXM_TAUNT_PITCH_ENABLE"]			= "Alay Ses Perdesini Ayarla"
+LANG["PHXM_TAUNT_PITCH_RANGE_MIN"]		= "Bir alay için en az kabul edilebilir ses perdeleme aralığı. 1'den 99'a kadar."
+LANG["PHXM_TAUNT_PITCH_RANGE_MAX"]		= "Bir alay için en fazla kabul edilebilir ses perdeleme aralığı. 100'den 255'e kadar."
 
 LANG["PHXM_DECOY_SETTINGS"]				= "Yem Ayarları"
 LANG["PHXM_DECOY_ENABLE"]				= "Yem Ödülünü Etkinleştir? Ödül raunt bitene kadar sadece bir kereliğe mahsus canlı nesnelere verilecektir. Birikmezler ve koyulduklarında eksilirler."
@@ -557,15 +557,15 @@ LANG["PLUG_DESCRIPTION"]				= "Açıklama: %s"
 --[[
 	Taunt Pitch, Revision 10.06/2022/X2Z
 ]]--
-LANG["PHX_CTAUNT_USE_PITCH"]			= "Özel tauntlar için perde kullan"
-LANG["PHX_CTAUNT_RANDOM_PITCH"]			= "Taunt çalarken ses perdeleme seviyesini rastgele seç"
-LANG["PHX_RTAUNT_USE_PITCH"]			= "Rastgele tauntlar için ses perdelemesi kullan [%s]"
-LANG["PHX_RTAUNT_RANDOMIZE"]			= "Rastgele tauntlarda ses perdeleme seviyesini rastgele seç [%s]"
-LANG["PHX_CTAUNT_PITCH_FOR_FAKE"]		= "Sahte tauntlar için ses perdelemesi kullan"
-LANG["PHX_CTAUNT_RANDPITCH_FOR_FAKE"]	= "Sahte tauntlar için rastgele ses perdelemesi kullan"
-LANG["PHX_CTAUNT_SLIDER_PITCH"]			= "Taunt Ses Perdeleme."
-LANG["TM_TOOLTIP_FAKETAUNT"]			= "Rastgele bir nesne üzerinde Taunt çal"
-LANG["TM_PREFERRED_PITCH"]              = "Tercih Edilen Taunt Ses Perdeleme Seviyesi"
+LANG["PHX_CTAUNT_USE_PITCH"]			= "Özel alaylar için perde kullan"
+LANG["PHX_CTAUNT_RANDOM_PITCH"]			= "Alay ederken ses perdeleme seviyesini rastgele seç"
+LANG["PHX_RTAUNT_USE_PITCH"]			= "Rastgele alaylar için ses perdelemesi kullan [%s]"
+LANG["PHX_RTAUNT_RANDOMIZE"]			= "Rastgele alaylarda ses perdeleme seviyesini rastgele seç [%s]"
+LANG["PHX_CTAUNT_PITCH_FOR_FAKE"]		= "Sahte alaylar için ses perdelemesi kullan"
+LANG["PHX_CTAUNT_RANDPITCH_FOR_FAKE"]	= "Sahte alaylar için rastgele ses perdelemesi kullan"
+LANG["PHX_CTAUNT_SLIDER_PITCH"]			= "Alay Ses Perdeleme."
+LANG["TM_TOOLTIP_FAKETAUNT"]			= "Rastgele bir nesne üzerinden alay et"
+LANG["TM_PREFERRED_PITCH"]              = "Tercih Edilen Alay Ses Perdeleme Seviyesi"
 
 --[[
 	Fake Taunt, Revision 10.06/2022/X2Z
@@ -573,10 +573,10 @@ LANG["TM_PREFERRED_PITCH"]              = "Tercih Edilen Taunt Ses Perdeleme Sev
 ]]--
 LANG["PHX_CTAUNT_ON_RAND_PROPS"]		= "Rastgele nesneler üzerinde çal (%ix)"
 LANG["PHX_CTAUNT_ON_RAND_PROPS_UNLI"]	= "Rastgele nesneler üzerinde çal"
-LANG["PHX_CTAUNT_PLAYED_ON_RANDPROP"]	= "Rastgele bir nesne üzerinde taunt çaldın."
+LANG["PHX_CTAUNT_PLAYED_ON_RANDPROP"]	= "Rastgele bir nesne üzerinden alay ettin."
 LANG["PHX_CTAUNT_RAND_PROPS_LIMIT"]		= "Sınıra ulaştın!"
 LANG["PHX_CTAUNT_RAND_PROPS_NOT_PROP"]  = "Şu anda mevcut değil."
-LANG["PHX_CTAUNT_RANDPROP_DISABLED"]	= "Sahte taunt şu anda devre dışı."
+LANG["PHX_CTAUNT_RANDPROP_DISABLED"]	= "Sahte alay şu anda devre dışı."
 
 --[[
 	PH:Z Simple Decoy, Revision 10.06/2022/X2Z
@@ -703,7 +703,7 @@ LANG["PHX_TM_MNBAR_LOADFAV"]		= "Favorileri Yeniden Yükle"
 LANG["PHX_TM_MNBAR_SETTINGS"]		= "Diğerleri"
 LANG["PHX_TM_MNBAR_RESET"]			= "Favorileri Sıfırla"
 
-LANG["PHX_TM_WARN_CLEARFAV"]		= "UYARI: Bu önceden kaydettiğiniz Favori Tauntları silecektir. Devam etmek istediğine emin misiniz?"
+LANG["PHX_TM_WARN_CLEARFAV"]		= "UYARI: Bu önceden kaydettiğiniz Favori Alayları silecektir. Devam etmek istediğine emin misiniz?"
 
 LANG["PHXM_BANNED_MODELS"]			= "Kısıtlanmış Modellerin kullanımına izin ver/me (Yasaklanmış Modeller). Buna Yasaklı Modeller dahil değildir (Bunlar her zaman silinir)."
 LANG["PHXM_ADMIN_ALLOWARMOR"]       = "Nesne ve avcı takımında zırha izin ver"
@@ -837,9 +837,9 @@ LANG["KEYHINT_SEC"]			= "İkincil Ateş"
 LANG["KEYHINT_PICKUP"]		= "Nesneyle Etkileşim"
 
 LANG["KEYHINT_LMB"]			= "Nesneye Dönüş"
-LANG["KEYHINT_RMB"]			= "Nesne Taunt/Özel Yetenek"
-LANG["KEYHINT_RANDTAUNT"] 	= "Rastgele Taunt"
-LANG["KEYHINT_TAUNTMENU"] 	= "Taunt Menüsü"
+LANG["KEYHINT_RMB"]			= "Nesne Alay/Özel Yetenek"
+LANG["KEYHINT_RANDTAUNT"] 	= "Rastgele Alay"
+LANG["KEYHINT_TAUNTMENU"] 	= "Alay Menüsü"
 LANG["KEYHINT_ROTATION"] 	= "Dönme Kilidi"
 LANG["KEYHINT_PROPMENU"] 	= "Nesne Menüsü"
 LANG["KEYHINT_FREEZEAIR"] 	= "Nesne Donması"
