@@ -89,7 +89,7 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 				surface.DrawRect(0,0,w,h)
 			end
 			
-			draw.DrawText( text, font ,w*0.22,h*0.4, color, TEXT_ALIGN_LEFT )
+			draw.DrawText( text, font ,w*0.24,h*0.4, color, TEXT_ALIGN_LEFT )
 		end
         
         item.Button:SetToolTip( text )

@@ -74,7 +74,7 @@ local function AutoTauntPaint()
 	if !isEnabled || !isProp || !started then return; end
 
 	if tweenTime < 1 then
-		x = outElastic(tweenTime, xStart, xEnd - xStart, 1, 1, 0.5)
+		local x = outElastic(tweenTime, xStart, xEnd - xStart, 1, 1, 0.5)
 		local cTime = CurTime()
 		tweenTime = tweenTime + (cTime - previousTime)
 		previousTime = cTime
@@ -117,7 +117,7 @@ local delayC = PHX:GetCVar( "ph_customtaunts_delay" )
 local colText = color_white -- decoy
 local function AutoTauntPaint_phx()
 
-	if IsValid(LocalPlayer()) && LocalPlayer():Alive() && isProp && started then
+	if IsValid(LocalPlayer()) && LocalPlayer():Alive() && LocalPlayer():Team()==TEAM_PROPS && started then
 		local timeLeft = math.ceil(TimeLeft())
 		local percentage = timeLeft / delay
 		local taunttext = ""

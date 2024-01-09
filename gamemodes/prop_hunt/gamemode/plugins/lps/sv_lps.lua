@@ -167,7 +167,7 @@ local function DoPlayerCheck(ply)
 				local RN = GetGlobalInt( "RoundNumber", 0 )
 				local XR = PHX:GetCVar( "lps_start_every_x_rounds" )
 				
-				if PHX:GetCVar( "lps_start_random" ) then
+				if PHX:GetCVar( "lps_start_random_round" ) then
 					if math.random(0,1) == 0 then 
 						return
 					end

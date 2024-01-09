@@ -13,7 +13,6 @@ AddCSLuaFile("cl_hud.lua")
 AddCSLuaFile("cl_menutypes.lua")
 AddCSLuaFile("cl_menu.lua")
 AddCSLuaFile("cl_menuadmacc.lua")
-AddCSLuaFile("cl_targetid.lua")
 AddCSLuaFile("cl_autotaunt.lua")
 AddCSLuaFile("cl_credits.lua")
 
@@ -81,18 +80,34 @@ local function ControlTauntWindow(num)
 	end
 end
 
+local function ClearBlindedHuntersList()
+	for _,ply in ipairs( team.GetPlayers(TEAM_HUNTERS) ) do
+        local tmrUnblind = ply.TimerBlindID or "tmr.hunterUnblind:"..ply:EntIndex()
+        if timer.Exists(tmrUnblind) then timer.Remove(tmrUnblind) end
+		ply.TimerBlindID = nil
+		if ply:GetBlindState() then ply:Blind(false) end
+		if ply:IsFrozen() then ply:UnLock() end
+		if !GAMEMODE:InRound() then ply.HasLoadout = false end
+		timer.Simple(0.1, function()
+			-- a delay to prevent weapons spawn twice
+			if !(ply.HasLoadout) and GAMEMODE:InRound() and !GetGlobalBool("PHX.BlindStatus",false) and (ply._LoadOutUnblind) then 
+				PHX.VerboseMsg('[PH:X Loadout] Spawning late weapon loadouts (possibly player was respawned manually or during blind time)')
+				ply._LoadOutUnblind( ply )
+				ply.HasLoadout = true
+			end
+		end)
+    end
+end
+
 local function ClearTimer()
 
-    SetGlobalBool("BlindStatus", false)
+    SetGlobalBool("PHX.BlindStatus", false)
 
 	if timer.Exists("tmr_handleUnblindHook") then timer.Remove("tmr_handleUnblindHook") end
     if timer.Exists("phx.tmr_GiveGrenade") then timer.Remove("phx.tmr_GiveGrenade") end
     
-    -- Clear Hunter's Timer.
-    for _,pl in pairs( team.GetPlayers(TEAM_HUNTERS) ) do
-        local tmrUnblind = "tmr.hunterUnblind:"..pl:EntIndex()
-        if timer.Exists(tmrUnblind) then timer.Remove(tmrUnblind) end
-    end
+    ClearBlindedHuntersList()
+	
 end
 
 local function sendGroupInfo( ply )
@@ -455,14 +470,14 @@ hook.Add("OnPlayerChangedTeam", "TeamChange_switchLimitter", function(ply, old, 
 	end
 end)
 
-hook.Add("PostCleanupMap", "PH_ResetCustomTauntWindow", function()
+hook.Add("PostCleanupMap", "PH_ResetStats", function()
 	-- Force close any taunt menu windows
 	ControlTauntWindow(0)
 	PHX.VOICE_IS_END_ROUND = 0
 	
 	-- Called every round restart: make sure this was set publicly and make it synced accross clients.
 	SetGlobalInt("unBlind_Time", math.Clamp(PHX:GetCVar( "ph_hunter_blindlock_time" ) - (CurTime() - GetGlobalFloat("RoundStartTime", 0)), 0, PHX:GetCVar( "ph_hunter_blindlock_time" )) )
-    SetGlobalBool("BlindStatus", true)
+    SetGlobalBool("PHX.BlindStatus", true)
 	
 	local cvarPercent	= PHX:GetCVar( "ph_blindtime_respawn_percent" )
 	local blindTime		= GetGlobalInt("unBlind_Time", 0)
@@ -471,8 +486,9 @@ hook.Add("PostCleanupMap", "PH_ResetCustomTauntWindow", function()
 	
     -- Call a hook/set global state that Blind Time is over.
 	timer.Create("tmr_handleUnblindHook", blindTime, 1, function()
-        SetGlobalBool("BlindStatus", false)
+        SetGlobalBool("PHX.BlindStatus", false)
 		hook.Call("PH_BlindTimeOver", nil)
+		ClearBlindedHuntersList()
 	end)
     
 end)
@@ -773,10 +789,9 @@ hook.Add("PlayerInitialSpawn", "PHX.SetupInitData", function(ply)
 	end)
 	
 	-- Inform Player to recently joined with X2Z's Tutorial
-	
 	timer.Simple(5, function()
 		if IsValid(ply) then
-			local info = ply:GetInfoNum("ph_cl_show_first_tutorial",0) or 1
+			local info = ply:GetInfoNum("ph_cl_show_introduction",0)
 			if tobool( info ) then
 				net.Start("phx_showVeryFirstTutorial")
 				net.Send(ply)
@@ -962,7 +977,7 @@ function GM:OnPreRoundStart(num)
             end)
         end
 		
-		hook.Call("PH_OnPreRoundStart", nil, PHX:GetCVar( "ph_swap_teams_every_round" ))
+		hook.Call("PH_OnPreRoundStart", nil, num, PHX:GetCVar( "ph_swap_teams_every_round" ))
 	end
 	
 	-- Balance teams. We need to set this "TRUE" to make sure the switched player isn't killed during team switch.

@@ -1,6 +1,28 @@
 ## A new major updates to Prop Hunt: X has been released.
 Note: Prop Hunt X will change it's version to "X2Z" following with date-formatted revisions.
 
+## Revision 09.01.2024 (January 2024 Hotfix)
+These patch are mainly fixes due to December 2023/January 2024 Garry's Mod update.
+- HotFix: Fixed Lua Error when suicide occurs on all team due to December 2023/January 2024 patch. This affects to `GAMEMODE:AddDeathNotice` rule changes
+- HotFix: Fixed Hunters when respawning too early during blind time will have them longer blindfold time. This is now cut shorter and will be soon released once blindfold time is over
+- Fixed typos GetGlobalBool's `BlindStatus -> PHX.BlindStatus`
+- Minor Improvements and Changed `MapVote` Global variable into `local MapVote = PHX.MV` table, so that you can use original fretta-like MapVote addon. To make it work you must use `ph_custom_mv_func "MapVote.Start()"` in order to work (or use any Map Votes addon you like)
+- Changed ULX Category for Prop Menu & MapVote commands and removed `gamemodes/ulx/modules/sh` directory
+- Renamed ConVar `lps_start_random` to `lps_start_random_round` with default value to `0` (Request)
+- Changed default value `ph_custom_mv_func` from `MapVote.PHXStart()` to `PHX.StartMapVote()`
+- Fixed Prop AutoTaunt HUD would overlap with Hunter's Weapon HUD upon respawn after switching team
+- Minor Improvements for Hunter's Weapon Loadout
+- Added new hook `PH_OnHunterLoadOut` (Arg: `player Ply`): Adds or Overrides Hunter's Weapon Loadout after blindfold is over. Using `return true` will remove default weapon loadout (crowbar, 357 and shotgun). **CAUTION: using `return true` in an addon _Will Also_ overrides other addons too that uses this hook!**
+- Added Turkish Language (Submission by: Talha Berkay A. aka Matt, Nova Diablox, Fat Fox Talha)
+- Added `/config/maps/ph_lttp_kakariko_b2.lua`: Remove invalid sprite entities to prevent console from spamming
+- Removed `cl_targetid.lua` and merged into `cl_init.lua` instead
+- Removed uneccessary global variables (e.g. `x` variable inside HUD hook, it should meant to `local x`)
+- Deprecated: PHX's eChat will soon replaced/removed on future update. A warning message will appear if you use PHX's eChat feature.
+
+#### Known Issues
+- Linux 64-bit only (with CEF patch): Player's Prop Entity (`ph_prop`) `SetupDataTables` **will not** get called and causes prop to stay in place. This may caused internally by the game and still looking forward for workaround.
+- December 2023/January 2024 update: Strange weapon tracer behaviour. This would affect to Last Prop Standing weapons with their custom Tracers. This is currently being discussed at [Garry's Mod issue tracker #5684](https://github.com/Facepunch/garrysmod-issues/issues/5684)
+
 ## Revision 30.01.2023
 - HotFix: Fixed Error for calling `PHInLastPropStanding` hook where is `Player` argument returns `nil`. This is **REQUIRED** if you use "AK47 LPS Weapon" addon.
 - HotFix: Fixed Error when trying to run `ph_force_end_round` on Dedicated Server console.

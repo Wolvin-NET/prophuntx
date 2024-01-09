@@ -174,7 +174,7 @@ function Player:LPSShootBullets()
         
         self:LPSNextFire( wepdata.Delay )
         self:SetLPSAmmoCount( self:GetLPSAmmo() )
-        
+
         local wepEntity      = self:GetLPSWeaponEntity()
         local att            = wepEntity:GetAttachment(1)
         local shootOrg       = att.Pos
@@ -198,6 +198,7 @@ function Player:LPSShootBullets()
             end
         
         -- Fire Bullet and make us Lag Compesated
+        
         self:LagCompensation(true)
         self:FireBullets( bullet )
         self:LagCompensation(false)

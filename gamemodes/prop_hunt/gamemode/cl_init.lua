@@ -31,10 +31,8 @@ include("cl_menutypes.lua")
 include("cl_menu.lua")
 include("cl_menuadmacc.lua")
 include("cl_tauntwindow.lua")
-include("cl_targetid.lua")
 include("cl_autotaunt.lua")
--- Credits and Contributors message
-include("cl_credits.lua")
+include("cl_credits.lua") -- Credits and Contributors message
 
 -- /!\ Convars are now moved on sh_convars.lua.
 
@@ -427,7 +425,10 @@ function GM:CalcView(pl, origin, angles, fov)
  	return view 
 end
 
-function HUDPaint()
+local blindlock_time_left = 0
+local blindlock_time_left_msg = nil
+
+local function HUDPaint()
     if (game.SinglePlayer()) then
         draw.WordBox( 8, ScrW()/2, ScrH()/2, "[WARNING] Single Player Mode is not Supported! Please Host a Multiplayer to play!", "Trebuchet24",
         Color(0,0,0,250), Color(220,10,10), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
@@ -455,7 +456,7 @@ function HUDPaint()
 			WordBoxCol.bg, WordBoxCol.spectator, TEXT_ALIGN_CENTER )
 		end
 	
-		local blindlock_time_left = (PHX:GetCVar( "ph_hunter_blindlock_time" ) - (CurTime() - GetGlobalFloat("RoundStartTime", 0))) + 1
+		blindlock_time_left = (PHX:GetCVar( "ph_hunter_blindlock_time" ) - (CurTime() - GetGlobalFloat("RoundStartTime", 0))) + 1
 		
 		if blindlock_time_left < 1 && blindlock_time_left > -6 then
 			blindlock_time_left_msg = PHX:FTranslate("HUD_UNBLINDED")
@@ -564,8 +565,60 @@ function HUDPaint()
 end
 hook.Add("HUDPaint", "PH_HUDPaint", HUDPaint)
 
+function GM:HUDDrawTargetID()
+	local tr = util.GetPlayerTrace(LocalPlayer())
+	local trace = util.TraceLine(tr)
+	
+	-- Don't show if 'Player Names above their head' is enabled.
+	if PHX:GetCVar( "ph_enable_plnames" ) && PHX:GetCLCVar( "ph_cl_pltext" ) then return end
+	
+	if (!trace.Hit) then return end
+	if (!trace.HitNonWorld) then return end
+	
+	local text = "ERROR"
+	local font = "TargetID"
+	
+	if (trace.Entity:IsPlayer() && trace.Entity:Team() == LocalPlayer():Team()) then
+		text = trace.Entity:Nick()
+	else
+		return
+	end
+	
+	surface.SetFont(font)
+	local w, h = surface.GetTextSize(text)
+	local MouseX, MouseY = gui.MousePos()
+	
+	if (MouseX == 0 && MouseY == 0) then
+		MouseX = ScrW() / 2
+		MouseY = ScrH() / 2
+	end
+	
+	local x = MouseX
+	local y = MouseY
+	
+	x = x - w / 2
+	y = y + 30
+	
+	draw.SimpleText(text, font, x + 1, y + 1, Color(0, 0, 0, 120))
+	draw.SimpleText(text, font, x + 2, y + 2, Color(0, 0, 0, 50))
+	draw.SimpleText(text, font, x, y, self:GetTeamColor(trace.Entity))
+	
+	y = y + h + 5
+	
+	local text = trace.Entity:Health().."%"
+	local font = "TargetIDSmall"
+	
+	surface.SetFont(font)
+	local w, h = surface.GetTextSize(text)
+	local x = MouseX - w / 2
+	
+	draw.SimpleText(text, font, x + 1, y + 1, Color(0, 0, 0, 120))
+	draw.SimpleText(text, font, x + 2, y + 2, Color(0, 0, 0, 50))
+	draw.SimpleText(text, font, x, y, self:GetTeamColor(trace.Entity))
+end
+
 -- After the player has been drawn
-function PH_PostPlayerDraw(pl)
+local function PH_PostPlayerDraw(pl)
 	-- Draw a line on hunters
 	if PHX:GetCLCVar( "ph_cl_spec_hunter_line" ) && (!LocalPlayer():Alive() || LocalPlayer():Team() == TEAM_SPECTATOR) and pl:Team() == TEAM_HUNTERS then
         local eyepos = pl:GetShootPos()
@@ -590,7 +643,7 @@ hook.Add("PrePlayerDraw", "PHX.HidePlayer", function(ply)
 end)
 
 -- Draws halos on team members
-function drawPropSelectHalos()
+local function drawPropSelectHalos()
 	local halocol = IndicatorColor.ok
 	
 	if PHX:GetCLCVar( "ph_cl_halos" ) and GetGlobalBool("InRound", false) then
@@ -1040,12 +1093,16 @@ function PHX:showLangPreview()
 end
 
 --Very First Tutorial - this will only show ONCE.
-CreateClientConVar("ph_cl_show_first_tutorial","1",true,true,"Show a very first tutorial window on joining")
+CreateClientConVar("ph_cl_show_introduction","1",true,true,"Show PH:X introduction.")
 local function ShowVeryFirstTutorial()
 	local fh = {}
-	
+	local WFix=ScrW()*0.8
+	local HFix=ScrH()*0.85
+	if WFix <= 1090 then WFix = 1090 end
+	if HFix <= 648 then HFix = 648 end
+
 	fh.frame = vgui.Create("DFrame")
-	fh.frame:SetSize(ScrW()*0.8,ScrH()*0.85)
+	fh.frame:SetSize( WFix, HFix )
 	fh.frame:Center()
 	fh.frame:SetTitle("Prop Hunt X2Z: Tutorial")
 	
@@ -1060,18 +1117,33 @@ local function ShowVeryFirstTutorial()
 	
 		fh.pBottom = vgui.Create("DPanel", fh.panel)
 		fh.pBottom:Dock(BOTTOM)
-		fh.pBottom:SetSize(0,40)
+		fh.pBottom:SetSize(0,56)
 		fh.pBottom:SetPaintBackground(false)
 		
 		fh.center = vgui.Create("DPanel", fh.pBottom)
 		fh.center:Dock(FILL)
 		fh.center:SetSize(0,40)
 		fh.center:SetPaintBackground(false)
+
+		fh.btnSetting = vgui.Create("DLabel", fh.center)
+		fh.btnSetting:Dock(FILL)
+		fh.btnSetting:SetContentAlignment(5)
+		fh.btnSetting:SetText("Hint: To Change Settings such as Languages, Models, Admin & Host settings,\nAccess by pressing [F1] and click [Prop Hunt Menu] button.")
+		fh.btnSetting:SetFont( "PHX.TopBarFont" )
+		fh.btnSetting:SetTextColor( Color(238,185,12) )
+
+		fh.bOpenMenu = vgui.Create("DButton", fh.pBottom)
+		fh.bOpenMenu:Dock(RIGHT)
+		fh.bOpenMenu:SetSize(160,40)
+		fh.bOpenMenu:SetText( "Settings Menu" )
+		fh.bOpenMenu:SetFont( "RobotoInfo" )
+		fh.bOpenMenu.DoClick = function() RunConsoleCommand("ph_x_menu", ""); fh.frame:Close() end
 		
 		fh.bnext = vgui.Create("DButton", fh.pBottom)
 		fh.bnext:Dock(RIGHT)
-		fh.bnext:SetSize(128,40)
+		fh.bnext:SetSize(132,40)
 		fh.bnext:SetText(PHX:FTranslate("MISC_NEXT"))
+		fh.bnext:SetFont( "RobotoInfo" )
 		fh.bnext.DoClick = function(pnl)
 			fh.helpImage.Count = fh.helpImage.Count + 1
 			if fh.helpImage.Count > 10 then
@@ -1082,8 +1154,9 @@ local function ShowVeryFirstTutorial()
 		
 		fh.bprev = vgui.Create("DButton", fh.pBottom)
 		fh.bprev:Dock(LEFT)
-		fh.bprev:SetSize(128,40)
+		fh.bprev:SetSize(132,40)
 		fh.bprev:SetText(PHX:FTranslate("MISC_PREV"))
+		fh.bprev:SetFont( "RobotoInfo" )
 		fh.bprev.DoClick = function(pnl)
 			fh.helpImage.Count = fh.helpImage.Count - 1
 			if fh.helpImage.Count < 1 then
@@ -1093,13 +1166,16 @@ local function ShowVeryFirstTutorial()
 		end
 	
 	fh.frame:MakePopup()
-	RunConsoleCommand("ph_cl_show_first_tutorial", "0")
+
+	print( fh.frame:GetTall(), fh.frame:GetWide() )
+
+	RunConsoleCommand("ph_cl_show_introduction", "0")
 end
 
 net.Receive("phx_showVeryFirstTutorial", function()
-	if GetConVar("ph_cl_show_first_tutorial"):GetBool() then
-		Derma_Query("Prop Hunt X2Z Introduces many new features. Would you like to see the tutorial window before playing?", "Prop Hunt X2Z",
+	if GetConVar("ph_cl_show_introduction"):GetBool() then
+		Derma_Query("Prop Hunt X2Z Introduces many new features.\nWould you like to see the Tutorial window & access [Prop Hunt Menu] before playing?", "Prop Hunt X2Z",
 		"Yes", function() ShowVeryFirstTutorial() end,
-		"No", function() RunConsoleCommand("ph_cl_show_first_tutorial", "0") end)
+		"No", function() RunConsoleCommand("ph_cl_show_introduction", "0") end)
 	end
 end)

@@ -7,20 +7,20 @@
 **"Prop Hunt: X" Was Originally given and created by Wolvindra-Vinzuerio and Only Available Exclusively for Garry's Mod.**
 
 ### Versioning
-Version: X2Z, Revision: 30/01/2023 (dd/mm/yyyy)
+Version: X2Z, Revision: 09/01/2024 (dd/mm/yyyy)
 
 ### Public Servers
 - Server #1 [U.S]: **74.91.120.8:27015** (Public Stable Server)
-- Server #2 [U.S]: **maelstrom94.duckdns.org:27016** (Public Dev Server)
+- Server #2 [U.S]: **offline** (Public Dev Server)
 - Other Servers: https://gmodgameservers.com/prophuntx/servers
 
 ### Support the PH:X2Z Development
-Please help me to support the project by donating or buying me a coffee:
+Buy me a coffee If you like Prop Hunt: X2Z ☕
 
 - https://www.buymeacoffee.com/wolvindra/ (or)
 - https://ko-fi.com/wolvindra
 
-Any bits of your donation really helps me alot!
+Any bits of your donation really helps me a lot!
 
 ### Contributing
 - Feel free if you want to add, tweaks or enhance something to the Gamemode;
@@ -57,11 +57,15 @@ Visit the "[Releases](https://github.com/Wolvin-NET/prophuntx/releases)" page to
 
 ### Quick Steam Guide:
 - Installing Prop Hunt: X  
-_(Coming Soon)_
+See Wiki
 - How to add Custom Taunt with Taunt Scanner:  
 https://steamcommunity.com/sharedfiles/filedetails/?id=2847440960
 - List of ConVars and ConCommands:  
 https://steamcommunity.com/sharedfiles/filedetails/?id=2851968180
+- How to add Weapons:  
+See Wiki
+- Configuring MapVotes:  
+See Wiki
 
 ### Wiki
 Read the manuals here: https://gmodgameservers.com/wiki/prophuntx/  
@@ -75,7 +79,7 @@ https://gmodgameservers.com/prophuntx/
 https://github.com/yobson1/glua-soundduration (yobson1)
 - Using a forked MapVote system
 https://github.com/willox/gmod-mapvote (Willox)
-- Using a forked eChat for _Temporary ChatBox Replacement_
+- Using a forked eChat for _(Obsolete, will get replaced/removed)_
 https://github.com/Exho1/eChat (Exho1)
 - May require of use of an additional game contents for specific maps & server-customized gamemodes.
 
@@ -85,8 +89,7 @@ See [`CONTRIBUTORS.TXT`](/CONTRIBUTORS.TXT)
 ### License & Rules
 
 **Rules**
-- This gamemode **Will No Longer support Single Player** because it's becoming useless. The reason is that there were some function that are made available only for Multiplayer Games.  
-If you want to use this to test with your Prop Hunt Map, consider creating a multiplayer server and use `sv_lan 1` in there.
+- This gamemode **Will No Longer support Single Player** because it's intended for Multiplayer gameplay. If you want to use this to test with your Prop Hunt Map, create a multiplayer instance and use `sv_lan 1` in there.
 - **Please keep the `cl_credits.lua` and `Contributors` table as original as possible.** Except if you want to add yourself as contributors.
 - Any changes or modification you have made publicly available on Steam Workshop must include the license below and a link back to: https://gmodgameservers.com/prophuntx/rules or Prop Hunt: X's Repository Git Page
 in your 'credits' page (e.g. Workshop Description, About, etc...)  

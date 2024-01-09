@@ -74,7 +74,7 @@ tbl.hp = {
 	{ x = xAdd,			y = yAdd + 30 }		-- d end
 }
 
-yArmorAdd = yAdd + 22.5
+local yArmorAdd = yAdd + 22.5
 tbl.Armor = {
 	{ x = xAdd - 10,	y = yArmorAdd + 20 },
 	{ x = xAdd - 5,		y = yArmorAdd + 15 },

@@ -1,3 +1,5 @@
+local MapVote = PHX.MV
+
 MapVote.EndTime = 0
 MapVote.Panel = false
 

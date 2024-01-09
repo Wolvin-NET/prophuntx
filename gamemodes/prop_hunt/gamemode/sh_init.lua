@@ -14,6 +14,7 @@ IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMA
 ]]--
 
 PHX = PHX or {}
+PHX.TITLE = "Prop Hunt: X2Z"
 
 TEAM_HUNTERS 	= 1
 TEAM_PROPS 	 	= 2
@@ -21,7 +22,7 @@ IS_PHX		 	= true	-- an easy check if PHX is installed.
 
 PHX.ConfigPath 	= "phx_data"
 PHX.VERSION		= "X2Z"
-PHX.REVISION	= "30.01.23" --Format: dd/mm/yy.
+PHX.REVISION	= "09.01.24" --Format: dd/mm/yy.
 
 --[[ BEGIN OF SHARED INIT HEADERS ]]--
 
@@ -169,20 +170,19 @@ end
 AddCSLuaFile("enhancedplus/sh_enhancedplus.lua")
 AddCSLuaFile("cl_lang.lua")
 AddCSLuaFile("config/sh_init.lua")
-AddCSLuaFile("ulx/modules/sh/sh_phx_mapvote.lua")
 AddCSLuaFile("sh_config.lua")
 AddCSLuaFile("sh_player.lua")
 AddCSLuaFile("sh_chatbox.lua")
 AddCSLuaFile("sh_tauntscanner.lua")
 include("enhancedplus/sh_enhancedplus.lua")
 include("config/sh_init.lua")
-include("ulx/modules/sh/sh_phx_mapvote.lua")
 include("sh_config.lua")
 include("sh_player.lua")
 include("sh_chatbox.lua")
 include("sh_tauntscanner.lua")
 
 -- MapVote
+PHX.MV = {}
 if SERVER then
     AddCSLuaFile("sh_mapvote.lua")
     AddCSLuaFile("mapvote/cl_mapvote.lua")
@@ -263,7 +263,7 @@ DeriveGamemode("fretta")
 IncludePlayerClasses()
 
 -- Information about the gamemode
-GM.Name		= "Prop Hunt: X2Z"
+GM.Name		= PHX.TITLE
 GM.Author	= "Wolvindra-Vinzuerio & D4UNKN0WNM4N"
 
 -- Versioning

@@ -313,6 +313,7 @@ PHX.CachedTaunts = {}
 PHX.CachedTaunts[TEAM_HUNTERS]	= {}
 PHX.CachedTaunts[TEAM_PROPS]	= {}
 
+local AddResources
 if SERVER then
 	function AddResources(t)
 		if !t then return end

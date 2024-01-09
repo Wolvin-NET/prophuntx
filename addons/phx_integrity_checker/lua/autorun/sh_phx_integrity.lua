@@ -15,8 +15,8 @@ if engine.ActiveGamemode() ~= "prop_hunt" then return end
 
 local EnableChecker = false
 
-local CheckCVar = CreateConVar( "phx_enable_checker", "1", FCVAR_REPLICATED + FCVAR_ARCHIVE + FCVAR_NOTIFY, "Enable PH:X Integrity Checker.", 0, 1 )
-cvars.AddChangeCallback("phx_enable_checker", function(cvar,old,new)
+local CheckCVar = CreateConVar( "phx_integrity_check", "1", FCVAR_REPLICATED + FCVAR_ARCHIVE + FCVAR_NOTIFY, "Enable PH:X Integrity Checker.", 0, 1 )
+cvars.AddChangeCallback("phx_integrity_check", function(cvar,old,new)
 	if (new) && new ~= nil then
 		EnableChecker = tobool(new)
 	end

@@ -19,7 +19,7 @@ if CLIENT then
 end
 
 -- ULX
-local CATEGORY_NAME = "Prop Hunt: X"
+local CATEGORY_NAME = PHX.TITLE
 local function PHX_PropMenu( calling_ply )
 	if PCR and PCR ~= nil then		  
 		if PHX:QCVar( "pcr_use_ulx_menu" ) then

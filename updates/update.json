@@ -1,6 +1,6 @@
 {
 	"version":"X2Z",
-	"revision":"30.01.23",
+	"revision":"09.01.24",
 	"url":"https:\/\/gmodgameservers.com\/prophuntx\/changelogs",
-	"notice":"A NEW 30th JANUARY HOTFIX 2023 UPDATE FOR Prop Hunt: X2Z Revision 30.01.23 IS AVAILABLE!\nIt's Highly Recommended to Update PH:X!\nHotfix: Fixed Argument Error in \"PHInLastPropStanding\" hook\nPlease Read the Change log here: https:\/\/gmodgameservers.com\/prophuntx\/changelogs"
+	"notice":"A NEW 9TH JANUARY HOTFIX 2023 PH:X2Z UPDATE IS AVAILABLE!\nHotfixes:\n-Fixed death notice error when suicide\n-Fixed Hunder Blindfold behaviour\n-MapVote Fixes\n-and more\nFor more info https:\/\/gmodgameservers.com\/prophuntx\/changelogs"
 }
