@@ -3,6 +3,8 @@ util.AddNetworkString("RAM_MapVoteUpdate")
 util.AddNetworkString("RAM_MapVoteCancel")
 util.AddNetworkString("RTV_Delay")
 
+local MapVote = PHX.MV
+
 MapVote.Continued = false
 local RecentMapsFile = PHX.ConfigPath .. "/mapvote_recentmaps.txt"
 
@@ -36,11 +38,13 @@ else
 end
 
 if ConVarExists("mv_maplimit") then
-	PHX.VerboseMsg("[MapVote] Loading ConVars...")
+	PHX:VerboseMsg("[MapVote] Loading ConVars...")
 	MapVote.PHXConfig = {
 		MapLimit 		= GetConVar("mv_maplimit"):GetInt(),
 		TimeLimit 		= GetConVar("mv_timelimit"):GetInt(),
 		AllowCurrentMap = GetConVar("mv_allowcurmap"):GetBool(),
+		ChangeMapNoPlayer = GetConVar("mv_change_when_no_player"):GetBool(),
+		UseULX 			= GetConVar("mv_use_ulx_votemaps"):GetBool(),
 		EnableCooldown 	= GetConVar("mv_cooldown"):GetBool(),
 		MapsBeforeRevote = GetConVar("mv_mapbeforerevote"):GetInt(), --omfg it has been like, spent 8 years to realise, it was "GetBool", NOT "GetInt", damn it...
 		RTVPlayerCount 	= GetConVar("mv_rtvcount"):GetInt(),
@@ -67,6 +71,16 @@ local conv = {
 			MapVote.PHXConfig.AllowCurrentMap = tobool(new)
 		end
 	end,
+	["mv_change_when_no_player"] = function(cvar,old,new)
+		if new && (new != nil || new != "") then
+			MapVote.PHXConfig.ChangeMapNoPlayer = tobool(new)
+		end
+	end,
+	["mv_use_ulx_votemaps"] = function(cvar,old,new)
+		if new && (new != nil || new != "") then
+			MapVote.PHXConfig.UseULX = tobool(new)
+		end
+	end,
 	["mv_cooldown"]		= function(cvar,old,new)
 		if new && (new != nil || new != "") then
 			MapVote.PHXConfig.EnableCooldown = tobool(new)
@@ -91,7 +105,7 @@ local conv = {
 
 -- Precheck when the convar is changed
 for cvar,func in pairs(conv) do
-	PHX.VerboseMsg("[MapVote] Adding ConVar Callbacks for: "..cvar)
+	PHX:VerboseMsg("[MapVote] Adding ConVar Callbacks for: "..cvar)
 	cvars.AddChangeCallback(cvar, func)
 end
 
@@ -120,12 +134,20 @@ function PHX.CoolDownDoStuff()
 end
 
 function MapVote.GetFromULX()
-	if (!ulx or ulx == nil or !ulx.votemaps or ulx.votemaps == nil) then
+
+	if (ulx) then
+		if (ulx.votemaps) then return ulx.votemaps end
+	end
+	
+	print("[MapVote] WARNING: ULX is not installed! Couldn't get any list from 'votemap' data!")
+	return {}
+
+	--[[ if (!ulx or ulx == nil or !ulx.votemaps or ulx.votemaps == nil) then
 		print("[!PHX] Warning: ULX is not installed, can't get any votemap information!")
 		return {}
 	end
 
-	return ulx.votemaps
+	return ulx.votemaps ]]
 end
 
 -- Original: MapVote.Start
@@ -142,8 +164,9 @@ function MapVote.PHXStart(length, current, limit, prefix)
     current 	= current or MapVote.PHXConfig.AllowCurrentMap or false
     length 		= length or MapVote.PHXConfig.TimeLimit or 28
     limit 		= limit or MapVote.PHXConfig.MapLimit or 24
-    cooldown 	= MapVote.PHXConfig.EnableCooldown or MapVote.PHXConfig.EnableCooldown == nil and true
     prefix 		= prefix or MapVote.PHXConfig.MapPrefixes
+    
+	local cooldown 	= MapVote.PHXConfig.EnableCooldown or (!MapVote.PHXConfig.EnableCooldown and true)
 
     local is_expression = false
 	local ulxmap = MapVote.GetFromULX()
@@ -167,10 +190,8 @@ function MapVote.PHXStart(length, current, limit, prefix)
     
 	local maps = {}
 	
-	if GetConVar("mv_use_ulx_votemaps"):GetBool() and (ulxmap or ulxmap ~= nil) then
-		for _,map in pairs(ulxmap) do
-			table.insert(maps, map..".bsp")
-		end
+	if (MapVote.PHXConfig.UseULX) and istable(ulxmap) and !table.IsEmpty(ulxmap) then
+		for _,map in pairs(ulxmap) do table.insert(maps, map..".bsp"); end
 	else
 		maps = file.Find("maps/*.bsp", "GAME")
 	end
@@ -295,9 +316,13 @@ function PHX.StartMapVote()
 	end
 	
 	if (not PHX:GetCVar( "ph_enable_mapvote" )) then
-		hook.Call( "PH_OverrideMapVote", nil )
-		MsgAll("PH:X MapVote is disabled. Calling MapVote Overrides... \n")
-		return
+		local result = hook.Call( "PH_OverrideMapVote", nil )
+        if (result) then
+		    MsgAll("PH:X MapVote is disabled. Calling Map Vote Overrides Hook... \n")
+		    return
+        else
+            MsgAll("WARNING: Detected no external Map Votes Call from [PH_OverrideMapVote] hook, Falling back! (Did you forget to `return true`?)\n")
+        end
 	end
 	
 	MapVote.PHXStart()

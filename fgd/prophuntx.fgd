@@ -1,0 +1,139 @@
+//--------------------------------------------------------------------------//
+//																			//
+//						Prop Hunt: X2Z Game Data File						//
+//																			//
+//--------------------------------------------------------------------------//
+
+@PointClass base(Targetname, PlayerClass, Parentname, Angles) studio("models/kleiner.mdl") = info_player_props :
+	"Props player spawn entity"
+[
+	subclass(choices) : "Mark Subclass" : 0 : "Mark as Special Spawn/SubClass (not implemented)" =
+	[
+		0 : "No"
+		1 : "Yes"
+	]
+]
+
+@PointClass base(Targetname, PlayerClass, Parentname, Angles) studio("models/combine_soldier.mdl") = info_player_hunters :
+	"Hunters player spawn entity"
+[
+	subclass(choices) : "Mark Subclass" : 0 : "Mark as Special Spawn/SubClass (not implemented)" =
+	[
+		0 : "No"
+		1 : "Yes"
+	]
+]
+
+//Todo: Implement Spectator Camera
+@PointClass base(Targetname, Angles, Parentname) studio("models/editor/playerstart.mdl") = info_player_phx_spectator :
+	"Spectator spawn entity. Can be act as camera."
+[]
+
+// Team Item Spawner (Lucky Ball, Devil Ball, Ult Points)
+@PointClass base(Targetname, Parentname, Angles) = ph_teamitem_spawner :
+	"PH:Z Team Item Spawner"
+[
+	spawnflags(flags) =
+	[
+		64 : "Silent" : 0
+		128 : "Remove After Spawn" : 0
+	]
+
+	spawnent(choices) : "Item to Spawn" : 1 : "Set Item to Spawn" =
+	[
+		1 : "Lucky Ball"
+		2 : "Devil Crystal"
+		3 : "Ultimate Point (Not Implemented)"
+	]
+	
+	amount(integer) : "Amount of Item" : 3 : "Amount of item to spawn. Max is 5. Devil Crystal will only spawn 1 item."
+	spawnontarget(target_destination) : "Spawn on Entity" : : "if not empty, spawn on specified Entity Names instead of using from This spawner."
+	
+	input Spawn(void) : "Spawn an Item."
+	input SetAmount(integer) : "Set Amount of entity to spawn."
+	input ChangeTarget(target_destination) : "Set of an entity name to spawn. Use empty string to disable."
+	input SetType(integer) : "Set Item Type to spawn. from 1 to 3 only."
+]
+
+// Decoy Spawner
+@PointClass base(Targetname) = ph_decoy_spawner :
+	"A Decoy Spawner. EntityName is required to spawn decoys to its position. Usually this was done by using info_targets with given name."
+[
+	spawnflags(flags) =
+	[
+		1 : "Spawn Immediately and Remove after spawn" : 1
+	]
+	
+	spawnrandom(choices) : "Spawn Randomly?" : 1 : "Spawn to [EntityName] randomly or sequentially" =
+	[
+		0 : "No"
+		1 : "Yes"
+	]
+	
+	spawnchance(float) : "Chance to spawn" : "0.2" : "Chance in percentage to spawn decoys, 0.0 to 1.0"
+	spawnmaxtype(choices) : "Max. Spawn Type" : 2 : "Set Maximum Amount Type. 1 is numerical (0,1,2,... to Max total EntityName), 2 is percentage (ranging 0.0 to 1.0), 0 always maximum" =
+	[
+		0 : "0: Max Total EntityName"
+		1 : "1: Numeric (0 to Max EntityName)"
+		2 : "2. Percentage (0.0 to 1.0)"
+	]
+	
+	spawnmax(float) : "Max. Decoys to Spawn" : 3 : "Maximum Decoys to spawn. This respects to [Max. Spawn Type] is set"
+	entity(target_destination) : "EntityName to spawn" : : "Required: Entity Names that decoys will spawn."
+	
+	takemodelfrommap(choices) : "Take Model(s) from Map" : 1 : "Set Models of Decoys from a random prop in a map. Set 0 to use [Model Override]" =
+	[
+		0 : "No"
+		1 : "Yes"
+	]
+	
+	model(studio) : "Model Override" : : "Model to override, if 'Take Model(s) from Map' is set to 0 (No)."
+	
+	input Spawn(void) : "Spawn decoys and remove this entity"
+	input SetSpawnChance(integer) : "Set Amount of chance to spawn"
+	input SetMax(float) : "Set Max Amount of decoys to spawn"
+	input SetMaxType(integer) : "Set Max Spawning Type"
+	input ChangeTarget(target_destination) : "Set the EntityName to spawn"
+]
+
+// Model Bans
+@PointClass base(Targetname) = ph_model_bans :
+	"PH:X/Z Model Bans. Uncheck Add Immediately flag to add bans manually after AddBans input is called. Currently support up to 16 model list (model1...model16 keyvalues)"
+[
+	spawnflags(flags) =
+	[
+		1 : "Add Immediately (uncheck means wait for input)" : 1
+	]
+	
+	input AddBans(void) : "Add Bans to BANNED_PROP_MODELS table"
+	input RemoveBans(void) : "Remove added Bans from AddBans input and Remove from BANNED_PROP_MODELS table too"
+]
+
+// Disabled, not implemented yet in X2Z: Hunter Trap Button
+// @PointClass base(Targetname, Parentname, Angles) = ph_hunter_trap_button :
+// 	"Floating button that acts identically to TTT Traitor Button to activate something for Booby Trapping Hunters."
+// [
+//	todo(integer) : "Todo" : 0 : "Todo"
+// ]
+
+// Disabled, not implemented yet in X2Z: : Ultimate Point Energy
+// @PointClass base(Targetname, Parentname, Angles) = ph_ultpointball :
+// 	"An Ultimate Point Ball, or other energy balls that requires you to activate something from both teams."
+// [
+// 
+// 	spawnflags(flags) = 
+// 	[
+// 		1 : "Use Radius" : 0
+//		2 : "Must Duck" : 0
+// 	]
+// 
+// 	team(choices) : "Team" : 1 : "Team that are able to use this entity" =
+// 	[
+// 		1 : "Hunters"
+// 		2 : "Props"
+//		3 : "Both Teams"
+// 	]
+// 	
+// 	point(integer) : "Ult Point" : 1 : "Ultimate Point. 0 to use from ConVar. Max is 3."
+// 	delay(float) : "Ult Delay Override" : 3 : "How long (in seconds) does it take to earn the ultimate point."
+// ]

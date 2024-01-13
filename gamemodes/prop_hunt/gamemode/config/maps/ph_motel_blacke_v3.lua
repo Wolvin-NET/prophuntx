@@ -1,5 +1,5 @@
 -- ph_motel_blacke_v3 Configuration.
-PHX.VerboseMsg("[PHX Map Config] Config for 'ph_motel_blacke_v3' has been loaded.")
+PHX:VerboseMsg("[Map Config] Config for 'ph_motel_blacke_v3' has been loaded.")
 
 local function ph_motel_blacke_v3_config()
 

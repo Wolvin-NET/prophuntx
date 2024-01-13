@@ -5,7 +5,7 @@ local function LoadOBBConfig()
 	local GetData = PHX.ConfigPath .. "/obb/"..map..".txt"
 	
 	if !file.Exists(GetData, "DATA") then
-		PHX.VerboseMsg("[PHX] No OBB Configuration found for map: "..map)
+		PHX:VerboseMsg("[OBB] No OBB Configuration found for map: "..map)
 		return false
 	end
 	
@@ -54,7 +54,7 @@ local function DoConfig()
 		
 		for _,found in pairs(tent) do
 			if IsValid(found) then
-				PHX.VerboseMsg( "[PHX] OBB MODIFIER: Setting up OBB Value for Entity ["..found:EntIndex().."]["..found:GetModel().."]: \n   >Hull-Vector: min "..tostring(min).." max "..tostring(max) )
+				PHX:VerboseMsg( "[OBB MODIFIER] Setting up OBB Value for Entity ["..found:EntIndex().."]["..found:GetModel().."]: \n   >Hull-Vector: min "..tostring(min).." max "..tostring(max) )
 				found:SetNWBool("hasCustomHull",true)
 				found.m_Hull 	= {min,max}
 			end
@@ -70,7 +70,7 @@ hook.Add("Initialize", "PHX.InitOBBModelData", function()
 	end
 
 	timer.Simple(1.5, function()
-		PHX.VerboseMsg("[PHX] Initializing OBB ModelData Config...")
+		PHX:VerboseMsg("[OBB] Initializing OBB ModelData Config...")
 		
 		CUR_MAP_DATA = LoadOBBConfig()
 		DoConfig()
@@ -79,7 +79,7 @@ end)
 
 hook.Add("PostCleanupMap", "PHX.PostOBBModelData", function()
 	if PHX:GetCVar( "ph_reload_obb_setting_everyround" ) then
-		PHX.VerboseMsg("[PHX] PostCleanup OBB ModelData Config...")
+		PHX:VerboseMsg("[OBB] PostCleanup OBB ModelData Config...")
 		
 		DoConfig()
 	end
@@ -89,7 +89,7 @@ concommand.Add("refresh_obb_map_setting", function(ply)
 
 	if ( util.IsStaff( ply ) ) then
 
-		PHX.VerboseMsg("[PHX] Refreshing OBB Model Data Modifier...")
+		PHX:VerboseMsg("[OBB] Refreshing OBB Model Data Modifier...")
 		CUR_MAP_DATA = LoadOBBConfig()
 	
 		DoConfig()

@@ -1,0 +1,7 @@
+"UnlitGeneric"
+{
+	"$basetexture" "vgui/hud/weapon_shotgun_water"
+	"$additive" 	1
+	"$vertexalpha"	1
+	"$vertexcolor"	1
+}

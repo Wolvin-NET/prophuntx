@@ -1,5 +1,5 @@
 -- This is a template of Devil Balls Additions which will adds a new events for Devil balls entity.
--- Note: Key name (the "UniqueName") must be different and cannot be similar with other name's addition. This is purposely used for PHX.VerboseMsg and preventing
+-- Note: Key name (the "UniqueName") must be different and cannot be similar with other name's addition. This is purposely used for PHX:VerboseMsg and preventing
 -- Duplicated addition and table reading errors.
 
 -- To add something, Remove "--[[" and "]]" to make them available again.

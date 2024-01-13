@@ -31,14 +31,6 @@ function util.PHXQuickDecompress( data )
     return t
 end
 
-function table.HasKey(tbl, keyName)
-	for k,_ in SortedPairs(tbl) do
-		print("looking for "..keyName)
-		if k == keyName then print("found! : "..keyName) return true end
-	end
-	return false
-end
-
 -- https://stackoverflow.com/a/17120745
 function table.CustomShuffle(array)
 	local counter = #array

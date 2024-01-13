@@ -16,6 +16,73 @@ local phx_PermaBannedModels = {
     "models/sims/lightwall2.mdl"
 }
 
+--///// EP2's Flachettes /////--
+
+game.AddParticles( "particles/hunter_flechette.pcf" )
+game.AddParticles( "particles/hunter_projectile.pcf" )
+
+local SoundTbl = {}
+SoundTbl["NPC_Hunter.FlechetteShoot"] =
+{
+	channel = CHAN_STATIC,volume = 1.0,level = 130,pitch = {98,104},
+	sound = "^npc/ministrider/ministrider_fire1.wav"
+}
+SoundTbl["NPC_Hunter.FlechetteNearmiss"] =
+{
+	channel = CHAN_BODY,volume = 1.0,level = 120,pitch = 100,
+	sound = {
+		">npc/ministrider/flechetteltor01.wav",
+		">npc/ministrider/flechetteltor02.wav",
+		">npc/ministrider/flechetteltor03.wav",
+		">npc/ministrider/flechetteltor04.wav"
+	}
+}
+SoundTbl["NPC_Hunter.FlechetteHitBody"] =
+{
+	channel = CHAN_STATIC,volume = 0.7,pitch = {93,108},level = 80,
+	sound = {
+		"npc/ministrider/flechette_flesh_impact1.wav",
+		"npc/ministrider/flechette_flesh_impact2.wav",
+		"npc/ministrider/flechette_flesh_impact3.wav",
+		"npc/ministrider/flechette_flesh_impact4.wav"
+	}
+}
+SoundTbl["NPC_Hunter.FlechettePreExplode"] =
+{
+	channel = CHAN_STATIC,volume = 0.6,pitch = {93,108},level = 70,
+	sound = {
+		"npc/ministrider/hunter_flechette_preexplode1.wav",
+		"npc/ministrider/hunter_flechette_preexplode2.wav",
+		"npc/ministrider/hunter_flechette_preexplode3.wav"
+	}
+}
+SoundTbl["NPC_Hunter.FlechetteExplode"] =
+{
+	channel = CHAN_STATIC,volume = 1.0,pitch = {93,108},level = 95,
+	sound = {
+		"npc/ministrider/flechette_explode1.wav",
+		"npc/ministrider/flechette_explode2.wav",
+		"npc/ministrider/flechette_explode3.wav",
+	}
+}
+SoundTbl["NPC_Hunter.FlechetteHitWorld"] = 
+{
+	channel = CHAN_STATIC,volume = {.95,1.0},pitch = {110,130},level = 80,
+	sound = {
+		"npc/ministrider/flechette_impact_stick1.wav",
+		"npc/ministrider/flechette_impact_stick2.wav",
+		"npc/ministrider/flechette_impact_stick3.wav",
+		"npc/ministrider/flechette_impact_stick4.wav",
+		"npc/ministrider/flechette_impact_stick5.wav"
+	}
+}
+for k,v in pairs( SoundTbl ) do
+	v.name = k,
+	sound.Add(v)
+end
+
+--///// End of EP2's Flachettes /////--
+
 -- Decoy Default Distance
 PHX.DecoyDistance   = 250
 
@@ -167,8 +234,7 @@ function PHX:AddAdminGroup( strGroup )
 	if !strGroup or strGroup == nil or !isstring(strGroup) or strGroup == "" then return end
 	
 	if self.SVAdmins[strGroup] then
-        print("Failed. UserGroup was exists.")
-		PHX.VerboseMsg("[PHX] The usergroup you entered '" .. strGroup .. "' was exist. Ignoring...")
+		PHX:VerboseMsg("[User] The usergroup you entered '" .. strGroup .. "' was exist. Ignoring...")
 	else
 		self.SVAdmins[strGroup] = true
 	end
@@ -184,7 +250,7 @@ function PHX:AddWhitelistMuted( strGroup )
 	if !strGroup or strGroup == nil or !isstring(strGroup) or strGroup == "" then return end
 	
 	if self.IgnoreMutedUserGroup[strGroup] then
-		PHX.VerboseMsg("[PHX] The whitelisted mute usergroup you entered '" .. strGroup .. "' was exist. Ignoring...")
+		PHX:VerboseMsg("[User] The whitelisted mute usergroup you entered '" .. strGroup .. "' was exist. Ignoring...")
 	else
 		self.IgnoreMutedUserGroup[strGroup] = true
 	end
@@ -313,19 +379,20 @@ PHX.CachedTaunts = {}
 PHX.CachedTaunts[TEAM_HUNTERS]	= {}
 PHX.CachedTaunts[TEAM_PROPS]	= {}
 
+local AddResources
 if SERVER then
 	function AddResources(t)
 		if !t then return end
 		
 		for name,path in pairs(t) do
-			PHX.VerboseMsg("[PH Taunts] Adding resource for download: " .. name)
+			PHX:VerboseMsg("[Taunts] Adding resource for download: " .. name)
 			resource.AddFile("sound/" .. path)
 		end
 	end
 	
 	function PHX:GetRandomTaunt( idTeam )
 		if table.IsEmpty(self.CachedTaunts[idTeam]) then
-			print("[PH Taunts] !!ERROR: Cache Taunt Table is Empty! Is there something messing up the cache??")
+			print("[Taunts] !!ERROR: Cache Taunt Table is Empty! Is there something is messing with the cache??")
 			return "vo/k_lab/kl_fiddlesticks.wav"
 		else
 			local rand = table.Random(self.CachedTaunts[idTeam])
@@ -342,10 +409,10 @@ function PHX:CheckCache( tbl, cat )
 		if tbl[i] and tbl[i] ~= nil then
 			for name,path in pairs(tbl[i]) do
 				if (self.CachedTaunts[i][name] ~= nil) then
-					self.VerboseMsg("[PH Taunts: "..team.GetName(i).." Cache Warning] Taunt name ["..name.."] from category '".. cat .. "' was exists in the cache. Removing entry to prevent duplication...")
+					self:VerboseMsg("[Taunts: "..team.GetName(i).." Cache Warning] Taunt name ["..name.."] from category '".. cat .. "' was exists in the cache. Removing entry to prevent duplication...", 2)
 					tbl[i][name] = nil
 				elseif table.HasValue( self.CachedTaunts[i], path ) then
-					self.VerboseMsg("[PH Taunts:"..team.GetName(i).." Cache Warning] Taunt name ["..name.."]["..path.."] from category '"..cat.."' was exists in the cache. Removing entry to prevent duplication...")
+					self:VerboseMsg("[Taunts: "..team.GetName(i).." Cache Warning] Taunt name ["..name.."]["..path.."] from category '"..cat.."' was exists in the cache. Removing entry to prevent duplication...", 2)
 					tbl[i][name] = nil
 				end
 			end
@@ -357,7 +424,7 @@ end
 function PHX:AddToCache( idTeam, tbl )
 
 	for name,path in pairs( tbl ) do
-		self.VerboseMsg( "[PH Taunts] ["..team.GetName( idTeam ):upper().." Cache] Adding taunt [" .. name .. "] to the cache." )
+		self:VerboseMsg( "[Taunts] ["..team.GetName( idTeam ):upper().." Cache] Adding taunt [" .. name .. "] to the cache." )
 		self.CachedTaunts[idTeam][name] = path
 	end
 	
@@ -366,7 +433,7 @@ end
 function PHX:ManageTaunt( category, tauntData )
 	
 	-- check cache first.
-	self.VerboseMsg("[PH Taunts] Checking for duplicated/conflicting taunts: "..category.."...")
+	self:VerboseMsg("[Taunts] Checking for duplicated/conflicting taunts: "..category.."...")
 	self:CheckCache( tauntData, category )
 	
 	local emptied=0
@@ -384,26 +451,26 @@ function PHX:ManageTaunt( category, tauntData )
 	end
 	
 	if emptied==2 then
-		print("[PH Taunts] Warning: It seems that all taunts from "..category.." was emptied from Cache Checker! Skipping to next taunt if any.")
+		print("[Taunts] Warning: It seems that all taunts from "..category.." was emptied from Cache Checker! Skipping to next taunt if any.")
 		return
 	end
 	
-	self.VerboseMsg("[PH Taunts] Done. Starting Managing Taunts ...")
+	self:VerboseMsg("[Taunts] Done. Starting Managing Taunts ...")
 
 	if self.TAUNTS[category] ~= nil then
 		-- if category exist, add them.
-		self.VerboseMsg("[PH Taunts] Category " .. category .. " was exists in taunt table. Adding Taunts...")
+		self:VerboseMsg("[Taunts] Category " .. category .. " was exists in taunt table. Adding Taunts...")
 		
 		for i=TEAM_HUNTERS,TEAM_PROPS do
 			if tauntData[i] and tauntData[i] ~= nil then
 				for name,path in pairs(tauntData[i]) do
 					-- Double Check, if somehow found any duplicates
 					if ( self.TAUNTS[category][i][name] ) or ( self.CachedTaunts[i][name] ) then
-						self.VerboseMsg(string.format("[PH Taunts] Skipping taunt NAME '%s' (Cat: %s) because it exist in Taunt Table & Cache.", name,category))
+						self:VerboseMsg(string.format("[Taunts] Skipping taunt NAME '%s' (Cat: %s) because it exist in Taunt Table & Cache.", name,category))
 					elseif (table.HasValue( self.TAUNTS[category][i], path )) and (table.HasValue( self.CachedTaunts[i], path )) then
-						self.VerboseMsg(string.format("[PH Taunts] Skipping taunt PATH '%s' (Cat: %s, path: %s) because it exist in Taunt Table & Cache.", name,category,path))
+						self:VerboseMsg(string.format("[Taunts] Skipping taunt PATH '%s' (Cat: %s, path: %s) because it exist in Taunt Table & Cache.", name,category,path))
 					else
-						self.VerboseMsg(string.format("[PH Taunts] Adding taunt '%s' (Cat: %s) to their Existing Taunt Table and Cache.", name,category))
+						self:VerboseMsg(string.format("[Taunts] Adding taunt '%s' (Cat: %s) to their Existing Taunt Table and Cache.", name,category))
 						self.TAUNTS[category][i][name] 	= path
 						self.CachedTaunts[i][name] 		= path
 					end
@@ -411,25 +478,25 @@ function PHX:ManageTaunt( category, tauntData )
 			end
 		end
 		
-		self.VerboseMsg("[PH Taunts] Taunts Category " .. category .. " has been successfully added!")
+		self:VerboseMsg("[Taunts] Taunts Category " .. category .. " has been successfully added!")
 		
 		return
 	end
 	
-	self.VerboseMsg("[PH Taunts] Adding new taunt & category: " .. category .. "!")
+	self:VerboseMsg("[Taunts] Adding new taunt & category: " .. category .. "!")
 	
 	self.TAUNTS[category]	= tauntData
 	
 	local PROPS_TAUNT 		= {}
 	local HUNTERS_TAUNT 	= {}
 	
-	self.VerboseMsg("[PH Taunts] Precaching taunts from category: " .. category .. "..." )
+	self:VerboseMsg("[Taunts] Precaching taunts from category: " .. category .. "..." )
 	
 	if tauntData[TEAM_PROPS] and tauntData[TEAM_PROPS] ~= nil and istable(tauntData[TEAM_PROPS]) and !table.IsEmpty( tauntData[TEAM_PROPS] ) then
 		PROPS_TAUNT = tauntData[TEAM_PROPS]
 		self:AddToCache( TEAM_PROPS, PROPS_TAUNT )
 		if SERVER then
-			self.VerboseMsg("[PH Taunts] Adding Prop taunts resources if any." )
+			self:VerboseMsg("[Taunts] Adding Prop taunts resources if any." )
 			AddResources( PROPS_TAUNT )
 		end
 	end
@@ -438,7 +505,7 @@ function PHX:ManageTaunt( category, tauntData )
 		HUNTERS_TAUNT = tauntData[TEAM_HUNTERS]
 		self:AddToCache( TEAM_HUNTERS, HUNTERS_TAUNT )
 		if SERVER then
-			self.VerboseMsg("[PH Taunts] Adding Hunter taunts resources if any." )
+			self:VerboseMsg("[Taunts] Adding Hunter taunts resources if any." )
 			AddResources( HUNTERS_TAUNT )
 		end
 	end
@@ -449,7 +516,7 @@ function PHX:AddCustomTaunt( idTeam, category, tblTaunt )
 	self:CheckCache( tblTaunt, category )
 
 	if (idTeam ~= TEAM_PROPS or idTeam ~= TEAM_HUNTERS) and (!tblTaunt or tblTaunt == nil) and (!istable(tblTaunt)) then
-		print( "[PH] Error: Cannot add taunt category from team: "..team.GetName(idTeam).."!" )
+		print("[Taunts] Error: Cannot add taunt category from team: "..team.GetName(idTeam).."!" )
 		return
 	end
 	
@@ -458,14 +525,14 @@ function PHX:AddCustomTaunt( idTeam, category, tblTaunt )
 		self:AddToCache(idTeam, tblTaunt)
 		AddResources( tblTaunt )
 	else
-		print( "[PH] Error: Cannot add taunt category "..category.." because category is exists! Try with different name." )
+		print("[Taunts] Error: Cannot add taunt category "..category.." because category is exists! Try with different name." )
 	end
 	
 end
 
 function PHX:AddSingleTaunt(idTeam, category, name, path)
 	if (idTeam ~= TEAM_PROPS or idTeam ~= TEAM_HUNTERS) and (!name and !path) and (type(name) ~= "string" and type(path) ~= "string") then
-		print( "[PH] Error: All required arguments must be a string, required and thus cannot be empty!" )
+		print("[Taunts] Error: All required arguments must be a string, required and thus cannot be empty!" )
 		return
 	end
 	
@@ -487,7 +554,7 @@ end
 
 function PHX:RemoveTauntByPath( idTeam, category, strTaunt )
 	if (!idTeam or !category) then
-		print("[PH Taunts] Error: Team ID or Category is Invalid!")
+		print("[Taunts] Error: Team ID or Category is Invalid!")
 	end
 
 	if table.HasValue(self.TAUNT[category][idTeam], strTaunt) then 
@@ -495,7 +562,7 @@ function PHX:RemoveTauntByPath( idTeam, category, strTaunt )
 		table.RemoveByValue(self.CachedTaunts[idTeam], strTaunt)
 		return true
 	else
-		print("[PH Taunts] Taunt: ".. strTaunt .. " didn't exists on category " .. category)
+		print("[Taunts] Taunt: ".. strTaunt .. " didn't exists on category " .. category)
 	end
 	
 	return false
@@ -504,12 +571,12 @@ end
 -- Get List of Taunt, returned by Table.
 function PHX:GetAllTeamTaunt( teamid, category )
 	if (not category) then
-		self.VerboseMsg("[PH Taunts] Warning: category isn't defined. Reverting back to Default Category!")
+		self:VerboseMsg("[Taunts] Warning: category isn't defined. Reverting back to Default Category!", 2)
 		category = self.DEFAULT_CATEGORY
 	end
 
 	if (not self.TAUNTS[category]) or (self.TAUNTS[category] == nil) then
-		print("[PH Taunts] The specified ".. team.GetName(teamid) .." taunt table from "..category.." contains nothing or not found.")
+		print("[Taunts] The specified ".. team.GetName(teamid) .." taunt table from "..category.." contains nothing or not found.")
 		return false
 	end
 	
@@ -523,7 +590,7 @@ function PHX:RefreshTauntList()
 	local t = table.Copy(self.TAUNTS)
 	local getCategories = table.GetKeys(self.TAUNTS)
 	
-	print( "[PHX Taunt] Refreshing..." )
+	print( "[Taunts] Warning: Using this command while in active round is dangerous. Anyway, Refreshing!" )
 	
 	-- Empty Table
 	self.TAUNTS = {}
@@ -552,7 +619,7 @@ end, nil, "(Deprecated: Use with your own risk) Refresh Taunt List and Sort them
 local config_path = PHX.ConfigPath
 if SERVER then
 	if ( !file.Exists( config_path, "DATA" ) ) then
-		PHX.VerboseMsg("[PHX] Warning: ./data/".. config_path .." does not exist. Creating New One...")
+		PHX:VerboseMsg("[Config] Warning: ./data/".. config_path .." does not exist. Creating New One...")
 		file.CreateDir( config_path )
 	end
 	
@@ -578,12 +645,12 @@ if SERVER then
 			PHX.PROP_PLMODEL_BANS = {}
 			
 			for _, v in pairs(PROP_PLMODEL_BANS_READ) do
-				PHX.VerboseMsg("[PHX PlayerModels] Adding custom prop player model ban --> "..string.lower(v))
+				PHX:VerboseMsg("[Models] Adding custom prop player model ban --> "..string.lower(v))
 				table.insert(PHX.PROP_PLMODEL_BANS, string.lower(v))
 			end
 		else
 			
-			PHX.VerboseMsg("[PHX] Cannot read "..dir.."/bans.txt: Error - did not exist. Did you just delete it or what?")
+			PHX:VerboseMsg("[Models] Cannot read "..dir.."/bans.txt: Error - did not exist. Did you just delete it or what?", 3)
 			
 		end
 
@@ -611,16 +678,16 @@ if SERVER then
             
 			--PHX.BANNED_PROP_MODELS = {}
 			for _,v in pairs(PROP_MODEL_BANS_READ) do
-				PHX.VerboseMsg("[PHX Model Bans] Adding entry of restricted model to be used -> "..string.lower(v))
+				PHX:VerboseMsg("[Models] Adding entry of restricted model to be used -> "..string.lower(v))
                 
                 if table.HasValue(PHX.BANNED_PROP_MODELS, v) then
-                    PHX.VerboseMsg("[PHX Model Bans] Models " .. v .. " is already exists in the prop model banlist. Ignoring...!")
+                    PHX:VerboseMsg("[Models] Models " .. v .. " is already exists in the prop model banlist. Ignoring...!")
                 else
                     table.insert(PHX.BANNED_PROP_MODELS, string.lower(v))
                 end
 			end
 		else
-			PHX.VerboseMsg("[PHX] Cannot read "..dir.."/model_bans.txt: Error - did not exist. Did you just delete it or what?")
+			PHX:VerboseMsg("[Models] Cannot read "..dir.."/model_bans.txt: Error - did not exist. Did you just delete it or what?", 3)
 		end
 	end
     
@@ -653,6 +720,17 @@ local function UpdatePropBansInfo( PHXKey, tbl )
 	net.Broadcast()
 end
 
+if SERVER then
+	-- called only from ph_model_bans entity
+	function PHX:ENT_UpdateModelBan( entity, index )
+	
+		if entity and entity:GetClass() == "ph_model_bans" and entity:EntIndex() == index then
+			UpdatePropBansInfo( "BANNED_PROP_MODELS", self.BANNED_PROP_MODELS )
+		end
+	
+	end
+end
+
 hook.Add("PostCleanupMap", "PHX.UpdateUsablePropEnt", function()
 	-- Update Prop Entities Type
 	PHX.USABLE_PROP_ENTITIES = PHX.CVARUseAbleEnts[ PHX:GetCVar( "ph_usable_prop_type" ) ]
@@ -663,7 +741,7 @@ hook.Add("PostCleanupMap", "PHX.UpdateUsablePropEnt", function()
         for _,ent in pairs(ents.GetAll()) do
             timer.Simple(0.1, function()
                 if IsValid(ent) and PHX.PROHIBITTED_MDLS[ ent:GetModel() ] then
-                    PHX.VerboseMsg("[PHX] Removing " .. ent:GetModel() .. " to prevent server crash or gameplay-breaking exploits.")
+                    PHX:VerboseMsg("[Config] Removing " .. ent:GetModel() .. " to prevent server crash or gameplay-breaking exploits.")
                     ent:Remove()
                 end
             end)
@@ -677,21 +755,21 @@ end)
 
 local function InitializeConfig()
 
-	PHX.VerboseMsg("[PH Taunts] Initializing Taunts...")
+	PHX:VerboseMsg("[Taunts] Initializing Taunts...")
 	
-	PHX.VerboseMsg("[PH Taunts] Precaching stock taunts..." )
+	PHX:VerboseMsg("[Taunts] Precaching stock taunts..." )
 	PHX:AddToCache( TEAM_PROPS, 	PHX.TAUNTS[PHX.DEFAULT_CATEGORY][TEAM_PROPS] )
 	PHX:AddToCache( TEAM_HUNTERS, 	PHX.TAUNTS[PHX.DEFAULT_CATEGORY][TEAM_HUNTERS] )
 	
-	PHX.VerboseMsg("[PHX Taunts] Adding External Custom Taunts, if any...")
+	PHX:VerboseMsg("[Taunts] Adding External Custom Taunts, if any...")
 	for category,tauntData in SortedPairs( list.Get("PHX.CustomTaunts") ) do 
 		
-		PHX.VerboseMsg("[PH Taunts] Working on Adding external taunt: Category: [" .. category .. "]...")
+		PHX:VerboseMsg("[Taunts] Working on Adding external taunt: Category: [" .. category .. "]...")
 		PHX:ManageTaunt( category, tauntData )
 		
 	end
 	
-	PHX.VerboseMsg( "[PH Taunts] Total Cache size: Props - " .. tostring(table.Count(PHX.CachedTaunts[TEAM_PROPS])) .. ", Hunter: " .. tostring(table.Count(PHX.CachedTaunts[TEAM_HUNTERS])) .."\n[PH Taunts] Done. Have Fun!" )
+	PHX:VerboseMsg( "[Taunts] Total Cache size: Props - " .. tostring(table.Count(PHX.CachedTaunts[TEAM_PROPS])) .. ", Hunter: " .. tostring(table.Count(PHX.CachedTaunts[TEAM_HUNTERS])) .."\n[Taunts] All Done. Have Fun!" )
     
     -- Initialize Usable Prop Entities
     PHX.USABLE_PROP_ENTITIES = PHX.CVARUseAbleEnts[ PHX:QCVar( "ph_usable_prop_type" ) ]

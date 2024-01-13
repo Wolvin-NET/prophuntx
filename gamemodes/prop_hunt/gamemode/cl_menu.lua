@@ -89,7 +89,7 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 				surface.DrawRect(0,0,w,h)
 			end
 			
-			draw.DrawText( text, font ,w*0.22,h*0.4, color, TEXT_ALIGN_LEFT )
+			draw.DrawText( text, font ,w*0.24,h*0.4, color, TEXT_ALIGN_LEFT )
 		end
         
         item.Button:SetToolTip( text )
@@ -704,13 +704,7 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 		
 		PHX.UI:CreateVGUIType("devspacer","spacer",nil,grid,"" )
 		PHX.UI:CreateVGUIType("", "label", "PHX.MenuCategoryLabel", grid, "PHXM_ADMIN_DEVSECTION")
-        
-        PHX.UI:CreateVGUIType("ph_print_verbose", "combobox", { kind="SERVER", data=
-            {
-                ["0"] = { name="PHXM_DROP_VBS_DISABLE", icon="icon16/application_delete.png" },
-                ["1"] = { name="PHXM_DROP_VBS_ENABLE",  icon="icon16/application_xp_terminal.png" },
-            }
-        }, grid, "PHXM_ADMIN_BEVERBOSE")
+
 		PHX.UI:CreateVGUIType("ph_prop_viewoffset_mult", "slider", {min=0.6,max=1.2,dec=1,float=true,kind="SERVER"}, grid, "PHXM_ADMIN_PROPOFFSET")
 		PHX.UI:CreateVGUIType("ph_prop_must_standing", "check", "SERVER", grid, "PHXM_ADMIN_REPL_MUST_STAND")
 		PHX.UI:CreateVGUIType("ph_check_for_rooms", "check", "SERVER", grid, "PHXM_ADMIN_ROOMCHECK")

@@ -22,7 +22,6 @@ function ENT:SetupDataTables()
 end
 
 function ENT:Initialize()
-    self.propNextFire = 0
 	self.Entity:DrawShadow( false ) -- don't draw shadows.
 end
 
@@ -33,8 +32,12 @@ if CLIENT then
 end
 
 function ENT:ShouldDraw()
-	local state = GetGlobalBool( "lps_show_weapon", 0 )
-	self:SetNoDraw( !state and true or false )
+	if IsValid( self:GetOwner() ) then
+
+		local state = GetGlobalBool( "lps_show_weapon", false )
+		self:SetNoDraw( (!state or self:GetOwner():IsLPSHolstered()) and true or false )
+		
+	end
 end
 
 function ENT:Think()

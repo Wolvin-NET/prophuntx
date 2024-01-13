@@ -1,11 +1,11 @@
 -- ph_kleiner Configuration.
 -- Add some Invisible Wall to prevent Exploit. Additionaly, Force all player props become Kleiner model after 0.5 seconds of respawn.
-PHX.VerboseMsg("[PHX Map Config] Config for 'ph_kliener_v2' has been loaded.")
+PHX:VerboseMsg("[Map Config] Config for 'ph_kliener_v2' has been loaded.")
 
 local function RemoveClipBrush()
 	for _,pc in pairs(ents.FindByClass("brush_playerclip")) do
 		if !IsValid(pc) then return end
-		PHX.VerboseMsg("[PH:X ph_kliener_v2] Removing Anti Exploit Brush -> #"..pc:EntIndex())
+		PHX:VerboseMsg("[Map Config] Removing Anti Exploit Brush -> #"..pc:EntIndex())
 		pc:Remove()
 	end
 end
@@ -20,7 +20,7 @@ local Clips = {
 }
 
 local function PostCreatePlayerClip()
-	PHX.VerboseMsg("[PH:X ph_kliener_v2] Creating Anti Exploit walls...")
+	PHX:VerboseMsg("[Map Config] Creating Anti Exploit walls...")
 	
 	for _,bounds in pairs(Clips) do
 		PHX:CreatePlayerClip(bounds.mins, bounds.maxs)

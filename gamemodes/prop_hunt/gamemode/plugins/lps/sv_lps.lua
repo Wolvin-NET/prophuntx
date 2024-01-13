@@ -167,7 +167,7 @@ local function DoPlayerCheck(ply)
 				local RN = GetGlobalInt( "RoundNumber", 0 )
 				local XR = PHX:GetCVar( "lps_start_every_x_rounds" )
 				
-				if PHX:GetCVar( "lps_start_random" ) then
+				if PHX:GetCVar( "lps_start_random_round" ) then
 					if math.random(0,1) == 0 then 
 						return
 					end
@@ -218,12 +218,12 @@ local function DoPlayerCheck(ply)
                         
                         pl:PrintCenter( "LASTPROP_ANNOUNCE", Color(240,72,82) )
                         
-                        if PHX:GetCVar("lps_trail_enable") then
+                        if PHX:GetCVar("lps_trail_show") then
                             local TrailCol = PHX.LPS:TrailColorTranslate( PHX:GetCVar( "lps_trail_color" ) )
                             local TrailTex = PHX:GetCVar( "lps_trail_texture" )
                             
                             if !file.Exists("materials/" .. TrailTex .. ".vmt", "GAME") then
-                                print("Texture file for creating Trail: '" .. TrailTex .. "' was not found! Reverting back to default!!")
+                                print("[LPS] Texture file for creating Trail: '" .. TrailTex .. "' was not found! Reverting back to default!!")
                                 TrailTex = "trails/laser"
                             end
                             
@@ -235,7 +235,8 @@ local function DoPlayerCheck(ply)
                 end
 				
 				SetGlobalBool("LPS.InLastPropStanding", true) -- for Think
-				hook.Call( "PHInLastPropStanding", nil, pl, PHX.LPS.WEAPON2.NAME, PHX.LPS.WEAPON2.DATA ) -- for Something you need to "hook.Add" it.
+				-- FIX 01/30/2023: Replaced 'pl' to 'stand'. pl was nil.
+				hook.Call( "PHInLastPropStanding", nil, stand, PHX.LPS.WEAPON2.NAME, PHX.LPS.WEAPON2.DATA ) -- for Something you need to "hook.Add" it.
 
                 for _,p in pairs(player.GetAll()) do                    
                     if p:IsLastStanding() then

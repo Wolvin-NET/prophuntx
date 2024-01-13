@@ -1,8 +1,5 @@
--- Create new class
 local CLASS = {}
 
-
--- Some settings for the class
 CLASS.DisplayName			= "Hunter"
 CLASS.WalkSpeed 			= 230
 CLASS.CrouchedWalkSpeed 	= 0.4
@@ -10,12 +7,12 @@ CLASS.RunSpeed				= 290
 CLASS.DuckSpeed				= 0.2
 CLASS.DrawTeamRing			= false
 
-
--- Called by spawn and sets loadout
--- Original: function CLASS:Loadout(pl), This is bug prevention where Hunters can shoot before they got blinded!
-local function StartLoadOut( pl )
-
+function CLASS:StartLoadOut( pl )
     if !pl:Alive() then return end
+	if (pl.HasLoadout) then return end
+	
+	local override = hook.Run("PH_OnHunterLoadOut", pl)
+	if (override) then return end
 
     pl:GiveAmmo(32, "Buckshot")
     pl:GiveAmmo(255, "SMG1")
@@ -37,27 +34,23 @@ local function StartLoadOut( pl )
  	if pl:HasWeapon(cl_defaultweapon) then 
  		pl:SelectWeapon(cl_defaultweapon)
 	else
-		-- Return to weapon_smg1.
-        -- Todo: Update ph_underwataaa weapon giving system.
-		if pl:HasWeapon("weapon_smg1") then
-			pl:SelectWeapon("weapon_smg1")
-		end
+		if pl:HasWeapon("weapon_smg1") then pl:SelectWeapon("weapon_smg1") end
  	end
 end
 
-local function ControlPlayer( ply, isLock )
-    
+function CLASS:ControlPlayer( ply, isLock, TimerID )
+	
     if IsValid( ply ) then
     
-        if isLock then
+        if isLock and GetGlobalBool("PHX.BlindStatus", false) then
             ply:Lock()
             return
         end
     
         ply:Blind(false)
         ply:UnLock()
-
-        StartLoadOut( ply )
+		
+        self:StartLoadOut( ply )
         
     end
 end
@@ -76,16 +69,22 @@ function CLASS:OnSpawn(pl)
     
     -- Allow respawn without being blinded when the blind state is false.
 	-- Also immediately give weapons.
-    if !GetGlobalBool("BlindStatus", false) then
-		StartLoadOut( pl )
+    if !GetGlobalBool("PHX.BlindStatus", false) then
+		self:StartLoadOut( pl )
+		pl.HasLoadout = true
 		return
 	end
-    
+	
 	local unlock_time = GetGlobalInt("unBlind_Time", 0)
 	if unlock_time > 2 then
-        pl:Blind(true)
-        timer.Simple(1, function() ControlPlayer( pl, true ) end)
-        timer.Create("tmr.hunterUnblind:"..pl:EntIndex(), unlock_time, 1, function() ControlPlayer( pl, false ) end)
+		local TimerID = "tmr.hunterUnblind:"..pl:EntIndex()
+		pl.TimerBlindID = TimerID
+		pl:Blind(true)
+		if !pl._LoadOutUnblind then
+			pl._LoadOutUnblind = function( pl ) self:StartLoadOut( pl ) end
+		end
+		timer.Simple(1, function() self:ControlPlayer( pl, true, TimerID ) end)
+		timer.Create( TimerID, unlock_time, 1, function() self:ControlPlayer( pl, false, TimerID ); pl.HasLoadout = true; end)
 	end
 	
 end
@@ -101,14 +100,14 @@ end
  
 -- Called when a player dies with this class
 function CLASS:OnDeath(pl, attacker, dmginfo)
-    -- force remove timer.
-    timer.Remove("tmr.hunterUnblind:"..pl:EntIndex())
+    timer.Remove( "tmr.hunterUnblind:"..pl:EntIndex() ) -- force remove timer.
+	pl.HasLoadout = false
+	pl.TimerBlindID = nil
+	
 	pl:CreateRagdoll()
     pl:Blind(false)
 	pl:UnLock()
-	
-	-- Always Reset the ViewOffset
-    pl:PHResetView()
+    pl:PHResetView() -- Always Reset the ViewOffset
 	
 	-- Spawn Devil Ball
 	local pos = pl:GetPos()

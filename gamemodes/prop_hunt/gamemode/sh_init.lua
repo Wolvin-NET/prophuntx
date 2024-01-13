@@ -14,6 +14,7 @@ IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMA
 ]]--
 
 PHX = PHX or {}
+PHX.TITLE = "Prop Hunt: X2Z"
 
 TEAM_HUNTERS 	= 1
 TEAM_PROPS 	 	= 2
@@ -21,7 +22,45 @@ IS_PHX		 	= true	-- an easy check if PHX is installed.
 
 PHX.ConfigPath 	= "phx_data"
 PHX.VERSION		= "X2Z"
-PHX.REVISION	= "XX.XX.23" --Format: dd/mm/yy.
+PHX.REVISION	= "10.01.24" --Format: dd/mm/yy.
+
+--Include Languages
+PHX.LANGUAGES = {}
+
+-- ////////////////// Verbose Message ////////////////// --
+local verbHelp="Enable more detailed and verbose messages when Prop Hunt: X2Z is running."
+local MsgErrorLevel = {
+	{ "[INFO]", 	color_white },
+	{ "[WARN]", 	Color(246,246,2) },
+	{ "[ALERT]", 	Color(248,151,25) },
+	{ "[ERROR]", 	Color(235,43,36) },
+	{ "[FATAL]", 	Color(208,24,24) }
+}
+local maxMsgErrorLevel = #MsgErrorLevel
+local ErrorKeys = table.GetKeys( MsgErrorLevel )
+
+if SERVER then
+	-- Serverside must be archived
+	CreateConVar( "phx_verbose", "0", FCVAR_SERVER_CAN_EXECUTE+FCVAR_ARCHIVE, verbHelp, 0, maxMsgErrorLevel )
+else
+	-- Client should not be archived
+	CreateClientConVar( "phx_verbose", "0", false, true, verbHelp, 0, maxMsgErrorLevel )
+end
+function PHX:VerboseMsg( text, level )
+	if !level then level = 1 end
+	level = math.Clamp( level, 1, maxMsgErrorLevel )
+	local VerboseLevel = GetConVar("phx_verbose"):GetInt()
+	
+	if VerboseLevel > 0 and text then
+		if ErrorKeys[level] >= VerboseLevel then
+			local lv = MsgErrorLevel[ level ]
+			local realm = Color(231,219,116)
+			if SERVER then realm = Color(137,222,255); end
+
+			MsgC( color_white, "[PHX]", lv[2], lv[1] .. " ", realm, text .."\n" )
+		end
+	end
+end
 
 --[[ BEGIN OF SHARED INIT HEADERS ]]--
 
@@ -121,7 +160,7 @@ function PHX:Includes( path, name, isExternal )
     local pathToSearch = root .. path .. "/*.lua"
     local ReqFiles = file.Find(pathToSearch, "LUA")    
     for _,File in SortedPairs( ReqFiles ) do
-        PHX.VerboseMsg( string.format( "[PHX] [%s] Loading %s: %s", name:upper(), name, File ) )
+        PHX:VerboseMsg( string.format( "[Includes] Loading %s: %s", name, File ) )
         
         if (isExternal) then
             local nice = root .. path .. "/" .. File
@@ -135,54 +174,33 @@ function PHX:Includes( path, name, isExternal )
     end
 end
 
-function PHX.VerboseMsg( text )
-	-- Very stupid checks: PHX:GetCVar() will only sets after 1st player is joined. This is intentional
-	-- because Loading PHX:GetCVar() too early (outside initialization hook) will only load it's default value
-	-- followed by GetGlobal* value. This problem was noticed on TTT here: 
-	-- https://github.com/Facepunch/garrysmod/blob/be251723824643351cb88a969818425d1ddf42b3/garrysmod/gamemodes/terrortown/gamemode/init.lua#L235
-	if SERVER then
-		if GetConVar("ph_print_verbose"):GetBool() and text then
-			print( text )
-		end
-	else
-		-- BUGS: This somehow works on client *AFTER* map changes, but occasionally not working in some cases (e.g: Early Hook Calls)
-		-- Can't do anything about this atm...
-		if PHX:GetCVar( "ph_print_verbose" ) and text then
-			print( text )
-		end
-	end
-end
-
---Include Languages
-PHX.LANGUAGES = {}
-
 PHX:Includes( "langs", "Languages" )
 PHX:Includes( "config/lib", "Libraries" )
 PHX:Includes( "config/external", "External Lua" )
 
 --Add Alias for NewSoundDuration()
 function PHX:SoundDuration( snd )
-    return NewSoundDuration( snd )
+	if (NewSoundDuration) then return NewSoundDuration(snd) end
+	return -1
 end
 
 -- Standard Inclusion
 AddCSLuaFile("enhancedplus/sh_enhancedplus.lua")
 AddCSLuaFile("cl_lang.lua")
 AddCSLuaFile("config/sh_init.lua")
-AddCSLuaFile("ulx/modules/sh/sh_phx_mapvote.lua")
 AddCSLuaFile("sh_config.lua")
 AddCSLuaFile("sh_player.lua")
 AddCSLuaFile("sh_chatbox.lua")
 AddCSLuaFile("sh_tauntscanner.lua")
 include("enhancedplus/sh_enhancedplus.lua")
 include("config/sh_init.lua")
-include("ulx/modules/sh/sh_phx_mapvote.lua")
 include("sh_config.lua")
 include("sh_player.lua")
 include("sh_chatbox.lua")
 include("sh_tauntscanner.lua")
 
 -- MapVote
+PHX.MV = {}
 if SERVER then
     AddCSLuaFile("sh_mapvote.lua")
     AddCSLuaFile("mapvote/cl_mapvote.lua")
@@ -203,9 +221,59 @@ include("sh_httpupdates.lua")
 
 local _,folder = file.Find(engine.ActiveGamemode() .. "/gamemode/plugins/*", "LUA")
 for _,plugfolder in SortedPairs( folder ) do
-	PHX.VerboseMsg("[PHX] [PLUGINS] Loading plugin: "..plugfolder)
+	PHX:VerboseMsg("[Plugins Init] Loading plugin: "..plugfolder)
 	AddCSLuaFile("plugins/" .. plugfolder .. "/sh_load.lua")
 	include("plugins/" .. plugfolder .. "/sh_load.lua")
+end
+
+if SERVER then
+	
+	local function GetTranslation(self,strID,ply)
+		local str="error"
+		
+		if self:GetCVar( "ph_use_lang" ) then
+			local lang = self:GetCVar( "ph_force_lang" )
+			if (self.LANGUAGES[lang]) and self.LANGUAGES[lang][ strID ] then
+				str = self.LANGUAGES[lang][ strID ]
+			else
+				str = self.LANGUAGES["en_us"][ strID ]
+			end
+		else
+			if ply and IsValid(ply) then
+				local clLang = ply:GetInfo("ph_cl_language")
+				if (self.LANGUAGES[clLang]) and self.LANGUAGES[clLang][ strID ] then
+					str = self.LANGUAGES[clLang][ strID ]
+				end
+			else
+				str = self.LANGUAGES["en_us"][ strID ]
+			end
+		end
+
+		return str
+	end
+
+	function PHX.SVTranslate( self, ply, strID, ... )
+
+		local str =  GetTranslation(self,strID,ply)
+		return string.format( str, ... )
+		
+	end
+
+	--Get Random Translated
+	function PHX.RTranslate( self, ply, strID )
+		local rStr = GetTranslation(self,strID,ply)
+		return rStr[math.random(1,#rStr)]
+	end
+	
+	--Broadcast Translate to All Players
+	function PHX.BTranslate( self, strID, ... )
+		--Broadcast Translate
+		for _,ply in pairs( player.GetAll() ) do
+		
+			self:SVTranslate( strID, ply, ... )
+			
+		end
+	end
 end
 
 local strteam = {}
@@ -214,8 +282,24 @@ strteam[TEAM_HUNTERS]		= "PHX_TEAM_HUNTERS"
 strteam[TEAM_PROPS]			= "PHX_TEAM_PROPS"
 strteam[TEAM_UNASSIGNED]	= "PHX_TEAM_UNASSIGNED"
 strteam[TEAM_SPECTATOR]		= "PHX_TEAM_SPECTATOR"
-
 function PHX.TranslateName( self, teamID, ply )
+	local strID = strteam[teamID]
+	
+	if SERVER then
+		local Translation = self:SVTranslate( strID, ply )
+		return Translation
+	else
+		local txt = self:FTranslate( strID )
+		if !txt or txt == nil then
+			teamID = team.GetName( teamID )
+		else
+			teamID = txt
+		end
+		
+		return teamID
+	end
+end
+--[[ function PHX.TranslateName( self, teamID, ply )
 	local strID = strteam[teamID]
 	
 	if SERVER then	-- self:F/Translate() DON'T EXIST on Serverside!
@@ -254,7 +338,7 @@ function PHX.TranslateName( self, teamID, ply )
 		
 		return teamID
 	end
-end
+end ]]
 
 --[[ END OF SHARED INIT HEADERS ]]--
 
@@ -263,7 +347,7 @@ DeriveGamemode("fretta")
 IncludePlayerClasses()
 
 -- Information about the gamemode
-GM.Name		= "Prop Hunt: X2Z"
+GM.Name		= PHX.TITLE
 GM.Author	= "Wolvindra-Vinzuerio & D4UNKN0WNM4N"
 
 -- Versioning
@@ -395,25 +479,25 @@ function PHX:InitializePlugin()
 		STATE = "CLIENT"
 	end
 	
-	self.VerboseMsg( "[PHX Plugin] Initializing Plugins..." )
+	self:VerboseMsg( "[Plugin] Initializing Plugins..." )
 	for name,plugin in pairs( list.Get("PHX.Plugins") ) do
 		if (self.PLUGINS[name] ~= nil) then
-			self.VerboseMsg("[PHX Plugin] Not adding "..name.." because it was exists in table. Use different name instead!")
+			self:VerboseMsg("[Plugin] Not adding "..name.." because it was exists in table. Use different name instead!", 3)
 		else
-			self.VerboseMsg("[PHX Plugin] Adding & Loading Plugin: "..name)
+			self:VerboseMsg("[Plugin] Adding & Loading Plugin: "..name)
 			self.PLUGINS[name] = plugin
 		end
 	end
 	
 	timer.Simple(0, function()
 		if !table.IsEmpty( self.PLUGINS ) then
-			self.VerboseMsg( string.format("[PHX Plugin] --------- Listing loaded %s SIDE plugins ---------", STATE ) )
+			self:VerboseMsg( string.format("[Plugin] --------- Listing loaded %s SIDE plugins ---------", STATE ) )
 			for pName,pData in SortedPairs(self.PLUGINS) do
-				self.VerboseMsg("[PHX Plugin] Loaded Plugin:"..pName)
-				self.VerboseMsg("--> Name: "..pData.name.."\n--> Version: "..pData.version.."\n--> Info: "..pData.info)
+				self:VerboseMsg("[Plugin] Loaded Plugin:"..pName)
+				self:VerboseMsg("--> Name: "..pData.name.."\n--> Version: "..pData.version.."\n--> Info: "..pData.info)
 			end
 		else
-			self.VerboseMsg( string.format("[PHX Plugin] No %s Plugins Loaded...", STATE) )
+			self:VerboseMsg( string.format("[PHX Plugin] No %s Plugins Loaded...", STATE) )
 		end
 	end)
 end

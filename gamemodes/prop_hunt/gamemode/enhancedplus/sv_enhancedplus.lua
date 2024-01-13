@@ -280,7 +280,7 @@ function GM:TryNormalUnstuck(pl)
 	]]
 	
 	if PHX:GetCVar( "ph_disabletpunstuckinround" ) then
-		if !GetGlobalBool("BlindStatus", false) then -- same as above, don't allow when hunter is released
+		if !GetGlobalBool("PHX.BlindStatus", false) then -- same as above, don't allow when hunter is released
 			pl:PHXChatInfo("WARNING", "UNSTUCK_SPAWNPOINTS_DISABLED")
 			return
 		end

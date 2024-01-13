@@ -10,7 +10,10 @@ if SERVER then
 	return
 end
 
-eChat = {}
+PHX.eChat = {}
+
+local eChat = PHX.eChat
+print("[PHX] !!Warning: Custom PH:X Chat (eChat) will be deprecated soon!")
 
 eChat.config = {
 	timeStamps = true,
@@ -23,8 +26,9 @@ if not GAMEMODE then
 	hook.Remove("Initialize", "echat_init")
 	hook.Add("Initialize", "echat_init", function()
 		if PHX:QCVar("ph_use_new_chat") then
+			print("[PHX] !!Warning: Custom PH:X Chat (eChat) will be deprecated soon!")
 			include(engine.ActiveGamemode() .. "/gamemode/sh_chatbox.lua")
-			eChat.buildBox()
+			PHX.eChat.buildBox()
 		end
 	end)
 	return

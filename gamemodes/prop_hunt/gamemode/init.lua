@@ -13,13 +13,13 @@ AddCSLuaFile("cl_hud.lua")
 AddCSLuaFile("cl_menutypes.lua")
 AddCSLuaFile("cl_menu.lua")
 AddCSLuaFile("cl_menuadmacc.lua")
-AddCSLuaFile("cl_targetid.lua")
 AddCSLuaFile("cl_autotaunt.lua")
 AddCSLuaFile("cl_credits.lua")
 
 -- Include the required lua files
 include("sv_nettables.lua")
 include("sh_init.lua")
+include("sv_items.lua")
 include("enhancedplus/sv_enhancedplus.lua")
 include("sh_config.lua")
 include("sv_admin.lua")
@@ -81,18 +81,34 @@ local function ControlTauntWindow(num)
 	end
 end
 
+local function ClearBlindedHuntersList()
+	for _,ply in ipairs( team.GetPlayers(TEAM_HUNTERS) ) do
+        local tmrUnblind = ply.TimerBlindID or "tmr.hunterUnblind:"..ply:EntIndex()
+        if timer.Exists(tmrUnblind) then timer.Remove(tmrUnblind) end
+		ply.TimerBlindID = nil
+		if ply:GetBlindState() then ply:Blind(false) end
+		if ply:IsFrozen() then ply:UnLock() end
+		if !GAMEMODE:InRound() then ply.HasLoadout = false end
+		timer.Simple(0.1, function()
+			-- a delay to prevent weapons spawn twice
+			if !(ply.HasLoadout) and GAMEMODE:InRound() and !GetGlobalBool("PHX.BlindStatus",false) and (ply._LoadOutUnblind) then 
+				PHX:VerboseMsg('[Loadout] Spawning late weapon loadouts (possibly player was respawned manually or during blind time)')
+				ply._LoadOutUnblind( ply )
+				ply.HasLoadout = true
+			end
+		end)
+    end
+end
+
 local function ClearTimer()
 
-    SetGlobalBool("BlindStatus", false)
+    SetGlobalBool("PHX.BlindStatus", false)
 
 	if timer.Exists("tmr_handleUnblindHook") then timer.Remove("tmr_handleUnblindHook") end
     if timer.Exists("phx.tmr_GiveGrenade") then timer.Remove("phx.tmr_GiveGrenade") end
     
-    -- Clear Hunter's Timer.
-    for _,pl in pairs( team.GetPlayers(TEAM_HUNTERS) ) do
-        local tmrUnblind = "tmr.hunterUnblind:"..pl:EntIndex()
-        if timer.Exists(tmrUnblind) then timer.Remove(tmrUnblind) end
-    end
+    ClearBlindedHuntersList()
+	
 end
 
 local function sendGroupInfo( ply )
@@ -155,7 +171,7 @@ function GM:CheckPlayerDeathRoundEnd()
 		if (TeamID == TEAM_PROPS or TeamID == TEAM_HUNTERS) then
 		
 			-- debug
-			PHX.VerboseMsg("Round Result: "..team.GetName(TeamID).." ("..TeamID..") Wins!")
+			PHX:VerboseMsg("[Round] Round Result: "..team.GetName(TeamID).." ("..TeamID..") Wins!")
 			
 			-- End Round
 			GAMEMODE:RoundEndWithResult(TeamID, "HUD_TEAMWIN")
@@ -265,11 +281,11 @@ function EntityTakeDamage(ent, dmginfo)
 	if GAMEMODE:InRound() && ent && ent:IsPlayer() && ent:Alive() && ent:Team() == TEAM_PROPS && ent.ph_prop then
 		-- Prevent Prop 'Friendly Fire'
 		if ( dmginfo:GetAttacker():IsPlayer() && dmginfo:GetAttacker():Team() == ent:Team() ) then 
-			PHX.VerboseMsg("DMGINFO::ATTACKED!!-> "..ent:Nick().."(Victim) <- "..tostring(dmginfo:GetAttacker()).."! DMGTYPE: "..dmginfo:GetDamageType())
+			PHX:VerboseMsg("[TakeDamage] DMGINFO::ATTACKED!!-> "..ent:Nick().."(Victim) <- "..tostring(dmginfo:GetAttacker()).."! DMGTYPE: "..dmginfo:GetDamageType())
 			return
 		end
 		--Debug purpose.
-		PHX.VerboseMsg("!! " .. ent:Name() .. "'s PLAYER entity appears to have taken damage, we can redirect it to the prop! (Model is: " .. ent.ph_prop:GetModel() .. ")")
+		PHX:VerboseMsg("[TakeDamage] " .. ent:Name() .. "'s PLAYER entity appears to have taken damage, we can redirect it to the prop! (Model is: " .. ent.ph_prop:GetModel() .. ")")
 		ent.ph_prop:TakeDamageInfo(dmginfo)
 		
 		return	-- don't continue below.
@@ -438,7 +454,7 @@ hook.Add("OnPlayerChangedTeam", "TeamChange_switchLimitter", function(ply, old, 
 		if new ~= TEAM_SPECTATOR then
 			ply.ChangeLimit = ply.ChangeLimit + 1
 			ply:PHXChatInfo("WARNING", "CHAT_SWAPTEAM_WARNING", ply.ChangeLimit, MAX_TEAMCHANGE_LIMIT)
-			PHX.VerboseMsg("[PHX] "..ply:Nick().." has switched team "..ply.ChangeLimit.."x.")
+			PHX:VerboseMsg("[Team] "..ply:Nick().." has switched team "..ply.ChangeLimit.."x.")
 		end
 		
 		if ply.ChangeLimit > MAX_TEAMCHANGE_LIMIT and new ~= TEAM_SPECTATOR then
@@ -448,21 +464,21 @@ hook.Add("OnPlayerChangedTeam", "TeamChange_switchLimitter", function(ply, old, 
 					ply:SetTeam(old)
 					--ply:PHXChatInfo("ERROR", "CHAT_SWAPTEAM_REVERT", team.GetName(new))
 					ply:PHXChatInfo("ERROR", "CHAT_SWAPTEAM_REVERT", PHX:TranslateName(new,ply))
-					PHX.VerboseMsg("[PHX] Reverting "..ply:Nick().."\'s team to "..team.GetName(old))
+					PHX:VerboseMsg("[Team] Reverting "..ply:Nick().."\'s team to "..team.GetName(old))
 				end
 			end)
 		end
 	end
 end)
 
-hook.Add("PostCleanupMap", "PH_ResetCustomTauntWindow", function()
+hook.Add("PostCleanupMap", "PH_ResetStats", function()
 	-- Force close any taunt menu windows
 	ControlTauntWindow(0)
 	PHX.VOICE_IS_END_ROUND = 0
 	
 	-- Called every round restart: make sure this was set publicly and make it synced accross clients.
 	SetGlobalInt("unBlind_Time", math.Clamp(PHX:GetCVar( "ph_hunter_blindlock_time" ) - (CurTime() - GetGlobalFloat("RoundStartTime", 0)), 0, PHX:GetCVar( "ph_hunter_blindlock_time" )) )
-    SetGlobalBool("BlindStatus", true)
+    SetGlobalBool("PHX.BlindStatus", true)
 	
 	local cvarPercent	= PHX:GetCVar( "ph_blindtime_respawn_percent" )
 	local blindTime		= GetGlobalInt("unBlind_Time", 0)
@@ -471,8 +487,9 @@ hook.Add("PostCleanupMap", "PH_ResetCustomTauntWindow", function()
 	
     -- Call a hook/set global state that Blind Time is over.
 	timer.Create("tmr_handleUnblindHook", blindTime, 1, function()
-        SetGlobalBool("BlindStatus", false)
+        SetGlobalBool("PHX.BlindStatus", false)
 		hook.Call("PH_BlindTimeOver", nil)
+		ClearBlindedHuntersList()
 	end)
     
 end)
@@ -483,7 +500,7 @@ if (PHX:GetCVar( "ph_add_hla_combine" )) then
 		if (file.Exists(model, "GAME")) then
 			local hlacombine = player_manager.TranslateToPlayerModelName(model)
 			if (hlacombine ~= "kleiner") then
-				PHX.VerboseMsg("[PHX] HLA Model found: " .. hlacombine .. ", adding to random combine model list...")
+				PHX:VerboseMsg("[Misc] HLA Model found: " .. hlacombine .. ", adding to random combine model list...")
 				table.insert(playerModels, hlacombine)
 			end
 		end
@@ -703,7 +720,7 @@ hook.Add("PlayerDisconnected", "PH_PlayerDisconnected", function( ply )
 		local id = ply:SteamID()
 		PHX.CurPlys[id] = ply.ChangeLimit
 		
-		PHX.VerboseMsg("[PHX] Saving player team change information of "..ply:Nick().." ("..ply:SteamID()..") -> ["..ply.ChangeLimit.."]")
+		PHX:VerboseMsg("[Team] Saving player team change information of "..ply:Nick().." ("..ply:SteamID()..") -> ["..ply.ChangeLimit.."]")
 		
 	end
 end)
@@ -753,10 +770,10 @@ hook.Add("PlayerInitialSpawn", "PHX.SetupInitData", function(ply)
 		
 		if PHX.CurPlys[id] == 0 then
 			ply.ChangeLimit = 0
-			PHX.VerboseMsg("[PHX] "..ply:Nick().."'s team switch limit initialised.")
+			PHX:VerboseMsg("[Team] "..ply:Nick().."'s team switch limit initialised.")
 		elseif PHX.CurPlys[id] > 0 then
 			ply.ChangeLimit = PHX.CurPlys[id]
-			PHX.VerboseMsg("[PHX] "..ply:Nick().."'s has "..tostring(PHX.CurPlys[id]).."x team switches remaining.")
+			PHX:VerboseMsg("[Team] "..ply:Nick().."'s has "..tostring(PHX.CurPlys[id]).."x team switches remaining.")
 		end
 		
 	end
@@ -773,10 +790,9 @@ hook.Add("PlayerInitialSpawn", "PHX.SetupInitData", function(ply)
 	end)
 	
 	-- Inform Player to recently joined with X2Z's Tutorial
-	
 	timer.Simple(5, function()
 		if IsValid(ply) then
-			local info = ply:GetInfoNum("ph_cl_show_first_tutorial",0) or 1
+			local info = ply:GetInfoNum("ph_cl_show_introduction",0)
 			if tobool( info ) then
 				net.Start("phx_showVeryFirstTutorial")
 				net.Send(ply)
@@ -901,7 +917,11 @@ local function ForceEndRound( ply )
         MsgAll("Round was forced end. No one Wins!\n")
     
     else
-        ply:PrintMessage(HUD_PRINTTALK, "[PHX] Sorry, this command is unavailable.")
+        if ply == NULL then
+			print( "[PHX] Cannot Restart round: Not in active round!" )
+		else
+			ply:PrintMessage(HUD_PRINTTALK, "[PHX] Sorry, this command is unavailable.")
+		end
     end
 end
 concommand.Add("ph_force_end_round", ForceEndRound, nil, "Force End Active Round")
@@ -958,7 +978,7 @@ function GM:OnPreRoundStart(num)
             end)
         end
 		
-		hook.Call("PH_OnPreRoundStart", nil, PHX:GetCVar( "ph_swap_teams_every_round" ))
+		hook.Call("PH_OnPreRoundStart", nil, num, PHX:GetCVar( "ph_swap_teams_every_round" ))
 	end
 	
 	-- Balance teams. We need to set this "TRUE" to make sure the switched player isn't killed during team switch.
@@ -1143,7 +1163,7 @@ end)
 
 function PHX:PlayTaunt( pl, sndTaunt, bIsPitchEnabled, iPitchLevel, bIsRandomized, LastTauntTimeID )
 	if !pl or !IsValid(pl) then
-		print("[PHX:PlayTaunt] A Player Entity is Required.")
+		print("[Taunt:PlayTaunt] Error: A 'Player' entity is required!")
 		return
 	end
 

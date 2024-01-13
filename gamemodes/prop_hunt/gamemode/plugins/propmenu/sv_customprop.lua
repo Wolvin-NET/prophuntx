@@ -118,7 +118,7 @@ local function SavePropData( tblToAdd )
 		if good then
 			table.insert( ValidModels, mdl )
 		else
-			print("[PCR: Warning] Cannot add model '" .. mdl .. "' because it seems not exists in the server!")
+			print("[Prop Menu] Cannot add model '" .. mdl .. "' because it seems not exists in the server!") --should verbose message?
 		end
 	end
 	

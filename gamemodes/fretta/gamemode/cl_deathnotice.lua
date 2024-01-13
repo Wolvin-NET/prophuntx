@@ -119,6 +119,9 @@ net.Receive( "NPCKilledNPC", RecvNPCKilledNPC )
 --function GM:AddDeathNotice( victim, inflictor, attacker )
 function GM:AddDeathNotice( Attacker, team1, Inflictor, Victim , team2 )
 	
+	-- for some odd reason, Attacker == nil if inflictor == "suicide" in the base gamemode. wtf and WHEN DID THEY UPDATED THIS???
+	if Inflictor == "suicide" then Attacker = Victim; team1 = team2 end
+	
 	if ( !IsValid( g_DeathNotify ) ) then return end
 
 	local pnl = vgui.Create( "GameNotice", g_DeathNotify )
