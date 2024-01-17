@@ -239,7 +239,7 @@ local function CheckAutoTaunt()
 	if !ply:Alive() || ply:Team() != TEAM_PROPS then
 		started = false
 		RemoveTimer()
-		PHX.VerboseMsg("[PHX AutoTaunt] Blocked!")
+		PHX:VerboseMsg("[AutoTaunt] Blocked!")
 		return
 	end
 end

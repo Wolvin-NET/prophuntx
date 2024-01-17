@@ -1,6 +1,42 @@
 ## A new major updates to Prop Hunt: X has been released.
 Note: Prop Hunt X will change it's version to "X2Z" following with date-formatted revisions.
 
+## Revision 17.01.2024 (January 2024 Major Update & HotFix #2)
+A Major patch mainly for fixes for issues caused by `ph_print_verbose` that sometimes do not exists in client realm, added new weapon, Weapon Manager & Ammo Editor (as Plugin/Addon) and others.
+- NEW Plugin (Addon): Prop Hunt: X2Z Weapon Loadout/Ammo Editor (BETA as of 17.01.2024): https://steamcommunity.com/sharedfiles/filedetails/?id=3141486825
+- Removed `Verbose Print` option in Prop Hunt Settings Menu, instead client and server have to manually type `phx_verbose 1/0` just like setting `developer 1/0`
+- Renamed `ph_print_verbose` to `phx_verbose` to prevent errors when player first time installing PH:X2Z from any previous version of PH: X/Enhanced.
+- Renamed `ph_enable_unstuck` to `ph_use_unstuck` and reset to their default values to 0. This mean allowing any server admins to use Unstuck from Addon version instead of built-in (Currently it's pretty buggy)
+- Make Verbose Message with Realm Colour, more Informational, Leveled and renamed `[PHX]` prefix with their call origin (example: Taunt Scanner will be `[TauntScanner]`)
+- Removed Verbose Message on Bonus Weapon (`wlv_bren`) when detecting weapon base
+- Removed test debug print messages
+- Edited Contributor Names (Turkish Translator & Recent Donator from 2023)
+- Updated FGD and removed `ph_fake_prop` entry
+- Added Example VMF and BSP for FGD Demonstration
+- FGD: Added `ph_model_bans`, manually adds model bans from the map. Key ranging from `model1` to `model16`
+- FGD: Added `ph_decoy_spawner`, use this rather than using `ph_fake_prop`!
+- Fixed Typo year revision on Update Description
+- Lucky Ball & Devil Crystals Improvement: Moved every item & instances into `gamemodes/sv_items.lua` and keep Entities Scripts clean
+- Added Devil Crystal Items: **PROP Launcher**
+- Added Hunter Weapon: **Flechette Gun** (Obtained via Lucky Ball)
+- Include: Added Half-Life 2: Episode 2's "Flechette" contents, no longer requiring game content to be mounted
+- Added Flechette's Kill Icon (only when PH:X2Z mode is loaded)
+- Fixed when Updating Banned Prop Models where client can get empty data
+- Corrected few weapon HUDs & Killicons
+- Added few Language IDs: `KEY_MIDCLICK, (Devil Crystal) LD_MIDCLICK, LD_RIGHTCLICK, LD_PRESS2SHOOT`
+- Shorten local variable `LANG -> L` for each Language files to preserve disk space (just like TTT)
+- Updated `PH_OnPreRoundStart` hook argument: `number RoundNumber, bool "ph_swap_teams_every_round"`
+- Added new function `PHX:SetBlindStatus(bBool)`, `bool = PHX:IsBlindStatus()`, Alias for `"PHX.BlindStatus"` GetGlobals
+- Fixed & Improved: Very Strange Behaviour when Allowing Team-to-Team/Spectator-to-Team Respawn during Blind Time
+- Hunters: Weapons should normally spawn whenever Team Balance has occured* (see Known Issues)
+- Updated Integrity Checker
+
+### Known Issues
+- Changing `ph_hunter_blindlock_time` greater than the current value will cause the BlindFold HUD to be appear. **It's better to change this value before the round has started, or better yet use from your `listenserver.cfg` or `server.cfg` file!**
+- [Issue #35](https://github.com/Wolvin-NET/prophuntx/issues/35#issuecomment-1894901565) Hunter Weapons may not spawn at certain condition/Team Balance has occured, this has been fixed although you might avoid respawning/switching team too fast.
+- [Issue #36](https://github.com/Wolvin-NET/prophuntx/issues/36) : Linux Client 64-bit only (with CEF patch): `ph_prop` Scripted Entity `SetupDataTables` **will not** get called causing prop become static. This may caused internally by the game and still looking forward for workaround.
+
+
 ## Revision 09.01.2024 (January 2024 Hotfix)
 These patch are mainly fixes due to December 2023/January 2024 Garry's Mod update.
 - HotFix: Fixed Lua Error when suicide occurs on all team due to December 2023/January 2024 patch. This affects to `GAMEMODE:AddDeathNotice` rule changes
@@ -12,7 +48,7 @@ These patch are mainly fixes due to December 2023/January 2024 Garry's Mod updat
 - Changed default value `ph_custom_mv_func` from `MapVote.PHXStart()` to `PHX.StartMapVote()`
 - Fixed Prop AutoTaunt HUD would overlap with Hunter's Weapon HUD upon respawn after switching team
 - Minor Improvements for Hunter's Weapon Loadout
-- Added new hook `PH_OnHunterLoadOut` (Arg: `player Ply`): Adds or Overrides Hunter's Weapon Loadout after blindfold is over. Using `return true` will remove default weapon loadout (crowbar, 357 and shotgun). **CAUTION: using `return true` in an addon _Will Also_ overrides other addons too that uses this hook!**
+- Added NEW HOOK: `PH_OnHunterLoadOut` (Arg: `player Ply`): Adds or Overrides Hunter's Weapon Loadout after blindfold is over. Using `return true` will remove default weapon loadout (crowbar, 357 and shotgun). **CAUTION: using `return true` in an addon _Will Also_ overrides other addons too that uses this hook!**
 - Added Turkish Language (Submission by: Talha Berkay A. aka Matt, Nova Diablox, Fat Fox Talha)
 - Added `/config/maps/ph_lttp_kakariko_b2.lua`: Remove invalid sprite entities to prevent console from spamming
 - Removed `cl_targetid.lua` and merged into `cl_init.lua` instead
@@ -21,7 +57,7 @@ These patch are mainly fixes due to December 2023/January 2024 Garry's Mod updat
 
 #### Known Issues
 - Linux 64-bit only (with CEF patch): Player's Prop Entity (`ph_prop`) `SetupDataTables` **will not** get called and causes prop to stay in place. This may caused internally by the game and still looking forward for workaround.
-- December 2023/January 2024 update: Strange weapon tracer behaviour. This would affect to Last Prop Standing weapons with their custom Tracers. This is currently being discussed at [Garry's Mod issue tracker #5684](https://github.com/Facepunch/garrysmod-issues/issues/5684)
+- ~~December 2023/January 2024 update: Strange weapon tracer behaviour. This would affect to Last Prop Standing weapons with their custom Tracers. This is currently being discussed at [Garry's Mod issue tracker #5684](https://github.com/Facepunch/garrysmod-issues/issues/5684)~~ Fixed!
 
 ## Revision 30.01.2023
 - HotFix: Fixed Error for calling `PHInLastPropStanding` hook where is `Player` argument returns `nil`. This is **REQUIRED** if you use "AK47 LPS Weapon" addon.

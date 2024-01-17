@@ -418,6 +418,7 @@ function GM:OnPlayerChangedTeam( ply, oldteam, newteam )
 	
 end
 
+-- unused, moved to prop_hunt
 function GM:CheckTeamBalance( bDontKillPlayer )
 
 	local highest

@@ -1,7 +1,7 @@
-local LANG = {}
+local L = {}
 
 -- English Section
-LANG["ko_kr"]   = {
+L["ko_kr"]   = {
     -- Header Text Group
     ["LPS_GENERAL_SETTINGS"]    = "일반 설정",
     ["LPS_APPEARANCES"]         = "외형",
@@ -69,4 +69,4 @@ LANG["ko_kr"]   = {
     ["WEAPON_AMMO_UNLI"]        = "무제한"
 }
 
-list.Set("PHX.LanguageInsertion", "[LastPropStanding] Korean", LANG)
+list.Set("PHX.LanguageInsertion", "[LastPropStanding] Korean", L)

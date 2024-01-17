@@ -9,7 +9,7 @@ CLASS.DrawTeamRing			= false
 
 function CLASS:StartLoadOut( pl )
     if !pl:Alive() then return end
-	if (pl.HasLoadout) then return end
+	if (pl.PHXHasLoadout) then return end
 	
 	local override = hook.Run("PH_OnHunterLoadOut", pl)
 	if (override) then return end
@@ -42,7 +42,7 @@ function CLASS:ControlPlayer( ply, isLock, TimerID )
 	
     if IsValid( ply ) then
     
-        if isLock and GetGlobalBool("PHX.BlindStatus", false) then
+        if isLock and PHX:IsBlindStatus() then
             ply:Lock()
             return
         end
@@ -69,15 +69,14 @@ function CLASS:OnSpawn(pl)
     
     -- Allow respawn without being blinded when the blind state is false.
 	-- Also immediately give weapons.
-    if !GetGlobalBool("PHX.BlindStatus", false) then
+    if !PHX:IsBlindStatus() then
 		self:StartLoadOut( pl )
-		pl.HasLoadout = true
+		pl.PHXHasLoadout = true
 		return
 	end
 	
 	local unlock_time = GetGlobalInt("unBlind_Time", 0)
 	if unlock_time > 2 then
-		print("Starting blind")
 		local TimerID = "tmr.hunterUnblind:"..pl:EntIndex()
 		pl.TimerBlindID = TimerID
 		pl:Blind(true)
@@ -85,7 +84,10 @@ function CLASS:OnSpawn(pl)
 			pl._LoadOutUnblind = function( pl ) self:StartLoadOut( pl ) end
 		end
 		timer.Simple(1, function() self:ControlPlayer( pl, true, TimerID ) end)
-		timer.Create( TimerID, unlock_time, 1, function() self:ControlPlayer( pl, false, TimerID ); pl.HasLoadout = true; end)
+		timer.Create( TimerID, unlock_time, 1, function() 
+			self:ControlPlayer( pl, false, TimerID ); 
+			if IsValid(pl) then pl.PHXHasLoadout = true; end
+		end )
 	end
 	
 end
@@ -102,7 +104,7 @@ end
 -- Called when a player dies with this class
 function CLASS:OnDeath(pl, attacker, dmginfo)
     timer.Remove( "tmr.hunterUnblind:"..pl:EntIndex() ) -- force remove timer.
-	pl.HasLoadout = false
+	pl.PHXHasLoadout = false
 	pl.TimerBlindID = nil
 	
 	pl:CreateRagdoll()

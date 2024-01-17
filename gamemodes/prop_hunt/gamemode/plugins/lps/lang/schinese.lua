@@ -1,7 +1,7 @@
-local LANG = {}
+local L = {}
 
 -- English Section
-LANG["zh-CN"]   = {
+L["zh-CN"]   = {
     -- Header Text Group
     ["LPS_GENERAL_SETTINGS"]    = "常规设置",
     ["LPS_APPEARANCES"]         = "外观",
@@ -69,4 +69,4 @@ LANG["zh-CN"]   = {
     ["WEAPON_AMMO_UNLI"]        = "无限"
 }
 
-list.Set("PHX.LanguageInsertion", "[LastPropStanding] Chinese Simplified", LANG)
+list.Set("PHX.LanguageInsertion", "[LastPropStanding] Chinese Simplified", L)

@@ -84,7 +84,6 @@ local ConVarTranslate = {
 CreateConVar( "ph_kick_non_admin_access", "0", {FCVAR_SERVER_CAN_EXECUTE,FCVAR_ARCHIVE}, "Should Kick Non-Admin user when trying to access Admin Commands? If Not, Throw a message instead.", 0, 1 )
 
 local CVAR = {}
-CVAR["ph_print_verbose"]			    =	{ CTYPE_BOOL,	"0", CVAR_SERVER_ONLY_NO_NOTIFY, "Developer Verbose. Some printed messages will only appear if this is enabled." }
 CVAR["ph_show_splash_screen"]           =   { CTYPE_BOOL,   "1", CVAR_SERVER_ONLY, "Show Splash Screen upon joining." }
 
 CVAR["ph_banned_models"]				=	{ CTYPE_BOOL,	"1", CVAR_SERVER_ONLY, "Ban/Unban the use of Restricted Models. This does not include from Prohibitted Models!"}
@@ -147,7 +146,7 @@ CVAR["ph_fc_cue_path"]					=	{ CTYPE_STRING, "misc/freeze_cam.wav", CVAR_SERVER_
 		-- override default callback because this is important part.
 		cvars.AddChangeCallback( cvarname, function(_,_,new)
 			if string.find(new, "\\") then
-				print("[!] Warning: Detected Backslash (\\) character! Please use \"/\" instead!")
+				print("[ConVar:FreezeCam] Warning: Detected Backslash (\\) character! Please use \"/\" instead!")
 			end
 			-- replace escaped backslash char, if any.
 			local ReplaceIllegalPath = string.Replace(new, "\\", "/")
@@ -188,7 +187,7 @@ function(cvarname, value)
         if tonumber(new) < 1 then
             RunConsoleCommand("ph_min_waitforplayers", "1")
             SetGlobalInt( cvarname, tonumber(new) )
-            print("[PHX] Warning: "..cvarname.." value cannot contain less than 0. Use 'ph_waitforplayers' 0 to disable!")
+            print("[ConVar:WaitForPlayers] Warning: "..cvarname.." value cannot contain less than 0. Use 'ph_waitforplayers' 0 to disable!")
         end
     end, "phx.cvnum_" .. cvarname)
 end }
@@ -219,10 +218,11 @@ CVAR["ph_give_grenade_roundend_before_time"] =   { CTYPE_FLOAT, "15", CVAR_SERVE
 CVAR["ph_use_new_chat"]						=	{ CTYPE_BOOL, 	"0", CVAR_SERVER_ONLY, "!!REQUIRE MAP RESTART!\nUse new (temporary) chat box? This will replace default chatbox and prevent new HUD overlap.", 
 function(cvarname, value)	
 	cvars.AddChangeCallback( cvarname, function(cv, _, new)
-		print(cv .. " -> has changed. Please be sure to Restart the map to take effect!")
+		print(cv .. " -> was changed. Please be sure to change/restart map to take effect!")
 		for _,v in pairs(player.GetHumans()) do
 			if v:CheckUserGroup() then
 				v:ChatPrint("NOTICE: Map restart required, a ConVar '"..cv.."' has been changed therefore a map change is needed.")
+				v:ChatPrint("WARNING: Deprecated: eChat will be replaced/removed in future update!")
 			end
 		end
 		SetGlobalBool(cvarname, tobool(new))
@@ -322,7 +322,7 @@ end
 	-- > GM:Pre/On/PostGamemodeLoaded
 	-- > Any Early Hooks before Config (*.cfg) Files are Loaded
 	-- > PlayerInitSpawn or InitPostEntity ARE NOT NEEDED. Use PHX:GetCVar() instead!
--- See Example of how PHX:GetCVar() can get bugged on PHX.VerboseMsg()
+-- See Example of how PHX:GetCVar() can get bugged on PHX:VerboseMsg()
 function PHX:QCVar( cvar )
 	if CVAR[cvar] and CVAR[cvar] ~= nil then
 		local isType = CVAR[cvar][1]

@@ -223,7 +223,7 @@ local function DoPlayerCheck(ply)
                             local TrailTex = PHX:GetCVar( "lps_trail_texture" )
                             
                             if !file.Exists("materials/" .. TrailTex .. ".vmt", "GAME") then
-                                print("Texture file for creating Trail: '" .. TrailTex .. "' was not found! Reverting back to default!!")
+                                print("[LPS] Texture file for creating Trail: '" .. TrailTex .. "' was not found! Reverting back to default!!")
                                 TrailTex = "trails/laser"
                             end
                             

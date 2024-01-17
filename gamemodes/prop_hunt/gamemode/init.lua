@@ -19,6 +19,7 @@ AddCSLuaFile("cl_credits.lua")
 -- Include the required lua files
 include("sv_nettables.lua")
 include("sh_init.lua")
+include("sv_items.lua")
 include("enhancedplus/sv_enhancedplus.lua")
 include("sh_config.lua")
 include("sv_admin.lua")
@@ -87,13 +88,13 @@ local function ClearBlindedHuntersList()
 		ply.TimerBlindID = nil
 		if ply:GetBlindState() then ply:Blind(false) end
 		if ply:IsFrozen() then ply:UnLock() end
-		if !GAMEMODE:InRound() then ply.HasLoadout = false end
+		if !GAMEMODE:InRound() then ply.PHXHasLoadout = false end
 		timer.Simple(0.1, function()
 			-- a delay to prevent weapons spawn twice
-			if !(ply.HasLoadout) and GAMEMODE:InRound() and !GetGlobalBool("PHX.BlindStatus",false) and (ply._LoadOutUnblind) then 
-				PHX.VerboseMsg('[PH:X Loadout] Spawning late weapon loadouts (possibly player was respawned manually or during blind time)')
+			if !(ply.PHXHasLoadout) and GAMEMODE:InRound() and !PHX:IsBlindStatus() and (ply._LoadOutUnblind) then 
+				PHX:VerboseMsg('[Loadout] Spawning late weapon loadouts (possibly player was respawned manually or during blind time)')
 				ply._LoadOutUnblind( ply )
-				ply.HasLoadout = true
+				ply.PHXHasLoadout = true
 			end
 		end)
     end
@@ -101,7 +102,7 @@ end
 
 local function ClearTimer()
 
-    SetGlobalBool("PHX.BlindStatus", false)
+    PHX:SetBlindStatus(false)
 
 	if timer.Exists("tmr_handleUnblindHook") then timer.Remove("tmr_handleUnblindHook") end
     if timer.Exists("phx.tmr_GiveGrenade") then timer.Remove("phx.tmr_GiveGrenade") end
@@ -170,7 +171,7 @@ function GM:CheckPlayerDeathRoundEnd()
 		if (TeamID == TEAM_PROPS or TeamID == TEAM_HUNTERS) then
 		
 			-- debug
-			PHX.VerboseMsg("Round Result: "..team.GetName(TeamID).." ("..TeamID..") Wins!")
+			PHX:VerboseMsg("[Round] Round Result: "..team.GetName(TeamID).." ("..TeamID..") Wins!")
 			
 			-- End Round
 			GAMEMODE:RoundEndWithResult(TeamID, "HUD_TEAMWIN")
@@ -280,11 +281,11 @@ function EntityTakeDamage(ent, dmginfo)
 	if GAMEMODE:InRound() && ent && ent:IsPlayer() && ent:Alive() && ent:Team() == TEAM_PROPS && ent.ph_prop then
 		-- Prevent Prop 'Friendly Fire'
 		if ( dmginfo:GetAttacker():IsPlayer() && dmginfo:GetAttacker():Team() == ent:Team() ) then 
-			PHX.VerboseMsg("DMGINFO::ATTACKED!!-> "..ent:Nick().."(Victim) <- "..tostring(dmginfo:GetAttacker()).."! DMGTYPE: "..dmginfo:GetDamageType())
+			PHX:VerboseMsg("[TakeDamage] DMGINFO::ATTACKED!!-> "..ent:Nick().."(Victim) <- "..tostring(dmginfo:GetAttacker()).."! DMGTYPE: "..dmginfo:GetDamageType())
 			return
 		end
 		--Debug purpose.
-		PHX.VerboseMsg("!! " .. ent:Name() .. "'s PLAYER entity appears to have taken damage, we can redirect it to the prop! (Model is: " .. ent.ph_prop:GetModel() .. ")")
+		PHX:VerboseMsg("[TakeDamage] " .. ent:Name() .. "'s PLAYER entity appears to have taken damage, we can redirect it to the prop! (Model is: " .. ent.ph_prop:GetModel() .. ")")
 		ent.ph_prop:TakeDamageInfo(dmginfo)
 		
 		return	-- don't continue below.
@@ -398,53 +399,100 @@ end)
 
 -- function to respawn players during blind mode.
 -- this is usually noticed when the player is falling, changing team, or etc.
-local function AutoRespawnCheck(ply)
-
+local function AutoRespawnCheck( ply, bWasDeadOrSuicide )
 	-- Require at least 3 players.
-	if PHX:GetCVar( "ph_allow_respawnonblind" ) and player.GetCount() > 2 and (ply:Team() == TEAM_PROPS or ply:Team() == TEAM_HUNTERS) then
-	
-		if CurTime() < phx_blind_unlocktime then
-			timer.Simple(math.random(0.5,1), function() if 
-				IsValid(ply) then
-					local tim = PHX:GetCVar( "ph_allow_respawnonblind_team_only" )
-					if tim > 0 and ply:Team() == tim then
-						ply:Spawn()
-						ControlTauntWindow(0)
-						ply:PHXChatInfo( "NOTICE", "BLIND_RESPAWN_TEAM", PHX:TranslateName( tim, ply ), math.Round(phx_blind_unlocktime - CurTime()) )
-					elseif tim == 0 then
-						ply:Spawn()
-						ControlTauntWindow(0)
-						ply:PHXChatInfo( "NOTICE", "BLIND_RESPAWN", math.Round(phx_blind_unlocktime - CurTime()) )
-					end
-				end 
-			end)
+	if player.GetCount() > 2 and (ply:Team() == TEAM_PROPS or ply:Team() == TEAM_HUNTERS) then
+
+		local SpecChange = PHX:GetCVar("ph_allow_respawn_from_spectator")
+		local TeamChange = PHX:GetCVar("ph_allow_respawnonblind_teamchange")
+		local tim 		 = math.Clamp( PHX:GetCVar("ph_allow_respawnonblind_team_only"), 0, TEAM_PROPS )
+
+		if CurTime() < phx_blind_unlocktime then --Remaining percentage time
+			local dospawn=false
+			local old = ply._joinCameFrom
+			if (bWasDeadOrSuicide) and !old then dospawn=true; end
+			if SpecChange and (old) and old == TEAM_SPECTATOR then dospawn=true; end
+			if TeamChange then
+				if (old) and old == TEAM_HUNTERS and ply:Team() == TEAM_PROPS then
+					dospawn = true
+				elseif (old) and old == TEAM_PROPS and ply:Team() == TEAM_HUNTERS then
+					dospawn = true
+				end
+			end
+
+			if dospawn and (tim == ply:Team() or tim == 0) then
+				if ply.PHXHasLoadout then ply.PHXHasLoadout = false end
+				if ply:Alive() then ply:KillSilent() end
+				ply._joinCameFrom = nil
+				ply:Spawn() --ply._joinCameFrom will also nile from PlayerSpawn hook, just double checking though
+				ControlTauntWindow(0)
+				if tim > 0 then
+					ply:PHXChatInfo( "NOTICE", "BLIND_RESPAWN_TEAM", PHX:TranslateName( tim, ply ), math.Round(phx_blind_unlocktime - CurTime()) )
+				else
+					ply:PHXChatInfo( "NOTICE", "BLIND_RESPAWN", math.Round(phx_blind_unlocktime - CurTime()) )
+				end
+			end
+			ply._joinCameFrom = nil
+
+		else
+			ply._joinCameFrom = nil -- not in blind phase
 		end
-	
+	else
+		ply._joinCameFrom = nil
 	end
 	
-	-- Force Close the Taunt Menu whenever the player is dead.
+end
+hook.Add("PostPlayerDeath", "autoPlayerRepsawnDuringDeath", function(ply)
+	-- Force Close the Taunt Menu whenever a player is dead.
 	if ply:Team() == TEAM_PROPS or ply:Team() == TEAM_HUNTERS then
 		net.Start( "PH_ForceCloseTauntWindow" )
 		net.Send(ply)
 	end
-	
-end
-hook.Add("PostPlayerDeath", "autoPlayerRepsawnDuringDeath", AutoRespawnCheck)
 
-function GM:PlayerChangedTeam(ply, old, new)
-	if PHX:GetCVar( "ph_allow_respawn_from_spectator" ) and (old == TEAM_SPECTATOR && (new == TEAM_HUNTERS or new == TEAM_PROPS)) then
-		timer.Simple(math.random(0.5,1), function()
-			if IsValid(ply) then AutoRespawnCheck( ply ) end
-		end)
+	if !PHX:GetCVar( "ph_allow_respawnonblind" ) then return end
+	if !GAMEMODE:InRound() then return end
+
+	local time = 0.45
+	timer.Simple(time, function()
+		if IsValid(ply) and GAMEMODE:InRound() then AutoRespawnCheck(ply, true) end
+	end)
+
+end)
+
+hook.Add("PlayerChangedTeam", "changeteam", function(ply, old, new)
+
+	local AllowRespawn = PHX:GetCVar( "ph_allow_respawnonblind" )
+	local FromSpectator = PHX:GetCVar( "ph_allow_respawn_from_spectator" )
+	local FromTeamToTeam = PHX:GetCVar( "ph_allow_respawnonblind_teamchange" )
+
+	if !AllowRespawn then return end
+	if !GAMEMODE:InRound() then return end
+
+	local time = 0.5
+	if FromSpectator then
+		if (old == TEAM_SPECTATOR and new == TEAM_HUNTERS) or (old == TEAM_SPECTATOR and new == TEAM_PROPS) then
+			ply._joinCameFrom = TEAM_SPECTATOR
+			timer.Simple(time, function()
+				if IsValid(ply) and GAMEMODE:InRound() then AutoRespawnCheck(ply) end
+			end)
+		end
 	end
-	
-	-- not recommended if this enabled. See: "help ph_allow_respawnonblind_teamchange" in the console for more information.
-	if PHX:GetCVar( "ph_allow_respawnonblind_teamchange" ) and ( (old == TEAM_HUNTERS and new == TEAM_PROPS) or (old == TEAM_PROPS and new == TEAM_HUNTERS) ) then
-		timer.Simple(math.random(0.5,1), function()
-			if IsValid(ply) then AutoRespawnCheck( ply ) end
-		end)
+
+	if FromTeamToTeam then
+		if old == TEAM_HUNTERS and new == TEAM_PROPS then
+			ply._joinCameFrom = TEAM_HUNTERS
+			timer.Simple(time, function()
+				if IsValid(ply) and GAMEMODE:InRound() then AutoRespawnCheck(ply) end
+			end)
+		elseif old == TEAM_PROPS and new == TEAM_HUNTERS then
+			ply._joinCameFrom = TEAM_PROPS
+			timer.Simple(time, function()
+				if IsValid(ply) and GAMEMODE:InRound() then AutoRespawnCheck(ply) end
+			end)
+		end
 	end
-end
+
+end)
 
 hook.Add("OnPlayerChangedTeam", "TeamChange_switchLimitter", function(ply, old, new)
 	local MAX_TEAMCHANGE_LIMIT = PHX:GetCVar( "ph_max_teamchange_limit" )
@@ -453,17 +501,17 @@ hook.Add("OnPlayerChangedTeam", "TeamChange_switchLimitter", function(ply, old, 
 		if new ~= TEAM_SPECTATOR then
 			ply.ChangeLimit = ply.ChangeLimit + 1
 			ply:PHXChatInfo("WARNING", "CHAT_SWAPTEAM_WARNING", ply.ChangeLimit, MAX_TEAMCHANGE_LIMIT)
-			PHX.VerboseMsg("[PHX] "..ply:Nick().." has switched team "..ply.ChangeLimit.."x.")
+			PHX:VerboseMsg("[Team] "..ply:Nick().." has switched team "..ply.ChangeLimit.."x.")
 		end
 		
 		if ply.ChangeLimit > MAX_TEAMCHANGE_LIMIT and new ~= TEAM_SPECTATOR then
 			ply.ChangeLimit = MAX_TEAMCHANGE_LIMIT
 			timer.Simple(0.3, function()
 				if old ~= TEAM_SPECTATOR then
+					if (ply.PHXHasLoadout) then ply.PHXHasLoadout = false end
 					ply:SetTeam(old)
-					--ply:PHXChatInfo("ERROR", "CHAT_SWAPTEAM_REVERT", team.GetName(new))
 					ply:PHXChatInfo("ERROR", "CHAT_SWAPTEAM_REVERT", PHX:TranslateName(new,ply))
-					PHX.VerboseMsg("[PHX] Reverting "..ply:Nick().."\'s team to "..team.GetName(old))
+					PHX:VerboseMsg("[Team] Reverting "..ply:Nick().."\'s team to "..team.GetName(old))
 				end
 			end)
 		end
@@ -477,7 +525,7 @@ hook.Add("PostCleanupMap", "PH_ResetStats", function()
 	
 	-- Called every round restart: make sure this was set publicly and make it synced accross clients.
 	SetGlobalInt("unBlind_Time", math.Clamp(PHX:GetCVar( "ph_hunter_blindlock_time" ) - (CurTime() - GetGlobalFloat("RoundStartTime", 0)), 0, PHX:GetCVar( "ph_hunter_blindlock_time" )) )
-    SetGlobalBool("PHX.BlindStatus", true)
+    PHX:SetBlindStatus(true)
 	
 	local cvarPercent	= PHX:GetCVar( "ph_blindtime_respawn_percent" )
 	local blindTime		= GetGlobalInt("unBlind_Time", 0)
@@ -486,7 +534,7 @@ hook.Add("PostCleanupMap", "PH_ResetStats", function()
 	
     -- Call a hook/set global state that Blind Time is over.
 	timer.Create("tmr_handleUnblindHook", blindTime, 1, function()
-        SetGlobalBool("PHX.BlindStatus", false)
+        PHX:SetBlindStatus(false)
 		hook.Call("PH_BlindTimeOver", nil)
 		ClearBlindedHuntersList()
 	end)
@@ -499,7 +547,7 @@ if (PHX:GetCVar( "ph_add_hla_combine" )) then
 		if (file.Exists(model, "GAME")) then
 			local hlacombine = player_manager.TranslateToPlayerModelName(model)
 			if (hlacombine ~= "kleiner") then
-				PHX.VerboseMsg("[PHX] HLA Model found: " .. hlacombine .. ", adding to random combine model list...")
+				PHX:VerboseMsg("[Misc] HLA Model found: " .. hlacombine .. ", adding to random combine model list...")
 				table.insert(playerModels, hlacombine)
 			end
 		end
@@ -719,7 +767,7 @@ hook.Add("PlayerDisconnected", "PH_PlayerDisconnected", function( ply )
 		local id = ply:SteamID()
 		PHX.CurPlys[id] = ply.ChangeLimit
 		
-		PHX.VerboseMsg("[PHX] Saving player team change information of "..ply:Nick().." ("..ply:SteamID()..") -> ["..ply.ChangeLimit.."]")
+		PHX:VerboseMsg("[Team] Saving player team change information of "..ply:Nick().." ("..ply:SteamID()..") -> ["..ply.ChangeLimit.."]")
 		
 	end
 end)
@@ -769,10 +817,10 @@ hook.Add("PlayerInitialSpawn", "PHX.SetupInitData", function(ply)
 		
 		if PHX.CurPlys[id] == 0 then
 			ply.ChangeLimit = 0
-			PHX.VerboseMsg("[PHX] "..ply:Nick().."'s team switch limit initialised.")
+			PHX:VerboseMsg("[Team] "..ply:Nick().."'s team switch limit initialised.")
 		elseif PHX.CurPlys[id] > 0 then
 			ply.ChangeLimit = PHX.CurPlys[id]
-			PHX.VerboseMsg("[PHX] "..ply:Nick().."'s has "..tostring(PHX.CurPlys[id]).."x team switches remaining.")
+			PHX:VerboseMsg("[Team] "..ply:Nick().."'s has "..tostring(PHX.CurPlys[id]).."x team switches remaining.")
 		end
 		
 	end
@@ -824,6 +872,7 @@ end )
 
 -- Called when the players spawns
 hook.Add("PlayerSpawn", "PH_PlayerSpawn", function(pl)
+	pl._joinCameFrom=nil
     pl:SetPlayerLockedRot( false )
 	pl:SetNWBool("InFreezeCam", false)
 	pl:SetNWEntity("PlayerKilledByPlayerEntity", nil)
@@ -992,7 +1041,7 @@ function GM:OnPreRoundStart(num)
     -- Timer to give grenades, if ph_give_grenade_near_roundend is set.
     timer.Create( "phx.tmr_GiveGrenade", GAMEMODE.RoundLength - PHX:GetCVar( "ph_give_grenade_roundend_before_time" ), 1, function()
         if PHX:GetCVar( "ph_give_grenade_near_roundend" ) and GAMEMODE:InRound() then
-            for _,h in pairs(team.GetPlayers( TEAM_HUNTERS )) do
+            for _,h in ipairs(team.GetPlayers( TEAM_HUNTERS )) do
                 if h:Alive() and h:HasWeapon( "weapon_smg1" ) then
                     local numGrenade = PHX:GetCVar( "ph_smggrenadecounts" )
                     h:SetAmmo(numGrenade, "SMG1_Grenade")
@@ -1003,6 +1052,8 @@ function GM:OnPreRoundStart(num)
         end
     end)
 	
+	-- Clear All Hunter's HasLoadout
+	for _,h in ipairs(team.GetPlayers( TEAM_HUNTERS )) do h.PHXHasLoadout = false; end
 	UTIL_StripAllPlayers()
 	UTIL_SpawnAllPlayers()
 end
@@ -1162,7 +1213,7 @@ end)
 
 function PHX:PlayTaunt( pl, sndTaunt, bIsPitchEnabled, iPitchLevel, bIsRandomized, LastTauntTimeID )
 	if !pl or !IsValid(pl) then
-		print("[PHX:PlayTaunt] A Player Entity is Required.")
+		print("[Taunt:PlayTaunt] Error: A 'Player' entity is required!")
 		return
 	end
 
@@ -1238,7 +1289,7 @@ hook.Add("PlayerButtonDown", "PlayerButton_ControlTaunts", function(pl, key)
 			pl:ConCommand("ph_showtaunts")
 		end
 		
-		if (PHX:GetCVar( "ph_enable_unstuck" ) and key == unstuckKey) then
+		if (PHX:GetCVar( "ph_use_unstuck" ) and key == unstuckKey) then
 			GAMEMODE:UnstuckPlayer(pl)
 		end
 	

@@ -30,7 +30,7 @@ local convarlist = {
 }
 
 if !ConVarExists("mv_maplimit") then
-	PHX.VerboseMsg("[MapVote] ConVars initialized!")
+	PHX:VerboseMsg("[MapVote] ConVars initialized!")
 	for _,convars in ipairs(convarlist) do
 		CreateConVar(convars[1], convars[2], convars[3], convars[4], convars[5], convars[6])
 	end
@@ -115,16 +115,16 @@ local function PHX_MapVote( calling_ply, votetime, should_cancel )
 	else
 		if SERVER then
 			if game.IsDedicated() then -- if mapvote not installed, give a warning in server console:
-				print("[ULX MapVote] WARNING: You need at least 2 more players to get this MapVote votes work!")
+				print("[MapVote:ULX] WARNING: You need at least 2 more players to get this MapVote votes work!")
 			else
-				print("[ULX MapVote] WARNING: MapVote is Unavailable. You might have to change map manually!")
+				print("[MapVote:ULX] WARNING: MapVote is Unavailable. You might have to change map manually!")
 			end
 		end
 	end
 end
 
 if (!ulx or ulx == nil) then
-	print("[PHX MapVote] WARNING: ULX is not installed! Not going to add map_vote ...")
+	print("[MapVote] WARNING: ULX is not installed! Not going to add map_vote ...")
 else
 	local mapvotecmd = ulx.command( CATEGORY_NAME, "ulx map_vote", PHX_MapVote, "!map_vote" )
 	mapvotecmd:addParam{ type=ULib.cmds.NumArg, min=15, default=25, hint="time", ULib.cmds.optional, ULib.cmds.round }

@@ -13,7 +13,7 @@ Supported Weapon Base:
 ]]--
 
 -- Basic information
-SWEP.Category				= "Prop Hunt: X"
+SWEP.Category 				= "Prop Hunt: X2Z" -- Used for Weapon Manager Plugin
 SWEP.Author					= "Wolvindra-Vinzuerio"
 SWEP.Contact				= "wolvindra.vinzuerio@gmail.com"
 SWEP.Purpose				= "Just aim and shot at those innocent props lol."
@@ -153,12 +153,6 @@ end
 
 if SWEP.BaseMode == "m9k" then
 
-	if SERVER then
-		if (PHX and PHX ~= nil) and (PHX.VerboseMsg and PHX.VerboseMsg ~= nil) then
-			PHX.VerboseMsg("[ PHX Bonus Weapon ] M9K base detected. MK Bren will use this base instead.")
-		end
-	end
-
 	local mode = SWEP.Properties[GetConVar("ph_mkbren_use_new_mdl"):GetInt()]
 	
 	SWEP.ViewModel				= Model(mode.vm)
@@ -206,12 +200,6 @@ if SWEP.BaseMode == "m9k" then
 	
 elseif SWEP.BaseMode == "tfa" then
 
-	if SERVER then
-		if (PHX and PHX ~= nil) and (PHX.VerboseMsg and PHX.VerboseMsg ~= nil) then
-			PHX.VerboseMsg("[ PHX Bonus Weapon ] TFA base detected. MK Bren will use this base instead.")
-		end
-	end
-
 	local mode = SWEP.Properties[GetConVar("ph_mkbren_use_new_mdl"):GetInt()]
 	
 	SWEP.ViewModel				= Model(mode.vm)
@@ -239,13 +227,6 @@ elseif SWEP.BaseMode == "tfa" then
 	SWEP.BlowbackVector 		= Vector(0, -0.5, 0)
 	
 else
-	
-	-- Return to monke-- sandbox base.
-	if SERVER then
-		if (PHX and PHX ~= nil) and (PHX.VerboseMsg and PHX.VerboseMsg ~= nil) then
-			PHX.VerboseMsg("[ PHX Bonus Weapon ] Server has no M9K/TFA base, Reverting to normal sandbox base.")
-		end
-	end
 	
 	-- Revert Default View/World model and make sure they are compatible.
 	if GetConVar("ph_mkbren_use_new_mdl"):GetBool() then

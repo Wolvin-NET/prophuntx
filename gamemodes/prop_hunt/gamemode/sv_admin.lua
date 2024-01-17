@@ -52,7 +52,7 @@ function PHX:ManageGroupInfo( bLoadSave, bUseNet, stblKey, fileName, netName )
 	file.Write( cfg, s )
 	
 	if !file.Exists( cfg, "DATA" ) or file.Size( cfg, "DATA" ) <= 0 then
-		print("[PHX] Error Saving configuration file: ".. cfg .." - File was not saved or file size is 0. Are you sure that '/garrysmod/data' directory is Writeable?")
+		print("[User:Config] Error Saving configuration file: ".. cfg .." - File was not saved or file size is 0. Are you sure that '/garrysmod/data' directory is Writeable?")
 		return 0
 	end
 	
@@ -128,7 +128,7 @@ local function doCommand(ply, cmd, value, identifier)
 	-- Bug: Float value, if you exceed less than 0.0001, will prints out "1e-05". I'm not sure if this valid value.
 	-- Also, while it will be printed like that, util.NiceFloat might help but it only cuts to 1e-07 (0.0000001)
 	RunConsoleCommand(cmd, tostring(value))	-- convert evertyhing into string because GetGlobalBool and other value don't like actual data type, they'll think as failed value. (e.g: GetGlobalBool 0 = ignored.)
-	PHX.VerboseMsg("[PHX ADMIN CVAR "..identifier.." NOTIFY] Command '".. cmd .. "' has changed to " .. value .. " (Player: " .. ply:Nick().. " (" ..ply:SteamID() ..") )")
+	PHX:VerboseMsg("[Server CVar: "..identifier.."] Command '".. cmd .. "' has changed to " .. value .. " (Player: " .. ply:Nick().. " (" ..ply:SteamID() ..") )")
 end
 
 local function doKickInvalidAccess(ply, cmd, identifier)
@@ -137,7 +137,7 @@ local function doKickInvalidAccess(ply, cmd, identifier)
 	else
 		ply:PHXChatInfo( "ERROR", "PHX_ADMIN_ACCESS_ONLY", ply:Nick() )
 	end
-	PHX.VerboseMsg("[PHX ADMIN CVAR "..identifier.." NOTIFY] Player "..ply:Nick().." (".. ply:SteamID() ..") is attempting to access "..cmd.."!")
+	PHX:VerboseMsg("[Server CVar: "..identifier.."] Player "..ply:Nick().." (".. ply:SteamID() ..") is attempting to access "..cmd.."!", 2)
 end
 
 -- man I wish lua has some-sort of switch/case .

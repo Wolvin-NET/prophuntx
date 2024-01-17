@@ -10,7 +10,7 @@ if CLIENT then
 	SWEP.WepSelectIcon = surface.GetTextureID("vgui/hud/"..GunName)
 end
 
-SWEP.Category 				= "UNDERWATAAAA"
+SWEP.Category 				= "Prop Hunt: X2Z" -- Used for Weapon Manager Plugin
 SWEP.PrintName				= "AR2 Underwater"
 SWEP.Author					= "Wolvindra-Vinzuerio"
 SWEP.Instructions			= "Weapon that can be used underwater."

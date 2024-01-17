@@ -317,6 +317,32 @@ local function FETCH_CONFLICT_WSID()
 
 end
 
+local function CheckGamemodeTXT()
+	local FrettaInfo = file.Read( "gamemodes/fretta/fretta.txt", "THIRDPARTY" ) --"GAME"
+	local PropHuntInfo = file.Read( "gamemodes/prop_hunt/prop_hunt.txt", "THIRDPARTY" ) --"GAME"
+	local addErr = 0
+	
+	if (FrettaInfo) then
+		local t = util.KeyValuesToTable( FrettaInfo )
+		local isphx = tobool( t["isphx"] )
+		if !isphx then addErr = addErr+1; table.insert( ErrorList, "Found different fretta version, using different gamemode detected" ); end
+	else
+		addErr = addErr+1; table.insert( ErrorList, "Cannot read fretta's gamemode txt file, seems to be invalid!" );
+	end
+	
+	if (PropHuntInfo) then
+		local t = util.KeyValuesToTable( PropHuntInfo )
+		local isphx = tobool( t["isphx"] )
+		if !isphx then addErr = addErr+1; table.insert( ErrorList, "Found different prop_hunt version, using different gamemode detected" ); end
+	else
+		addErr = addErr+1; table.insert( ErrorList, "Cannot read prop_hunt's gamemode txt file, seems to be invalid!" );
+	end
+	
+	if addErr > 0 then return addErr end
+	
+	return 0
+end
+
 hook.Add("InitPostEntity", "PHX.CheckIntegrity", function()
 	-- Check Important Variables
 	
@@ -351,6 +377,11 @@ hook.Add("InitPostEntity", "PHX.CheckIntegrity", function()
 		if (not file.Exists( engine.ActiveGamemode() .. "/gamemode/enhancedplus/sh_enhancedplus.lua", "LUA" )) then
 			Errors = Errors + 1
 			table.insert(ErrorList, "An Essential PH:X Core File was not found!")
+		end
+		
+		if CheckGamemodeTXT() > 0 then
+			Errors = Errors + 1
+			table.insert(ErrorList, "Fretta/Prop Hunt gamemode files IS different! You're likely using different gamemode!")
 		end
 		
 		FETCH_CONFLICT_WSID()

@@ -29,7 +29,7 @@ local TeamName = {
 
 if SERVER then	
 	local function AddToTable( idTeam, tauntCat, data )
-		PHX.VerboseMsg("[PHX Taunt Scanner] Adding to Taunt Table: Team[" .. TeamName[idTeam] .. "], Category:" .. tauntCat .. ", Total Taunt Data: " .. tostring(table.Count(data)))
+		PHX:VerboseMsg("[TauntScanner] Adding to Taunt Table: Team[" .. TeamName[idTeam] .. "], Category:" .. tauntCat .. ", Total Taunt Data: " .. tostring(table.Count(data)))
 		Taunts[tauntCat] = {}
 		Taunts[tauntCat][idTeam] = data
 	end
@@ -85,12 +85,12 @@ if SERVER then
 		  else
 			
 			err = err + 1
-			PHX.VerboseMsg("[PHX Taunt Scanner] " .. TeamName[TEAM_ID] .. "'s taunt seems to be empty, nothing to add.")
+			PHX:VerboseMsg("[TauntScanner] " .. TeamName[TEAM_ID] .. "'s taunt seems to be empty, nothing to add.")
 			
 		  end
 		  
 		  if err == 2 then
-			print("[PHX Taunt Scanner] Both Teams have no taunts detected in folder '".. tauntPath .."'. Are you trying to add empty folder?")
+			print("[TauntScanner] Both Teams have no taunts detected in folder '".. tauntPath .."'. Are you trying to add empty folder?")
 		  end
 		
 		end
@@ -162,7 +162,7 @@ if SERVER then
 			PHX:TauntScanFolder( DefaultPath )
 			-- And then, add external taunts directories, if any.
 			for tauntName, tauntFolder in SortedPairs( list.Get("PHX.TauntScanFolder") ) do	-- please sort.
-				PHX.VerboseMsg("[PHX] [Addon: ".. tauntName .."] Scanning custom Taunt folder: 'sound/"..tauntFolder.."'...")
+				PHX:VerboseMsg("[TauntScanner:Addon][".. tauntName .."] Scanning custom Taunt folder: 'sound/"..tauntFolder.."'...")
 				PHX:TauntScanFolder( tauntFolder )
 			end
 			
@@ -176,7 +176,7 @@ if SERVER then
 			
 			CompressedTaunt,CompressedTauntSize = util.PHXQuickCompress( Taunts )
 		else
-			print("[PHX] Taunt Scanner Status: Disabled.")
+			print("[TauntScanner] Taunt Scanner is Disabled.")
 		end		
 	end)
 	
@@ -193,7 +193,7 @@ if SERVER then
 		end
 	
 		if !ply.HasTauntScannedData then
-			PHX.VerboseMsg("[PHX] Sending Taunt Scanner Data to player: " .. ply:Nick() .. ", Size: " .. tostring(CompressedTauntSize) .. " Bytes")
+			PHX:VerboseMsg("[TauntScanner] Sending Taunt Scanner Data to player: " .. ply:Nick() .. ", Size: " .. tostring(CompressedTauntSize) .. " Bytes")
 		    timer.Simple(0.1, function()
 				net.Start(netRecv)
 				net.WriteUInt(CompressedTauntSize, 16)
@@ -225,7 +225,7 @@ if CLIENT then
 	end )
 	
 	net.Receive(netRecv, function()
-		PHX.VerboseMsg("[PHX] Received taunt scanner data, Processing...")
+		PHX:VerboseMsg("[TauntScanner] Received taunt scanner data, Processing...")
 		local size = net.ReadUInt(16)
 		local taunts = net.ReadData(size)
 		local Conv = util.PHXQuickDecompress( taunts )
@@ -236,6 +236,6 @@ if CLIENT then
 			end
 		end
 		
-		PHX.VerboseMsg("[PHX] Taunts successfully added! - Have Fun and Enjoy!")
+		PHX:VerboseMsg("[TauntScanner] Taunts successfully added! - Have Fun and Enjoy!")
 	end)
 end

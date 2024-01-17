@@ -87,7 +87,7 @@ function PANEL:Init()
     end
 
     self.closeButton.DoClick = function()
-        print("MapVote has started...")
+        print("Map Voting has been started...")
         self:SetVisible(false)
     end
 

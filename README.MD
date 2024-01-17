@@ -1,20 +1,19 @@
-# Prop Hunt: X
-## X2Z - Road to Zero
+# Prop Hunt: X2Z
+## Road to Zero
 
-### PLEASE NOTE
-#### This gamemode DOES NOT AFFILIATE NOR COLLABORATE TO ANY OTHER GAMES OUTSIDE OF GARRY'S MOD! THEREFORE IS NOT CREATED BY ME!
+#### PLEASE NOTE: THIS GAMEMODE DOES NOT AFFILIATE NOR COLLABORATING WITH ANY EXTERNAL GAMES OTHER THAN GARRY'S MOD! THOSE ARE NOT MADE BY ME!
 
-**"Prop Hunt: X" Was Originally given and created by Wolvindra-Vinzuerio and Only Available Exclusively for Garry's Mod.**
+**"Prop Hunt: X/X2Z" Was Originally given and created by Wolvindra-Vinzuerio and Only Available Exclusively for Garry's Mod.**
 
 ### Versioning
-Version: X2Z, Revision: 09/01/2024 (dd/mm/yyyy)
+Version: X2Z, Revision: 17/01/2024 (dd/mm/yyyy)
 
 ### Public Servers
 - Server #1 [U.S]: **74.91.120.8:27015** (Public Stable Server)
 - Server #2 [U.S]: **offline** (Public Dev Server)
 - Other Servers: https://gmodgameservers.com/prophuntx/servers
 
-### Support the PH:X2Z Development
+### Support Prop Hunt: X2Z Development
 Buy me a coffee If you like Prop Hunt: X2Z ☕
 
 - https://www.buymeacoffee.com/wolvindra/ (or)
@@ -55,24 +54,36 @@ https://steamcommunity.com/sharedfiles/filedetails/?id=2176546751
 **As a Legacy Gamemode**  
 Visit the "[Releases](https://github.com/Wolvin-NET/prophuntx/releases)" page to download the latest version.
 
+### Available Plugins
+|Addon Name|URL|
+|---|---|
+|Prop Menu (Prop Chooser)|Integrated|
+|Last Prop Standing|Integrated|
+|PH:X2Z Weapon Manager & Ammo Editor|[Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3141486825)|
+|LPS Weapon: Pulse Rifle|[Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=2923725324)|
+|LPS Weapon: Flechette|[Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=2923855102)|
+|LPS Weapon: Sniple Rifle|[Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=2925237917)|
+|LPS Weapon: AK47 w/ Grenade Launcher|[Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=2925842166)|
+
+
 ### Quick Steam Guide:
-- Installing Prop Hunt: X  
+- Installing Prop Hunt: X2Z  
 See Wiki
 - How to add Custom Taunt with Taunt Scanner:  
 https://steamcommunity.com/sharedfiles/filedetails/?id=2847440960
 - List of ConVars and ConCommands:  
 https://steamcommunity.com/sharedfiles/filedetails/?id=2851968180
 - How to add Weapons:  
-See Wiki
+[See Wiki](https://github.com/Wolvin-NET/prophuntx/wiki)
 - Configuring MapVotes:  
-See Wiki
+[See Wiki](https://github.com/Wolvin-NET/prophuntx/wiki)
 
 ### Wiki
-Read the manuals here: https://gmodgameservers.com/wiki/prophuntx/  
-**Note:** Wiki page is currently **outdated**. We're still writing some Wiki Topics on our WikiMedia pages and soon will be published.
+- Use our (temporary) updated version: https://github.com/Wolvin-NET/prophuntx/wiki
+- Outdated version: https://gmodgameservers.com/wiki/prophuntx/
 
 ### Official Website
-https://gmodgameservers.com/prophuntx/
+#### https://gmodgameservers.com/prophuntx/
 
 ### Additional Notes
 - Using glua-soundduration Library for LPS Event
@@ -86,7 +97,7 @@ https://github.com/Exho1/eChat (Exho1)
 ### Contributors
 See [`CONTRIBUTORS.TXT`](/CONTRIBUTORS.TXT)
 
-### License & Rules
+### Extra Info
 
 **Rules**
 - This gamemode **Will No Longer support Single Player** because it's intended for Multiplayer gameplay. If you want to use this to test with your Prop Hunt Map, create a multiplayer instance and use `sv_lan 1` in there.
@@ -98,11 +109,11 @@ _This does not apply if you modify the gamemode without submitting to the worksh
 **License**
 
 ```
-You are free to use, modify, contribute, or distribute the Prop Hunt: X ("SOFTWARE") as long as it stated exclusively for Garry's Mod.
-Any changes or modification you have made publicly on Steam Workshop must include this license and a link back to this page in your credits page.
-You are, however, not permitted to use for:
-- Commercial Purposes, including selling the codes.
-- Using, copying, alter (porting) the code OUTSIDE from "Garry's Mod" Game WITHOUT Permission.
+You are free to use, copy, modify, contribute, distribute, or make profit (server or community) when using the Prop Hunt: X/X2Z Gamemode ("SOFTWARE") as long as it stated exclusively and made only available for Garry's Mod.
+Any changes or modification you have made publicly on Steam Workshop must include this license OR a link back to this GitHub Repository Page/Official Website in your credits page.
+You are, however, not permitted to:
+- Selling the source codes.
+- Using, copying, alter (porting) the source codes other than "Garry's Mod" game without permission.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
 IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

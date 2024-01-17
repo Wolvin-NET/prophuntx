@@ -77,7 +77,7 @@ hook.Add( "PlayerDisconnected", "Remove RTV", function( ply )
 		else
 			if RTV.ShouldChange() then
 				local time = MapVote.PHXConfig.TimeLimit or 28
-				print("MapVote: Server is Emptied, attempting to force change map and voting random map in "..time.." seconds!")
+				print("MapVote: Server emptied, attempting to force change map and voting random map in "..time.." seconds!")
 				RTV.Start()
 			end
 		end

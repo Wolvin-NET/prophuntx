@@ -1,6 +1,6 @@
 -- ph_hotel Configuration.
 -- if you found this exploitable by Players, Adjust the Prop's bounding box to your appropriate setting.
-PHX.VerboseMsg("[PHX Map Config] Config for 'ph_hotel' has been loaded.")
+PHX:VerboseMsg("[Map Config] Config for 'ph_hotel' has been loaded.")
 
 local mdls = {
 	"models/props_debris/wood_board05a.mdl",

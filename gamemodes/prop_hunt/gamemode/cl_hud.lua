@@ -176,6 +176,8 @@ hook.Add("HUDPaint", "PHX.MainHUD", function()
 		tbl.Armor[4].x = armorpct - 10
 		surface.DrawPoly( tbl.Armor )
 		
+		if hp > 999 then hp = "bruh" end
+		if armor > 255 then armor = "wtf" end
 		draw.DrawText( TranslateMe("HUD_HP"), "Trebuchet24", pos.x + 215, pos.y + 110, color_white, TEXT_ALIGN_LEFT )
 		draw.DrawText( hp, "PHX.HealthFont", pos.x + 370, pos.y + 86, hpcolor, TEXT_ALIGN_RIGHT )
 		draw.DrawText( " / "..armor, "PHX.ArmorFont", pos.x + 370, pos.y + 104, Color( 255,255,255,255 ), TEXT_ALIGN_LEFT )

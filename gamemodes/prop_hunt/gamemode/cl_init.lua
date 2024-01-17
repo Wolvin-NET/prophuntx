@@ -336,12 +336,14 @@ end)
 
 -- Decides where  the player view should be (forces third person for props)
 local cameradist = 0
+local camMaxCollBounds=Vector(4,4,4)
+local camBlindFoldV = Vector(20000, 0, 0)
 function GM:CalcView(pl, origin, angles, fov)
 	local view = {} 
 	
 	if blind then
-		view.origin = Vector(20000, 0, 0)
-		view.angles = Angle(0, 0, 0)
+		view.origin = camBlindFoldV
+		view.angles = angle_zero
 		view.fov = fov
 		
 		return view
@@ -361,7 +363,7 @@ function GM:CalcView(pl, origin, angles, fov)
 			trace = self.ViewCam:CamColEnabled( origin, angles, trace, "start", "endpos", -80, -80, -80, cHullz )
 			trace.filter = filterent
             
-            trace.maxs = Vector(4,4,4)
+            trace.maxs = camMaxCollBounds
 			
             local prop = pl:GetPlayerPropEntity()
             if IsValid(prop) then
@@ -708,6 +710,10 @@ net.Receive("PHX.UpdatePropbanInfo", function()
 	
 	local data = util.PHXQuickDecompress( comp )
 	
+	if !data or istable(data) and table.IsEmpty(data) then
+		PHX:VerboseMsg( "[Model Ban] Warning: Retreiving an empty prop ban data! Reverting to default bans!", 2)
+		return
+	end
 	-- Replace the data anyway.
 	PHX[key]	= {}
 	for _,mdl in pairs( data ) do
@@ -1166,8 +1172,6 @@ local function ShowVeryFirstTutorial()
 		end
 	
 	fh.frame:MakePopup()
-
-	print( fh.frame:GetTall(), fh.frame:GetWide() )
 
 	RunConsoleCommand("ph_cl_show_introduction", "0")
 end

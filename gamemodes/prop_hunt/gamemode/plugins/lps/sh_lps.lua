@@ -1,6 +1,6 @@
 local cvar = {}
 
-math.randomseed(os.time())
+--math.randomseed(os.time())
 
 -- Public LPS Const
 LPS_WEAPON_UNARMED      = 0

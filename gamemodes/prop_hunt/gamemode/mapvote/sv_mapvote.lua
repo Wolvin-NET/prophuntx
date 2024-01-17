@@ -38,7 +38,7 @@ else
 end
 
 if ConVarExists("mv_maplimit") then
-	PHX.VerboseMsg("[MapVote] Loading ConVars...")
+	PHX:VerboseMsg("[MapVote] Loading ConVars...")
 	MapVote.PHXConfig = {
 		MapLimit 		= GetConVar("mv_maplimit"):GetInt(),
 		TimeLimit 		= GetConVar("mv_timelimit"):GetInt(),
@@ -105,7 +105,7 @@ local conv = {
 
 -- Precheck when the convar is changed
 for cvar,func in pairs(conv) do
-	PHX.VerboseMsg("[MapVote] Adding ConVar Callbacks for: "..cvar)
+	PHX:VerboseMsg("[MapVote] Adding ConVar Callbacks for: "..cvar)
 	cvars.AddChangeCallback(cvar, func)
 end
 
@@ -139,7 +139,7 @@ function MapVote.GetFromULX()
 		if (ulx.votemaps) then return ulx.votemaps end
 	end
 	
-	print("[!PHX] Warning: ULX is not installed! Couldn't get any list from 'votemap' data!")
+	print("[MapVote] WARNING: ULX is not installed! Couldn't get any list from 'votemap' data!")
 	return {}
 
 	--[[ if (!ulx or ulx == nil or !ulx.votemaps or ulx.votemaps == nil) then

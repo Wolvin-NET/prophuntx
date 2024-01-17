@@ -478,7 +478,7 @@ end,
                 if data.icon and data.icon ~= nil then icon = data.icon end            
                 cbox:AddChoice( PHX:QTrans( { data.name, val } ), { val, data.f }, false, icon )
             else
-                print("!!PHX.UI.CreateVGUIType() --> Warning: menutype[combobox]: 'data' is not a table.")
+                print("!!PHX.UI.CreateVGUIType() --> ERROR: menutype[combobox]: 'data' is not a table.")
             end
         end
     

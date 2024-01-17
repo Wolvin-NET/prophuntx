@@ -2,7 +2,7 @@ PHX.HunterList = {}
 
 local plus = {}
 plus.Unstuck = {
-	["ph_enable_unstuck"] 				= { "check", nil, "PHXM_ADMIN_ENABLEUNSTUCK" },
+	["ph_use_unstuck"] 				= { "check", nil, "PHXM_ADMIN_ENABLEUNSTUCK" },
 	["ph_disabletpunstuckinround"]		= { "check", nil, "PHXM_ADMIN_NOTPUNSTUCKINROUND" },
 	["ph_unstuck_waittime"] 			= { "slider", function() return 5,15 end, "PHXM_ADMIN_UNSTUCK_WAITTIME" },
 }
