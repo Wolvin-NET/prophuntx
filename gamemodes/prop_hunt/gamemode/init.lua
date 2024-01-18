@@ -407,15 +407,20 @@ local function AutoRespawnCheck( ply, bWasDeadOrSuicide )
 		local TeamChange = PHX:GetCVar("ph_allow_respawnonblind_teamchange")
 		local tim 		 = math.Clamp( PHX:GetCVar("ph_allow_respawnonblind_team_only"), 0, TEAM_PROPS )
 
-		if CurTime() < phx_blind_unlocktime then --Remaining percentage time
+		if CurTime() < phx_blind_unlocktime then --Remaining blindfold percentage time
 			local dospawn=false
-			local old = ply._joinCameFrom
-			if (bWasDeadOrSuicide) and !old then dospawn=true; end
-			if SpecChange and (old) and old == TEAM_SPECTATOR then dospawn=true; end
+			if bWasDeadOrSuicide then
+				if (ply._Team2TeamDisabledSuicide) and !ply._joinCameFrom then
+					ply._Team2TeamDisabledSuicide = nil
+				elseif !ply._joinCameFrom then
+					dospawn=true;
+				end
+			end
+			if SpecChange and (ply._joinCameFrom) and ply._joinCameFrom == TEAM_SPECTATOR then dospawn=true; end
 			if TeamChange then
-				if (old) and old == TEAM_HUNTERS and ply:Team() == TEAM_PROPS then
+				if (ply._joinCameFrom) and ply._joinCameFrom == TEAM_HUNTERS and ply:Team() == TEAM_PROPS then
 					dospawn = true
-				elseif (old) and old == TEAM_PROPS and ply:Team() == TEAM_HUNTERS then
+				elseif (ply._joinCameFrom) and ply._joinCameFrom == TEAM_PROPS and ply:Team() == TEAM_HUNTERS then
 					dospawn = true
 				end
 			end
@@ -424,6 +429,7 @@ local function AutoRespawnCheck( ply, bWasDeadOrSuicide )
 				if ply.PHXHasLoadout then ply.PHXHasLoadout = false end
 				if ply:Alive() then ply:KillSilent() end
 				ply._joinCameFrom = nil
+				ply._Team2TeamDisabledSuicide = nil
 				ply:Spawn() --ply._joinCameFrom will also nile from PlayerSpawn hook, just double checking though
 				ControlTauntWindow(0)
 				if tim > 0 then
@@ -431,15 +437,15 @@ local function AutoRespawnCheck( ply, bWasDeadOrSuicide )
 				else
 					ply:PHXChatInfo( "NOTICE", "BLIND_RESPAWN", math.Round(phx_blind_unlocktime - CurTime()) )
 				end
-			end
-			ply._joinCameFrom = nil
 
-		else
-			ply._joinCameFrom = nil -- not in blind phase
+				return
+			end
 		end
-	else
-		ply._joinCameFrom = nil
+
 	end
+
+	ply._joinCameFrom = nil
+	ply._Team2TeamDisabledSuicide = nil
 	
 end
 hook.Add("PostPlayerDeath", "autoPlayerRepsawnDuringDeath", function(ply)
@@ -490,9 +496,16 @@ hook.Add("PlayerChangedTeam", "changeteam", function(ply, old, new)
 				if IsValid(ply) and GAMEMODE:InRound() then AutoRespawnCheck(ply) end
 			end)
 		end
+
+		ply._Team2TeamDisabledSuicide = nil
+		return
 	end
 
+	ply._Team2TeamDisabledSuicide = true
+
 end)
+
+
 
 hook.Add("OnPlayerChangedTeam", "TeamChange_switchLimitter", function(ply, old, new)
 	local MAX_TEAMCHANGE_LIMIT = PHX:GetCVar( "ph_max_teamchange_limit" )
@@ -873,6 +886,7 @@ end )
 -- Called when the players spawns
 hook.Add("PlayerSpawn", "PH_PlayerSpawn", function(pl)
 	pl._joinCameFrom=nil
+	pl._Team2TeamDisabledSuicide=nil
     pl:SetPlayerLockedRot( false )
 	pl:SetNWBool("InFreezeCam", false)
 	pl:SetNWEntity("PlayerKilledByPlayerEntity", nil)
@@ -1030,8 +1044,9 @@ function GM:OnPreRoundStart(num)
 	end
 	
 	-- Balance teams. We need to set this "TRUE" to make sure the switched player isn't killed during team switch.
+	-- These both have :SetTeam option, making HasLoadout stays true, bellow will fixes it.
 	if PHX:GetCVar( "ph_enable_teambalance" ) then
-		if PHX:GetCVar( "ph_originalteambalance" ) then
+		if PHX:GetCVar( "ph_team_balance_classic" ) then
 			GAMEMODE:CheckTeamBalance( true )
 		else
 			GAMEMODE:CheckTeamBalanceCustom()

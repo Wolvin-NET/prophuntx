@@ -22,7 +22,7 @@ IS_PHX		 	= true	-- an easy check if PHX is installed.
 
 PHX.ConfigPath 	= "phx_data"
 PHX.VERSION		= "X2Z"
-PHX.REVISION	= "17.01.24" --Format: dd/mm/yy.
+PHX.REVISION	= "18.01.24" --Format: dd/mm/yy.
 
 --Include Languages
 PHX.LANGUAGES = {}
@@ -230,8 +230,8 @@ end
 
 if SERVER then
 	
-	local function GetTranslation(t,strID,ply)
-		local str="error"
+	local function GetTranslation(t, ply, strID)
+		local str="!error"
 		
 		if t:GetCVar( "ph_use_lang" ) then
 			local lang = t:GetCVar( "ph_force_lang" )
@@ -256,24 +256,28 @@ if SERVER then
 
 	function PHX:SVTranslate(ply, strID, ... )
 
-		local str = GetTranslation(self,strID,ply)
+		local str = GetTranslation( self, ply, strID )
 		return string.format( str, ... )
 		
 	end
 
 	--Get Random Translated
 	function PHX:RTranslate( ply, strID )
-		local rStr = GetTranslation(self,strID,ply)
-		return rStr[math.random(1,#rStr)]
+		local rStr = GetTranslation (self, ply, strID )
+		if (rStr) and istable(rStr) and !table.IsEmpty(rStr) then
+			return rStr[math.random(1,#rStr)]
+		end
+		return "error or table=nil"
 	end
 	
 	--Broadcast Translate to All Players
-	function PHX:BTranslate(strID, ... )
+	function PHX:BTranslate(f, strID, ... )
 		--Broadcast Translate
 		for _,ply in pairs( player.GetAll() ) do
 		
-			self:SVTranslate( strID, ply, ... )
-			
+			local txt = self:SVTranslate( ply, strID, ... )
+			f( ply, txt )
+
 		end
 	end
 end

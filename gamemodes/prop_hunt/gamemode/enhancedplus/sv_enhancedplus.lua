@@ -376,11 +376,9 @@ function GM:CheckTeamBalance( bDontKillPlayer )
 					local ply = GAMEMODE:FindLeastCommittedPlayerOnTeam( highest )
 					
 					if !bDontKillPlayer then ply:Kill() end
-					
+					-- :SetTeam() bug where ply.PHXHasLoadout still true, OnPreRoundRestart will handles it.
 					ply:SetTeam( id )
-					--ply:Spawn() ?
-
-					print( ply, "BALANCE SWAPPED" )
+					PHX:VerboseMsg( "[TeamBalance] Player "..ply:Nick().." was swapped by team balance." )
 					
 					for _, listener in ipairs(player.GetAll()) do
 						if listener == ply then
@@ -406,7 +404,7 @@ function GM:AutoTeam(pl)
 		return
 	end
 	
-	if PHX:GetCVar( "ph_originalteambalance" ) then
+	if PHX:GetCVar( "ph_team_balance_classic" ) then
 		GAMEMODE:PlayerRequestTeam(pl, team.BestAutoJoinTeam())
 	else
 		local playerCount = GAMEMODE:GetPlayingCount(pl)

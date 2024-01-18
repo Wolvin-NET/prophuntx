@@ -6,7 +6,7 @@ PHEPLUSCVAR["ph_unstuckrange"] 					= { CTYPE_NUMBER, 	"250", CVAR_SERVER_ONLY_N
 PHEPLUSCVAR["ph_disabletpunstuckinround"] 		= { CTYPE_BOOL, 	"0", CVAR_SERVER_ONLY, "Disable last-resort unstuck teleportations to spawnpoints outside of the hiding phase" }
 PHEPLUSCVAR["ph_unstuck_waittime"] 				= { CTYPE_NUMBER, 	"5", CVAR_SERVER_ONLY, "How much in seconds must pass between each unstuck attempt" }
 
-PHEPLUSCVAR["ph_originalteambalance"] 			= { CTYPE_BOOL, 	"0", CVAR_SERVER_ONLY, "Use default PH:X/E+ original auto-balancing (disables all following team-related options)", 
+PHEPLUSCVAR["ph_team_balance_classic"] 			= { CTYPE_BOOL, 	"1", CVAR_SERVER_ONLY, "Use default PH:X/E+ original auto-balancing (disables all following team-related options)", 
 function(cvarname, value)
 	cvars.AddChangeCallback( cvarname, function(cv, _, new)
 		
@@ -76,7 +76,7 @@ function GM:GetHunterCount(playerCount)
 end
 
 function GM:CustomTeamHasEnoughPlayers(teamid, pl)
-	if PHX:GetCVar( "ph_originalteambalance" ) then
+	if PHX:GetCVar( "ph_team_balance_classic" ) then
 		return GAMEMODE:TeamHasEnoughPlayers(teamid)
 	end
 
@@ -86,6 +86,9 @@ function GM:CustomTeamHasEnoughPlayers(teamid, pl)
 		local hunterCount = GAMEMODE:GetHunterCount(playerCount)
 
 		if teamid == TEAM_HUNTERS then
+			if !PHX:GetCVar("ph_enable_teambalance") then
+				return GAMEMODE:TeamHasEnoughPlayers(teamid)
+			end
 			return hunterCount <= teamPlayerCount
 		elseif teamid == TEAM_PROPS then
 			return (playerCount - hunterCount) <= teamPlayerCount

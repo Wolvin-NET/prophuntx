@@ -1,6 +1,48 @@
 ## A new major updates to Prop Hunt: X has been released.
 Note: Prop Hunt X will change it's version to "X2Z" following with date-formatted revisions.
 
+## Revision 18.01.2024 (January 2024 Minor Fixes #3)
+This update mainly fixes for "Respawn Team-to-Team/Spectator-to-Team on Hunter's Blind Time" as well as other ConVar changes related to Team Balance (`ph_enable_teambalance`) option. **Do note** that you must use Original Classic Team Balance `(ph_team_balance_classic ->renamed-> from ph_originalteambalance)` method if you want to use 1:1 Teams when Team Balance is enabled, or it will use default method to "Team Shuffle/Rotation" (Half Hunter vs Full Props).
+
+Disabling `ph_enable_teambalance` will completely disable team balance and run just like oldest version of Classic Prop Hunt with no Team Balancing.
+
+[Please Read on 'Team Options' wiki](https://github.com/Wolvin-NET/prophuntx/wiki/Team-Options-&-BlindFold-Respawn) for detail about Team Options & Respawn on BlindTime phase.
+
+- [Team Switching on BlindTime] Fixed (for the last time) Weird Behaviour during Team-To-Team / Spectator-to-Team Respawn on BlindTime phase. Now Switching Team-to-Team during blind time while disallowing it will no longer spawn on other team (if this hasn't fixed players will take advantage for being props all time).
+- (Request) Renamed `ph_originalteambalance` to `ph_team_balance_classic` and reset their default value to `1`. To Enable Team Shuffle/Rotation, you need to use `ph_team_balance_classic 0` AND `ph_enable_teambalance 1` to use Team Suffle/Rotation (Half Hunters vs Full Props) - See EnhancedPlus Menu for more info.
+- Workaround: Fix `ph_force_join_balanced_team` when `ph_enable_teambalance` is `0`, This needs to be updated in future (Currently it's semi working, but still do not use `ph_force_join_balanced_team` when Team Shuffle/Rotation is on otherwise you'll get locked out)
+- Removed another small leftover debug messages
+- Added Verbose Message when Team Balance has occured (Must use `ph_team_balance_classic == 1`)
+- Added Serverside Language Translate:
+    - `PHX:SVTranslate( player Ply, string strID, varargs )`: Translate with given ID and varargs. Require `Ply` to retreive `ph_cl_language` ConVar.
+    - `PHX:RTranslate( player Ply, string strID )`: Get Random Translated Text with given ID and varargs. Require `Ply` to retreive `ph_cl_language` ConVar.
+    - `PHX:BTranslate( function Func, string strID, varargs )`: Translate with given ID and vargs and Broadcast on everyplayer. The language is based on each Player's Language Setting. A function callback is needed to print something on every player that get broadcasted. See example below
+        - `function` callbacks:
+            - `player Ply` A player entity
+            - `txt` The translated result
+
+#### Example of Serverside Language Translate
+```lua
+    if CLIENT then return end -- obviously, only serverside realm.
+	local ply = Entity(1)
+	
+	-- Print a Single Translated Line
+	local Translate = PHX:SVTranslate( ply, "HUD_TEAMWIN", "Someone" )
+	ply:ChatPrint( Translate ) -- This will prints ("Someone win!") with their language settings.
+
+	-- Get a Random Translated Line
+	local Random = PHX:RTranslate( ply, "SUICIDEMSG" )
+	ply:ChatPrint( Random ) --this will prints random Suicide String Messages
+
+	-- Broadcast a single Translated line
+	PHX:BTranslate( function( ply, txt ) 
+		ply:ChatPrint( txt ) --this will prints the translated message
+	end, "CHAT_SWAPBALANCE", "GumbalBoy", "Salad" )
+```
+
+#### Team Switching on BlindTime Explanation
+It's Important to [Read on 'Team Options' wiki](https://github.com/Wolvin-NET/prophuntx/wiki/Team-Options-&-BlindFold-Respawn#2-team-switchingrespawn-player-on-blindtime-phase) to learn more detail about this features.
+
 ## Revision 17.01.2024 (January 2024 Major Update & HotFix #2)
 A Major patch mainly for fixes for issues caused by `ph_print_verbose` that sometimes do not exists in client realm, added new weapon, Weapon Manager & Ammo Editor (as Plugin/Addon) and others.
 - NEW Plugin (Addon): Prop Hunt: X2Z Weapon Loadout/Ammo Editor (BETA as of 17.01.2024): https://steamcommunity.com/sharedfiles/filedetails/?id=3141486825
