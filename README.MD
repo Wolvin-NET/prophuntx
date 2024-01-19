@@ -6,7 +6,7 @@
 **"Prop Hunt: X/X2Z" Was Originally given and created by Wolvindra-Vinzuerio and Only Available Exclusively for Garry's Mod.**
 
 ### Versioning
-Version: X2Z, Revision: 18/01/2024 (dd/mm/yyyy)
+Version: X2Z, Revision: 19/01/2024 (dd/mm/yyyy)
 
 ### Public Servers
 - Server #1 [U.S]: **74.91.120.8:27015** (Public Stable Server)
