@@ -1,6 +1,12 @@
 ## A new major updates to Prop Hunt: X has been released.
 Note: Prop Hunt X will change it's version to "X2Z" following with date-formatted revisions.
 
+## Revision 19.01.2024
+- Fixed Error when using Classic HUD with AutoTaunt enabled (`cl_autotaunt.lua->AutoTauntPaint()`)
+- Fixed Error when Trying to Closing Taunt Window too early while Right Click Context Menu is still remain open
+- Fixed Error when attempting to create Muzzle Effect for Last Prop Standing "Blaster Gun" Outside from PVS
+- Added prevention when prop tries to use Trash Prop (Residual props that was made from PROP Launcher)
+
 ## Revision 18.01.2024 (January 2024 Minor Fixes #3)
 This update mainly fixes for "Respawn Team-to-Team/Spectator-to-Team on Hunter's Blind Time" as well as other ConVar changes related to Team Balance (`ph_enable_teambalance`) option. **Do note** that you must use Original Classic Team Balance `(ph_team_balance_classic ->renamed-> from ph_originalteambalance)` method if you want to use 1:1 Teams when Team Balance is enabled, or it will use default method to "Team Shuffle/Rotation" (Half Hunter vs Full Props).
 

@@ -680,7 +680,7 @@ local function MainFrame()
 			
 			local menu = DermaMenu()
 			menu:AddOption(PHX:FTranslate("TM_TOOLTIP_PREVIEW"), function() 
-                if hasLines then 
+                if hasLines and (window) and IsValid(window.frame) then 
                     --surface.PlaySound(getline);
                     local pt = 100
                     if window.ckpitch:GetChecked() then
@@ -710,14 +710,16 @@ local function MainFrame()
 			
 			menu:AddOption(PHX:FTranslate("TM_TOOLTIP_PLAYTAUNT"), function() if hasLines then SendToServer(Name,getline); end end):SetIcon("icon16/sound.png")
 			menu:AddOption(PHX:FTranslate("TM_TOOLTIP_PLAYCLOSE"), function()
-				if hasLines then 
+				if hasLines and (window) and IsValid(window.frame) then
 					SendToServer(Name,getline)
 					window.frame:Close()
 				end 
 			end):SetIcon("icon16/sound_delete.png")
 			menu:AddSpacer()
 			menu:AddOption(PHX:FTranslate("TM_MENU_CLOSE"), function()
-				window.frame:Close()
+				if (window) and IsValid(window.frame) then
+					window.frame:Close()
+				end
 			end):SetIcon("icon16/cross.png")
 			menu:Open()
 		end

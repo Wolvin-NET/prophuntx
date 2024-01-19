@@ -604,6 +604,8 @@ function GM:PlayerExchangeProp(pl, ent)
 	if !IsValid(ent) then return; end
 
 	if pl:Team() == TEAM_PROPS && PHX:IsUsablePropEntity(ent:GetClass()) && ent:GetModel() then
+		-- Prop Launcher: Don't allow if Prop is a Trash (Residue of PROP Launcher item/LPS)
+		if (ent._PropTrash) then return end
 		if PHX:GetCVar( "ph_banned_models" ) and table.HasValue(PHX.BANNED_PROP_MODELS, ent:GetModel()) then
 			pl:PHXChatInfo("ERROR", "PHX_PROP_IS_BANNED")
 		elseif IsValid(ent:GetPhysicsObject()) && (pl.ph_prop:GetModel() != ent:GetModel() || pl.ph_prop:GetSkin() != ent:GetSkin()) then
