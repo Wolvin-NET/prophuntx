@@ -1,10 +1,6 @@
 ## A new major updates to Prop Hunt: X has been released.
 Note: Prop Hunt X will change it's version to "X2Z" following with date-formatted revisions.
 
-## Revision 07.02.24
-- A RoundRestart / MapCleanUp fix to prevent 'Too Many Edicts' bug and also preventing addon/plugins or other scripts from breaking due to this changes.
-More detail on Garry's Mod Issue Tracker #5902: https://github.com/Facepunch/garrysmod-issues/issues/5702#issuecomment-1917563220
-
 ## Revision 19.01.2024
 - Fixed Error when using Classic HUD with AutoTaunt enabled (`cl_autotaunt.lua->AutoTauntPaint()`)
 - Fixed Error when Trying to Closing Taunt Window too early while Right Click Context Menu is still remain open

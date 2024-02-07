@@ -994,8 +994,7 @@ concommand.Add("ph_force_end_round", ForceEndRound, nil, "Force End Active Round
 function GM:OnPreRoundStart(num)
     IS_ROUND_FORCED_END = false
 
-	-- https://github.com/Facepunch/garrysmod-issues/issues/5702#issuecomment-1917563220
-	game.CleanUpMap(false, nil, function() end)
+	game.CleanUpMap()
 	
 	if GetGlobalInt("RoundNumber") != 1 && (PHX:GetCVar( "ph_swap_teams_every_round" ) || ((team.GetScore(TEAM_PROPS) + team.GetScore(TEAM_HUNTERS)) > 0)) then
 		for _, pl in pairs(player.GetAll()) do
