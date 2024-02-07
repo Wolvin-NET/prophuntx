@@ -1,6 +1,6 @@
 {
 	"version":"X2Z",
-	"revision":"19.01.24",
+	"revision":"07.02.24",
 	"url":"https:\/\/gmodgameservers.com\/prophuntx\/changelogs",
-	"notice":"NEW JANUARY 2024 4th UPDATE!\nChanges: \n-Fixed Error on HUD and Prevention to use Trash Props (PROP Launcher)\n-Team Options and Added Serverside Language\n-Added New Weapons\n-Removed Verbose Option\n-Fixed death notice error when suicide\n-Fixed Hunder Blindfold behaviour\n-MapVote Fixes\n-and more!!\nFor more info https:\/\/gmodgameservers.com\/prophuntx\/changelogs"
+	"notice":"February 2024 Important Patch Regarding Issues related during Round Restart\/Map Cleanup\nChanges:\n-Changed game.CleanUpMap behaviour to prevent addons or plugins from breaking\n-Fixed Error on HUD and Prevention to use Trash Props (PROP Launcher)\n-Team Options and Added Serverside Language\n-Added New Weapons\n-Removed Verbose Option\n-Fixed death notice error when suicide\n-Fixed Hunder Blindfold behaviour\n-MapVote Fixes\n-and more!!\nFor more info https:\/\/gmodgameservers.com\/prophuntx\/changelogs"
 }
