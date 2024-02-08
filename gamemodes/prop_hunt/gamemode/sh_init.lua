@@ -1,12 +1,12 @@
 --[[
 
-( This License Applies to all files writen in "fretta and prop_hunt" gamemode directories )
+( This License Applies to all files writen in "fretta" and "prop_hunt" gamemode directories )
 
-You are free to use, modify, contribute, or distribute the Prop Hunt: X ("SOFTWARE") as long as it stated exclusively for Garry's Mod.
-Any changes or modification you have made publicly on Steam Workshop must include this license and a link back to this page in your credits page.
-You are, however, not permitted to use for:
-- Commercial Purposes, including selling the source code.
-- Using, copying, alter (porting) the source code OUTSIDE of "Garry's Mod" Game WITHOUT Permission.
+You are free to use, copy, modify, contribute, distribute, or make profit (server or community) when using the Prop Hunt: X/X2Z Gamemode ("SOFTWARE") as long as it stated exclusively and made only available for Garry's Mod.
+Any changes or modification you have made publicly on Steam Workshop must include this license OR a link back to this GitHub Repository Page/Official Website in your credits page.
+You are, however, not permitted to:
+- Selling the source codes.
+- Using, copying, alter (porting) the source codes other than "Garry's Mod" game without permission.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
 IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
@@ -22,7 +22,7 @@ IS_PHX		 	= true	-- an easy check if PHX is installed.
 
 PHX.ConfigPath 	= "phx_data"
 PHX.VERSION		= "X2Z"
-PHX.REVISION	= "10.01.24" --Format: dd/mm/yy.
+PHX.REVISION	= "BETA_BUILD" --Format: dd/mm/yy.
 
 --Include Languages
 PHX.LANGUAGES = {}
@@ -39,13 +39,7 @@ local MsgErrorLevel = {
 local maxMsgErrorLevel = #MsgErrorLevel
 local ErrorKeys = table.GetKeys( MsgErrorLevel )
 
-if SERVER then
-	-- Serverside must be archived
-	CreateConVar( "phx_verbose", "0", FCVAR_SERVER_CAN_EXECUTE+FCVAR_ARCHIVE, verbHelp, 0, maxMsgErrorLevel )
-else
-	-- Client should not be archived
-	CreateClientConVar( "phx_verbose", "0", false, true, verbHelp, 0, maxMsgErrorLevel )
-end
+CreateConVar( "phx_verbose", "0", FCVAR_ARCHIVE, verbHelp, 0, maxMsgErrorLevel )
 function PHX:VerboseMsg( text, level )
 	if !level then level = 1 end
 	level = math.Clamp( level, 1, maxMsgErrorLevel )
@@ -80,13 +74,13 @@ GM.ViewCam.cHullzMaxs  = 84    -- Limit Maximums Height in BBox
 GM.ViewCam.cHullzLow   = 8     -- Clam view to this height.
 
 -- Can also internally used for CalcView but you can use anywhere in serverside realm.
-function GM.ViewCam.CamColEnabled( self, origin, ang, trace, traceStart, traceEnd, distMin, distMax, distNorm, entHullz )
+function GM.ViewCam.CamColEnabled( self, origin, ang, trace, traceStart, traceEnd, distMin, distMax, distNorm, entHullz, ply, distMult )
 	
     -- don't allow 0.
     if (!entHullz or entHullz == nil) then entHullz = self.cHullz end
     if !trace or trace == nil then trace = {} end
     
-	if entHullz < self.cHullzMins then
+	--[[ if entHullz < self.cHullzMins then
 		trace[traceStart] 	= origin + Vector(0, 0, entHullz + (self.cHullzMins - entHullz))
 		trace[traceEnd] 	= origin + Vector(0, 0, entHullz + (self.cHullzMins - entHullz)) + (ang:Forward() * distMin)
 	elseif entHullz > self.cHullzMaxs then
@@ -95,7 +89,29 @@ function GM.ViewCam.CamColEnabled( self, origin, ang, trace, traceStart, traceEn
 	else
 		trace[traceStart] 	= origin + Vector(0, 0, self.cHullzLow)
 		trace[traceEnd] 	= origin + Vector(0, 0, self.cHullzLow) + (ang:Forward() * distNorm)
+	end ]]
+	
+	if ply and IsValid( ply ) then
+		local prop=ply:GetPlayerPropEntity()
+		if IsValid(prop) then
+			if !distMult then distMult = 40 end
+			local Maxs=prop:OBBMaxs()
+			local Mins=prop:OBBMins()
+			local Center=prop:OBBCenter()
+			local Hullz = (Center - Vector(0,0,Mins.z))
+			local Long = ( math.Max( Maxs.x, Maxs.y ) * distMult * 0.75 ) * -1
+			
+			local Base = origin + Vector(0, 0, Hullz)
+		
+			trace[traceStart]	= Base
+			trace[traceEnd]		= Base + (ang:Forward() * Long)
+			
+			return trace
+		end
 	end
+	
+	trace[traceStart]	= origin + Vector(0, 0, self.cHullzLow)
+	trace[traceEnd]		= origin + Vector(0, 0, self.cHullzLow) + (ang:Forward() * distNorm)
 	
 	return trace
 end
@@ -226,52 +242,64 @@ for _,plugfolder in SortedPairs( folder ) do
 	include("plugins/" .. plugfolder .. "/sh_load.lua")
 end
 
+function PHX:SetBlindStatus( bool )
+	bool = tobool(bool)
+	SetGlobalBool("PHX.BlindStatus", bool)
+end
+function PHX:IsBlindStatus()
+	return GetGlobalBool("PHX.BlindStatus", false)
+end
+
 if SERVER then
 	
-	local function GetTranslation(self,strID,ply)
-		local str="error"
+	local function GetTranslation(t, ply, strID)
+		local str="!error"
 		
-		if self:GetCVar( "ph_use_lang" ) then
-			local lang = self:GetCVar( "ph_force_lang" )
-			if (self.LANGUAGES[lang]) and self.LANGUAGES[lang][ strID ] then
-				str = self.LANGUAGES[lang][ strID ]
+		if t:GetCVar( "ph_use_lang" ) then
+			local lang = t:GetCVar( "ph_force_lang" )
+			if (t.LANGUAGES[lang]) and t.LANGUAGES[lang][ strID ] then
+				str = t.LANGUAGES[lang][ strID ]
 			else
-				str = self.LANGUAGES["en_us"][ strID ]
+				str = t.LANGUAGES["en_us"][ strID ]
 			end
 		else
 			if ply and IsValid(ply) then
 				local clLang = ply:GetInfo("ph_cl_language")
-				if (self.LANGUAGES[clLang]) and self.LANGUAGES[clLang][ strID ] then
-					str = self.LANGUAGES[clLang][ strID ]
+				if (t.LANGUAGES[clLang]) and t.LANGUAGES[clLang][ strID ] then
+					str = t.LANGUAGES[clLang][ strID ]
 				end
 			else
-				str = self.LANGUAGES["en_us"][ strID ]
+				str = t.LANGUAGES["en_us"][ strID ]
 			end
 		end
 
 		return str
 	end
 
-	function PHX.SVTranslate( self, ply, strID, ... )
+	function PHX:SVTranslate(ply, strID, ... )
 
-		local str =  GetTranslation(self,strID,ply)
+		local str = GetTranslation( self, ply, strID )
 		return string.format( str, ... )
 		
 	end
 
 	--Get Random Translated
-	function PHX.RTranslate( self, ply, strID )
-		local rStr = GetTranslation(self,strID,ply)
-		return rStr[math.random(1,#rStr)]
+	function PHX:RTranslate( ply, strID )
+		local rStr = GetTranslation (self, ply, strID )
+		if (rStr) and istable(rStr) and !table.IsEmpty(rStr) then
+			return rStr[math.random(1,#rStr)]
+		end
+		return "error or table=nil"
 	end
 	
 	--Broadcast Translate to All Players
-	function PHX.BTranslate( self, strID, ... )
+	function PHX:BTranslate(f, strID, ... )
 		--Broadcast Translate
 		for _,ply in pairs( player.GetAll() ) do
 		
-			self:SVTranslate( strID, ply, ... )
-			
+			local txt = self:SVTranslate( ply, strID, ... )
+			f( ply, txt )
+
 		end
 	end
 end
@@ -282,11 +310,11 @@ strteam[TEAM_HUNTERS]		= "PHX_TEAM_HUNTERS"
 strteam[TEAM_PROPS]			= "PHX_TEAM_PROPS"
 strteam[TEAM_UNASSIGNED]	= "PHX_TEAM_UNASSIGNED"
 strteam[TEAM_SPECTATOR]		= "PHX_TEAM_SPECTATOR"
-function PHX.TranslateName( self, teamID, ply )
+function PHX:TranslateName( teamID, ply )
 	local strID = strteam[teamID]
 	
 	if SERVER then
-		local Translation = self:SVTranslate( strID, ply )
+		local Translation = self:SVTranslate( ply, strID )
 		return Translation
 	else
 		local txt = self:FTranslate( strID )
@@ -402,12 +430,9 @@ GM.PHXContributors			= {
 	"So-chiru (Korean Translation)", 
 	"Pawelxxdd (Polish Translation)",
 	"Clã | BR | The Fire Fuchs (Portuguese/Brazil Translation)",
+	"Talha Berkay Akbulut aka Matt (Turkish Translation)",
 	"Ryo567, Kurayashi (Spannish Translation)",
-	"Dralga (Discord Helper)",
-	"Yam",
-	"adk",
-	"Jonpopnycorn",
-	"Thundernerd"
+	"Dralga (Discord Helper)","@yttoxictripz", "Pascual","Yam","adk","Jonpopnycorn","Thundernerd"
 }
 
 -- Called on gamemdoe initialization to create teams

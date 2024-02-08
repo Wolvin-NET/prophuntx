@@ -323,13 +323,14 @@ net.Receive("pcr.SetMetheProp",function(len,ply)
 		local pos = ply:GetPos()
 		--Temporarily Spawn a prop.
 		local ent = ents.Create("prop_physics")
-		ent:SetPos( Vector( pos.x, pos.y, pos.z-512 ) )
-		ent:SetAngles(Angle(0,0,0))
+		ent:SetPos( pos + Vector( 0,0,-1024 ) )
+		ent:SetAngles( angle_zero )
 		ent:SetKeyValue("spawnflags","654")
 		ent:SetNoDraw(true)
 		ent:SetModel(mdl)
-		
 		ent:Spawn()
+		
+		PHX:OBB_HasEntModded(ent)
 		
 		local usage = ply:CheckUsage()
 		local hmx,hmy,hz = ent:GetPropSize()

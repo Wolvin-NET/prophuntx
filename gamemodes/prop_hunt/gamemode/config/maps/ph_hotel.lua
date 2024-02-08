@@ -1,10 +1,13 @@
--- ph_hotel Configuration.
--- if you found this exploitable by Players, Adjust the Prop's bounding box to your appropriate setting.
-PHX:VerboseMsg("[Map Config] Config for 'ph_hotel' has been loaded.")
-
+local map = game.GetMap()
+local hookname="PHX.MapConfig_"..map
 local mdls = {
-	"models/props_debris/wood_board05a.mdl",
-	"models/props_debris/wood_board03a.mdl"
+	-- Mins Z Should never below 0!
+	["models/props_debris/wood_board03a.mdl"] = {mins=Vector(-1.3, -4, 0), maxs=Vector(1.3, 4, 96)},
+	["models/props_debris/wood_board05a.mdl"] = {mins=Vector(-1.3, -8, 0), maxs=Vector(1.3, 8, 96)},
+}
+
+local only={
+	["prop_physics"] = true
 }
 
 local function FixTallModelHulls()
@@ -15,23 +18,16 @@ local function FixTallModelHulls()
 	  end
 	end
 
-	for i=1,#mdls do
+	for model,data in pairs(mdls) do
 	
-		for _,ent in pairs(ents.FindByModel(mdls[i])) do
+		if !PHX.OBB_DATA[model] then PHX.OBB_DATA[model] = data; end
+	
+		for _,ent in ipairs( ents.FindByModel( model ) ) do
 		
-			if IsValid( ent ) and string.find(ent:GetClass(), "prop_physics") then
+			if IsValid(ent) and only[ent:GetClass()] then	
 				
-				local bounds = {
-					min 	= Vector(-1.3, -4.3, 0),
-					max 	= Vector(1.3, 4.3, 96),
-					--[[ dmin 	= Vector(-1.3, -4.3, 0),
-					dmax 	= Vector(1.3, 4.3, 32) ]]
-				}
-	
-				ent:SetNWBool("hasCustomHull", true)
-				ent.m_Hull 	= { bounds.min, bounds.max }
-				-- ent.m_dHull = { bounds.dmin, bounds.dmax }
-			
+				PHX:OBB_ModifyPropOBB( ent, data.mins, data.maxs )
+				
 			end
 		
 		end
@@ -39,4 +35,4 @@ local function FixTallModelHulls()
 	end
 end
 
-hook.Add("PostCleanupMap", "PHX.ph_hotel.config", FixTallModelHulls)
+hook.Add("PostCleanupMap", hookname, FixTallModelHulls)

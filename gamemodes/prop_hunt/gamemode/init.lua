@@ -88,13 +88,13 @@ local function ClearBlindedHuntersList()
 		ply.TimerBlindID = nil
 		if ply:GetBlindState() then ply:Blind(false) end
 		if ply:IsFrozen() then ply:UnLock() end
-		if !GAMEMODE:InRound() then ply.HasLoadout = false end
+		if !GAMEMODE:InRound() then ply.PHXHasLoadout = false end
 		timer.Simple(0.1, function()
 			-- a delay to prevent weapons spawn twice
-			if !(ply.HasLoadout) and GAMEMODE:InRound() and !GetGlobalBool("PHX.BlindStatus",false) and (ply._LoadOutUnblind) then 
+			if !(ply.PHXHasLoadout) and GAMEMODE:InRound() and !PHX:IsBlindStatus() and (ply._LoadOutUnblind) then 
 				PHX:VerboseMsg('[Loadout] Spawning late weapon loadouts (possibly player was respawned manually or during blind time)')
 				ply._LoadOutUnblind( ply )
-				ply.HasLoadout = true
+				ply.PHXHasLoadout = true
 			end
 		end)
     end
@@ -102,7 +102,7 @@ end
 
 local function ClearTimer()
 
-    SetGlobalBool("PHX.BlindStatus", false)
+    PHX:SetBlindStatus(false)
 
 	if timer.Exists("tmr_handleUnblindHook") then timer.Remove("tmr_handleUnblindHook") end
     if timer.Exists("phx.tmr_GiveGrenade") then timer.Remove("phx.tmr_GiveGrenade") end
@@ -399,53 +399,113 @@ end)
 
 -- function to respawn players during blind mode.
 -- this is usually noticed when the player is falling, changing team, or etc.
-local function AutoRespawnCheck(ply)
-
+local function AutoRespawnCheck( ply, bWasDeadOrSuicide )
 	-- Require at least 3 players.
-	if PHX:GetCVar( "ph_allow_respawnonblind" ) and player.GetCount() > 2 and (ply:Team() == TEAM_PROPS or ply:Team() == TEAM_HUNTERS) then
-	
-		if CurTime() < phx_blind_unlocktime then
-			timer.Simple(math.random(0.5,1), function() if 
-				IsValid(ply) then
-					local tim = PHX:GetCVar( "ph_allow_respawnonblind_team_only" )
-					if tim > 0 and ply:Team() == tim then
-						ply:Spawn()
-						ControlTauntWindow(0)
-						ply:PHXChatInfo( "NOTICE", "BLIND_RESPAWN_TEAM", PHX:TranslateName( tim, ply ), math.Round(phx_blind_unlocktime - CurTime()) )
-					elseif tim == 0 then
-						ply:Spawn()
-						ControlTauntWindow(0)
-						ply:PHXChatInfo( "NOTICE", "BLIND_RESPAWN", math.Round(phx_blind_unlocktime - CurTime()) )
-					end
-				end 
-			end)
+	if player.GetCount() > 2 and (ply:Team() == TEAM_PROPS or ply:Team() == TEAM_HUNTERS) then
+
+		local SpecChange = PHX:GetCVar("ph_allow_respawn_from_spectator")
+		local TeamChange = PHX:GetCVar("ph_allow_respawnonblind_teamchange")
+		local tim 		 = math.Clamp( PHX:GetCVar("ph_allow_respawnonblind_team_only"), 0, TEAM_PROPS )
+
+		if CurTime() < phx_blind_unlocktime then --Remaining blindfold percentage time
+			local dospawn=false
+			if bWasDeadOrSuicide then
+				if (ply._Team2TeamDisabledSuicide) and !ply._joinCameFrom then
+					ply._Team2TeamDisabledSuicide = nil
+				elseif !ply._joinCameFrom then
+					dospawn=true;
+				end
+			end
+			if SpecChange and (ply._joinCameFrom) and ply._joinCameFrom == TEAM_SPECTATOR then dospawn=true; end
+			if TeamChange then
+				if (ply._joinCameFrom) and ply._joinCameFrom == TEAM_HUNTERS and ply:Team() == TEAM_PROPS then
+					dospawn = true
+				elseif (ply._joinCameFrom) and ply._joinCameFrom == TEAM_PROPS and ply:Team() == TEAM_HUNTERS then
+					dospawn = true
+				end
+			end
+
+			if dospawn and (tim == ply:Team() or tim == 0) then
+				if ply.PHXHasLoadout then ply.PHXHasLoadout = false end
+				if ply:Alive() then ply:KillSilent() end
+				ply._joinCameFrom = nil
+				ply._Team2TeamDisabledSuicide = nil
+				ply:Spawn() --ply._joinCameFrom will also nile from PlayerSpawn hook, just double checking though
+				ControlTauntWindow(0)
+				if tim > 0 then
+					ply:PHXChatInfo( "NOTICE", "BLIND_RESPAWN_TEAM", PHX:TranslateName( tim, ply ), math.Round(phx_blind_unlocktime - CurTime()) )
+				else
+					ply:PHXChatInfo( "NOTICE", "BLIND_RESPAWN", math.Round(phx_blind_unlocktime - CurTime()) )
+				end
+
+				return
+			end
 		end
-	
+
 	end
+
+	ply._joinCameFrom = nil
+	ply._Team2TeamDisabledSuicide = nil
 	
-	-- Force Close the Taunt Menu whenever the player is dead.
+end
+hook.Add("PostPlayerDeath", "autoPlayerRepsawnDuringDeath", function(ply)
+	-- Force Close the Taunt Menu whenever a player is dead.
 	if ply:Team() == TEAM_PROPS or ply:Team() == TEAM_HUNTERS then
 		net.Start( "PH_ForceCloseTauntWindow" )
 		net.Send(ply)
 	end
-	
-end
-hook.Add("PostPlayerDeath", "autoPlayerRepsawnDuringDeath", AutoRespawnCheck)
 
-function GM:PlayerChangedTeam(ply, old, new)
-	if PHX:GetCVar( "ph_allow_respawn_from_spectator" ) and (old == TEAM_SPECTATOR && (new == TEAM_HUNTERS or new == TEAM_PROPS)) then
-		timer.Simple(math.random(0.5,1), function()
-			if IsValid(ply) then AutoRespawnCheck( ply ) end
-		end)
+	if !PHX:GetCVar( "ph_allow_respawnonblind" ) then return end
+	if !GAMEMODE:InRound() then return end
+
+	local time = 0.45
+	timer.Simple(time, function()
+		if IsValid(ply) and GAMEMODE:InRound() then AutoRespawnCheck(ply, true) end
+	end)
+
+end)
+
+hook.Add("PlayerChangedTeam", "changeteam", function(ply, old, new)
+
+	local AllowRespawn = PHX:GetCVar( "ph_allow_respawnonblind" )
+	local FromSpectator = PHX:GetCVar( "ph_allow_respawn_from_spectator" )
+	local FromTeamToTeam = PHX:GetCVar( "ph_allow_respawnonblind_teamchange" )
+
+	if !AllowRespawn then return end
+	if !GAMEMODE:InRound() then return end
+
+	local time = 0.5
+	if FromSpectator then
+		if (old == TEAM_SPECTATOR and new == TEAM_HUNTERS) or (old == TEAM_SPECTATOR and new == TEAM_PROPS) then
+			ply._joinCameFrom = TEAM_SPECTATOR
+			timer.Simple(time, function()
+				if IsValid(ply) and GAMEMODE:InRound() then AutoRespawnCheck(ply) end
+			end)
+		end
 	end
-	
-	-- not recommended if this enabled. See: "help ph_allow_respawnonblind_teamchange" in the console for more information.
-	if PHX:GetCVar( "ph_allow_respawnonblind_teamchange" ) and ( (old == TEAM_HUNTERS and new == TEAM_PROPS) or (old == TEAM_PROPS and new == TEAM_HUNTERS) ) then
-		timer.Simple(math.random(0.5,1), function()
-			if IsValid(ply) then AutoRespawnCheck( ply ) end
-		end)
+
+	if FromTeamToTeam then
+		if old == TEAM_HUNTERS and new == TEAM_PROPS then
+			ply._joinCameFrom = TEAM_HUNTERS
+			timer.Simple(time, function()
+				if IsValid(ply) and GAMEMODE:InRound() then AutoRespawnCheck(ply) end
+			end)
+		elseif old == TEAM_PROPS and new == TEAM_HUNTERS then
+			ply._joinCameFrom = TEAM_PROPS
+			timer.Simple(time, function()
+				if IsValid(ply) and GAMEMODE:InRound() then AutoRespawnCheck(ply) end
+			end)
+		end
+
+		ply._Team2TeamDisabledSuicide = nil
+		return
 	end
-end
+
+	ply._Team2TeamDisabledSuicide = true
+
+end)
+
+
 
 hook.Add("OnPlayerChangedTeam", "TeamChange_switchLimitter", function(ply, old, new)
 	local MAX_TEAMCHANGE_LIMIT = PHX:GetCVar( "ph_max_teamchange_limit" )
@@ -461,8 +521,8 @@ hook.Add("OnPlayerChangedTeam", "TeamChange_switchLimitter", function(ply, old, 
 			ply.ChangeLimit = MAX_TEAMCHANGE_LIMIT
 			timer.Simple(0.3, function()
 				if old ~= TEAM_SPECTATOR then
+					if (ply.PHXHasLoadout) then ply.PHXHasLoadout = false end
 					ply:SetTeam(old)
-					--ply:PHXChatInfo("ERROR", "CHAT_SWAPTEAM_REVERT", team.GetName(new))
 					ply:PHXChatInfo("ERROR", "CHAT_SWAPTEAM_REVERT", PHX:TranslateName(new,ply))
 					PHX:VerboseMsg("[Team] Reverting "..ply:Nick().."\'s team to "..team.GetName(old))
 				end
@@ -471,14 +531,15 @@ hook.Add("OnPlayerChangedTeam", "TeamChange_switchLimitter", function(ply, old, 
 	end
 end)
 
-hook.Add("PostCleanupMap", "PH_ResetStats", function()
+--hook.Add("PostCleanupMap", "PH_ResetStats", function()
+local function ResetOnRoundRestart()
 	-- Force close any taunt menu windows
 	ControlTauntWindow(0)
 	PHX.VOICE_IS_END_ROUND = 0
 	
 	-- Called every round restart: make sure this was set publicly and make it synced accross clients.
 	SetGlobalInt("unBlind_Time", math.Clamp(PHX:GetCVar( "ph_hunter_blindlock_time" ) - (CurTime() - GetGlobalFloat("RoundStartTime", 0)), 0, PHX:GetCVar( "ph_hunter_blindlock_time" )) )
-    SetGlobalBool("PHX.BlindStatus", true)
+    PHX:SetBlindStatus(true)
 	
 	local cvarPercent	= PHX:GetCVar( "ph_blindtime_respawn_percent" )
 	local blindTime		= GetGlobalInt("unBlind_Time", 0)
@@ -487,12 +548,12 @@ hook.Add("PostCleanupMap", "PH_ResetStats", function()
 	
     -- Call a hook/set global state that Blind Time is over.
 	timer.Create("tmr_handleUnblindHook", blindTime, 1, function()
-        SetGlobalBool("PHX.BlindStatus", false)
+        PHX:SetBlindStatus(false)
 		hook.Call("PH_BlindTimeOver", nil)
 		ClearBlindedHuntersList()
 	end)
-    
-end)
+end
+--end)
 
 -- Check if HLA Playermodels exists.
 if (PHX:GetCVar( "ph_add_hla_combine" )) then
@@ -542,130 +603,179 @@ function GM:PlayerExchangeProp(pl, ent)
 	if !self:InRound() then return; end
 	if !IsValid(pl) then return; end
 	if !IsValid(ent) then return; end
+	
+	local PlayerProp = pl.ph_prop
+	if !IsValid( PlayerProp ) then return; end
 
-	if pl:Team() == TEAM_PROPS && PHX:IsUsablePropEntity(ent:GetClass()) && ent:GetModel() then
-		if PHX:GetCVar( "ph_banned_models" ) and table.HasValue(PHX.BANNED_PROP_MODELS, ent:GetModel()) then
+	local PropModel = ent:GetModel()
+	local PropClass = ent:GetClass()
+	
+	if pl:Team() == TEAM_PROPS && PHX:IsUsablePropEntity( PropClass ) and PropModel then
+		
+		-- Prop Launcher: Don't allow if Prop is a Trash (Residue of PROP Launcher item/LPS)
+		if (ent._PropTrash) then return end
+		
+		local PropSkin  = ent:GetSkin()
+		local PropPhys  = ent:GetPhysicsObject()
+		
+		local prModel	= PlayerProp:GetModel()
+		local prSkin	= PlayerProp:GetSkin()
+		
+		local cvBannedModels = PHX:GetCVar( "ph_banned_models" )
+		local cvPropMustStand= PHX:GetCVar( "ph_prop_must_standing" )
+		local cvOBBModded	 = PHX:GetCVar( "ph_sv_enable_obb_modifier" )
+		--local cvIsUsableType = PHX:GetCVar( "ph_usable_prop_type" )
+		local OffsetMult	 = PHX:GetCVar( "ph_prop_viewoffset_mult" )
+		
+		if cvBannedModels and table.HasValue( PHX.BANNED_PROP_MODELS, PropModel ) then
 			pl:PHXChatInfo("ERROR", "PHX_PROP_IS_BANNED")
-		elseif IsValid(ent:GetPhysicsObject()) && (pl.ph_prop:GetModel() != ent:GetModel() || pl.ph_prop:GetSkin() != ent:GetSkin()) then
-        
-            -- Disallow props that has maximum bounding box's less than 1 units.
-            if math.Max(ent:OBBMaxs().x, ent:OBBMaxs().y) <= 1 then
+			return
+		end
+			
+		if IsValid( PropPhys ) and (prModel ~= PropModel or prSkin ~= PropSkin) then
+			
+			local MINS,MAXS = ent:OBBMins(),ent:OBBMaxs()
+			local XYMAX 	= math.Max( MAXS.x, MAXS.y )
+			
+			-- Disallow props that has maximum bounding box's less than 1 units.
+            if XYMAX <= 1 then
                 pl:PHXChatInfo("ERROR", "PHX_PROP_TOO_THIN")
                 return
             end
 			
-			-- Restriction to enable/disable prop crouch/isonground.
-			if PHX:GetCVar( "ph_prop_must_standing" ) and ( pl:Crouching() or (not pl:IsOnGround()) ) then
-				return
-			end
+			local ISCROUCH = pl:Crouching()
+			local ISGROUND = pl:IsOnGround()
+			
+			-- Prop Must Standing?
+			if cvPropMustStand and ( ISCROUCH or (not ISGROUND) ) then return; end
         
-			local ent_health = math.Clamp(ent:GetPhysicsObject():GetVolume() / 250, 1, 200)
-			local new_health = math.Clamp((pl.ph_prop.health / pl.ph_prop.max_health) * ent_health, 1, 200)
-			pl.ph_prop.health = new_health
+			local max_health = 200
+			local ent_health = math.Clamp( PropPhys:GetVolume() / 250, 1, max_health )
+			local new_health = math.Clamp( (PlayerProp.health / PlayerProp.max_health) * ent_health, 1, max_health )
+			local PropHasCHull = ent:GetNWBool("hasCustomHull",false)
+			local PlyPos	= pl:GetPos()
+			local PlyAng	= pl:EyeAngles() --pl:GetAngles()
+			local StartPos	= PlyPos - Vector(0, 0, MINS.z)
+			local SOLID  	= SOLID_VPHYSICS
+			local PITCHROT	= true
+			local prColor   = color_white
+			if ent:GetClass() == "ph_luckyball" then prColor = ent:GetColor(); end -- Get Color from 'ph_luckyball', if UsablePropType == 3
 			
-			pl.ph_prop.max_health = ent_health
-			pl.ph_prop:SetModel(ent:GetModel())
-			pl.ph_prop:SetSkin(ent:GetSkin())
-			pl.ph_prop:SetSolid(SOLID_VPHYSICS)
-			pl.ph_prop:SetPos(pl:GetPos() - Vector(0, 0, ent:OBBMins().z))
-			pl.ph_prop:SetAngles(pl:GetAngles())
+			-- default values
+			local VEC_VIEW = 72
+			local VMIN,VMAX = vector_origin,vector_origin
+			local VHXYMINS = XYMAX*-1
+			local VHXYMAXS = XYMAX
+			local VHZ = VEC_VIEW
+			-- end of default values
 			
-			-- Special Prop Entity: ph_luckyball (if Prop Type == 3)
-			if ent:GetClass() == "ph_luckyball" then
-				pl.ph_prop:SetColor(ent:GetColor())
-			else
-				pl.ph_prop:SetColor(color_white)
-			end
-			
-			pl:SetHealth(new_health)            
-            -- Free the rotation: This will prevent rare bug for Yaw-only rotation and bug for Pitch rotation.
-            pl:SetPlayerLockedRot( false )
-            pl:SendRotState( 0 )
-            pl:PrintCenter( "HUD_ROTFREE", Color(32,200,72) )
-            pl:EnablePropPitchRot( true )
-			
-			local OffsetMult = PHX:GetCVar( "ph_prop_viewoffset_mult" )
-			
-			if PHX:GetCVar( "ph_sv_enable_obb_modifier" ) && ent:GetNWBool("hasCustomHull",false) then
+			if cvOBBModded and PropHasCHull then
 				local hmin	= ent.m_Hull[1]
-				local hmax 	= ent.m_Hull[2] * OffsetMult
+				local hmax 	= ent.m_Hull[2]
+				local hz = hmax.z * OffsetMult
 				
-				if hmax.z < self.ViewCam.cHullzMins then
-                    pl:PHAdjustView( self.ViewCam.cHullzMins, self.ViewCam.cHullzMins )
-				elseif hmax.z > self.ViewCam.cHullzMaxs then
-                    pl:PHAdjustView( self.ViewCam.cHullzMaxs, self.ViewCam.cHullzMaxs )
-				else
-                    pl:PHAdjustView( hmax.z )
+				local viewz = hz				
+				if hz < self.ViewCam.cHullzMins then
+                    viewz = self.ViewCam.cHullzMins
+				elseif hz > self.ViewCam.cHullzMaxs then
+                    viewz = self.ViewCam.cHullzMaxs
 				end
+				
+				local xymax = math.Round( math.Max(hmax.x,hmax.y) )
+				hmin = Vector(xymax*-1, xymax*-1, 0) --Z should never below 0.
+				hmax = Vector(xymax, xymax, hmax.z)
                 
-                pl:SetHull(hmin,hmax)
-				pl:SetHullDuck(hmin,hmax)
-                local xymax = math.Round(math.Max(hmax.x,hmax.y))
-                pl:PHSendHullInfo( xymax*-1, xymax, hmax.z, new_health )
+				VEC_VIEW = viewz
+                VMIN = hmin; VMAX = hmax;
+                VHXYMINS = xymax*-1
+				VHXYMAXS = xymax
+				VHZ 	 = hmax.z
 			else
-                local hullxymax = math.Round(math.Max(ent:OBBMaxs().x, ent:OBBMaxs().y))
+                local hullxymax = math.Round( XYMAX )
 				local hullxymin = hullxymax * -1
-				local hullz     = math.Round(ent:OBBMaxs().z-ent:OBBMins().z) * OffsetMult
+				local hullz     = math.Round( MAXS.z-MINS.z )
+				local viewz 	= hullz * OffsetMult
                 
-                if ent:GetClass() == "prop_ragdoll" then -- Optional (but Better): Add 'PHX:GetCVar( "ph_usable_prop_type" ) >= 3' for extra checks.
-                    -- We'll use GetModelBounds() instead of using CollisionBounds or OBBMins/Maxs.
-                    -- Reason because is that ragdoll's Coll/OBBs bounds values are always changing when they move.
+                if ent:GetClass() == "prop_ragdoll" then -- and cvIsUsableType >= 3 then...
                     local mins,maxs = ent:GetModelBounds()
-                    
                     hullxymax   = math.Round( math.Max( maxs.x, maxs.y) )
                     hullxymin   = hullxymax * -1
-                    hullz       = math.Round(maxs.z-mins.z) * OffsetMult
-                    
-                    -- Override health back to 100 and set their solid back to BBOX.
-                    pl.ph_prop:SetSolid(SOLID_BBOX)
-                    pl:SetHealth(100)
-                    pl.ph_prop.health 		= 100
-                    pl.ph_prop.max_health 	= 100
-                    
-                    pl:EnablePropPitchRot( false ) --Do not use Pitch Rotation when prop_ragdoll being used.
-                    -- Bug Explanation: Bullet can still goes through if using SOLID_BBOX.
-                    -- Using SOLID_OBB **DOES NOT** Helps: This will produce ANOTHER bug that
-                    -- hunters are completely stucked when the prop is rotated. This appear to be engine's bug.
+                    hullz       = math.Round( maxs.z-mins.z )
+					viewz		= hullz * OffsetMult
+                    SOLID		= SOLID_BBOX
+                    new_health 	= 100
+                    max_health 	= 100
+                    -- TODO: Implement AABB on next update!
+                    PITCHROT 	= false --Do not use Pitch Rotation when prop_ragdoll being used.
                 end
             
 				if hullz < self.ViewCam.cHullzMins then
-					pl:PHAdjustView( self.ViewCam.cHullzMins, self.ViewCam.cHullzMins )
+					viewz = self.ViewCam.cHullzMins
 				elseif hullz > self.ViewCam.cHullzMaxs then                
-					pl:PHAdjustView( self.ViewCam.cHullzMaxs, self.ViewCam.cHullzMaxs )
-				else
-                    pl:PHAdjustView( hullz )
+					viewz = self.ViewCam.cHullzMaxs
 				end
-                
-				pl:SetHull(Vector(hullxymin, hullxymin, 0), Vector(hullxymax, hullxymax, hullz))
-				pl:SetHullDuck(Vector(hullxymin, hullxymin, 0), Vector(hullxymax, hullxymax, hullz))
-                pl:PHSendHullInfo( hullxymin, hullxymax, hullz, new_health )
-
+				
+				VEC_VIEW = viewz
+                VMIN = Vector( hullxymin, hullxymin, 0 ); VMAX = Vector( hullxymax, hullxymax, hullz );
+                VHXYMINS = hullxymin
+				VHXYMAXS = hullxymax
+				VHZ 	 = hullz
 			end
+			
+			-- Start Applying
+			PlayerProp.health 		= new_health
+			PlayerProp.max_health   = ent_health
+			--PlayerProp:SetHealth( new_health )
+			--PlayerProp:SetMaxHealth( max_health )
+			PlayerProp:SetModel( PropModel )
+			PlayerProp:SetSkin( PropSkin )
+			PlayerProp:SetSolid( SOLID )
+			PlayerProp:SetPos( StartPos )
+			PlayerProp:SetAngles( PlyAng )
+			PlayerProp:SetColor( prColor )
+			pl:SetHealth( new_health )            
+            pl:SetPlayerLockedRot( false ) -- Free the rotation: Prevent rare bug for Yaw-only rotation and bug for Pitch rotation.
+            pl:SendRotState( 0 )
+            pl:PrintCenter("HUD_ROTFREE", PHX_COL_ROTFREE)
+            pl:EnablePropPitchRot( PITCHROT )
+			
+			pl:PHAdjustView( VEC_VIEW )
+			pl:SetHull( VMIN, VMAX )
+			pl:SetHullDuck( VMIN, VMAX )
+            pl:PHSendHullInfo( VHXYMINS, VHXYMAXS, VHZ, new_health )
+			
+			hook.Call("PH_OnChangeProp", nil, pl, ent)
+			
 		end
-		
-		hook.Call("PH_OnChangeProp", nil, pl, ent)
+
 	end
 	
 end
 
--- Called when a player tries to use an object. By default this pressed ['E'] button. MouseClick 1 will be mentioned below at line @351
+-- Called when a player tries to use an object. By default this pressed ['E'] button. MouseClick 1 will be mentioned below.
+local IsSpectators={[TEAM_SPECTATOR]=true,[TEAM_UNASSIGNED]=true}
 function GM:PlayerUse(pl, ent)
-	if !pl:Alive() || pl:Team() == TEAM_SPECTATOR || pl:Team() == TEAM_UNASSIGNED then return false; end
 	
-	-- Prevent Execution Spam by holding ['E'] button too long.
-	if pl:Team() == TEAM_PROPS && pl:GetVar("UseTime",0) <= CurTime() then
+	if not pl:Alive() or IsSpectators[pl:Team()] then return false; end
+	
+	if pl:Team() == TEAM_PROPS and pl:GetVar("UseTime",0) <= CurTime() then
 		
-		local hmx,hmy,hz = ent:GetPropSize()
         local proptype = PHX:GetCVar( "ph_usable_prop_type" )
-		if PHX:GetCVar( "ph_check_for_rooms" ) && !pl:CheckHull(hmx, hmy, hz) then
-            if (proptype <= 2 && PHX:IsUsablePropEntity( ent:GetClass() )) then
+		local checkroom = PHX:GetCVar( "ph_check_for_rooms" )
+		local notice = PHX:QCVar( "ph_usable_prop_type_notice" )
+		local AllowPickupObj = PHX:GetCVar( "ph_allow_pickup_object" )
+		local PropClass = ent:GetClass()
+		local hmx,hmy,hz = ent:GetPropSize()
+		local IsUsableEnt = PHX:IsUsablePropEntity( PropClass )
+		local PreventDoorSpam = PHX.EXPLOITABLE_DOORS[PropClass]
+		
+		if checkroom and (not pl:CheckHull(hmx, hmy, hz)) then
+            if (proptype <= 2 and IsUsableEnt) then
                 pl:PHXChatInfo("WARNING", "CHAT_PROP_NO_ROOM")
             end
 		else
-			if ( proptype >= 3 && PHX.CVARUseAbleEnts[proptype][ent:GetClass()] ) then
-				if PHX:QCVar( "ph_usable_prop_type_notice" ) then
-					pl:PrintCenter( "NOTIFY_PROP_ENTTYPE" )
-				end
+			if ( proptype >= 3 and PHX.CVARUseAbleEnts[proptype][PropClass] ) then
+				if notice then pl:PrintCenter( "NOTIFY_PROP_ENTTYPE" ); end
 			else
 				self:PlayerExchangeProp(pl, ent)
 			end
@@ -676,31 +786,24 @@ function GM:PlayerUse(pl, ent)
 	end
 	
 	-- control who can pick up objects
-	if PHX:IsUsablePropEntity(ent:GetClass()) then
-		local state = PHX:GetCVar( "ph_allow_pickup_object" )
-	
-		if state <= 0 then
+	if IsUsableEnt then
+		if AllowPickupObj <= 0 then
 			return false
-		elseif (state == 1 or state == 2) then
-			if pl:Team() ~= state then return false end
+		elseif (AllowPickupObj == 1 or AllowPickupObj == 2) then
+			if pl:Team() ~= AllowPickupObj then return false end
 		end
 	end
 	
 	
 	-- Prevent the door exploit
-	if PHX.EXPLOITABLE_DOORS[ent:GetClass()] && pl:GetVar("LastDoorUseTime",0) + 1 > CurTime() then
-		return false
-	end
-    
+	if PreventDoorSpam and pl:GetVar("LastDoorUseTime",0) + 1 > CurTime() then return false; end
     pl:SetVar("LastDoorUseTime", CurTime())
     
     -- Sorry, but Props are not allowed to enter vehicle, this is due to new code fixes for ph_prop :(
     -- This is temporarily disabled and re-enabled again if there is a workaround
     -- https://github.com/Facepunch/garrysmod-issues/issues/1150
     -- https://github.com/Facepunch/garrysmod-issues/issues/2620
-    if pl:Team() == TEAM_PROPS and ent:IsVehicle() then
-        return false
-    end
+    if pl:Team() == TEAM_PROPS and ent:IsVehicle() then return false; end
 	
 	return true
 end
@@ -737,7 +840,7 @@ function GM:Initialize()
 end
 
 function GM:Think()
-	self.BaseClass:Think() --... required?
+	self.BaseClass:Think()
 	
 	for k,v in pairs( player.GetAll() ) do
 	
@@ -825,6 +928,8 @@ end )
 
 -- Called when the players spawns
 hook.Add("PlayerSpawn", "PH_PlayerSpawn", function(pl)
+	pl._joinCameFrom=nil
+	pl._Team2TeamDisabledSuicide=nil
     pl:SetPlayerLockedRot( false )
 	pl:SetNWBool("InFreezeCam", false)
 	pl:SetNWEntity("PlayerKilledByPlayerEntity", nil)
@@ -929,10 +1034,13 @@ concommand.Add("ph_force_end_round", ForceEndRound, nil, "Force End Active Round
 -- Called before start of round
 function GM:OnPreRoundStart(num)
     IS_ROUND_FORCED_END = false
+	local cvSwapTeam = PHX:GetCVar( "ph_swap_teams_every_round" )
 
-	game.CleanUpMap()
+	--https://github.com/Facepunch/garrysmod-issues/issues/5702
+	ResetOnRoundRestart()
+	game.CleanUpMap(false,nil,function()end) -- if this could crash a server when there is a fire entity: nil => { "env_fire", "entityflame", "_firesmoke" }
 	
-	if GetGlobalInt("RoundNumber") != 1 && (PHX:GetCVar( "ph_swap_teams_every_round" ) || ((team.GetScore(TEAM_PROPS) + team.GetScore(TEAM_HUNTERS)) > 0)) then
+	if GetGlobalInt("RoundNumber") != 1 && (cvSwapTeam || ((team.GetScore(TEAM_PROPS) + team.GetScore(TEAM_HUNTERS)) > 0)) then
 		for _, pl in pairs(player.GetAll()) do
 		
 			if pl:Team() == TEAM_PROPS || pl:Team() == TEAM_HUNTERS then
@@ -978,12 +1086,12 @@ function GM:OnPreRoundStart(num)
             end)
         end
 		
-		hook.Call("PH_OnPreRoundStart", nil, num, PHX:GetCVar( "ph_swap_teams_every_round" ))
 	end
 	
 	-- Balance teams. We need to set this "TRUE" to make sure the switched player isn't killed during team switch.
+	-- These both have :SetTeam option, making HasLoadout stays true, bellow will fixes it.
 	if PHX:GetCVar( "ph_enable_teambalance" ) then
-		if PHX:GetCVar( "ph_originalteambalance" ) then
+		if PHX:GetCVar( "ph_team_balance_classic" ) then
 			GAMEMODE:CheckTeamBalance( true )
 		else
 			GAMEMODE:CheckTeamBalanceCustom()
@@ -993,7 +1101,7 @@ function GM:OnPreRoundStart(num)
     -- Timer to give grenades, if ph_give_grenade_near_roundend is set.
     timer.Create( "phx.tmr_GiveGrenade", GAMEMODE.RoundLength - PHX:GetCVar( "ph_give_grenade_roundend_before_time" ), 1, function()
         if PHX:GetCVar( "ph_give_grenade_near_roundend" ) and GAMEMODE:InRound() then
-            for _,h in pairs(team.GetPlayers( TEAM_HUNTERS )) do
+            for _,h in ipairs(team.GetPlayers( TEAM_HUNTERS )) do
                 if h:Alive() and h:HasWeapon( "weapon_smg1" ) then
                     local numGrenade = PHX:GetCVar( "ph_smggrenadecounts" )
                     h:SetAmmo(numGrenade, "SMG1_Grenade")
@@ -1004,8 +1112,12 @@ function GM:OnPreRoundStart(num)
         end
     end)
 	
+	-- Clear All Hunter's HasLoadout
+	for _,h in ipairs(team.GetPlayers( TEAM_HUNTERS )) do h.PHXHasLoadout = false; end
 	UTIL_StripAllPlayers()
 	UTIL_SpawnAllPlayers()
+	
+	hook.Call("PH_OnPreRoundStart", nil, num, cvSwapTeam)
 end
 
 -- Called every server tick.
@@ -1239,7 +1351,7 @@ hook.Add("PlayerButtonDown", "PlayerButton_ControlTaunts", function(pl, key)
 			pl:ConCommand("ph_showtaunts")
 		end
 		
-		if (PHX:GetCVar( "ph_enable_unstuck" ) and key == unstuckKey) then
+		if (PHX:GetCVar( "ph_use_unstuck" ) and key == unstuckKey) then
 			GAMEMODE:UnstuckPlayer(pl)
 		end
 	
@@ -1251,11 +1363,11 @@ hook.Add("PlayerButtonDown", "PlayerButton_ControlTaunts", function(pl, key)
 				if pl:GetPlayerLockedRot() then
 					pl:SetPlayerLockedRot( false )
 					pl:SendRotState(0)
-					pl:PrintCenter( "HUD_ROTFREE", Color(32,200,72) )
+					pl:PrintCenter( "HUD_ROTFREE", PHX_COL_ROTFREE )
 				else
 					pl:SetPlayerLockedRot( true )
 					pl:SendRotState(1)
-					pl:PrintCenter( "HUD_ROTLOCK", Color(255,128,40) )
+					pl:PrintCenter( "HUD_ROTLOCK", PHX_COL_ROTLOCK )
 				end
 			end
 			

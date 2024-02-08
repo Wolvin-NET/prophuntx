@@ -1,23 +1,21 @@
 ## PRE-RELEASE
 
-## Revision 14.01.2024 (January 2024 Hotfix #2)-PRE-RELEASE
-Minor patch for issues caused by `ph_print_verbose` that sometimes not exists in client realm due to Gamemode's loading order and other enhancement, causing error when opening Prop Hunt Settings menu
-- Removed option `Verbose Print` in Prop Hunt Settings Menu;
-- Renamed `ph_print_verbose` to `phx_verbose` to prevent errors when player first time installing PH:X with previously PH: Enhanced was installed. **Realms are now separated (CLIENT and SERVER) and client must manually enter `phx_verbose 1` in their console.**
-- Make Verbose Message with Realm Colour, more Informational, Leveled and renamed `[PHX]` prefix with their call origin (example: Taunt Scanner will be `[TauntScanner]`)
-- Removed Verbose Message on Bonus Weapon (`wlv_bren`) when detecting weapon base
-- Removed test debug print messages
-- Edited Contributor Names (Turkish Translator & Recent Donator from 2023)
-- Updated FGD and removed `ph_fake_prop` entry
-- Added `ph_model_bans`, manually adds model bans from the map. Key ranging from `model1` to `model16`
-- Added `ph_decoy_spawner`, use this rather using `ph_fake_prop`!
-- Fixed Typo year revision on Update Description
-- Lucky Ball & Devil Crystals Improvement: Moved every item & instances into `gamemodes/sv_items.lua` and keep Entities Scripts clean
-- Added Devil Crystal Items: **PROP Launcher**
-- Added Hunter Weapon: **Flechette Gun** (Obtained via Lucky Ball)
-- Fixed when Updating Banned Prop Models where client can get empty ban data
-- Updated Integrity Checker
+## Revision ??.??.2024 February Beta
+This build is a patch from `game.CleanUpMap()` changes () and built some experimental
+- Experimental: Prop ViewOffset Changes with Mousewheel Zoom (NOTE: Currently broken for other things such as Prop Halo, Selection, Weapon Accuracy, etc)
+- Changed `game.CleanUpMap()` behaviour to avoid gamemode & addon/plugins scripts from breaking
+- Changed `PH_OnPreRoundStart` hook behaviour - DO NOT USE THIS TO DETECT ENTITIES, USE `PostMapCleanup` HOOK INSTEAD!
+- Fixed Hunter Blindtime not triggered after `game.CleanUpMap()` changes
+- Fixed Prop being `NULL` after `game.CleanUpMap()` changes
+- Todo: Change prop health behaviour by using `:SetHealth()` instead using from `.health` key
+- Todo: Change Team Selection
+- `HUDShouldDraw`->`CHudWeaponSelection` = `false` for Player Props. We don't use weapon as much except LPS weapon.
+- Todo: REMOVE ALL `GetGlobal*`, `FCVAR_REPLICATED` ConVars should be worked for now, _at least_.
+- Update to Map Props OBB Modifier Behaviour: updated Prop Room/Space Checking due to new OBB changes (see `/gamemodes/config/maps/ph_hotel.lua`)
+- Optimized `GM:ExchangeProp`, noticed slight performance improvement
+- More not mentioned
 
 ### Untested
-x: Test `phx_verbose` on SRCDS as `SERVER` and `CLIENT`
-x: Flechette Killicon
+- LPS Dummy Weapon selection with `HUDShouldDraw`->`CHudWeaponSelection` = `false`
+- Test Prop's ViewOffset
+- **Many things** needs to be tested

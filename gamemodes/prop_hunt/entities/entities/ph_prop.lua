@@ -35,6 +35,7 @@ function ENT:Initialize()
 		self:SetLagCompensated(true)
 		self:SetMoveType(MOVETYPE_NONE)
 		self:SetEntColorEnabled( true )
+		self:SetRenderMode(RENDERMODE_NORMAL)
 
 		self.health = 100
 	end
@@ -45,6 +46,23 @@ end
 if CLIENT then
 	function ENT:Draw()
 		self:DrawModel()
+		
+		--[[ local ply = self:GetOwner()
+		if IsValid(ply) and ply:Alive() and ply == LocalPlayer() then
+		
+			local CamZ = ply:GetViewOffset().z
+			local Maxs = self:OBBMaxs()
+			
+			if CamZ < Maxs.z then
+				self:SetRenderMode(RENDERMODE_TRANSCOLOR)
+				self:SetColor( ColorAlpha( color_white, 200 ) )
+			else
+				self:SetRenderMode(RENDERMODE_NORMAL)
+				self:SetColor( ColorAlpha( color_white, 255 ) )
+			end
+		
+		end ]]
+		
 	end
 end
 

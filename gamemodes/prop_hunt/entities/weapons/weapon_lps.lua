@@ -3,7 +3,7 @@
     A DIRTY HACK Dummy Weapon Script for Last Prop Standing's for Prediction & Resolving Entity:EmitSound() issues.
 ]]--
 
-SWEP.Category				= "Prop Hunt: X"
+SWEP.Category 				= "Prop Hunt: X2Z" -- Used for Weapon Manager Plugin
 SWEP.Author					= "Wolvindra-Vinzuerio"
 SWEP.Contact				= "wolvindra.vinzuerio@gmail.com"
 SWEP.Purpose				= "Yes."

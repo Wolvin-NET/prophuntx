@@ -1,7 +1,7 @@
-local LANG = {}
+local L = {}
 
 -- Russian Section
-LANG["ru"]   = {
+L["ru"]   = {
     -- Header Text Group
     ["LPS_GENERAL_SETTINGS"]    = "Общие настройки",
     ["LPS_APPEARANCES"]         = "Внешний вид",
@@ -69,4 +69,4 @@ LANG["ru"]   = {
     ["WEAPON_AMMO_UNLI"]        = "Бесконечно"
 }
 
-list.Set("PHX.LanguageInsertion", "[LastPropStanding] Russian", LANG)
+list.Set("PHX.LanguageInsertion", "[LastPropStanding] Russian", L)

@@ -6,8 +6,19 @@ if !Entity then return end
 function Entity:GetPropSize()
     local hullxymax=0
     local hullz=0
-    hullxymax     = math.Round(math.Max(self:OBBMaxs().x - self:OBBMins().x, self:OBBMaxs().y - self:OBBMins().y) / 2)
-    hullz         = math.Round(self:OBBMaxs().z - self:OBBMins().z)
+	
+	local MAXS=self:OBBMaxs()
+	local MINS=self:OBBMins()
+	
+	if self:GetNWBool( "hasCustomHull", false ) then
+		local mins = self:GetNWVector( "CustomHullMins" )
+		local maxs = self:GetNWVector( "CustomHullMaxs" )
+		hullxymax     = math.Round( math.Max(maxs.x - mins.x, maxs.y - mins.y) / 2)
+		hullz         = math.Round( maxs.z - mins.z )
+	else
+		hullxymax     = math.Round( math.Max(MAXS.x - MINS.x, MAXS.y - MINS.y) / 2)
+		hullz         = math.Round( MAXS.z - MINS.z )
+	end
 	
     -- don't do a hull check. It's kinda bugged and causing low framerate problems.
 	if self:GetClass() == "prop_ragdoll" then

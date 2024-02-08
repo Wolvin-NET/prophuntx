@@ -1,3 +1,6 @@
+PHX_COL_ROTFREE = Color( 32,200,72 )
+PHX_COL_ROTLOCK = Color(255,128,40 )
+
 PHX.DEFAULT_CATEGORY = "Prop Hunt X Classics"
 
 -- Permanently banned models.

@@ -334,14 +334,29 @@ hook.Add("PlayerButtonDown", "PHX.EnableThirdPerson", function(ply,btn)
     end
 end)
 
+local DistanceMult = 1
+hook.Add("StartCommand", "PHX.PropScrollView", function( ply,cmd )
+    --if (IsFirstTimePredicted()) then
+        if ply:Team() == TEAM_PROPS and ply:Alive() and cmd:GetMouseWheel() ~= 0 then 
+			
+			local delta = cmd:GetMouseWheel()
+			DistanceMult = math.Clamp( DistanceMult + delta, 2, 10 )
+			print( "scrolled ", delta, DistanceMult )
+			
+		end
+    --end
+end)
+
 -- Decides where  the player view should be (forces third person for props)
 local cameradist = 0
+local camMaxCollBounds=Vector(4,4,4)
+local camBlindFoldV = Vector(20000, 0, 0)
 function GM:CalcView(pl, origin, angles, fov)
-	local view = {} 
+	local view = {}
 	
 	if blind then
-		view.origin = Vector(20000, 0, 0)
-		view.angles = Angle(0, 0, 0)
+		view.origin = camBlindFoldV
+		view.angles = angle_zero
 		view.fov = fov
 		
 		return view
@@ -349,76 +364,84 @@ function GM:CalcView(pl, origin, angles, fov)
 	
  	view.origin = origin 
  	view.angles	= angles 
- 	view.fov = fov 
+ 	view.fov = fov
  	
  	-- Give the active weapon a go at changing the viewmodel position 
-	if pl:Team() == TEAM_PROPS && pl:Alive() then
-		if PHX:GetCVar( "ph_prop_camera_collisions" ) then
-			local trace = {}
-
-			local filterent = ents.FindByClass("ph_prop")
-			table.insert(filterent, pl)
-			trace = self.ViewCam:CamColEnabled( origin, angles, trace, "start", "endpos", -80, -80, -80, cHullz )
-			trace.filter = filterent
-            
-            trace.maxs = Vector(4,4,4)
+	if pl:Alive() then		
+		if pl:Team() == TEAM_PROPS then
+			local cvCamColEnabled	= PHX:GetCVar( "ph_prop_camera_collisions" )
 			
-            local prop = pl:GetPlayerPropEntity()
-            if IsValid(prop) then
-                local xymax = math.Round( math.Max(prop:OBBMaxs().x, prop:OBBMaxs().y) )
-				local z = prop:OBBMaxs().z
-                if (xymax >= 1 and xymax < 4) then
-                    trace.maxs = Vector(xymax,xymax,xymax)
-				elseif (z >= 1 and z < 4) then
-					trace.maxs = Vector(z,z,z)
-                end
-            end
-            
-            trace.mins = trace.maxs*-1
-			
-            local tr = util.TraceHull(trace)
-			view.origin = tr.HitPos
-		else
-			
-			self.ViewCam:CamColDisabled( origin, angles, view, "origin", -80, -80, -80, cHullz )
-
-		end
-	elseif pl:Team() == TEAM_HUNTERS && pl:Alive() then
-	 	local wep = pl:GetActiveWeapon() 
-	 	if wep && wep != NULL then
-	 		local func = wep.GetViewModelPosition 
-	 		if func then 
-	 			view.vm_origin, view.vm_angles = func(wep, origin*1, angles*1)
-	 		end
-	 		 
-	 		local func = wep.CalcView 
-	 		if func then 
-	 			view.origin, view.angles, view.fov = func(wep, pl, origin*1, angles*1, fov)
-	 		end 
-	 	end
-		
-        -- thirdperson camera
-        if PHX:GetCVar( "ph_enable_thirdperson" ) and tpOn then
-            local tp={}
-			if PHX:GetCVar( "ph_sv_thirdperson_desired" ) then
-				tp.f=GetConVar("ph_sv_thirdperson_ddist"):GetInt()
-				tp.r=GetConVar("ph_sv_thirdperson_dright"):GetInt()
-				tp.up=GetConVar("ph_sv_thirdperson_dup"):GetInt()
+			if cvCamColEnabled then
+				local trace = {}
+				local prop = pl:GetPlayerPropEntity()
+				local filterent = ents.FindByClass("ph_prop")
+				
+				table.insert(filterent, pl)
+				trace = self.ViewCam:CamColEnabled( origin, angles, trace, "start", "endpos", -80, -80, -80, cHullz, pl, DistanceMult )
+				trace.filter = filterent
+				
+				trace.maxs = camMaxCollBounds
+				
+				if IsValid(prop) then
+					local MAXS=prop:OBBMaxs()
+					local xymax = math.Round( math.Max(MAXS.x, MAXS.y) )
+					local z = MAXS.z
+					if (xymax >= 1 and xymax < 4) then
+						trace.maxs = Vector(xymax,xymax,xymax)
+					elseif (z >= 1 and z < 4) then
+						trace.maxs = Vector(z,z,z)
+					end
+				end
+				
+				trace.mins = trace.maxs*-1
+				
+				local tr = util.TraceHull(trace)
+				view.origin = tr.HitPos
 			else
-				tp.f=GetConVar("ph_tpcam_dist"):GetInt()
-				tp.r=GetConVar("ph_tpcam_right"):GetInt()
-				tp.up=GetConVar("ph_tpcam_up"):GetInt()
+				
+				self.ViewCam:CamColDisabled( origin, angles, view, "origin", -80, -80, -80, cHullz )
+
 			end
-            local tr = self.ViewCam:Hunter3pCollEnabled( pl:Crouching(), origin, angles, tp.f, tp.r, tp.up )
-            view.drawviewer = true
-            view.origin = tr.HitPos
-        end
-        
-		-- hunter glimpse of thirdperson
-		if !tpOn and CL_GLIMPCAM > CurTime() then
-            local tr = self.ViewCam:Hunter3pCollEnabled( pl:Crouching(), origin, angles, 80 )
-			view.drawviewer = true
-			view.origin = tr.HitPos
+		elseif pl:Team() == TEAM_HUNTERS then
+			local cvEnable3p = PHX:GetCVar( "ph_enable_thirdperson" )
+			local cvDesired3p = PHX:GetCVar( "ph_sv_thirdperson_desired" )
+			
+			local wep = pl:GetActiveWeapon() 
+			if wep and IsValid(wep) then
+				local func = wep.GetViewModelPosition 
+				if func then
+					view.vm_origin, view.vm_angles = func(wep, origin*1, angles*1)
+				end
+				 
+				local func = wep.CalcView 
+				if func then 
+					view.origin, view.angles, view.fov = func(wep, pl, origin*1, angles*1, fov)
+				end 
+			end
+			
+			-- thirdperson camera
+			if cvEnable3p and tpOn then
+				local tp={}
+				if cvDesired3p then
+					tp.f=GetConVar("ph_sv_thirdperson_ddist"):GetInt()
+					tp.r=GetConVar("ph_sv_thirdperson_dright"):GetInt()
+					tp.up=GetConVar("ph_sv_thirdperson_dup"):GetInt()
+				else
+					tp.f=GetConVar("ph_tpcam_dist"):GetInt()
+					tp.r=GetConVar("ph_tpcam_right"):GetInt()
+					tp.up=GetConVar("ph_tpcam_up"):GetInt()
+				end
+				local tr = self.ViewCam:Hunter3pCollEnabled( pl:Crouching(), origin, angles, tp.f, tp.r, tp.up )
+				view.drawviewer = true
+				view.origin = tr.HitPos
+			end
+			
+			-- hunter glimpse of thirdperson
+			if !tpOn and CL_GLIMPCAM > CurTime() then
+				local tr = self.ViewCam:Hunter3pCollEnabled( pl:Crouching(), origin, angles, 80 )
+				view.drawviewer = true
+				view.origin = tr.HitPos
+			end
 		end
 	end
  	

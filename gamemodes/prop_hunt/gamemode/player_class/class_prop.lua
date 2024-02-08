@@ -36,14 +36,18 @@ function CLASS:OnSpawn(pl)
 	-- Prevent 'mod_studio: MOVETYPE_FOLLOW with No Models error.'
 	pl:DrawViewModel( false )
     
-    -- Create Prop Entity
-    pl:CreatePlayerPropEntity()
-	
 	-- Do not allow Pitch Rotation until the prop is changing to a new prop.
 	pl:EnablePropPitchRot( false )
-    
-    -- Set Color
-    pl:PHSetColor()
+	
+	-- Delay Prop Spawning due to new game.CleanUpMap changes
+	timer.Simple(0.1, function()
+		if IsValid(pl) and pl:Alive() then
+			-- Create Prop Entity & Set Color
+			pl:CreatePlayerPropEntity()
+			pl:PHSetColor()
+			pl.ph_prop.max_health = 100
+		end
+	end)
 	
 	-- Delay start the AutoTaunt stuff
 	timer.Simple(1, function()
@@ -53,7 +57,6 @@ function CLASS:OnSpawn(pl)
 		end
 	end)
 	
-	pl.ph_prop.max_health = 100
 end
 
 

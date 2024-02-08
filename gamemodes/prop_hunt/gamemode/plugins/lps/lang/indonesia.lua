@@ -1,7 +1,7 @@
-local LANG = {}
+local L = {}
 
 -- English Section
-LANG["id"]   = {
+L["id"]   = {
     -- Header Text Group
     ["LPS_GENERAL_SETTINGS"]    = "Peraturan Umum",
     ["LPS_APPEARANCES"]         = "Penampilan",
@@ -69,4 +69,4 @@ LANG["id"]   = {
     ["WEAPON_AMMO_UNLI"]        = "Tanpa Batas"
 }
 
-list.Set("PHX.LanguageInsertion", "[LastPropStanding] Indonesia", LANG)
+list.Set("PHX.LanguageInsertion", "[LastPropStanding] Indonesia", L)

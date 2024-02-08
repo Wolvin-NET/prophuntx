@@ -209,7 +209,7 @@ local function DoPlayerCheck(ply)
                         pl:SetLPSWeapon( PHX.LPS.WEAPON2.NAME )
                         pl:CreateLPSWeaponEntity( PHX.LPS.WEAPON2.DATA.WorldModel, PHX.LPS.WEAPON2.DATA.FixAngles, PHX.LPS.WEAPON2.DATA.FixPos )
                         pl:SetLastStanding( true )
-                        timer.Simple(0, function() pl:Give( PHX.LPS.DUMMYWEAPON ) end) -- Give the dummy weapon. We'll give it on the next frame.
+                        timer.Simple(0, function() pl:Give( PHX.LPS.DUMMYWEAPON ) pl:SelectWeapon(PHX.LPS.DUMMYWEAPON) end) -- Give the dummy weapon. We'll give it on the next frame.
                         pl:SetLPSWeaponState( LPS_WEAPON_READY )
                         
                         -- Health & Armor Options

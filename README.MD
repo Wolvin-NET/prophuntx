@@ -10,10 +10,11 @@ If you are normal user, DO NOT use this version. Use `master` branch instead!
 # Prop Hunt: X
 
 ### Versioning
-Version: Enhanced X2Z, Revision: ??/??/2022 (dd/mm/yyyy)
+Version: X2Z 2.0, Revision: ??/??/2022 (dd/mm/yyyy)
 
 ### Purpose:
 - Backup
+- Beta Need Testing
 
 ### Donate
 Please help support the project by donating:  

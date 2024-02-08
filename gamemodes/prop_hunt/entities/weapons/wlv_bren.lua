@@ -13,7 +13,7 @@ Supported Weapon Base:
 ]]--
 
 -- Basic information
-SWEP.Category				= "Prop Hunt: X"
+SWEP.Category 				= "Prop Hunt: X2Z" -- Used for Weapon Manager Plugin
 SWEP.Author					= "Wolvindra-Vinzuerio"
 SWEP.Contact				= "wolvindra.vinzuerio@gmail.com"
 SWEP.Purpose				= "Just aim and shot at those innocent props lol."

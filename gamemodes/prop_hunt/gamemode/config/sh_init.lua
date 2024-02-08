@@ -12,10 +12,10 @@ if SERVER then
 		pc:Spawn()
 	end
 	
-	local map	= game.GetMap()
+	local map = game.GetMap()
 	if file.Exists(engine.ActiveGamemode() .. "/gamemode/config/maps/"..map..".lua", "LUA") then
-		PHX:VerboseMsg("[Map Config] Adding map config: " .. map)
 		include("maps/"..map..".lua")
+		PHX:VerboseMsg("[Map Config] Config map '"..map.."' has been successfully loaded.")
 	end
 	
 	include("server/sv_devilball_additions.lua")

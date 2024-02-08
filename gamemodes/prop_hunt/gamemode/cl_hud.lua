@@ -92,9 +92,16 @@ local function TranslateMe(text, ...)
 end
 
 -- Hook sections
+local HUDUseNew = GetConVar( "ph_hud_use_new" )
+local HideWeaponSlot={["CHudWeaponSelection"]=true}
 hook.Add("HUDShouldDraw", "PHX.ShouldHideHUD", function(hudname)
 	-- make sure matw is already installed, otherwise don't use new HUD.
-	if PHX:GetCLCVar( "ph_hud_use_new" ) and (not matw:IsError()) then
+	local ply=LocalPlayer()
+	if IsValid(ply) and ply:Alive() and ply:Team() == TEAM_PROPS and HideWeaponSlot[hudname] then
+		return false
+	end
+	
+	if HUDUseNew:GetBool() and (not matw:IsError()) then
 		if (hide[hudname]) then return false end
 	end
 end)

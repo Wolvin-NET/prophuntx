@@ -21,7 +21,7 @@ hook.Add("PH_CustomTabMenu", "PHX.About", function(tab, pVgui, paintPanelFunc)
 	grid:SetRowHeight(32)
 	
 	local label = {
-		title 	= "Prop Hunt: XIIZ",
+		title 	= "Prop Hunt: X2Z",
 		author	= GAMEMODE.Author,
 		version = GAMEMODE._VERSION,
 		rev 	= GAMEMODE.REVISION,
@@ -29,7 +29,7 @@ hook.Add("PH_CustomTabMenu", "PHX.About", function(tab, pVgui, paintPanelFunc)
 		lgit	= "https://github.com/Wolvin-NET/prophuntx/",
 		lhome	= "https://gmodgameservers.com/prophuntx",
 		ldonate = GAMEMODE.DONATEURL,
-		lwiki	= "https://gmodgameservers.com/wiki/",
+		lwiki	= "https://github.com/Wolvin-NET/prophuntx/wiki/",
 		lklog	= "https://gmodgameservers.com/prophuntx/logs",
 		lplugins = "https://gmodgameservers.com/prophuntx/plugins"
 	}
@@ -63,10 +63,10 @@ hook.Add("PH_CustomTabMenu", "PHX.About", function(tab, pVgui, paintPanelFunc)
 		[6] = {"PHXM_ABOUT_BTN_WIKI",		function() gui.OpenURL(label.lwiki)     end}
 	},grid,"")
 	pVgui("","spacer",nil,grid,"" )
-	pVgui("","label","PHX.TopBarFont",grid, {"PHXM_ABOUT_THANKS", ""}) --label.credits
+	pVgui("","label","Trebuchet24",grid, {"PHXM_ABOUT_THANKS", ""}) --label.credits
     
     for _,names in pairs(GAMEMODE.PHXContributors) do
-        pVgui("","label","PHX.TopBarFont",grid, "- " .. names )
+        pVgui("","label","PHX.TopBarFont",grid, names )
     end
 	
 	local PanelModify = tab:AddSheet("", panel, "vgui/ph_iconmenu/m_info.png")

@@ -1,8 +1,21 @@
 AddCSLuaFile()
 
+sound.Add({
+	name = 			"wlv.guardgun_reload",
+	channel = 		CHAN_ITEM,
+	volume = 		1.0,
+	sound = 		"plats/train_use1.wav"
+})
+
 if (CLIENT) then
-	SWEP.WepSelectIcon = surface.GetTextureID("vgui/hud/weapon_fchet")
+	local gunmat = "vgui/hud/weapon_fchet"
+	SWEP.WepSelectIcon = surface.GetTextureID(gunmat)
+	if !killicon.Exists( "hunter_flechette" ) then
+		killicon.Add( "hunter_flechette", gunmat, Color(0,162,230,255) )
+	end
 end
+
+SWEP.Category 	= "Prop Hunt: X2Z" -- Used for Weapon Manager Plugin
 
 SWEP.PrintName 	= "#GMOD_FlechetteGun"
 SWEP.Author 	= "garry"
@@ -18,20 +31,19 @@ SWEP.WorldModel 	= Model( "models/weapons/w_physics.mdl" )
 SWEP.ViewModelFOV 	= 54
 SWEP.UseHands 		= true
 
-SWEP.Primary.ClipSize 		= 60
-SWEP.Primary.DefaultClip 	= 60
+SWEP.Primary.ClipSize 		= 30
+SWEP.Primary.DefaultClip 	= 30
 SWEP.Primary.Automatic 		= true
 SWEP.Primary.Ammo 			= "AlyxGun"
 
 SWEP.Secondary.ClipSize 	= 1
 SWEP.Secondary.DefaultClip 	= 2
 SWEP.Secondary.Automatic 	= false
-SWEP.Secondary.Ammo 		= "SMG1_Grenade"
+SWEP.Secondary.Ammo 		= "GaussEnergy"
 
 SWEP.DrawAmmo				= true
 SWEP.DrawCrosshair			= true
 SWEP.BounceWeaponIcon		= false
-
 SWEP.m_WeaponDeploySpeed	= 1.25
 
 -- game.AddParticles( "particles/hunter_flechette.pcf" )
@@ -46,10 +58,16 @@ function SWEP:Initialize()
 end
 
 function SWEP:Reload()
+	if ( self:Clip1() < self:GetMaxClip1() ) then
+		self.Weapon:EmitSound( Sound( "wlv.guardgun_reload" ) )
+	end
+	self:SetNextPrimaryFire( CurTime() + 3 )
+	self:SetNextSecondaryFire( CurTime() + 3 )
+	self:DefaultReload( ACT_VM_RELOAD )
 end
 
 function SWEP:CanBePickedUpByNPCs()
-	return true
+	return false
 end
 
 function SWEP:PrimaryAttack()
@@ -92,12 +110,12 @@ function SWEP:SecondaryAttack()
     if !IsValid(ply) then return end
 	
 	if ( !self:CanSecondaryAttack() ) then return end
-	
-	ply:ViewPunch( AngleRand(-7.5, 1.5) )
         
     if self:Ammo2() > 0 then
         
         self.Weapon:EmitSound( Sound( "Weapon_IRifle.Single" ) )
+		
+		ply:ViewPunch( AngleRand(-7.5, 1.5) )
         
         if SERVER then
 		
@@ -107,14 +125,12 @@ function SWEP:SecondaryAttack()
 
 				local ent = ents.Create( "hunter_flechette" )
 				if ( !IsValid( ent ) ) then return end
-
-				local owner = self:GetOwner()
 				
 				local ang=Angle(0,i,0)
 				
-				ent:SetPos( owner:GetPos()+AddZ )
+				ent:SetPos( ply:GetPos()+AddZ )
 				ent:SetAngles( ang )
-				ent:SetOwner( owner )
+				ent:SetOwner( ply )
 				ent:Spawn()
 				ent:Activate()
 
@@ -123,13 +139,13 @@ function SWEP:SecondaryAttack()
 			end
         end
         
-		self:GetOwner():SetVelocity( Angle(0,90,0):Forward() * 100 )
+		ply:SetVelocity( Angle(-90,0,0):Forward() * 255 )
 		self:DrawRing()
 
 		self.Weapon:SetNextPrimaryFire( CurTime() + 1 )
         self.Weapon:SetNextSecondaryFire( CurTime() + 2 )
         self.Weapon:SendWeaponAnim( ACT_VM_SECONDARYATTACK )
-        self.Owner:RemoveAmmo( 1, self.Weapon:GetSecondaryAmmoType() )
+        ply:RemoveAmmo( 1, self.Weapon:GetSecondaryAmmoType() )
         
     else
     
