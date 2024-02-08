@@ -27,17 +27,12 @@ function ENT:SetupDataTables()
     end
 end
 
+--[[ Obsolete, do not use!
 function ENT:KeyValue( key, value )
-	--[[ if key == "takemodelfrommap" then
-		self:SetApplyModelFromMap( math.Clamp(tonumber(value), 0, 2) )
-	else
-		self:SetNetworkKeyValue(key, value)
-	end ]]
-	
 	if ( self:SetNetworkKeyValue( key, value ) ) then
 		return
 	end
-end
+end ]]
 
 function ENT:Initialize()
 	if SERVER then
@@ -74,7 +69,7 @@ function ENT:Initialize()
 		
 	end
     
-    self.DefaultColor = util.ColorToVector( team.GetColor(TEAM_PROPS) )
+    self.DefaultColor = team.GetColor(TEAM_PROPS):ToVector()
 end
 
 if CLIENT then
@@ -84,7 +79,7 @@ if CLIENT then
 end
 
 ENT.GetPlayerColor = function( self )
-    local state = GetGlobalBool( "ph_enable_prop_player_color" , false )
+    local state = PHX:GetCVar( "ph_enable_prop_player_color" )
     if state then
         return self:GetfEntityColor()
     else
@@ -128,7 +123,7 @@ if SERVER then
 		local owner = self:GetOwner()
 
 		-- Health
-		if GAMEMODE:InRound() and attacker:IsPlayer() and attacker:Team() == TEAM_HUNTERS and dmg:GetDamage() > 0 then
+		if PHX:GameInRound() and attacker:IsPlayer() and attacker:Team() == TEAM_HUNTERS and dmg:GetDamage() > 0 then
 			self.health = self.health - dmg:GetDamage()
 			
 			if self.health <= 0 then
@@ -162,21 +157,5 @@ if SERVER then
 			end
 		end
 	end
-    
-    -- Remove this shitty props on Round End
-    hook.Add("PH_RoundEndResult", "PHX.DestroyDecoys", function(r,rt)
-        for _,v in pairs(player.GetAll()) do
-            if IsValid(v.propdecoy) then
-                v.propdecoy:SetOwner(NULL)
-                v.propdecoy = nil
-            end
-        end
-        
-        timer.Simple(0.1, function()
-            for _,decoys in pairs(ents.FindByClass("ph_fake_prop")) do
-                decoys:Remove()
-            end
-        end)
-    end)
 	
 end

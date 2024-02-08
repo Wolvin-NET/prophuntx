@@ -9,17 +9,10 @@ PHEPLUSCVAR["ph_unstuck_waittime"] 				= { CTYPE_NUMBER, 	"5", CVAR_SERVER_ONLY,
 PHEPLUSCVAR["ph_team_balance_classic"] 			= { CTYPE_BOOL, 	"1", CVAR_SERVER_ONLY, "Use default PH:X/E+ original auto-balancing (disables all following team-related options)", 
 function(cvarname, value)
 	cvars.AddChangeCallback( cvarname, function(cv, _, new)
-		
-		if SERVER then
-			if (not tobool(new)) then
-				for _,v in pairs(player.GetAll()) do
-					v:PHXChatInfo("NOTICE", "FORCE_JOIN_TEAM_IS_DISABLED")
-				end
-				RunConsoleCommand("ph_force_join_balanced_teams", "0")
-			end
+		if (SERVER) and not tobool(new) then
+			util.AllPlayers( function(v) v:PHXChatInfo("NOTICE", "FORCE_JOIN_TEAM_IS_DISABLED"); end)
+			RunConsoleCommand( "ph_force_join_balanced_teams", "0" )
 		end
-		
-		SetGlobalBool(cvarname, tobool(new))
 	end, "phx.cvbool_" .. cvarname)
 end }
 PHEPLUSCVAR["ph_rotateteams"] 					= { CTYPE_BOOL, 	"0", CVAR_SERVER_ONLY, "Disable shuffle mode and rotate players instead" }

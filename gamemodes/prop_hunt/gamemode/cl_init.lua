@@ -470,7 +470,7 @@ local function HUDPaint()
 	end
 	
 	-- Hunter Blindlock Time
-	if GetGlobalBool("InRound", false) then
+	if PHX:GameInRound() then
 	
 		local cX,cY = ScrW()*0.5,ScrH()*0.5
 	
@@ -507,7 +507,7 @@ local function HUDPaint()
 		end
 	end
 	
-	if (GetGlobalBool("InRound", false)) then
+	if PHX:GameInRound() then
 	
 		-- Draw Lucky Balls Icon
 		if PHX:GetCLCVar( "cl_enable_luckyballs_icon" ) && LocalPlayer():Team() == TEAM_HUNTERS then
@@ -669,7 +669,7 @@ end)
 local function drawPropSelectHalos()
 	local halocol = IndicatorColor.ok
 	
-	if PHX:GetCLCVar( "ph_cl_halos" ) and GetGlobalBool("InRound", false) then
+	if PHX:GetCLCVar( "ph_cl_halos" ) and PHX:GameInRound() then
 		-- Something to tell if the prop is selectable
 		if LocalPlayer():Team() == TEAM_PROPS && LocalPlayer():Alive() then
 		

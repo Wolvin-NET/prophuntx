@@ -147,7 +147,7 @@ end
 function Player:LPSShootBullets()
 
     if !IsValid(self) and self:Team() ~= TEAM_PROPS and !self:Alive() then return end
-    if !GetGlobalBool("InRound", false) then return end
+    if !PHX:GameInRound() then return end
     if !PHX:GetCVar( "lps_enable" ) then return end
     if !self:IsLastStanding() then return end
 	if self:IsLPSHolstered() then return end

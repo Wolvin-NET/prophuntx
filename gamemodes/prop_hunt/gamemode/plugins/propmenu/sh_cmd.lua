@@ -21,7 +21,7 @@ end
 local CATEGORY_NAME = PHX.TITLE
 local function PHX_PropMenu( calling_ply )
 	if PCR and PCR ~= nil then		  
-		if PHX:QCVar( "pcr_use_ulx_menu" ) then
+		if PHX:GetCVar( "pcr_use_ulx_menu" ) then
 			calling_ply:SendLua("PCR:OpenPropMenu()")
 		else
 		    local btn = calling_ply:GetInfoNum( "ph_prop_menu_key", 0 )

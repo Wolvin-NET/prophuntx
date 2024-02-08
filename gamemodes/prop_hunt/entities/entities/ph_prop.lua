@@ -40,7 +40,7 @@ function ENT:Initialize()
 		self.health = 100
 	end
     
-    self.DefaultColor = util.ColorToVector( team.GetColor(TEAM_PROPS) )
+    self.DefaultColor = team.GetColor(TEAM_PROPS):ToVector()
 end
 
 if CLIENT then
@@ -70,7 +70,7 @@ ENT.GetPlayerColor = function( self )
 
 	if self:GetEntColorEnabled() then
 
-		local state = GetGlobalBool( "ph_enable_prop_player_color" , false )
+		local state = PHX:GetCVar( "ph_enable_prop_player_color" )
 		if state then
 			return self:GetEntityColor()
 		else
@@ -88,7 +88,7 @@ end
 function ENT:CalcRotation( ply, pos, ang, bLock )
     local min       = self:OBBMins()
     local info      = ply:GetInfo("cl_playermodel")
-	local rotMode   = GetGlobalBool( "ph_exp_rot_pitch", false )
+	local rotMode   = PHX:GetCVar( "ph_exp_rot_pitch" )
     local TranslatedModel = player_manager.TranslatePlayerModel( info )
     
 	local z  
@@ -121,7 +121,7 @@ function ENT:Think()
         local ang = pl:EyeAngles()
         local lockstate = pl:GetPlayerLockedRot()
         
-		if GetGlobalBool( "ph_exp_rot_pitch", false ) and pl:HasPropPitchRotAllowed() then
+		if PHX:GetCVar( "ph_exp_rot_pitch" ) and pl:HasPropPitchRotAllowed() then
 			self:SetRotationAngle( Angle( ang.p, ang.y, 0 ) )
 		else
 			-- switch back to Classic "Yaw" rotation
@@ -153,7 +153,7 @@ if SERVER then
 		local inflictor = dmg:GetInflictor()
 
 		-- Health
-		if GAMEMODE:InRound() && IsValid(pl) && pl:Alive() && pl:IsPlayer() && attacker:IsPlayer() && pl:Team() ~= attacker:Team() && dmg:GetDamage() > 0 then
+		if PHX:GameInRound() && IsValid(pl) && pl:Alive() && pl:IsPlayer() && attacker:IsPlayer() && pl:Team() ~= attacker:Team() && dmg:GetDamage() > 0 then
             local allow = PHX:GetCVar( "ph_allow_armor" )
 			if allow and pl:Armor() >= 10 then
 				self.health = self.health - (math.Round( dmg:GetDamage()/2 ))

@@ -157,7 +157,7 @@ if SERVER then
 	--Add to PHX Taunt Table. Use "Initialize" instead.
 	local CompressedTaunt,CompressedTauntSize
 	hook.Add("Initialize", "PHX.InitScannedTauntData", function()
-		if PHX:QCVar( "ph_enable_taunt_scanner" ) then	-- Disabled = no operation will be done. You also need to restart map to enable this feature!
+		if PHX:GetCVar( "ph_enable_taunt_scanner" ) then	-- Disabled = no operation will be done. You also need to restart map to enable this feature!
 			-- Scan default taunts
 			PHX:TauntScanFolder( DefaultPath )
 			-- And then, add external taunts directories, if any.
@@ -180,14 +180,8 @@ if SERVER then
 		end		
 	end)
 	
-	hook.Add("PlayerInitialSpawn", "PHX.SetupScannedTauntData", function(ply)
-		--wait for client to request the data. They can't request anymore after they receive the data unless they have to reconnect.
-		--Keep this available even though taunt scanner is disabled.
-		ply.HasTauntScannedData = false
-	end)
-	
     local function SendTauntsInfo( ply )
-        if !PHX:QCVar( "ph_enable_taunt_scanner" ) then
+        if !PHX:GetCVar( "ph_enable_taunt_scanner" ) then
 			ply:PrintMessage(HUD_PRINTCONSOLE, "[PHX] Taunt Scanner is Disabled.")
 			return
 		end
@@ -201,28 +195,32 @@ if SERVER then
 				net.Send(ply)
 				ply.HasTauntScannedData = true
 			end)
-		else
-			ply:PrintMessage(HUD_PRINTCONSOLE, "[PHX] Request Rejected: You have requested Taunt Scanner data ONCE. To refresh, please reconnect to the server!")
+		--else
+			--ply:PrintMessage(HUD_PRINTCONSOLE, "[PHX] Request Rejected: You have requested Taunt Scanner data ONCE. To refresh, please reconnect to the server!")
 		end
 		-- you can't request anymore unless reconnect to get a refresh list!
     end
     
-	net.Receive( netReq, function( len, ply )
+	--[[ net.Receive( netReq, function( len, ply )
 		if ply:IsListenServerHost() then
             timer.Simple(2, function() SendTauntsInfo( ply ) end)
         else
-            -- send after next frame
+            -- send after next frame?
             timer.Simple(0, function() SendTauntsInfo( ply ) end)
         end
-	end )
+	end ) ]]
+
+	hook.Add("PHZ_PlayerInitUpdateData", "PHZ.SendTauntScannerInfo", function( ply )
+		SendTauntsInfo( ply )
+	end)
 end
 
 
 if CLIENT then
-	hook.Add( "InitPostEntity", "PHX.requestTauntScanner", function()
+	--[[ hook.Add( "InitPostEntity", "PHX.requestTauntScanner", function()
 		net.Start( netReq )
 		net.SendToServer()
-	end )
+	end ) ]]
 	
 	net.Receive(netRecv, function()
 		PHX:VerboseMsg("[TauntScanner] Received taunt scanner data, Processing...")
@@ -230,7 +228,7 @@ if CLIENT then
 		local taunts = net.ReadData(size)
 		local Conv = util.PHXQuickDecompress( taunts )
 		
-		if PHX and PHX.ManageTaunt ~= nil then
+		if (PHX) and (PHX.ManageTaunt) then
 			for cat, data in pairs(Conv) do
 				PHX:ManageTaunt(cat, data)
 			end

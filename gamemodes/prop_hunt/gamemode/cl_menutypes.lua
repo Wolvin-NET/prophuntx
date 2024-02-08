@@ -38,7 +38,7 @@ PHX.CLUI = {
 			if d == "SERVER" then
 				net.Start("SvCommandReq")
 				  net.WriteString(c)
-				  net.WriteString(tostring(v))	-- Changed to String because GetGlobalBool doesn't like actual type (0 = ignored).
+				  net.WriteString(tostring(v))
 				net.SendToServer()
 			elseif d == "CLIENT" then
 				RunConsoleCommand(c, tostring(v))
@@ -125,9 +125,9 @@ end,
 		local float = d.float
 		
 		if !d.init or d.init == nil then
-			dval = PHX:QCVar(c)	-- use from 'c' instead.
+			dval = PHX:GetCVar(c)	-- use from 'c' instead.
 		elseif isstring(dval) or d.init == "DEF_CONVAR" then
-			dval = PHX:QCVar(c)	-- any string, will revert to 'c' anyway.
+			dval = PHX:GetCVar(c)	-- any string, will revert to 'c' anyway.
 		else
 			dval = d.init -- assume it's correct number value. We keep this because there are still GetCVar() being used in cl_menu.lua
 		end

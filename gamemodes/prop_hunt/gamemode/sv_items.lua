@@ -222,40 +222,6 @@ function PHX.LUCKY_BALL:RandomiseText()
 	return self.ItemMessages[math.random(1, #self.ItemMessages)]
 end
 
---[[
-Base Lucky Balls Functions. 
-Please note that you might have to create a custom serverside lua with full of function list with list.Set into "LuckyBallsAddition".
-	Example:
-	
-	list.Set("LuckyBallsAddition", "UniqueName", function(pl,ball)
-		-- code...
-	end)
-	
-Keep in note that UniqueName should be unique and different. Otherwise will cause some confusion with PHX.VerboseMsg!
-]]
-function PHX.LUCKY_BALL:AddMoreLuckyEvents()
-	local t = list.Get("LuckyBallsAddition")
-	if !table.IsEmpty(t) then
-		for name,tab in pairs(t) do
-			PHX.VerboseMsg("[PHX: Lucky Ball] Adding new events : "..name)
-			table.insert(self.Items, tab)
-		end
-	else
-		PHX.VerboseMsg("[PHX: Lucky Ball] There is no additional events detected, skipping...")
-	end
-end
-
-PHX.LUCKY_BALL:AddMoreLuckyEvents()
-
-hook.Add("PH_RoundEnd", "PHX.DestroyLuckys", function()
-	timer.Simple(0.1, function()
-		for _,lb in ipairs(ents.FindByClass("ph_luckyball")) do
-			lb:ShowEffects(lb, "cball_explode", lb:GetPos(), lb:GetPos())
-			lb:Remove()
-		end
-	end)
-end)
-
 
 --------------[[ DEVIL BALL ]]--------------
 
@@ -552,33 +518,54 @@ function PHX.DEVIL_BALL:ResetPlayerStuff(pl)
 end
 
 --[[
-Base Devil Balls Functions. 
-Please note that you might have to create a custom serverside lua with full of function list with list.Set into "DevilBallsAddition".
-	Example:
-	
-	list.Set("DevilBallsAddition", "UniqueName", function(pl,ball)
+	### External Item Events
+	Usage Example #1: Lucky Balls
+	list.Set("LuckyBallsAddition", "UniqueName", function(ply, LuckyBallEntity)
+		-- code...
+	end)
+
+	Usage Example #2: Devil Crystal
+	list.Set("DevilBallsAddition", "UniqueName", function(ply, CrystalEntity)
 		-- code...
 	end)
 	
-Keep in note that UniqueName should be unique and different. Otherwise will cause some confusion with PHX.VerboseMsg!
+	!! Keep UniqueName should be unique as possible to prevent overrides!
 ]]
-function PHX.DEVIL_BALL:AddMoreLuckyEvents()
+
+function PHX:AddExtItemsEvents()
+	-- Lucky Balls
 	local t = list.Get("DevilBallsAddition")
 	if !table.IsEmpty(t) then
 		for name,tab in pairs(t) do
-			PHX.VerboseMsg("[PHX: Devil Crystal] Adding new events: "..name)
-			table.insert(self.Items, tab)
+			PHX:VerboseMsg("[Lucky Ball] Adding new events: "..name)
+			table.insert(self.LUCKY_BALL.Items, tab)
 		end
 	else
-		PHX.VerboseMsg("[PHX: Devil Crystal] There is no additional events detected, skipping...")
+		PHX:VerboseMsg("[Lucky Ball] There is no additional events, skipping...")
 	end
+
+	-- Crystals
+	local tc = list.Get("DevilBallsAddition")
+	if !table.IsEmpty(tc) then
+		for name,tab in pairs(tc) do
+			PHX:VerboseMsg("[Devil Crystal] Adding new events: "..name)
+			table.insert( self.DEVIL_BALL.Items, tab )
+		end
+	else
+		PHX:VerboseMsg("[Devil Crystal] There is no additional events, skipping...")
+	end
+
 end
 
-PHX.DEVIL_BALL:AddMoreLuckyEvents()
+-- Initialize?
+PHX:AddExtItemsEvents()
+-- hook.Add("OnReloaded", "PHX.TeamItemsReload", function() PHX:AddExtItemsEvents() end)
 
 -- Hooks
 local function ResetEverything()
 	for _,v in ipairs(player.GetAll()) do
+
+		-- Reset Effects obtained from Crystals
 		if IsValid(v) then
 			v.ph_cloacking		= false
 			v.ph_slowspeed		= false
@@ -600,25 +587,20 @@ local function ResetEverything()
 				if v:Team() == TEAM_PROPS && v.ph_prop:GetMaterial() then v.ph_prop:DrawShadow(true); v.ph_prop:SetMaterial(""); end
 				if v:IsFrozen() then v:Freeze(false) end
 			end
+
+			-- Remove Decoy Owners
+			if v.propdecoy and IsValid(v.propdecoy) then
+				v.propdecoy:SetOwner(NULL)
+				v.propdecoy = nil
+			end
 		end
 	end
 	
-	-- Remove Prop Trash
+	-- Remove Prop Trash made by PROP Launchers
 	for _,p in ipairs(ents.FindByClass('prop_physics')) do
 		if IsValid(p) and (p._PropTrash) then p:Remove() end
 	end
 end
-
-hook.Add("PH_RoundEnd", "PHX.DestroyDevils", function()
-	ResetEverything()
-	
-	timer.Simple(0.1, function()
-		for _,cr in ipairs(ents.FindByClass("ph_devilball")) do
-			cr:ShowEffects(cr, "GlassImpact", cr:GetPos(), cr:GetPos())
-			cr:Remove()
-		end
-	end)
-end)
 
 local function DoPropRevenge( pl, amount )
 	if !pl.has_uniqueitem then return end
@@ -638,8 +620,10 @@ local function DoPropRevenge( pl, amount )
 	end
 end
 
+--------------- [[ MAIN HOOKS & RESET STATS ]] ---------------
+
 hook.Add("PlayerButtonDown", "PHX.PlayerPropDoRevenge", function(pl, key)
-	if GAMEMODE:InRound() and pl:Alive() and pl:Team() == TEAM_PROPS then
+	if PHX:GameInRound() and pl:Alive() and pl:Team() == TEAM_PROPS then
 		
 		if ((pl:IsLastStanding() and key == MOUSE_MIDDLE) or (!pl:IsLastStanding() and key == MOUSE_RIGHT)) and
 			(pl.prop_revenge_item) and pl.prop_revenge_item > 0 and 
@@ -650,4 +634,26 @@ hook.Add("PlayerButtonDown", "PHX.PlayerPropDoRevenge", function(pl, key)
 		end
 		
 	end
+end)
+
+hook.Add("PH_RoundEnd", "PHX.RemoveAllTeamItems", function()
+
+	ResetEverything()
+	
+	timer.Simple(0.1, function()
+
+		-- Remove Decoys
+		for _,decoys in pairs(ents.FindByClass("ph_fake_prop")) do decoys:Remove(); end
+
+		-- Remove Crystals
+		for _,cr in ipairs(ents.FindByClass("ph_devilball")) do
+			cr:ShowEffects(cr, "GlassImpact", cr:GetPos(), cr:GetPos()); cr:Remove();
+		end
+
+		-- Remove LuckyBalls
+		for _,lb in ipairs(ents.FindByClass("ph_luckyball")) do
+			lb:ShowEffects(lb, "cball_explode", lb:GetPos(), lb:GetPos()); lb:Remove()
+		end
+
+	end)
 end)

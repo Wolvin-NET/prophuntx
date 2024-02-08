@@ -33,7 +33,7 @@ function ENT:Initialize()
 end
 
 function ENT:Use(activator)
-	if GAMEMODE:InRound() && activator:IsPlayer() && activator:Alive() && activator:Team() == TEAM_HUNTERS then
+	if PHX:GameInRound() && activator:IsPlayer() && activator:Alive() && activator:Team() == TEAM_HUNTERS then
 		if activator:Team() == TEAM_HUNTERS and activator:Alive() then
 			local DoItem = PHX.LUCKY_BALL.Items[math.random(1,#PHX.LUCKY_BALL.Items)]; DoItem(activator);
 			hook.Call("PH_OnLuckyBallPickup", nil, activator)

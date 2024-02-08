@@ -25,7 +25,7 @@ eChat.config = {
 if not GAMEMODE then
 	hook.Remove("Initialize", "echat_init")
 	hook.Add("Initialize", "echat_init", function()
-		if PHX:QCVar("ph_use_new_chat") then
+		if PHX:GetCVar("ph_use_new_chat") then
 			print("[PHX] !!Warning: Custom PH:X Chat (eChat) will be deprecated soon!")
 			include(engine.ActiveGamemode() .. "/gamemode/sh_chatbox.lua")
 			PHX.eChat.buildBox()

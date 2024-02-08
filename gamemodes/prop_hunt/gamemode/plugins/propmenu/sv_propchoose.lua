@@ -1,5 +1,5 @@
 local netstr = {
-	"pcr.ClientRequestPropData",
+	--"pcr.ClientRequestPropData",
 	"pcr.PropListData",
 	"pcr.EditorCustomData",
 	"pcr.ForceCloseMenu",
@@ -81,9 +81,9 @@ end
 
 function PCR:CheckBBox(entity)
 	local min,max = entity:GetCollisionBounds()
-	if math.Round(max.x) >= PHX:QCVar( "pcr_bbox_max_width" ) or
-		math.Round(max.y) >= PHX:QCVar( "pcr_bbox_max_width" ) or 
-		math.Round(max.z) >= PHX:QCVar( "pcr_bbox_max_height" ) then 
+	if math.Round(max.x) >= PHX:GetCVar( "pcr_bbox_max_width" ) or
+		math.Round(max.y) >= PHX:GetCVar( "pcr_bbox_max_width" ) or 
+		math.Round(max.z) >= PHX:GetCVar( "pcr_bbox_max_height" ) then 
 			return true 
 	end
 	return false
@@ -146,15 +146,15 @@ function PCR:PopulateProp( bUseModCustomProp )
 			-- update: Do not include Forbidden models that can cause server crashes or exploits
 			if PHX.PROHIBITTED_MDLS[ string.lower(prop:GetModel()) ] then continue end
 			if table.HasValue(self.PropList, string.lower(prop:GetModel())) then continue end
-			if (PHX:QCVar( "pcr_enable_prop_ban" ) && table.HasValue(self.BannedProp, prop:GetModel())) then
+			if (PHX:GetCVar( "pcr_enable_prop_ban" ) && table.HasValue(self.BannedProp, prop:GetModel())) then
 				PHX:VerboseMsg("[Prop Menu] Banning prop of "..prop:GetModel().." @Index #"..prop:EntIndex().."!")
 				continue
 			end
-			if (PHX:QCVar( "pcr_enable_bbox_limit" ) && self:CheckBBox(prop)) then
+			if (PHX:GetCVar( "pcr_enable_bbox_limit" ) && self:CheckBBox(prop)) then
 				PHX:VerboseMsg("[Prop Menu] Found prop "..prop:GetModel().." @Index #"..prop:EntIndex().." that Exceeds the OBB settings, Ignoring!")
 				continue
 			end
-			if (PHX:QCVar( "pcr_limit_enable" ) && count == PHX:QCVar( "pcr_max_prop_list" )) then break end
+			if (PHX:GetCVar( "pcr_limit_enable" ) && count == PHX:GetCVar( "pcr_max_prop_list" )) then break end
 			
 			count = count + 1
 			table.insert(self.PropList, string.lower(prop:GetModel()))
@@ -171,7 +171,7 @@ function PCR:PopulateProp( bUseModCustomProp )
 	end
 
 	-- Add Custom Props
-	if PHX:QCVar( "pcr_allow_custom" ) then
+	if PHX:GetCVar( "pcr_allow_custom" ) then
 		PHX:VerboseMsg("[Prop Menu] Adding custom props...")
 		if !bUseModCustomProp then self:GetCustomProps() end
 		for _,prop in pairs(self.CustomProp) do
@@ -201,7 +201,7 @@ hook.Add("PlayerInitialSpawn","pcr.InitPropRequestData",function(ply)
 	ply:SetNWInt("CurrentUsage", 0)
 end)
 
-net.Receive("pcr.ClientRequestPropData", function(len, ply)
+--[[ net.Receive("pcr.ClientRequestPropData", function(len, ply)
     if ply:IsListenServerHost() then
         -- Host don't retreive the prop data at first spawn, for some reason. We might have to DELAY it.
         timer.Simple(2, function() SendPropData( ply ) end)
@@ -210,12 +210,14 @@ net.Receive("pcr.ClientRequestPropData", function(len, ply)
             SendPropData( ply ) -- Dedicated servers should be no problem. Listen Servers however, don't.
         end)
     end
+end) ]]
+
+hook.Add("PHZ_PlayerInitUpdateData", "pcr.SendPropMenuData", function( ply )
+	SendPropData( ply )
 end)
 
 hook.Add("PostCleanupMap","PCR.ResetUseLimit",function()
-	for _,ply in pairs(player.GetAll()) do
-		ply:ResetUsage()
-	end
+	util.AllPlayers( function(ply) ply:ResetUsage() end)
 end)
 
 local function PCRForceClose(ply)
@@ -224,9 +226,7 @@ local function PCRForceClose(ply)
 end
 hook.Add("PostPlayerDeath", "PCR.ForceCloseMenu", function(ply) PCRForceClose(ply) end)
 hook.Add("PH_RoundEnd", "PCR.ForceCloseMenu", function()
-	for _,v in pairs(player.GetAll()) do
-		PCRForceClose(v)
-	end
+	util.AllPlayers( function(ply) PCRForceClose(ply) end)
 end)
 hook.Add("OnReloaded", "PCR.OnReload", function()
 	-- empty reference props.
@@ -254,7 +254,7 @@ local function PlayerDelayCheck(ply)
 	if !ply.waitTime then ply.waitTime = 0 end
 
 	local lastUsedTime = ply:GetNWFloat("pcr.LastUsedTime")
-	local delayedTime = lastUsedTime + PHX:QCVar( "pcr_delay_use" )
+	local delayedTime = lastUsedTime + PHX:GetCVar( "pcr_delay_use" )
 	local currentTime = CurTime()
 	
 	ply.waitTime = delayedTime - currentTime
@@ -281,7 +281,7 @@ net.Receive("pcr.SetMetheProp",function(len,ply)
 		
 		print("[Prop Menu] !!WARNING: User ".. ply:Nick() .." ("..ply:SteamID()..") is trying to use Invalid Prop Model : " .. mdl .. ", which DOES NOT EXIST in the map!")
 		
-		if ( PHX:QCVar( "pcr_kick_invalid" ) ) then
+		if ( PHX:GetCVar( "pcr_kick_invalid" ) ) then
 			ply.warnInvalidModel = ply.warnInvalidModel + 1
 			ply:PHXChatInfo("ERROR", "PCR_NOT_EXIST_COUNT", tostring(ply.warnInvalidModel))
 			if ply.warnInvalidModel > 4 then
@@ -308,7 +308,7 @@ net.Receive("pcr.SetMetheProp",function(len,ply)
 	end
 	
 	-- Make sure player is not accessing banned prop
-	if ( PHX:QCVar( "pcr_enable_prop_ban" ) and table.HasValue(PCR.BannedProp, string.lower(mdl)) ) then
+	if ( PHX:GetCVar( "pcr_enable_prop_ban" ) and table.HasValue(PCR.BannedProp, string.lower(mdl)) ) then
 		ply:PHXChatInfo("WARNING", "PCR_PROPBANNED_BYPCR")
 		return
 	end
@@ -334,7 +334,7 @@ net.Receive("pcr.SetMetheProp",function(len,ply)
 		
 		local usage = ply:CheckUsage()
 		local hmx,hmy,hz = ent:GetPropSize()
-		if ( PHX:QCVar( "pcr_use_room_check" ) and (not ply:CheckHull(hmx,hmy,hz)) ) then
+		if ( PHX:GetCVar( "pcr_use_room_check" ) and (not ply:CheckHull(hmx,hmy,hz)) ) then
 			if usage > 0 or usage == -1 then
 				ply:PHXChatInfo("NOTICE", "PCR_NOROOM")
 			end

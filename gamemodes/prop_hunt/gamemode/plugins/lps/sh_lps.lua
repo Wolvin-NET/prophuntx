@@ -25,26 +25,22 @@ cvar["lps_start_random_round"]        = { CTYPE_BOOL,		"0",		CVAR_SERVER_ONLY, "
 function(cvarname,value)
     cvars.AddChangeCallback(cvarname, function(_,_,new)
         if tonumber(new) and tonumber(new) == 0 then
-            PHX.LPS.ROUND_LEFT = GetGlobalInt("RoundNumber",0) + GetGlobalInt( "lps_start_every_x_rounds", 0 )
+            PHX.LPS.ROUND_LEFT = PHX:GetRoundNumber() + PHX:GetCVar( "lps_start_every_x_rounds" ) or 0
         end
-        SetGlobalBool(cvarname, tobool(new))
     end, "phx.cvbool_"..cvarname)
 end }
 cvar["lps_start_delayed_rounds"] = { CTYPE_BOOL,    "0",        CVAR_SERVER_ONLY, "Should LPS Start on Every X Rounds? If so, see 'lps_start_every_x_rounds' ConVar.",
 function(cvarname,value)
     cvars.AddChangeCallback(cvarname, function(_,_,new)
         if tonumber(new) and tonumber(new) == 1 then
-            PHX.LPS.ROUND_LEFT = GetGlobalInt("RoundNumber",0) + GetGlobalInt( "lps_start_every_x_rounds", 0 )
+            PHX.LPS.ROUND_LEFT = PHX:GetRoundNumber() + PHX:GetCVar( "lps_start_every_x_rounds", 0 )
         end
-        SetGlobalBool(cvarname, tobool(new))
     end, "phx.cvbool_"..cvarname)
 end }
 cvar["lps_start_every_x_rounds"] = { CTYPE_NUMBER,  "2",        CVAR_SERVER_ONLY, "Numbers of X rounds that should make the event starts", {min = 2, max = PHX:GetCVar( "ph_rounds_per_map" ) },
 function(cvarname,value)
     cvars.AddChangeCallback(cvarname, function(_,_,new)
-        -- update immediately
-        PHX.LPS.ROUND_LEFT = GetGlobalInt("RoundNumber",0) + tonumber(new)
-        SetGlobalInt(cvarname, new)
+        PHX.LPS.ROUND_LEFT = PHX:GetRoundNumber() + tonumber(new)
     end, "phx.cvnum_"..cvarname)
 end }
 
@@ -84,6 +80,13 @@ end
 
 -- Add Language please.
 PHX:Includes("plugins/"..PHX.LPS._pluginname.."/lang", "LPS Language", true)
+
+function PHX.LPS:InLastStanding()
+    if SERVER then
+        return self.IsLastStanding
+    end
+    return GetGlobalBool("LPS.InLastPropStanding",false)
+end
 
 if CLIENT then    
 
@@ -185,7 +188,7 @@ hook.Add("SetupMove", "LPS.CLShootWeapon",function( ply, mv ) --Move ?
     
     if PHX:GetCVar( "lps_enable" ) and IsValid(wepEnt) and 
         hasWeapon and ActiveWep:GetClass() == PHX.LPS.DUMMYWEAPON and
-        ply:Team() == TEAM_PROPS and ply:IsLastStanding() and ply:Alive() and GetGlobalBool("InRound", false) then
+        ply:Team() == TEAM_PROPS and ply:IsLastStanding() and ply:Alive() and PHX:GameInRound() then
 		
 		if mv:KeyPressed( IN_ATTACK2 ) and ply:LPSHolsterTime() <= CurTime() then
 		

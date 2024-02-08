@@ -22,22 +22,22 @@ function ENT:SetupDataTables()
 end
 
 function ENT:Initialize()
-	self.Entity:DrawShadow( false ) -- don't draw shadows.
+	self:DrawShadow( false ) -- don't draw shadows.
 end
 
 if CLIENT then
 	function ENT:Draw()
-		self.Entity:DrawModel()
+		self:DrawModel()
 	end
-end
 
-function ENT:ShouldDraw()
-	if IsValid( self:GetOwner() ) then
-
-		local state = GetGlobalBool( "lps_show_weapon", false )
-		self:SetNoDraw( (!state or self:GetOwner():IsLPSHolstered()) and true or false )
-		
-	end
+    function ENT:ShouldDraw()
+        if IsValid( self:GetOwner() ) then
+    
+            local state = PHX:GetCVar( "lps_show_weapon" )
+            self:SetNoDraw( (!state or self:GetOwner():IsLPSHolstered()) and true or false )
+            
+        end
+    end
 end
 
 function ENT:Think()
@@ -66,7 +66,6 @@ function ENT:Think()
     end
     
     if SERVER then
-		-- DO NOT USE `self:ShouldDraw()` or this entity will be glitched!
         self:NextThink( CurTime() )
     elseif CLIENT then
 		self:ShouldDraw()

@@ -75,7 +75,7 @@ function CLASS:OnSpawn(pl)
 		return
 	end
 	
-	local unlock_time = GetGlobalInt("unBlind_Time", 0)
+	local unlock_time = PHX:GetUnblindTime()
 	if unlock_time > 2 then
 		local TimerID = "tmr.hunterUnblind:"..pl:EntIndex()
 		pl.TimerBlindID = TimerID
@@ -114,7 +114,7 @@ function CLASS:OnDeath(pl, attacker, dmginfo)
 	
 	-- Spawn Devil Ball
 	local pos = pl:GetPos()
-	if PHX:GetCVar( "ph_enable_devil_balls" ) and GAMEMODE:InRound() then
+	if PHX:GetCVar( "ph_enable_devil_balls" ) and PHX:GameInRound() then
         local dropent = ents.Create("ph_devilball")
         dropent:SetPos(Vector(pos.x, pos.y, pos.z + 16)) -- Don't spawn Devil Ball underground.
         dropent:SetAngles(Angle(0,0,0))

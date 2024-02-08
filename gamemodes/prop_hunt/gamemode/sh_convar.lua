@@ -1,4 +1,3 @@
--- phx's global cvar constants
 CVAR_SERVER_ONLY			= FCVAR_REPLICATED + FCVAR_ARCHIVE + FCVAR_NOTIFY	-- Apprently, this two may looks better.
 CVAR_SERVER_ONLY_NO_NOTIFY 	= FCVAR_REPLICATED + FCVAR_ARCHIVE
 CVAR_SERVER_HIDDEN 			= { 0x10, FCVAR_DONTRECORD } --,FCVAR_UNREGISTERED ?
@@ -9,79 +8,121 @@ CTYPE_NUMBER	= 2
 CTYPE_BOOL		= 3
 CTYPE_FLOAT		= 4
 
+PHX.CVAROBJ = {}
+PHX.CVAROBJ.SHARED = {}
+if SERVER then PHX.CVAROBJ.SERVER = {}; end
+if CLIENT then PHX.CVAROBJ.CLIENT = {}; end
+
+function PHX:GetEngineCVar( cvar, cvarType )
+
+	cvarType = cvarType or 1 --will return to CTYPE_STRING
+
+	local Exist = self.CVAROBJ.SHARED[cvar]
+	if (Exist) then
+		self:VerboseMsg( "[Convar:GetEngineCVar] Warning: Redirecting "..cvar.." to existing CVAROBJ.SHARED to use GetCVar instead",2 )
+		return self:GetCVar( cvar )
+	end
+
+	if SERVER then
+		local SVExist = self.CVAROBJ.SERVER[cvar]
+		if (SVExist) then
+			self:VerboseMsg( "[Convar:GetEngineCVar] Warning: Redirecting "..cvar.." to existing CVAROBJ.SERVER to use GetSVCVar instead",2 )
+			return self:GetSVCVar( cvar )
+		end
+	end
+
+	if CLIENT then
+		local CLExist = self.CVAROBJ.CLIENT[cvar]
+		if (CLExist) then
+			self:VerboseMsg( "[Convar:GetEngineCVar] Warning: Redirecting "..cvar.." to existing CVAROBJ.CLIENT to use GetCLCVar instead",2 )
+			return self:GetCLCVar( cvar )
+		end
+	end
+
+	-- fallback to GetConVar
+	local cInternal = GetConVar(cvar)
+	if cvarType == CTYPE_NUMBER then return cInternal:GetInt(); end
+	if cvarType == CTYPE_FLOAT then return cInternal:GetFloat(); end
+	if cvarType == CTYPE_BOOL then return cInternal:GetBool(); end
+	return cInternal:GetString()
+
+end
+
+local function cvRealm( isServer ) return (isServer) and "SERVER" or "SHARED"; end
+
 local ConVarTranslate = {
 	[CTYPE_STRING] = {
-		Set = function(name, value, fcvar, help, data)
-			CreateConVar(name, tostring(value), fcvar, help) -- for string, they don't have min and max convar limit, so we'll use 'function' as our advantage.
-			SetGlobalString(name, tostring(value))
-			
-			if (data and data ~= nil) then
-				if type(data) == "function" then data( name, value ) end
-			else
-				cvars.AddChangeCallback(name, function(_,_,new) SetGlobalString(name, tostring(new)) end, "phx.cvstr_" .. name)
-			end
+		Set = function(name, value, fcvar, help, data, bServer)
+			local Realm = cvRealm(bServer)
+			local cvObj = CreateConVar(name, tostring(value), fcvar, help)
+			PHX.CVAROBJ[Realm][name] = cvObj
+
+			if (data) and isfunction(data) then data( name, value, cvObj ) end
 		end,
-		Get = function(name, value)
-			return GetGlobalString(name, value) --default: 'error'.
+		Get = function(name, value, bServer)
+			local Realm = cvRealm(bServer)
+			local cvObj = PHX.CVAROBJ[Realm][name]
+			return cvObj and cvObj:GetString() or "!error"
 		end
 	},
 	[CTYPE_BOOL] = {
-		Set = function(name, value, fcvar, help, data)
-			CreateConVar(name, value, fcvar, help, 0, 1) -- Forcing boolean's min max convar limit to "always 0 and 1".
-			SetGlobalBool(name, tobool(value))
+		Set = function(name, value, fcvar, help, data, bServer)
+			local Realm = cvRealm(bServer)
+			local cvObj = CreateConVar(name, value, fcvar, help, 0, 1)
+			PHX.CVAROBJ[Realm][name] = cvObj
 			
-			if (data and data ~= nil) then
-				if type(data) == "function" then data( name, value ) end
-			else
-				cvars.AddChangeCallback(name, function(_,_,new) SetGlobalBool(name, tobool(new)) end, "phx.cvbool_" .. name)
-			end
+			if (data) and isfunction(data) then data( name, value, cvObj ) end
 		end,
-		Get = function(name, value)
-			return GetGlobalBool(name, tobool(value))
+		Get = function(name, value, bServer)
+			local Realm = cvRealm(bServer)
+			local cvObj = PHX.CVAROBJ[Realm][name]
+			return cvObj and cvObj:GetBool() or false
 		end
 	},
 	[CTYPE_NUMBER] = {
-		Set = function(name, value, fcvar, help, data, f)
-			if (data and data ~= nil) then
-				if type(data) == "table" then  CreateConVar(name, value, fcvar, help, data.min, data.max) end
-			else
-				CreateConVar(name, value, fcvar, help)
-			end
-			SetGlobalInt(name, tonumber(value))
+		Set = function(name, value, fcvar, help, data, f, bServer)
+			local Realm = cvRealm(bServer)
+			local min,max
+
+			if (data) and istable(data) then min = data.min; max = data.max; end
+
+			local cvObj = CreateConVar(name, value, fcvar, help, min, max)
+			PHX.CVAROBJ[Realm][name] = cvObj
 			
-			if (f and f ~= nil) then
-				if type(f) == "function" then f( name, value ) end
-			else
-				cvars.AddChangeCallback(name, function(_,_,new) SetGlobalInt(name, tonumber(new)) end, "phx.cvnum_" .. name)
-			end
+			if (f) and isfunction(f) then f( name, value, cvObj ); end
 		end,
-		Get = function(name, value)
-			return GetGlobalInt(name, tonumber(value))
+		Get = function(name, value, bServer)
+			local Realm = cvRealm(bServer)
+			local cvObj = PHX.CVAROBJ[Realm][name]
+			return cvObj and cvObj:GetInt() or 0
 		end
 	},
 	[CTYPE_FLOAT] = {
-		Set = function(name, value, fcvar, help, data, f)
-			if (data and data ~= nil) then
-				if type(data) == "table" then  CreateConVar(name, value, fcvar, help, data.min, data.max) end
-			else
-				CreateConVar(name, value, fcvar, help)
-			end
-			SetGlobalFloat(name, value)
+		Set = function(name, value, fcvar, help, data, f, bServer)
+			local Realm = cvRealm(bServer)
+			local min,max
+
+			if (data) and istable(data) then min = data.min; max = data.max; end
+
+			local cvObj = CreateConVar(name, value, fcvar, help, min, max)
+			PHX.CVAROBJ[Realm][name] = cvObj
 			
-			if (f and f ~= nil) then
-				if type(f) == "function" then f( name, value ) end
-			else
-				cvars.AddChangeCallback(name, function(_,_,new) SetGlobalFloat(name, tonumber(new)) end, "phx.cvflt_" .. name)
-			end
+			if (f) and isfunction(f) then f( name, value, cvObj ); end
 		end,
-		Get = function(name, value)
-			return GetGlobalFloat(name, tonumber(value))
+		Get = function(name, value, bServer)
+			local Realm = cvRealm(bServer)
+			local cvObj = PHX.CVAROBJ[Realm][name]
+			return cvObj and cvObj:GetFloat() or 0.0
 		end
 	}
 }
 
 -- Server only purpose.
-CreateConVar( "ph_kick_non_admin_access", "0", {FCVAR_SERVER_CAN_EXECUTE,FCVAR_ARCHIVE}, "Should Kick Non-Admin user when trying to access Admin Commands? If Not, Throw a message instead.", 0, 1 )
+local SVCVAR = {}
+if SERVER then
+	SVCVAR["ph_kick_non_admin_access"]	=	{ CTYPE_BOOL,	"0", {FCVAR_SERVER_CAN_EXECUTE, FCVAR_ARCHIVE}, "Should We Kick Non-Admins when trying to access Server ConVars? If Not, Print a message who violates instead." }
+end
+-- End of Server only purpose.
 
 local CVAR = {}
 CVAR["ph_show_splash_screen"]           =   { CTYPE_BOOL,   "1", CVAR_SERVER_ONLY, "Show Splash Screen upon joining." }
@@ -119,22 +160,18 @@ CVAR["ph_allow_armor"]			        =	{ CTYPE_BOOL, 	"1", CVAR_SERVER_ONLY, "Allow 
 CVAR["ph_prop_jumppower"]				=	{ CTYPE_FLOAT, 	"1.5", CVAR_SERVER_ONLY_NO_NOTIFY, "Multipliers for Prop Jump Power (Do not confused with Gravity!). Default is 1.4. Min. 1.", {min=1, max=50}, -- in menu, it only limits to 5.
 function(cvarname, val)
     cvars.AddChangeCallback( cvarname, function(_,_,new )    
-        for _,v in pairs(team.GetPlayers(TEAM_PROPS)) do
-            if v:Alive() then v:SetJumpPower(160 * tonumber(new)) end
-        end
-        SetGlobalFloat( cvarname, tonumber(new) )
+        util.AllTeamPlayers( TEAM_PROPS, function(ply)
+            if ply:Alive() then ply:SetJumpPower(160 * tonumber(new)) end
+        end )
     end, "phx.cvflt_" .. cvarname)
-    
 end }
 CVAR["ph_hunter_jumppower"]		=	{ CTYPE_FLOAT, 	"1", CVAR_SERVER_ONLY_NO_NOTIFY, "Multipliers for Hunter Jump Power (Do not confused with Gravity!). Default is 1. Min. 1.", {min=1, max=25}, -- in menu, it only limits to 2.5.
 function(cvarname, val)
     cvars.AddChangeCallback( cvarname, function(_,_,new )    
-        for _,v in pairs(team.GetPlayers(TEAM_HUNTERS)) do
-            if v:Alive() then v:SetJumpPower(160 * tonumber(new)) end
-        end
-        SetGlobalFloat( cvarname, tonumber(new) )
+        util.AllTeamPlayers( TEAM_HUNTERS, function(ply)
+            if ply:Alive() then ply:SetJumpPower(160 * tonumber(new)) end
+        end )
     end, "phx.cvflt_" .. cvarname)
-    
 end }
 CVAR["ph_notice_prop_rotation"]			=	{ CTYPE_BOOL, 	"1", CVAR_SERVER_ONLY, "Enable Prop Rotation notification on every time Prop Spawns." }
 
@@ -142,32 +179,20 @@ CVAR["ph_freezecam"]					=	{ CTYPE_BOOL, 	"1", CVAR_SERVER_ONLY, "Enable Freeze 
 CVAR["ph_freezecam_hunter"]				=	{ CTYPE_BOOL, 	"1", CVAR_SERVER_ONLY, "Enable Freeze Camera Feature for Hunters." }
 CVAR["ph_fc_use_single_sound"]			=	{ CTYPE_BOOL, 	"0", CVAR_SERVER_ONLY, "Use single Freezecam sound instead of sound list?" }
 CVAR["ph_fc_cue_path"]					=	{ CTYPE_STRING, "misc/freeze_cam.wav", CVAR_SERVER_ONLY, "Path for single Freezecam sound.", 
-	function(cvarname, val)
-		-- override default callback because this is important part.
-		cvars.AddChangeCallback( cvarname, function(_,_,new)
-			if string.find(new, "\\") then
-				print("[ConVar:FreezeCam] Warning: Detected Backslash (\\) character! Please use \"/\" instead!")
-			end
-			-- replace escaped backslash char, if any.
-			local ReplaceIllegalPath = string.Replace(new, "\\", "/")
-			
-			RunConsoleCommand( cvarname, ReplaceIllegalPath )
-			SetGlobalString( cvarname, ReplaceIllegalPath )
-			PHX.LegalSoundPath = ReplaceIllegalPath
-		end, "phx.cvstr_" .. cvarname)
-	end
-}
-PHX.LegalSoundPath							= 	GetGlobalString("ph_fc_cue_path", "misc/freeze_cam.wav")
+function(cvarname, val)
+	cvars.AddChangeCallback( cvarname, function(_,_,new)
+		-- replace \ char to / instead.
+		new = new:Replace("\\", "/")
+		PHX.LegalSoundPath = new
+	end, "phx.cvstr_" .. cvarname)
+end }
 
 CVAR["ph_notify_player_join_leave"]			=	{ CTYPE_BOOL, 	"1", CVAR_SERVER_ONLY, "Notify Player Join and Leave in the Chat?" }
 
 CVAR["ph_usable_prop_type"]					=	{ CTYPE_NUMBER, "1", CVAR_SERVER_ONLY, "Usable Prop Types. 1 = Physics only, 2 = Dynamics, Ragdolls & Physics, 3 = Almost Anything, 4 = Custom", { min = 1, max = 4 },
-	function(cvarname, value)
-		cvars.AddChangeCallback( cvarname, function(_,_,new)
-			PHX:SetUsableEntity( tonumber(new) )
-			SetGlobalInt( cvarname, tonumber(new) )
-		end, "phx.cvnum_" .. cvarname )
-	end }
+function(cvarname, value)
+	cvars.AddChangeCallback( cvarname, function(_,_,new) PHX:SetUsableEntity( tonumber(new) ); end, "phx.cvnum_" .. cvarname )
+end }
 CVAR["ph_usable_prop_type_notice"]			= 	{ CTYPE_BOOL,	"1", CVAR_SERVER_ONLY, "Notify about certain entities cannot be replicated by pressing 'E'. This only works if 'ph_usable_prop_type' is set to '3' or '4'." }
 
 CVAR["ph_enable_lucky_balls"]				=	{ CTYPE_BOOL, 	"1", CVAR_SERVER_ONLY, "Spawn Lucky balls on breakable props?" }
@@ -181,16 +206,7 @@ CVAR["ph_hunter_blindlock_time"]			=	{ CTYPE_NUMBER, "30", CVAR_SERVER_ONLY, "Ho
 CVAR["ph_round_time"]						=	{ CTYPE_NUMBER, "300", CVAR_SERVER_ONLY, "(Require Map Restart) Time (in seconds) for each rounds." }
 CVAR["ph_rounds_per_map"]					=	{ CTYPE_NUMBER, "10", CVAR_SERVER_ONLY, "(Require Map Restart) Numbers of rounds played on a single map (Default: 10)" }
 CVAR["ph_waitforplayers"]					=	{ CTYPE_BOOL, 	"1", CVAR_SERVER_ONLY, 	"Should we wait for players for proper round?" }
-CVAR["ph_min_waitforplayers"]				=	{ CTYPE_NUMBER, "1", CVAR_SERVER_ONLY, 	"Numbers of mininum players that we should wait for round start. Value must not contain less than 1.", { min = 1, max = game.MaxPlayers() }, 
-function(cvarname, value)
-    cvars.AddChangeCallback(cvarname, function(_, _, new)
-        if tonumber(new) < 1 then
-            RunConsoleCommand("ph_min_waitforplayers", "1")
-            SetGlobalInt( cvarname, tonumber(new) )
-            print("[ConVar:WaitForPlayers] Warning: "..cvarname.." value cannot contain less than 0. Use 'ph_waitforplayers' 0 to disable!")
-        end
-    end, "phx.cvnum_" .. cvarname)
-end }
+CVAR["ph_min_waitforplayers"]				=	{ CTYPE_NUMBER, "1", CVAR_SERVER_ONLY, 	"Numbers of mininum players that we should wait for round start. Value must not contain less than 1.", { min = 1, max = game.MaxPlayers() } }
 
 CVAR["ph_sv_enable_obb_modifier"]			=	{ CTYPE_BOOL, 	"1",CVAR_SERVER_ONLY_NO_NOTIFY, "Developer: Enable OBB Model Data Override/Modifier" }
 CVAR["ph_reload_obb_setting_everyround"]	=	{ CTYPE_BOOL, 	"1",CVAR_SERVER_ONLY_NO_NOTIFY, "Developer: Reload OBB Model Data Override/Modifier Every round Restarts" }
@@ -204,8 +220,7 @@ CVAR["ph_add_hla_combine"]					=	{ CTYPE_BOOL, 	"1", CVAR_SERVER_ONLY, "Add HLA 
 CVAR["ph_swap_teams_every_round"]			=	{ CTYPE_BOOL, 	"1", CVAR_SERVER_ONLY, "Should teams swapped on every round?" }
 CVAR["ph_max_teamchange_limit"]				=	{ CTYPE_NUMBER, "8", CVAR_SERVER_ONLY_NO_NOTIFY, "Define how many times player can change team to another. Default is 5. -1 means disabled." }
 CVAR["ph_enable_teambalance"]				=	{ CTYPE_BOOL, 	"1", CVAR_SERVER_ONLY_NO_NOTIFY, "Enable Team Balance during round restart?" }
--- Taken from PH:E v16. This addition was made by Fafy
-CVAR["ph_force_join_balanced_teams"]			=	{ CTYPE_BOOL, 	"0", CVAR_SERVER_ONLY, "Force players to even out teams upon joining? Setting 0 means do not force to join in balanced teams." }
+CVAR["ph_force_join_balanced_teams"]			=	{ CTYPE_BOOL, 	"0", CVAR_SERVER_ONLY, "Force players to even out teams upon joining? Setting 0 means do not force to join in balanced teams." } -- PH:E v16, by Fafy
 
 CVAR["ph_enable_decoy_reward"]				=	{ CTYPE_BOOL,	"1", CVAR_SERVER_ONLY_NO_NOTIFY, "Enable a decoy reward? Reward will be given if any prop player is alive on every round ends." }
 CVAR["ph_decoy_health"]						=	{ CTYPE_NUMBER,	"10", CVAR_SERVER_ONLY_NO_NOTIFY, "How much health points does the decoy has. Default is 10.", { min = 1, max = 200 } }
@@ -219,13 +234,13 @@ CVAR["ph_use_new_chat"]						=	{ CTYPE_BOOL, 	"0", CVAR_SERVER_ONLY, "!!REQUIRE 
 function(cvarname, value)	
 	cvars.AddChangeCallback( cvarname, function(cv, _, new)
 		print(cv .. " -> was changed. Please be sure to change/restart map to take effect!")
+		print("WARNING: Deprecated: eChat will be replaced/removed in future update!")
 		for _,v in pairs(player.GetHumans()) do
 			if v:CheckUserGroup() then
 				v:ChatPrint("NOTICE: Map restart required, a ConVar '"..cv.."' has been changed therefore a map change is needed.")
 				v:ChatPrint("WARNING: Deprecated: eChat will be replaced/removed in future update!")
 			end
 		end
-		SetGlobalBool(cvarname, tobool(new))
 	end, "phx.cvbool_" .. cvarname)
 end }
 CVAR["ph_new_chat_pos_sub"]					=	{ CTYPE_NUMBER, "50", CVAR_SERVER_ONLY_NO_NOTIFY, "Move (in pixels) by substracting chat position Y pixels high. Negative (-) means to move it lower." }
@@ -276,57 +291,117 @@ CVAR["pcr_bbox_max_height"]					=	{ CTYPE_NUMBER, "96", CVAR_SERVER_ONLY_NO_NOTI
 CVAR["pcr_bbox_max_width"]					=	{ CTYPE_NUMBER, "72", CVAR_SERVER_ONLY_NO_NOTIFY, "BBOX CollissionBound Maximum Width Limit. Either: 72, 56, 48, 36, 32, ..."}
 
 -- Load & init
-for name, data in pairs(CVAR) do
-	local isType = data[1]	   --cvar, value,   flag,    help,   data/f,   f callback
-	ConVarTranslate[isType].Set( name, data[2], data[3], data[4], data[5], data[6] )
+if SERVER then
+	for name, data in pairs(SVCVAR) do
+		local isType = data[1]	   --cvar, value,   flag,    help,   data/f,   f callback, ServerOnlyRealm
+		ConVarTranslate[isType].Set( name, data[2], data[3], data[4], data[5], data[6], true )
+	end
 end
 
-local function InitCVar()	
+for name, data in pairs(CVAR) do
+	local isType = data[1]	   --cvar, value,   flag,    help,   data/f,   f callback, ServerOnlyRealm
+	ConVarTranslate[isType].Set( name, data[2], data[3], data[4], data[5], data[6], false )
+end
+
+-- Init Specific Global Defaults, if any.
+PHX.LegalSoundPath = (PHX.CVAROBJ.SHARED["ph_fc_cue_path"]) and PHX.CVAROBJ.SHARED["ph_fc_cue_path"]:GetString() or "misc/freeze_cam.wav"
+
+--[[ local function InitCVar()
 	if SERVER then PHX.cvarsynced = false end
 end
-hook.Add("Initialize", "PHX.InitCVARs", InitCVar)
+hook.Add("Initialize", "PHX.InitCVARs", InitCVar) ]]
 
--- here you can make a proper replicated convar.
--- however, they will be updated after new round (PostCleanupMap) event occured.
+local function CheckFlag( cName, flags, iFlagToCheck, sFlagName, sShouldUse )
+	if !istable(flags)  or !isnumber(flags) then 
+		ErrorNoHalt("[PHX CVAR] Error: Cannot add '".. cName .."', Flags must be either Table or Numbers!")
+		return true
+	end
+
+	if istable(flags) and table.HasValue(flags, iFlagToCheck) then
+		ErrorNoHalt("[PHX CVAR] Error: Cannot add '".. cName .."' to ConVar because it contains flag ["..sFlagName.."] set! Use "..sShouldUse.." instead!")
+		return true
+	end
+
+	if isnumber(flags) then
+		if (bit.band( flags, iFlagToCheck ) == iFlagToCheck) then
+			ErrorNoHalt("[PHX CVAR] Error: Cannot add '".. cName .."' to ConVar because it contains flag ["..sFlagName.."] set! Use "..sShouldUse.." instead!")
+			return true
+		end
+	end
+	
+	return false
+end
+
 function PHX:AddCVar( cType, cName, cValue, cFlag, cHelp, cData, cFunc )
-	if (!cType or cType == nil or !cName or cName == nil or cValue == nil) then
+	if (!cType or !cName or cValue == nil) then
 		ErrorNoHalt("[PHX CVAR] ConVar Type, ConVar Name and ConVar Value cannot be Empty!")
 		return
 	end
-	
-	if (cFlag and cFlag ~= nil) and istable(cFlag) and table.HasValue(cFlag, FCVAR_USERINFO) then
-		ErrorNoHalt("[PHX CVAR] Error: Cannot add '".. cName .."' to Shared ConVar because it contains FCVAR_USERINFO flag set! Please use PHX:AddCLCVar() instead!")
+
+	if (cFlag) and CheckFlag( cName, cFlag, FCVAR_USERINFO, "FCVAR_USERINFO", "PHX:AddCLCVar()") then
 		return
 	end
 
 	CVAR[cName]	= { cType, cValue, cFlag, cHelp, cData, cFunc }
-	ConVarTranslate[cType].Set( cName, cValue, cFlag, cHelp, cData, cFunc )
+	ConVarTranslate[cType].Set( cName, cValue, cFlag, cHelp, cData, cFunc, false )
 end
 
--- Use this on Clients. Do Not use on Server Side unless you know what you're doing.
--- Either use GetConVar for global/engine convar, or use PHX:QCVar to retreive PHX convars only (Does not work for global / engines convars).
 function PHX:GetCVar( cvar )
-
-	if CVAR[cvar] and CVAR[cvar] ~= nil then
+	if (CVAR[cvar]) then
 		local isType = CVAR[cvar][1]
 		local value	 = CVAR[cvar][2]
-		return ConVarTranslate[isType].Get( cvar, value ) -- value = default value for GetGlobal*'s failed value.
+		return ConVarTranslate[isType].Get( cvar, value, false )
 	end
-	
-	return nil -- should return nil instead of false.
+
+	PHX:VerboseMsg("[CVar:Shared] CVar "..cvar.." seems do not exists in CVAROBJ.SHARED, try using PHX:GetCLCVar('"..cvar.."') or PHX:GetSVCVar('"..cvar.."')?", 2)
+	return nil
 end
 
--- /!\ DO NOT USE THIS IF YOUR REPLICATION IS WORKED.
--- /!\ THIS SHOULD **ONLY** BE USED IN FOLLOWING CONDITIONS OR HOOKS:
-	-- > GM:Initialize
-	-- > GM:Pre/On/PostGamemodeLoaded
-	-- > Any Early Hooks before Config (*.cfg) Files are Loaded
-	-- > PlayerInitSpawn or InitPostEntity ARE NOT NEEDED. Use PHX:GetCVar() instead!
--- See Example of how PHX:GetCVar() can get bugged on PHX:VerboseMsg()
+if SERVER then
+	function PHX:SVAddCVar( cType, cName, cValue, cFlag, cHelp, cData, cFunc )
+		if (!cType or !cName or cValue == nil) then
+			ErrorNoHalt("[PHX CVAR] ConVar Type, ConVar Name and ConVar Value cannot be Empty!")
+			return
+		end
+
+		if (cFlag) and CheckFlag( cName, cFlag, FCVAR_USERINFO, "FCVAR_USERINFO", "PHX:AddCLCVar()") then
+			return
+		end
+
+		local svonly=FCVAR_SERVER_CAN_EXECUTE
+		if (istable( cFlag ) and !table.HasValue(svonly)) then
+			table.insert(cFlag,svonly)
+		elseif (isnumber(cFlag) and bit.band(cFlag,svonly) ~= svonly) then
+			cFlag = cFlag+svonly
+		end
+
+		CVAR[cName]	= { cType, cValue, cFlag, cHelp, cData, cFunc }
+		ConVarTranslate[cType].Set( cName, cValue, cFlag, cHelp, cData, cFunc, true )
+	end
+
+	function PHX:GetSVCVar( cvar )
+		if (SVCVAR[cvar]) then
+			local isType = SVCVAR[cvar][1]
+			local value	 = SVCVAR[cvar][2]
+			return ConVarTranslate[isType].Get( cvar, value, true )
+		end
+
+		PHX:VerboseMsg("[CVar:Server] CVar "..cvar.." seems do not exists in CVAROBJ.SERVER, try using PHX:GetCVar('"..cvar.."') instead?",2)
+		return nil
+	end
+end
+
+-- /!\ DEPRECATED /!\
+local qcvar_warn=0
 function PHX:QCVar( cvar )
-	if CVAR[cvar] and CVAR[cvar] ~= nil then
-		local isType = CVAR[cvar][1]
-		local value
+	if qcvar_warn < 10 then
+		print( "[PHX:QCVar] WARNING: USING THIS IS DEPRECATED! USE PHX:GetCVar/GetSVCVar/GetCLCVar instead!!" )
+		qcvar_warn=qcvar_warn+1
+	end
+
+	if (CVAR[cvar]) then
+		local isType = CVAR[cvar][1] or CTYPE_STRING
+		local value = "!error"
 		
 		if isType == CTYPE_BOOL then
 			value = GetConVar( cvar ):GetBool()
@@ -344,37 +419,31 @@ function PHX:QCVar( cvar )
 	return nil
 end
 
-function PHX:DebugCVar()
-	for c,_ in pairs(CVAR) do
-		print("['".. c .."'] | GetConVar/QCVar: " .. tostring(self:QCVar(c)) .. " -> GetGlobal*: " .. tostring(self:GetCVar(c)) )
-	end
-end
-
--- /!\  DO NOT USE /!\ -- Refresh the convar after config files are loaded.
+-- /!\  DO NOT USE /!\
 if SERVER then
-	local TranslateInit = {
-		[CTYPE_BOOL] 	= function(name) SetGlobalBool(  name, GetConVar(name):GetBool()) 	end,
-		[CTYPE_NUMBER]	= function(name) SetGlobalInt(   name, GetConVar(name):GetInt()) 	end,
-		[CTYPE_STRING]	= function(name) SetGlobalString(name, GetConVar(name):GetString()) end,
-		[CTYPE_FLOAT]	= function(name) SetGlobalFloat( name, GetConVar(name):GetFloat()) 	end,
+	--[[ local TranslateInit = {
+		[CTYPE_BOOL] 	= function(name) BruhGlobalBool(  name, GetConVar(name):GetBool()) 	end,
+		[CTYPE_NUMBER]	= function(name) BruhGlobalInt(   name, GetConVar(name):GetInt()) 	end,
+		[CTYPE_STRING]	= function(name) BruhGlobalString(name, GetConVar(name):GetString()) end,
+		[CTYPE_FLOAT]	= function(name) BruhGlobalFloat( name, GetConVar(name):GetFloat()) 	end,
 	}
 	
-	function PHX:SyncCVar()
+	local SyncCVar()
 		for c,v in pairs(CVAR) do
 			local isType = v[1]
 			local trans = TranslateInit[isType]
 			trans(c)
 		end
-	end
+	end ]]
 	
-	function PHX:InitCVar()	-- called from: init.lua@631
-		self:SyncCVar()
+	--[[ function PHX:InitCVar()	-- called from init.lua->PlayerInitialSpawn - code is disabled
+		SyncCVar()
 		self.cvarsynced = true
-	end
+	end ]]
 	
-	hook.Add("PostCleanupMap", "sync_CvarEveryRoundRestart", function()
+	--[[ hook.Add("PostCleanupMap", "sync_CvarEveryRoundRestart", function()
 		PHX:SyncCVar()
-	end)
+	end) ]]
 end
 
 -- START OF CLIENT CONVAR
@@ -383,7 +452,7 @@ if CLIENT then
 
 	local CLCVAR = {} -- Move outside "Client" Realm for convar dump. Once you're done, get back in.
 
-	CLCVAR["ph_cl_language"]				=	{ CTYPE_STRING, GetGlobalString("ph_default_lang", "en_us"), true, true, "Prefered language to use" }
+	CLCVAR["ph_cl_language"]				=	{ CTYPE_STRING, ConVarExists( "ph_default_lang") and PHX:GetCVar( "ph_default_lang" ) or "en_us", true, true, "Prefered language to use" }
 	
 	-- Old convars that previously placed in cl_init.lua is moved HERE.
 	CLCVAR["ph_cl_halos"]					=	{ CTYPE_BOOL, 	"1",	 true, true,  "Toggle Enable/Disable Halo effects when choosing a prop.", {min=0,max=1} }
@@ -429,26 +498,24 @@ if CLIENT then
 	CLCVAR["ph_cl_unstuck_key"]             =   { CTYPE_NUMBER, KEY_F6,    true, true, "Key to try to unstuck." }
 
 	local cTranslate = {}
-
-	cTranslate[CTYPE_STRING] 	= function(name) return GetConVar(name):GetString()	end
-	cTranslate[CTYPE_BOOL] 		= function(name) return GetConVar(name):GetBool() 	end
-	cTranslate[CTYPE_NUMBER] 	= function(name) return GetConVar(name):GetInt() 	end
-	cTranslate[CTYPE_FLOAT] 	= function(name) return GetConVar(name):GetFloat() 	end
+	cTranslate[CTYPE_STRING] 	= function(name) return PHX.CVAROBJ.CLIENT[name] and PHX.CVAROBJ.CLIENT[name]:GetString()	or "!error" end
+	cTranslate[CTYPE_BOOL] 		= function(name) return PHX.CVAROBJ.CLIENT[name] and PHX.CVAROBJ.CLIENT[name]:GetBool()		or false 	end
+	cTranslate[CTYPE_NUMBER] 	= function(name) return PHX.CVAROBJ.CLIENT[name] and PHX.CVAROBJ.CLIENT[name]:GetInt()		or 0		end
+	cTranslate[CTYPE_FLOAT] 	= function(name) return PHX.CVAROBJ.CLIENT[name] and PHX.CVAROBJ.CLIENT[name]:GetFloat()	or 0.0		end
 	
 	local function SetClientConVar (name, value, shouldSave, isUserInfo, help, data, func)
-		if (data and data ~= nil) then
-			-- Note: if value contains String, it wouldn't work if data.min and data.max is present. You've been warned!
-			if type(data) == "table" and (not table.IsEmpty(data)) then
-				CreateClientConVar(name, value, shouldSave, isUserInfo, help, data.min, data.max)
-			end
-		else
-			CreateClientConVar(name, value, shouldSave, isUserInfo, help)
+		local min,max
+
+		-- min/max don't work if they're a string value!
+		if (data) and istable(data) and !table.IsEmpty(data) then
+			min = data.min
+			max = data.max
 		end
+
+		local cvObj = CreateClientConVar(name, value, shouldSave, isUserInfo, help, min, max)
+		PHX.CVAROBJ.CLIENT[name] = cvObj
 		
-		-- do something within the function with associated cvar, if any.
-		if (func and func ~= nil) then
-			if type(func) == "function" then func(name, value) end
-		end
+		if (func) and isfunction(func) then func(name, value, cvObj) end
 	end
 	
 	-- immediately create convars
@@ -457,7 +524,7 @@ if CLIENT then
 	end
 	
 	function PHX:AddCLCVar(cType, cName, cValue, cSave, cUserInfo, cHelp, cData, cFunc)
-		if (!cType or cType == nil or !cName or cName == nil or cValue == nil) then
+		if (!cType or !cName or cValue == nil) then
 			ErrorNoHalt("[PHX CVAR] ConVar Type, ConVar Name and ConVar Value cannot be Empty!")
 			return
 		end
@@ -467,13 +534,14 @@ if CLIENT then
 	end
 	
 	function PHX:GetCLCVar( name )
-		if CLCVAR[name] and CLCVAR[name] ~= nil then
+		if (CLCVAR[name]) then
 			local id = CLCVAR[name][1]
 			local trans = cTranslate[id]( name )
 			
 			return trans
 		end
 		
+		PHX:VerboseMsg("[CVar:CLIENT] CVar "..cvar.." seems do not exists in CVAROBJ.CLIENT, try using PHX:GetCVar('"..cvar.."') instead?", 2)
 		return nil
 	end
 end

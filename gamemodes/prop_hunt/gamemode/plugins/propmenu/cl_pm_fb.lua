@@ -2,10 +2,10 @@ local serverContents = {}
 serverContents["GAME"]	= "ALL" -- DO NOT TRANSLATE FROM HERE!
 serverContents["MOD"]	= "Garry's Mod"
 
-hook.Add("InitPostEntity", "reqServerContent", function()
-	net.Start("PCR.RequestServerGameContents")
+--[[ hook.Add("_InitPostEntity", "reqServerContent", function()
+	net.Start("PCR_.RequestServerGameContents")
 	net.SendToServer()
-end)
+end) ]]
 
 net.Receive("PCR.TheServerGameContents", function()
 	local size = net.ReadUInt(16)

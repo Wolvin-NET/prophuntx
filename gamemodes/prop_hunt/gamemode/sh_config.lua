@@ -90,6 +90,7 @@ end
 PHX.DecoyDistance   = 250
 
 -- Time (in seconds) for spectator check (Default: 0.1)
+-- Obsolete?
 PHX.SPECTATOR_CHECK_ADD = 0.1
 
 -- [ Usable Entities ]
@@ -158,23 +159,17 @@ PHX.CVARUseAbleEnts = {
 PHX.USABLE_PROP_ENTITIES = PHX.USABLE_PROP_ENTITIES or PHX.CVARUseAbleEnts[1]
 
 function PHX:IsUsablePropEntity( entClass )
-	if entClass and entClass ~= nil then
-		if self.USABLE_PROP_ENTITIES[entClass] then
-			return true
-		end
+	if (entClass) and self.USABLE_PROP_ENTITIES[entClass] then
+		return true
 	end
 	return false
 end
 
 -- Called only from cvars.AddChangeCallback. Do Not use outside from cvar's callback function!
 function PHX:SetUsableEntity( number )
-	if !number and !isnumber(number) then return end
-
-	if number >= 1 and number <= 4 then
-		self.USABLE_PROP_ENTITIES = self.CVARUseAbleEnts[number]
-	else
-		ErrorNoHalt("Error: SetUsableEntity number argument is out of range! (min = 1, max = 4)")
-	end
+	if !number or !isnumber(number) then return end
+	number = math.Clamp(number, 1, #self.CVARUseAbleEnts)
+	self.USABLE_PROP_ENTITIES = self.CVARUseAbleEnts[number]
 end
 
 function PHX:GetUsableEntities()
@@ -775,7 +770,7 @@ local function InitializeConfig()
 	PHX:VerboseMsg( "[Taunts] Total Cache size: Props - " .. tostring(table.Count(PHX.CachedTaunts[TEAM_PROPS])) .. ", Hunter: " .. tostring(table.Count(PHX.CachedTaunts[TEAM_HUNTERS])) .."\n[Taunts] All Done. Have Fun!" )
     
     -- Initialize Usable Prop Entities
-    PHX.USABLE_PROP_ENTITIES = PHX.CVARUseAbleEnts[ PHX:QCVar( "ph_usable_prop_type" ) ]
+    PHX.USABLE_PROP_ENTITIES = PHX.CVARUseAbleEnts[ PHX:GetCVar( "ph_usable_prop_type" ) ]
 	
 end
 hook.Add("Initialize", "PHX.InitializeTaunts", InitializeConfig)

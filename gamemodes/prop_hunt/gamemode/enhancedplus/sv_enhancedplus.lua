@@ -1,6 +1,8 @@
+PHX.EH_RotationTeamOffset = 0
+
 net.Receive("PHX.ResetRotateTeams", function(len, ply)
 	if ( ply:PHXIsStaff() ) then
-		SetGlobalInt("RotateTeamsOffset", 0)
+		PHX.EH_RotationTeamOffset = 0
 		ply:PHXChatInfo("GOOD", "PHX_ROTATE_TEAM_RESET")
 	else
 		ply:PHXChatInfo("ERROR", "PHX_ADMIN_ACCESS_ONLY", ply:Nick())
@@ -303,8 +305,8 @@ function GM:CheckTeamBalanceCustom()
 	local hunterCount = GAMEMODE:GetHunterCount(plyrCount)
 
 	if PHX:GetCVar( "ph_rotateteams" ) then
-		local offset = GetGlobalInt("RotateTeamsOffset", 1)
-		SetGlobalInt("RotateTeamsOffset", offset + 1)
+		local offset = PHX.EH_RotationTeamOffset
+		PHX.EH_RotationTeamOffset = offset + 1
 		offset = offset % plyrCount
 		local max = hunterCount + offset
 

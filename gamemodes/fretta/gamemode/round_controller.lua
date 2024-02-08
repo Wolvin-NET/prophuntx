@@ -11,8 +11,6 @@ function GM:InRound() return GetGlobalBool( "InRound", false ) end
 function GM:OnRoundStart( num )
 
 	UTIL_UnFreezeAllPlayers()
-
-	hook.Call("PH_OnRoundStart", nil, num)
 	
 end
 
@@ -167,47 +165,6 @@ end
 //
 // Internal, override OnRoundStart if you want to do stuff here
 //
---[[ moved to prop hunt's init.lua 
-function GM:RoundStart()
-
-	local roundNum = GetGlobalInt( "RoundNumber" );
-	local roundDuration = GAMEMODE:GetRoundTime( roundNum )
-	
-	GAMEMODE:OnRoundStart( roundNum )
-
-	timer.Create( "RoundEndTimer", roundDuration, 0, function() GAMEMODE:RoundTimerEnd() end )
-	timer.Create( "CheckRoundEnd", 1, 0, function() GAMEMODE:CheckRoundEnd() end )
-	
-	SetGlobalFloat( "RoundEndTime", CurTime() + roundDuration );
-	
-	// Check if fretta_waitforplayers is true
-	// This is a fast implementation for a waiting system
-	// Make optimisations if needed
-	if ( fretta_waitforplayers:GetBool() ) then
-	
-		// Pause these timers if there are not enough players on the teams in the server
-		if ( ( team.NumPlayers( TEAM_HUNTERS ) < 1 ) || ( team.NumPlayers( TEAM_PROPS ) < 1 ) ) then
-		
-			if ( timer.Exists( "RoundEndTimer" ) && timer.Exists( "CheckRoundEnd" ) ) then
-			
-				timer.Pause( "RoundEndTimer" )
-				timer.Pause( "CheckRoundEnd" )
-			
-				SetGlobalFloat( "RoundEndTime", -1 );
-			
-				PrintMessage( HUD_PRINTTALK, "There's not enough players to start the game." )
-			
-			end
-		
-		end
-	
-	end
-	
-	// Send this as a global boolean
-	SetGlobalBool( "RoundWaitForPlayers", fretta_waitforplayers:GetBool() )
-	
-end
-]]--
 -- default fretta on round start.
 function GM:RoundStart()
 
@@ -257,9 +214,6 @@ function GM:RoundEndWithResult( result, resulttext )
 	
 	end
 	
-	-- PH:X2Z: Added RoundEndResult
-	hook.Call("PH_RoundEndResult", nil, result, resulttext)
-	
 end
 
 //
@@ -283,8 +237,6 @@ function GM:RoundEnd()
 	SetGlobalFloat( "RoundEndTime", -1 )
 	
 	timer.Simple( GAMEMODE.RoundPostLength, function() GAMEMODE:PreRoundStart( GetGlobalInt( "RoundNumber" )+1 ) end )
-	
-	hook.Call("PH_RoundEnd", nil)
 	
 end
 

@@ -56,7 +56,7 @@ ENT.sounds = {
 }
 
 function ENT:Use(activator)
-	if GAMEMODE:InRound() && IsValid(activator) && activator:IsPlayer() && activator:Alive() && activator:Team() == TEAM_PROPS then
+	if PHX:GameInRound() && IsValid(activator) && activator:IsPlayer() && activator:Alive() && activator:Team() == TEAM_PROPS then
 		
 		if activator:Team() == TEAM_PROPS && activator:Alive() then
 			local cur

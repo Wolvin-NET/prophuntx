@@ -1,7 +1,3 @@
--- Wolvin: Warning: there are already like 250+ net tables in PH:X.
--- Mostly those are occupied by GetGlobals* from ConVars.
--- Reduce Next Time!
-
 local nets = {
 	-- // start of sv_admins: \\ --
 	"SvCommandReq",

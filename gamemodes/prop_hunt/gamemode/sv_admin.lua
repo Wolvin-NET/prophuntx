@@ -127,7 +127,7 @@ end
 local function doCommand(ply, cmd, value, identifier)
 	-- Bug: Float value, if you exceed less than 0.0001, will prints out "1e-05". I'm not sure if this valid value.
 	-- Also, while it will be printed like that, util.NiceFloat might help but it only cuts to 1e-07 (0.0000001)
-	RunConsoleCommand(cmd, tostring(value))	-- convert evertyhing into string because GetGlobalBool and other value don't like actual data type, they'll think as failed value. (e.g: GetGlobalBool 0 = ignored.)
+	RunConsoleCommand(cmd, tostring(value))	-- convert to string since it's the rule.
 	PHX:VerboseMsg("[Server CVar: "..identifier.."] Command '".. cmd .. "' has changed to " .. value .. " (Player: " .. ply:Nick().. " (" ..ply:SteamID() ..") )")
 end
 

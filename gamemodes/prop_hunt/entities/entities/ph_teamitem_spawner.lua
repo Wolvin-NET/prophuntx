@@ -85,7 +85,7 @@ end
 
 function ENT:makeEntity()
 
-	if not GetGlobalBool("InRound", false) then
+	if not PHX:GameInRound() then
 		MsgC(Color(240,72,86), self.MsgPrefix .. "Cannot spawn PH:X Item because round isn't properly started!\n")
 		return 
 	end

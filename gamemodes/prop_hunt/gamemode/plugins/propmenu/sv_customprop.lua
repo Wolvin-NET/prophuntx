@@ -1,5 +1,5 @@
 local netstr = {
-	"PCR.RequestServerGameContents",	-- Admin Request Game Contents
+	--"PCR.RequestServerGameContents",	-- Admin Request Game Contents
 	"PCR.TheServerGameContents",		-- Granted Request Game Contents
 	
 	"PCR.DoneEditing",					-- Notify an Admin Done Editing
@@ -25,7 +25,7 @@ local inEditing = false
 -- verify user request, ONLY ONE INSTANCE IS DONE!
 net.Receive("phxpm.fb_RequestOpen_w", function(len, ply)
 	if CheckUser(ply) then
-	  if PHX:QCVar( "pcr_allow_custom" ) then
+	  if PHX:GetCVar( "pcr_allow_custom" ) then
 		if !inEditing then
 			net.Start("phxpm.fb_openPM_Editor")
 				net.WriteTable({ global = "PCR", sub = "CustomProp" })
@@ -61,16 +61,16 @@ hook.Add("Initialize", "pcr.InfoGameContents", function()
 	gameSize = gameData:len()
 end)
 
-net.Receive("PCR.RequestServerGameContents", function(len, ply)
+--net.Receive("PCR.RequestServerGameContents", function(len, ply)
+hook.Add("PHZ_PlayerInitUpdateData", "pcr.dReqServerGames", function( ply )
 	if CheckUser(ply) then
-		
 		net.Start("PCR.TheServerGameContents")
 			net.WriteUInt(gameSize,16)
 			net.WriteData(gameData,gameSize)
 		net.Send(ply)
-		
 	end
-end)
+end
+--end)
 
 local function checkModelExistence( mdlPath )
 	local svgames = getServerGames()

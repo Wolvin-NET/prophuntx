@@ -446,7 +446,7 @@ if CLIENT then
     -- if Anyone had better solution, please let me know!
     hook.Add("PreDrawEffects", "LPS.LaserBeamDraw", function()    
         
-        if GetGlobalBool("LPS.InLastPropStanding", false) and GetGlobalBool("InRound", false) then
+        if PHX.LPS:InLastStanding() and PHX:GameInRound() then
         
         for _,v in pairs(team.GetPlayers(TEAM_PROPS)) do
             if v:Alive() and v:IsLastStanding() and v:LPSFiringStatus() and v:GetLPSWeaponName() == "laser" then
@@ -483,7 +483,7 @@ hook.Add("PlayerTick", "LPS.LaserSoundControl", function( ply, mv )
 
     if (PHX:GetCVar( "lps_enable" ) and
         ply:Team() == TEAM_PROPS and ply:IsLastStanding() and ply:Alive() and !ply:InVehicle() and
-        ply:GetLPSWeaponName() == "laser" and GetGlobalBool("LPS.InLastPropStanding", false) and GetGlobalBool("InRound", false)) then
+        ply:GetLPSWeaponName() == "laser" and PHX.LPS:InLastStanding() and PHX:GameInRound()) then
         
         if SERVER then
         

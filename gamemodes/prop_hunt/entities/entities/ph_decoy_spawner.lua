@@ -35,7 +35,7 @@ local DontSpawn = {
 }
 function ENT:makeEntity()
 
-	if not GetGlobalBool("InRound", false) then
+	if not PHX:GameInRound() then
 		PHX:VerboseMsg("[Decoy Spawner] Cannot spawn Decoy because round isn't properly started!\n", 2)
 		return
 	end
@@ -75,7 +75,7 @@ function ENT:makeEntity()
 				-- Don't spawn if some decoys spawned near 32 units nearby
 				local findEnt = ents.FindInSphere( pos, 32 )
 				for _,v in ipairs(findEnt) do
-					if IsValid(v) and DontSpawn[v:GetClass()] then
+					if IsValid(v) and DontSpawn[v:GetClass()] or v:IsPlayer() then
 						PHX:VerboseMsg("[Decoy Spawner] I was trying to spawn decoy but there was prop or decoy near ".. tostring(v:GetPos())..", Surpressing!\n", 2)
 						continue
 					end

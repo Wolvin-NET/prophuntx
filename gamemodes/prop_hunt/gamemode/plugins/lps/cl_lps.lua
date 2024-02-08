@@ -47,7 +47,7 @@ local TextBox = {
 }
 
 hook.Add("HUDPaint", "LPS.WeaponHUDIndicator", function()
-    if GetGlobalBool("InRound", false) and LocalPlayer():IsLastStanding() and LocalPlayer():Team() == TEAM_PROPS and LocalPlayer():Alive() then
+    if PHX:GameInRound() and LocalPlayer():IsLastStanding() and LocalPlayer():Team() == TEAM_PROPS and LocalPlayer():Alive() then
         local WeaponName    = LocalPlayer():GetLPSWeaponName()
         local WeaponState   = LocalPlayer():GetLPSWeaponState()
         local Ammo          = LocalPlayer():GetLPSAmmo()

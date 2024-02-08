@@ -22,7 +22,7 @@ IS_PHX		 	= true	-- an easy check if PHX is installed.
 
 PHX.ConfigPath 	= "phx_data"
 PHX.VERSION		= "X2Z"
-PHX.REVISION	= "BETA_BUILD" --Format: dd/mm/yy.
+PHX.REVISION	= "BETA_TEST" --Format: dd/mm/yy.
 
 --Include Languages
 PHX.LANGUAGES = {}
@@ -242,12 +242,37 @@ for _,plugfolder in SortedPairs( folder ) do
 	include("plugins/" .. plugfolder .. "/sh_load.lua")
 end
 
-function PHX:SetBlindStatus( bool )
-	bool = tobool(bool)
-	SetGlobalBool("PHX.BlindStatus", bool)
+if SERVER then
+	function PHX:SetBlindStatus( bool )
+		bool = tobool(bool)
+		SetGlobalBool("PHX.BlindStatus", bool)
+	end
+
+	function PHX:SetupBlindTime()
+		local cvHunterTime = PHX:GetCVar( "ph_hunter_blindlock_time" )
+		local RoundStartTime = GetGlobalFloat("RoundStartTime",0)
+		local time = math.Clamp( cvHunterTime - (CurTime() - RoundStartTime), 0, cvHunterTime )
+
+		SetGlobalInt( "unBlind_Time", time )
+	end
 end
 function PHX:IsBlindStatus()
 	return GetGlobalBool("PHX.BlindStatus", false)
+end
+
+function PHX:GetUnblindTime()
+	return GetGlobalInt("unBlind_Time",0)
+end
+
+function PHX:GameInRound()
+	if SERVER then
+		return GAMEMODE:InRound()
+	end
+	return GetGlobalBool("InRound",false)
+end
+
+function PHX:GetRoundNumber()
+	return GetGlobalInt("RoundNumber",0)
 end
 
 if SERVER then
@@ -327,46 +352,6 @@ function PHX:TranslateName( teamID, ply )
 		return teamID
 	end
 end
---[[ function PHX.TranslateName( self, teamID, ply )
-	local strID = strteam[teamID]
-	
-	if SERVER then	-- self:F/Translate() DON'T EXIST on Serverside!
-		-- Note: DO NOT use this on expensive operations on Think, PlayerTick, and other hooks.
-		-- You  have been warned!
-		if self:GetCVar( "ph_use_lang" ) then
-			local lang = self:GetCVar( "ph_force_lang" )			
-			if self.LANGUAGES[lang] and self.LANGUAGES[lang] ~= nil and
-				self.LANGUAGES[lang][ strID ] and 
-				self.LANGUAGES[lang][ strID ] ~= nil then
-				teamID = self.LANGUAGES[lang][ strID ]
-			else
-				teamID = self.LANGUAGES["en_us"][ strID ]
-			end
-		else
-			if ply and IsValid(ply) then
-				local clLang = ply:GetInfo("ph_cl_language")
-				if self.LANGUAGES[clLang] and self.LANGUAGES[clLang] ~= nil and
-					self.LANGUAGES[clLang][ strID ] and 
-					self.LANGUAGES[clLang][ strID ] ~= nil then
-					teamID = self.LANGUAGES[clLang][ strID ]
-				end
-			else
-				teamID = self.LANGUAGES["en_us"][ strID ]
-			end
-		end
-		
-		return teamID
-	else
-		local txt = self:FTranslate( strID )
-		if !txt or txt == nil then
-			teamID = team.GetName( teamID )
-		else
-			teamID = txt
-		end
-		
-		return teamID
-	end
-end ]]
 
 --[[ END OF SHARED INIT HEADERS ]]--
 
@@ -394,7 +379,7 @@ GM.IS_PROPER_PHX_INSTALLED 	= true
 
 -- Fretta configuration
 -- Note: NEVER USE PHX:GetCVar() on ANY EARLY VARIABLES or else Settings won't work!
-GM.GameLength				= PHX:QCVar( "ph_game_time" ) -- Same as GetConVar but it's a wrapper and quicker version.
+GM.GameLength				= PHX:GetCVar( "ph_game_time" ) -- Same as GetConVar but it's a wrapper and quicker version.
 GM.AddFragsToTeamScore		= true
 GM.CanOnlySpectateOwnTeam 	= true
 GM.ValidSpectatorModes 		= { OBS_MODE_CHASE, OBS_MODE_IN_EYE, OBS_MODE_ROAMING }
@@ -407,8 +392,8 @@ GM.NoPlayerPlayerDamage 	= true
 GM.NoPlayerTeamDamage		= true
 
 GM.RoundBased				= true
-GM.RoundLimit				= PHX:QCVar( "ph_rounds_per_map" )  -- Tested: Using GetGlobalInt without restarting will mess up round system!
-GM.RoundLength 				= PHX:QCVar( "ph_round_time" )      -- Tested: Using GetGlobalInt may serve severe problems including weird timer precision!
+GM.RoundLimit				= PHX:GetCVar( "ph_rounds_per_map" )
+GM.RoundLength 				= PHX:GetCVar( "ph_round_time" )
 GM.RoundPreStartTime		= 0
 GM.SuicideString			= "dead" -- obsolete
 GM.TeamBased 				= true
@@ -455,7 +440,7 @@ end
 -- Check collisions
 local function CheckPropCollision(entA, entB)
 	-- Disable prop on prop collisions
-	if !PHX:QCVar( "ph_prop_collision" ) && (entA && entB && ((entA:IsPlayer() && entA:Team() == TEAM_PROPS && entB:IsValid() && entB:GetClass() == "ph_prop") || (entB:IsPlayer() && entB:Team() == TEAM_PROPS && entA:IsValid() && entA:GetClass() == "ph_prop"))) then
+	if !PHX:GetCVar( "ph_prop_collision" ) && (entA && entB && ((entA:IsPlayer() && entA:Team() == TEAM_PROPS && entB:IsValid() && entB:GetClass() == "ph_prop") || (entB:IsPlayer() && entB:Team() == TEAM_PROPS && entA:IsValid() && entA:GetClass() == "ph_prop"))) then
 		return false
 	end
 	

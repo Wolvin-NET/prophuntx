@@ -11,6 +11,12 @@ local LPSAllowed = false
 
 PHX.LPS.ROUND_LEFT = 1
 
+function PHX.LPS:SetIsLastStanding( bool )
+    bool = tobool(bool)
+    SetGlobalBool("LPS.InLastPropStanding",bool)
+    self.IsLastStanding=bool
+end
+
 function PHX.LPS:CreateSound( ply )
 
     if IsValid( ply ) and ply:Alive() and ply:Team() == TEAM_PROPS then
@@ -93,7 +99,7 @@ local function ResetPlayerStat( ply )
     ply:SetLPSWeapon( "No Weapon" )
     if ply:IsLastStanding() then 
         ply:SetLastStanding( false )
-        SetGlobalBool("LPS.InLastPropStanding", false)
+        PHX.LPS:SetIsLastStanding( false )
     end
     
     -- In case of disconnect
@@ -116,7 +122,7 @@ hook.Add("Initialize", "LPS.CreateSoundHook", function()
 end)
 
 hook.Add("PlayerCanPickupWeapon", "LPS.GiveDummyWeapon", function( ply, wep )
-    if ply:Team() == TEAM_PROPS and ply:Alive() and ply:IsLastStanding() and GetGlobalBool( "InRound", false ) then
+    if ply:Team() == TEAM_PROPS and ply:Alive() and ply:IsLastStanding() and PHX:GameInRound() then
         if ( ply:HasWeapon( wep:GetClass() ) ) then return false end
         if wep:GetClass() == PHX.LPS.DUMMYWEAPON then return true end
     end
@@ -162,9 +168,9 @@ local function DoPlayerCheck(ply)
         
         -- Gives delay in case hunter throws a grenade or something or 2 player prop were killed simultaneously
         timer.Simple(0.5, function()
-	        if team.NumPlayers(TEAM_PROPS) >= PHX:GetCVar( "lps_mins_prop_players" ) and LPSAllowed and GAMEMODE:GetTeamAliveCounts()[TEAM_PROPS] == 1 and GAMEMODE:InRound() and (not GetGlobalBool("LPS.InLastPropStanding", false)) then
+	        if team.NumPlayers(TEAM_PROPS) >= PHX:GetCVar( "lps_mins_prop_players" ) and LPSAllowed and GAMEMODE:GetTeamAliveCounts()[TEAM_PROPS] == 1 and PHX:GameInRound() and (not PHX.LPS:InLastStanding()) then
 				
-				local RN = GetGlobalInt( "RoundNumber", 0 )
+				local RN = PHX:GetRoundNumber()
 				local XR = PHX:GetCVar( "lps_start_every_x_rounds" )
 				
 				if PHX:GetCVar( "lps_start_random_round" ) then
@@ -234,7 +240,7 @@ local function DoPlayerCheck(ply)
 			        end
                 end
 				
-				SetGlobalBool("LPS.InLastPropStanding", true) -- for Think
+				PHX.LPS:SetIsLastStanding( true )
 				-- FIX 01/30/2023: Replaced 'pl' to 'stand'. pl was nil.
 				hook.Call( "PHInLastPropStanding", nil, stand, PHX.LPS.WEAPON2.NAME, PHX.LPS.WEAPON2.DATA ) -- for Something you need to "hook.Add" it.
 

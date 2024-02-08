@@ -1,9 +1,9 @@
 PCR.PropList = {}
 
-hook.Add("InitPostEntity", "pcr.RequestPropData", function()
+--[[ hook.Add("_InitPostEntity", "pcr.RequestPropData", function()
 	net.Start("pcr.ClientRequestPropData")
 	net.SendToServer()
-end)
+end) ]]
 
 net.Receive("pcr.PropListData", function()
 	PCR.PropList = {}
@@ -199,7 +199,7 @@ function PCR:OpenPropMenu()
 		return
 	end
     
-    if !LocalPlayer():Alive() && LocalPlayer():Team() ~= TEAM_PROPS && !GetGlobalBool("InRound",false) then
+    if !LocalPlayer():Alive() && LocalPlayer():Team() ~= TEAM_PROPS && !PHX:GameInRound() then
         chat.AddText(Color(10,235,30), "[PHX Prop Menu]", Color(220,220,220), PHX:FTranslate("PCR_CL_MENU_NOTREADY"))
         return
     end

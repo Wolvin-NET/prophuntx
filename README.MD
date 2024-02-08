@@ -14,7 +14,7 @@ Version: X2Z 2.0, Revision: ??/??/2022 (dd/mm/yyyy)
 
 ### Purpose:
 - Backup
-- Beta Need Testing
+- Need Testing
 
 ### Donate
 Please help support the project by donating:  

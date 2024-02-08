@@ -9,12 +9,22 @@ function util.IsHexColor( str )
     
 end
 
-function util.ColorToVector( tblColor )
-    if istable( tblColor ) then
-        return Vector( tblColor.r/255, tblColor.g/255, tblColor.b/255 )
+function util.AllPlayers( f )
+    for _,ply in ipairs( player.GetAll() ) do
+        f( ply )
     end
-    
-    return Vector( 1, 1, 1 )
+end
+
+function util.HumanPlayers( f )
+    for _,ply in ipairs( player.GetHumans() ) do
+        f( ply )
+    end
+end
+
+function util.AllTeamPlayers( TeamID, f )
+    for _,ply in ipairs( team.GetPlayers( TeamID ) ) do
+        f( ply )
+    end
 end
 
 function util.PHXQuickCompress( tbl )

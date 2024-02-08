@@ -33,10 +33,7 @@ function GM:AddScoreboardAvatar( ScoreBoard )
 		local av = vgui.Create( "AvatarImage", ScoreBoard )
 			av:SetSize( 32, 32 )
 			av:SetPlayer( ply )
-			av.Click = function()
-				--print( "LOL" )
-				-- todo: Let's add something here in future. Hopefully...
-			end
+			av.Click = function() end
 			return av
 	end
 	

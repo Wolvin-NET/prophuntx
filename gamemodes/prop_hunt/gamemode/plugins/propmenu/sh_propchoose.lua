@@ -31,7 +31,7 @@ end
 if SERVER then
 	hook.Add("PlayerButtonDown","PCR.PressedKey",function(ply, btn)
 		if (btn == ply:GetInfoNum( "ph_prop_menu_key", 0 )) and ply:Team() == TEAM_PROPS and ply:Alive() then
-			if PHX:QCVar("pcr_use_ulx_menu") then
+			if PHX:GetCVar("pcr_use_ulx_menu") then
 				ply:ConCommand("ulx propmenu")
 			else
 				ply:ConCommand("ph_prop_menu")
