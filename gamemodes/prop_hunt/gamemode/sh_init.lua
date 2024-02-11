@@ -22,10 +22,20 @@ IS_PHX		 	= true	-- an easy check if PHX is installed.
 
 PHX.ConfigPath 	= "phx_data"
 PHX.VERSION		= "X2Z"
-PHX.REVISION	= "BETA_TEST" --Format: dd/mm/yy.
+--PHX.REVISION	= "19.01.24" --Format: dd/mm/yy.
+PHX.REVISION	= "DEV_BUILD"
+PHX.LANGUAGES	= {}
+PHX.PLUGINS		= {}
+PHX.MV			= {} -- MapVote
 
---Include Languages
-PHX.LANGUAGES = {}
+-- Local Variables
+local VMax = Vector(4,4,4)
+local strteam = {} -- for Serverside TeamName Translation
+strteam[TEAM_CONNECTING] 	= "PHX_TEAM_CONNECTING"
+strteam[TEAM_HUNTERS]		= "PHX_TEAM_HUNTERS"
+strteam[TEAM_PROPS]			= "PHX_TEAM_PROPS"
+strteam[TEAM_UNASSIGNED]	= "PHX_TEAM_UNASSIGNED"
+strteam[TEAM_SPECTATOR]		= "PHX_TEAM_SPECTATOR"
 
 -- ////////////////// Verbose Message ////////////////// --
 local verbHelp="Enable more detailed and verbose messages when Prop Hunt: X2Z is running."
@@ -34,16 +44,16 @@ local MsgErrorLevel = {
 	{ "[WARN]", 	Color(246,246,2) },
 	{ "[ALERT]", 	Color(248,151,25) },
 	{ "[ERROR]", 	Color(235,43,36) },
-	{ "[FATAL]", 	Color(208,24,24) }
+	{ "[!FATAL]", 	Color(208,24,24) }
 }
 local maxMsgErrorLevel = #MsgErrorLevel
 local ErrorKeys = table.GetKeys( MsgErrorLevel )
 
-CreateConVar( "phx_verbose", "0", FCVAR_ARCHIVE, verbHelp, 0, maxMsgErrorLevel )
+local cvVerbose = CreateConVar( "phx_verbose", "0", FCVAR_ARCHIVE, verbHelp, 0, maxMsgErrorLevel )
 function PHX:VerboseMsg( text, level )
 	if !level then level = 1 end
 	level = math.Clamp( level, 1, maxMsgErrorLevel )
-	local VerboseLevel = GetConVar("phx_verbose"):GetInt()
+	local VerboseLevel = cvVerbose:GetInt()
 	
 	if VerboseLevel > 0 and text then
 		if ErrorKeys[level] >= VerboseLevel then
@@ -55,6 +65,7 @@ function PHX:VerboseMsg( text, level )
 		end
 	end
 end
+-- ////////////////// Verbose Message ////////////////// --
 
 --[[ BEGIN OF SHARED INIT HEADERS ]]--
 
@@ -73,12 +84,47 @@ GM.ViewCam.cHullzMins  = 8     -- Limit Minimums Height in BBox
 GM.ViewCam.cHullzMaxs  = 84    -- Limit Maximums Height in BBox
 GM.ViewCam.cHullzLow   = 8     -- Clam view to this height.
 
+-- Function to control Props View Zoom.
+function GM:StartCommand( ply, cmd )
+	if ply:PHIsAlive( TEAM_PROPS ) and cmd:GetMouseWheel() ~= 0 then 
+		local delta = cmd:GetMouseWheel()
+		ply.DistanceMult = math.Clamp( DistanceMult + delta, 2, 10 )
+		print( "scrolled ", delta, ply.DistanceMult )
+	end
+end
+
+local function CalcCameraView( ply, origin, angles, trace, trStart, trEnd, bUseNegative, OverrideDistance, distNorm )
+	if ply and IsValid( ply ) then
+		local prop=ply:GetPlayerPropEntity()
+		if IsValid(prop) then
+			if !ply.distMult then ply.distMult = 2 end
+			local Mins,Center,Maxs=prop:OBBMins(),prop:OBBCenter(),prop:OBBMaxs()
+			local Hullz	= Center.z - Mins.z
+			local Base	= origin + Vector( 0, 0, Hullz )
+			trace[trStart]	= Base
+
+			if (trEnd) then -- for Prop Camera Collision Enabled
+				local Long	= math.Max( Maxs.x, Maxs.y ) * ply.distMult --ply.distMult * 0.75
+				if (OverrideDistance) then Long = distNorm end -- for LPS Prop's POV Weapon Tracer and other meaning.
+				if (bUseNegative) then Long = Long * -1 end --negative are for props camera view or any other meaning.
+				local Dist		= Base + (angles:Forward() * Long)
+				trace[trEnd]	= Dist
+			end
+			
+			return true
+		end
+	end
+
+	return false
+end
+
 -- Can also internally used for CalcView but you can use anywhere in serverside realm.
-function GM.ViewCam.CamColEnabled( self, origin, ang, trace, traceStart, traceEnd, distMin, distMax, distNorm, entHullz, ply, distMult )
+function GM.ViewCam.CamColEnabled( self, ply, origin, ang, trace, traceStart, traceEnd, bUseNegative, distNorm, entHullz, OverrideDistance )
 	
-    -- don't allow 0.
-    if (!entHullz or entHullz == nil) then entHullz = self.cHullz end
-    if !trace or trace == nil then trace = {} end
+	-- distNorm and entHullz are fallback values if !IsValid(ply)
+    if not entHullz then entHullz = self.cHullz end
+	entHullz = math.Clamp( entHullz, self.cHullzMins, self.cHullzMaxs )
+    if not trace then trace = {} end
     
 	--[[ if entHullz < self.cHullzMins then
 		trace[traceStart] 	= origin + Vector(0, 0, entHullz + (self.cHullzMins - entHullz))
@@ -91,25 +137,10 @@ function GM.ViewCam.CamColEnabled( self, origin, ang, trace, traceStart, traceEn
 		trace[traceEnd] 	= origin + Vector(0, 0, self.cHullzLow) + (ang:Forward() * distNorm)
 	end ]]
 	
-	if ply and IsValid( ply ) then
-		local prop=ply:GetPlayerPropEntity()
-		if IsValid(prop) then
-			if !distMult then distMult = 40 end
-			local Maxs=prop:OBBMaxs()
-			local Mins=prop:OBBMins()
-			local Center=prop:OBBCenter()
-			local Hullz = (Center - Vector(0,0,Mins.z))
-			local Long = ( math.Max( Maxs.x, Maxs.y ) * distMult * 0.75 ) * -1
-			
-			local Base = origin + Vector(0, 0, Hullz)
-		
-			trace[traceStart]	= Base
-			trace[traceEnd]		= Base + (ang:Forward() * Long)
-			
-			return trace
-		end
-	end
+	local TraceValid = CalcCameraView( ply, origin, ang, trace, traceStart, traceEnd, bUseNegative, OverrideDistance, distNorm )
+	if (TraceValid) then return trace end
 	
+	if bUseNegative then distNorm = distNorm * -1
 	trace[traceStart]	= origin + Vector(0, 0, self.cHullzLow)
 	trace[traceEnd]		= origin + Vector(0, 0, self.cHullzLow) + (ang:Forward() * distNorm)
 	
@@ -117,55 +148,63 @@ function GM.ViewCam.CamColEnabled( self, origin, ang, trace, traceStart, traceEn
 end
 
 -- Internally used for CalcView.
-function GM.ViewCam.CamColDisabled( self, origin, ang, trace, traceStart, distMin, distMax, distNorm, entHullz )
+function GM.ViewCam.CamColDisabled( self, ply, origin, ang, trace, traceStart, bUseNegative, distNorm, entHullz )
 
-    -- don't allow 0.
-    if (!entHullz or entHullz == nil) then entHullz = self.cHullz end
-    if !trace or trace == nil then trace = {} end
+    if not entHullz then entHullz = self.cHullz end
+	entHullz = math.Clamp( entHullz, self.cHullzMins, self.cHullzMaxs )
+    if not trace then trace = {} end
 	
-	if entHullz < self.cHullzMins then
+	--[[ if entHullz < self.cHullzMins then
 		trace[traceStart] = origin + Vector(0, 0, entHullz + (self.cHullzMins - entHullz)) + (ang:Forward() * distMin)
 	elseif entHullz > self.cHullzMaxs then
 		trace[traceStart] = origin + Vector(0, 0, entHullz - self.cHullzMaxs) + (ang:Forward() * distMax)
 	else
 		trace[traceStart] = origin + Vector(0, 0, self.cHullzLow) + (ang:Forward() * distNorm)
-	end
+	end ]]
+
+	local TraceValid = CalcCameraView( ply, origin, ang, trace, traceStart, nil, bUseNegative )
+	if (TraceValid) then return trace end
+
+	if bUseNegative then distNorm = distNorm * -1
+	trace[traceStart]	= origin + Vector(0, 0, self.cHullzLow) + (ang:Forward() * distNorm)
 
 	return trace
     
 end
 
 -- Use this to get a common value instead of using CamColEnabled()
-function GM.ViewCam.CommonCamCollEnabledView( self, origin, angles, entZ )
-    if (!entZ and entZ == nil) then entZ = self.cHullz end
+function GM.ViewCam.CommonCamCollEnabledView( self, ply, origin, angles, bUseNegative, entHullz )
+    if !entZ then entZ = self.cHullz end
+	entHullz = math.Clamp( entHullz, self.cHullzMins, self.cHullzMaxs )
 
     local trace = {}
-      trace = self:CamColEnabled( origin, angles, trace, "start", "endpos", 100, 300, 100, entZ )
-      
+    trace = self:CamColEnabled( ply, origin, angles, trace, "start", "endpos", bUseNegative, 100, entHullz )
     return trace
 end
 
 -- Used for Hunters.
-function GM.ViewCam.Hunter3pCollEnabled( self, isduck, origin, angles, forward, right, up )
+function GM.ViewCam.Hunter3pCollEnabled( self, pl, origin, angles, forward, right, up )
+	if not IsValid(pl) then return end
+	if !origin then origin = pl:EyePos() end
+	if !angles then angles = pl:EyeAngles() end
+	if !forward then forward = 50 end
+    if !right then right = 0 end
+    if !up then up = 0 end
+	
     local trace = {}
-    
-    if !forward or forward == nil then forward = 50 end
-    if !right or right == nil then right = 0 end
-    if !up or up == nil then up = 0 end
-	if isduck == nil then isduck = false end
+	local isduck = pl:Crouching()
     
     trace.start = origin
     trace.endpos = origin - (angles:Forward()*forward) + (angles:Right()*right) + (angles:Up()*up)
     trace.filter = player.GetAll()
-	trace.maxs = Vector(4,4,4)
-	trace.mins = trace.maxs*-1
+	trace.maxs = VMax
+	trace.mins = trace.maxs * -1
 	if isduck then
 		trace.maxs = trace.maxs/2
 		trace.mins = trace.mins/2
 	end
     
     local tr = util.TraceHull( trace )
-    
     return tr
 end
 
@@ -189,12 +228,10 @@ function PHX:Includes( path, name, isExternal )
         end
     end
 end
-
 PHX:Includes( "langs", "Languages" )
 PHX:Includes( "config/lib", "Libraries" )
 PHX:Includes( "config/external", "External Lua" )
 
---Add Alias for NewSoundDuration()
 function PHX:SoundDuration( snd )
 	if (NewSoundDuration) then return NewSoundDuration(snd) end
 	return -1
@@ -208,15 +245,15 @@ AddCSLuaFile("sh_config.lua")
 AddCSLuaFile("sh_player.lua")
 AddCSLuaFile("sh_chatbox.lua")
 AddCSLuaFile("sh_tauntscanner.lua")
+AddCSLuaFile("sh_httpupdates.lua")
 include("enhancedplus/sh_enhancedplus.lua")
 include("config/sh_init.lua")
 include("sh_config.lua")
 include("sh_player.lua")
 include("sh_chatbox.lua")
 include("sh_tauntscanner.lua")
+include("sh_httpupdates.lua")
 
--- MapVote
-PHX.MV = {}
 if SERVER then
     AddCSLuaFile("sh_mapvote.lua")
     AddCSLuaFile("mapvote/cl_mapvote.lua")
@@ -229,12 +266,7 @@ else
     include("mapvote/cl_mapvote.lua")
 end
 
--- Update
-AddCSLuaFile("sh_httpupdates.lua")
-include("sh_httpupdates.lua")
-
 -- Plugins and other modules
-
 local _,folder = file.Find(engine.ActiveGamemode() .. "/gamemode/plugins/*", "LUA")
 for _,plugfolder in SortedPairs( folder ) do
 	PHX:VerboseMsg("[Plugins Init] Loading plugin: "..plugfolder)
@@ -242,7 +274,9 @@ for _,plugfolder in SortedPairs( folder ) do
 	include("plugins/" .. plugfolder .. "/sh_load.lua")
 end
 
+-- Shared Functions and Helpers
 if SERVER then
+
 	function PHX:SetBlindStatus( bool )
 		bool = tobool(bool)
 		SetGlobalBool("PHX.BlindStatus", bool)
@@ -255,28 +289,8 @@ if SERVER then
 
 		SetGlobalInt( "unBlind_Time", time )
 	end
-end
-function PHX:IsBlindStatus()
-	return GetGlobalBool("PHX.BlindStatus", false)
-end
-
-function PHX:GetUnblindTime()
-	return GetGlobalInt("unBlind_Time",0)
-end
-
-function PHX:GameInRound()
-	if SERVER then
-		return GAMEMODE:InRound()
-	end
-	return GetGlobalBool("InRound",false)
-end
-
-function PHX:GetRoundNumber()
-	return GetGlobalInt("RoundNumber",0)
-end
-
-if SERVER then
 	
+	-- Server Sided Translation, require Player Entity
 	local function GetTranslation(t, ply, strID)
 		local str="!error"
 		
@@ -302,10 +316,8 @@ if SERVER then
 	end
 
 	function PHX:SVTranslate(ply, strID, ... )
-
 		local str = GetTranslation( self, ply, strID )
 		return string.format( str, ... )
-		
 	end
 
 	--Get Random Translated
@@ -320,21 +332,33 @@ if SERVER then
 	--Broadcast Translate to All Players
 	function PHX:BTranslate(f, strID, ... )
 		--Broadcast Translate
-		for _,ply in pairs( player.GetAll() ) do
-		
+		util.AllPlayers( function( ply )
 			local txt = self:SVTranslate( ply, strID, ... )
 			f( ply, txt )
-
-		end
+		end )
 	end
+
 end
 
-local strteam = {}
-strteam[TEAM_CONNECTING] 	= "PHX_TEAM_CONNECTING"
-strteam[TEAM_HUNTERS]		= "PHX_TEAM_HUNTERS"
-strteam[TEAM_PROPS]			= "PHX_TEAM_PROPS"
-strteam[TEAM_UNASSIGNED]	= "PHX_TEAM_UNASSIGNED"
-strteam[TEAM_SPECTATOR]		= "PHX_TEAM_SPECTATOR"
+function PHX:IsBlindStatus()
+	return GetGlobalBool("PHX.BlindStatus", false)
+end
+
+function PHX:GetUnblindTime()
+	return GetGlobalInt("unBlind_Time",0)
+end
+
+function PHX:GameInRound()
+	if SERVER then
+		return GAMEMODE:InRound()
+	end
+	return GetGlobalBool("InRound",false)
+end
+
+function PHX:GetRoundNumber()
+	return GetGlobalInt("RoundNumber",0)
+end
+
 function PHX:TranslateName( teamID, ply )
 	local strID = strteam[teamID]
 	
@@ -422,76 +446,82 @@ GM.PHXContributors			= {
 
 -- Called on gamemdoe initialization to create teams
 function GM:CreateTeams()
-	if !GAMEMODE.TeamBased then
-		return
-	end
+	if not GAMEMODE.TeamBased then return; end
 	
 	-- hunters
 	team.SetUp(TEAM_HUNTERS, "Hunters", Color(150, 205, 255, 255))
-	team.SetSpawnPoint(TEAM_HUNTERS, {"info_player_counterterrorist", "info_player_combine", "info_player_deathmatch", "info_player_axis", "info_player_hunters"})
+	team.SetSpawnPoint( TEAM_HUNTERS, {
+		"info_player_hunters",
+		"info_player_counterterrorist",
+		"info_player_combine",
+		"info_player_deathmatch",
+		"info_player_axis"
+	})
 	team.SetClass(TEAM_HUNTERS, {"Hunter"})
 
 	-- props
 	team.SetUp(TEAM_PROPS, "Props", Color(255, 60, 60, 255))
-	team.SetSpawnPoint(TEAM_PROPS, {"info_player_terrorist", "info_player_rebel", "info_player_deathmatch", "info_player_allies", "info_player_props"})
+	team.SetSpawnPoint( TEAM_PROPS, {
+		"info_player_props",
+		"info_player_terrorist",
+		"info_player_rebel",
+		"info_player_deathmatch",
+		"info_player_allies"
+	})
 	team.SetClass(TEAM_PROPS, {"Prop"})
+
 end
 
 -- Check collisions
-local function CheckPropCollision(entA, entB)
+local PhPropEnt={ ["ph_prop"] = true }
+function GM:ShouldCollide( entA, entB )
 	-- Disable prop on prop collisions
-	if !PHX:GetCVar( "ph_prop_collision" ) && (entA && entB && ((entA:IsPlayer() && entA:Team() == TEAM_PROPS && entB:IsValid() && entB:GetClass() == "ph_prop") || (entB:IsPlayer() && entB:Team() == TEAM_PROPS && entA:IsValid() && entA:GetClass() == "ph_prop"))) then
+	local cvPropColl = PHX:GetCVar( "ph_prop_collision" )
+
+	if IsValid(entA) and IsValid(entB) then
+		if !cvPropColl and 
+			((entA:IsPlayer() and entA:Team() == TEAM_PROPS and PhPropEnt[entB:GetClass()]) or 
+			(entB:IsPlayer() and entB:Team() == TEAM_PROPS and PhPropEnt[entA:GetClass()])) then
+			return false
+		end
+		
+		-- Disable hunter on hunter collisions so we can allow bullets through them
+		if ( (entA:IsPlayer() and entA:Team() == TEAM_HUNTERS and entB:IsPlayer() and entB:Team() == TEAM_HUNTERS) ) then
+			return false
+		end
+	end
+	--[[ if !cvPropColl and 
+		(entA and entB and 
+		(
+		(entA:IsPlayer() and entA:Team() == TEAM_PROPS and entB:IsValid() and entB:GetClass() == "ph_prop") or 
+		(entB:IsPlayer() and entB:Team() == TEAM_PROPS and entA:IsValid() and entA:GetClass() == "ph_prop")
+		)) then
 		return false
 	end
 	
 	-- Disable hunter on hunter collisions so we can allow bullets through them
 	if (IsValid(entA) && IsValid(entB) && (entA:IsPlayer() && entA:Team() == TEAM_HUNTERS && entB:IsPlayer() && entB:Team() == TEAM_HUNTERS)) then
 		return false
-	end
+	end ]]
+
+	return true
 end
-hook.Add("ShouldCollide", "CheckPropCollision", CheckPropCollision)
 
 -- Footstep Control
-hook.Add( "PlayerFootstep", "PHX_FootstepControls", function( ply )
-	if PHX:GetCVar( "ph_props_disable_footstep" ) and ply:Team() == TEAM_PROPS then
-		return true
-	end
-end )
+function GM:PlayerFootstep( ply )
+	if ( IsValid( ply ) and !ply:Alive() ) then return true end
+	if PHX:GetCVar( "ph_props_disable_footstep" ) and ply:Team() == TEAM_PROPS then return true end
+end
 
 -- External / Internal Plugins
-PHX.PLUGINS = {}
-
 function PHX:InitializePlugin()
-
-	--[[
-		-- Notes to Myself (Wolvin) - Please Finish & Improveon this section in Prop Hunt: Codename Zero
-		local _Plugins = {}
 	
-		function _Plugins:AddToList( name, data )
-			_Plugins[name] = data
-		end
-		
-		hook.Call("PHX_AddPlugin", nil, _Plugins)
-		
-		-- try to get rid of using list.Set this time.
-		
-		table.sort(_Plugins)
-		
-		-- Todo:
-		- loop
-		- add & combine with legacy below
-		- stuff.
-	]]
-	
-	-- Add Legacy Plugins or Addons, if any.
 	local STATE = "SERVER"
-	if CLIENT then
-		STATE = "CLIENT"
-	end
+	if CLIENT then STATE = "CLIENT"; end
 	
 	self:VerboseMsg( "[Plugin] Initializing Plugins..." )
 	for name,plugin in pairs( list.Get("PHX.Plugins") ) do
-		if (self.PLUGINS[name] ~= nil) then
+		if (self.PLUGINS[name]) then
 			self:VerboseMsg("[Plugin] Not adding "..name.." because it was exists in table. Use different name instead!", 3)
 		else
 			self:VerboseMsg("[Plugin] Adding & Loading Plugin: "..name)
@@ -507,21 +537,20 @@ function PHX:InitializePlugin()
 				self:VerboseMsg("--> Name: "..pData.name.."\n--> Version: "..pData.version.."\n--> Info: "..pData.info)
 			end
 		else
-			self:VerboseMsg( string.format("[PHX Plugin] No %s Plugins Loaded...", STATE) )
+			self:VerboseMsg( string.format("[Plugin] No %s Plugins Loaded...", STATE) )
 		end
 	end)
 end
 -- Initialize Plugins
-hook.Add("Initialize", "PHX.LoadPlugins", function() -- Origin: PostGamemodeLoaded
+hook.Add("Initialize", "PHXHook.LoadPlugins", function()
 	PHX:InitializePlugin()
 end)
-hook.Add("OnReloaded", "PHX.ReLoadPlugins", function()
+hook.Add("OnReloaded", "PHXHook.ReLoadPlugins", function()
 	PHX:InitializePlugin()
 end)
 
 if CLIENT then	
 	hook.Add("PH_CustomTabMenu", "PHX.NewPlugins", function(tab, pVgui, paintPanelFunc)
-		--local tabW,tabH = tab:GetWide(),tab:GetTall()
 		local tabW,tabH = tab.Content:GetWide(),tab.Content:GetTall()
 		local main = {}
 	

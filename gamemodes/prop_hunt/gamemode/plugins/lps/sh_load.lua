@@ -34,11 +34,11 @@ function util.LPSgetConValue( val )
     return 1
 end
 
-function util.LPSgetAccurateAim( tblEntity, pos, WeaponPos, ang, maxsz )
+function util.LPSgetAccurateAim( pl, tblEntity, pos, WeaponPos, ang, maxsz )
     local eyeTrace = {}
     local aimTrace = {}
     local filter   = tblEntity
-    eyeTrace  = GAMEMODE.ViewCam:CamColEnabled( pos, ang, {}, "start", "endpos", 32768/2, 32768, 32768/2, maxsz )
+    eyeTrace        = GAMEMODE.ViewCam:CamColEnabled( pl, pos, ang, {}, "start", "endpos", false, 32768, maxsz, true )
     eyeTrace.filter = filter
     aimTrace.filter = eyeTrace.filter
     local eyeResult = util.TraceLine(eyeTrace)  --tested: Using eyeResult.Normal will create inaccurate result after changing into smaller props.

@@ -199,7 +199,7 @@ end
 
 function Player:GetLastTauntTime( idStringID, useNet )
 
-	if useNet == nil then useNet = false end
+	if useNet == tobool(useNet) end
 	
 	if ( useNet or CLIENT ) then
 		return self:GetNWFloat( idStringID, 0.00 )
@@ -214,7 +214,90 @@ function Player:GetLastTauntTime( idStringID, useNet )
 	return 0
 end
 
+function Player:InFreezeCam()
+	return self:GetNWBool( "InFreezeCam", false )
+end
+
+function Player:PHIsPlayerAndAlive( idTeam )
+	if idTeam then return self:IsPlayer() and self:Alive() and self:Team() == idTeam end
+	return self:IsPlayer() and self:Alive()
+end
+
+function Player:PHIsAlive( idTeam )
+	if idTeam then return self:Alive() and self:Team() == idTeam end
+	return self:Alive()
+end
+
+function Player:PHIsSpectators()
+	if ply:Team() == TEAM_SPECTATOR or ply:Team() == TEAM_UNASSIGNED then return true end
+	return false
+end
+
+function Player:PHIsPlaying()
+	if ply:Team() == TEAM_PROPS or ply:Team() == TEAM_HUNTERS then return true end
+	return false
+end
+
 if SERVER then
+	function Player:PHResetStat()
+		local pl=self
+		net.Start("ResetHull"); net.Send(pl); 
+		net.Start("DisableDynamicLight"); net.Send(pl); 
+		pl._joinCameFrom = nil
+		pl._Team2TeamDisabledSuicide = nil
+		pl.propdecoy = nil
+		pl:RemoveProp()
+		pl:Blind(false)
+		pl:SetPlayerLockedRot(false)
+		pl:SetNWBool("InFreezeCam", false)
+		pl:SetNWEntity("PlayerKilledByPlayerEntity", nil) -- NULL?
+		pl:ResetTauntRandMapCount() -- Reset Fake taunts
+		pl:SetLastTauntTime( "LastTauntTime", CurTime() )
+		pl:SetLastTauntTime( "CLastTauntTime", CurTime() )
+		pl:PropSwitchLight( true )
+	end
+
+	function Player:StartFreezeCam( attacker )
+		timer.Simple(0.5, function() 
+			if IsValid(self) and IsValid(attacker) and not self:InFreezeCam() then
+				net.Start("PlayFreezeCamSound")
+				net.Send(self)
+			
+				self:SetNWEntity("PlayerKilledByPlayerEntity", attacker)
+				self:SetNWBool("InFreezeCam", true)
+				self:SpectateEntity( attacker )
+				self:Spectate( OBS_MODE_FREEZECAM )
+			end
+		end)
+	
+		timer.Simple(4.5, function()
+			local AliveHunters = {}
+			if self:Team() == TEAM_HUNTERS then
+				util.AllTeamPlayers( TEAM_HUNTERS, function(v)
+					if v:Alive() then table.insert(AliveHunters, v); end
+				end )
+			end
+	
+			if IsValid(self) and self:InFreezeCam() then
+				local SpectEnt = nil
+				self:SetNWBool("InFreezeCam", false)
+				self:Spectate( OBS_MODE_CHASE )
+				if #AliveHunters > 0 and self:Team() == TEAM_HUNTERS then
+					SpectEnt = AliveHunters[math.random(1,#AliveHunters)]
+				end
+				self:SpectateEntity( SpectEnt )
+				--self:SetNWEntity("PlayerKilledByPlayerEntity", NULL) --?
+			end
+		end)
+	end
+
+	function Player:PropSwitchLight( isForced )
+		local Forced = tobool( isForced )
+		net.Start("PlayerSwitchDynamicLight")
+		net.WriteBool(Forced) -- = True behaves "DisableDynamicLight"
+		net.Send(self)
+	end
+
     function Player:EnablePropPitchRot( bool )
         self:SetNWBool("PlayerPitchRot", bool)
     end
@@ -307,7 +390,7 @@ if SERVER then
             local min,max = self:GetHull()
             local playercolor = self:GetInfo("cl_playercolor")
             
-            trace           = GAMEMODE.ViewCam:CamColEnabled( self:EyePos(), self:EyeAngles(), trace, "start", "endpos", dist, dist, dist, max.z )
+            trace           = GAMEMODE.ViewCam:CamColEnabled( self, self:EyePos(), self:EyeAngles(), trace, "start", "endpos", false, dist, max.z, true )
 			trace.mask		= MASK_PLAYERSOLID
 			trace.filter	= ents.FindByClass('ph_prop')
             table.insert(trace.filter, self)

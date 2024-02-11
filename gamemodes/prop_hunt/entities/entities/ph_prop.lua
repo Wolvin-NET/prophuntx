@@ -185,10 +185,11 @@ if SERVER then
 				MsgAll(attacker:Name() .. " found and killed " .. pl:Name() .. "\n") 
 
 				if PHX:GetCVar( "ph_freezecam" ) then
-					if pl:GetNWBool("InFreezeCam", false) then
+					if pl:InFreezeCam() then
 						pl:PrintMessage(HUD_PRINTCONSOLE, "!! WARNING: Something went wrong with the Freeze Camera, but it's still enabled!")
 					else
-						timer.Simple(0.5, function()
+						pl:StartFreezeCam( attacker )
+						--[[ timer.Simple(0.5, function()
 							if !pl:GetNWBool("InFreezeCam", false) then
 								-- Play the good old Freeze Cam sound
 								net.Start("PlayFreezeCamSound")
@@ -207,7 +208,8 @@ if SERVER then
 								pl:Spectate( OBS_MODE_CHASE )
 								pl:SpectateEntity( nil )
 							end
-						end)
+						end) ]]
+
 					end
 				end
 				

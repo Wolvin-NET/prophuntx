@@ -48,6 +48,25 @@ function PHX:GetEngineCVar( cvar, cvarType )
 
 end
 
+function PHX:GetCVarRaw( cvar )
+
+	local Exist = self.CVAROBJ.SHARED[cvar]
+	return Exist or GetConVar(cvar)
+
+	if SERVER then
+		local SVExist = self.CVAROBJ.SERVER[cvar]
+		return SVExist or GetConVar(cvar)
+	end
+
+	if CLIENT then
+		local CLExist = self.CVAROBJ.CLIENT[cvar]
+		return CLExist or GetConVar(cvar)
+	end
+
+	-- fallback to GetConVar if none of them exists
+	return GetConVar(cvar)
+end
+
 local function cvRealm( isServer ) return (isServer) and "SERVER" or "SHARED"; end
 
 local ConVarTranslate = {

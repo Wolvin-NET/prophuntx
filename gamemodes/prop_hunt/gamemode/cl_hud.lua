@@ -330,3 +330,7 @@ hook.Add("HUDPaint", "PHX.MainHUD", function()
 		end
 	end
 end)
+
+function GM:UpdateHUD_AddedTime( iTimeAdded )
+	-- DNotify
+end

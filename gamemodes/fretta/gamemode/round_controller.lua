@@ -1,54 +1,13 @@
-
 function GM:SetRoundWinner( ply, resulttext ) SetGlobalEntity( "RoundWinner", ply ) SetGlobalString( "RRText", tostring(resulttext) ) end
 function GM:SetRoundResult( i, resulttext ) SetGlobalInt( "RoundResult", i ) SetGlobalString( "RRText", tostring(resulttext) ) end
 function GM:ClearRoundResult() SetGlobalEntity( "RoundWinner", NULL ) SetGlobalInt( "RoundResult", 0 ) SetGlobalString( "RRText", "" ) end
 function GM:SetInRound( b ) SetGlobalBool( "InRound", b ) end
 function GM:InRound() return GetGlobalBool( "InRound", false ) end
 
---//moved to prop hunt's init.lua
--- fretta_waitforplayers = CreateConVar( "fretta_waitforplayers", "1", { FCVAR_ARCHIVE } )
-
 function GM:OnRoundStart( num )
-
 	UTIL_UnFreezeAllPlayers()
-	
 end
 
---local bAlreadyStarted = false
---[[moved to prop hunt's init.lua 
-function GM:OnRoundEnd( num )
-
-	// Check if fretta_waitforplayers is true
-	// This is a fast implementation for a waiting system
-	// Make optimisations if needed
-	if ( fretta_waitforplayers:GetBool() ) then
-	
-		// Take away a round number quickly before it adds another when there are not enough players
-		// Set to false
-		if ( ( team.NumPlayers( TEAM_HUNTERS ) < 1 ) || ( team.NumPlayers( TEAM_PROPS ) < 1 ) ) then
-		
-			bAlreadyStarted = false
-		
-		end
-
-		// Check if the round was already started before so we count it as a fully played round
-		if ( !bAlreadyStarted ) then
-		
-			SetGlobalInt( "RoundNumber", GetGlobalInt( "RoundNumber" )-1 )
-		
-		end
-
-		// Set to true
-		if ( ( team.NumPlayers( TEAM_HUNTERS ) >= 1 ) && ( team.NumPlayers( TEAM_PROPS ) >= 1 ) ) then
-		
-			bAlreadyStarted = true
-		
-		end
-	
-	end
-
-end
-]]--
 function GM:OnRoundEnd(num)
 end
 

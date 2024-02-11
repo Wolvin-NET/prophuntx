@@ -31,10 +31,10 @@ function GM:AddScoreboardAvatar( ScoreBoard )
 
 	local f = function( ply ) 	
 		local av = vgui.Create( "AvatarImage", ScoreBoard )
-			av:SetSize( 32, 32 )
-			av:SetPlayer( ply )
-			av.Click = function() end
-			return av
+		av:SetSize( 32, 32 )
+		av:SetPlayer( ply )
+		av.Click = function() gui.OpenURL( "https://steamcommunity.com/profiles/"..ply:SteamID64() ) end
+		return av
 	end
 	
 	ScoreBoard:AddColumn( "", 32, f, 360 ) // Avatar
@@ -90,15 +90,15 @@ end
 function GM:AddScoreboardWantsChange( ScoreBoard )
 
 	local f = function( ply ) 
-					if ( ply:GetNWBool( "WantsVote", false ) ) then 
-						local lbl = vgui.Create( "DLabel" )
-							lbl:SetFont( "Marlett" )
-							lbl:SetText( "a" )
-							lbl:SetTextColor( Color( 100, 255, 0 ) )
-							lbl:SetContentAlignment( 5 )
-						return lbl
-					end					
-				end
+		if ( ply:GetNWBool( "WantsVote", false ) ) then 
+			local lbl = vgui.Create( "DLabel" )
+				lbl:SetFont( "Marlett" )
+				lbl:SetText( "a" )
+				lbl:SetTextColor( Color( 100, 255, 0 ) )
+				lbl:SetContentAlignment( 5 )
+			return lbl
+		end					
+	end
 				
 	ScoreBoard:AddColumn( "", 16, f, 2, nil, 6, 6 )
 
@@ -112,27 +112,27 @@ function GM:CreateScoreboard( ScoreBoard )
 
 	// This makes it so that it's behind chat & hides when you're in the menu
 	// Disable this if you want to be able to click on stuff on your scoreboard
-	ScoreBoard:ParentToHUD()
+	// ScoreBoard:ParentToHUD()
 	
 	ScoreBoard:SetRowHeight( 32 )
 
 	ScoreBoard:SetAsBullshitTeam( TEAM_SPECTATOR )
 	ScoreBoard:SetAsBullshitTeam( TEAM_CONNECTING )
-	ScoreBoard:SetShowScoreboardHeaders( GAMEMODE.TeamBased )
+	ScoreBoard:SetShowScoreboardHeaders( self.TeamBased )
 	
-	if ( GAMEMODE.TeamBased ) then
+	if ( self.TeamBased ) then
 		ScoreBoard:SetAsBullshitTeam( TEAM_UNASSIGNED )
 		ScoreBoard:SetHorizontal( true )	
 	end
 
-	ScoreBoard:SetSkin( GAMEMODE.HudSkin )
+	ScoreBoard:SetSkin( self.HudSkin )
 
 	self:AddScoreboardAvatar( ScoreBoard )		// 1
 	self:AddScoreboardWantsChange( ScoreBoard )	// 2
 	self:AddScoreboardName( ScoreBoard )		// 3
 	-- Include custom column externally. Set after Player's Name.
-	hook.Call("PH_AddColumnScoreboard", nil, ScoreBoard, function( Name, Fixed, Func, Rate, TeamID, HAlign, VAlign, Font )
-		GAMEMODE:AddScoreboardCustom( ScoreBoard, Name, Fixed, Func, Rate, TeamID, HAlign, VAlign, Font )
+	hook.Run("PH_AddColumnScoreboard", ScoreBoard, function( Name, Fixed, Func, Rate, TeamID, HAlign, VAlign, Font )
+		self:AddScoreboardCustom( ScoreBoard, Name, Fixed, Func, Rate, TeamID, HAlign, VAlign, Font )
 	end)
 	-- Add the Rest.
 	self:AddScoreboardKills( ScoreBoard )		// 4

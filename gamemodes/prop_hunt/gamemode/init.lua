@@ -25,7 +25,8 @@ SetGlobalBool("PHX.BlindStatus",false)
 PHX:SetupBlindTime()
 
 -- PUBLIC VARIABLES
-PHX.EXPLOITABLE_DOORS = {
+GM.ReconnectedPlayers	= {}
+PHX.EXPLOITABLE_DOORS	= {
 	["func_door"]			= true,
 	["prop_door_rotating"]	= true, 
 	["func_door_rotating"]	= true,
@@ -43,7 +44,47 @@ CTRL_TEAMLMT_DCPLAYERS	= {}
 
 --PHX.SPECTATOR_CHECK     = 0 -- Obsolete
 
+function PHX:PlayTaunt( pl, sndTaunt, bIsPitchEnabled, iPitchLevel, bIsRandomized, LastTauntTimeID )
+	if not pl or not IsValid(pl) then
+		print("[Taunt:PlayTaunt] Error: A 'Player' entity is required!")
+		return
+	end
+
+	local cvPitchEnabled = self:GetCVar( "ph_taunt_pitch_enable" )
+	local cvPitchMin	 = self:GetCVar( "ph_taunt_pitch_range_min" )
+	local cvPitchMax	 = self:GetCVar( "ph_taunt_pitch_range_max" )
+	local curTeam		 = pl:Team()
+
+	if ( curTeam == TEAM_PROPS or curTeam == TEAM_HUNTERS ) then
+		local taunt = "vo/k_lab/kl_fiddlesticks.wav"
+		
+		-- sndTaunt can be either boolean or string.
+		if isbool(sndTaunt) and (sndTaunt) then
+			repeat
+				taunt = self:GetRandomTaunt( curTeam )
+			until taunt != pl.last_taunt
+			pl.last_taunt = taunt
+			
+		elseif isstring(sndTaunt) then
+			taunt = sndTaunt
+		end
+		
+		local pitch = 100
+		if cvPitchEnabled and tobool( bIsPitchEnabled ) then		
+			if tobool( bIsRandomized ) then
+				pitch = math.random( cvPitchMin, cvPitchMax )
+			else
+				pitch = math.Clamp( iPitchLevel, cvPitchMin, cvPitchMax )
+			end
+		end
+		pl:EmitSound( taunt, 100, pitch )
+		pl:SetLastTauntTime( LastTauntTimeID, CurTime() )
+	end
+end
+
 -- LOCAL VARIABLES
+local game_RndAlreadyStarted = false
+local PlayerQueues = {}
 local HunterNoPenaltyEnts = {
 	["func_breakable"]	= true,
 	["func_physbox"]	= true,
@@ -72,14 +113,8 @@ https://steamcommunity.com/sharedfiles/filedetails/?id=2035168341
 ]]
 
 -- LOCAL FUNCTIONS
-local function IsPlayerPlaying(ply, idTeam)
-	if idTeam then return ply:IsPlayer() and ply:Alive() and ply:Team() == idTeam end
-	return ply:IsPlayer() and ply:Alive()
-end
-local function IsPlayerAlive( ply, idTeam )
-	if idTeam then return ply:Alive() and ply:Team() == idTeam end
-	return ply:Alive()
-end
+local function IsPlayerPlaying(ply, idTeam) ply:PHIsPlayerAndAlive( idTeam ); end
+local function IsPlayerAlive(ply, idTeam) ply:PHIsAlive( idTeam ); end
 
 local function Game_MngTauntWindow( bool )
 	-- true: Force Close
@@ -170,13 +205,13 @@ end
 
 -- Player Join/Leave message
 gameevent.Listen( "player_connect" )
-hook.Add( "player_connect", "PHX.BroadcastPlayerJoinServer", function( data )
+hook.Add( "player_connect", "PHXHook.BroadcastPlayerJoinServer", function( data )
 	if PHX:GetCVar( "ph_notify_player_join_leave" ) then
 		util.AllPlayers(function(v) v:PHXChatInfo( "NOTICE", "EV_PLAYER_CONNECT", data.name ) end)
 	end
 end )
 gameevent.Listen( "player_disconnect" )
-hook.Add( "player_disconnect", "PHX.BroadcastPlayerDisconnected", function( data )
+hook.Add( "player_disconnect", "PHXHook.BroadcastPlayerDisconnected", function( data )
 	if PHX:GetCVar( "ph_notify_player_join_leave" ) then
 		util.AllPlayers( function(v) v:PHXChatInfo( "NOTICE", "EV_PLAYER_DISCONNECT", data.name, data.reason ) end)
 	end
@@ -263,7 +298,7 @@ function GM:PlayerCanSeePlayersChat(txt, onteam, listen, speaker)
 end
 
 -- Called when an entity takes damage
-hook.Add("EntityTakeDamage", "PH_EntityTakeDamage", function( ent, dmginfo )
+hook.Add("EntityTakeDamage", "PHXHook.ManageEntityTakeDamage", function( ent, dmginfo )
 	if not ent then return end
 	local att = dmginfo:GetAttacker()
 	if not att or not IsValid(att) then return end
@@ -360,9 +395,9 @@ function GM:PlayerShouldTakeDamage(ply, attacker)
 			if self.NoPlayerSelfDamage and ply == attacker then return false end	-- NoPlayerSelfDamage = false
 			if self.NoPlayerDamage then return false end							-- NoPlayerDamage = false
 			if self.NoPlayerTeamDamage and ply:Team() == attacker:Team() and ply ~= attacker then return false end	-- NoPlayerTeamDamage = true
-			if self.NoPlayerPlayerDamage then return false end -- NoPlayerPlayerDamage = true
+			if self.NoPlayerPlayerDamage then return false end		-- NoPlayerPlayerDamage = true
 		else
-			if self.NoNonPlayerPlayerDamage then return false end -- NoNonPlayerPlayerDamage = true, Assume NPCs or other things
+			if self.NoNonPlayerPlayerDamage then return false end	-- NoNonPlayerPlayerDamage = true, Assume NPCs or other things
 		end
 
 	end
@@ -397,54 +432,23 @@ function GM:PlayerCanPickupItem(pl, item)
     return true
 end
 
--- Don't use "GM:DoPlayerDeath" and we'll use a hook version instead.
--- Freeze Cam Fix for Hunters
-hook.Add("DoPlayerDeath", "HunterFreezeCam", function(ply, attacker, dmginfo)
-	if ( PHX:GetCVar( "ph_freezecam_hunter" ) && 
-		ply:Team() == TEAM_HUNTERS && IsValid( attacker ) && 
-		attacker:IsPlayer() && attacker ~= ply && attacker:Team() == TEAM_PROPS ) then
-		
-		timer.Simple(0.5, function()
-			if ply and IsValid(ply) and !ply:GetNWBool("InFreezeCam", false) then
-				net.Start("PlayFreezeCamSound")
-				net.Send(ply)
-			
-				ply:SetNWEntity("PlayerKilledByPlayerEntity", attacker)
-				ply:SetNWBool("InFreezeCam", true)
-				ply:SpectateEntity( attacker )
-				ply:Spectate( OBS_MODE_FREEZECAM )
-			end
-		end)
-		
-		timer.Simple(4.5, function()
-			if ply and IsValid(ply) and ply:GetNWBool("InFreezeCam", false) then
-				local randHunter = {}
-				for _,v in pairs(team.GetPlayers(TEAM_HUNTERS)) do
-					if v:Alive() then
-						table.insert(randHunter, v)
-					end
-				end
-				
-				ply:SetNWBool("InFreezeCam", false)
-				ply:Spectate( OBS_MODE_CHASE )
-				if #randHunter > 0 then
-					local huntPly = randHunter[math.random(1,#randHunter)]
-					ply:SpectateEntity( huntPly )
-				else
-					ply:SpectateEntity( nil )
-				end
-			end
-		end)
-		
+-- Allow FreezeCam for Hunters when they're get killed by Props.
+hook.Add("DoPlayerDeath", "PHXHook.HunterFreezeCam", function(ply, attacker, dmginfo)
+	local cvFreezeCamOn = PHX:GetCVar( "ph_freezecam_hunter" )
+	if ( cvFreezeCamOn and
+		ply:Team() == TEAM_HUNTERS and IsValid( attacker ) and
+		attacker:IsPlayer() and attacker ~= ply and attacker:Team() == TEAM_PROPS ) then
+
+		ply:StartFreezeCam( attacker )
 	end
 end)
 
 
--- function to respawn players during blind mode.
--- this is usually noticed when the player is falling, changing team, or etc.
+-- Function to respawn players during blind mode.
+-- Purpose: Respawn players after certain death: Fall, Killed too early, etc.
 local function AutoRespawnCheck( ply, bWasDeadOrSuicide )
 	-- Require at least 3 players.
-	if player.GetCount() > 2 and (ply:Team() == TEAM_PROPS or ply:Team() == TEAM_HUNTERS) then
+	if player.GetCount() > 2 and ply:PHIsPlaying() then
 
 		local SpecChange = PHX:GetCVar("ph_allow_respawn_from_spectator")
 		local TeamChange = PHX:GetCVar("ph_allow_respawnonblind_teamchange")
@@ -491,15 +495,15 @@ local function AutoRespawnCheck( ply, bWasDeadOrSuicide )
 	ply._Team2TeamDisabledSuicide = nil
 	
 end
-hook.Add("PostPlayerDeath", "autoPlayerRepsawnDuringDeath", function(ply)
+hook.Add("PostPlayerDeath", "PHXHook.AutoRespawnEarlyDeath", function(ply)
 	-- Force Close the Taunt Menu whenever a player is dead.
-	if ply:Team() == TEAM_PROPS or ply:Team() == TEAM_HUNTERS then
+	if ply:PHIsPlaying() then
 		net.Start( "PH_ForceCloseTauntWindow" )
 		net.Send(ply)
 	end
 
-	if !PHX:GetCVar( "ph_allow_respawnonblind" ) then return end
-	if !PHX:GameInRound() then return end
+	if not PHX:GetCVar( "ph_allow_respawnonblind" ) then return end
+	if not PHX:GameInRound() then return end
 
 	local time = 0.45
 	timer.Simple(time, function()
@@ -508,7 +512,8 @@ hook.Add("PostPlayerDeath", "autoPlayerRepsawnDuringDeath", function(ply)
 
 end)
 
-hook.Add("PlayerChangedTeam", "changeteam", function(ply, old, new)
+-- usually called after PostPlayerDeath, then this called, then calls OnPlayerChangedTeam
+hook.Add("PlayerChangedTeam", "PHXHook.PlyChangedTeam", function(ply, old, new)
 
 	local AllowRespawn = PHX:GetCVar( "ph_allow_respawnonblind" )
 	local FromSpectator = PHX:GetCVar( "ph_allow_respawn_from_spectator" )
@@ -548,9 +553,7 @@ hook.Add("PlayerChangedTeam", "changeteam", function(ply, old, new)
 
 end)
 
-
-
-hook.Add("OnPlayerChangedTeam", "TeamChange_switchLimitter", function(ply, old, new)
+hook.Add("OnPlayerChangedTeam", "PHXHook.OnPlyChangedTeam_TeamLimit", function(ply, old, new)
 	local MAX_TEAMCHANGE_LIMIT = PHX:GetCVar( "ph_max_teamchange_limit" )
 
 	if MAX_TEAMCHANGE_LIMIT ~= -1 and (not ply:IsBot()) and !ply:PHXIsStaff() then
@@ -573,9 +576,6 @@ hook.Add("OnPlayerChangedTeam", "TeamChange_switchLimitter", function(ply, old, 
 		end
 	end
 end)
-
---hook.Add("PostCleanupMap", "PH_ResetStats", function()
---end)
 
 function GM:PlayerSetModel(pl)
 	
@@ -755,10 +755,9 @@ function GM:PlayerExchangeProp(pl, ent)
 end
 
 -- Called when a player tries to use an object. By default this pressed ['E'] button. MouseClick 1 will be mentioned below.
-local IsSpectators={[TEAM_SPECTATOR]=true,[TEAM_UNASSIGNED]=true}
 function GM:PlayerUse(pl, ent)
 	
-	if not pl:Alive() or IsSpectators[pl:Team()] then return false; end
+	if not pl:Alive() or pl:PHIsSpectators() then return false; end
 	
 	local PropClass			= ent:GetClass()
 	local AllowPickupObj 	= PHX:GetCVar( "ph_allow_pickup_object" )
@@ -811,13 +810,35 @@ function GM:PlayerUse(pl, ent)
 	return true
 end
 
+function GM:PlayerReconnected( ply )
+	local cvMaxChange	= PHX:GetCVar( "ph_max_teamchange_limit" )
 
+	-- Check Player Team-Switch Limits if they were recently reconnected to the server.
+	-- This will reset after new map has changed.
+	if IsValid( ply ) and cvMaxChange ~= -1 and not ply:PHXIsStaff() and not ply:IsBot() then
+		
+		local id = ply:SteamID()
+		local RecentPly = CTRL_TEAMLMT_DCPLAYERS[id] or 0
+		RecentPly = math.Clamp( RecentPly, 0, cvMaxChange )
+		
+		if RecentPly > 0 then
+			ply.ChangeLimit = RecentPly
+			PHX:VerboseMsg("[Team] "..ply:Nick().." has remaining "..tostring(RecentPly).."x team switches (Max: "..cvMaxChange..")")
+		else
+		--	ply.ChangeLimit = 0
+			PHX:VerboseMsg("[Team] "..ply:Nick().." has no reamining team switches.")
+		end
+		
+	end
 
-function GM:CheckPlayerReconnected( pl )
-	if table.HasValue( self.ReconnectedPlayers, pl:SteamID() ) then self:PlayerReconnected( pl ) end
+	hook.Run("PH_PlayerReconnected", ply)
+end
+function GM:CheckPlayerReconnected( ply )
+	if self.ReconnectedPlayers[ ply:SteamID() ] then self:PlayerReconnected( ply ) end
 end
 function GM:PlayerDisconnected( ply )
-	table.insert( self.ReconnectedPlayers, ply:SteamID() )
+	local cvMaxChanges	= PHX:GetCVar( "ph_max_teamchange_limit" )
+	self.ReconnectedPlayers[ply:SteamID()] = true
 	
 	ply:RemoveProp()
     if IsValid(ply.propdecoy) then
@@ -825,16 +846,15 @@ function GM:PlayerDisconnected( ply )
         ply.propdecoy = nil
     end
 	
-	-- Save player Change Team info -- this will reset after map has been changed
-	if PHX:GetCVar( "ph_max_teamchange_limit" ) ~= -1 and !ply:PHXIsStaff() and (not ply:IsBot()) then
+	if cvMaxChanges ~= -1 and not ply:PHXIsStaff() and not ply:IsBot() then
 	
 		local id = ply:SteamID()
+		local plName = ply:Nick()
 		CTRL_TEAMLMT_DCPLAYERS[id] = ply.ChangeLimit
 		
-		PHX:VerboseMsg("[Team] Saving player team change information of "..ply:Nick().." ("..ply:SteamID()..") -> ["..ply.ChangeLimit.."]")
+		PHX:VerboseMsg("[Team] Saving player team change information of "..name.." ("..id..") => "..ply.ChangeLimit.."x")
 		
 	end
-
 
 	self.BaseClass:PlayerDisconnected( ply )
 end
@@ -883,48 +903,28 @@ function GM:Think()
 	
 end
 
--- Set specific variable for checking in player initial spawn, then use Player:IsHoldingEntity()
-
-local PlayerQueues = {}
 --hook.Add("PlayerInitialSpawn", "PHX.SetupPlayerInit", function(ply)
 function GM:PlayerInitialSpawn( ply )
 	--if not PHX.cvarsynced then PHX:InitCVar() end --Deprecated
 
-	pl:SetTeam( TEAM_SPECTATOR ) --TEAM_UNASSIGNED
-	pl:SetPlayerClass( "Spectator" )
-	pl.m_bFirstSpawn = true
-	pl:UpdateNameColor()
+	ply.LastPickupEnt		= NULL
+	ply.ChangeLimit			= 0
+	ply.HasTauntScannedData = false --Obsolete...?
+	PHX:VerboseMsg("[Team] "..ply:Nick().."'s team switch limit initialised.")
 
-	self:CheckPlayerReconnected( pl )
+	ply:SetTeam( TEAM_SPECTATOR )
+	ply:SetPlayerClass( "Spectator" )
+	ply.m_bFirstSpawn = true
+	ply:UpdateNameColor()
 
-	ply.LastPickupEnt	= NULL
-	ply.ChangeLimit		= 0
-	ply.HasTauntScannedData = false
-	
-	-- Player Switch Teams Initialisations	
-	if IsValid(ply) && PHX:GetCVar( "ph_max_teamchange_limit" ) ~= -1 && !ply:PHXIsStaff() && !ply:IsBot() then
-		
-		local id = ply:SteamID()
-		CTRL_TEAMLMT_DCPLAYERS[id] = CTRL_TEAMLMT_DCPLAYERS[id] or 0
-		
-		if CTRL_TEAMLMT_DCPLAYERS[id] == 0 then
-			ply.ChangeLimit = 0
-			PHX:VerboseMsg("[Team] "..ply:Nick().."'s team switch limit initialised.")
-		elseif CTRL_TEAMLMT_DCPLAYERS[id] > 0 then
-			ply.ChangeLimit = CTRL_TEAMLMT_DCPLAYERS[id]
-			PHX:VerboseMsg("[Team] "..ply:Nick().."'s has "..tostring(CTRL_TEAMLMT_DCPLAYERS[id]).."x team switches remaining.")
-		end
-		
-	end
+	self:CheckPlayerReconnected( ply )
 	
 	-- Info Player Spawns
 	timer.Simple(3.5, function()
 		if PHX:GetCVar( "ph_notify_player_join_leave" ) then
-			for k,v in pairs( player.GetAll() ) do
-				if (IsValid(v) and IsValid(ply)) then
-					v:PHXChatInfo( "NOTICE", "EV_PLAYER_JOINED", ply:Nick() )
-				end
-			end
+			util.AllPlayers( function(v)
+				if IsValid(ply) then v:PHXChatInfo( "NOTICE", "EV_PLAYER_JOINED", ply:Nick() ) end
+			end)
 		end
 	end)
 	
@@ -951,7 +951,7 @@ function GM:PlayerInitialSpawn( ply )
 
 end
 
-hook.Add( "SetupMove", "PHX._PreparePHXData/Load", function( ply, _, cmd )
+hook.Add( "SetupMove", "PHXHook._PreparePHXData", function( ply, _, cmd )
 	if PlayerQueues[ply] and not cmd:IsForced() then
 		PlayerQueues[ply] = nil
 		Core_SendGroupInfo( ply )
@@ -959,60 +959,32 @@ hook.Add( "SetupMove", "PHX._PreparePHXData/Load", function( ply, _, cmd )
 	end
 end )
 
-hook.Add("AllowPlayerPickup", "PHX.IsHoldingEntity", function(ply,ent)
-	ply.LastPickupEnt = ent
-	ent.LastPickupPly = ply
-end)
-
--- Spray Controls
-hook.Add( "PlayerSpray", "PH.GeneralSprayFunc", function( ply )
-	if !ply:Alive() or 
-		( ply:Team() == TEAM_SPECTATOR ) or ( ply:Team() == TEAM_UNASSIGNED ) then
-		return true
-	end
-end)
-
 -- Called when the players spawns
-hook.Add("PlayerSpawn", "PH_PlayerSpawn", function(pl)
-	pl._joinCameFrom=nil
-	pl._Team2TeamDisabledSuicide=nil
-    pl:SetPlayerLockedRot( false )
-	pl:SetNWBool("InFreezeCam", false)
-	pl:SetNWEntity("PlayerKilledByPlayerEntity", nil)
-	pl:Blind(false)
-	pl:RemoveProp()
-	pl:SetColor(Color(255,255,255,255))
+hook.Add( "PlayerSpawn", "PHXHook.DoPlayerSpawn", function(pl)
+	local HunterJumpPower 	= PHX:GetCVar( "ph_hunter_jumppower" )
+	local PropJumpPower		= PHX:GetCVar( "ph_prop_jumppower" )
+
+	pl:SetColor( color_white )
 	pl:SetRenderMode(RENDERMODE_TRANSCOLOR)
 	pl:UnLock()
-    -- Reset Fake taunts
-	pl:ResetTauntRandMapCount()
-	
-	pl:SetLastTauntTime( "LastTauntTime", CurTime() )
-	pl:SetLastTauntTime( "CLastTauntTime", CurTime() )
-    pl.propdecoy = nil -- don't link to your decoy prop
-	
-	pl:ResetHull() -- Always call this.
-	net.Start("ResetHull")
-	net.Send(pl)
-	
-	net.Start("DisableDynamicLight")
-	net.Send(pl)
-	
+	pl:ResetHull()
+	pl:PHResetStat()
 	pl:SetCollisionGroup(COLLISION_GROUP_PASSABLE_DOOR)
 	pl:CollisionRulesChanged()
 	
+	local JumpPower = 160
 	if pl:Team() == TEAM_HUNTERS then
-		pl:SetJumpPower(160 * PHX:GetCVar( "ph_hunter_jumppower" )) --1
+		JumpPower = JumpPower * HunterJumpPower
 	elseif pl:Team() == TEAM_PROPS then
-		pl:SetJumpPower(160 * PHX:GetCVar( "ph_prop_jumppower" )) --1.5
+		JumpPower = JumpPower * PropJumpPower
 	end
+	pl:SetJumpPower( JumpPower )
 
 	-- Listen server host
-	if !game.IsDedicated() then pl:SetNWBool("ListenServerHost", pl:IsListenServerHost()) end
+	if not game.IsDedicated() then pl:SetNWBool("ListenServerHost", pl:IsListenServerHost()) end
 end)
 
 
--- Called when round ends
 --[[ hook.Add("PH_RoundEnd", "PHX.RoundIsEnd", function()
     -- Unblind the hunters
 	util.AllTeamPlayers( TEAM_HUNTERS, function(pl)
@@ -1035,6 +1007,8 @@ end)
 	net.Start("AutoTauntRoundEnd")
 	net.Broadcast()
 end) ]]
+
+-- //////// Begin of Round Control Override ////////
 
 function GM:CheckPlayerDeathRoundEnd()
 	if not self.RoundBased or not self:InRound() then return end
@@ -1087,8 +1061,6 @@ function GM:RoundTimerEnd()
 	hook.Call("PH_OnTimerEnd", nil)
 end
 
--- Begin of Round Control Override
-
 -- Temporary Workaround for Spectating Props in OBS_MODE_IN_EYE
 function GM:ChangeObserverMode( pl, mode )
 	
@@ -1140,6 +1112,23 @@ end
 	end
 end ]]
 
+function GM:AddRoundTime() end
+--[[ Temporarily disabled, I have to think about this
+function GM:AddRoundTime( iAddedTime )
+	
+	if not self:InRound() then return end
+	
+	SetGlobalFloat( "RoundEndTime", GetGlobalFloat( "RoundEndTime", CurTime() ) + iAddedTime );
+	timer.Adjust( "RoundEndTimer", GetGlobalFloat( "RoundEndTime" ) - GetGlobalFloat( "RoundStartTime" ), 0, function() 
+		self:RoundTimerEnd() 
+	end)
+	
+	BroadcastLua( string.format( "GAMEMODE:UpdateHUD_AddedTime(%d)", iAddedTime ) )
+
+	hook.Run("PH_AddRoundTime", iAddedTime )
+
+end ]]
+
 function GM:RoundEndWithResult( result, resulttext )
 
 	resulttext = self:ProcessResultText( result, resulttext )
@@ -1161,6 +1150,7 @@ function GM:RoundEndWithResult( result, resulttext )
 	
 end
 
+-- Called when round: PreRoundEnd?, End, OnRoundEnd
 function GM:RoundEnd()
 
 	if ( !self:InRound() ) then 
@@ -1204,11 +1194,10 @@ function GM:RoundEnd()
 	
 end
 
-local bAlreadyStarted = false
 function GM:OnRoundEnd( num )
 	local cvWaitPlayers	= PHX:GetCVar( "ph_waitforplayers" )
 	local cvMinPlayers	= math.Clamp(PHX:GetCVar( "ph_waitforplayers" ),  1, game.MaxPlayers())
-	-- local bAlreadyStarted = false --what happens if placed here?
+	-- local game_RndAlreadyStarted = false --what happens if placed here?
 
 	if ( cvWaitPlayers ) ) then
 		local NumHunters = team.NumPlayers(TEAM_HUNTERS)
@@ -1216,17 +1205,17 @@ function GM:OnRoundEnd( num )
 		-- Take away a round number quickly before it adds another when there are not enough players
 		-- Set to false
 		if ( ( NumHunters < cvMinPlayers ) or ( NumProps < cvMinPlayers ) ) then
-			bAlreadyStarted = false
+			game_RndAlreadyStarted = false
 		end
 
 		-- Set to true
 		-- Posibly at this section causing "Waiting for New Round Start" due to New Balance is Active?
 		if ( ( NumHunters >= cvMinPlayers ) and ( NumProps >= cvMinPlayers ) ) then
-			bAlreadyStarted = true
+			game_RndAlreadyStarted = true
 		end
 		
 		-- Check if the round was already started before so we count it as a fully played round
-		if ( !bAlreadyStarted ) then
+		if ( not game_RndAlreadyStarted ) then
 			SetGlobalInt( "RoundNumber", GetGlobalInt("RoundNumber") - 1 )
 		end
 	end
@@ -1237,6 +1226,7 @@ function GM:OnRoundEnd( num )
 	
 end
 
+-- Called when round: PreStart, Start, OnStart
 function GM:OnPreRoundStart(num)
     CTRL_ROUND_FORCEDEND = false
 	local cvSwapTeam		= PHX:GetCVar( "ph_swap_teams_every_round" )
@@ -1255,7 +1245,7 @@ function GM:OnPreRoundStart(num)
 	Game_ResetOnRestart()
 	game.CleanUpMap(false,nil,function()end) -- if this could crash a server when there is a fire entity: nil => { "env_fire", "entityflame", "_firesmoke" }
 	
-	if PHX:GetRoundNumber() != 1 and (cvSwapTeam or ((team.GetScore(TEAM_PROPS) + team.GetScore(TEAM_HUNTERS)) > 0)) then
+	if PHX:GetRoundNumber() ~= 1 and (cvSwapTeam or ((team.GetScore(TEAM_PROPS) + team.GetScore(TEAM_HUNTERS)) > 0)) then
 		util.AllPlayers( function(pl)
 			if pl:Team() == TEAM_PROPS or pl:Team() == TEAM_HUNTERS then
 			
@@ -1378,36 +1368,32 @@ function GM:OnRoundStart( num )
 	UTIL_UnFreezeAllPlayers()
 	hook.Call("PH_OnRoundStart", nil, num)
 end
--- End of Round Control Override
 
+-- //////// End of Round Control Override //////// --
 
 -- 'MOUSE1/CLICK' props replication behaviour
-hook.Add("KeyPress", "PHX.PlayerKeyPress", function( pl, key )
-	if IsValid(pl) and IsPlayerAlive( TEAM_PROPS ) then
-        local min,max = pl:GetHull()
-	
+hook.Add( "KeyPress", "PHXHook.PlayerKeyPress", function( pl, key )
+	if IsValid(pl) and IsPlayerAlive( TEAM_PROPS ) then	
 		if key == IN_ATTACK then
 			local trace = {}
 			local cvCheckRoom = PHX:GetCVar( "ph_check_for_rooms" )
-
-            trace = GAMEMODE.ViewCam:CommonCamCollEnabledView( pl:EyePos(), pl:EyeAngles(), max.z )
+			local min,max = pl:GetHull()
 			local filter = {}
-            table.Add(filter, ents.FindByClass("ph_prop"))
+            
+			table.Add(filter, ents.FindByClass("ph_prop"))
             table.Add(filter, player.GetAll())
-
+            trace = GAMEMODE.ViewCam:CommonCamCollEnabledView( pl, pl:EyePos(), pl:EyeAngles(), false, max.z )
 			trace.filter = filter
 			
 			local trace2 = util.TraceLine(trace)
 			local Ent = trace2.Entity
 			if IsValid( Ent ) and PHX:IsUsablePropEntity( Ent:GetClass() ) then
-				if pl:GetVar("UseTime",0) <= CurTime() then
-					if !pl:IsHoldingEntity() then
-						local hmx,hmy,hz = Ent:GetPropSize()
-						if cvCheckRoom and !pl:CheckHull(hmx, hmy, hz) then
-							pl:PHXChatInfo("WARNING", "CHAT_PROP_NO_ROOM")
-						else
-							GAMEMODE:PlayerExchangeProp(pl, Ent)
-						end
+				if pl:GetVar("UseTime",0) <= CurTime() and not pl:IsHoldingEntity() then
+					local hmx,hmy,hz = Ent:GetPropSize()
+					if cvCheckRoom and !pl:CheckHull(hmx, hmy, hz) then
+						pl:PHXChatInfo("WARNING", "CHAT_PROP_NO_ROOM")
+					else
+						GAMEMODE:PlayerExchangeProp(pl, Ent)
 					end
 					pl:SetVar("UseTime",CurTime()+1)
 				end
@@ -1416,126 +1402,89 @@ hook.Add("KeyPress", "PHX.PlayerKeyPress", function( pl, key )
 	end
 end)
 
-function PHX:PlayTaunt( pl, sndTaunt, bIsPitchEnabled, iPitchLevel, bIsRandomized, LastTauntTimeID )
-	if !pl or !IsValid(pl) then
-		print("[Taunt:PlayTaunt] Error: A 'Player' entity is required!")
-		return
-	end
+hook.Add( "PlayerButtonDown", "PHXHook.ButtonDown_KeyBinds", function(pl, key)
+	if not PHX:GameInRound() then return end
 
-	local cvPitchEnabled = PHX:GetCVar( "ph_taunt_pitch_enable" )
-	local cvPitchMin	 = PHX:GetCVar( "ph_taunt_pitch_range_min" )
-	local cvPitchMax	 = PHX:GetCVar( "ph_taunt_pitch_range_max" )
-	local curTeam		 = pl:Team()
-
-	if ( curTeam == TEAM_PROPS or curTeam == TEAM_HUNTERS ) then
-		local taunt = "vo/k_lab/kl_fiddlesticks.wav"
-		
-		-- sndTaunt can be either boolean or string.
-		if isbool(sndTaunt) and (sndTaunt) then
-			repeat
-				taunt = PHX:GetRandomTaunt( curTeam )
-			until taunt != pl.last_taunt
-			pl.last_taunt = taunt
-			
-		elseif isstring(sndTaunt) then
-			taunt = sndTaunt
-		end
-		
-		local pitch = 100
-		if cvPitchEnabled and tobool( bIsPitchEnabled ) then		
-			if tobool( bIsRandomized ) then
-				pitch = math.random( cvPitchMin, cvPitchMax )
-			else
-				pitch = math.Clamp( iPitchLevel, cvPitchMin, cvPitchMax )
-			end
-		end
-		pl:EmitSound( taunt, 100, pitch )
-		pl:SetLastTauntTime( LastTauntTimeID, CurTime() )
-		
-	end
-
-end
-
-hook.Add("PlayerButtonDown", "PlayerButton_ControlTaunts", function(pl, key)
-	if !PHX:GameInRound() then return end
-
-	local info 	 		= pl:GetInfoNum("ph_default_taunt_key", 0)
-	local ctInfo 		= pl:GetInfoNum("ph_default_customtaunt_key", 0)
-	local lockInfo 		= pl:GetInfoNum("ph_default_rotation_lock_key", 0)
-	local freezePropKey = pl:GetInfoNum("ph_prop_midair_freeze_key", 0)
-	
-	local pitchApplyRand = pl:GetInfoNum("ph_cl_pitch_apply_random", 0)		-- Also applies for random taunt, specified with pitch level
-	local plPitchLevel	= pl:GetInfoNum("ph_cl_pitch_level", 100)			-- Pitch level to use
-	local isRandomPitch = pl:GetInfoNum("ph_cl_pitch_randomized_random", 0)	-- Use Randomized pitch for Random Taunts instead of specified level
-    local isRightClickMode = pl:GetInfoNum("ph_prop_right_mouse_taunt", 0)  -- Right Click for taunt. Changed to clientside convar instead
-	
-	local decoyKey		= pl:GetInfoNum("ph_cl_decoy_spawn_key", 0)			-- Used for spawning decoy
-	local unstuckKey	= pl:GetInfoNum("ph_cl_unstuck_key", 0)				-- The Unstuck Key
+	local plkey_RTaunt 		= pl:GetInfoNum("ph_default_taunt_key", 0)
+	local plkey_CTaunt		= pl:GetInfoNum("ph_default_customtaunt_key", 0)
+	local plkey_RotLock		= pl:GetInfoNum("ph_default_rotation_lock_key", 0)
+	local plkey_PropFreeze	= pl:GetInfoNum("ph_prop_midair_freeze_key", 0)
+	local plkey_Decoy		= pl:GetInfoNum("ph_cl_decoy_spawn_key", 0)
+	local plkey_Unstuck		= pl:GetInfoNum("ph_cl_unstuck_key", 0)
 	
 	if IsValid(pl) and pl:Alive() and (pl:Team() == TEAM_PROPS or pl:Team() == TEAM_HUNTERS) then
-		
-		-- Taunt Access
-		-- if you're excluding custom taunts not to be played on random taunts or use them *only* for specific 'groups', you're evil. jk it's good tho :)	
-		local tauntmode  = PHX:GetCVar( "ph_custom_taunt_mode" )
-		local tauntdelay = PHX:GetCVar( "ph_normal_taunt_delay" )
-		if (key == info or (pl:Team() == TEAM_PROPS and ( tobool(isRightClickMode) and key == MOUSE_RIGHT ) )) then
-			if tauntmode == 1 then
+		-- if you're excluding custom taunts not to be played on random taunts or use them *only* for specific 'groups', you're evil. jk it's good tho :)
+		local tn_pitchRand		= pl:GetInfoNum("ph_cl_pitch_apply_random", 0)				-- Also applies for random taunt, specified with pitch level
+		local tn_pitchLevel		= pl:GetInfoNum("ph_cl_pitch_level", 100)					-- Pitch level to use
+		local tn_bIsRandomPitch	= tobool(pl:GetInfoNum("ph_cl_pitch_randomized_random", 0))	-- Use Randomized pitch for Random Taunts instead of specified level
+    	local tn_bIsRClickMode	= tobool(pl:GetInfoNum("ph_prop_right_mouse_taunt", 0))  	-- Right Click for taunt. Changed to clientside convar instead
+		local cvTauntMode		= PHX:GetCVar( "ph_custom_taunt_mode" )
+		local cvTauntDelay		= PHX:GetCVar( "ph_normal_taunt_delay" )
+		local cvUseUnstuck		= PHX:GetCVar( "ph_use_unstuck" )
+
+		-- Section: Both Team
+		if (key == plkey_RTaunt) or ( pl:Team() == TEAM_PROPS and (tn_bIsRClickMode and key == MOUSE_RIGHT) ) then
+			if cvTauntMode == 1 then
 				pl:ConCommand("ph_showtaunts")
-			elseif tauntmode == 0 or tauntmode == 2 and pl:GetLastTauntTime( "LastTauntTime" ) + tauntdelay <= CurTime() and
-				-- Random taunts rules: Use Cached; includes range from: [custom, stock, externals]. That's it.
-				-- Make sure both team's cached taunts are not empty.
-					(!table.IsEmpty(PHX.CachedTaunts[TEAM_PROPS]) and !table.IsEmpty(PHX.CachedTaunts[TEAM_HUNTERS])) then
+			elseif cvTauntMode == 0 or cvTauntMode == 2 and pl:GetLastTauntTime( "LastTauntTime" ) + cvTauntDelay <= CurTime() then
+				local CachedTauntsProp,CachedTauntHunter = PHX.CachedTaunts[TEAM_PROPS],PHX.CachedTaunts[TEAM_HUNTERS]
+				if CachedTauntsProp and table.IsEmpty(CachedTauntsProp) then return end
+				if CachedTauntHunter and table.IsEmpty(CachedTauntHunter) then return end
 				
-				PHX:PlayTaunt( pl, true, pitchApplyRand, plPitchLevel, isRandomPitch, "LastTauntTime" )
-				
+				PHX:PlayTaunt( pl, true, tn_pitchRand, tn_pitchLevel, tn_bIsRandomPitch, "LastTauntTime" )
 			end
+			return
 		end
 		
-		-- Both Team goes here.
-		if (key == ctInfo) then
-			pl:ConCommand("ph_showtaunts")
-		end
-		
-		if (PHX:GetCVar( "ph_use_unstuck" ) and key == unstuckKey) then
-			GAMEMODE:UnstuckPlayer(pl)
-		end
+		if (key == plkey_CTaunt) then pl:ConCommand("ph_showtaunts"); return; end
+		if (key == plkey_Unstuck) and cvUseUnstuck then GAMEMODE:UnstuckPlayer(pl); return; end
 	
 		-- Team Props
 		if pl:Team() == TEAM_PROPS then
 	
 			-- Lock rotation
-			if (key == lockInfo) then
+			if (key == plkey_RotLock) then
+				local SetLockRot = true
+				local SetRotState = 1
+				local Text		= { "HUD_ROTLOCK", PHX_COL_ROTLOCK }
 				if pl:GetPlayerLockedRot() then
-					pl:SetPlayerLockedRot( false )
-					pl:SendRotState(0)
-					pl:PrintCenter( "HUD_ROTFREE", PHX_COL_ROTFREE )
-				else
-					pl:SetPlayerLockedRot( true )
-					pl:SendRotState(1)
-					pl:PrintCenter( "HUD_ROTLOCK", PHX_COL_ROTLOCK )
+					SetLockRot	= false
+					SetRotState	= 0
+					Text		= { "HUD_ROTFREE", PHX_COL_ROTFREE }
 				end
+				pl:SetPlayerLockedRot( SetLockRot )
+				pl:SendRotState( SetRotState )
+				pl:PrintCenter( unpack( Text ) )
+
+				return
 			end
 			
 			-- Freeze Prop while midair
-			if (key == freezePropKey) then
-				pl:FreezePropMidAir()
-			end
-			
+			if (key == plkey_PropFreeze) then pl:FreezePropMidAir(); return; end
 			-- Spawn Decoy
-			if pl:HasFakePropEntity() and (key == decoyKey) then
-				pl:PlaceDecoyProp()
-			end
+			if (key == plkey_Decoy) and pl:HasFakePropEntity() then pl:PlaceDecoyProp(); return; end
 			
+			return
 		-- Team Hunters
 		elseif pl:Team() == TEAM_HUNTERS then
 			
 			-- Add Something here for hunters. Sometimes in future I think.
+			return
 			
 		end
 	end
 end)
 
 -- //////// Miscellaneous Stuffs //////// --
+
+-- Spray Control
+hook.Add( "PlayerSpray", "PHXHook.PlayerSpraying", function( ply )
+	if not ply:Alive() or ply:PHIsSpectators() then return true; end
+end)
+
+hook.Add( "AllowPlayerPickup", "PHXHook.AllowPlayerPickup", function(ply,ent)
+	ply.LastPickupEnt = ent; ent.LastPickupPly = ply;
+end)
 
 -- Addition from PH:E/Plus: Fall Damage
 function GM:GetFallDamage(ply, flFallSpeed)
@@ -1571,11 +1520,7 @@ end
 function GM:PlayerSwitchFlashlight(pl, on)
 	if pl:Alive() then
 		if pl:Team() == TEAM_HUNTERS then return true end
-		
-		if pl:Team() == TEAM_PROPS then
-			net.Start("PlayerSwitchDynamicLight")
-			net.Send(pl)
-		end
+		if pl:Team() == TEAM_PROPS then pl:PropSwitchLight(); end
 	end
 	return false
 end

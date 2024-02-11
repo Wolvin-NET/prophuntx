@@ -109,7 +109,7 @@ function Player:LPSCheckEntityCanShoot( tblFilter )
     if !tblFilter or tblFilter == nil then tblFilter = { self:GetPlayerPropEntity() } end -- make it default, if filter is empty.
 
     local _,plmaxs = self:GetHull()
-    local qt = GAMEMODE.ViewCam:CommonCamCollEnabledView( self:EyePos(), self:EyeAngles(), plmaxs.z )
+    local qt = GAMEMODE.ViewCam:CommonCamCollEnabledView( self, self:EyePos(), self:EyeAngles(), false, plmaxs.z )
     qt.filter = tblFilter
     local trx = util.TraceLine(qt)
     if trx.Entity and trx.Entity:IsValid() and PHX:IsUsablePropEntity( trx.Entity:GetClass() ) then
@@ -128,16 +128,13 @@ function Player:LPSCreatePropTrace( tblFilter, startpos, angle, strStart, strEnd
     if !strStart or strStart == nil then strStart = "start" end
     if !strEnd or strEnd == nil then strEnd = "endpos" end
     
-    local long = 32768
-    if !small or small == nil then small = long/2 end
-    if !big or big == nil then big = long end
-    if !normal or normal == nil then normal = long/2 end
+    local normal = 32768
 
     if self:Team() ~= TEAM_PROPS or !self:Alive() then return nil end --return nil instead of table.
 
     local _,plmaxs = self:GetHull() --Todo: OBBMaxs
     local trace    = {}
-    trace          = GAMEMODE.ViewCam:CamColEnabled( startpos, angle, trace, strStart, strEnd, small, big, normal, plmaxs.z )
+    trace          = GAMEMODE.ViewCam:CamColEnabled( self, startpos, angle, trace, strStart, strEnd, false, normal, plmaxs.z, true )
     trace.filter   = tblFilter
     
     return util.TraceLine(trace)
@@ -179,7 +176,7 @@ function Player:LPSShootBullets()
         local att            = wepEntity:GetAttachment(1)
         local shootOrg       = att.Pos
         local shootAng       = self:EyeAngles()
-        local aimTraceResult = util.LPSgetAccurateAim( { ph_prop }, self:EyePos(), shootOrg, shootAng, plmaxs.z )
+        local aimTraceResult = util.LPSgetAccurateAim( self, { ph_prop }, self:EyePos(), shootOrg, shootAng, plmaxs.z )
         local AmmoCount      = util.LPSgetConValue( wepdata.AmmoCount )
         local bullet = {}
             bullet.Num          = wepdata.Num
