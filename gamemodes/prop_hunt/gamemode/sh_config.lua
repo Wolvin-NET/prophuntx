@@ -778,18 +778,13 @@ end
 hook.Add("Initialize", "PHX.InitializeTaunts", InitializeConfig)
 
 --TODO: FIX ME
---TODO: FIX ME
 hook.Add("InitPostEntity", "PHX.SetDefaultTaunt", function()
 	if not PHX:QCVar( "ph_include_default_taunt" ) then
-		-- Temporary Workaround, pls fix: this has be delayed because of taunt menu window
-		timer.Simple(1, function()
-			if table.IsEmpty(PHX.TAUNTS) then 
-				TAUNT_FALLBACK = true;
-			end
-		end)
+		if table.IsEmpty(PHX.TAUNTS) then 
+			TAUNT_FALLBACK = true; // this may gets overriden from sh_tauntscanner.lua@256 if there are no PHX.CustomTaunts present.
+		end
 	end
 end)
---TODO: FIX ME
 --TODO: FIX ME
 
 -- AAAAAAARGGHHHHHH
