@@ -1,0 +1,8 @@
+"fretta"
+{
+	"base"				"base"
+	"title"				"Modified Fretta Base for PH:X"
+	"menusystem"			"0"
+	
+	"isphx"				"1"
+}

@@ -1,7 +1,6 @@
 -- QoL Improvement by: Darktooth (Scrollbar improvement, taunt close by bind keys, and other enhancement)
 -- Special thanks for the idea and implementations!
-
-PHX.FAVORITE_CATEGORY = "Favorite Taunts"
+PHX.FAVORITE_CATEGORY = PHX.FAVORITE_CATEGORY or "Favorite Taunts"
 -- Had to put this to Public PHX table because of LUA Refresh event. We don't want our favorite list gets reset by itself
 -- just because of Lua Refresh (Meaning that, incase someone edited the gamemode files while the server IS running). This one will fixed it.
 PHX.FavoriteTaunts = PHX.FavoriteTaunts or {}
@@ -126,6 +125,40 @@ end)
 net.Receive("PH_AllowTauntWindow", function()
 	window.state = true
 end)
+
+local function SendToServer(name, snd, bFakeTaunt)
+	
+	bFakeTaunt = tobool(bFakeTaunt)
+
+	local lastCTauntTime = LocalPlayer():GetLastTauntTime( "CLastTauntTime" )
+	local lastRTauntTime = LocalPlayer():GetLastTauntTime( "LastTauntTime" )
+	
+	local delay = lastCTauntTime + PHX:GetCVar( "ph_customtaunts_delay" )
+	local delayR = lastRTauntTime + PHX:GetCVar( "ph_normal_taunt_delay" )
+
+	if (delay <= CurTime() and delayR <= CurTime()) then
+	
+		net.Start("CL2SV_PlayThisTaunt")
+			net.WriteString(tostring(name))
+			net.WriteString(tostring(snd))
+			net.WriteBool(bFakeTaunt)
+		net.SendToServer();
+	
+	else
+	
+		local time = 0
+		local text = ""
+		if delay >= CurTime() then
+			time = delay
+			text   = "TM_DELAYTAUNT_PLSWAIT"	-- added extra random taunt text.
+		elseif delayR >= CurTime() then
+			time = delayR
+			text   = "TM_NOTICE_PLSWAIT"
+		end
+		PHX:ChatInfo( PHX:Translate(text, tostring(math.Round(time - CurTime()))) , "NOTICE" )
+		
+	end
+end
 
 local function MainFrame()
 	if PHX:GetCVar( "ph_custom_taunt_mode" ) < 1 then
@@ -510,12 +543,22 @@ local function MainFrame()
 			hasLines = false
 		end
 	end
-	
+
 	function window.input:OnEnter( val )
+		if (window.CurrentCategory == PHX.FAVORITE_CATEGORY) then
+			self:SetText("Sorry, Cannot find in 'favorite' category at the moment")
+			return
+		end
+		
+		local t = {}
+		local cur = PHX.TAUNTS[window.CurrentCategory]
+		if !cur then return end
+
+		t = cur[LocalPlayer():Team()] or {}
+		if table.IsEmpty(t) then return end
+
 		window.list:Clear()
 		hastaunt = false
-		
-		local t = PHX.TAUNTS[window.CurrentCategory][LocalPlayer():Team()]
 		
 		if (val == "" or !val or val == nil) then
 			window:ResetList( t )
@@ -580,40 +623,6 @@ local function MainFrame()
 		end
 	end
 	
-	local function SendToServer(name, snd, bFakeTaunt)
-	
-		if bFakeTaunt == nil then bFakeTaunt = false end
-	
-		local lastCTauntTime = LocalPlayer():GetLastTauntTime( "CLastTauntTime" ) --LocalPlayer():GetNWFloat("CTaunt.LastTauntTime", 0)
-		local lastRTauntTime = LocalPlayer():GetLastTauntTime( "LastTauntTime" ) --LocalPlayer():GetNWFloat("LastTauntTime",0)
-		
-		local delay = lastCTauntTime + PHX:GetCVar( "ph_customtaunts_delay" )
-		local delayR = lastRTauntTime + PHX:GetCVar( "ph_normal_taunt_delay" )
-	
-		if (delay <= CurTime() and delayR <= CurTime()) then
-		
-			net.Start("CL2SV_PlayThisTaunt")
-				net.WriteString(tostring(name))
-				net.WriteString(tostring(snd))
-				net.WriteBool(bFakeTaunt)
-			net.SendToServer();
-		
-		else
-		
-			local time = 0
-			local text = ""
-			if delay >= CurTime() then
-				time = delay
-				text   = "TM_DELAYTAUNT_PLSWAIT"	-- added extra random taunt text.
-			elseif delayR >= CurTime() then
-				time = delayR
-				text   = "TM_NOTICE_PLSWAIT"
-			end
-			PHX:ChatInfo( PHX:Translate(text, tostring(math.Round(time - CurTime()))) , "NOTICE" )
-			
-		end
-	end
-	
 	CreateStyledButton(LEFT,86,PHX:FTranslate("TM_TOOLTIP_PLAYTAUNT"),{5,5,5,5},"vgui/phehud/btn_playpub.vmt",FILL, function()
 		if hastaunt and hasLines then
 			local Name,getline = TranslateTaunt(window.CurrentCategory, window.list:GetLine(window.list:GetSelectedLine()):GetValue(1))
@@ -631,7 +640,11 @@ local function MainFrame()
                     pt = window.slider:GetValue()
                 end
             end
-            LocalPlayer():EmitSound( getline, 0, pt )
+			local me = LocalPlayer()
+			local cvOverlap = PHX:GetCVar( "ph_overlap_taunt" )
+			if (not cvOverlap and (me.last_taunt)) then me:StopSound( me.last_taunt ) end
+            me:EmitSound( getline, 0, pt )
+			me.last_taunt = getline
 			PHX:AddChat(PHX:Translate("TM_NOTICE_PLAYPREVIEW", "["..Name.."] : "..getline), Color(20,220,0))
 		end
 	end)
@@ -690,7 +703,11 @@ local function MainFrame()
                             pt = window.slider:GetValue()
                         end
                     end
-                    LocalPlayer():EmitSound( getline, 0, pt )
+					local me = LocalPlayer()
+					local cvOverlap = PHX:GetCVar( "ph_overlap_taunt" )
+					if (not cvOverlap and (me.last_taunt)) then me:StopSound( me.last_taunt ) end
+					me:EmitSound( getline, 0, pt )
+					me.last_taunt = getline
                     PHX:AddChat(PHX:Translate("TM_NOTICE_PLAYPREVIEW", "["..Name.."] : "..getline), Color(20,220,0)); 
                 end 
             end):SetIcon("icon16/control_play.png")
@@ -767,13 +784,20 @@ hook.Add("ShutDown", "PHX.SaveFavFile", function()
 end)
 
 concommand.Add("ph_showtaunts", function(ply)
-if ply:Alive() and window.state and ply:GetObserverMode() == OBS_MODE_NONE then
-	if !window.CurrentlyOpen then
-		MainFrame()
-	else
-		window.frame:Close()
+	if (TAUNT_FALLBACK) then --play default cheer sound if taunt table is empty
+		SendToServer( "___fail", "___fail", false )
+		MsgN("WARNING: Taunt Table is Empty (No taunts detected), playing default sound!")
+		LocalPlayer():ChatPrint("WARNING: No taunts detected, playing default sound!")
+		return
 	end
-else
-	PHX:ChatInfo( PHX:Translate("TM_PLAY_ONLY_ALIVE"), "WARNING" )
-end
+
+	if ply:Alive() and window.state and ply:GetObserverMode() == OBS_MODE_NONE then
+		if !window.CurrentlyOpen then
+			MainFrame()
+		else
+			window.frame:Close()
+		end
+	else
+		PHX:ChatInfo( PHX:Translate("TM_PLAY_ONLY_ALIVE"), "WARNING" )
+	end
 end, nil, "Show Prop Hunt taunt menu")

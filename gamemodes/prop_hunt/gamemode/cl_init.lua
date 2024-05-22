@@ -1099,7 +1099,7 @@ function PHX:showLangPreview()
 end
 
 --Very First Tutorial - this will only show ONCE.
-CreateClientConVar("ph_cl_show_introduction","1",true,true,"Show PH:X introduction.")
+local ShowIntro = CreateClientConVar("ph_cl_show_introduction","1",true,true,"Show PH:X introduction.")
 local function ShowVeryFirstTutorial()
 	local fh = {}
 	local WFix=ScrW()*0.8
@@ -1177,9 +1177,29 @@ local function ShowVeryFirstTutorial()
 end
 
 net.Receive("phx_showVeryFirstTutorial", function()
-	if GetConVar("ph_cl_show_introduction"):GetBool() then
-		Derma_Query("Prop Hunt X2Z Introduces many new features.\nWould you like to see the Tutorial window & access [Prop Hunt Menu] before playing?", "Prop Hunt X2Z",
+	if ShowIntro:GetBool() then
+		Derma_Query("Prop Hunt: X2Z Introduces many new features.\nWould you like to see the Tutorial window & access [Prop Hunt Menu] before playing?", "Prop Hunt X2Z",
 		"Yes", function() ShowVeryFirstTutorial() end,
 		"No", function() RunConsoleCommand("ph_cl_show_introduction", "0") end)
 	end
 end)
+
+
+----
+local ShowDonate = CreateClientConVar("ph_cl_show_donate","1",true,true)
+hook.Add("InitPostEntity", "PHX.ShowDonateMessage", function()
+	if ShowDonate:GetBool() then
+		timer.Simple(2, function()
+			Derma_Query(
+				"Thank you for using Prop Hunt: X2Z! However Modifying & Updating this gamemode and making it to stay updated requires a lot of effort...\n\nIf you can help me to keep updated with PH:X, would you like to help me to Support by Donating?\nAny amount of donation is Highly appreciated though, Thanks!", "Have a moment?",
+				"Yes", function()
+					gui.OpenURL( GAMEMODE.DONATEURL )
+				 end,
+				"No", function() 
+				end
+			)
+			RunConsoleCommand("ph_cl_show_donate", "0")
+		end)
+	end
+end)
+----

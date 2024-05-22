@@ -180,7 +180,7 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 		btnKf:SetSize(240,24)
 		btnKf:SetText("Donate via Buy Ko-Fi")
 		btnKf.DoClick = function()
-			gui.OpenURL("https://ko-fi.com/wolvindra")
+			gui.OpenURL(GAMEMODE.DONATEURL)
 		end
 		
 		local PanelModify = PHX.UI.PnlTab:AddSheet("", panel, "vgui/ph_iconmenu/m_donate.png")
@@ -649,11 +649,16 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 				end
 			end}
 			}, grid ,"")
+			
+		PHX.UI:CreateVGUIType("ph_include_default_taunt", "check", "SERVER", grid, "PHXM_TAUNT_INCLUDE_DEF")
+		PHX.UI:CreateVGUIType("ph_overlap_taunt", "check", "SERVER", grid, "PHXM_TAUNT_DOOVERLAP")
+		PHX.UI:CreateVGUIType("ph_taunt_soundlevel", "slider", {min = 1, max = 6, init = PHX:GetCVar( "ph_taunt_soundlevel" ), dec = 0, kind = "SERVER"}, grid, "PHXM_TAUNT_SNDLVL")
 		
         PHX.UI:CreateVGUIType("","spacer",nil,grid,"" )
 		PHX.UI:CreateVGUIType("", "label", "PHX.MenuCategoryLabel", grid, "PHXM_TAUNT_PITCH_SETTINGS")
 		PHX.UI:CreateVGUIType("ph_taunt_pitch_enable", "check", "SERVER", grid, "PHXM_TAUNT_PITCH_ENABLE")
-        -- these two below are intentionally set without float.
+        
+		-- these two below are intentionally set without float.
 		PHX.UI:CreateVGUIType("ph_taunt_pitch_range_min", "slider", {min = 1, max = 99, init = PHX:GetCVar( "ph_taunt_pitch_range_min" ), dec = 0, kind = "SERVER"}, grid, "PHXM_TAUNT_PITCH_RANGE_MIN")
 		PHX.UI:CreateVGUIType("ph_taunt_pitch_range_max", "slider", {min = 100, max = 255, init = PHX:GetCVar( "ph_taunt_pitch_range_max" ), dec = 0, kind = "SERVER"}, grid, "PHXM_TAUNT_PITCH_RANGE_MAX")
 		

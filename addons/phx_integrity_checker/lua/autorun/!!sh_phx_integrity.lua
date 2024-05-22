@@ -14,12 +14,16 @@ IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMA
 if engine.ActiveGamemode() ~= "prop_hunt" then return end
 
 local EnableChecker = false
+local CheckBaseFretta = false
 
 local CheckCVar = CreateConVar( "phx_integrity_check", "1", FCVAR_REPLICATED + FCVAR_ARCHIVE + FCVAR_NOTIFY, "Enable PH:X Integrity Checker.", 0, 1 )
+local cvIgnoreFretta = CreateConVar( "phx_integrity_check_fretta", "1", FCVAR_REPLICATED + FCVAR_ARCHIVE + FCVAR_NOTIFY, "Enable Checks if there's another fretta base gamemode installed", 0, 1 )
+
 cvars.AddChangeCallback("phx_integrity_check", function(cvar,old,new)
-	if (new) && new ~= nil then
-		EnableChecker = tobool(new)
-	end
+	EnableChecker = tobool(new)
+end)
+cvars.AddChangeCallback("phx_integrity_check_fretta", function(cvar,old,new)
+	CheckBaseFretta = tobool(new)
 end)
 
 local Errors = 0
@@ -318,7 +322,7 @@ local function FETCH_CONFLICT_WSID()
 end
 
 local function CheckGamemodeTXT()
-	local FrettaInfo = file.Read( "gamemodes/fretta/fretta.txt", "THIRDPARTY" ) --"GAME"
+	local FrettaInfo = file.Read( "gamemodes/base_phx/base_phx.txt", "THIRDPARTY" ) --"GAME"
 	local PropHuntInfo = file.Read( "gamemodes/prop_hunt/prop_hunt.txt", "THIRDPARTY" ) --"GAME"
 	local addErr = 0
 	
@@ -337,6 +341,13 @@ local function CheckGamemodeTXT()
 	else
 		addErr = addErr+1; table.insert( ErrorList, "Cannot read prop_hunt's gamemode txt file, seems to be invalid!" );
 	end
+
+	local _,dir = file.Find( "gamemodes/*", "GAME" )
+	for _,gm in ipairs( dir ) do
+		if (string.find(gm:lower(), "fretta")) then
+			addErr = addErr+1; table.insert( ErrorList, "Detected " .. gm .. " (Default Fretta Base), This can cause PH:X to stop working!" );
+		end
+	end
 	
 	if addErr > 0 then return addErr end
 	
@@ -349,9 +360,15 @@ hook.Add("InitPostEntity", "PHX.CheckIntegrity", function()
 	if engine.ActiveGamemode() ~= "prop_hunt" then return end
 	
 	EnableChecker = CheckCVar:GetBool()
+	CheckBaseFretta = cvIgnoreFretta:GetBool()
 	
 	if (not EnableChecker) then
 		print("[PH:X Integrity Check] WARNING: Integrity Checker is DISABLED! We won't warn clients about conflicting addons.")
+		return
+	end
+
+	if (not CheckBaseFretta) then
+		print("[PH:X Integrity Check] WARNING: Ignoring Fretta checks - this can't guarantee PH:X from working due to fretta version differences!")
 		return
 	end
 	
@@ -379,8 +396,9 @@ hook.Add("InitPostEntity", "PHX.CheckIntegrity", function()
 			table.insert(ErrorList, "An Essential PH:X Core File was not found!")
 		end
 		
-		if CheckGamemodeTXT() > 0 then
-			Errors = Errors + 1
+		local CheckGM = CheckGamemodeTXT()
+		if CheckGM > 0 and CheckBaseFretta then
+			Errors = Errors + CheckGM + 1
 			table.insert(ErrorList, "Fretta/Prop Hunt gamemode files IS different! You're likely using different gamemode!")
 		end
 		

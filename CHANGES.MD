@@ -1,5 +1,24 @@
 ## A new major updates to Prop Hunt: X has been released.
-Note: Prop Hunt X will change it's version to "X2Z" following with date-formatted revisions.
+Note: **Prop Hunt X2Z will SOON change it's versioning from "X2Z" to "24XZ" with unique formatted revision versioning.**  
+Example: `VERSION = "24XZ" REVISION = "XZ24.0105A"` where: `XZ24`: X2Z/YY, `0105`: DD/MM, `A`: Quick revisions if occured within same day.
+
+## Revision 22.05.2024
+- Renamed `fretta` base gamemode to `base_phx` to avoid conflicts with other gamemodes.  
+If you really wanted to include PHX's fretta base into your multi-fretta-gamemode, simply rename the base_phx and base_phx.txt, and `DeriveGamemode('base_phx')` => `DeriveGamemode('fretta')`@`prop_hunt/gamemode/sh_init.lua`. However, I highly recommend to avoid this to prevent any undesired effects. Use at your own risk!
+- Integrity Check: Added checks if `fretta*` bases are present and warn users if they have multiple/alternate Prop Hunt versions are installed. Please [consult to this wiki](https://gmodgameservers.com/wiki/prophuntx/#0_QuickFix/Clients_Error_when_Joining+Clients_Error_when_Joining) or [here](https://github.com/Wolvin-NET/prophuntx/wiki#incompatible-addons) on how to disable other Prop Hunt in order to use Prop Hunt X.
+- Integrity Check: Added ConVar `phx_integrity_check_fretta` to ignore checking if `fretta` gamemode folder is present. This is **highly not recommended** as this will cause several problem. Use at your own risk!
+- Taunt: Added function to Include/Exclude stock PH:X Taunts provided from the gamemode, meaning you can remove 'Prop Hunt X Originals' and 'Prop Hunt X Classics' category. This will also disable stock Taunt scanner that scanned from `sound/taunt_phx` directory so you have to update your custom taunt folder if it was installed in there! **Also this requires map restart** after toggling this function.
+- Taunt Include/Exclude: At least requires any Custom Taunts (LUA or using from Taunt Scanner with different path other than `sound/taunt_phx`)
+- Taunt Include/Exclude: When Excluding taunts without any custom taunts installed, the gamemode will use a fallback sound.
+- Taunt: Added function to Stop/Overlapping taunt sounds after playing a new Taunts.
+- Taunt: Added Taunt Sound Level: Starting from 75dB to 100dB (default is 100dB)
+- Added CVar: `ph_include_default_taunt` (1/0, def: 1)
+- Added CVar: `ph_taunt_soundlevel` (1=75dB, 2=80dB, 3=85dB, 4=90dB, 5=95dB, 6=100dB, def: 6)
+- Added CVar: `ph_overlap_taunt` (1/0, def: 0 = stop)
+- Fixed some errors when using search in Taunt window when `Favorite Taunts` category is selected. A warning message will printed the text entry instead.
+- Other tweaks for taunt behaviours
+- Fixed typo on Ko-Fi Donation Link
+- Added Donation Message on first time play
 
 ## Revision 19.01.2024
 - Fixed Error when using Classic HUD with AutoTaunt enabled (`cl_autotaunt.lua->AutoTauntPaint()`)

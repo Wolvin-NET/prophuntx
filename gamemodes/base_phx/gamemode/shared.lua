@@ -10,12 +10,10 @@ include( "player_extension.lua" )
 include( "class_default.lua" )
 include( "player_colours.lua" )
 
---SetGlobalBool("bJoinBalancedTeam", GetConVar("ph_forcejoinbalancedteams"):GetBool() or false)
-
-GM.Name 	= "Simple Game Base"
+GM.Name 	= "Modified Fretta Base"
 GM.Author 	= "Anonymous"
 GM.Email 	= ""
-GM.Website 	= "www.garry.tv"
+GM.Website 	= ""
 GM.Help		= "No Help Available"
 
 GM.TeamBased = true					// Team based game or a Free For All game?

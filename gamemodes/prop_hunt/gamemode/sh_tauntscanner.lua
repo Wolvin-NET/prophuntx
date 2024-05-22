@@ -159,7 +159,9 @@ if SERVER then
 	hook.Add("Initialize", "PHX.InitScannedTauntData", function()
 		if PHX:QCVar( "ph_enable_taunt_scanner" ) then	-- Disabled = no operation will be done. You also need to restart map to enable this feature!
 			-- Scan default taunts
-			PHX:TauntScanFolder( DefaultPath )
+			if PHX:QCVar( "ph_include_default_taunt" ) then
+				PHX:TauntScanFolder( DefaultPath )
+			end
 			-- And then, add external taunts directories, if any.
 			for tauntName, tauntFolder in SortedPairs( list.Get("PHX.TauntScanFolder") ) do	-- please sort.
 				PHX:VerboseMsg("[TauntScanner:Addon][".. tauntName .."] Scanning custom Taunt folder: 'sound/"..tauntFolder.."'...")
@@ -171,9 +173,14 @@ if SERVER then
 				PHX:ManageTaunt( category, data )
 			end
 			
+			if table.IsEmpty( Taunts ) then
+				MsgN("!! WARNING: Taunt Scanner List is EMPTY, this may due to `ph_include_default_taunt` convar is set to 0 or you don't have any custom taunts installed!")
+				MsgN("!! Not Broacasting Taunt Scanner List because the list is EMPTY...")
+				
+				return
+			end
 			-- Prepare data and compress tables to clients. This is only available after the map is fully loaded.
 			-- Do Not Re-broadcast!
-			
 			CompressedTaunt,CompressedTauntSize = util.PHXQuickCompress( Taunts )
 		else
 			print("[TauntScanner] Taunt Scanner is Disabled.")
@@ -191,9 +198,16 @@ if SERVER then
 			ply:PrintMessage(HUD_PRINTCONSOLE, "[PHX] Taunt Scanner is Disabled.")
 			return
 		end
+
+		local plName = ply:Nick()
+
+		if table.IsEmpty( Taunts ) then
+			MsgN("!! Not sending Taunt Scanner List to " .. plName .. " because the list is EMPTY!")
+			return
+		end
 	
 		if !ply.HasTauntScannedData then
-			PHX:VerboseMsg("[TauntScanner] Sending Taunt Scanner Data to player: " .. ply:Nick() .. ", Size: " .. tostring(CompressedTauntSize) .. " Bytes")
+			PHX:VerboseMsg("[TauntScanner] Sending Taunt Scanner Data to player: " .. plName .. ", Size: " .. tostring(CompressedTauntSize) .. " Bytes")
 		    timer.Simple(0.1, function()
 				net.Start(netRecv)
 				net.WriteUInt(CompressedTauntSize, 16)
@@ -226,6 +240,8 @@ if CLIENT then
 	
 	net.Receive(netRecv, function()
 		PHX:VerboseMsg("[TauntScanner] Received taunt scanner data, Processing...")
+
+		-- Set TAUNT_FALLBACK to nil
 		local size = net.ReadUInt(16)
 		local taunts = net.ReadData(size)
 		local Conv = util.PHXQuickDecompress( taunts )
@@ -235,6 +251,9 @@ if CLIENT then
 				PHX:ManageTaunt(cat, data)
 			end
 		end
+
+		-- Mark TAUNT_FALLBACK to nil to make sure taunt window is working.
+		TAUNT_FALLBACK = nil
 		
 		PHX:VerboseMsg("[TauntScanner] Taunts successfully added! - Have Fun and Enjoy!")
 	end)

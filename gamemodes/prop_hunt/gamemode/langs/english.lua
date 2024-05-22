@@ -535,14 +535,18 @@ L["PHXM_FAKE_TAUNT_MAXUSAGE"]		= "Maximum usage for fake taunts to be used; -1 i
 L["PHXM_TAUNT_RIGHT_CLICK"]		    = "Right click for taunt. This will disable Right-clicking on custom menu!"
 
 L["PHXM_TAUNT_PITCH_SETTINGS"]		= "Taunt Pitch Settings"
-L["PHXM_TAUNT_PITCH_ENABLE"]			= "Enable Taunt Pitch"
+L["PHXM_TAUNT_PITCH_ENABLE"]		= "Enable Taunt Pitch"
 L["PHXM_TAUNT_PITCH_RANGE_MIN"]		= "Minimum threshold/acceptable pitch range for a taunt. 1 to 99."
 L["PHXM_TAUNT_PITCH_RANGE_MAX"]		= "Maximum threshold/acceptable pitch range for a taunt. 100 to 255."
 
-L["PHXM_DECOY_SETTINGS"]				= "Decoy Settings"
+L["PHXM_TAUNT_INCLUDE_DEF"]			= "Include stock default PH:X & Taunt Scanner dir?\nIf this disabled, we will use any available custom taunts and if no custom taunts installed will use fallbacks (REQUIRE MAP RESTART)"
+L["PHXM_TAUNT_DOOVERLAP"]			= "Should any played taunts overlap with newly played taunt?\nDisabling this mean to stop and plays new one. Enable to keep classic behaviour."
+L["PHXM_TAUNT_SNDLVL"]				= "Taunt Sound Level to use\n1=75dB 2=80dB 3=85dB 4=90dB 5=95dB 6=100dB (Default is 6)"
+
+L["PHXM_DECOY_SETTINGS"]			= "Decoy Settings"
 L["PHXM_DECOY_ENABLE"]				= "Enable Decoy reward? Reward will be given ONLY ONCE for alive props until the round ends. They don't add and only substract once they're placed."
 
-L["PHXM_DISABLE_FOOTSTEP"]           = "Toggle silent prop team footsteps"
+L["PHXM_DISABLE_FOOTSTEP"]          = "Toggle silent prop team footsteps"
 
 L["PHXM_ADMIN_CHATSETTING"]			= "Chat Window Settings"
 L["PHXM_ADMIN_HUNTERBLIND"]			= "Hunter Blind Control"

@@ -22,7 +22,7 @@ IS_PHX		 	= true	-- an easy check if PHX is installed.
 
 PHX.ConfigPath 	= "phx_data"
 PHX.VERSION		= "X2Z"
-PHX.REVISION	= "19.01.24" --Format: dd/mm/yy.
+PHX.REVISION	= "22.05.24" --Format: dd/mm/yy.
 
 --Include Languages
 PHX.LANGUAGES = {}
@@ -348,8 +348,17 @@ end ]]
 
 --[[ END OF SHARED INIT HEADERS ]]--
 
--- Fretta!
-DeriveGamemode("fretta")
+local getloadedgamemodes = engine.GetGamemodes()
+for _,data in ipairs(getloadedgamemodes) do
+	if (data.name) and (string.find(data.name, "fretta")) then
+		MsgN("------------!! WARNING: DEFAULT FRETTA: [".. data.name .."] HAS DETECTED - THIS MAY CAUSE PH:X TO STOP WORKING !!------------")
+		MsgN("Unless if you use other gamemode that is still using fretta, ignore this message but this wont guarantee to make PH:X to work.")
+		MsgN("------------!! Please uninstall any gamemodes/Other Prop Hunt Version that uses fretta otherwise use this gamemode at your own risk! !!------------")
+		ErrorNoHalt("Prop Hunt X2Z Warning - Please check console for more info!")
+	end
+end
+
+DeriveGamemode("base_phx")
 IncludePlayerClasses()
 
 -- Information about the gamemode
@@ -359,7 +368,7 @@ GM.Author	= "Wolvindra-Vinzuerio & D4UNKN0WNM4N"
 -- Versioning
 GM._VERSION		= PHX.VERSION
 GM.REVISION		= PHX.REVISION --dd/mm/yy.
-GM.DONATEURL 	= "https://ko-fi/wolvindra"
+GM.DONATEURL 	= "https://ko-fi.com/wolvindra"
 
 -- Update information - returns json only
 GM.UPDATEURL 		= "https://gmodgameservers.com/ph_update_check.php"
@@ -455,26 +464,6 @@ end )
 PHX.PLUGINS = {}
 
 function PHX:InitializePlugin()
-
-	--[[
-		-- Notes to Myself (Wolvin) - Please Finish & Improveon this section in Prop Hunt: Codename Zero
-		local _Plugins = {}
-	
-		function _Plugins:AddToList( name, data )
-			_Plugins[name] = data
-		end
-		
-		hook.Call("PHX_AddPlugin", nil, _Plugins)
-		
-		-- try to get rid of using list.Set this time.
-		
-		table.sort(_Plugins)
-		
-		-- Todo:
-		- loop
-		- add & combine with legacy below
-		- stuff.
-	]]
 	
 	-- Add Legacy Plugins or Addons, if any.
 	local STATE = "SERVER"

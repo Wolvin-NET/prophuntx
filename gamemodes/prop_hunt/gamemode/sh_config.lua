@@ -1,4 +1,5 @@
 PHX.DEFAULT_CATEGORY = "Prop Hunt X Classics"
+PHX.FAVORITE_CATEGORY = "Favorite Taunts"
 
 -- Permanently banned models.
 local phx_PermaBannedModels = {
@@ -590,7 +591,7 @@ function PHX:RefreshTauntList()
 	local t = table.Copy(self.TAUNTS)
 	local getCategories = table.GetKeys(self.TAUNTS)
 	
-	print( "[Taunts] Warning: Using this command while in active round is dangerous. Anyway, Refreshing!" )
+	print( "[Taunts] Warning: Using this command is DEPRECATED and while in active round is very dangerous! Anyway, refreshing!" )
 	
 	-- Empty Table
 	self.TAUNTS = {}
@@ -603,13 +604,6 @@ function PHX:RefreshTauntList()
 	
 	self.TAUNTS = t
 end
-
--- if there was no  taunts loaded, uncomment these. For most cases, this should never happened.
---[[
-	hook.Add("InitPostEntity", "PHX.RefreshTauntList", function()
-		PHX:RefreshTauntList() 
-	end)
-]]
 
 concommand.Add("ph_refresh_taunt_list", function( ply ) 
 	if ( util.IsStaff( ply ) ) then PHX:RefreshTauntList() end
@@ -757,9 +751,15 @@ local function InitializeConfig()
 
 	PHX:VerboseMsg("[Taunts] Initializing Taunts...")
 	
-	PHX:VerboseMsg("[Taunts] Precaching stock taunts..." )
-	PHX:AddToCache( TEAM_PROPS, 	PHX.TAUNTS[PHX.DEFAULT_CATEGORY][TEAM_PROPS] )
-	PHX:AddToCache( TEAM_HUNTERS, 	PHX.TAUNTS[PHX.DEFAULT_CATEGORY][TEAM_HUNTERS] )
+	if PHX:QCVar( "ph_include_default_taunt" ) then
+		PHX:VerboseMsg("[Taunts] Precaching stock taunts..." )
+		PHX:AddToCache( TEAM_PROPS, 	PHX.TAUNTS[PHX.DEFAULT_CATEGORY][TEAM_PROPS] )
+		PHX:AddToCache( TEAM_HUNTERS, 	PHX.TAUNTS[PHX.DEFAULT_CATEGORY][TEAM_HUNTERS] )
+	else
+		-- empty default ones, and we'll use fallback taunts if no taunts available
+		PHX.TAUNTS[PHX.DEFAULT_CATEGORY] = nil
+		PHX.DEFAULT_CATEGORY = PHX.FAVORITE_CATEGORY
+	end
 	
 	PHX:VerboseMsg("[Taunts] Adding External Custom Taunts, if any...")
 	for category,tauntData in SortedPairs( list.Get("PHX.CustomTaunts") ) do 
@@ -776,8 +776,21 @@ local function InitializeConfig()
 	
 end
 hook.Add("Initialize", "PHX.InitializeTaunts", InitializeConfig)
--- use this if taunts are not properly added.
--- hook.Add("InitPostEntity", "PHX.InitializeTaunts", InitializeTaunts)
+
+--TODO: FIX ME
+--TODO: FIX ME
+hook.Add("InitPostEntity", "PHX.SetDefaultTaunt", function()
+	if not PHX:QCVar( "ph_include_default_taunt" ) then
+		-- Temporary Workaround, pls fix: this has be delayed because of taunt menu window
+		timer.Simple(1, function()
+			if table.IsEmpty(PHX.TAUNTS) then 
+				TAUNT_FALLBACK = true;
+			end
+		end)
+	end
+end)
+--TODO: FIX ME
+--TODO: FIX ME
 
 -- AAAAAAARGGHHHHHH
 if CLIENT then

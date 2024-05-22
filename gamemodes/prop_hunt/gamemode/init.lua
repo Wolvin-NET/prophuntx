@@ -998,6 +998,9 @@ function GM:OnPreRoundStart(num)
 	
 	if GetGlobalInt("RoundNumber") != 1 && (PHX:GetCVar( "ph_swap_teams_every_round" ) || ((team.GetScore(TEAM_PROPS) + team.GetScore(TEAM_HUNTERS)) > 0)) then
 		for _, pl in pairs(player.GetAll()) do
+
+			-- Clear player's last_taunt
+			pl.last_taunt = nil
 		
 			if pl:Team() == TEAM_PROPS || pl:Team() == TEAM_HUNTERS then
 			
@@ -1228,9 +1231,19 @@ hook.Add("KeyPress", "PlayerPressedKey", function( pl, key )
 	end
 end)
 
+-- DO NOT OVERRIDE.
+local SNDLVL_TAUNT_CHOICE = {75, 80, 85, 90, 95, 100}
 function PHX:PlayTaunt( pl, sndTaunt, bIsPitchEnabled, iPitchLevel, bIsRandomized, LastTauntTimeID )
 	if !pl or !IsValid(pl) then
-		print("[Taunt:PlayTaunt] Error: A 'Player' entity is required!")
+		print("[Taunt:PlayTaunt] Error: 'Player' entity argument on PHX:PlayTaunt is required!")
+		return
+	end
+
+	bIsPitchEnabled = bIsPitchEnabled or 0
+	iPitchLevel = iPitchLevel or 100
+	bIsRandomized = bIsRandomized or 0
+	if !LastTauntTimeID or LastTauntTimeID == "" then
+		print("[Taunt:PlayTaunt] Error: LastTauntTimeID argument on PHX:PlayTaunt is Required!")
 		return
 	end
 
@@ -1239,16 +1252,26 @@ function PHX:PlayTaunt( pl, sndTaunt, bIsPitchEnabled, iPitchLevel, bIsRandomize
 	if (pl:Team() == TEAM_PROPS or pl:Team() == TEAM_HUNTERS) then
 		-- sndTaunt can be either boolean or string.
 		local taunt
+		local cvSndLevel = SNDLVL_TAUNT_CHOICE[PHX:GetCVar( "ph_taunt_soundlevel" )]
+		local cvStopSound = PHX:GetCVar( "ph_overlap_taunt" )
+
+		if (not cvStopSound and (pl.last_taunt)) then
+			pl:StopSound( pl.last_taunt )
+		end
 		
 		if isbool(sndTaunt) and (sndTaunt) then
-			repeat
-				taunt = PHX:GetRandomTaunt( pl:Team() )
-			until taunt != pl.last_taunt
-			--pl.last_taunt_time  = CurTime()
-			pl.last_taunt = taunt
+			if (TAUNT_FALLBACK) then
+				taunt = "vo/coast/odessa/male01/nlo_cheer0"..math.random(1,4)..".wav"
+			else
+				repeat
+					taunt = PHX:GetRandomTaunt( pl:Team() )
+				until taunt != pl.last_taunt
+				pl.last_taunt = taunt
+			end
 			
 		elseif isstring(sndTaunt) then
 			taunt = sndTaunt
+			pl.last_taunt = taunt
 		end
 		
 		local pitch = 100
@@ -1259,7 +1282,7 @@ function PHX:PlayTaunt( pl, sndTaunt, bIsPitchEnabled, iPitchLevel, bIsRandomize
 				pitch = math.Clamp( iPitchLevel, PHX:GetCVar("ph_taunt_pitch_range_min"), PHX:GetCVar("ph_taunt_pitch_range_max") )
 			end
 		end
-		pl:EmitSound( taunt, 100, pitch )
+		pl:EmitSound( taunt, cvSndLevel, pitch )
 		pl:SetLastTauntTime( LastTauntTimeID, CurTime() )
 		
 	end
@@ -1269,7 +1292,7 @@ end
 hook.Add("PlayerButtonDown", "PlayerButton_ControlTaunts", function(pl, key)
 	if !GAMEMODE:InRound() then return end
 
-	local info 	 		= pl:GetInfoNum("ph_default_taunt_key", 0)
+	local TauntKey 		= pl:GetInfoNum("ph_default_taunt_key", 0)
 	local ctInfo 		= pl:GetInfoNum("ph_default_customtaunt_key", 0)
 	local lockInfo 		= pl:GetInfoNum("ph_default_rotation_lock_key", 0)
 	local freezePropKey = pl:GetInfoNum("ph_prop_midair_freeze_key", 0)
@@ -1281,23 +1304,26 @@ hook.Add("PlayerButtonDown", "PlayerButton_ControlTaunts", function(pl, key)
 	
 	local decoyKey		= pl:GetInfoNum("ph_cl_decoy_spawn_key", 0)			-- Used for spawning decoy
 	local unstuckKey	= pl:GetInfoNum("ph_cl_unstuck_key", 0)				-- The Unstuck Key
+
+	local plTeam = pl:Team()
 	
-	if IsValid(pl) and pl:Alive() and (pl:Team() == TEAM_PROPS or pl:Team() == TEAM_HUNTERS) then
+	if IsValid(pl) and pl:Alive() and (plTeam == TEAM_PROPS or plTeam == TEAM_HUNTERS) then
 		
 		-- Taunt Access
 		-- if you're excluding custom taunts not to be played on random taunts or use them *only* for specific 'groups', you're evil. jk it's good tho :)	
 		local tauntmode  = PHX:GetCVar( "ph_custom_taunt_mode" )
 		local tauntdelay = PHX:GetCVar( "ph_normal_taunt_delay" )
-		if (key == info or (pl:Team() == TEAM_PROPS and ( tobool(isRightClickMode) and key == MOUSE_RIGHT ) )) then
+		if (key == TauntKey or (plTeam == TEAM_PROPS and ( tobool(isRightClickMode) and key == MOUSE_RIGHT ) )) then
 			if tauntmode == 1 then
 				pl:ConCommand("ph_showtaunts")
-			elseif tauntmode == 0 or tauntmode == 2 and pl:GetLastTauntTime( "LastTauntTime" ) + tauntdelay <= CurTime() and
+			elseif tauntmode == 0 or tauntmode == 2 and pl:GetLastTauntTime( "LastTauntTime" ) + tauntdelay <= CurTime() then
 				-- Random taunts rules: Use Cached; includes range from: [custom, stock, externals]. That's it.
-				-- Make sure both team's cached taunts are not empty.
-					(!table.IsEmpty(PHX.CachedTaunts[TEAM_PROPS]) and !table.IsEmpty(PHX.CachedTaunts[TEAM_HUNTERS])) then
-				
-				PHX:PlayTaunt( pl, true, pitchApplyRand, plPitchLevel, isRandomPitch, "LastTauntTime" )
-				
+				local TauntPath = true
+				if ( table.IsEmpty(PHX.CachedTaunts[plTeam]) or TAUNT_FALLBACK ) then
+					TauntPath = "vo/coast/odessa/male01/nlo_cheer0"..math.random(1,4)..".wav"
+					pitchApplyRand = 0; plPitchLevel = 100; isRandomPitch = 0;
+				end
+				PHX:PlayTaunt( pl, TauntPath, pitchApplyRand, plPitchLevel, isRandomPitch, "LastTauntTime" )
 			end
 		end
 		
@@ -1311,7 +1337,7 @@ hook.Add("PlayerButtonDown", "PlayerButton_ControlTaunts", function(pl, key)
 		end
 	
 		-- Team Props
-		if pl:Team() == TEAM_PROPS then
+		if plTeam == TEAM_PROPS then
 	
 			-- Lock rotation
 			if (key == lockInfo) then
@@ -1337,7 +1363,7 @@ hook.Add("PlayerButtonDown", "PlayerButton_ControlTaunts", function(pl, key)
 			end
 			
 		-- Team Hunters
-		elseif pl:Team() == TEAM_HUNTERS then
+		elseif plTeam == TEAM_HUNTERS then
 			
 			-- Add Something here for hunters. Sometimes in future I think.
 			
