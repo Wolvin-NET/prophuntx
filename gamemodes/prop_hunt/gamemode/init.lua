@@ -610,8 +610,8 @@ function GM:PlayerExchangeProp(pl, ent)
 			pl:PHXChatInfo("ERROR", "PHX_PROP_IS_BANNED")
 		elseif IsValid(ent:GetPhysicsObject()) && (pl.ph_prop:GetModel() != ent:GetModel() || pl.ph_prop:GetSkin() != ent:GetSkin()) then
         
-            -- Disallow props that has maximum bounding box's less than 1 units.
-            if math.Max(ent:OBBMaxs().x, ent:OBBMaxs().y) <= 1 then
+            -- Disallow props that has maximum bounding box's less than 0.5 units (originally 1 but because we have "ph_tmp_accurate_hull" convar )
+            if math.Max(ent:OBBMaxs().x, ent:OBBMaxs().y) <= 0.5 then
                 pl:PHXChatInfo("ERROR", "PHX_PROP_TOO_THIN")
                 return
             end
@@ -647,6 +647,7 @@ function GM:PlayerExchangeProp(pl, ent)
             pl:EnablePropPitchRot( true )
 			
 			local OffsetMult = PHX:GetCVar( "ph_prop_viewoffset_mult" )
+			local UseFullHull = PHX:GetCVar( "ph_tmp_accurate_hull" )
 			
 			if PHX:GetCVar( "ph_sv_enable_obb_modifier" ) && ent:GetNWBool("hasCustomHull",false) then
 				local hmin	= ent.m_Hull[1]
@@ -662,21 +663,27 @@ function GM:PlayerExchangeProp(pl, ent)
                 
                 pl:SetHull(hmin,hmax)
 				pl:SetHullDuck(hmin,hmax)
-                local xymax = math.Round(math.Max(hmax.x,hmax.y))
+				local vMax = math.Max(hmax.x,hmax.y)
+                local xymax = UseFullHull and vMax or math.Round(vMax)
                 pl:PHSendHullInfo( xymax*-1, xymax, hmax.z, new_health )
 			else
-                local hullxymax = math.Round(math.Max(ent:OBBMaxs().x, ent:OBBMaxs().y))
+				local vMax = math.Max(ent:OBBMaxs().x, ent:OBBMaxs().y)
+				local vMaxZ = ent:OBBMaxs().z-ent:OBBMins().z
+				
+                local hullxymax = UseFullHull and vMax or math.Round(vMax)
 				local hullxymin = hullxymax * -1
-				local hullz     = math.Round(ent:OBBMaxs().z-ent:OBBMins().z) * OffsetMult
+				local hullz     = (UseFullHull and vMaxZ or math.Round(vMaxZ)) * OffsetMult
                 
                 if ent:GetClass() == "prop_ragdoll" then -- Optional (but Better): Add 'PHX:GetCVar( "ph_usable_prop_type" ) >= 3' for extra checks.
                     -- We'll use GetModelBounds() instead of using CollisionBounds or OBBMins/Maxs.
                     -- Reason because is that ragdoll's Coll/OBBs bounds values are always changing when they move.
                     local mins,maxs = ent:GetModelBounds()
                     
-                    hullxymax   = math.Round( math.Max( maxs.x, maxs.y) )
+					local vRagMax = math.Max( maxs.x, maxs.y)
+					local vRagMaxZ = maxs.z-mins.z
+                    hullxymax   = UseFullHull and vRagMax or math.Round( vRagMax )
                     hullxymin   = hullxymax * -1
-                    hullz       = math.Round(maxs.z-mins.z) * OffsetMult
+                    hullz       = (UseFullHull and vRagMaxZ or math.Round(vRagMaxZ)) * OffsetMult
                     
                     -- Override health back to 100 and set their solid back to BBOX.
                     pl.ph_prop:SetSolid(SOLID_BBOX)

@@ -2,6 +2,15 @@
 Note: **Prop Hunt X2Z will SOON change it's versioning from "X2Z" to "24XZ" with unique formatted revision versioning.**  
 Example: `VERSION = "24XZ" REVISION = "XZ24.0105A"` where: `XZ24`: X2Z/YY, `0105`: DD/MM, `A`: Quick revisions if occured within same day.
 
+## Revision 17.07.2024
+- Re-enabled back a function where you can use accurate prop's hull rather than rounding them.
+- Added ConVar "ph_tmp_accurate_hull" (Enabled by Default) for Accurate Hull - Turn this off if you have a problem such as getting stuck too often
+- Changed restriction that you cannot change into a Prop if Prop's max hull X and Y is less than 0.5 units (before: 1.0 units)
+
+### Known Issues
+- If you're trying to use a very thin or tiniest prop (by disabling the restriction in the code) you'll likely have some collission problem from Player's Hull with other objects.  
+So far, I found that Valve Games are nearly never made a very thin/tiniest prop so this should be safe for 0.5 units restriction. (this probably due to VPhysics Collision rule that the must be 0.5 units thick.)
+
 ## Revision 22.05.2024
 - Renamed `fretta` base gamemode to `base_phx` to avoid conflicts with other gamemodes.  
 If you really wanted to include PHX's fretta base into your multi-fretta-gamemode, simply rename the base_phx and base_phx.txt, and `DeriveGamemode('base_phx')` => `DeriveGamemode('fretta')`@`prop_hunt/gamemode/sh_init.lua`. However, I highly recommend to avoid this to prevent any undesired effects. Use at your own risk!

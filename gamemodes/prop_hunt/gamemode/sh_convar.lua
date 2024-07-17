@@ -85,6 +85,7 @@ CreateConVar( "ph_kick_non_admin_access", "0", {FCVAR_SERVER_CAN_EXECUTE,FCVAR_A
 
 local CVAR = {}
 CVAR["ph_show_splash_screen"]           =   { CTYPE_BOOL,   "1", CVAR_SERVER_ONLY, "Show Splash Screen upon joining." }
+CVAR["ph_tmp_accurate_hull"]            =   { CTYPE_BOOL,   "1", CVAR_SERVER_ONLY, "(Experimental) Enable accurate hull size instead of rounding them.\nNote: You may able to stick on walls but it may cause some problems, use with caution." }
 
 CVAR["ph_include_default_taunt"]        =   { CTYPE_BOOL,   "1", CVAR_SERVER_ONLY, "Should we Include default stock PH:X taunt from the gamemode?" }
 CVAR["ph_taunt_soundlevel"]        		=   { CTYPE_NUMBER, "6", CVAR_SERVER_ONLY, "Taunt SoundLevel to use, value must from 1 to 6.\n1=75dB\n2=80dB\n3=85dB\n4=90dB\n5=95dB\n6=100dB - this is default.", { min = 1, max = 6 } }
