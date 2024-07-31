@@ -747,6 +747,12 @@ function GM:PlayerUse(pl, ent)
 	-- control who can pick up objects
 	if PHX:IsUsablePropEntity(ent:GetClass()) then
 		local state = PHX:GetCVar( "ph_allow_pickup_object" )
+		local cls = ent:GetClass()
+		
+		-- Fix where you cant open doors or use+ing any entities.
+		if PHX.EXPLOITABLE_DOORS[cls] then return end
+		if cls == "ph_luckyball" or cls == "ph_devilball" then return end
+		if ent:IsVehicle() then return end -- for ph_factory map
 	
 		if state <= 0 then
 			return false

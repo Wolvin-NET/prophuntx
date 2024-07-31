@@ -22,7 +22,7 @@ IS_PHX		 	= true	-- an easy check if PHX is installed.
 
 PHX.ConfigPath 	= "phx_data"
 PHX.VERSION		= "X2Z"
-PHX.REVISION	= "17.07.24" --Format: dd/mm/yy.
+PHX.REVISION	= "31.07.24" --Format: dd/mm/yy.
 
 --Include Languages
 PHX.LANGUAGES = {}
