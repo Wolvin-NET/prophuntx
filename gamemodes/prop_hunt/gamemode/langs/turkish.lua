@@ -75,7 +75,7 @@ L["DERMA_CHANGETEAM"]		= "Takım Değiş"
 
 -- FRETTA: Scoreboard
 L["DERMA_PLAYER"]			= "(%d oyuncu)"	
-L["DERMA_PLAYERS"]			= "(%d oyuncular)"
+L["DERMA_PLAYERS"]			= "(%d oyuncu)"
 L["DERMA_NAME"]				= "Ad"
 L["DERMA_KILLS"]				= "Leş"
 L["DERMA_DEATHS"]			= "Ölüm"
@@ -707,11 +707,11 @@ L["PHX_TM_WARN_CLEARFAV"]		= "UYARI: Bu önceden kaydettiğiniz Favori Alayları
 
 L["PHXM_BANNED_MODELS"]			= "Kısıtlanmış Modellerin kullanımına izin ver/me (Yasaklanmış Modeller). Buna Yasaklı Modeller dahil değildir (Bunlar her zaman silinir)."
 L["PHXM_ADMIN_ALLOWARMOR"]       = "Nesne ve avcı takımında zırha izin ver"
-L["PHXM_ADMIN_ALLOW3P"]          = "Avcılar ÜŞBA'ya erişebilir"
-L["PHXM_ADMIN_ALLOW3P_SVDESIRED"]= "ÜŞBA'nın sunucunun istediği kamera pozisyonunu kullanmasına izin ver (Özel oyuncu pozisyonuna izin verme)"
-L["PHXM_ADMIN_ALLOW3P_DIST"]     = "ÜŞBA: Kamera Mesafesi"
-L["PHXM_ADMIN_ALLOW3P_RIGHT"]    = "ÜŞBA: Kamera Sağ Pozisyonu"
-L["PHXM_ADMIN_ALLOW3P_UP"]     	= "ÜŞBA: Kamera Üst Pozisyonu"
+L["PHXM_ADMIN_ALLOW3P"]          = "Avcılar üçüncü şahıs bakış açısına erişebilir"
+L["PHXM_ADMIN_ALLOW3P_SVDESIRED"]= "Üçüncü şahıs bakış açısının sunucunun istediği kamera pozisyonunu kullanmasına izin ver (Özel oyuncu pozisyonuna izin verme)"
+L["PHXM_ADMIN_ALLOW3P_DIST"]     = "Üçüncü Şahıs: Kamera Mesafesi"
+L["PHXM_ADMIN_ALLOW3P_RIGHT"]    = "Üçüncü Şahıs: Kamera Sağ Pozisyon"
+L["PHXM_ADMIN_ALLOW3P_UP"]     	= "Üçüncü Şahıs: Kamera Üst Pozisyon"
 L["PHXM_ADMIN_JUMPPOWER_H"]		= "Avcılar için ek Zıplama Gücü çarpanı"
 L["PHXM_ADMIN_MDLCOLOR_PROP"]	= "Nesne Takımı için Oyuncu Rengini etkinleştir (Özel Avcı Modellerinin etkinleştirilmesini gerektir)"
 L["PHXM_ADMIN_MDLCOLOR_HUNTER"]	= "Avcı Takımı için Oyuncu Rengini etkinleştir (Özel Avcı Modellerinin etkinleştirilmesini gerektir)"
@@ -811,15 +811,15 @@ L["MISC_CANCEL"]     = "İptal"
 L["MISC_SEL_ALL"]    = "Hepsini Seç"
 L["MISC_SEL_NONE"]   = "Hiçbirini Seçme"
 
-L["PHXM_CL_THIRDPERSON"]     = "ÜŞBA modu tuşu (Üçüncü Şahıs Bakış Açısı)"
+L["PHXM_CL_THIRDPERSON"]     = "Üçüncü Şahıs modu tuşu (Üçüncü Şahıs Bakış Açısı)"
 L["PHXM_CL_UNSTUCK"]			= "Sıkışmaktan kurtulma tuşu"
-L["CL_THIRDPERSON_ENABLED"]  = "ÜŞBA Etkin"
-L["CL_THIRDPERSON_DISABLED"] = "ÜŞBA Devre dışı"
+L["CL_THIRDPERSON_ENABLED"]  = "Üçüncü Şahıs Etkin"
+L["CL_THIRDPERSON_DISABLED"] = "Üçüncü Şahıs Devre dışı"
 
-L["PHX_TP_ADJUSTVIEW_BTN"]	= "ÜŞBA görünümünü ayarla" --Button, as well as window title.
-L["PHX_TPS_ADJ_TITLE"]		= "ÜŞBA Uyarısı"
-L["PHX_TPS_ADJ_SVDESIRED"]	= "ÜŞBA özelleştirmesi devre dışı: Sunucunun istediği pozisyon kullanılıyor."
-L["PHX_TPS_ADJ_3PDIS"]		= "ÜŞBA Devre Dışı."
+L["PHX_TP_ADJUSTVIEW_BTN"]	= "Üçüncü şahıs görünümünü ayarla" --Button, as well as window title.
+L["PHX_TPS_ADJ_TITLE"]		= "Üçüncü Şahıs Uyarısı"
+L["PHX_TPS_ADJ_SVDESIRED"]	= "Üçüncü şahıs özelleştirmesi devre dışı: Sunucunun istediği pozisyon kullanılıyor."
+L["PHX_TPS_ADJ_3PDIS"]		= "Üçüncü Şahıs Devre Dışı."
 L["PHX_TPS_ADJ_BLIND"]		= "Kör oldunuz. Yeniden deneyin."
 L["PHX_TPS_ADJ_NEEDALIVE"]	= "Bunu yapmak için Avcı Takımında canlı olmanız gerekiyor."
 
@@ -831,7 +831,7 @@ L["VEC_POS_FRONT"]	= "Ön" --Y?
 L["VEC_POS_TOP"]		= "Üst"  --Z
 
 -- Key Hints
-L["KEYHINT_HUNTER3P"] 	= "Avcı ÜŞBA"
+L["KEYHINT_HUNTER3P"] 	= "Avcı Üçüncü Şahıs"
 L["KEYHINT_SHOOT"]		= "Ateş Et"
 L["KEYHINT_SEC"]			= "İkincil Ateş"
 L["KEYHINT_PICKUP"]		= "Nesneyle Etkileşim"
