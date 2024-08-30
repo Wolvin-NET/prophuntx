@@ -867,7 +867,7 @@ L["PHXM_MV_CHANGEMAP_NOPLAYER"]	= "Sunucuda oyuncu kalmayınca haritayı değiş
 
 L["KEY_MIDCLICK"]        = "FT"
 
-L["LD_MIDCLICK"]         = "ORTA TUŞ"
+L["LD_MIDCLICK"]         = "ORTA TIK"
 L["LD_RIGHTCLICK"]       = "SAĞ TIK"
 L["LD_PRESS2SHOOT"]      = "%s Ateş etmek için [%s] tuşuna basın!"
 
