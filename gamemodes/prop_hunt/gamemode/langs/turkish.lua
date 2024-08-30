@@ -472,7 +472,7 @@ L["PCR_HEADER_BOTTOM"]		= "bu nesne seçiciyi kullanmak için!"
 L["PCR_CL_TOOLTIP_BANNED"]	= "Bu modeli kullanamazsın."
 L["PCR_CL_TOOLTIP_MODEL"]	= "Model: %s"
 L["PCR_CL_MENU_NOTREADY"]	= " Bu özellik şu anda kullanılamıyor."
-L["PCR_WINDOW_GUIDE_TTL"]	= "Hızlı Rehber: Nesne Menüsü 101"
+L["PCR_WINDOW_GUIDE_TTL"]	= "Hızlı Rehber: Kısaca Nesne Menüsü"
 L["PCR_BTN_HELP_MENU"]		= "Nesne Yardım Menüsü"
 
 L["PCR_CL_CMDUSEULX"]		= " Bu komut devre dışı. 'ulx propmenu' kullanın!"
@@ -537,9 +537,11 @@ L["PHXM_TAUNT_PITCH_ENABLE"]			= "Alay Ses Perdesini Ayarla"
 L["PHXM_TAUNT_PITCH_RANGE_MIN"]		= "Bir alay için en az kabul edilebilir ses perdeleme aralığı. 1'den 99'a kadar."
 L["PHXM_TAUNT_PITCH_RANGE_MAX"]		= "Bir alay için en fazla kabul edilebilir ses perdeleme aralığı. 100'den 255'e kadar."
 
-L["PHXM_DECOY_SETTINGS"]				= "Yem Ayarları"
 L["PHXM_DECOY_ENABLE"]				= "Yem Ödülünü Etkinleştir? Ödül raunt bitene kadar sadece bir kereliğe mahsus canlı nesnelere verilecektir. Birikmezler ve koyulduklarında eksilirler."
-
+L["PHXM_TAUNT_INCLUDE_DEF"]			= "Varsayılan NA:X ve Alay Tarayıcısı dizini dahil edilsin mi?\nBu devre dışı bırakılırsa, mevcut tüm özel alaylar kullanılacak ve yüklü özel alaylar yoksa yedekleri kullanılacak (HARİTAYI YENİDEN BAŞLATMA GEREKLİ)"
+L["PHXM_TAUNT_DOOVERLAP"]			= "Yeni çalınan alaylar, çalınmaya devam edilen alayların üstüne yazılsın mı?\nBunu devre dışı bırakmak, durup yenisini oynatmak anlamına gelir. Klasik davranışı korumak için etkinleştirin."
+L["PHXM_TAUNT_SNDLVL"]				= "Kullanılacak Alay Ses Seviyesi\n1=75dB 2=80dB 3=85dB 4=90dB 5=95dB 6=100dB (Varsayılan 6)"
+L["PHXM_DECOY_SETTINGS"]				= "Yem Ayarları"
 L["PHXM_DISABLE_FOOTSTEP"]           = "Nesne takımının adım seslerini sessize al"
 
 L["PHXM_ADMIN_CHATSETTING"]			= "Sohbet Penceresi Ayarları"
