@@ -307,11 +307,11 @@ L["PHXM_ADMIN_TAUNTMODE1"]			= "Mod [1]: C/Özel Alay"
 L["PHXM_ADMIN_TAUNTMODE2"]			= "Mod [2]: Her İkiside"
 L["PHXM_ADMIN_TAUNTSOPEN"]			= "Alay Penceresini Aç"
 
-L["PHXM_MODE_DEFAULT"] 				= "--[ Etkileşim modu %d'ya ayarlandı ]--"
-L["PHXM_MODE0"]						= "Mode [0]: İzin Verme"
-L["PHXM_MODE1"]						= "Mode [1]: Sadece Avcılar"
-L["PHXM_MODE2"]						= "Mode [2]: Sadece Nesneler"
-L["PHXM_MODE3"]						= "Mode [3]: Herkese izin ver"
+L["PHXM_MODE_DEFAULT"] 				= "--[ Etkileşim modu %d değerine ayarlandı ]--"
+L["PHXM_MODE0"]						= "Mod [0]: İzin Verme"
+L["PHXM_MODE1"]						= "Mod [1]: Sadece Avcılar"
+L["PHXM_MODE2"]						= "Mod [2]: Sadece Nesneler"
+L["PHXM_MODE3"]						= "Mod [3]: Herkese izin ver"
 
 --[[
 	Admin Developer Sections
@@ -421,7 +421,7 @@ L["MISC_GAME_ENDED"]		= "Oyun bitti."
 	Credits: Late Addition: Revision: 16.09.21/X2Z
 ]]
 
-L["PHXM_ABOUT_BTN_WIKI"]			= "NAX Viki & Kılavuzlar"
+L["PHXM_ABOUT_BTN_WIKI"]			= "NAX Viki & Rehber"
 
 --[[
 	Auto Taunt: Late Addition: Revision: 16.09.21/X2Z
@@ -524,7 +524,7 @@ L["MISC_IDK"]						= "Bilinmeyen"
 L["MISC_NA"]							= "N/A"
 
 -- HUD
-L["HUD_DECOY_ACTIVE"]                = "[%s]'e bas"
+L["HUD_DECOY_ACTIVE"]                = "[%s] tuşuna bas"
 L["HUD_FAKETAUNT_COUNT"]             = "%ix Kaldı"
 L["HUD_FAKETAUNT_UNLI"]              = "Sınırsız"
 L["NOTICE_GRENADE_SMG_GIVEN"]        = "SMG bombaları edindin."
@@ -561,7 +561,7 @@ L["PHXM_ADMIN_GIVEGRENADE_TIME"]     = "Raunt bitmeden önce bomba verme süresi
 --[[
 	Plugins in sh_init.lua, Revision 10.06/2022/X2Z
 ]]--
-L["PLUG_NAME_VER"]					= "Eklenti: %s | v.%s"
+L["PLUG_NAME_VER"]					= "Eklenti: %s | s.%s"
 L["PLUG_DESCRIPTION"]				= "Açıklama: %s"
 
 --[[
@@ -603,7 +603,7 @@ L["DECOY_PUT_SUCC"]					= "Yem başarılı bir şekilde koyuldu."
 L["DECOY_CANT_PUT_HERE"]				= "Buraya yem koyamazsın."
 L["DECOY_GET_REWARD"]				= "Tebrikler! Bu raunt hayatta kaldığınız için ['Nesne Yemi'] kazandınız!"
 L["DECOY_REMINDER_GET"]              = "Bir Yem/Kukla nesnen var! Avcıları şaşırtmak için bir yere koy!"
-L["DECOY_FRAGS_RECEIVED"]			= "Yem başarıyla yemlendi: %s'dan 1 puan çaldınız!"
+L["DECOY_FRAGS_RECEIVED"]			= "Yem başarıyla yemlendi: %s adlı oyuncudan 1 puan çaldınız!"
 L["DECOY_DISABLED"]					= "Şu anda, yem mevcut değil."
 L["PHXM_CL_DECOY_KEYBIND"]			= "Yem koymak için varsayılan tuş. Varsayılan 1 (Num Tuş Takımı 1 değil)."
 
@@ -703,7 +703,7 @@ L["PHZ_pcr_fb_notmounted"] = "%s [Kurulu Değil]"
 L["PHX_ADMIN_ACCESS_ONLY"]		= "Erişim engellendi: bunu sadece adminler yapabilir, %s !"
 L["PHX_PROP_TOO_THIN"]           = "Dönüşülemez: Nesne çok ince!"
 L["PHX_PROP_IS_BANNED"]			= "Kullanmaya çalıştığınız nesne sunucudan yasaklandı!"
-L["PHX_SPECT_JOINGAME"]			= "Oyuna katılmak için, [F2]ye basın ve bir takım seçiniz."
+L["PHX_SPECT_JOINGAME"]			= "Oyuna katılmak için [F2] tuşuna basın ve bir takım seçiniz."
 L["PHX_TEAM_IS_FULL"]			= "O takım dolu!"
 L["FORCE_JOIN_TEAM_IS_DISABLED"]	= "Takım eşitleme devre dışı (Takım Karması/Aktarması etkin)"
 
@@ -808,8 +808,8 @@ L["UNSTUCK_RESCUE_SPAWNPOINT"]		= "Bu doğma noktası aşırı yakın, hala sık
 L["UNSTUCK_NO_SPAWNPOINTS"]			= "Bilinmeyen nedenlerden ötürü, doğma noktası bulunamadı. Önlem olarak, (0, 0, 0)a ışınlanacaksanız. Sıkışmanıza çok yüksek bir şans var, eğer sıkışırsanız tekrar deneyin."
 L["UNSTUCK_PLEASE_WAIT"]				= "Lütfen her bir sıkışmaktan kurtulma denemesinde %d saniye bekleyin."
 L["UNSTUCK_NOT_ON_GROUND"] 			= "Zeminde değil, kontrol ediliyor..."
-L["UNSTUCK_NOT_STUCK_JITTER"]		= "Sıkışmamışsın. Eğer gerçekten sıkıştıysanız, Nesneniniz hareket etmeyi veya titremeyi bırakana kadar bekleyin (ALT'a basmayı deneyin) ve yeniden deneyin."
-L["UNSTUCK_NOT_STUCK_TOOBAD"]		= "Sıkışmamışsın. Eğer gerçekten sıkıştıysanız, üzgünüm, raunt sonuna kadar beklemek zorundasın."
+L["UNSTUCK_NOT_STUCK_JITTER"]		= "Sıkışmamışsınız. Eğer gerçekten sıkıştıysanız, Nesneniniz hareket etmeyi veya titremeyi bırakana kadar bekleyin (ALT'a basmayı deneyin) ve yeniden deneyin."
+L["UNSTUCK_NOT_STUCK_TOOBAD"]		= "Sıkışmamışsınız. Eğer gerçekten sıkıştıysanız, üzgünüm, raunt sonuna kadar beklemek zorundasın."
 L["UNSTUCK_CANNOT_FIND_SPOT"]		= "Sizin hareket edebileceğiniz bir yer bulunamadı, en yakın doğma noktasına ışınlanılıyor."
 L["UNSTUCK_SPAWNPOINTS_DISABLED"]	= "Doğma noktasına ışınlanacaktın, ama bu sunucu yumma süresinin dışında izin vermiyor. Üzgünüz!"
 -- End of PHE/Plus
@@ -833,12 +833,12 @@ L["PHX_TPS_ADJ_3PDIS"]		= "Üçüncü Şahıs Devre Dışı."
 L["PHX_TPS_ADJ_BLIND"]		= "Kör oldunuz. Yeniden deneyin."
 L["PHX_TPS_ADJ_NEEDALIVE"]	= "Bunu yapmak için Avcı Takımında canlı olmanız gerekiyor."
 
-L["ANG_AXIS_DIST"]	= "İleri" -- or Forward
+L["ANG_AXIS_DIST"]	= "İleri"
 L["ANG_AXIS_RIGHT"]	= "Sağ"
 L["ANG_AXIS_UP"]		= "Yukarı"
-L["VEC_POS_LEFT"]	= "Sol" --X
-L["VEC_POS_FRONT"]	= "Ön" --Y?
-L["VEC_POS_TOP"]		= "Üst"  --Z
+L["VEC_POS_LEFT"]	= "Sol"
+L["VEC_POS_FRONT"]	= "Ön"
+L["VEC_POS_TOP"]		= "Üst"
 
 -- Key Hints
 L["KEYHINT_HUNTER3P"] 	= "Avcı Üçüncü Şahıs"
@@ -854,7 +854,7 @@ L["KEYHINT_ROTATION"] 	= "Dönme Kilidi"
 L["KEYHINT_PROPMENU"] 	= "Nesne Menüsü"
 L["KEYHINT_FREEZEAIR"] 	= "Nesne Donması"
 L["KEYHINT_SPAWNDECOY"] 	= "Yem At"
-L["KEYHINT_UNSTUCK"]		= "Sıkışmaktan Kurtulma Tuşu"
+L["KEYHINT_UNSTUCK"]		= "Sıkışmaktan Kurtulma"
 
 L["KEY_LMB"]				= "LMB" -- Sol Fare Tuşu, Kısaltılmış
 L["KEY_RMB"]				= "RMB" -- Sağ Fare Tuşu, Kısaltılmış
