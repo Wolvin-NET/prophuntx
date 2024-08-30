@@ -43,10 +43,10 @@ L.SUICIDEMSG = {
 	"paçavra oldu.",
 }
 L.RANDOM_SPECTATORS = {
-	"oturup izlemek için.",
-	"takılmalarını izlemek için.",
-	"ne olup bittiğini izlemek için.",
-	" ",
+	"takımına oturup izlemek için geçti.",
+	"takımına takılmalarını izlemek için geçti.",
+	"takımına ne olup bittiğini izlemek için geçti.",
+	"",
 }
 
 L["PHX_TEAM_CONNECTING"] = "Bağlanıyor"
@@ -91,8 +91,8 @@ L["DERMA_SERVER_TAG"]		= "SV"
 L["DERMA_BOT_TAG"]			= "BOT"
 L["DERMA_GAMEMODE_CREDITS"]	= "%s | Sürüm: %s - Rev. %s"
 
-L["CHAT_JOINED"]				= " katıldı "
-L["CHAT_JOINEDTHE"]			= " katıldı "
+L["CHAT_JOINED"]				= " şu takıma katıldı: "
+L["CHAT_JOINEDTHE"]			= " şu takıma katıldı: "
 
 L["CHAT_SWAPBALANCE"]		= "Takım dengesi için %s , %s takımına aktarıldı."
 L["CHAT_SWAPBALANCEYOU"]		= "Mükemmel dengeyi sağlamak için aktarıldın."
@@ -131,7 +131,7 @@ L["HUD_HP"]					= "CAN"
 L["HUD_AMMO"] 				= "CEPHANE"
 L["HUD_MAGSEC"]				= "MAG. / SEC." --Magazine | Secondary Magazine
 
--- !!WEAPON NAMES CANNOT BE TRANSLATED, THEY USE FROM language.GetPhrase THEREFORE IT'S IMPOSSIBLE TO DO.
+
 
 L["TEAM_PROPS"]				= L["PHX_TEAM_PROPS"] 
 L["TEAM_HUNTERS"]			= L["PHX_TEAM_HUNTERS"]
