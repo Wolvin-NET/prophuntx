@@ -7,8 +7,8 @@ local L={}
 
 L.code = "tr"
 
-L.Name 		 	= "Türkçe" -- example: "Bahasa Indonesia"
-L.NameEnglish	= "Turkish" -- Your Language but spoken in English, example: "Indonesian"
+L.Name 		 	= "Türkçe"
+L.NameEnglish	= "Turkish"
 L.Author			= "Talha Berkay Akbulut aka Matt"
 
 L.AuthorURL		= {	
@@ -94,8 +94,8 @@ L["DERMA_GAMEMODE_CREDITS"]	= "%s | Sürüm: %s - Rev. %s"
 L["CHAT_JOINED"]				= " katıldı "
 L["CHAT_JOINEDTHE"]			= " katıldı "
 
-L["CHAT_SWAPBALANCE"]		= "Takım dengesi için %s , %s'lara aktarıldı."
-L["CHAT_SWAPBALANCEYOU"]		= "Mükemmel dengeyi sağlamak için aktarıldın." -- Smile... for even in death, you have become children of Thanos
+L["CHAT_SWAPBALANCE"]		= "Takım dengesi için %s , %s takımına aktarıldı."
+L["CHAT_SWAPBALANCEYOU"]		= "Mükemmel dengeyi sağlamak için aktarıldın."
 
 -- FRETTA: Splash Starting Screen
 L["SPASHSCREEN_BY_X"]		= "%s tarafından"
@@ -112,11 +112,11 @@ https://www.buymeacoffee.com/wolvindra
 
 Daha fazla bilgi, yardım ve kılavuz görmek için [F1] tuşuna basın ve ardından [Nesne Avı Menüsü] düğmesine tıklayın.
 
-Version: ]].. PHX.VERSION ..[[ Revision: ]].. PHX.REVISION ..[[
+Sürüm: ]].. PHX.VERSION ..[[ Revizyon: ]].. PHX.REVISION ..[[
 
 İyi Eğlenceler!]]
 
-L["LANGUAGE_CHANGED"]		= "Tercih edilen dil %s'yle değiştirildi."
+L["LANGUAGE_CHANGED"]		= "Tercih edilen dil %s diliyle değiştirildi."
 
 -- internal cl_menutypes section.
 L["SUBTYPE_PREFERED_LANG"]	= "Tercih Edilen Dil"
@@ -148,7 +148,7 @@ L["HUD_TargetID"]			= "Oyuncu: %s (%d%%)"
 L["HUD_BLINDED"]				= "%s gözleri açılacak ve %s içinde serbest kalacaklar"
 L["HUD_UNBLINDED"]			= "Önüm arkam sağım solum sobe saklanmayan ebe!"
 
-L["BLIND_RESPAWN_TEAM"]		= "Sadece %s takımındayken %d saniyede yumarken doğmuştun."
+L["BLIND_RESPAWN_TEAM"]		= "%s takımındayken %d saniyede yumarken doğmuştun."
 L["BLIND_RESPAWN"]			= "Yumarken %d saniyede doğmuştun."
 
 L["MISC_ACCEPT"]				= "Kabul"
@@ -162,7 +162,7 @@ L["MISC_ACCESSDENIED"]		= "Erişim Engellendi"
 L["CHAT_NOPLAYERS"]			= "Oyunu başlatmak için yeterli oyuncu yok!"
 L["CHAT_SWAP"]				= "Takımlar değiştirildi!"
 
-L["CHAT_SWAPTEAM_WARNING"]   = "%dx (%dx MAKS) Takım değiştin. O süreden sonra takım değişemezsin."
+L["CHAT_SWAPTEAM_WARNING"]   = "%dx (%dx MAKS) Takım değiştin. Bu değerden sonra takım değişemezsin."
 L["CHAT_SWAPTEAM_REVERT"]	= "%s takımına geçemezsin çünkü takım değişme sayısını aştın."
 
 L["CHAT_PROP_NO_ROOM"] 		= "Nesneye değişmek için yeterli alan yok!"
@@ -206,7 +206,7 @@ L["PHXM_TAB_ABOUT"]			= "NA:X Hakkında"
 L["PHXM_TAB_MAPVOTE"]		= "Harita Oyla"
 L["PHXM_TAB_PLUGINS"]		= "Eklentiler"
 
-L["PHXM_CVAR_CHANGED"]		= "[Ayarlar] %q CVarı %q'a değiştirildi."
+L["PHXM_CVAR_CHANGED"]		= "[Ayarlar] %q CVarı %q ile değiştirildi."
 
 --[[
 	Player Mute Settings
@@ -343,9 +343,9 @@ L["PHXM_ADMIN_REWSPANTIMEPERCENT"]		= "Doğmana izin veren yumma süresi oranı.
 L["PHXM_ADMIN_ALLOWRESPAWN_SPECTATOR"]	= "İzleyici takımına atanırken yumma süresinde doğmaya izin ver"
 L["PHXM_ADMIN_ALLOWRESPAWN_TEAMCHANGE"]	= "Farklı bir takıma atanırken yumma süresinde doğmaya izin ver (Bunu etkinleştirmek önerilmez)"
 
---[[
-	MapVote Settings
-]]
+
+--	MapVote Settings
+
 L["PHXM_MV_SETTINGS"]			= "Harita Oylama Ayarları"
 
 L["PHXM_MV_ALLOWCURMAP"]			= "Mevcut haritanın oylanmasına izin ver"
@@ -465,8 +465,8 @@ L["PCR_NOT_EXIST_COUNT"]		= "Seçtiğiniz nesne bu haritada yok! ( %s / 4 )"
 L["PCR_NOT_EXIST"]			= "Seçtiğiniz nesne bu haritada yok!"
 
 -- PCR Client section, reason why there is a space because of chat.AddText between args.
-L["PCR_NOTIFY_1"]			= " Bunu sunucu nesne menüsü %s sürümünü kullanıyor!"
-L["PCR_NOTIFY_2"]			= " konsolda veya F1 -> [Nesne Seçme Yardımı] menüsü."
+L["PCR_NOTIFY_1"]			= " Bu sunucu Nesne Nenüsü %s sürümünü kullanıyor!"
+L["PCR_NOTIFY_2"]			= " konsolda yaz veya F1 -> [Nesne Seçici Yardım] menüsünü kullan."
 L["PCR_CL_DISABLED"]			= " Bu özellik devre dışı."
 L["PCR_CL_GROUP"]			= " Sadece belli gruplar bu menüyü açabilir!"
 L["PCR_CL_LIMIT"]			= " Sınıra ulaştın!"
@@ -603,7 +603,7 @@ L["DECOY_PUT_SUCC"]					= "Yem başarılı bir şekilde koyuldu."
 L["DECOY_CANT_PUT_HERE"]				= "Buraya yem koyamazsın."
 L["DECOY_GET_REWARD"]				= "Tebrikler! Bu raunt hayatta kaldığınız için ['Nesne Yemi'] kazandınız!"
 L["DECOY_REMINDER_GET"]              = "Bir Yem/Kukla nesnen var! Avcıları şaşırtmak için bir yere koy!"
-L["DECOY_FRAGS_RECEIVED"]			= "Yem başarıyla yemlendi: %s adlı oyuncudan 1 puan çaldınız!"
+L["DECOY_FRAGS_RECEIVED"]			= "Yem başarılı: %s adlı oyuncudan 1 puan çaldınız!"
 L["DECOY_DISABLED"]					= "Şu anda, yem mevcut değil."
 L["PHXM_CL_DECOY_KEYBIND"]			= "Yem koymak için varsayılan tuş. Varsayılan 1 (Num Tuş Takımı 1 değil)."
 
@@ -643,8 +643,8 @@ L["PCR_PLUG_SPACE_CHECK"]	= "Oyuncunun başka bir nesneye sıkışmasını engel
 L["PCR_PLUG_X_BBOX"]			= "(Haritayı Yeniden Başlatma Gerektirir) Nesne Menüsü listesine eklemeden önce Varlıkların Temas Sınır seviyesini kontrol et"
 L["PCR_PLUG_X_BBOX_MAX"]		= "Varlıkların Temas Sınır Yükseklik seviyesi. En az olanlar otomatik hesaplanır."
 L["PCR_PLUG_X_BBOX_MIN"]		= "Varlıkların Temas Sınır Genişlik seviyesi. En az olanlar otomatik hesaplanır."
-L["PCR_PLUG_ONLY_GROUPS"]	= "Nesne Menüsü sadece bağışçılar gibi gruplara mı açık olsun?"
-L["PCR_PLUG_NOTIFYMSG"]		= "Oyuncuyu Nesne Menüsünü nasıl kullanacağı hakkında bilgilendir"
+L["PCR_PLUG_ONLY_GROUPS"]	= "Nesne Menüsü sadece bağışçılar gibi belli gruplara mı açık olsun?"
+L["PCR_PLUG_NOTIFYMSG"]		= "Her raunt başında oyuncuyu Nesne Menüsünü nasıl kullanacağı hakkında bilgilendir"
 
 L["PCR_EDITOR_MSG_ERROR"]	= "Değişiklikler bir hata nedeniyle kaydedilemedi.\nLütfen sunucu konsolonu kontrol et!"
 L["PCR_EDITOR_MSG_SUCC"]		= "Değişikliklerin ve Özel Nesne bilgilerin başarıyla kaydedildi ve güncellendi." --Thanks galaxio! x)
@@ -795,7 +795,7 @@ L["PHXM_ADMIN_FORCEH2P_RANDONLY"]	= "Bu eylem sadece karma modunda geçerli." --
 L["PHXM_ADMIN_FORCEH2P_NOHUNT"]		= "[AVCI YOK]" --ForceHunterAsProp_nohunters [UNUSED]
 L["PHXM_ADMIN_FORCEH2P_NOHUNTMSG"] 	= "Avcı yok Allah kahretsin, düğmede yazılı!" --ForceHunterAsProp_nohuntersmsg [UNUSED]
 
-L["FORCEH2P_WILL_BE"]				= "%s sonraki raunt Nesne."
+L["FORCEH2P_WILL_BE"]				= "%s sonraki raunt Nesne olacak."
 L["FORCEH2P_IS_CANCELED"]			= "%s sonraki raunt Nesne olmayacak."
 L["FORCEH2P_IS_RESET"]				= "Sonraki rauntta tüm Avcılar Nesne olarak zorlanmayacak."
 L["FORCEH2P_PLAYER_NOT_FOUND"]		= "Seçilen oyuncu bulunamadı, muhtemelen ayrıldı."
@@ -847,7 +847,7 @@ L["KEYHINT_SEC"]			= "İkincil Ateş"
 L["KEYHINT_PICKUP"]		= "Nesneyle Etkileşim"
 
 L["KEYHINT_LMB"]			= "Nesneye Dönüş"
-L["KEYHINT_RMB"]			= "Nesne Alay/Özel Yetenek"
+L["KEYHINT_RMB"]			= "Nesne Alayı/Özel Yetenek"
 L["KEYHINT_RANDTAUNT"] 	= "Rastgele Alay"
 L["KEYHINT_TAUNTMENU"] 	= "Alay Menüsü"
 L["KEYHINT_ROTATION"] 	= "Dönme Kilidi"
@@ -869,6 +869,6 @@ L["KEY_MIDCLICK"]        = "FT"
 
 L["LD_MIDCLICK"]         = "ORTA TIK"
 L["LD_RIGHTCLICK"]       = "SAĞ TIK"
-L["LD_PRESS2SHOOT"]      = "%s Ateş etmek için [%s] tuşuna basın!"
+L["LD_PRESS2SHOOT"]      = "%s ateş etmek için [%s] tuşuna basın!"
 
 PHX.LANGUAGES[L.code] = L
