@@ -9,13 +9,13 @@ L.code = "tr"
 
 L.Name 		 	= "Türkçe" -- example: "Bahasa Indonesia"
 L.NameEnglish	= "Turkish" -- Your Language but spoken in English, example: "Indonesian"
-L.Author			= "Talha Berkay Akbulut aka Matt" -- Only accept STRINGS.
--- Can Accept: String, and Table.
+L.Author			= "Talha Berkay Akbulut aka Matt"
+
 L.AuthorURL		= {	
 	"https://steamcommunity.com/profiles/76561198443702005"
 }
 -- Special Section that isn't String-based
-L.SUICIDEMSG = {  -- Fix me: there was addition text here but feel free to add more.
+L.SUICIDEMSG = {  
 	"intihar etti!",
 	"esrarengiz bir şekilde öldü.",
 	"büyüden öldü.",
@@ -31,6 +31,9 @@ L.SUICIDEMSG = {  -- Fix me: there was addition text here but feel free to add m
 	"Arka odalara geçti.",
 	"soyunu kurutmayı deniyor.",
 	"çok fena öldü.",
+	"acayip bir şekilde öldü.",
+	"bir şekilde öldü.",
+	"çarpıldı.",
 	"bütün nesneleri öldürecekken panikledi.",
 	"dur artık, yardıma ihtiyacın var.",
 	"paçavra oldu.",
@@ -355,7 +358,7 @@ L["PHXM_MV_EXPLANATION3"]		= "Harita Oylama Eylemi (İptal etmek için, basitçe
 
 L["PHXM_MV_START"]		= "Harita Oylamasını Başlat"
 L["PHXM_MV_STOP"]		= "Harita Oylamasını Durdur"
---                  			  ^YOU VIOLATED THE LAW!
+
 
 --[[ 
 	Versioning, Credits or About section
@@ -377,10 +380,10 @@ L["UPDATE_NOTIFY_WINDOW_TITLE"]	= "Güncelleme Bildirimi"
 L["UPDATE_RTBOX_APPEND"]			= "\n\nBilginize:\nŞuanda: %s sürümünü %s revizyonuyla kullanıyorsunuz"
 L["UPDATE_BTN_SEEFULL"]			= "Tüm Değişiklikleri Gör"
 
-L["PHXM_ABOUT_LINKS"]			= "Bağlantılar ve Krediler"
+L["PHXM_ABOUT_LINKS"]			= "Bağlantılar ve Emeği Geçenler"
 L["PHXM_ABOUT_THANKS"]			= "Destek için Özel Teşekkürler, Öneri & Katkılar:\n %s"
 L["PHXM_ABOUT_BTN_DONATE"]		= "NA:X'ı bağış yaparak destekle"
-L["PHXM_ABOUT_BTN_HOME"]			= "NAX Anasayfası"
+L["PHXM_ABOUT_BTN_HOME"]			= "NAX Ana Sayfası"
 L["PHXM_ABOUT_BTN_GITHUB"]		= "NAX GitHub Dizini"
 L["PHXM_ABOUT_BTN_PLUGINS"]		= "NAX Eklentiler"
 L["PHXM_ABOUT_BTN_CHANGELOGS"]	= "NAX Değişiklik Kaydı"
@@ -404,7 +407,7 @@ L["PLUGINS_CLIENT_SETTINGS"]			= "-- Kullanıcı Ayarları --"
 
 -- Text Entries
 L["TEXTENTRY_FZ_SINGLE"] = "Sabit Kamera Tek Ses Yolu"
-L["TEXTENTRY_MV_PREFIX"] = "Harita Oylama Harita Öneki"
+L["TEXTENTRY_MV_PREFIX"] = "Harita Oylama Harita Ön Eki"
 
 L["MISC_GAME_ENDED"]		= "Oyun bitti."
 
@@ -414,7 +417,7 @@ L["MISC_GAME_ENDED"]		= "Oyun bitti."
 	Credits: Late Addition: Revision: 16.09.21/X2Z
 ]]
 
-L["PHXM_ABOUT_BTN_WIKI"]			= "NAX Wiki & Kılavuzlar"
+L["PHXM_ABOUT_BTN_WIKI"]			= "NAX Viki & Kılavuzlar"
 
 --[[
 	Auto Taunt: Late Addition: Revision: 16.09.21/X2Z
@@ -537,13 +540,14 @@ L["PHXM_TAUNT_PITCH_ENABLE"]			= "Alay Ses Perdesini Ayarla"
 L["PHXM_TAUNT_PITCH_RANGE_MIN"]		= "Bir alay için en az kabul edilebilir ses perdeleme aralığı. 1'den 99'a kadar."
 L["PHXM_TAUNT_PITCH_RANGE_MAX"]		= "Bir alay için en fazla kabul edilebilir ses perdeleme aralığı. 100'den 255'e kadar."
 
-L["PHXM_DECOY_ENABLE"]				= "Yem Ödülünü Etkinleştir? Ödül raunt bitene kadar sadece bir kereliğe mahsus canlı nesnelere verilecektir. Birikmezler ve koyulduklarında eksilirler."
 L["PHXM_TAUNT_INCLUDE_DEF"]			= "Varsayılan NA:X ve Alay Tarayıcısı dizini dahil edilsin mi?\nBu devre dışı bırakılırsa, mevcut tüm özel alaylar kullanılacak ve yüklü özel alaylar yoksa yedekleri kullanılacak (HARİTAYI YENİDEN BAŞLATMA GEREKLİ)"
 L["PHXM_TAUNT_DOOVERLAP"]			= "Yeni çalınan alaylar, çalınmaya devam edilen alayların üstüne yazılsın mı?\nBunu devre dışı bırakmak, durup yenisini oynatmak anlamına gelir. Klasik davranışı korumak için etkinleştirin."
 L["PHXM_TAUNT_SNDLVL"]				= "Kullanılacak Alay Ses Seviyesi\n1=75dB 2=80dB 3=85dB 4=90dB 5=95dB 6=100dB (Varsayılan 6)"
 L["PHXM_DECOY_SETTINGS"]				= "Yem Ayarları"
 L["PHXM_DISABLE_FOOTSTEP"]           = "Nesne takımının adım seslerini sessize al"
 
+
+L["PHXM_DECOY_ENABLE"]				= "Yem Ödülünü Etkinleştir? Ödül raunt bitene kadar sadece bir kereliğe mahsus canlı nesnelere verilecektir. Birikmezler ve koyulduklarında eksilirler."
 L["PHXM_ADMIN_CHATSETTING"]			= "Sohbet Penceresi Ayarları"
 L["PHXM_ADMIN_HUNTERBLIND"]			= "Avcı Yumma Kontrolü"
 
@@ -635,7 +639,7 @@ L["PCR_PLUG_SPACE_CHECK"]	= "Oyuncunun başka bir nesneye sıkışmasını engel
 L["PCR_PLUG_X_BBOX"]			= "(Haritayı Yeniden Başlatma Gerektirir) Nesne Menüsü listesine eklemeden önce Varlıkların Temas Sınır seviyesini kontrol et"
 L["PCR_PLUG_X_BBOX_MAX"]		= "Varlıkların Temas Sınır Yükseklik seviyesi. En az olanlar otomatik hesaplanır."
 L["PCR_PLUG_X_BBOX_MIN"]		= "Varlıkların Temas Sınır Genişlik seviyesi. En az olanlar otomatik hesaplanır."
-L["PCR_PLUG_ONLY_GROUPS"]	= "Should Prop Menu can only be accessed by certain groups e.g. Donator?"
+L["PCR_PLUG_ONLY_GROUPS"]	= "Nesne Menüsü sadece bağışçılar gibi gruplara mı açık olsun?"
 L["PCR_PLUG_NOTIFYMSG"]		= "Oyuncuyu Nesne Menüsünü nasıl kullanacağı hakkında bilgilendir"
 
 L["PCR_EDITOR_MSG_ERROR"]	= "Değişiklikler bir hata nedeniyle kaydedilemedi.\nLütfen sunucu konsolonu kontrol et!"
@@ -643,17 +647,17 @@ L["PCR_EDITOR_MSG_SUCC"]		= "Değişikliklerin ve Özel Nesne bilgilerin başar�
 
 L["PHZ_generic_title"]		= "Özel Nesne Kapsama Düzenleyecisi"
 L["PHZ_generic_helptext"]	= [[[Nasıl Kullanılır:
-[LEFT PANEL]
+[SOL PANEL]
 ← Bir oyun içeriği seçin
 ← Sağa model eklemek için simgelere tıklayın
 ← Bağlam menüsünü açmak için sağ tıklayın
 
-[RIGHT PANEL]
+[SAĞ PANEL]
 → Herhangi bir nesneyi silmeden önce 'işaretlemek' için tıklayın
 → Modelleri kaldırmak için "Seçilenleri Kaldır"a basın
 → Değişiklik yapmak için 'Seçimi Uygula'ya basın
 
-[INFO]
+[BİLGİ]
 - Yalnızca 2048 girişe kadar model ekleyebilirsiniz.
 - Tüm harita nesneleri otomatik olarak dahil edilecektir, yani buna gerek yok.
 - [Kapat] düğmesine basmak işlemi iptal edecek.
@@ -662,13 +666,13 @@ L["PHZ_generic_helptext"]	= [[[Nasıl Kullanılır:
 - Sunucu içeriğiniz sizinkinden farklı olabilir. Aşağıya doğru açılan menüde "<oyun> [İlişkilendirilmemiş]" görüyorsanız, oyunu yüklemediğiniz/ilişkilendirmediğiniz anlamına geliyor.
 - Eklenti klasörüne göz atma özelliği henüz geliştirilmedi, bu nedenle bunun yerine 'Tüm İçerikler'i kullanmanız gerekecek.
 ]]
-L["PHZ_generic_mdlinfo"] = [[Model Info:
+L["PHZ_generic_mdlinfo"] = [[Model Bilgisi:
 %s
-Has Physics: %s]]
+Fiziği Var: %s]]
 L["PHZ_generic_mdlinfoStart"] = "(İlk önce model seç!)"
 
-L["PHZ_generic_no_ragdoll"]	= "No: Ragdoll"
-L["PHZ_generic_titlelabel"]	= "%s Önizle :"
+L["PHZ_generic_no_ragdoll"]	= "Ceset Yok"
+L["PHZ_generic_titlelabel"]	= "%s Önizlemesi :"
 
 L["PHZ_mount_game_sel"]		= "İlişkilendirilmiş oyun seç (Default: Garry's Mod)"
 L["PHZ_input_placeholder1"]	= "Aranacak Klasör: <klasör adı> veya '*', tüm klasörler için boş."
@@ -689,7 +693,7 @@ L["PHZ_tooltip_wasmarked"] = [[Bu nesne, sunucuda bulunmadığı için işaretle
 Bu düzenleyiciyi kapatırsanız, bu otomatik olarak kaldırılacaktır.]]
 
 L["PHZ_pcr_fb_allcontent"] = "Tüm İçerikler (Tüm Oyuncular/Sunucu sizinle aynı içeriğe sahip olmayacaktır)"
-L["PHZ_pcr_fb_notmounted"] = "%s [İlişkilendirilmemiş]"
+L["PHZ_pcr_fb_notmounted"] = "%s [Kurulu Değil]"
 
 -- Revision 25-27/08/2022
 L["PHX_ADMIN_ACCESS_ONLY"]		= "Erişim engellendi: bunu sadece adminler yapabilir, %s !"
