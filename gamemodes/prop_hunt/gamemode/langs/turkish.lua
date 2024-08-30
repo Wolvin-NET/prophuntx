@@ -22,7 +22,7 @@ L.SUICIDEMSG = {
 	"öldü.",
 	"kendini dürbünsüz öldürdü.",
 	"sinirlenip çıktı.",
-	"sarhoş.",
+	"kendinden geçti.",
 	"öldü. Bir dahakine iyi şanslar!",
 	"kendini tokatladı.",
 	"ayağı kayıp düştü.",
@@ -145,7 +145,7 @@ L["HUD_AUTOTAUNT_ALT"]		= "Otomatik Alaya %d"
 
 L["HUD_TargetID"]			= "Oyuncu: %s (%d%%)"
 
-L["HUD_BLINDED"]				= "%s gözleri açılacak ve %s içinde serbest kalacaklar"
+L["HUD_BLINDED"]				= "%s takımının gözleri %s içinde açılacak ve serbest kalacaklar"
 L["HUD_UNBLINDED"]			= "Önüm arkam sağım solum sobe saklanmayan ebe!"
 
 L["BLIND_RESPAWN_TEAM"]		= "%s takımındayken %d saniyede yumarken doğmuştun."
@@ -859,7 +859,7 @@ L["KEYHINT_UNSTUCK"]		= "Sıkışmaktan Kurtulma"
 L["KEY_LMB"]				= "LMB" -- Sol Fare Tuşu, Kısaltılmış
 L["KEY_RMB"]				= "RMB" -- Sağ Fare Tuşu, Kısaltılmış
 
-L["MISC_TEAM_NAME"]		= "%s TAKIMI" -- NESNELER, AVCILAR, ama bir cümlede.
+L["MISC_TEAM_NAME"]		= "%s" -- NESNELER, AVCILAR, ama bir cümlede.
 L["NOTIFY_HEADER_TITLE"]	= "Oyun Ayarları"
 
 -- Revision 14/09/2022
