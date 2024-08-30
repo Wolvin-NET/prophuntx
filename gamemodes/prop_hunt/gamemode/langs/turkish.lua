@@ -813,8 +813,8 @@ L["MISC_CANCEL"]     = "İptal"
 L["MISC_SEL_ALL"]    = "Hepsini Seç"
 L["MISC_SEL_NONE"]   = "Hiçbirini Seçme"
 
-L["PHXM_CL_THIRDPERSON"]     = "Üçüncü Şahıs modu tuşu (Üçüncü Şahıs Bakış Açısı)"
-L["PHXM_CL_UNSTUCK"]			= "Sıkışmaktan kurtulma tuşu"
+L["PHXM_CL_THIRDPERSON"]     = "Üçüncü Şahıs modu tuşu"
+L["PHXM_CL_UNSTUCK"]			= "Sıkışmaktan kurtulma"
 L["CL_THIRDPERSON_ENABLED"]  = "Üçüncü Şahıs Etkin"
 L["CL_THIRDPERSON_DISABLED"] = "Üçüncü Şahıs Devre dışı"
 
@@ -857,7 +857,7 @@ L["NOTIFY_HEADER_TITLE"]	= "Oyun Ayarları"
 -- Revision 14/09/2022
 L["PHXM_MV_CHANGEMAP_NOPLAYER"]	= "Sunucuda oyuncu kalmayınca haritayı değiştir?"
 
-L["KEY_MIDCLICK"]        = "OFT"
+L["KEY_MIDCLICK"]        = "FT"
 
 L["LD_MIDCLICK"]         = "ORTA TUŞ"
 L["LD_RIGHTCLICK"]       = "SAĞ TIK"
