@@ -134,7 +134,7 @@ L["EV_PLAYER_DISCONNECT"]	= "%s sunucudan ayrıldı. (Neden: %s)"
 -- HUD elements
 L["HUD_HP"]					= "CAN"
 L["HUD_AMMO"] 				= "CEPHANE"
-L["HUD_MAGSEC"]				= "MAG. / SEC." --Magazine | Secondary Magazine
+L["HUD_MAGSEC"]				= "MAG. / SEC."
 
 
 
@@ -195,9 +195,9 @@ L["TM_MENU_CLOSE"]			= "Menüyü Kapat"
 L["TM_DELAYTAUNT_NOT_EXIST"] = "Seçtiğin alay sunucuda bulunamadı!"
 L["TM_DELAYTAUNT_PLSWAIT"]	= "%s saniye bekleyiniz!"
 
---[[
-	PHX Menu window
-]]
+
+--	PHX Menu window
+
 L["PHXM_WINDOW_TITLE"]		= "Nesne Avı X - Gelişmiş Ayarlar ve Menü"
 L["SERVER_INFO_MOTD"]		= "SUNUCU BİLGİSİ ve KURALLARI [GM]"
 
@@ -213,14 +213,14 @@ L["PHXM_TAB_PLUGINS"]		= "Eklentiler"
 
 L["PHXM_CVAR_CHANGED"]		= "[Ayarlar] %q CVarı %q ile değiştirildi."
 
---[[
-	Player Mute Settings
-]]
+
+--	Player Mute Settings
+
 L["PHXM_MUTE_SELECT"]		= "Susturmak istediğiniz oyuncuyu seçin."
 
---[[ 
-	Player Settings
-]]
+ 
+--	Player Settings
+
 L["PHXM_PLAYER_OPTIONS"]		= "Oyuncu Ayarları"
 L["PHXM_PLAYER_LANG"]		= "Diller"
 L["PHXM_PLAYER_BIND"]		= "Tuş Atamaları"
@@ -243,9 +243,9 @@ L["PHXM_PLAYER_SHOW_TUTOR"]			= "Öğretici Pencereyi Göster (2 kere nesne tak�
 L["PHXM_PLAYER_USE_NEW_CROSSHAIR"]	= "Özel Nişangahı Etkinleştir"
 L["PHXM_PLAYER_SHOW_TEAM_TOPBAR"]	= "Toplam hayatta olan takım oyuncularını sol üst köşede gösterir (En az 4 oyuncu gösterilir)"
 
---[[
-	Player model Browser Section
-]]
+
+--	Player model Browser Section
+
 L["QUERY_MODEL_SELECTED"]	= " %s modeli seçildi ve yeniden doğduktan sonra geçerli olacak!"
 L["QUERY_MODEL_INFO"]		= "Model adı: %s - Uygunluk: Herkese"
 
@@ -259,15 +259,15 @@ L["MISC_APPLYMDL"] 			= "Modeli Uygula"
 L["PHXM_MODEL_DISABLED"] 	= "Üzgünüz, Özel Oyuncu Modelleri bu sunucuda devre dışı!"
 L["PHXM_PLAYERMODEL_SETFOV"]	= "Model Görüş Açısını Ayarla"
 
---[[
-	Server Settings
-]]
+
+--	Server Settings
+
 L["PHXM_ADMIN_OPTIONS"]		= "Sunucunun oyun ayarları (Sadece Adminlere ve Kurucuya Görünür)"
 L["PHXM_ADMIN_MUSTALIVE"]	= "Bu işlemi gerçekleştirebilmek için canlı olmanız gerekiyor."
 
---[[
-	Language Override
-]]
+
+--	Language Override
+
 L["PHXM_ADMIN_LANGOVERRIDE"]	= "Zorunlu Dil"
 
 L["PHXM_ADMIN_FORCELANG"] 				= "Zorunlu dili kullan? Bu kullanıcının dilini sunucunun seçtiği ile değiştirecektir."
@@ -318,9 +318,9 @@ L["PHXM_MODE1"]						= "Mod [1]: Sadece Avcılar"
 L["PHXM_MODE2"]						= "Mod [2]: Sadece Nesneler"
 L["PHXM_MODE3"]						= "Mod [3]: Herkese izin ver"
 
---[[
-	Admin Developer Sections
-]]
+
+--	Admin Developer Sections
+
 L["PHXM_ADMIN_DEVSECTION"]		= "Geliştirici Ayarları"
 L["PHXM_ADMIN_ROOMCHECK"]		= "Nesne çarpışmasını etkinleştir? Bu ayar duvara veya nesnelere sıkışmanızı engeller."
 L["PHXM_ADMIN_USENEWMKBREN"]		= "Bren MK II bonus silahı için yeni modeli kullan (Haritayı Yeniden Başlatma Gerektirir)"
@@ -332,9 +332,9 @@ L["PHXM_ADMIN_JUMPPOWER"]		= "Nesneler için ek zıplama gücü katsayısı"
 L["PHXM_ADMIN_ENABLE_OBB"]		= "Geliştirici: Özelleştirilmiş Nesne Varlık Modelinin Sınırları değiştiricisini konfig verisinden etkinleştir (OBB)"
 L["PHXM_ADMIN_RELOAD_OBB"]		= "Geliştirici: Her raunt yeniden başlatıldığında OBB değiştiricisini yeniden yükle"
 
---[[
-	Experimental & PH:X Features
-]]
+
+--	Experimental & PH:X Features
+
 L["PHXM_ADMIN_EXPERIMENTALPHX"]			= "Nesne Avı: X Deneysel Şeyler"
 
 L["PHXM_ADMIN_HLA_COMBINE"]				= "HL: Alyx Combine model desteği ekle"
@@ -369,9 +369,9 @@ L["PHXM_MV_START"]		= "Harita Oylamasını Başlat"
 L["PHXM_MV_STOP"]		= "Harita Oylamasını Durdur"
 
 
---[[ 
-	Versioning, Credits or About section
-]]
+ 
+--	Versioning, Credits or About section
+
 L["PHXM_ABOUT_VERSIONING"]		= "Sürüm: %s - Revizyon: %s"
 L["PHXM_ABOUT_AUTHOR"]			= "%s tarafından"
 L["PHXM_ABOUT_ENJOYING"]			= "Eğer oyunda eğleniyorsanız, bağış yapmaya ne dersiniz!"
@@ -422,22 +422,22 @@ L["MISC_GAME_ENDED"]		= "Oyun bitti."
 
 --============= LATE ADDITION OF 16.09.21/X2Z. =============--
 
---[[
-	Credits: Late Addition: Revision: 16.09.21/X2Z
-]]
+
+--	Credits: Late Addition: Revision: 16.09.21/X2Z
+
 
 L["PHXM_ABOUT_BTN_WIKI"]			= "NAX Viki & Rehber"
 
---[[
-	Auto Taunt: Late Addition: Revision: 16.09.21/X2Z
-]]
+
+--	Auto Taunt: Late Addition: Revision: 16.09.21/X2Z
+
 
 L["HUD_AUTOTAUNT_DISABLED"]		= 	"Otomatik Alay devre dışı."
 L["HUD_AUTOTAUNT_WAITFORUPDATE"]	=	"Otomatik Alay senkronize ediliyor..."
 
---[[
-	MapVote: Late Addition: Revision: 16.09.21/X2Z
-]]
+
+--	MapVote: Late Addition: Revision: 16.09.21/X2Z
+
 L["PHXM_MV_VOTEROCKED"]				= "Oylama çağrısı yapıldı, harita oylaması raunt sonu başlayacak"
 L["PHXM_MV_VOTEROCKED_IMMINENT"]		= "Oylama çağrısı yapıldı, harita oylaması çok yakın"
 L["PHXM_MV_VOTEROCKED_PLY_TOTAL"]	= "%s oylama çağrısı yaptı. ( %d / %d )"
@@ -448,14 +448,14 @@ L["PHXM_MV_HAS_VOTED"]				= "Zaten oylama çağrısı yaptın!"
 L["PHXM_MV_ALR_IN_VOTE"]				= "Zaten oylama yapıldı, harita değişecek!"
 L["PHXM_MV_NEED_MORE_PLY"]			= "Oylama çağrısı için daha fazla oyuncuya ihtiyacınız var!"
 
---[[
-	Late Addition: Revision: 16.09.21/X2Z
-]]
+
+--	Late Addition: Revision: 16.09.21/X2Z
+
 L["PROP_PLAYERMDL_BANNED"]	= "Özel Nesne Oyuncu Modeliniz sunucudan yasaklandı."
 
---[[
-	Prop Menu/Prop Chooser, Revision: 16.09.21/X2Z
-]]
+
+--	Prop Menu/Prop Chooser, Revision: 16.09.21/X2Z
+
 
 L["PCR_USAGE_UNLIMIT"]		= "[Nesne Menü] **Unlimited** kullanımın kaldı!"
 L["PCR_USAGE_COUNT"]			= "[Nesne Menü] %d kullanımın kaldı!"
@@ -494,9 +494,9 @@ L["PCR_EDT_IN_USE"]			= "Bir admin hala nesne bilgisini düzenliyor. Lütfen bek
 L["PCR_EDT_ERROR_DISABLED"]	= "[Nesne Menüsü] Hata: Özel Nesne Eki Devre dışı!"
 L["PCR_EDT_NO_RIGHTS"]		= "Bu özelliğe erişme hakkınız yok."
 
---[[
-	Admin Section, Revision: 16.09.21/X2Z
-]]
+
+--	Admin Section, Revision: 16.09.21/X2Z
+
 L["PHXM_PLAYER_PROP_CHOOSER_KEY"]	= "Nesne Menüsünü açmak için varsayılan tuş."
 L["PHXM_PROP_FREEZE_MIDAIR"]			= "Bir nesne olarak havadayken hareketi dondurmak için varsayılan tuş"
 L["PHXM_ADMIN_TAUNT_SCANNER"]		= "(Haritayı Yeniden Başlatma Gerektirir) alay tarayıcısını etkinleştir?"
@@ -507,9 +507,9 @@ L["PHXM_ADMIN_NOTIFY_ENT_TYPE"]		= "Nesnelere [E]'ye basılarak dönüşülemeye
 L["NOTIFY_PROP_ENTTYPE"]				= "Etkileşime girmek için [E]'ye bas, Dönüşmek için sol tıkla."
 L["NOTIFY_CUST_ENT_TYPE_IS_ON"]		= "[NAX] Uyarı: Etkileşime girmek için [E]'ye bas, Dönüşmek için sol tıkla."
 
---[[
-	Custom Taunts, Revision: 16.09.21/X2Z
-]]
+
+-- 	Custom Taunts, Revision: 16.09.21/X2Z
+
 L["TM_TAUNTS_SEARCH_NOTHING"]		= "'%s' içeren alay bulunamadı..."
 L["TM_SEARCH_PLACEHOLDER"]			= "Bu kategoride ara: sözcük gir, küçük harf & joker karakter yok. Boş=Hepsini Göster."
 L["PHXM_MSG_INPUT_IS_EMPTY"]			= "Metin boş veya ENTER tuşuna basmadınız."
@@ -534,9 +534,9 @@ L["HUD_FAKETAUNT_COUNT"]             = "%ix Kaldı"
 L["HUD_FAKETAUNT_UNLI"]              = "Sınırsız"
 L["NOTICE_GRENADE_SMG_GIVEN"]        = "SMG bombaları edindin."
 
---[[
-	ADMIN PANEL, Revision 10.06/2022/X2Z
-]]--
+
+--	ADMIN PANEL, Revision 10.06/2022/X2Z
+
 L["PHXM_TAUNT_SETTINGS"]				= "Alay Ayarları"
 L["PHXM_GENERAL_SETTINGS"]			= "Genel Ayarlar"
 L["PHXM_FAKE_TAUNT_SETTINGS"]		= "Sahte Alay Ayarları"
@@ -563,15 +563,15 @@ L["PHXM_ADMIN_HUNTERBLIND"]			= "Avcı Yumma Kontrolü"
 L["PHXM_ADMIN_GIVEGRENADE_NEAREND"]  = "Bombalar raunt sonuna yakın mı verilmeli? Eğer evetse, 'ph_give_grenade_roundend_before_time' komutunu kontrol ediniz."
 L["PHXM_ADMIN_GIVEGRENADE_TIME"]     = "Raunt bitmeden önce bomba verme süresi (Saniye). Genel olarak 10 ile 30 saniye arasındadır."
 
---[[
-	Plugins in sh_init.lua, Revision 10.06/2022/X2Z
-]]--
+
+--	Plugins in sh_init.lua, Revision 10.06/2022/X2Z
+
 L["PLUG_NAME_VER"]					= "Eklenti: %s | s.%s"
 L["PLUG_DESCRIPTION"]				= "Açıklama: %s"
 
---[[
-	Taunt Pitch, Revision 10.06/2022/X2Z
-]]--
+
+--	Taunt Pitch, Revision 10.06/2022/X2Z
+
 L["PHX_CTAUNT_USE_PITCH"]			= "Özel alaylar için perde kullan"
 L["PHX_CTAUNT_RANDOM_PITCH"]			= "Alay ederken ses perdeleme seviyesini rastgele seç"
 L["PHX_RTAUNT_USE_PITCH"]			= "Rastgele alaylar için ses perdelemesi kullan [%s]"
@@ -582,10 +582,10 @@ L["PHX_CTAUNT_SLIDER_PITCH"]			= "Alay Ses Perdeleme."
 L["TM_TOOLTIP_FAKETAUNT"]			= "Rastgele bir nesne üzerinden alay et"
 L["TM_PREFERRED_PITCH"]              = "Tercih Edilen Alay Ses Perdeleme Seviyesi"
 
---[[
-	Fake Taunt, Revision 10.06/2022/X2Z
-	Description: Play fake taunts on random props in the map (Not Players)
-]]--
+
+--	Fake Taunt, Revision 10.06/2022/X2Z
+
+
 L["PHX_CTAUNT_ON_RAND_PROPS"]		= "Rastgele nesneler üzerinde çal (%ix)"
 L["PHX_CTAUNT_ON_RAND_PROPS_UNLI"]	= "Rastgele nesneler üzerinde çal"
 L["PHX_CTAUNT_PLAYED_ON_RANDPROP"]	= "Rastgele bir nesne üzerinden alay ettin."
@@ -593,9 +593,9 @@ L["PHX_CTAUNT_RAND_PROPS_LIMIT"]		= "Sınıra ulaştın!"
 L["PHX_CTAUNT_RAND_PROPS_NOT_PROP"]  = "Şu anda mevcut değil."
 L["PHX_CTAUNT_RANDPROP_DISABLED"]	= "Sahte alay şu anda devre dışı."
 
---[[
-	PH:Z Simple Decoy, Revision 10.06/2022/X2Z
-]]--
+
+--	PH:Z Simple Decoy, Revision 10.06/2022/X2Z
+
 L.DECOY_PROP	= {
 	"kuklayı öldürdü!",
 	"kuklayı öldürdükten sonra pişman oldu.",
@@ -620,10 +620,10 @@ L["PHXM_DECOY_HEALTH"]				= "Bir yemin ne kadar canı olmalı. Varsayılan 10."
 L["PHXM_PLAYER_SHOW_DECOY_HELPER"]   = "Yem koyma yardımcısını göster? Bu ayar nişangahın üstünde beyaz bir noktayla metin gösterecektir."
 L["PHXM_PLAYER_SHOW_DECOY_MARKER"]   = "Yem işaretini göster?"
 
---[[
-	Revision 10.06/2022/X2Z
-    Prop Menu Update: Menu, Editor, Browser
-]]--
+
+--	Revision 10.06/2022/X2Z
+--  Prop Menu Update: Menu, Editor, Browser
+
 L["PCR_MODEL_DONT_EXISTS"]   = "Üzgünüz, bu model şu anda mevcut değil!"
 
 L["PCR_PLUG_WARN_MSG"]		= "Uyarı: Özel Nesne Eklemesi (pcr_allow_custom) 0'a ayarlandı.\nÖzel nesnenizi düzenlemek için bu özelliği etkinleştirmelisiniz!\nA Bu ayarı değiştirmek için bir harita değişikliği gerekli."
@@ -787,7 +787,7 @@ L["PHXM_ADMIN_ENABLEUNSTUCK"]		= "Eklentinin sıkışmaktan kurtulma özelliğin
 L["PHXM_ADMIN_NOTPUNSTUCKINROUND"]	= "Saklanma aşamasındayken doğma noktalarının dışında son çare olarak sıkışmaktan kurtulmak için ışınlanmayı devre dışı bırak" --ph_disabletpunstuckinround
 L["PHXM_ADMIN_UNSTUCK_WAITTIME"]		= "Her bir sıkışmaktan kurtulma denemesi arasında kaç saniye geçmeli" --ph_unstuck_waittime
 L["PHXM_ADMIN_TEAMBAL_ORIG"] 		= "NA:X'ın kendi takım dengeleme özelliğini kullan (takım ilgili aşağıdaki tüm ayarları devre dışı bırakır)" --ph_originalteambalance
-L["PHXM_ADMIN_TEAMBAL_UNCHECK"] 		= "Gelişmiş takım dengesi ayarlarına erişmek için önceki onay kutusunun işaretini kaldırın." --ph_originalteambalance_uncheck [KULLANILMAMIŞ]
+L["PHXM_ADMIN_TEAMBAL_UNCHECK"] 		= "Gelişmiş takım dengesi ayarlarına erişmek için önceki onay kutusunun işaretini kaldırın."
 L["PHXM_ADMIN_FORCESPECTOPLAY"]		= "Takımları dengelerken izleyicileri oynaması için zorla" --ph_forcespectatorstoplay
 L["PHXM_ADMIN_NO_H_CONSECUTIVE"]		= "Oyuncuların arka arkaya iki kez Avcı olmasını engelle (Sadece karma modunda çalışır)" --ph_preventconsecutivehunting
 L["PHXM_ADMIN_HUNTER_COUNT"] 		= "Avcı sayısı (0 = otomatik)" --ph_huntercount
@@ -797,15 +797,15 @@ L["PHXM_ADMIN_RESET_ROTTEAM_WARN"]	= "Başlangıçta değişmeyi yeniden başlat
 L["PHXM_ADMIN_RESET_MSG"]			= "Takım Aktarması sıfırlandı!"
 L["PHXM_ADMIN_FORCEH2P_WARN"]		= "Bir Avcıyı bir dahaki sefere Nesne olması için zorla (sadece karma modunda çalışır):" --ForceHunterAsProp_warning
 L["PHXM_ADMIN_FORCEH2P_RANDONLY"]	= "Bu eylem sadece karma modunda geçerli." --ForceHunterAsProp_randomonly
-L["PHXM_ADMIN_FORCEH2P_NOHUNT"]		= "[AVCI YOK]" --ForceHunterAsProp_nohunters [UNUSED]
-L["PHXM_ADMIN_FORCEH2P_NOHUNTMSG"] 	= "Avcı yok Allah kahretsin, düğmede yazılı!" --ForceHunterAsProp_nohuntersmsg [UNUSED]
+L["PHXM_ADMIN_FORCEH2P_NOHUNT"]		= "[AVCI YOK]"
+L["PHXM_ADMIN_FORCEH2P_NOHUNTMSG"] 	= "Avcı yok Allah kahretsin, düğmede yazılı!"
 
 L["FORCEH2P_WILL_BE"]				= "%s sonraki raunt Nesne olacak."
 L["FORCEH2P_IS_CANCELED"]			= "%s sonraki raunt Nesne olmayacak."
 L["FORCEH2P_IS_RESET"]				= "Sonraki rauntta tüm Avcılar Nesne olarak zorlanmayacak."
 L["FORCEH2P_PLAYER_NOT_FOUND"]		= "Seçilen oyuncu bulunamadı, muhtemelen ayrıldı."
 L["PHX_ROTATE_TEAM_RESET"]			= "Takım Aktarma Dengesi sıfırlandı."
-L["FORCEH2P_ALREADY"]				= "%s zaten bir sonraki raunt için Nesne olarak belirlenmiş." -- [UNUSED]
+L["FORCEH2P_ALREADY"]				= "%s zaten bir sonraki raunt için Nesne olarak belirlenmiş."
 
 L["UNSTUCK_YOURE_UNSTUCK"]			= "Artık kurtulmuş olmalısın!"
 L["UNSTUCK_BAD_SPAWNPOINT"]			= "Hata: En yakın doğma noktası seni yeniden sıkıştırabilir. Eğer sıkışırsan, yeniden kurtulmayı deneyin."
@@ -831,7 +831,7 @@ L["PHXM_CL_UNSTUCK"]			= "Sıkışmaktan kurtulma"
 L["CL_THIRDPERSON_ENABLED"]  = "Üçüncü Şahıs Etkin"
 L["CL_THIRDPERSON_DISABLED"] = "Üçüncü Şahıs Devre dışı"
 
-L["PHX_TP_ADJUSTVIEW_BTN"]	= "Üçüncü şahıs görünümünü ayarla" --Button, as well as window title.
+L["PHX_TP_ADJUSTVIEW_BTN"]	= "Üçüncü şahıs görünümünü ayarla"
 L["PHX_TPS_ADJ_TITLE"]		= "Üçüncü Şahıs Uyarısı"
 L["PHX_TPS_ADJ_SVDESIRED"]	= "Üçüncü şahıs özelleştirmesi devre dışı: Sunucunun istediği pozisyon kullanılıyor."
 L["PHX_TPS_ADJ_3PDIS"]		= "Üçüncü Şahıs Devre Dışı."
@@ -861,10 +861,10 @@ L["KEYHINT_FREEZEAIR"] 	= "Nesne Donması"
 L["KEYHINT_SPAWNDECOY"] 	= "Yem At"
 L["KEYHINT_UNSTUCK"]		= "Sıkışmaktan Kurtulma"
 
-L["KEY_LMB"]				= "LMB" -- Sol Fare Tuşu, Kısaltılmış
-L["KEY_RMB"]				= "RMB" -- Sağ Fare Tuşu, Kısaltılmış
+L["KEY_LMB"]				= "LMB"
+L["KEY_RMB"]				= "RMB"
 
-L["MISC_TEAM_NAME"]		= "%s" -- NESNELER, AVCILAR, ama bir cümlede.
+L["MISC_TEAM_NAME"]		= "%s"
 L["NOTIFY_HEADER_TITLE"]	= "Oyun Ayarları"
 
 -- Revision 14/09/2022
