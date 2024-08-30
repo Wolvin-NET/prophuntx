@@ -9,7 +9,7 @@ L.code = "tr"
 
 L.Name 		 	= "Türkçe"
 L.NameEnglish	= "Turkish"
-L.Author			= "Talha Berkay Akbulut aka Matt"
+L.Author			= "Talha Berkay A. aka Tora"
 
 L.AuthorURL		= {	
 	"https://steamcommunity.com/profiles/76561198443702005"
@@ -50,8 +50,8 @@ L.RANDOM_SPECTATORS = {
 }
 
 L["PHX_TEAM_CONNECTING"] = "Bağlanıyor"
-L["PHX_TEAM_PROPS"]		= "Nesneler"
-L["PHX_TEAM_HUNTERS"] 	= "Avcılar"
+L["PHX_TEAM_PROPS"]		= "Nesne"
+L["PHX_TEAM_HUNTERS"] 	= "Avcı"
 L["PHX_TEAM_UNASSIGNED"]	= "Atanmamış"
 L["PHX_TEAM_SPECTATOR"] 	= "İzleyici"
 
@@ -59,7 +59,7 @@ L["PHX_TEAM_SPECTATOR"] 	= "İzleyici"
 
 -- // FRETTA SECTION \\
 --  FRETTA: Kill text (X killed Y)
-L["HUD_KILLED"]				= "öldürdü"
+L["HUD_KILLED"]				= "şu oyuncuyu öldürdü:"
 
 -- FRETTA: HUDs
 L["HUD_TIME"] 				= "SÜRE"
