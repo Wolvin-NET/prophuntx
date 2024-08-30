@@ -19,12 +19,15 @@ L.SUICIDEMSG = {
 	"intihar etti!",
 	"esrarengiz bir şekilde öldü.",
 	"büyüden öldü.",
+	"öldü.",
 	"kendini dürbünsüz öldürdü.",
 	"sinirlenip çıktı.",
 	"sarhoş.",
 	"öldü. Bir dahakine iyi şanslar!",
 	"kendini tokatladı.",
 	"ayağı kayıp düştü.",
+	"kendine hâkim olamadı.",
+	"duvara kafa attı.",
 	"baskıdan öldü.",
 	"öldü. Ltfn F'ye basın.",
 	"Masum nesneleri öldürdükten sonra pişmanlık duyuyor.",
@@ -32,8 +35,9 @@ L.SUICIDEMSG = {
 	"soyunu kurutmayı deniyor.",
 	"çok fena öldü.",
 	"acayip bir şekilde öldü.",
-	"bir şekilde öldü.",
+	"gizemli bir şekilde öldü.",
 	"çarpıldı.",
+	"kalp krizi geçirdi.",
 	"bütün nesneleri öldürecekken panikledi.",
 	"dur artık, yardıma ihtiyacın var.",
 	"paçavra oldu.",
@@ -605,7 +609,7 @@ L["PHXM_CL_DECOY_KEYBIND"]			= "Yem koymak için varsayılan tuş. Varsayılan 1
 
 L["DECOY_INDICATOR_INVALID"]         = "Geçersiz Eğim!"
 L["DECOY_INDICATOR_TOOFAR"]          = "Çok uzak!"
-L["DECOY_INDICATOR_OK"]              = "Yem koy [%s'e bas]"
+L["DECOY_INDICATOR_OK"]              = "Yem koy [%s tuşuna bas]"
 
 L["PHXM_DECOY_HEALTH"]				= "Bir yemin ne kadar canı olmalı. Varsayılan 10."
 L["PHXM_PLAYER_SHOW_DECOY_HELPER"]   = "Yem koyma yardımcısını göster? Bu ayar nişangahın üstünde beyaz bir noktayla metin gösterecektir."
@@ -626,7 +630,7 @@ L["PCR_PLUG_LBL_TECHSET"]	= "Teknik Ayarlar"
 L["PCR_PLUG_LBL_EXPSET"]		= "Deneysel"
 L["PCR_PLUG_LBL_PLAYERSET"]	= "Oyuncu Ayarları"
 
-L["PCR_PLUG_ENABLE"]			= "Nesne Menüsünü etkinleştir."
+L["PCR_PLUG_ENABLE"]			= "Nesne Menüsünü etkinleştir"
 L["PCR_PLUG_ALLOW_CUSTOM"]	= "(Haritayı Yeniden Başlatma Gerektirir) Özel nesnelerin nesne menüsü listesine eklenmesine izin ver?"
 L["PCR_PLUG_PROP_BAN"]		= "(Haritayı Yeniden Başlatma Gerektirir) Nesne Menüsü listesine yasaklanmış nesneleri dahil etme?"
 L["PCR_PLUG_USAGE_LIMIT"]	= "Oyuncunun kullanması için en fazla kullanım sınırı. -1 sınırsızdır."
@@ -680,7 +684,7 @@ L["PHZ_input_placeholder2"]  = "Aranacak Eklenti: <ad> veya '*', tüm klasörler
 L["PHZ_msg_warn_close"]		= "Bu pencereyi kapatmak istediğinizden emin misiniz? Kaydedilmemiş düzenlemeler kaybolacak!"
 L["PHZ_msg_commit"] 			= "Değişiklik yapmak istediğinizden emin misiniz??"
 L["PHZ_msg_cant_empty"]		= "Nesne listesi boş olamaz!"
-L["PHZ_msg_removesel"] 		= [[Remove selected props in the list. Hedefşer:
+L["PHZ_msg_removesel"] 		= [[Listedeki seçili nesneleri kaldır. Hedefler:
 Kırmızı = İşaretli Seçimler
 Sarı: Nesne sunucuda yok ve kaldırılmalı.]]
 L["PHZ_msg_warn_mdlinlist"]  = "Uyarı: Bu model zaten listede!"
