@@ -1,5 +1,3 @@
-﻿-- Kindly free to improve the language.
-
 -- Originally written by: Fafy
 -- Improved by Wolvindra-Vinzuerio & Godfather
 
@@ -784,19 +782,19 @@ L["PHXM_PLUS_BTNRESET"]			= "Seçimleri Temizle (ve tüm zorlanmışları sıfı
 L["PHXM_PLUS_LISTTIPS"]			= "İpuçları: Bir oyuncuyu Nesne Takımında olmasını zorlamak için çift tıklayın."
 
 L["PHXM_ADMIN_ENABLEUNSTUCK"]		= "Eklentinin sıkışmaktan kurtulma özelliğini etkinleştirin veya devre dışı bırakın. Eğer özel bir eklenti kullanıyorsanız, bu ayarı devre dışı bırakın."
-L["PHXM_ADMIN_NOTPUNSTUCKINROUND"]	= "Saklanma aşamasındayken doğma noktalarının dışında son çare olarak sıkışmaktan kurtulmak için ışınlanmayı devre dışı bırak" --ph_disabletpunstuckinround
-L["PHXM_ADMIN_UNSTUCK_WAITTIME"]		= "Her bir sıkışmaktan kurtulma denemesi arasında kaç saniye geçmeli" --ph_unstuck_waittime
-L["PHXM_ADMIN_TEAMBAL_ORIG"] 		= "NA:X'ın kendi takım dengeleme özelliğini kullan (takım ilgili aşağıdaki tüm ayarları devre dışı bırakır)" --ph_originalteambalance
+L["PHXM_ADMIN_NOTPUNSTUCKINROUND"]	= "Saklanma aşamasındayken doğma noktalarının dışında son çare olarak sıkışmaktan kurtulmak için ışınlanmayı devre dışı bırak"
+L["PHXM_ADMIN_UNSTUCK_WAITTIME"]		= "Her bir sıkışmaktan kurtulma denemesi arasında kaç saniye geçmeli"
+L["PHXM_ADMIN_TEAMBAL_ORIG"] 		= "NA:X'ın kendi takım dengeleme özelliğini kullan (takım ilgili aşağıdaki tüm ayarları devre dışı bırakır)"
 L["PHXM_ADMIN_TEAMBAL_UNCHECK"] 		= "Gelişmiş takım dengesi ayarlarına erişmek için önceki onay kutusunun işaretini kaldırın."
-L["PHXM_ADMIN_FORCESPECTOPLAY"]		= "Takımları dengelerken izleyicileri oynaması için zorla" --ph_forcespectatorstoplay
-L["PHXM_ADMIN_NO_H_CONSECUTIVE"]		= "Oyuncuların arka arkaya iki kez Avcı olmasını engelle (Sadece karma modunda çalışır)" --ph_preventconsecutivehunting
-L["PHXM_ADMIN_HUNTER_COUNT"] 		= "Avcı sayısı (0 = otomatik)" --ph_huntercount
-L["PHXM_ADMIN_ROTATETEAM"] 			= "Karma modu devre dışı bırak ve oyuncuları aktarmayı kullan" --ph_rotateteams
-L["PHXM_ADMIN_RESET_ROTTEAM"] 		= "Aktarmaları sıfırla" --ResetRotateTeams
-L["PHXM_ADMIN_RESET_ROTTEAM_WARN"]	= "Başlangıçta değişmeyi yeniden başlat (eğer onları başlatmışsan, veya durdurmuşsan, ve yeniden başlatmışsanız ve şu anki değişim sizi memnun etmiyorsa):" --ResetRotateTeams_warning
+L["PHXM_ADMIN_FORCESPECTOPLAY"]		= "Takımları dengelerken izleyicileri oynaması için zorla"
+L["PHXM_ADMIN_NO_H_CONSECUTIVE"]		= "Oyuncuların arka arkaya iki kez Avcı olmasını engelle (Sadece karma modunda çalışır)"
+L["PHXM_ADMIN_HUNTER_COUNT"] 		= "Avcı sayısı (0 = otomatik)"
+L["PHXM_ADMIN_ROTATETEAM"] 			= "Karma modu devre dışı bırak ve oyuncuları aktarmayı kullan"
+L["PHXM_ADMIN_RESET_ROTTEAM"] 		= "Aktarmaları sıfırla"
+L["PHXM_ADMIN_RESET_ROTTEAM_WARN"]	= "Başlangıçta değişmeyi yeniden başlat (eğer onları başlatmışsan, veya durdurmuşsan, ve yeniden başlatmışsanız ve şu anki değişim sizi memnun etmiyorsa):"
 L["PHXM_ADMIN_RESET_MSG"]			= "Takım Aktarması sıfırlandı!"
-L["PHXM_ADMIN_FORCEH2P_WARN"]		= "Bir Avcıyı bir dahaki sefere Nesne olması için zorla (sadece karma modunda çalışır):" --ForceHunterAsProp_warning
-L["PHXM_ADMIN_FORCEH2P_RANDONLY"]	= "Bu eylem sadece karma modunda geçerli." --ForceHunterAsProp_randomonly
+L["PHXM_ADMIN_FORCEH2P_WARN"]		= "Bir Avcıyı bir dahaki sefere Nesne olması için zorla (sadece karma modunda çalışır):"
+L["PHXM_ADMIN_FORCEH2P_RANDONLY"]	= "Bu eylem sadece karma modunda geçerli."
 L["PHXM_ADMIN_FORCEH2P_NOHUNT"]		= "[AVCI YOK]"
 L["PHXM_ADMIN_FORCEH2P_NOHUNTMSG"] 	= "Avcı yok Allah kahretsin, düğmede yazılı!"
 
