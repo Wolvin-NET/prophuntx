@@ -536,7 +536,7 @@ L["PHZ_generic_helptext"]	= [[[Nasıl Kullanılır:
 - [Kapat] düğmesine basmak işlemi iptal edecek.
 - Tüm modellerin geçerli bir 'VPhysics' VFiziği olmayacaktır.
 - Tüm oyuncuların (Sunucunuz dahil) özel modelleri olmayacak. Mevcut değillerse, seçimler uygulandıktan sonra kaldırılacaklar.
-- Sunucu içeriğiniz sizinkinden farklı olabilir. Aşağıya doğru açılan menüde "<oyun> [İlişkilendirilmemiş]" görüyorsanız, oyunu yüklemediğiniz/ilişkilendirmediğiniz anlamına geliyor.
+- Sunucu içeriğiniz sizinkinden farklı olabilir. Aşağıya doğru açılan menüde "<oyun> [Kurulu Değil]" görüyorsanız, oyunu yüklemediğiniz veya kurmadığınız anlamına geliyor.
 - Eklenti klasörüne göz atma özelliği henüz geliştirilmedi, bu nedenle bunun yerine 'Tüm İçerikler'i kullanmanız gerekecek.
 ]]
 L["PHZ_generic_mdlinfo"] = [[Model Bilgisi:
