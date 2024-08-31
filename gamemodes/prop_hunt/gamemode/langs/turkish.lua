@@ -1,6 +1,5 @@
--- Originally written by: Fafy
--- Improved by Wolvindra-Vinzuerio & Godfather
-
+-- Source Language by: Fafy, Wolvindra-Vinzuerio & Godfather
+-- Turkish Localization: Tora
 local L={}
 
 L.code = "tr"
@@ -57,9 +56,7 @@ L["PHX_TEAM_PROPS"]		= "Nesne"
 L["PHX_TEAM_HUNTERS"] 	= "Avcı"
 L["PHX_TEAM_UNASSIGNED"]	= "Atanmamış"
 L["PHX_TEAM_SPECTATOR"] 	= "İzleyici"
-
 L["HUD_KILLED"]				= "şu oyuncuyu öldürdü:"
-
 
 L["HUD_TIME"] 				= "SÜRE"
 L["HUD_ROUND"]				= "RAUNT"
@@ -70,7 +67,6 @@ L["HUD_TEAMWIN"]				= "%s kazandı!"
 L["HUD_LOSE"]				= "Berabere, herkes kaybetti!"
 L["MISC_TIMELEFT"]			= "Kalan Süre: %s"
 L["MISC_GAMEEND"] 			= "Oyun bu raunttan sonra bitecektir."
-
 
 L["DERMA_TEAMSELECT"]		= "Takım Seç"
 L["DERMA_RTV"] 				= "Harita Değişmek İçin Oyla"
@@ -93,12 +89,8 @@ L["CHAT_JOINEDTHE"]			= " şu takıma katıldı: "
 L["CHAT_SWAPBALANCE"]		= "Takım dengesi için %s , %s takımına aktarıldı."
 L["CHAT_SWAPBALANCEYOU"]		= "Mükemmel dengeyi sağlamak için aktarıldın."
 
-
 L["SPASHSCREEN_BY_X"]		= "%s tarafından"
-
 L["HELP_DONATORS_AND_CONTRIBUTORS"]  = "\n\nBağışçılar & Katkıda Bulunanlar:\n- %s"
-
-
 L["HELP_F1"] 				= [[Bir Nesne Avı X Projesi.
 
 Nesne Avını daha modern ve özelleştirilebilir hale getiren bir proje.
@@ -118,11 +110,9 @@ L["EV_PLAYER_CONNECT"]		= "%s sunucuya bağlandı."
 L["EV_PLAYER_JOINED"]		= "%s sunucuya katıldı."
 L["EV_PLAYER_DISCONNECT"]	= "%s sunucudan ayrıldı. (Neden: %s)"
 
-
 L["HUD_HP"]					= "CAN"
 L["HUD_AMMO"] 				= "CEPHANE"
 L["HUD_MAGSEC"]				= "MAG. / SEC."
-
 
 L["TEAM_PROPS"]				= L["PHX_TEAM_PROPS"] 
 L["TEAM_HUNTERS"]			= L["PHX_TEAM_HUNTERS"]
@@ -177,7 +167,6 @@ L["TM_MENU_CLOSE"]			= "Menüyü Kapat"
 L["TM_DELAYTAUNT_NOT_EXIST"] = "Seçtiğin alay sunucuda bulunamadı!"
 L["TM_DELAYTAUNT_PLSWAIT"]	= "%s saniye bekleyiniz!"
 
-
 L["PHXM_WINDOW_TITLE"]		= "Nesne Avı X - Gelişmiş Ayarlar ve Menü"
 L["SERVER_INFO_MOTD"]		= "SUNUCU BİLGİSİ ve KURALLARI [GM]"
 
@@ -193,7 +182,6 @@ L["PHXM_TAB_PLUGINS"]		= "Eklentiler"
 
 L["PHXM_CVAR_CHANGED"]		= "[Ayarlar] %q CVarı %q ile değiştirildi."
 L["PHXM_MUTE_SELECT"]		= "Susturmak istediğiniz oyuncuyu seçin."
-
 
 L["PHXM_PLAYER_OPTIONS"]		= "Oyuncu Ayarları"
 L["PHXM_PLAYER_LANG"]		= "Diller"
@@ -217,7 +205,6 @@ L["PHXM_PLAYER_SHOW_TUTOR"]			= "Öğretici Pencereyi Göster (2 kere nesne tak�
 L["PHXM_PLAYER_USE_NEW_CROSSHAIR"]	= "Özel Nişangahı Etkinleştir"
 L["PHXM_PLAYER_SHOW_TEAM_TOPBAR"]	= "Toplam hayatta olan takım oyuncularını sol üst köşede gösterir (En az 4 oyuncu gösterilir)"
 
-
 L["QUERY_MODEL_SELECTED"]	= " %s modeli seçildi ve yeniden doğduktan sonra geçerli olacak!"
 L["QUERY_MODEL_INFO"]		= "Model adı: %s - Uygunluk: Herkese"
 
@@ -229,17 +216,14 @@ L["MISC_APPLYMDL"] 			= "Modeli Uygula"
 L["PHXM_MODEL_DISABLED"] 	= "Üzgünüz, Özel Oyuncu Modelleri bu sunucuda devre dışı!"
 L["PHXM_PLAYERMODEL_SETFOV"]	= "Model Görüş Açısını Ayarla"
 
-
 L["PHXM_ADMIN_OPTIONS"]		= "Sunucunun oyun ayarları (Sadece Adminlere ve Kurucuya Görünür)"
 L["PHXM_ADMIN_MUSTALIVE"]	= "Bu işlemi gerçekleştirebilmek için canlı olmanız gerekiyor."
-
 
 L["PHXM_ADMIN_LANGOVERRIDE"]	= "Zorunlu Dil"
 
 L["PHXM_ADMIN_FORCELANG"] 				= "Zorunlu dili kullan? Bu kullanıcının dilini sunucunun seçtiği ile değiştirecektir."
 L["PHXM_ADMIN_LANGTOUSE"]				= "Zorunlu Dil kullanılacak."
 L["PHXM_ADMIN_PLAYERDEFAULTLANG"] 		= "İlk girişte varsayılan oyuncu dili."
-
 
 L["PHXM_ADMIN_CUSTOM_MODEL"]				= "Avcılar özel modellere erişebilir. Bu [Model Tarayıcı] menüsünü etkinleştirir."
 L["PHXM_ADMIN_CUSTOM_MODEL_PROP"]		= "Nesneler özel modellere erişebilir (Avcıların özel modellere erişimi olmasını gerektirir.)"
@@ -284,7 +268,6 @@ L["PHXM_MODE1"]						= "Mod [1]: Sadece Avcılar"
 L["PHXM_MODE2"]						= "Mod [2]: Sadece Nesneler"
 L["PHXM_MODE3"]						= "Mod [3]: Herkese izin ver"
 
-
 L["PHXM_ADMIN_DEVSECTION"]		= "Geliştirici Ayarları"
 L["PHXM_ADMIN_ROOMCHECK"]		= "Nesne çarpışmasını etkinleştir? Bu ayar duvara veya nesnelere sıkışmanızı engeller."
 L["PHXM_ADMIN_USENEWMKBREN"]		= "Bren MK II bonus silahı için yeni modeli kullan (Haritayı Yeniden Başlatma Gerektirir)"
@@ -296,9 +279,7 @@ L["PHXM_ADMIN_JUMPPOWER"]		= "Nesneler için ek zıplama gücü katsayısı"
 L["PHXM_ADMIN_ENABLE_OBB"]		= "Geliştirici: Özelleştirilmiş Nesne Varlık Modelinin Sınırları değiştiricisini konfig verisinden etkinleştir (OBB)"
 L["PHXM_ADMIN_RELOAD_OBB"]		= "Geliştirici: Her raunt yeniden başlatıldığında OBB değiştiricisini yeniden yükle"
 
-
 L["PHXM_ADMIN_EXPERIMENTALPHX"]			= "Nesne Avı: X Deneysel Şeyler"
-
 L["PHXM_ADMIN_HLA_COMBINE"]				= "HL: Alyx Combine model desteği ekle"
 L["PHXM_ADMIN_TEAMBALANCE"]				= "Temel Takım Ayarları"
 L["PHXM_ADMIN_CHANGETEAM_LIMIT"]			= "Takım değiştirme sınırı kullan. Devre dışı bırakmak için '-1'."
@@ -312,7 +293,6 @@ L["PHXM_ADMIN_ALLOWRESPAWN_TEAMCHANGE"]	= "Farklı bir takıma atanırken yumma 
 
 
 L["PHXM_MV_SETTINGS"]			= "Harita Oylama Ayarları"
-
 L["PHXM_MV_ALLOWCURMAP"]			= "Mevcut haritanın oylanmasına izin ver"
 L["PHXM_MV_COOLDOWN"]			= "Oylama için harita bekleme süresini etkinleştir"
 L["PHXM_MV_USE_ULX_VOTEMAPS"]	= "ULX harita oylama listesini kullan? Eğer yoksa, varsayılan maps/*.bsp kullanılacak."
@@ -324,16 +304,13 @@ L["PHXM_MV_RTVCOUNT"]			= "Oylamayı başlatmak için gerekli oyuncu sayısı"
 L["PHXM_MV_EXPLANATION1"]		= "Hangi haritanın listeleneceği, Örneğin [ mv_map_prefix 'phx_,ph_,cs_,de_' ] konsolda kullanın."
 L["PHXM_MV_EXPLANATION2"]		= "Eğer ULX yüklüyse, 'ulx map_vote' kullanın. Aksi takdirde 'mv_start' kullanın."
 L["PHXM_MV_EXPLANATION3"]		= "Harita Oylama Eylemi (İptal etmek için, basitçe 'ulx unmap_vote' yada 'mv_stop' konsolda kullanın.)"
-
 L["PHXM_MV_START"]		= "Harita Oylamasını Başlat"
 L["PHXM_MV_STOP"]		= "Harita Oylamasını Durdur"
-
 
 L["PHXM_ABOUT_VERSIONING"]		= "Sürüm: %s - Revizyon: %s"
 L["PHXM_ABOUT_AUTHOR"]			= "%s tarafından"
 L["PHXM_ABOUT_ENJOYING"]			= "Eğer oyunda eğleniyorsanız, bağış yapmaya ne dersiniz!"
 L["PHXM_ABOUT_UPDATE"]			= "Nesne Avı X Güncellemeleri"
-
 L["PHXM_VIEW_UPDATE_INFO"]		= "Güncelleme bilgisini göster"
 L["PHXM_CHECK_FOR_UPDATES"]		= "Güncellemeleri konrol et"
 L["PHXM_UPDATE_FOUND_TEXT"]		= "Güncellemeler konrol edildi. Lütfen daha fazla bilgi için konsolu kontrol edin.\n\nYenilikleri güncellemeyi görmek ister misiniz?"
@@ -356,7 +333,6 @@ L["PHXM_ABOUT_BTN_CHANGELOGS"]	= "NAX Değişiklik Kaydı"
 
 L["HUD_SPECTATING"]	= "İZLENİYOR"
 L["HUD_YOUDIED"]		= "Öldün!"
-
 L["CHAT_STARTING_MAPVOTE"] = "Raunt bitti. Harita oylaması başlatılıyor..."
 
 L["HUD_PROP_TAUNT_TIME"]	= "Rastgele Alay"
@@ -373,10 +349,8 @@ L["TEXTENTRY_MV_PREFIX"] = "Harita Oylama Harita Ön Eki"
 
 L["MISC_GAME_ENDED"]		= "Oyun bitti."
 L["PHXM_ABOUT_BTN_WIKI"]			= "NAX Viki & Rehber"
-
 L["HUD_AUTOTAUNT_DISABLED"]		= 	"Otomatik Alay devre dışı."
 L["HUD_AUTOTAUNT_WAITFORUPDATE"]	=	"Otomatik Alay senkronize ediliyor..."
-
 
 L["PHXM_MV_VOTEROCKED"]				= "Oylama çağrısı yapıldı, harita oylaması raunt sonu başlayacak"
 L["PHXM_MV_VOTEROCKED_IMMINENT"]		= "Oylama çağrısı yapıldı, harita oylaması çok yakın"
@@ -387,7 +361,6 @@ L["PHXM_MV_VOTEINPROG"]				= "Şu anda devam eden bir oylama var!"
 L["PHXM_MV_HAS_VOTED"]				= "Zaten oylama çağrısı yaptın!"
 L["PHXM_MV_ALR_IN_VOTE"]				= "Zaten oylama yapıldı, harita değişecek!"
 L["PHXM_MV_NEED_MORE_PLY"]			= "Oylama çağrısı için daha fazla oyuncuya ihtiyacınız var!"
-
 
 L["PROP_PLAYERMDL_BANNED"]	= "Özel Nesne Oyuncu Modeliniz sunucudan yasaklandı."
 L["PCR_USAGE_UNLIMIT"]		= "[Nesne Menü] **Unlimited** kullanımın kaldı!"
@@ -401,7 +374,6 @@ L["PCR_STAY_ON_GROUND"]		= "[Nesne Menü] Yerde kalmalı ve çömelmemelisiniz!"
 L["PCR_ONLY_GROUP"]			= "[Nesne Menü] Sadece belli gruplar bu menüyü açabilir!"
 L["PCR_NOT_EXIST_COUNT"]		= "Seçtiğiniz nesne bu haritada yok! ( %s / 4 )"
 L["PCR_NOT_EXIST"]			= "Seçtiğiniz nesne bu haritada yok!"
-
 
 L["PCR_NOTIFY_1"]			= " Bu sunucu Nesne Nenüsü %s sürümünü kullanıyor!"
 L["PCR_NOTIFY_2"]			= " konsolda yaz veya F1 -> [Nesne Seçici Yardım] menüsünü kullan."
@@ -427,7 +399,6 @@ L["PCR_EDT_IN_USE"]			= "Bir admin hala nesne bilgisini düzenliyor. Lütfen bek
 L["PCR_EDT_ERROR_DISABLED"]	= "[Nesne Menüsü] Hata: Özel Nesne Eki Devre dışı!"
 L["PCR_EDT_NO_RIGHTS"]		= "Bu özelliğe erişme hakkınız yok."
 
-
 L["PHXM_PLAYER_PROP_CHOOSER_KEY"]	= "Nesne Menüsünü açmak için varsayılan tuş."
 L["PHXM_PROP_FREEZE_MIDAIR"]			= "Bir nesne olarak havadayken hareketi dondurmak için varsayılan tuş"
 L["PHXM_ADMIN_TAUNT_SCANNER"]		= "(Haritayı Yeniden Başlatma Gerektirir) alay tarayıcısını etkinleştir?"
@@ -435,9 +406,8 @@ L["PHXM_ADMLBL_USABLE_ENTS"]			= "Kullanılabilir Nesne Varlık Türleri"
 L["PHXM_ADMLBL_USABLE_ENTS_REF"]		= "Türler: 1: Yalnızca Fizik, 2: Fizik & Dinamikler, 3: Neredeyse Her şey (cesetler dahil), 4: Özel Varlıklar."
 L["PHXM_ADMIN_USABLE_ENT_TYPE"]		= "Nesnenin dönüşebileceği varlık türleri"
 L["PHXM_ADMIN_NOTIFY_ENT_TYPE"]		= "Nesnelere [E]'ye basılarak dönüşülemeyen varlıkları bildir. Sadece 'ph_usable_prop_type' 3 veya 4'se çalışır."
-L["NOTIFY_PROP_ENTTYPE"]				= "Etkileşime girmek için [E]'ye bas, Dönüşmek için sol tıkla."
-L["NOTIFY_CUST_ENT_TYPE_IS_ON"]		= "[NAX] Uyarı: Etkileşime girmek için [E]'ye bas, Dönüşmek için sol tıkla."
-
+L["NOTIFY_PROP_ENTTYPE"]				= "Etkileşime girmek için [E] tuşuna bas, Dönüşmek için sol tıkla."
+L["NOTIFY_CUST_ENT_TYPE_IS_ON"]		= "[NAX] Uyarı: Etkileşime girmek için [E] tuşuna bas, Dönüşmek için sol tıkla."
 
 L["TM_TAUNTS_SEARCH_NOTHING"]		= "'%s' içeren alay bulunamadı..."
 L["TM_SEARCH_PLACEHOLDER"]			= "Bu kategoride ara: sözcük gir, küçük harf & joker karakter yok. Boş=Hepsini Göster."
@@ -454,12 +424,10 @@ L["MISC_NOTICE"]						= "Uyarı"
 L["MISC_IDK"]						= "Bilinmeyen"
 L["MISC_NA"]							= "N/A"
 
-
 L["HUD_DECOY_ACTIVE"]                = "[%s] tuşuna bas"
 L["HUD_FAKETAUNT_COUNT"]             = "%ix Kaldı"
 L["HUD_FAKETAUNT_UNLI"]              = "Sınırsız"
 L["NOTICE_GRENADE_SMG_GIVEN"]        = "SMG bombaları edindin."
-
 
 L["PHXM_TAUNT_SETTINGS"]				= "Alay Ayarları"
 L["PHXM_GENERAL_SETTINGS"]			= "Genel Ayarlar"
@@ -467,18 +435,15 @@ L["PHXM_FAKE_TAUNT_SETTINGS"]		= "Sahte Alay Ayarları"
 L["PHXM_FAKE_TAUNT_ENABLE"]			= "Sahte alayların haritada rastgele bir şekilde nesnelerin üzerinde çalınmasına izin ver. Sadece Özel Alay Menüsünden erişilebilir."
 L["PHXM_FAKE_TAUNT_MAXUSAGE"]		= "En fazla kullanılabilir sahte alay; -1 sınırsızdır."
 L["PHXM_TAUNT_RIGHT_CLICK"]		    = "Alay için sağ tıkla. Bu özel menüde sağ tıkı devre dışı bırakacaktır!"
-
 L["PHXM_TAUNT_PITCH_SETTINGS"]		= "Alay Ses Perdeleme Ayarları"
 L["PHXM_TAUNT_PITCH_ENABLE"]			= "Alay Ses Perdesini Ayarla"
 L["PHXM_TAUNT_PITCH_RANGE_MIN"]		= "Bir alay için en az kabul edilebilir ses perdeleme aralığı. 1'den 99'a kadar."
 L["PHXM_TAUNT_PITCH_RANGE_MAX"]		= "Bir alay için en fazla kabul edilebilir ses perdeleme aralığı. 100'den 255'e kadar."
-
 L["PHXM_TAUNT_INCLUDE_DEF"]			= "Varsayılan NA:X ve Alay Tarayıcısı dizini dahil edilsin mi?\nBu devre dışı bırakılırsa, mevcut tüm özel alaylar kullanılacak ve yüklü özel alaylar yoksa yedekleri kullanılacak (HARİTAYI YENİDEN BAŞLATMA GEREKLİ)"
 L["PHXM_TAUNT_DOOVERLAP"]			= "Yeni çalınan alaylar, çalınmaya devam edilen alayların üstüne yazılsın mı?\nBunu devre dışı bırakmak, durup yenisini oynatmak anlamına gelir. Klasik davranışı korumak için etkinleştirin."
 L["PHXM_TAUNT_SNDLVL"]				= "Kullanılacak Alay Ses Seviyesi\n1=75dB 2=80dB 3=85dB 4=90dB 5=95dB 6=100dB (Varsayılan 6)"
 L["PHXM_DECOY_SETTINGS"]				= "Yem Ayarları"
 L["PHXM_DISABLE_FOOTSTEP"]           = "Nesne takımının adım seslerini sessize al"
-
 
 L["PHXM_DECOY_ENABLE"]				= "Yem Ödülünü Etkinleştir? Ödül raunt bitene kadar sadece bir kereliğe mahsus canlı nesnelere verilecektir. Birikmezler ve koyulduklarında eksilirler."
 L["PHXM_ADMIN_CHATSETTING"]			= "Sohbet Penceresi Ayarları"
@@ -521,17 +486,13 @@ L["DECOY_REMINDER_GET"]              = "Bir Yem/Kukla nesnen var! Avcıları şa
 L["DECOY_FRAGS_RECEIVED"]			= "Yem başarılı: %s adlı oyuncudan 1 puan çaldınız!"
 L["DECOY_DISABLED"]					= "Şu anda, yem mevcut değil."
 L["PHXM_CL_DECOY_KEYBIND"]			= "Yem koymak için varsayılan tuş. Varsayılan 1 (Num Tuş Takımı 1 değil)."
-
 L["DECOY_INDICATOR_INVALID"]         = "Geçersiz Eğim!"
 L["DECOY_INDICATOR_TOOFAR"]          = "Çok uzak!"
 L["DECOY_INDICATOR_OK"]              = "Yem koy [%s tuşuna bas]"
-
 L["PHXM_DECOY_HEALTH"]				= "Bir yemin ne kadar canı olmalı. Varsayılan 10."
 L["PHXM_PLAYER_SHOW_DECOY_HELPER"]   = "Yem koyma yardımcısını göster? Bu ayar nişangahın üstünde beyaz bir noktayla metin gösterecektir."
 L["PHXM_PLAYER_SHOW_DECOY_MARKER"]   = "Yem işaretini göster?"
-
 L["PCR_MODEL_DONT_EXISTS"]   = "Üzgünüz, bu model şu anda mevcut değil!"
-
 L["PCR_PLUG_WARN_MSG"]		= "Uyarı: Özel Nesne Eklemesi (pcr_allow_custom) 0'a ayarlandı.\nÖzel nesnenizi düzenlemek için bu özelliği etkinleştirmelisiniz!\nA Bu ayarı değiştirmek için bir harita değişikliği gerekli."
 L["PCR_PLUG_LBL_BINDKEY"]	= "Tuş atamasını değişmek için [Oyuncu] sekmesine geçin."
 L["PCR_PLUG_LBL_EDITOR"]		= "Özel Nesne Düzenleyicisi"
@@ -540,7 +501,6 @@ L["PCR_PLUG_LBL_COMSET"]		= "Genel Ayarlar"
 L["PCR_PLUG_LBL_TECHSET"]	= "Teknik Ayarlar"
 L["PCR_PLUG_LBL_EXPSET"]		= "Deneysel"
 L["PCR_PLUG_LBL_PLAYERSET"]	= "Oyuncu Ayarları"
-
 L["PCR_PLUG_ENABLE"]			= "Nesne Menüsünü etkinleştir"
 L["PCR_PLUG_ALLOW_CUSTOM"]	= "(Haritayı Yeniden Başlatma Gerektirir) Özel nesnelerin nesne menüsü listesine eklenmesine izin ver?"
 L["PCR_PLUG_PROP_BAN"]		= "(Haritayı Yeniden Başlatma Gerektirir) Nesne Menüsü listesine yasaklanmış nesneleri dahil etme?"
@@ -556,10 +516,8 @@ L["PCR_PLUG_X_BBOX_MAX"]		= "Varlıkların Temas Sınır Yükseklik seviyesi. En
 L["PCR_PLUG_X_BBOX_MIN"]		= "Varlıkların Temas Sınır Genişlik seviyesi. En az olanlar otomatik hesaplanır."
 L["PCR_PLUG_ONLY_GROUPS"]	= "Nesne Menüsü sadece bağışçılar gibi belli gruplara mı açık olsun?"
 L["PCR_PLUG_NOTIFYMSG"]		= "Her raunt başında oyuncuyu Nesne Menüsünü nasıl kullanacağı hakkında bilgilendir"
-
 L["PCR_EDITOR_MSG_ERROR"]	= "Değişiklikler bir hata nedeniyle kaydedilemedi.\nLütfen sunucu konsolonu kontrol et!"
 L["PCR_EDITOR_MSG_SUCC"]		= "Değişikliklerin ve Özel Nesne bilgilerin başarıyla kaydedildi ve güncellendi."
-
 L["PHZ_generic_title"]		= "Özel Nesne Kapsama Düzenleyecisi"
 L["PHZ_generic_helptext"]	= [[[Nasıl Kullanılır:
 [SOL PANEL]
@@ -589,15 +547,15 @@ L["PHZ_generic_mdlinfoStart"] = "(İlk önce model seç!)"
 L["PHZ_generic_no_ragdoll"]	= "Ceset Yok"
 L["PHZ_generic_titlelabel"]	= "%s Önizlemesi :"
 
-L["PHZ_mount_game_sel"]		= "İlişkilendirilmiş oyun seç (Default: Garry's Mod)"
+L["PHZ_mount_game_sel"]		= "Kurulu oyun seç (Varsayılan: Garry's Mod)"
 L["PHZ_input_placeholder1"]	= "Aranacak Klasör: <klasör adı> veya '*', tüm klasörler için boş."
 L["PHZ_input_placeholder2"]  = "Aranacak Eklenti: <ad> veya '*', tüm klasörler için boş."
 L["PHZ_msg_warn_close"]		= "Bu pencereyi kapatmak istediğinizden emin misiniz? Kaydedilmemiş düzenlemeler kaybolacak!"
 L["PHZ_msg_commit"] 			= "Değişiklik yapmak istediğinizden emin misiniz??"
 L["PHZ_msg_cant_empty"]		= "Nesne listesi boş olamaz!"
-L["PHZ_msg_removesel"] 		= [[Listedeki seçili nesneleri kaldır. Hedefler:
+L["PHZ_msg_removesel"] 		= [[Listedeki seçili nesneleri kaldır. İşaretler:
 Kırmızı = İşaretli Seçimler
-Sarı: Nesne sunucuda yok ve kaldırılmalı.]]
+Sarı: Nesne sunucuda yok ve kaldırılmalıdır.]]
 L["PHZ_msg_warn_mdlinlist"]  = "Uyarı: Bu model zaten listede!"
 L["PHZ_msg_invalid_mdl"] 	= "Neden: Bu geçersiz bir model"
 L["PHZ_apply_select"] 		= "Seçimleri Uygula ve Kaydet"
@@ -622,7 +580,6 @@ L["PHX_TM_MNBAR_SAVEFAV"]		= "Favorileri Kaydet"
 L["PHX_TM_MNBAR_LOADFAV"]		= "Favorileri Yeniden Yükle"
 L["PHX_TM_MNBAR_SETTINGS"]		= "Diğerleri"
 L["PHX_TM_MNBAR_RESET"]			= "Favorileri Sıfırla"
-
 L["PHX_TM_WARN_CLEARFAV"]		= "UYARI: Bu önceden kaydettiğiniz Favori Alayları silecektir. Devam etmek istediğine emin misiniz?"
 
 L["PHXM_BANNED_MODELS"]			= "Kısıtlanmış Modellerin kullanımına izin ver/me (Yasaklanmış Modeller). Buna Yasaklı Modeller dahil değildir (Bunlar her zaman silinir)."
@@ -654,7 +611,6 @@ L["PHXM_DROP_RESPAWNBLIND_BOTH"] = "Her İki Takım"
 
 L["PHXM_TAB_ADMINGROUPS"]        = "Grup ve Erişim Seçeneği"
 L["PHXM_TAB_PHEPLUS"]			= "Gelişmiş+ Ayarları"
-
 L["PHXM_ADMIN_ACCESS_GROUP"]     = "NA:X Yönetici Ayarlarına erişime izin vermek için grupları seçiniz, Gelişmiş Plus & Eklenti Ayarları sayfası."
 L["PHXM_ADMIN_ACCESS_GROUP_HINT"] = "Bilginize, \"superadminler\"in yetkisi geri alınamaz."
 L["PHXM_ADMIN_ACCESS_GROUP_NOULX"] = "Hata: ULib ve ULX sunucunuzda yüklü değil."
@@ -681,7 +637,6 @@ L["LIST_PLAYER"]					= "Oyuncular"
 L["LIST_FORCEDASPROP"]			= "Nesneye Zorlandı?"
 L["LIST_MARKEDASPROP"]			= "Nesneye zorlanmış olarak işaretle"
 L["LIST_NOHUNTERS"]				= "Şu anda oynayan Avcı bulunmamaktadır."
-
 L["PHXM_PLUS_MSG_NO_HUNTERS"]	= "Sıfırlamak için Avcı yok."
 
 L["PHXM_PLUS_BTNRESET"]			= "Seçimleri Temizle (ve tüm zorlanmışları sıfırla)"
@@ -721,7 +676,6 @@ L["UNSTUCK_NOT_STUCK_JITTER"]		= "Sıkışmamışsınız. Eğer gerçekten sık�
 L["UNSTUCK_NOT_STUCK_TOOBAD"]		= "Sıkışmamışsınız. Eğer gerçekten sıkıştıysanız, üzgünüm, raunt sonuna kadar beklemek zorundasın."
 L["UNSTUCK_CANNOT_FIND_SPOT"]		= "Sizin hareket edebileceğiniz bir yer bulunamadı, en yakın doğma noktasına ışınlanılıyor."
 L["UNSTUCK_SPAWNPOINTS_DISABLED"]	= "Doğma noktasına ışınlanacaktın, ama bu sunucu yumma süresinin dışında izin vermiyor. Üzgünüz!"
-
 
 L["MISC_SEL_APPLY"]  = "Seçimleri Uygula"
 L["MISC_RESET_SEL"]  = "Seçimleri Sıfırla"
