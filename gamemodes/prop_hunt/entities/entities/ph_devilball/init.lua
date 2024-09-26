@@ -17,6 +17,13 @@ function ENT:StopTeslaSpark()
 end
 
 function ENT:Initialize()
+	local cvEnableSpawn = GetConVar( "ph_enable_team_itemspawner" )
+	
+	if (not cvEnableSpawn:GetBool()) then
+		if SERVER then self:Remove(); end
+		return
+	end
+	
 	self:SetModel(self.model)
 	self:PhysicsInit(SOLID_BBOX)
 	self:SetMoveType(MOVETYPE_NONE)

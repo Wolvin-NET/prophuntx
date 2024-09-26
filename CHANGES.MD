@@ -1,6 +1,12 @@
 ## A new major updates to Prop Hunt: X has been released.
-Note: **Prop Hunt X2Z will SOON change it's versioning from "X2Z" to "24XZ" with unique formatted revision versioning.**  
-Example: `VERSION = "24XZ" REVISION = "XZ24.0105A"` where: `XZ24`: X2Z/YY, `0105`: DD/MM, `A`: Quick revisions if occured within same day.
+Note: **Prop Hunt X2Z will SOON change it's versioning from "X2Z" to "25XZ" with unique formatted revision versioning.**  
+Example: `VERSION = "25XZ" REVISION = "XZ25.0105A"` where: `XZ25`: X2Z/YY, `0105`: DD/MM, `A`: Quick revisions if occured within same day.
+
+## Revision 01.10.2024 (GitHub Release)
+- Update Turkish Language and `Contributors.txt`
+- Temporary Fix for Item & Decoy Spawner to respect `ph_enable_decoy_reward` and `ph_enable_team_itemspawner (Serverside Only)` ConVars.
+- Fixes for certain official PHX maps that forcing Items to spawn
+- At the latest by Revision 03.10.2024: Workshop update
 
 ## Revision 31.07.2024
 - Quick Minor fix where players cannot use door or any entities where it supposed to. (This was caused by `ph_allow_pickup_object` that was set to 0 or <team number>)

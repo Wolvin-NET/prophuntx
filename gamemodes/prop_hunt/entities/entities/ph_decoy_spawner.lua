@@ -1,8 +1,15 @@
 ENT.Type = "point"
 ENT.Base = "base_point"
 
-function ENT:Initialize() 
+function ENT:Initialize()
 	if (SERVER) then
+		local IsDecoyEnabled = GetConVar("ph_enable_decoy_reward")
+		
+		if (not IsDecoyEnabled:GetBool()) then
+			self:Remove()
+			return
+		end
+		
 		if self:HasSpawnFlags(1) then --Spawn and instantly delete on spawn
 			timer.Simple(0.25, function() --Yes, spawn are bit delayed. This is safe measurements
 				self:makeEntity(); self:Remove();

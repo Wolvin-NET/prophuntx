@@ -17,6 +17,13 @@ ENT.sounds = {
 }
 
 function ENT:Initialize()
+	local cvEnableSpawn = GetConVar( "ph_enable_team_itemspawner" )
+	
+	if (not cvEnableSpawn:GetBool()) then
+		if SERVER then self:Remove(); end
+		return
+	end
+	
 	self:SetModel( self.model[math.random(1,#self.model)] )
 	self:PhysicsInit(SOLID_VPHYSICS)
 	self:SetMoveType(MOVETYPE_VPHYSICS)

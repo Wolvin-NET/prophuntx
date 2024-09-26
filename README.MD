@@ -6,12 +6,10 @@
 **"Prop Hunt: X/X2Z" Was Originally given and created by Wolvindra-Vinzuerio and Only Available Exclusively for Garry's Mod.**
 
 ### Versioning
-Version: X2Z, Revision: 31/07/2024 (dd/mm/yyyy)
+Version: X2Z, Revision: 01/10/2024 GitHub Release | Workshop: 03/10/2024 (dd/mm/yyyy)
 
 ### Public Servers
-- Server #1 [U.S]: **74.91.120.8:27015** (Public Stable Server)
-- Server #2 [U.S]: **offline** (Public Dev Server)
-- Other Servers: https://gmodgameservers.com/prophuntx/servers
+- Public Servers can be accessed at https://gmodgameservers.com/prophuntx/servers
 
 ### Support Prop Hunt: X2Z Development
 Buy me a coffee If you like Prop Hunt: X2Z ☕
@@ -24,10 +22,10 @@ Any bits of your donation really helps me a lot!
 ### Contributing
 - Feel free if you want to add, tweaks or enhance something to the Gamemode;
 As long it can still to be customized and does not require any external addons to use.
-- If you want to contribute something externally but exclusively made available for Prop Hunt: X, you can consider
+- If you want to contribute something externally but exclusively made available for Prop Hunt: X2Z, you can consider
 making as a plugin instead.
 
-### About this Gamemode
+### About
 This gamemode is a continuation from Prop Hunt: Enhanced development lineup,
 with some extra changes and several new features such as:
 
@@ -44,7 +42,7 @@ with some extra changes and several new features such as:
 - Tweaks and Optimisation
 - And many other stuff!
 
-### Change Logs
+### Changes
 To see what things are changed, see [`CHANGES.MD`](/CHANGES.MD)
 
 ### Download
