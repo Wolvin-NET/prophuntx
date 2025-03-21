@@ -15,12 +15,10 @@ function EFFECT:Init(data)
 	self.KillTime       = 0
 	self.ShouldRender   = false
 	
-	if not self.Shooter or not self.Shooter:IsValid() then return end
-	if not self.WeaponEnt or not self.WeaponEnt:IsValid() then return end
+	if not self.Shooter or not IsValid(self.Shooter) then return end
+	if not self.WeaponEnt or not IsValid(self.WeaponEnt) then return end
 	
 	self.BeamWidth      = 32
-	
-	if not self.WeaponEnt:IsValid() then return end	
 
 	local Muzzle    = 	self.WeaponEnt:GetAttachment(self.Attachment)
 	

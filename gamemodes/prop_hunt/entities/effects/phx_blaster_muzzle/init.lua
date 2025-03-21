@@ -17,7 +17,7 @@ function EFFECT:Init(data)
     self.SpriteSize = 55
     self.FlashSize = 110
 	
-	if not self.WeaponEnt:IsValid() then return end	
+	if not IsValid(self.WeaponEnt) then return end	
 
 	local Muzzle = 	self.WeaponEnt:GetAttachment(self.Attachment)
 	self:SetRenderBoundsWS(Muzzle.Pos + Vector() * self.SpriteSize, Muzzle.Pos - Vector() * self.SpriteSize)

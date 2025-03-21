@@ -2,6 +2,11 @@
 Note: **Prop Hunt X2Z will SOON change it's versioning from "X2Z" to "25XZ" with unique formatted revision versioning.**  
 Example: `VERSION = "25XZ" REVISION = "XZ25.0105A"` where: `XZ25`: X2Z/YY, `0105`: DD/MM, `A`: Quick revisions if occured within same day.
 
+## Revision 21.03.2025
+- Lint - Fixed Mistyped IF statement ( PR https://github.com/Wolvin-NET/prophuntx/pull/39 )
+- Added Extra checks for Last Prop Standing's Blaster Gun effect if entity is out from PVS (mostly)
+- Removed single language, temporarily (See discord `#announcement` channel for a reason)
+
 ## Revision 01.10.2024 (GitHub Release)
 - Update Turkish Language and `Contributors.txt`
 - Temporary Fix for Item & Decoy Spawner to respect `ph_enable_decoy_reward` and `ph_enable_team_itemspawner (Serverside Only)` ConVars.

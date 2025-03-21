@@ -3,8 +3,8 @@ local L={}
 
 L.code = "ko_kr"
 
-L.Name = "한국어" -- example: "Bahasa Indonesia"
-L.NameEnglish = "Korean" -- Your Language but spoken in English, example: "Indonesian"
+L.Name = "한국어"
+L.NameEnglish = "Korean"
 L.Author = "So-chiru, 123rse" -- Only accept STRINGS.
 -- Can Accept: String, and Table.
 L.AuthorURL = {

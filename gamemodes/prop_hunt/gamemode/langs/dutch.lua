@@ -7,8 +7,8 @@ local L={}
 
 L.code = "nl"
 
-L.Name 		 	= "Nederlands" -- example: "Bahasa Indonesia"
-L.NameEnglish	= "Dutch" -- Your Language but spoken in English, example: "Indonesian"
+L.Name 		 	= "Nederlands"
+L.NameEnglish	= "Dutch"
 L.Author			= "Trigstur" -- Only accept STRINGS.
 -- Can Accept: String, and Table.
 L.AuthorURL		= {"http://steamcommunity.com/profiles/76561198161415786"}

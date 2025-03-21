@@ -6,7 +6,7 @@
 **"Prop Hunt: X/X2Z" Was Originally given and created by Wolvindra-Vinzuerio and Only Available Exclusively for Garry's Mod.**
 
 ### Versioning
-Version: X2Z, Revision: 01/10/2024 GitHub Release | Workshop: 03/10/2024 (dd/mm/yyyy)
+Version: X2Z, Revision: 21/03/2025 GitHub Release | Workshop: 21/03/2025 (dd/mm/yyyy)
 
 ### Public Servers
 - Public Servers can be accessed at https://gmodgameservers.com/prophuntx/servers

@@ -6,8 +6,8 @@ local L={}
 
 L.code = "pt-BR"
 
-L.Name 		 	= "Português Brasileiro" -- example: "Bahasa Indonesia"
-L.NameEnglish	= "Portuguese Brazil" -- Your Language but spoken in English, example: "Indonesian"
+L.Name 		 	= "Português Brasileiro"
+L.NameEnglish	= "Portuguese Brazil"
 L.Author			= "Clã | BR | The Fire Fuchs" -- Only accept STRINGS.
 -- Can Accept: String, and Table.
 L.AuthorURL		= "http://steamcommunity.com/profiles/76561198008932606"

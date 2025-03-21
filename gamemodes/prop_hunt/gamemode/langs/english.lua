@@ -7,8 +7,8 @@ local L={}
 
 L.code = "en_us"
 
-L.Name 		 	= "English" -- example: "Bahasa Indonesia"
-L.NameEnglish	= "English" -- Your Language but spoken in English, example: "Indonesian"
+L.Name 		 	= "English"
+L.NameEnglish	= "English"
 L.Author			= "Wolvindra-Vinzuerio, Godfather, Fafy" -- Only accept STRINGS.
 -- Can Accept: String, and Table.
 L.AuthorURL		= {	
