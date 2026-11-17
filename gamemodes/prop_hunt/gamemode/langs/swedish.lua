@@ -27,7 +27,7 @@ L.SUICIDEMSG = {  -- Fix me: there was addition text here but feel free to add m
 	"dog av kraften.",
 	"dog. Tryck F tack.",
 	"ångrar sig efter att ha dödat några oskyldiga föremål.",
-	"is noclipped to backroom.",
+	"är noclippad till bakrummen.",
 	"försöker dö ut.",
 	"dogog.",
 	"är panikslagen och försöker döda alla föremål istället.",
@@ -164,8 +164,8 @@ L["NOTIFY_IN_PROP_TEAM"]		= "Du är i föremålslaget och kan rotera! Du roterar
 L["NOTIFY_ROTATE_NOTICE"]	= "Dessutom kan du växla rotationslås genom att trycka på [R] knappen (vanliga nyckelbindningar)"
 
 -- Custom Taunt Window
-L["TM_WARNING_CT_DISABLE"]	= "[PHX - Hån] Varning: Denna servern har stängt av anpassade hån." -- Fix me anpassade hån?
-L["TM_NO_TAUNTS"]			= "Varning: Inga hån hittades i denna kategorin."
+L["TM_WARNING_CT_DISABLE"]	= "[PHX - Hån] Varning: Denna server har stängt av anpassade hån." -- Fix me anpassade hån?
+L["TM_NO_TAUNTS"]			= "Varning: Inga hån hittades i denna kategori."
 L["TM_PLAY_ONLY_ALIVE"] 		= "Du får endast spela anpassade hån när du lever."
 
 L["TM_WINDOW_TITLE"]			= "Prop Hunt Fönstret för anpassade hån"
@@ -243,14 +243,14 @@ L["MDL_MENU_MODELINFO"] 		= "Modellinformation"
 
 L["MISC_APPLYMDL"] 			= "Tillämpa Modell"
 
-L["PHXM_MODEL_DISABLED"] 	= "Förlåt, men anpassade modeller har stängts av på denna servern!"
+L["PHXM_MODEL_DISABLED"] 	= "Förlåt, men anpassade modeller har stängts av på denna server!"
 L["PHXM_PLAYERMODEL_SETFOV"]	= "  Anpassa Modellsynfält"
 
 --[[
 	Server Settings
 ]]
 L["PHXM_ADMIN_OPTIONS"]		= "Inställningar för spelläge på serversidan (Endast synlig för Administratörer/Ägare)"
-L["PHXM_ADMIN_MUSTALIVE"]	= "Du måsta vara levande för att utföra denna handlingen."
+L["PHXM_ADMIN_MUSTALIVE"]	= "Du måsta vara levande för att utföra denna handling."
 
 --[[
 	Language Override
@@ -322,90 +322,90 @@ L["PHXM_ADMIN_RELOAD_OBB"]		= "Utvecklare: ladda om data för OBB modifierare va
 --[[
 	Experimental & PH:X Features
 ]]
-L["PHXM_ADMIN_EXPERIMENTALPHX"]			= "Prop Hunt: X Experimental Stuff"
+L["PHXM_ADMIN_EXPERIMENTALPHX"]			= "Prop Hunt: X Experimentella grejer"
 
-L["PHXM_ADMIN_HLA_COMBINE"]				= "Add HL: Alyx Combine model support"
-L["PHXM_ADMIN_TEAMBALANCE"]				= "Basic Team Settings"
-L["PHXM_ADMIN_CHANGETEAM_LIMIT"]			= "Use Team Switch limitter. Set -1 to disable. "
-L["PHXM_ADMIN_USENEWCHAT"]				= "Use new Chat Box (eChat) - This is temporary replacement. If you have one already, leave this unchecked."
-L["PHXM_ADMIN_NEWCHATPOS"]				= "New Chat Box Position: Substract Height (Y) Position by N pixels."
-L["PHXM_ADMIN_RESPAWNONBLIND"]			= "Allow Respawn on Blind Time"
-L["PHXM_ADMIN_RESPAWNONBLIND_TEAM"]		= "Allow Respawn on Blind Time with specific Team Only: 0: All, 1: Hunters, 2: Props"
-L["PHXM_ADMIN_REWSPANTIMEPERCENT"]		= "Percentage of Blind Time which allows you to respawn. Default is 0.75 (means 75% * Max Blind Time)"
-L["PHXM_ADMIN_ALLOWRESPAWN_SPECTATOR"]	= "Allow Respawn on Blind Time when Assigning to Spectator Team"
-L["PHXM_ADMIN_ALLOWRESPAWN_TEAMCHANGE"]	= "Allow Respawn on Blind Time when Assigning to Different Team (Enabling this may not recommended)"
+L["PHXM_ADMIN_HLA_COMBINE"]				= "Lägg till stöd för HL: Alyx Combine modeller"
+L["PHXM_ADMIN_TEAMBALANCE"]				= "Enkla laginställningar"
+L["PHXM_ADMIN_CHANGETEAM_LIMIT"]			= "Sätt en gräns på lagändringar. Ange -1 för att stänga av. "
+L["PHXM_ADMIN_USENEWCHAT"]				= "Använd nya chattboxen (eChat) - Detta är en tillfällig lösning. Om du redan har en, lämna denna omarkerad."
+L["PHXM_ADMIN_NEWCHATPOS"]				= "Position för nya chattboxen: Subtrahera höjdposition (Y) med N pixlar."
+L["PHXM_ADMIN_RESPAWNONBLIND"]			= "Tillåt återupplivning under blindtid"
+L["PHXM_ADMIN_RESPAWNONBLIND_TEAM"]		= "Tillåt återupplivning under blindtid endast för specifierat lag: 0: Alla, 1: Jägare, 2: Föremål"
+L["PHXM_ADMIN_REWSPANTIMEPERCENT"]		= "Procent av blindtid där du tillåts återupplivas. Standard är 0.75 (betyder 75% * Max blindtid)"
+L["PHXM_ADMIN_ALLOWRESPAWN_SPECTATOR"]	= "Tillåt återupplivning under blindtid när man byter till åskådarlag"
+L["PHXM_ADMIN_ALLOWRESPAWN_TEAMCHANGE"]	= "Tillåt återupplivning under blindtid när man byter till annat lag (Rekommenderas inte att slås på)"
 
 --[[
 	MapVote Settings
 ]]
-L["PHXM_MV_SETTINGS"]			= "MapVote Settings"
+L["PHXM_MV_SETTINGS"]			= "Kartomröstningsinställningar"
 
-L["PHXM_MV_ALLOWCURMAP"]			= "Allow Current map to be Voted"
-L["PHXM_MV_COOLDOWN"]			= "Enable map Cooldown for voting"
-L["PHXM_MV_USE_ULX_VOTEMAPS"]	= "Use map listing from ULX Votemaps? If not, default maps/*.bsp will be used."
-L["PHXM_MV_MAPLIMIT"]			= "Number of Maps to be shown in MapVote."
-L["PHXM_MV_TIMELIMIT"]			= "Time in Seconds for default mapvote when voting."
-L["PHXM_MV_MAPBEFOREREVOTE"]		= "Map changes needed for a map to reappear"
-L["PHXM_MV_RTVCOUNT"]			= "How many players required to use RTV (Rock the Vote)"
+L["PHXM_MV_ALLOWCURMAP"]			= "Tillåt nuvarande karta att få röster"
+L["PHXM_MV_COOLDOWN"]			= "Slå på återställningstid för röster på kartor"
+L["PHXM_MV_USE_ULX_VOTEMAPS"]	= "Använd kartlistor från ULX-röstkartor? Om inte, kommer maps/*.bsp användas."
+L["PHXM_MV_MAPLIMIT"]			= "Antal kartor att visa under kartomröstning."
+L["PHXM_MV_TIMELIMIT"]			= "Tid i sekunder tills standardröstning."
+L["PHXM_MV_MAPBEFOREREVOTE"]		= "Antal kartändringar innan samma karta kan dyka upp igen"
+L["PHXM_MV_RTVCOUNT"]			= "Hur många spleare som behövs för att använda RTV (Rock the Vote)"
 
-L["PHXM_MV_EXPLANATION1"]		= "To Setup which map should be listed, use (for example) [ mv_map_prefix 'phx_,ph_,cs_,de_' ] in the console."
-L["PHXM_MV_EXPLANATION2"]		= "if ULX installed, use 'ulx map_vote' instead. Otherwise use 'mv_start' for normal call."
-L["PHXM_MV_EXPLANATION3"]		= "MapVote Action (To cancel, simply use 'ulx unmap_vote' or 'mv_stop' in the console.)"
+L["PHXM_MV_EXPLANATION1"]		= "För att ange vilken karta borde dyka upp i listan, skriv (exempelvis) [ mv_map_prefix 'phx_,ph_,cs_,de_' ] i konsolen."
+L["PHXM_MV_EXPLANATION2"]		= "om ULX är installerat, använd 'ulx map_vote' istället. Använd annars 'mv_start' för vanligt anrop."
+L["PHXM_MV_EXPLANATION3"]		= "Kartomröstningshandling (För att avbryta, skriv 'ulx unmap_vote' eller 'mv_stop' i konsolen.)"
 
-L["PHXM_MV_START"]		= "Start the MapVote"
-L["PHXM_MV_STOP"]		= "Stop the MapVote"
+L["PHXM_MV_START"]		= "Påbörja kartomröstningen"
+L["PHXM_MV_STOP"]		= "Avsluta kartomröstningen"
 --                  			  ^YOU VIOLATED THE LAW!
 
 --[[ 
 	Versioning, Credits or About section
 ]]
 L["PHXM_ABOUT_VERSIONING"]		= "Version: %s - Revision: %s"
-L["PHXM_ABOUT_AUTHOR"]			= "By: %s"
-L["PHXM_ABOUT_ENJOYING"]			= "If you are enjoying the game, consider donating!"
-L["PHXM_ABOUT_UPDATE"]			= "Prop Hunt X Updates"
+L["PHXM_ABOUT_AUTHOR"]			= "Av: %s"
+L["PHXM_ABOUT_ENJOYING"]			= "Om du gillar spelet, överväg att donera!"
+L["PHXM_ABOUT_UPDATE"]			= "Prop Hunt X-uppdateringar"
 
-L["PHXM_VIEW_UPDATE_INFO"]		= "View update info"
-L["PHXM_CHECK_FOR_UPDATES"]		= "Check for Updates"
-L["PHXM_UPDATE_FOUND_TEXT"]		= "Update has been checked. Please check on the Console for more information.\n\nWould you like to view update what's new?"
-L["PHXM_UPDATE_FOUND_TITLE"]   	= "Update Information"
-L["PHXM_UPDATE_FOUND_BUTTON"]   	= "View Updates"
+L["PHXM_VIEW_UPDATE_INFO"]		= "Visa uppdateringsinformation"
+L["PHXM_CHECK_FOR_UPDATES"]		= "Kolla efter uppdateringar"
+L["PHXM_UPDATE_FOUND_TEXT"]		= "Uppdatering har kontrollerats. Vänligen kolla in konsolen för mer information.\n\nVill du se vad som är nytt i uppdateringen?"
+L["PHXM_UPDATE_FOUND_TITLE"]   	= "Uppdateringsinformation"
+L["PHXM_UPDATE_FOUND_BUTTON"]   	= "Visa uppdateringar"
 
-L["UPDATE_NOTIFY_MSG_NOTFOUND"]	= "No update was found. Please click on 'Check for Updates' button first!"
-L["UPDATE_NOTIFY_MSG_TITLE"]		= "No updates found"
-L["UPDATE_NOTIFY_WINDOW_TITLE"]	= "Update Notice"
-L["UPDATE_RTBOX_APPEND"]			= "\n\nFor your information:\nCurrently you are using version: %s with Revision: %s"
-L["UPDATE_BTN_SEEFULL"]			= "See Full Changes"
+L["UPDATE_NOTIFY_MSG_NOTFOUND"]	= "Ingen uppdatering hittades. Vänligen klicka på 'Kolla efter uppdateringar' knappen först!"
+L["UPDATE_NOTIFY_MSG_TITLE"]		= "Inga uppdateringar hittades"
+L["UPDATE_NOTIFY_WINDOW_TITLE"]	= "Uppdateringsnotis"
+L["UPDATE_RTBOX_APPEND"]			= "\n\nOBS:\nDu är för närvarande på version: %s med revision: %s"
+L["UPDATE_BTN_SEEFULL"]			= "Se alla ändringar"
 
-L["PHXM_ABOUT_LINKS"]			= "Links and credits"
-L["PHXM_ABOUT_THANKS"]			= "Special Thanks for the Support, Suggestion & Contributions:\n %s"
-L["PHXM_ABOUT_BTN_DONATE"]		= "Support PH:X by donating"
-L["PHXM_ABOUT_BTN_HOME"]			= "PHX Homepage"
-L["PHXM_ABOUT_BTN_GITHUB"]		= "PHX GitHub Repository"
-L["PHXM_ABOUT_BTN_PLUGINS"]		= "PHX Addons/Plugins"
-L["PHXM_ABOUT_BTN_CHANGELOGS"]	= "PHX Changelogs"
+L["PHXM_ABOUT_LINKS"]			= "Länkar och medverkande"
+L["PHXM_ABOUT_THANKS"]			= "Stort tack för stödet, förslagen & bidragen:\n %s"
+L["PHXM_ABOUT_BTN_DONATE"]		= "Stöd PH:X genom att donera"
+L["PHXM_ABOUT_BTN_HOME"]			= "PHX Hemsida"
+L["PHXM_ABOUT_BTN_GITHUB"]		= "PHX GitHub repo"
+L["PHXM_ABOUT_BTN_PLUGINS"]		= "PHX Tillägg/Plugin"
+L["PHXM_ABOUT_BTN_CHANGELOGS"]	= "PHX Ändringsloggar"
 
 -- fretta
-L["HUD_SPECTATING"]	= "SPECTATING"
-L["HUD_YOUDIED"]		= "You Died!"
+L["HUD_SPECTATING"]	= "ÅSKÅDAR"
+L["HUD_YOUDIED"]		= "Du dog!"
 
-L["CHAT_STARTING_MAPVOTE"] = "Round has Ended. Starting map voting..."
+L["CHAT_STARTING_MAPVOTE"] = "Rundan har slutat. Påbörjar kartomröstning..."
 
 -- This used for HUD Taunt Timer
-L["HUD_PROP_TAUNT_TIME"]	= "Random Taunt"
-L["HUD_PROP_CTAUNT_TIME"] = "Cust. Taunt"
+L["HUD_PROP_TAUNT_TIME"]	= "Slumpmässigt hån"
+L["HUD_PROP_CTAUNT_TIME"] = "Anpassat hån"
 
 -- Plugins Section
-L["PLUGINS_NO_PLUGINS"]				= "No plugins installed. Browse more plugins here!"
-L["PLUGINS_BROWSE_MORE"]				= "Browse more plugins"
-L["PLUGINS_SERVER_HAS_NO_PLUGINS"]	= "Sorry, This server has no custom addons/plugins installed."
-L["PLUGINS_SERVER_SETTINGS"]			= "-- Server Settings --"
-L["PLUGINS_CLIENT_SETTINGS"]			= "-- Client Settings --"
+L["PLUGINS_NO_PLUGINS"]				= "Inga plugin installerade. Bläddra efter fler plugin här!"
+L["PLUGINS_BROWSE_MORE"]				= "Bläddra efter fler plugin"
+L["PLUGINS_SERVER_HAS_NO_PLUGINS"]	= "Förlåt, Denna server har inga anpassade tillägg/plugin installerade."
+L["PLUGINS_SERVER_SETTINGS"]			= "-- Serverinställningar --"
+L["PLUGINS_CLIENT_SETTINGS"]			= "-- Klientinställningar --"
 
 -- Text Entries
-L["TEXTENTRY_FZ_SINGLE"] = "Freeze Cam Single Sound Path"
-L["TEXTENTRY_MV_PREFIX"] = "MapVote Map Prefix"
+L["TEXTENTRY_FZ_SINGLE"] = "frys kamera, filsökväg för enstaka ljud"
+L["TEXTENTRY_MV_PREFIX"] = "kartprefix för kartomröstning"
 
-L["MISC_GAME_ENDED"]		= "Game has ended."
+L["MISC_GAME_ENDED"]		= "Spelet har avslutats."
 
 --============= LATE ADDITION OF 16.09.21/X2Z. =============--
 
@@ -413,86 +413,86 @@ L["MISC_GAME_ENDED"]		= "Game has ended."
 	Credits: Late Addition: Revision: 16.09.21/X2Z
 ]]
 
-L["PHXM_ABOUT_BTN_WIKI"]			= "PHX Wiki & Manuals"
+L["PHXM_ABOUT_BTN_WIKI"]			= "PHX Wiki & Manualer"
 
 --[[
 	Auto Taunt: Late Addition: Revision: 16.09.21/X2Z
 ]]
 
-L["HUD_AUTOTAUNT_DISABLED"]		= 	"Auto Taunting is disabled."
-L["HUD_AUTOTAUNT_WAITFORUPDATE"]	=	"Auto Taunt is Synchronizing..."
+L["HUD_AUTOTAUNT_DISABLED"]		= 	"Automatiska hån är avstängda."
+L["HUD_AUTOTAUNT_WAITFORUPDATE"]	=	"Automatiska hån synkroniserar..."
 
 --[[
 	MapVote: Late Addition: Revision: 16.09.21/X2Z
 ]]
-L["PHXM_MV_VOTEROCKED"]				= " The vote has been rocked, map vote will begin on round end"
-L["PHXM_MV_VOTEROCKED_IMMINENT"]		= "The vote has been rocked, map vote imminent"
-L["PHXM_MV_VOTEROCKED_PLY_TOTAL"]	= "%s has voted to Rock the Vote. ( %d / %d )"
+L["PHXM_MV_VOTEROCKED"]				= " Omröstningen har tippats, omröstningen börjar vid rundans slut"
+L["PHXM_MV_VOTEROCKED_IMMINENT"]		= "Omröstningen har tippats, omröstningen börjar snart"
+L["PHXM_MV_VOTEROCKED_PLY_TOTAL"]	= "%s har röstat för Rock the Vote. ( %d / %d )"
 
-L["PHXM_MV_MUST_WAIT"]				= "You must wait a bit before voting!"
-L["PHXM_MV_VOTEINPROG"]				= "There is currently a vote in progress!"
-L["PHXM_MV_HAS_VOTED"]				= "You have already voted to Rock the Vote!"
-L["PHXM_MV_ALR_IN_VOTE"]				= "There has already been a vote, the map is going to change!"
-L["PHXM_MV_NEED_MORE_PLY"]			= "You need more players before you can rock the vote!"
+L["PHXM_MV_MUST_WAIT"]				= "Du måste vänta en stund innan du röstar!"
+L["PHXM_MV_VOTEINPROG"]				= "En omröstning är på gång!"
+L["PHXM_MV_HAS_VOTED"]				= "Du har redan röstat för Rock the Vote!"
+L["PHXM_MV_ALR_IN_VOTE"]				= "En omröstning har redan genomförts, kartan kommer ändras!"
+L["PHXM_MV_NEED_MORE_PLY"]			= "Du behöver fler spelare innan du kan utföra Rock the Vote!"
 
 --[[
 	Late Addition: Revision: 16.09.21/X2Z
 ]]
-L["PROP_PLAYERMDL_BANNED"]	= "Your custom Prop Player Model was banned from the server."
+L["PROP_PLAYERMDL_BANNED"]	= "Din anpassade modell för föremål blev bannlyst från servern."
 
 --[[
 	Prop Menu/Prop Chooser, Revision: 16.09.21/X2Z
 ]]
 
-L["PCR_USAGE_UNLIMIT"]		= "[Prop Menu] You have **Unlimited** usage left!"
-L["PCR_USAGE_COUNT"]			= "[Prop Menu] You have %d usage left!"
-L["PCR_PLS_WAIT"]			= "[Prop Menu] Please wait in %d seconds."
-L["PCR_NOROOM"]				= "[Prop Menu] There is no room to change the prop!"
-L["PCR_PROPBANNED"]			= "[Prop Menu] This prop was banned by the server."
-L["PCR_PROPBANNED_BYPCR"]	= "[Prop Menu] You cannot use this prop because it was banned by Prop Menu."
-L["PCR_REACHED_LIMIT"]		= "[Prop Menu] You have reached the limit!"
-L["PCR_STAY_ON_GROUND"]		= "[Prop Menu] You need to stay on the ground and not crouching!"
-L["PCR_ONLY_GROUP"]			= "[Prop Menu] Only certain groups can open this menu!"
-L["PCR_NOT_EXIST_COUNT"]		= "That prop you have selected does not exists in this map! ( %s / 4 )"
-L["PCR_NOT_EXIST"]			= "That prop you have selected does not exists in this map!"
+L["PCR_USAGE_UNLIMIT"]		= "[Föremålsmeny] Du har **Oändliga** användningar kvar!"
+L["PCR_USAGE_COUNT"]			= "[Föremålsmeny] Du har %d användningar kvar!"
+L["PCR_PLS_WAIT"]			= "[Föremålsmeny] Vänligen vänta %d sekunder."
+L["PCR_NOROOM"]				= "[Föremålsmeny] Det finns ingen plats att byta föremål!"
+L["PCR_PROPBANNED"]			= "[Föremålsmeny] Detta föremål blev bannlyst från servern."
+L["PCR_PROPBANNED_BYPCR"]	= "[Föremålsmeny] Du kan inte använda detta föremål eftersom det blev bannlyst av föremålsmenyn."
+L["PCR_REACHED_LIMIT"]		= "[Föremålsmeny] Du har nått gränsen!"
+L["PCR_STAY_ON_GROUND"]		= "[Föremålsmeny] Du måste förbli på marken utan att huka!"
+L["PCR_ONLY_GROUP"]			= "[Föremålsmeny] Endast vissa grupper kan öppna denna meny!"
+L["PCR_NOT_EXIST_COUNT"]		= "Föremålet du har valt finns inte på denna karta! ( %s / 4 )"
+L["PCR_NOT_EXIST"]			= "Föremålet du har valt finns inte på denna karta!"
 
 -- PCR Client section, reason why there is a space because of chat.AddText between args.
-L["PCR_NOTIFY_1"]			= " This server use Prop Menu version %s! Type "
-L["PCR_NOTIFY_2"]			= " in console or use F1 -> [PropChooser Help] menu."
-L["PCR_CL_DISABLED"]			= " This feature is disabled."
-L["PCR_CL_GROUP"]			= " Only certain groups can open this menu!"
-L["PCR_CL_LIMIT"]			= " You have reached the limit!"
+L["PCR_NOTIFY_1"]			= " Denna server använder föremålsmeny version %s! Skriv "
+L["PCR_NOTIFY_2"]			= " i konsolen eller använd menyn under F1 -> [PropChooser Help]."
+L["PCR_CL_DISABLED"]			= " Denna funktion är avstängd."
+L["PCR_CL_GROUP"]			= " Endast vissa grupper kan öppna denna meny!"
+L["PCR_CL_LIMIT"]			= " Du har nått gränsen!"
 
-L["PCR_UNLIMIT_TEXT"]		= "Unlimited"
-L["PCR_WINDOW_TITLE"]		= "PH:X Prop Menu"
-L["PCR_HEADER_TOP"]			= "Choose any prop you want. You have"
-L["PCR_HEADER_MID"]			= "%s usage limit"
-L["PCR_HEADER_BOTTOM"]		= "to use this prop chooser!"
-L["PCR_CL_TOOLTIP_BANNED"]	= "You cannot use this model."
-L["PCR_CL_TOOLTIP_MODEL"]	= "Model: %s"
-L["PCR_CL_MENU_NOTREADY"]	= " This feature is not available at the moment."
-L["PCR_WINDOW_GUIDE_TTL"]	= "Quick Guide: Prop Menu 101"
-L["PCR_BTN_HELP_MENU"]		= "Prop Menu Help"
+L["PCR_UNLIMIT_TEXT"]		= "Obegränsad"
+L["PCR_WINDOW_TITLE"]		= "PH:X Föremålsmeny"
+L["PCR_HEADER_TOP"]			= "Välj det föremål du vill använda. Du har"
+L["PCR_HEADER_MID"]			= "%s användningsgräns"
+L["PCR_HEADER_BOTTOM"]		= "för att använda denna föremålsväljare!"
+L["PCR_CL_TOOLTIP_BANNED"]	= "Du kan inte använda denna modell."
+L["PCR_CL_TOOLTIP_MODEL"]	= "Modell: %s"
+L["PCR_CL_MENU_NOTREADY"]	= " Denna funktion är inte tillgänglig just nu."
+L["PCR_WINDOW_GUIDE_TTL"]	= "Snabbguide: Föremålsmeny A och O"
+L["PCR_BTN_HELP_MENU"]		= "Föremålsmeny Hjälp"
 
-L["PCR_CL_CMDUSEULX"]		= " This command is disabled. Use 'ulx propmenu' instead!"
-L["PCR_CMD_ULX_DISABLED"]	= "Command ulx propmenu is disabled. Press your [Prop Menu Bind] to open."
+L["PCR_CL_CMDUSEULX"]		= " Detta kommando är avstängt. Använd 'ulx propmenu' istället!"
+L["PCR_CMD_ULX_DISABLED"]	= "Kommandot ulx propmenu är avstängt. Tryck ditt [Föremålsmeny-kortkommando] för att öppna."
 
-L["PCR_EDT_IN_USE"]			= "An admin is still editing the prop data. Please Wait!"
-L["PCR_EDT_ERROR_DISABLED"]	= "[Prop Menu] Error: Custom Prop Addition is Disabled!"
-L["PCR_EDT_NO_RIGHTS"]		= "You have no rights to access this feature."
+L["PCR_EDT_IN_USE"]			= "En administrator redigerar fortfarande föremålsdatan. Vänligen vänta!"
+L["PCR_EDT_ERROR_DISABLED"]	= "[Föremålsmeny] Fel: Tillägg av anpassade föremål är avstängt!"
+L["PCR_EDT_NO_RIGHTS"]		= "Du har inte rättigheterna att komma åt denna funktion."
 
 --[[
 	Admin Section, Revision: 16.09.21/X2Z
 ]]
-L["PHXM_PLAYER_PROP_CHOOSER_KEY"]	= "Default Key to open Prop Menu (Prop Chooser)."
-L["PHXM_PROP_FREEZE_MIDAIR"]			= "Default Key to toogle Freeze movement during on midair as a Prop."
-L["PHXM_ADMIN_TAUNT_SCANNER"]		= "(Require Map Restart) Enable Taunt Scanner?"
-L["PHXM_ADMLBL_USABLE_ENTS"]			= "Usable Prop Entities Types"
-L["PHXM_ADMLBL_USABLE_ENTS_REF"]		= "Types can be: 1: Physics Only, 2: Physics & Dynamics, 3: Almost Anything inc. Ragdolls, 4: Custom Entities."
-L["PHXM_ADMIN_USABLE_ENT_TYPE"]		= "Type of Entities to use for Prop to Replicate"
-L["PHXM_ADMIN_NOTIFY_ENT_TYPE"]		= "Notify Props about entities that cannot be replicated by pressing E. Only works if 'ph_usable_prop_type' is set to 3 or 4."
-L["NOTIFY_PROP_ENTTYPE"]				= "Press [E] to interact, [Click] to replicate object."
-L["NOTIFY_CUST_ENT_TYPE_IS_ON"]		= "[PHX] Notice: Press [E] to interact object, Press [Click] to Replicate the object."
+L["PHXM_PLAYER_PROP_CHOOSER_KEY"]	= "Standardtangent för att öppna föremålsmeny (Föremålsväljare)."
+L["PHXM_PROP_FREEZE_MIDAIR"]			= "Standardtangent för att frysa rörelser mitt i luften som ett föremål."
+L["PHXM_ADMIN_TAUNT_SCANNER"]		= "(Kräver omstart av karta) Slå på hånskanner?"
+L["PHXM_ADMLBL_USABLE_ENTS"]			= "Användbara föremålstyper"
+L["PHXM_ADMLBL_USABLE_ENTS_REF"]		= "Typer kan vara: 1: Endast fysik, 2: Fysik & dynamik, 3: Nästan allt inkl. Ragdolls, 4: Anpassade enheter."
+L["PHXM_ADMIN_USABLE_ENT_TYPE"]		= "Typ av enheter att använda för föremål"
+L["PHXM_ADMIN_NOTIFY_ENT_TYPE"]		= "Meddela föremål om enheter som inte kan imiteras genom att trycka E. Fungerar endast om 'ph_usable_prop_type' är satt på 3 eller 4."
+L["NOTIFY_PROP_ENTTYPE"]				= "Tryck [E] för att interagera, [Klicka] för att imitera."
+L["NOTIFY_CUST_ENT_TYPE_IS_ON"]		= "[PHX] OBS: Tryck [E] för att interagera med objekt, [Klicka] för att imitera objektet."
 
 --[[
 	Custom Taunts, Revision: 16.09.21/X2Z
