@@ -497,100 +497,100 @@ L["NOTIFY_CUST_ENT_TYPE_IS_ON"]		= "[PHX] OBS: Tryck [E] för att interagera med
 --[[
 	Custom Taunts, Revision: 16.09.21/X2Z
 ]]
-L["TM_TAUNTS_SEARCH_NOTHING"]		= "Taunt containing '%s' was not found..."
-L["TM_SEARCH_PLACEHOLDER"]			= "Search in this category: Enter word, lowercase & no wildcards. Empty=Show All."
-L["PHXM_MSG_INPUT_IS_EMPTY"]			= "Text is empty or you didn't pressed ENTER key."
+L["TM_TAUNTS_SEARCH_NOTHING"]		= "Ett hån innehållandes '%s' hittades inte..."
+L["TM_SEARCH_PLACEHOLDER"]			= "Sök i denna kategori: Skriv ett ord; gemener & inga jokertecken. Tomt=Visa allt."
+L["PHXM_MSG_INPUT_IS_EMPTY"]			= "textfält är tomt eller har du inte tryckt RETUR tangenten."
 
 --============= LATE ADDITION OF 10.06.2022/X2Z. =============--
 
 --goto line: @132
-L["MISC_SET"]						= "Set"
-L["MISC_APPLY"]						= "Apply"
-L["MISC_NO"]							= "No"
-L["MISC_YES"]						= "Yes"
-L["MISC_WARN"]						= "Warning"
-L["MISC_ERROR"]						= "Error"
+L["MISC_SET"]						= "Ange"
+L["MISC_APPLY"]						= "Tillämpa"
+L["MISC_NO"]							= "Nej"
+L["MISC_YES"]						= "Ja"
+L["MISC_WARN"]						= "Varning"
+L["MISC_ERROR"]						= "Fel"
 L["MISC_INFO"]						= "Information"
-L["MISC_NOTICE"]						= "Notice"
-L["MISC_IDK"]						= "Unknown"
+L["MISC_NOTICE"]						= "Meddelande"
+L["MISC_IDK"]						= "Okänt"
 L["MISC_NA"]							= "N/A"
 
 -- HUD
-L["HUD_DECOY_ACTIVE"]                = "Press [%s]"
-L["HUD_FAKETAUNT_COUNT"]             = "%ix Left"
-L["HUD_FAKETAUNT_UNLI"]              = "Unlimited"
-L["NOTICE_GRENADE_SMG_GIVEN"]        = "You are now acquired some SMG Grenades."
+L["HUD_DECOY_ACTIVE"]                = "Tryck [%s]"
+L["HUD_FAKETAUNT_COUNT"]             = "%ix Kvar"
+L["HUD_FAKETAUNT_UNLI"]              = "Obegränsad"
+L["NOTICE_GRENADE_SMG_GIVEN"]        = "Du har nu några SMG-granater."
 
 --[[
 	ADMIN PANEL, Revision 10.06/2022/X2Z
 ]]--
-L["PHXM_TAUNT_SETTINGS"]				= "Taunt Settings"
-L["PHXM_GENERAL_SETTINGS"]			= "General Settings"
-L["PHXM_FAKE_TAUNT_SETTINGS"]		= "Fake Taunt Settings"
-L["PHXM_FAKE_TAUNT_ENABLE"]			= "Allow fake taunts to be played on random props in the map. Can be accessed only through Custom Taunt menu."
-L["PHXM_FAKE_TAUNT_MAXUSAGE"]		= "Maximum usage for fake taunts to be used; -1 is unlimited."
-L["PHXM_TAUNT_RIGHT_CLICK"]		    = "Right click for taunt. This will disable Right-clicking on custom menu!"
+L["PHXM_TAUNT_SETTINGS"]				= "Håninställningar"
+L["PHXM_GENERAL_SETTINGS"]			= "Allmänna inställningar"
+L["PHXM_FAKE_TAUNT_SETTINGS"]		= "Inställningar för låtsashån"
+L["PHXM_FAKE_TAUNT_ENABLE"]			= "Tillåt låtsashån att spelas på slumpmässiga föremål på kartan. Kan endast kommas åt genom menyn för anpassade hån."
+L["PHXM_FAKE_TAUNT_MAXUSAGE"]		= "Max antal användningar för låtsashån; -1 är obegränsat."
+L["PHXM_TAUNT_RIGHT_CLICK"]		    = "Högerklicka för att håna. Detta stänger av högerklick i den anpassade menyn!"
 
-L["PHXM_TAUNT_PITCH_SETTINGS"]		= "Taunt Pitch Settings"
-L["PHXM_TAUNT_PITCH_ENABLE"]			= "Enable Taunt Pitch"
-L["PHXM_TAUNT_PITCH_RANGE_MIN"]		= "Minimum threshold/acceptable pitch range for a taunt. 1 to 99."
-L["PHXM_TAUNT_PITCH_RANGE_MAX"]		= "Maximum threshold/acceptable pitch range for a taunt. 100 to 255."
+L["PHXM_TAUNT_PITCH_SETTINGS"]		= "Tonhöjdsinställningar för hån"
+L["PHXM_TAUNT_PITCH_ENABLE"]			= "Slå på tönhäjd för hån"
+L["PHXM_TAUNT_PITCH_RANGE_MIN"]		= "Minsta tillåtna tonhöjd hör hån. 1 till 99."
+L["PHXM_TAUNT_PITCH_RANGE_MAX"]		= "Högsta tillåtna tonhöjd hör hån. 100 till 255."
 
-L["PHXM_DECOY_SETTINGS"]				= "Decoy Settings"
-L["PHXM_DECOY_ENABLE"]				= "Enable Decoy reward? Reward will be given ONLY ONCE for alive props until the round ends. They don't add and only substract once they're placed."
+L["PHXM_DECOY_SETTINGS"]				= "Lockfågelsinställningar"
+L["PHXM_DECOY_ENABLE"]				= "Slå på låckfågelsbelöningar? Alla levande föremål belönas ENDAST EN GÅNG tills rundan slutar. De är inte additiva och subtraherar endast när dem placeras."
 
-L["PHXM_DISABLE_FOOTSTEP"]           = "Toggle silent prop team footsteps"
+L["PHXM_DISABLE_FOOTSTEP"]           = "Växla tysta fotsteg för föremålslaget"
 
-L["PHXM_ADMIN_CHATSETTING"]			= "Chat Window Settings"
-L["PHXM_ADMIN_HUNTERBLIND"]			= "Hunter Blind Control"
+L["PHXM_ADMIN_CHATSETTING"]			= "Chattfönsterinställningar"
+L["PHXM_ADMIN_HUNTERBLIND"]			= "Jägarblindhetskontroller"
 
-L["PHXM_ADMIN_GIVEGRENADE_NEAREND"]  = "Should grenades will be given near round end? If Yes, see 'ph_give_grenade_roundend_before_time'"
-L["PHXM_ADMIN_GIVEGRENADE_TIME"]     = "Time in seconds to give grenades before Round Ends. This is typically between 10 to 30 seconds"
+L["PHXM_ADMIN_GIVEGRENADE_NEAREND"]  = "Borde granater delas ut nära rundans slut? Om ja, se 'ph_give_grenade_roundend_before_time'"
+L["PHXM_ADMIN_GIVEGRENADE_TIME"]     = "Tid i sekunder som granater ska delas ut innan rundans slut. Detta är vanligen mellan 10 till 30 sekunder"
 
 --[[
 	Plugins in sh_init.lua, Revision 10.06/2022/X2Z
 ]]--
 L["PLUG_NAME_VER"]					= "Plugin: %s | v.%s"
-L["PLUG_DESCRIPTION"]				= "Description: %s"
+L["PLUG_DESCRIPTION"]				= "Beskrivning: %s"
 
 --[[
 	Taunt Pitch, Revision 10.06/2022/X2Z
 ]]--
-L["PHX_CTAUNT_USE_PITCH"]			= "Use pitch for custom taunts"
-L["PHX_CTAUNT_RANDOM_PITCH"]			= "Randomize pitch when playing taunt"
-L["PHX_RTAUNT_USE_PITCH"]			= "Use pitch for random taunts [%s]"
-L["PHX_RTAUNT_RANDOMIZE"]			= "Randomize pitch for random taunts [%s]"
-L["PHX_CTAUNT_PITCH_FOR_FAKE"]		= "Use pitch for fake taunts"
-L["PHX_CTAUNT_RANDPITCH_FOR_FAKE"]	= "Randomize pitch for fake taunts"
-L["PHX_CTAUNT_SLIDER_PITCH"]			= "Taunt pitch slider."
-L["TM_TOOLTIP_FAKETAUNT"]			= "Play a Fake Taunt on random prop"
-L["TM_PREFERRED_PITCH"]              = "Preferred Taunt Pitch Level"
+L["PHX_CTAUNT_USE_PITCH"]			= "Använd tonhöjd för anpassade hån"
+L["PHX_CTAUNT_RANDOM_PITCH"]			= "Slumpa tonhöjd när hån uppspelas"
+L["PHX_RTAUNT_USE_PITCH"]			= "Använd tonhöjd för slumpade hån [%s]"
+L["PHX_RTAUNT_RANDOMIZE"]			= "Slumpa tonhöjd för slumpmässiga hån [%s]"
+L["PHX_CTAUNT_PITCH_FOR_FAKE"]		= "Använd tonhöjd för låtsashån"
+L["PHX_CTAUNT_RANDPITCH_FOR_FAKE"]	= "Slumpa tonhöjd för låtsashån"
+L["PHX_CTAUNT_SLIDER_PITCH"]			= "Tonhöjdsreglage för hån."
+L["TM_TOOLTIP_FAKETAUNT"]			= "Spela upp låtsashån på slumpmässigt föremål"
+L["TM_PREFERRED_PITCH"]              = "Föredragen tonhöjd för hån"
 
 --[[
 	Fake Taunt, Revision 10.06/2022/X2Z
 	Description: Play fake taunts on random props in the map (Not Players)
 ]]--
-L["PHX_CTAUNT_ON_RAND_PROPS"]		= "Play on random props (%ix)"
-L["PHX_CTAUNT_ON_RAND_PROPS_UNLI"]	= "Play on random props"
-L["PHX_CTAUNT_PLAYED_ON_RANDPROP"]	= "You played a taunt on a random prop."
-L["PHX_CTAUNT_RAND_PROPS_LIMIT"]		= "You have hit the limit!"
-L["PHX_CTAUNT_RAND_PROPS_NOT_PROP"]  = "Not available at this moment."
-L["PHX_CTAUNT_RANDPROP_DISABLED"]	= "Fake taunt is currently disabled."
+L["PHX_CTAUNT_ON_RAND_PROPS"]		= "Spela upp på slumpmässiga föremål (%ix)"
+L["PHX_CTAUNT_ON_RAND_PROPS_UNLI"]	= "Spela upp på slumpmässiga föremål"
+L["PHX_CTAUNT_PLAYED_ON_RANDPROP"]	= "Du spelade upp ett hån på ett slumpmässigt föremål."
+L["PHX_CTAUNT_RAND_PROPS_LIMIT"]		= "Du har nått gränsen!"
+L["PHX_CTAUNT_RAND_PROPS_NOT_PROP"]  = "Inte tillgängligt just nu."
+L["PHX_CTAUNT_RANDPROP_DISABLED"]	= "Låtsashån är för närvarande avstängda."
 
 --[[
 	PH:Z Simple Decoy, Revision 10.06/2022/X2Z
 ]]--
 L.DECOY_PROP	= {
-	"killed the dummy!",
-	"feel regret after killing a dummy.",
-	"killed a decoy.",
-	"killed an innocent dummy.",
-	"feel embarrased after killing a dummy."
+	"dödade lockfågeln!",
+	"ångrar sig efter att ha dödat en lockfågel.",
+	"dödade en lockfågel.",
+	"dödade en oskyldig lockfågel.",
+	"känner sig generad efter att ha dödat en lockfågel."
 }
 
-L["DECOY_PUT_SUCC"]					= "Decoy successfully placed."
-L["DECOY_CANT_PUT_HERE"]				= "Cannot put decoy here."
-L["DECOY_GET_REWARD"]				= "Congrats! You received ['Prop Decoy'] for suviving this round!"
+L["DECOY_PUT_SUCC"]					= "Lockfågel placerad."
+L["DECOY_CANT_PUT_HERE"]				= "Kan inte placera lockfågel här."
+L["DECOY_GET_REWARD"]				= "Gratulerar! Du fick ett ['Lockfågelsföremål'] för att ha överlevt denna runda!"
 L["DECOY_REMINDER_GET"]              = "You have a Decoy/Dummy prop! Place somewhere to confuse hunters!"
 L["DECOY_FRAGS_RECEIVED"]			= "Decoy successfully baited: You stole 1 score from %s!"
 L["DECOY_DISABLED"]					= "Currently, decoy is unavailable."
