@@ -189,7 +189,7 @@ L["PHXM_WINDOW_TITLE"]		= "Prop Hunt X - Avancerade Alternativ & Meny"
 L["SERVER_INFO_MOTD"]		= "SERVER INFORMATION & REGLER [MOTD]"
 
 L["PHXM_TAB_HELP"]			= "Hjälp & Vägledning"
-L["PHXM_TAB_MUTE"]			= "Skruva Ner Spelare"
+L["PHXM_TAB_MUTE"]			= "Tysta Spelare"
 L["PHXM_TAB_PLAYER"]			= "Spelarinställningar"
 L["PHXM_TAB_MODEL"] 			= "Bläddra Modeller"
 L["PHXM_TAB_MODEL_DISABLED"]	= "Bläddra Modeller (Avstängd)"
@@ -203,14 +203,14 @@ L["PHXM_CVAR_CHANGED"]		= "[Inställningar] CVar %q har ändrats till %q"
 --[[
 	Player Mute Settings
 ]]
-L["PHXM_MUTE_SELECT"]		= "Välj spelare som du vill dämpa."
+L["PHXM_MUTE_SELECT"]		= "Välj spelare som du vill tysta."
 
 --[[ 
 	Player Settings
 ]]
 L["PHXM_PLAYER_OPTIONS"]		= "Alternativ för spelare"
 L["PHXM_PLAYER_LANG"]		= "Språk"
-L["PHXM_PLAYER_BIND"]		= "Kortkommandon"
+L["PHXM_PLAYER_BIND"]		= "Tangentbindningar"
 L["PHXM_PLAYER_HUDSETTINGS"]	= "HUD-inställningar"
 
 L["PHXM_PLAYER_TAUNT_KEY"]			= "Knapp för Slumpmässigt Hån"
@@ -223,10 +223,10 @@ L["PHXM_PLAYER_ENDROUND_CUE"]		= "Spela upp ljud för rundavslut"
 L["PHXM_PLAYER_TAUNTMENU_AUTOCLOSE"]	= "Alternativ for att stänga hånmeny automatiskt när man dubbelklickar."
 L["PHXM_PLAYER_SEE_HUNTER_LINE"]		= "Rita en linje på jägare så man kan se deras synriktning i åskådarläge."
 L["PHXM_PLAYER_SEE_LBALL_ICONS"]		= "Aktivera 'Lyckoboll' ikon för visning när de väl upplivas"
-L["PHXM_PLAYER_SEE_CRYSTAL_ICONS"]	= "Aktivera 'Djävulsboll' ikon för visning när de väl spawnar"
+L["PHXM_PLAYER_SEE_CRYSTAL_ICONS"]	= "Aktivera 'Djävulsboll' ikon för visning när de väl skapas"
 
-L["PHXM_PLAYER_USE_NEW_HUD"]			= "Använd Nya PH: Förbättrad HUD"
-L["PHXM_PLAYER_SHOW_TUTOR"]			= "Visa genomgångsruta (Visas endast 2x för varje föremål som spawnar)"
+L["PHXM_PLAYER_USE_NEW_HUD"]			= "Använd Nya PH: Enhanced HUD"
+L["PHXM_PLAYER_SHOW_TUTOR"]			= "Visa genomgångsruta (Visas endast 2x för varje föremål som skapas)"
 L["PHXM_PLAYER_USE_NEW_CROSSHAIR"]	= "Aktivera Anpassat Hårkors"
 L["PHXM_PLAYER_SHOW_TEAM_TOPBAR"]	= "Visa antal levande lagmedlemmar längst upp til vänster (åtminstone 4 spelare kommer visas)"
 
@@ -269,7 +269,7 @@ L["PHXM_ADMIN_TAUNT_DELAY_RANDOM"]		= "Normal hånfördröjning (Sekunder)"
 L["PHXM_ADMIN_TAUNT_DELAY_AUTO"]			= "Automatisk hånfördröjning (Sekunder)" -- fix all pls
 L["PHXM_ADMIN_AUTOTAUNT_ENABLE"]			= "Använd automatiska hånfunktioner (Timer fixas nästa runda)"
 
-L["PHXM_ADMIN_NOTICE_ROTATION"]			= "Visa 'Föremålsrotation' notis för varje föremålsspawn"
+L["PHXM_ADMIN_NOTICE_ROTATION"]			= "Visa 'Föremålsrotation' notis för varje föremålsskapande"
 L["PHXM_ADMIN_CAMERA_COLLIDE"]			= "Låt Föremålskamera kollidera med väggar"
 L["PHXM_ADMIN_FREEZECAM"]				= "Slå på kamerafrysningsfunktioner för föremålslaget"
 L["PHXM_ADMIN_FREEZECAM_HUNTER"]			= "Slå på kamerafrysningsfunktioner för jägarlaget"
@@ -278,12 +278,12 @@ L["PHXM_ADMIN_SWAP_TEAM"] 				= "Byt lag varje runda - lagen förblir på varsin
 L["PHXM_ADMIN_HUNTER_PENALTY"]			= "Hälsostraff för jägare"
 L["PHXM_ADMIN_HUNTER_KILL_BONUS"]		= "Jägardråpsbonus"
 L["PHXM_ADMIN_HUNTER_SMG_GRENADES"]		= "SMG granater till jägarna"
-L["PHXM_ADMIN_GAME_TIME"]				= "(Kräver omstart av kartan) Total speltid (minuter)"
+L["PHXM_ADMIN_GAME_TIME"]				= "(Kräver omstart av karta) Total speltid (minuter)"
 L["PHXM_ADMIN_BLINDLOCK_TIME"]			= "Jägares blindtid (sekunder)"
-L["PHXM_ADMIN_ROUND_TIME"]				= "(Kräver omstart av kartan) Omgångstid (sekunder)"
-L["PHXM_ADMIN_ROUNDS_PER_MAP"]			= "(Kräver omstart av kartan) Totalt antal rundor per karta"
-L["PHXM_ADMIN_ENABLE_LUCKYBALL"]			= "Tillåt Lyckobollar att spawna på förstörbara objekt (Chans är 8%)"
-L["PHXM_ADMIN_ENABLE_CRYSTAL"]			= "Tillåt Djävulsbollar att spawna när jägare dör (Alltid)"
+L["PHXM_ADMIN_ROUND_TIME"]				= "(Kräver omstart av karta) Omgångstid (sekunder)"
+L["PHXM_ADMIN_ROUNDS_PER_MAP"]			= "(Kräver omstart av karta) Totalt antal rundor per karta"
+L["PHXM_ADMIN_ENABLE_LUCKYBALL"]			= "Tillåt Lyckobollar att skapas på förstörbara objekt (Chans är 8%)"
+L["PHXM_ADMIN_ENABLE_CRYSTAL"]			= "Tillåt Djävulsbollar att skapas när jägare dör (Alltid)"
 L["PHXM_ADMIN_WAIT_PLAYERS"]				= "Vänta på spelare att påbörja spelet"
 L["PHXM_ADMIN_WAIT_MIN_PLAYERS"]			= "Minsta antal spelare att vänta på innan spelet börjar (standard: 1)"
 L["PHXM_ENABLE_PLAYER_JOIN_LEAVE"] 		= "Slå på chat notis för anslutning samt avgång av spelare? Sätt denna på 0 om du föredrar att använda ditt egna chattillägg."
@@ -310,7 +310,7 @@ L["PHXM_MODE3"]						= "Läge [3]: Tillåt alla"
 ]]
 L["PHXM_ADMIN_DEVSECTION"]		= "Inställningar för utvecklare"
 L["PHXM_ADMIN_ROOMCHECK"]		= "Slå på gränskontroller? Detta förhindrar att du fastnar i väggar/objekt."
-L["PHXM_ADMIN_USENEWMKBREN"]		= "Använd ny modell för bonusvapnet Bren MK II (Kräver omstart av kartan)"
+L["PHXM_ADMIN_USENEWMKBREN"]		= "Använd ny modell för bonusvapnet Bren MK II (Kräver omstart av karta)"
 L["PHXM_ADMIN_BEVERBOSE"]		= "Utvecklare: Var ordrik - låt PH:X skriva ut all information och alla händelser utförligt?"
 L["PHXM_ADMIN_SHOWPLNAMEHEAD"]	= "Låt spelarens lagnamn visas på deras skärm."
 L["PHXM_ADMIN_USESINGLE_FZCAM"]	= "Använd ett fryskameraljud isället för ljudlista (Använd 'ph_fc_cue_path' för att ställa in sökvägen till fryskamerans ljud)"
@@ -348,7 +348,7 @@ L["PHXM_MV_TIMELIMIT"]			= "Tid i sekunder tills standardröstning."
 L["PHXM_MV_MAPBEFOREREVOTE"]		= "Antal kartändringar innan samma karta kan dyka upp igen"
 L["PHXM_MV_RTVCOUNT"]			= "Hur många spleare som behövs för att använda RTV (Rock the Vote)"
 
-L["PHXM_MV_EXPLANATION1"]		= "För att ange vilken karta borde dyka upp i listan, skriv (exempelvis) [ mv_map_prefix 'phx_,ph_,cs_,de_' ] i konsolen."
+L["PHXM_MV_EXPLANATION1"]		= "För att ange vilken karta bör dyka upp i listan, skriv (t.ex.) [ mv_map_prefix 'phx_,ph_,cs_,de_' ] i konsolen."
 L["PHXM_MV_EXPLANATION2"]		= "om ULX är installerat, använd 'ulx map_vote' istället. Använd annars 'mv_start' för vanligt anrop."
 L["PHXM_MV_EXPLANATION3"]		= "Kartomröstningshandling (För att avbryta, skriv 'ulx unmap_vote' eller 'mv_stop' i konsolen.)"
 
@@ -475,7 +475,7 @@ L["PCR_WINDOW_GUIDE_TTL"]	= "Snabbguide: Föremålsmeny A och O"
 L["PCR_BTN_HELP_MENU"]		= "Föremålsmeny Hjälp"
 
 L["PCR_CL_CMDUSEULX"]		= " Detta kommando är avstängt. Använd 'ulx propmenu' istället!"
-L["PCR_CMD_ULX_DISABLED"]	= "Kommandot ulx propmenu är avstängt. Tryck ditt [Föremålsmeny-kortkommando] för att öppna."
+L["PCR_CMD_ULX_DISABLED"]	= "Kommandot ulx propmenu är avstängt. Tryck [tangentbindning för föremålsmenyn] för att öppna."
 
 L["PCR_EDT_IN_USE"]			= "En administrator redigerar fortfarande föremålsdatan. Vänligen vänta!"
 L["PCR_EDT_ERROR_DISABLED"]	= "[Föremålsmeny] Fel: Tillägg av anpassade föremål är avstängt!"
@@ -544,7 +544,7 @@ L["PHXM_DISABLE_FOOTSTEP"]           = "Växla tysta fotsteg för föremålslage
 L["PHXM_ADMIN_CHATSETTING"]			= "Chattfönsterinställningar"
 L["PHXM_ADMIN_HUNTERBLIND"]			= "Jägarblindhetskontroller"
 
-L["PHXM_ADMIN_GIVEGRENADE_NEAREND"]  = "Borde granater delas ut nära rundans slut? Om ja, se 'ph_give_grenade_roundend_before_time'"
+L["PHXM_ADMIN_GIVEGRENADE_NEAREND"]  = "Bör granater delas ut nära rundans slut? Om ja, se 'ph_give_grenade_roundend_before_time'"
 L["PHXM_ADMIN_GIVEGRENADE_TIME"]     = "Tid i sekunder som granater ska delas ut innan rundans slut. Detta är vanligen mellan 10 till 30 sekunder"
 
 --[[
@@ -591,208 +591,208 @@ L.DECOY_PROP	= {
 L["DECOY_PUT_SUCC"]					= "Lockfågel placerad."
 L["DECOY_CANT_PUT_HERE"]				= "Kan inte placera lockfågel här."
 L["DECOY_GET_REWARD"]				= "Gratulerar! Du fick ett ['Lockfågelsföremål'] för att ha överlevt denna runda!"
-L["DECOY_REMINDER_GET"]              = "You have a Decoy/Dummy prop! Place somewhere to confuse hunters!"
-L["DECOY_FRAGS_RECEIVED"]			= "Decoy successfully baited: You stole 1 score from %s!"
-L["DECOY_DISABLED"]					= "Currently, decoy is unavailable."
-L["PHXM_CL_DECOY_KEYBIND"]			= "Default key to place a decoy prop. Default is 1 (not keypad 1)."
+L["DECOY_REMINDER_GET"]              = "Du har ett lockfågelsföremål! Placera det någonstans för att förvirra jägare!"
+L["DECOY_FRAGS_RECEIVED"]			= "Lockfågel har fått fångst: du stal 1 poäng från %s!"
+L["DECOY_DISABLED"]					= "Lockfågel är för nuvarande otillgänglig."
+L["PHXM_CL_DECOY_KEYBIND"]			= "Standard tangent för att placera lockfågel. Standard är 1 (inte 1 på numpad)."
 
-L["DECOY_INDICATOR_INVALID"]         = "Invalid Slope!"
-L["DECOY_INDICATOR_TOOFAR"]          = "Range too far!"
-L["DECOY_INDICATOR_OK"]              = "Place Decoy [Press %s]"
+L["DECOY_INDICATOR_INVALID"]         = "Ogiltig sluttning!"
+L["DECOY_INDICATOR_TOOFAR"]          = "För långt bort!"
+L["DECOY_INDICATOR_OK"]              = "Placera lockfågel [Tryck %s]"
 
-L["PHXM_DECOY_HEALTH"]				= "How much health does the decoy should have. Default is 10."
-L["PHXM_PLAYER_SHOW_DECOY_HELPER"]   = "Show/Hide Decoy placement helper? This will show a white dot with a text near on your crosshair."
-L["PHXM_PLAYER_SHOW_DECOY_MARKER"]   = "Show/Hide Decoy marker?"
+L["PHXM_DECOY_HEALTH"]				= "Hur mycket hälsa lockfågeln ska ha. Standard är 10."
+L["PHXM_PLAYER_SHOW_DECOY_HELPER"]   = "Dölj/Visa hjälp vid placering av lockfågel? Detta visar en vit prick med en text nära ditt hårkors."
+L["PHXM_PLAYER_SHOW_DECOY_MARKER"]   = "Dölj/Visa lockfågelsmarkör?"
 
 --[[
 	Revision 10.06/2022/X2Z
     Prop Menu Update: Menu, Editor, Browser
 ]]--
-L["PCR_MODEL_DONT_EXISTS"]   = "Sorry, this model is not available at the moment!"
+L["PCR_MODEL_DONT_EXISTS"]   = "Tyvärr, denna modell är för närvarande inte tillgänglig!"
 
-L["PCR_PLUG_WARN_MSG"]		= "Warning: Custom Prop Addition (pcr_allow_custom) is set to 0.\nYou Must Enable this feature in order to edit your custom prop!\nA Map change is required to change this setting."
-L["PCR_PLUG_LBL_BINDKEY"]	= "To change bind key, switch to '[Player] tab."
-L["PCR_PLUG_LBL_EDITOR"]		= "Custom Prop Menu Editor"
-L["PCR_PLUG_BTN_OPEN_EDT"]	= "Open Editor"
-L["PCR_PLUG_LBL_COMSET"]		= "Common Settings"
-L["PCR_PLUG_LBL_TECHSET"]	= "Technical Settings"
-L["PCR_PLUG_LBL_EXPSET"]		= "Experimentals"
-L["PCR_PLUG_LBL_PLAYERSET"]	= "Player Settings"
+L["PCR_PLUG_WARN_MSG"]		= "Varning: Tillägg av anpassade föremål (pcr_allow_custom) är satt till 0.\nDu måste slå på denna funktion för att redigera ditt anpassade föremål!\nEn kartändring behövs för att byta denna inställning."
+L["PCR_PLUG_LBL_BINDKEY"]	= "För att ändra tangentbindning, byt till '[Spelare] fliken."
+L["PCR_PLUG_LBL_EDITOR"]		= "Redigerare för anpassade-föremålsmenyn"
+L["PCR_PLUG_BTN_OPEN_EDT"]	= "Öppna redigerare"
+L["PCR_PLUG_LBL_COMSET"]		= "Vanliga inställningar"
+L["PCR_PLUG_LBL_TECHSET"]	= "Tekniska inställningar"
+L["PCR_PLUG_LBL_EXPSET"]		= "Experimentellt"
+L["PCR_PLUG_LBL_PLAYERSET"]	= "Spelarinställningar"
 
-L["PCR_PLUG_ENABLE"]			= "Enable 'Prop Menu' feature"
-L["PCR_PLUG_ALLOW_CUSTOM"]	= "(Require Map Restart) Allow custom props to be added in to the Prop Menu list?"
-L["PCR_PLUG_PROP_BAN"]		= "(Require Map Restart) Do not include banned props into Prop Menu list?"
-L["PCR_PLUG_USAGE_LIMIT"]	= "Maximum usage limit for player to use. -1 means unlimited."
-L["PCR_PLUG_PROP_LIMIT"]		= "(Require Map Restart) Limit amount of prop addition to Prop Menu list"
-L["PCR_PLUG_PROP_LIMITMAX"]	= "Maximum amount of props that will be added to Prop Menu list. Note: This will be randomly added!"
-L["PCR_PLUG_USE_ULXMENU"]	= "Should Prop Menu can be accessed by Console (0) or ULX (1)? Bound key will respect with this setting"
-L["PCR_PLUG_USE_DELAY"]		= "Delay in seconds before player to use another Prop in Prop Menu"
-L["PCR_PLUG_KICK_INVALID"]	= "Kick any user attempt to access Invalid Model (4x Max. threshold)"
-L["PCR_PLUG_SPACE_CHECK"]	= "Check for space for a room before player use another prop to prevent Stuck"
-L["PCR_PLUG_X_BBOX"]			= "(Require Map Restart) Check Entity BBox Limit before adding to Prop Menu list"
-L["PCR_PLUG_X_BBOX_MAX"]		= "BBox CollisionBound Maximum Height limit. Mins will be auto-calculated."
-L["PCR_PLUG_X_BBOX_MIN"]		= "BBox CollisionBound Maximum Width limit. Mins will be auto-calculated."
-L["PCR_PLUG_ONLY_GROUPS"]	= "Should Prop Menu can only be accessed by certain groups e.g. Donator?"
-L["PCR_PLUG_NOTIFYMSG"]		= "Notify player on how to use Prop Menu on every round start"
+L["PCR_PLUG_ENABLE"]			= "Slå på 'Föremålsmeny' funktion"
+L["PCR_PLUG_ALLOW_CUSTOM"]	= "(Kräver omstart av karta) Tillåt tillägg av anpassade föremål in i föremålsmenyns lista?"
+L["PCR_PLUG_PROP_BAN"]		= "(Kräver omstart av karta) Inkludera inte bannlysta föremål i föremålsmenyns lista?"
+L["PCR_PLUG_USAGE_LIMIT"]	= "Max användingar för spelare. -1 är öbegränsat."
+L["PCR_PLUG_PROP_LIMIT"]		= "(Kräver omstart av karta) Begränsa antal tillägg i föremålsmenyns lista"
+L["PCR_PLUG_PROP_LIMITMAX"]	= "Max antal föremål som kommer läggas till i föremålsmenyns lista. OBS: Detta kommer läggas till slumpmässigt!!"
+L["PCR_PLUG_USE_ULXMENU"]	= "Bör föremålsmenyn vara tillgägnlig genom konsolen (0) eller ULX (1)? Bunden tangent kommer respektera denna inställning"
+L["PCR_PLUG_USE_DELAY"]		= "Fördröjning i sekunder innan spelaren kan ändra föremål i föremålsmenyn"
+L["PCR_PLUG_KICK_INVALID"]	= "Sparka spelare som försöker komma åt ogiltiga modeller (4x högsta tröskeln)"
+L["PCR_PLUG_SPACE_CHECK"]	= "Kontrollera utrymmet innan spelaren byter föremål för att förhindra att dem blir fast"
+L["PCR_PLUG_X_BBOX"]			= "(Kräver omstart av karta) Kontrollera BBox-gränsen på enheter innan dem läggs till i föremålsmenyns lista"
+L["PCR_PLUG_X_BBOX_MAX"]		= "Maximihöjd av BBox Kollisionsgränser. Minimivärden kalkyleras automatiskt."
+L["PCR_PLUG_X_BBOX_MIN"]		= "Maximibredd av BBox Kollisionsgränser. Minimivärden kalkyleras automatiskt."
+L["PCR_PLUG_ONLY_GROUPS"]	= "Bör föremålsmenyn endast vara tillgänglig för vissa grupper, exempelvis donatorer?"
+L["PCR_PLUG_NOTIFYMSG"]		= "Påminn spelare hur man använder föremålsmenyn i början av varje runda"
 
-L["PCR_EDITOR_MSG_ERROR"]	= "Your changes hasn't been saved due to Errors.\nPlease check on your server console!"
-L["PCR_EDITOR_MSG_SUCC"]		= "Your changes and Custom Prop data has been saved and updated successfully." --Thanks galaxio! x)
+L["PCR_EDITOR_MSG_ERROR"]	= "Dina ändringar har inte sparats på grund av fel.\nVänligen kolla in serverkonsolen!"
+L["PCR_EDITOR_MSG_SUCC"]		= "Dina ändringar samt anpassade föremålsdata har sparats och updaterats." --Thanks galaxio! x)
 
-L["PHZ_generic_title"]		= "Custom Prop Inclusion Editor"
-L["PHZ_generic_helptext"]	= [[[How To Use:
-[LEFT PANEL]
-← Choose a game content
-← Click on icons to add models to the right
-← Right Click to open context menu
+L["PHZ_generic_title"]		= "Redigerare för inkludering av anpassade föremål"
+L["PHZ_generic_helptext"]	= [[[Användning:
+[VÄNSTER PANEL]
+← Välj spelinnehåll
+← Klicka på ikonerna för att lägga till föremål till höger
+← Högerklicka för att öppna kontextmenyn
 
-[RIGHT PANEL]
-→ Click to 'mark' any props before deleting
-→ Hit 'Remove Selected' to Remove Models
-→ Hit 'Apply Selection' to Make changes
+[HÖGER PANEL]
+→ Klicka för att 'markera' föremål för radering
+→ Tryck 'Ta bort valda' för att ta bort modeller
+→ Tryck 'Tillämpa markering' för att göra ändringar
 
 [INFO]
-- You can only add models up to 2048 entries.
-- All maps props will be included automatically, so you don't have to.
-- Pressing [Close] button will cancel the operation.
-- Not all models will have a valid VPhysics.
-- Not all Players (inc. Your Server) will have custom models. If they don't exists they will removed after Applying selections.
-- Your Server content might be different from you. If you see "<game> [Not Mounted]" on dropdown menu, it means that you haven't mounted/installed the game.
-- Addon folder browsing isn't implemented yet so You'll have to use 'All Contents' instead.
+- Du kan lägga till max 2048 modeller.
+- Alla föremål som tillhör kartan läggs till automatiskt, så du inte behöver göra det själv.
+- Avbryt handlingen genom att trycka [Stäng].
+- Inte alla modeller kommer att ha en giltig 'VPhysics'.
+- Inte alla spelare (inkl. servern) kommer att ha anpassade modeller. Om de inte finns, kommer de att tas bort efter markering har tillämpats.
+- Serverns innhehåll kan skilja från ditt. Om du ser "<spel> [Inte fäst]" i rullgardinsmenyn, betyder det att du inte har fäst/installerat spelet.
+- Bläddring av tilläggsmappen har inte implementerats än, så du behöver använda 'Allt innehåll' tills vidare.
 ]]
-L["PHZ_generic_mdlinfo"] = [[Model Info:
+L["PHZ_generic_mdlinfo"] = [[Modellinfo:
 %s
-Has Physics: %s]]
-L["PHZ_generic_mdlinfoStart"] = "(Select model first!)"
+Har fysik: %s]]
+L["PHZ_generic_mdlinfoStart"] = "(Välj modell först!)"
 
-L["PHZ_generic_no_ragdoll"]	= "No: Ragdoll"
-L["PHZ_generic_titlelabel"]	= "%s Preview :"
+L["PHZ_generic_no_ragdoll"]	= "Nej: Ragdoll"
+L["PHZ_generic_titlelabel"]	= "%s förhandsvisning :"
 
-L["PHZ_mount_game_sel"]		= "Select mounted game (Default: Garry's Mod)"
-L["PHZ_input_placeholder1"]	= "Folder to Search: <folder name> or '*', blank for all folders."
-L["PHZ_input_placeholder2"]  = "Addon to Search: <name> or '*', blank for all folders."
-L["PHZ_msg_warn_close"]		= "Are you sure you want to close this window? Any unsaved edits will be lost!"
-L["PHZ_msg_commit"] 			= "Are you sure you want to commit changes?"
-L["PHZ_msg_cant_empty"]		= "Prop List cannot be empty!"
-L["PHZ_msg_removesel"] 		= [[Remove selected props in the list. Legends:
-Red = Marked Selections
-Yellow: Prop don't exists in server AND should be Removed.]]
-L["PHZ_msg_warn_mdlinlist"]  = "WARNING: This Model is already in the list!"
-L["PHZ_msg_invalid_mdl"] 	= "Reason: This is invalid model"
-L["PHZ_apply_select"] 		= "Apply & Save Selections"
-L["PHZ_menu_copy"] 		= "Copy Model"
-L["PHZ_menu_refresh"] 	= "Refresh Model"
-L["PHZ_tooltip_removesel"]	= "Remove Selected"
-L["PHZ_tooltip_wasmarked"] = [[This prop was marked because it does't exist in the server.
-If you close this editor, this will automatically removed.]]
+L["PHZ_mount_game_sel"]		= "Välj fäst spel (Standard: Garry's Mod)"
+L["PHZ_input_placeholder1"]	= "Mapp att söka: <mappnamn> eller '*', lämna blankt för alla mappar."
+L["PHZ_input_placeholder2"]  = "Tillägg att söka: <namn> eller '*', lämna blankt för alla mappar."
+L["PHZ_msg_warn_close"]		= "Är du säker att du vill stänga detta fönster? Alla osparade ändringar kommer förloras!"
+L["PHZ_msg_commit"] 			= "Är du säker att du vill tillämpa ändringarna?"
+L["PHZ_msg_cant_empty"]		= "Föremålslistan kan inte vara tom!"
+L["PHZ_msg_removesel"] 		= [[Ta bort valda föremål i listan. Teckenförklaring:
+Röd = Markeringar
+Gul: Föremål finns inte på servern OCH bör tas bort.]]
+L["PHZ_msg_warn_mdlinlist"]  = "VARNING: Denna modell finns redan i listan!"
+L["PHZ_msg_invalid_mdl"] 	= "Anledning: Detta är en ogiltig modell"
+L["PHZ_apply_select"] 		= "Tillämpa & spara valda"
+L["PHZ_menu_copy"] 		= "Kopiera modell"
+L["PHZ_menu_refresh"] 	= "Uppdatera modell"
+L["PHZ_tooltip_removesel"]	= "Ta bort valda"
+L["PHZ_tooltip_wasmarked"] = [[Detta föremål markerades eftersom den inte finns på servern.
+Om du stänger denna redigerare, kommer föremålet automatiskt tas bort.]]
 
-L["PHZ_pcr_fb_allcontent"] = "All Contents (Not All Players/Server will have same contents as you)"
-L["PHZ_pcr_fb_notmounted"] = "%s [Not Mounted]"
+L["PHZ_pcr_fb_allcontent"] = "Allt innehåll (Inte alla spelare/server kommer att ha samma innehåll som du)"
+L["PHZ_pcr_fb_notmounted"] = "%s [Inte fäst]"
 
 -- Revision 25-27/08/2022
-L["PHX_ADMIN_ACCESS_ONLY"]		= "Access Denied: only Admins can do that, %s !"
-L["PHX_PROP_TOO_THIN"]           = "Cannot Replicate: Prop is too thin!"
-L["PHX_PROP_IS_BANNED"]			= "The prop you're trying to use is banned from server!"
-L["PHX_SPECT_JOINGAME"]			= "To join the game, Press [F2] then select a team to join."
-L["PHX_TEAM_IS_FULL"]			= "That team is full!"
-L["FORCE_JOIN_TEAM_IS_DISABLED"]	= "Even-out Team Balance is disabled (Team Shuffle/Rotation is Enabled)"
+L["PHX_ADMIN_ACCESS_ONLY"]		= "Åtkomst nekad: endast administratörer kan göra detta, %s !"
+L["PHX_PROP_TOO_THIN"]           = "Kan inte imitera: föremålet är för tunn!"
+L["PHX_PROP_IS_BANNED"]			= "Föremålet som du försöker använda är bannlyst från servern!"
+L["PHX_SPECT_JOINGAME"]			= "För att gå med i spelet, tryck [F2] och välj ett lag."
+L["PHX_TEAM_IS_FULL"]			= "Det laget är fullt!"
+L["FORCE_JOIN_TEAM_IS_DISABLED"]	= "Lagutjämning är avstängt (lagrotation är på)"
 
-L["PHX_TM_MNBAR_OPTIONS"]		= "Options"
-L["PHX_TM_MNBAR_SAVEFAV"]		= "Save Favorites"
-L["PHX_TM_MNBAR_LOADFAV"]		= "Reload Favorites"
-L["PHX_TM_MNBAR_SETTINGS"]		= "Others"
-L["PHX_TM_MNBAR_RESET"]			= "Reset Favorites"
+L["PHX_TM_MNBAR_OPTIONS"]		= "Inställningar"
+L["PHX_TM_MNBAR_SAVEFAV"]		= "Spara favoriter"
+L["PHX_TM_MNBAR_LOADFAV"]		= "Ladda om favoriter"
+L["PHX_TM_MNBAR_SETTINGS"]		= "Andra"
+L["PHX_TM_MNBAR_RESET"]			= "Återställ favoriter"
 
-L["PHX_TM_WARN_CLEARFAV"]		= "WARNING: This will CLEAR ALL your previously saved Favorite Taunts. Are you sure you want to continue?"
+L["PHX_TM_WARN_CLEARFAV"]		= "VARNING: Detta kommer RENSA ALLA dina sparade favorithån. Är du säker på att du vill fortsätta?"
 
-L["PHXM_BANNED_MODELS"]			= "Dis/Allow the use of Restricted Models (Banned Models). This does not include from Prohibitted Models (They're always deleted)."
-L["PHXM_ADMIN_ALLOWARMOR"]       = "Allow Armor Addition for team Hunters and Props"
-L["PHXM_ADMIN_ALLOW3P"]          = "Allow thirdperson mode for Hunters"
-L["PHXM_ADMIN_ALLOW3P_SVDESIRED"]= "Allow thirdperson mode to use Server's Desired Camera position (Disallow player custom position)"
-L["PHXM_ADMIN_ALLOW3P_DIST"]     = "Thirdperson: Desired Camera Distance"
-L["PHXM_ADMIN_ALLOW3P_RIGHT"]    = "Thirdperson: Desired Camera Right Position"
-L["PHXM_ADMIN_ALLOW3P_UP"]     	= "Thirdperson: Desired Camera Up Position"
-L["PHXM_ADMIN_JUMPPOWER_H"]		= "Additional Jump Power multiplier for Hunters"
-L["PHXM_ADMIN_MDLCOLOR_PROP"]	= "Enable Player Color for team Props (Require Hunter Custom Models to be enabled)"
-L["PHXM_ADMIN_MDLCOLOR_HUNTER"]	= "Enable Player Color for team Hunters (Require Hunter Custom Models to be enabled)"
-L["PHXM_ADMIN_PITCH_ROTATION"]	= "[Experimental] Allow to use pitch rotation for props. This may be buggy."
-L["PHXM_ADMIN_FALLDMG"]			= "Enable Fall Damage (Applies on All Teams)"
-L["PHXM_ADMIN_FALLDMG_REAL"]		= "Enable 'Realistic' Fall Damage"
-L["PHXM_INFORM_TO_JOIN"]			= "Inform Unassigned/Spectators with static text advice to join the game."
-L["PHXM_ADMIN_PROPOFFSET"]		= "Substract/Add Prop View Offset Height using multiplier. Min: 0.6, Max: 1.2. Default: 0.8."
-L["PHXM_ADMIN_REPL_MUST_STAND"]	= "[Experimental] Restrict props replication only when they're standing. Disable this to allow replicating when ducking or jumping."
+L["PHXM_BANNED_MODELS"]			= "Tillåt användning av begränsade modeller (bannlysta modeller). Detta inkluderar inte förbjudna modeller (dem raderas alltid)."
+L["PHXM_ADMIN_ALLOWARMOR"]       = "Tillåt tillägg av pansar för jägar- och föremålslag"
+L["PHXM_ADMIN_ALLOW3P"]          = "Tillåt tredjepersonsvy för jägare"
+L["PHXM_ADMIN_ALLOW3P_SVDESIRED"]= "Använd serverns önskade kameraposition för tredjepersonsvy (förbjud spelares anpassade kamerapositioner)"
+L["PHXM_ADMIN_ALLOW3P_DIST"]     = "Tredjepersonsvy: Önskad kameraavstånd"
+L["PHXM_ADMIN_ALLOW3P_RIGHT"]    = "Tredjepersonsvy: Önskad kameraförskjutning mot höger"
+L["PHXM_ADMIN_ALLOW3P_UP"]     	= "Tredjepersonsvy: Önskad kamerahöjd"
+L["PHXM_ADMIN_JUMPPOWER_H"]		= "Ytterligare hoppkraft för jägare"
+L["PHXM_ADMIN_MDLCOLOR_PROP"]	= "Slå på färgade spelare för föremålslaget (Kräver att 'anpassade modeller för jägare' är på)"
+L["PHXM_ADMIN_MDLCOLOR_HUNTER"]	= "Slå på färgade spelare för jägarlaget (Kräver att 'anpassade modeller för jägare' är på)"
+L["PHXM_ADMIN_PITCH_ROTATION"]	= "[Experimentellt] Tillåt rotation runt tväraxeln för föremål. Detta kan vara ostabilt."
+L["PHXM_ADMIN_FALLDMG"]			= "Slå på fallskada (gäller alla lag)"
+L["PHXM_ADMIN_FALLDMG_REAL"]		= "Slå på 'verklighetstrogen' fallskada"
+L["PHXM_INFORM_TO_JOIN"]			= "Informera med en statisk text att otilldelade/åskådare ska gå med i spelet."
+L["PHXM_ADMIN_PROPOFFSET"]		= "Höjdförskjutningmultiplikator för föremåls sikt. Min: 0.6, Max: 1.2. Standard: 0.8."
+L["PHXM_ADMIN_REPL_MUST_STAND"]	= "[Experimentellt] Begränsa imitation av föremål endast när dem står upp. Stäng av detta för att tillåta imitation medan man duckar eller hoppar."
 
-L["PHXM_DROP_VBS_DISABLE"]       = "Disable Verbose"
-L["PHXM_DROP_VBS_ENABLE"]        = "Enable Verbose"
-L["PHXM_DROP_MDL_INCLUDEALL"]    = "Include Everything ( %d )"
-L["PHXM_DROP_MDL_CUSTOMLIST"]    = "Seperate/Custom List ( %d )"
-L["PHXM_DROP_MDLTYPE_PROP"]      = "Physics Only ( %d )"
-L["PHXM_DROP_MDLTYPE_PROPDYN"]   = "Physics & Dynamic Props ( %d )"
-L["PHXM_DROP_MDLTYPE_ANYENTS"]   = "Any Compatible Entities ( %d )"
-L["PHXM_DROP_MDLTYPE_CUSTOM"]    = "Custom Entities ( %d )"
-L["PHXM_DROP_RESPAWNBLIND_BOTH"] = "Both Teams"
+L["PHXM_DROP_VBS_DISABLE"]       = "Stäng av detaljrikt"
+L["PHXM_DROP_VBS_ENABLE"]        = "Slå på detaljrikt"
+L["PHXM_DROP_MDL_INCLUDEALL"]    = "Inkludera allt ( %d )"
+L["PHXM_DROP_MDL_CUSTOMLIST"]    = "Separat/Anpassas lista ( %d )"
+L["PHXM_DROP_MDLTYPE_PROP"]      = "Endast fysik ( %d )"
+L["PHXM_DROP_MDLTYPE_PROPDYN"]   = "Fysik & dynamiska föremål ( %d )"
+L["PHXM_DROP_MDLTYPE_ANYENTS"]   = "Valfria kompatibla enheter ( %d )"
+L["PHXM_DROP_MDLTYPE_CUSTOM"]    = "Anpassade enheter ( %d )"
+L["PHXM_DROP_RESPAWNBLIND_BOTH"] = "Båda lag"
 
-L["PHXM_TAB_ADMINGROUPS"]        = "Group & Access Option"
-L["PHXM_TAB_PHEPLUS"]			= "Enhanced Plus Settings"
+L["PHXM_TAB_ADMINGROUPS"]        = "grupp- & åtkomstinställningar"
+L["PHXM_TAB_PHEPLUS"]			= "Enhanced Plus-inställningnar"
 
-L["PHXM_ADMIN_ACCESS_GROUP"]     = "Select groups to allow access PH:X Admin Settings, Enhanced Plus & Plugin Settings page."
-L["PHXM_ADMIN_ACCESS_GROUP_HINT"] = "Please note that \"superadmins\" cannot be revoked."
-L["PHXM_ADMIN_ACCESS_GROUP_NOULX"] = "Error: ULib & ULX is not installed on your server."
-L["PHXM_ADMIN_ACCESS_NOREVOKE"]  = " (Cannot be revoked)"
-L["PHXM_ADMIN_GROUP_WHOCANACC"]	= "Select groups to allow access [Admin Settings]."
-L["PHXM_ADMIN_GROUP_MUTEABLE"]	= "Select groups to disallow Voice Mute in [Player Muting]. (User is always mute-able)."
+L["PHXM_ADMIN_ACCESS_GROUP"]     = "Välj grupper som får åtkomst till administrativa PH:X inställningar, Enhanced Plus & Plugin-inställningssidan."
+L["PHXM_ADMIN_ACCESS_GROUP_HINT"] = "Vänligen notera att \"superadmins\" inte kan upphävas."
+L["PHXM_ADMIN_ACCESS_GROUP_NOULX"] = "Fel: ULib & ULX är inte installerade på din server."
+L["PHXM_ADMIN_ACCESS_NOREVOKE"]  = " (Kan inte upphävas)"
+L["PHXM_ADMIN_GROUP_WHOCANACC"]	= "Välj grupper som får åtkomst till [Admin Settings]."
+L["PHXM_ADMIN_GROUP_MUTEABLE"]	= "Välj grupper imuna mot att tystas ner i [Tysta Spelare]. (Användare kan alltid tystas)."
 
-L["PHXM_ADMIN_ACCESS_CHATINFO"]  = "There was a configuration update for Prop Hunt Menu window. Reopening..."
-L["PHXM_ADMIN_ACCMSG_BODY"]      = "Do you want to save selection and proceed the changes?\nPlease note that any previous groups you revoked will no longer have the access.\nThis will restart the Prop Hunt Menu if they're still opened."
-L["PHXM_ADMIN_ACCMSG_TITLE"]     = "Apply Group Access"
-L["PHXM_ADMIN_ACCCFG_SUCC"]      = "Group Access data successfully saved."
-L["PHXM_ADMIN_ACCCFG_FAIL"]      = "There was an error saving Group Access data. Check your server console!"
-L["PHXM_ADMIN_MUTCFG_SUCC"]      = "Mutedable Group Access data successfully saved."
-L["PHXM_ADMIN_MUTCFG_FAIL"]      = "There was an error saving Muteable Group data. Check your server console!"
+L["PHXM_ADMIN_ACCESS_CHATINFO"]  = "Det var en konfigurationsuppdatering för Prop Hunt-menyn. Öppnar igen..."
+L["PHXM_ADMIN_ACCMSG_BODY"]      = "Vill du spara markeringen och fortsätta med ändringarna?\nVänligen notera att tidigare grupper som du upphävde inte lägre kommer att ha åtkomst.\nDetta startar om Prop Hunt-menyn om den är öppen.."
+L["PHXM_ADMIN_ACCMSG_TITLE"]     = "Tillämpa gruppåtkomst"
+L["PHXM_ADMIN_ACCCFG_SUCC"]      = "Gruppåtkomstdata sparad."
+L["PHXM_ADMIN_ACCCFG_FAIL"]      = "Det var ett fel vid sparande av gruppåtkomstdata. Kolla in serverkonsolen!"
+L["PHXM_ADMIN_MUTCFG_SUCC"]      = "Data för tystbara grupper sparat."
+L["PHXM_ADMIN_MUTCFG_FAIL"]      = "Det var ett fel vid sparande av data för tystbara grupper. Kolla in serverkonsolen!"
 
-L["PHXM_ADMIN_ACCESS_APPLY"]     = "Apply Selected Groups"
+L["PHXM_ADMIN_ACCESS_APPLY"]     = "Tillämpa valda grupper"
 
 -- PHE/Plus
-L["PHXM_ADMIN_PLUSSETTING"]		= "Plus+ Settings"
-L["PHXM_PLUSSETTING_HINT"]		= "Configure Team Balance or any other additional settings."
-L["PHXM_HEADER_UNSTUCK"]			= "Unstuck Settings"
-L["PHXM_HEADER_TEAMSETTING"]		= "More Team Options & Settings"
+L["PHXM_ADMIN_PLUSSETTING"]		= "Plus+ inställningar"
+L["PHXM_PLUSSETTING_HINT"]		= "Konfigurera lagutjämning eller andra diverse inställingar."
+L["PHXM_HEADER_UNSTUCK"]			= "Frigivningsinställningar"
+L["PHXM_HEADER_TEAMSETTING"]		= "Fler laginställningar"
 
-L["LIST_PLAYER"]					= "Players"
-L["LIST_FORCEDASPROP"]			= "Forced As Prop?"
-L["LIST_MARKEDASPROP"]			= "Marked to be forced as Prop"
-L["LIST_NOHUNTERS"]				= "No Hunters are currently playing."
+L["LIST_PLAYER"]					= "Spelare"
+L["LIST_FORCEDASPROP"]			= "Betvinga till föremål?"
+L["LIST_MARKEDASPROP"]			= "Markerad att bli betvingad till föremål"
+L["LIST_NOHUNTERS"]				= "Inga jägare spelar för tillfället."
 
-L["PHXM_PLUS_MSG_NO_HUNTERS"]	= "There are no hunters to reset."
+L["PHXM_PLUS_MSG_NO_HUNTERS"]	= "Det finns inga jägare att återställa."
 
-L["PHXM_PLUS_BTNRESET"]			= "Clear Selections (and Reset All Forced)"
-L["PHXM_PLUS_LISTTIPS"]			= "Tips: Double Click to toggle Force Player as Prop."
+L["PHXM_PLUS_BTNRESET"]			= "Rensa markeringar (och återställ alla betvingelser)"
+L["PHXM_PLUS_LISTTIPS"]			= "Tips: Dubbelklicka för att växla betvingelse till föremål för spelare."
 
-L["PHXM_ADMIN_ENABLEUNSTUCK"]		= "Toggle Enable/Disable Built-in unstuck feature. If you use an addon, disable this."
-L["PHXM_ADMIN_NOTPUNSTUCKINROUND"]	= "Disable last-resort unstuck teleportations to spawnpoints outside of the hiding phase" --ph_disabletpunstuckinround
-L["PHXM_ADMIN_UNSTUCK_WAITTIME"]		= "How much seconds must pass between each unstuck attempt" --ph_unstuck_waittime
-L["PHXM_ADMIN_TEAMBAL_ORIG"] 		= "Use PH:X's original auto-balancing (disables all following team-related options below)" --ph_originalteambalance
-L["PHXM_ADMIN_TEAMBAL_UNCHECK"] 		= "Uncheck the previous checkbox to access the advanced team balance options." --ph_originalteambalance_uncheck [UNUSED]
-L["PHXM_ADMIN_FORCESPECTOPLAY"]		= "Force spectators to play by including them when balancing teams" --ph_forcespectatorstoplay
-L["PHXM_ADMIN_NO_H_CONSECUTIVE"]		= "Prevent players from being a Hunter twice in a row (only works in shuffle mode)" --ph_preventconsecutivehunting
-L["PHXM_ADMIN_HUNTER_COUNT"] 		= "Hunter count (0 = automatic)" --ph_huntercount
-L["PHXM_ADMIN_ROTATETEAM"] 			= "Disable shuffle mode and rotate players instead" --ph_rotateteams
-L["PHXM_ADMIN_RESET_ROTTEAM"] 		= "Reset rotations" --ResetRotateTeams
-L["PHXM_ADMIN_RESET_ROTTEAM_WARN"]	= "Restart rotations from the beginning (in case you've started them, stopped, then started again and the current rotation does not satisfy you):" --ResetRotateTeams_warning
-L["PHXM_ADMIN_RESET_MSG"]			= "Rotation Team has been Reset!"
-L["PHXM_ADMIN_FORCEH2P_WARN"]		= "Force a Hunter to be a Prop next time (only works in shuffle mode):" --ForceHunterAsProp_warning
-L["PHXM_ADMIN_FORCEH2P_RANDONLY"]	= "This action is only available in shuffle mode." --ForceHunterAsProp_randomonly
-L["PHXM_ADMIN_FORCEH2P_NOHUNT"]		= "[NO HUNTERS]" --ForceHunterAsProp_nohunters [UNUSED]
-L["PHXM_ADMIN_FORCEH2P_NOHUNTMSG"] 	= "There are no hunters goddammit, it's written on the button!" --ForceHunterAsProp_nohuntersmsg [UNUSED]
+L["PHXM_ADMIN_ENABLEUNSTUCK"]		= "Växla inbyggd frigivningsfunktion. Om du använder ett tillägg, stäng av denna funktion."
+L["PHXM_ADMIN_NOTPUNSTUCKINROUND"]	= "Stäng av frigivningsteleportering som sista utväg till skapningspunkter utanför gömningsfasen" --ph_disabletpunstuckinround
+L["PHXM_ADMIN_UNSTUCK_WAITTIME"]		= "Hur många sekunder måste passera mellan varje frigivningsförsök" --ph_unstuck_waittime
+L["PHXM_ADMIN_TEAMBAL_ORIG"] 		= "Använd PH:Xs urspungliga lagutjämning (stänger av alla lagrelaterade inställningar nedan)" --ph_originalteambalance
+L["PHXM_ADMIN_TEAMBAL_UNCHECK"] 		= "Avmarkera den förra markeringsrutan för att komma åt avancerade lagutjämningsinställningar." --ph_originalteambalance_uncheck [UNUSED]
+L["PHXM_ADMIN_FORCESPECTOPLAY"]		= "Tvinga åskådare att spela genom att inkludera dem i lagutjämningen" --ph_forcespectatorstoplay
+L["PHXM_ADMIN_NO_H_CONSECUTIVE"]		= "Förhindra spelare att bli jägare två gånger i rad (fungerar endast i blandingsläge)" --ph_preventconsecutivehunting
+L["PHXM_ADMIN_HUNTER_COUNT"] 		= "Antal jägare (0 = automatisk)" --ph_huntercount
+L["PHXM_ADMIN_ROTATETEAM"] 			= "Stäng av blandningsläge och rotera spelare istället" --ph_rotateteams
+L["PHXM_ADMIN_RESET_ROTTEAM"] 		= "Återställ rotationer" --ResetRotateTeams
+L["PHXM_ADMIN_RESET_ROTTEAM_WARN"]	= "Starta rotationer from början (i fall du har börjat dem, stannat, och börjat igen och den nuvarande rotationen inte är tillfredsställande):" --ResetRotateTeams_warning
+L["PHXM_ADMIN_RESET_MSG"]			= "Lagrotationer har återställts!"
+L["PHXM_ADMIN_FORCEH2P_WARN"]		= "Tvinga en jägare att vara ett föremål nästa gång (fungerar endast i blandingsläge):" --ForceHunterAsProp_warning
+L["PHXM_ADMIN_FORCEH2P_RANDONLY"]	= "Denna handling är endast tillgänglig i blandningsläge." --ForceHunterAsProp_randomonly
+L["PHXM_ADMIN_FORCEH2P_NOHUNT"]		= "[INGA JÄGARE]" --ForceHunterAsProp_nohunters [UNUSED]
+L["PHXM_ADMIN_FORCEH2P_NOHUNTMSG"] 	= "Det finns inga jägare för fan, läs knappen!" --ForceHunterAsProp_nohuntersmsg [UNUSED]
 
-L["FORCEH2P_WILL_BE"]				= "%s will be a Prop next round."
-L["FORCEH2P_IS_CANCELED"]			= "%s won't be a Prop next round."
-L["FORCEH2P_IS_RESET"]				= "All Hunters won't be Forced as a Prop next round."
-L["FORCEH2P_PLAYER_NOT_FOUND"]		= "Selected player was not found, probably they were disconnected."
-L["PHX_ROTATE_TEAM_RESET"]			= "Rotation Team Offset has been reset."
-L["FORCEH2P_ALREADY"]				= "%s has already been defined as a Prop for next round." -- [UNUSED]
+L["FORCEH2P_WILL_BE"]				= "%s kommer vara ett föremål nästa runda."
+L["FORCEH2P_IS_CANCELED"]			= "%s kommer inte vara ett föremål nästa runda."
+L["FORCEH2P_IS_RESET"]				= "Inga jägare tvingas vara föremål nästa runda."
+L["FORCEH2P_PLAYER_NOT_FOUND"]		= "Vald spelare hittades inte, dem har troligen kopplat från servern."
+L["PHX_ROTATE_TEAM_RESET"]			= "Lagrotationsförsjkutning har återställts."
+L["FORCEH2P_ALREADY"]				= "%s betvingas redan vara föremål nästa runda." -- [UNUSED]
 
-L["UNSTUCK_YOURE_UNSTUCK"]			= "You should be unstuck!"
-L["UNSTUCK_BAD_SPAWNPOINT"]			= "Error: The closest spawnpoint might get you stuck again. If it does, try to unstuck again."
+L["UNSTUCK_YOURE_UNSTUCK"]			= "Du borde vara fri!"
+L["UNSTUCK_BAD_SPAWNPOINT"]			= "Fel: Närmaste skapningspunkt kan göra fast dig igen. Om det händer, försök frigivningsfunktionen igen."
 L["UNSTUCK_RESCUE_SPAWNPOINT"]		= "This spawnpoint is extremely close, so you might still be stuck. Try unstucking again if you are."
 L["UNSTUCK_NO_SPAWNPOINTS"]			= "For unknown reasons, no spawnpoint could be found. As a backup strategy, you will be teleported to (0, 0, 0). There is a very high chance that you will be stuck, so if you are please try unstucking again."
 L["UNSTUCK_PLEASE_WAIT"]				= "Please wait %d seconds between each unstuck attempt."
