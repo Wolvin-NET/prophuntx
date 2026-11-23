@@ -792,66 +792,66 @@ L["PHX_ROTATE_TEAM_RESET"]			= "Lagrotationsförsjkutning har återställts."
 L["FORCEH2P_ALREADY"]				= "%s betvingas redan vara föremål nästa runda." -- [UNUSED]
 
 L["UNSTUCK_YOURE_UNSTUCK"]			= "Du borde vara fri!"
-L["UNSTUCK_BAD_SPAWNPOINT"]			= "Fel: Närmaste skapningspunkt kan göra fast dig igen. Om det händer, försök frigivningsfunktionen igen."
-L["UNSTUCK_RESCUE_SPAWNPOINT"]		= "This spawnpoint is extremely close, so you might still be stuck. Try unstucking again if you are."
-L["UNSTUCK_NO_SPAWNPOINTS"]			= "For unknown reasons, no spawnpoint could be found. As a backup strategy, you will be teleported to (0, 0, 0). There is a very high chance that you will be stuck, so if you are please try unstucking again."
-L["UNSTUCK_PLEASE_WAIT"]				= "Please wait %d seconds between each unstuck attempt."
-L["UNSTUCK_NOT_ON_GROUND"] 			= "Not on ground, checking..."
-L["UNSTUCK_NOT_STUCK_JITTER"]		= "You're not stuck. If you really are, wait until your prop no longer moves/jitters (try pressing ALT) then try again."
-L["UNSTUCK_NOT_STUCK_TOOBAD"]		= "You're not stuck. If you really are, sorry, you'll have to wait until the end of the round."
-L["UNSTUCK_CANNOT_FIND_SPOT"]		= "Cannot find a place to move you to, teleporting to closest spawnpoint."
-L["UNSTUCK_SPAWNPOINTS_DISABLED"]	= "You were going to be teleported to a close spawnpoint, but this server disallows it outside of the hiding/hunter blind period. Sorry!"
+L["UNSTUCK_BAD_SPAWNPOINT"]			= "Fel: Närmaste skapningspunkt kan göra fast dig igen. Om det händer, testa frigivningsfunktionen igen."
+L["UNSTUCK_RESCUE_SPAWNPOINT"]		= "Denna skapningspunkt är extremt nära, så du kan fortfarande vara fast. Testa frigivningsfunktionen igen om du är det."
+L["UNSTUCK_NO_SPAWNPOINTS"]			= "För okända anledningar kunde ingen skapningspunkt hittas. Som en reservstrategi teleporteras du ill (0, 0, 0). Det finns en mycket hög sannolikhet att du kommer fastna, testa frigivningsfunktionen igen om så är fallet."
+L["UNSTUCK_PLEASE_WAIT"]				= "Vänligen vänta %d sekunder mellan varja frigivningsförsök."
+L["UNSTUCK_NOT_ON_GROUND"] 			= "Inte på marken, kontrollerar..."
+L["UNSTUCK_NOT_STUCK_JITTER"]		= "Du är inte fast. Om du verkligen är det, vänta tills ditt föremål slutar vricka/röra på sig (försök trycka ALT) sedan prova igen."
+L["UNSTUCK_NOT_STUCK_TOOBAD"]		= "Du är inte fast. Om du verkligen är det, får du tyvärr vänta till rundans slut."
+L["UNSTUCK_CANNOT_FIND_SPOT"]		= "Kan inte hitta ett ställe att flytta dig till, teleporterar till närmsta skapningspunkt."
+L["UNSTUCK_SPAWNPOINTS_DISABLED"]	= "Du var på väg att teleporteras till en nära skapningspunkt, men denna server förbjuder det utanför gömningsfasen. Förlåt!"
 -- End of PHE/Plus
 
-L["MISC_SEL_APPLY"]  = "Apply Selections"
-L["MISC_RESET_SEL"]  = "Reset Selections"
-L["MISC_RESET"]      = "Reset"
-L["MISC_CANCEL"]     = "Cancel"
-L["MISC_SEL_ALL"]    = "Select All"
-L["MISC_SEL_NONE"]   = "Select None"
+L["MISC_SEL_APPLY"]  = "Tillämpa markeringar"
+L["MISC_RESET_SEL"]  = "Återställ markeringar"
+L["MISC_RESET"]      = "Återställ"
+L["MISC_CANCEL"]     = "Avbryt"
+L["MISC_SEL_ALL"]    = "Markera alla"
+L["MISC_SEL_NONE"]   = "Avmarkera alla"
 
-L["PHXM_CL_THIRDPERSON"]     = "Key for Toggling thirdperson mode"
-L["PHXM_CL_UNSTUCK"]			= "Key for Unstuck"
-L["CL_THIRDPERSON_ENABLED"]  = "Thirdperson Enabled"
-L["CL_THIRDPERSON_DISABLED"] = "Thirdperson Disabled"
+L["PHXM_CL_THIRDPERSON"]     = "Tangent för att växla mellan första- och tredjepersonsvy"
+L["PHXM_CL_UNSTUCK"]			= "Tangent för frigivningsfunktion"
+L["CL_THIRDPERSON_ENABLED"]  = "Tredjepersonsvy på"
+L["CL_THIRDPERSON_DISABLED"] = "Tredjepersonsvy av"
 
-L["PHX_TP_ADJUSTVIEW_BTN"]	= "Adjust Thirdperson View" --Button, as well as window title.
-L["PHX_TPS_ADJ_TITLE"]		= "Thirdperson Warning"
-L["PHX_TPS_ADJ_SVDESIRED"]	= "Thirdperson Customization disabled: Using Server's desired position."
-L["PHX_TPS_ADJ_3PDIS"]		= "Thirdperson mode is disabled."
-L["PHX_TPS_ADJ_BLIND"]		= "You're blinded. Try again later."
-L["PHX_TPS_ADJ_NEEDALIVE"]	= "You need to be on Alive Hunter Team to do this."
+L["PHX_TP_ADJUSTVIEW_BTN"]	= "Justera tredjepersonsvy" --Button, as well as window title.
+L["PHX_TPS_ADJ_TITLE"]		= "Varning tredjepersonsvy"
+L["PHX_TPS_ADJ_SVDESIRED"]	= "Anpassning av tredjepersonsvy avstängt: Använder serverns önskade positionering."
+L["PHX_TPS_ADJ_3PDIS"]		= "Tredjepersonsvy avstängt."
+L["PHX_TPS_ADJ_BLIND"]		= "Du är blind. Försök igen senare."
+L["PHX_TPS_ADJ_NEEDALIVE"]	= "Du behöver vara levande på jägarlaget för att göra detta."
 
-L["ANG_AXIS_DIST"]	= "Distance" -- or Forward
-L["ANG_AXIS_RIGHT"]	= "Right"
-L["ANG_AXIS_UP"]		= "Up"
-L["VEC_POS_LEFT"]	= "Left" --X
-L["VEC_POS_FRONT"]	= "Front" --Y?
-L["VEC_POS_TOP"]		= "Top"  --Z
+L["ANG_AXIS_DIST"]	= "Avstånd" -- or Forward
+L["ANG_AXIS_RIGHT"]	= "Höger"
+L["ANG_AXIS_UP"]		= "Upp"
+L["VEC_POS_LEFT"]	= "Vänster" --X
+L["VEC_POS_FRONT"]	= "Fram" --Y?
+L["VEC_POS_TOP"]		= "Topp"  --Z
 
 -- Key Hints
-L["KEYHINT_HUNTER3P"] 	= "Hunter Thirdperson"
-L["KEYHINT_SHOOT"]		= "Fire Weapon"
-L["KEYHINT_SEC"]			= "Fire Secondary"
-L["KEYHINT_PICKUP"]		= "Pickup Object/Interact"
+L["KEYHINT_HUNTER3P"] 	= "Tredjepersonsvy för jägare"
+L["KEYHINT_SHOOT"]		= "Avfyra vapen"
+L["KEYHINT_SEC"]			= "Avfyra sekundär"
+L["KEYHINT_PICKUP"]		= "Plocka upp objekt/Interagera"
 
-L["KEYHINT_LMB"]			= "Replicate Prop"
-L["KEYHINT_RMB"]			= "Prop Taunt/Special Ability"
-L["KEYHINT_RANDTAUNT"] 	= "Random Taunt"
-L["KEYHINT_TAUNTMENU"] 	= "Toggle Taunt Menu"
-L["KEYHINT_ROTATION"] 	= "Toggle Rotation Lock"
-L["KEYHINT_PROPMENU"] 	= "Toggle Prop Menu"
-L["KEYHINT_FREEZEAIR"] 	= "Toggle Prop Freeze"
-L["KEYHINT_SPAWNDECOY"] 	= "Spawn Decoy"
-L["KEYHINT_UNSTUCK"]		= "Unstuck Key"
+L["KEYHINT_LMB"]			= "Imitera föremål"
+L["KEYHINT_RMB"]			= "Föremålshån/Särskild förmåga"
+L["KEYHINT_RANDTAUNT"] 	= "Slumpmässigt hån"
+L["KEYHINT_TAUNTMENU"] 	= "Växla hånmeny"
+L["KEYHINT_ROTATION"] 	= "Växla rotationslås"
+L["KEYHINT_PROPMENU"] 	= "Växla föremålsmeny"
+L["KEYHINT_FREEZEAIR"] 	= "Växla föremålsfrysningsfunktion"
+L["KEYHINT_SPAWNDECOY"] 	= "Skapa lockfågel"
+L["KEYHINT_UNSTUCK"]		= "Tangent för frigivninsfunktion"
 
 L["KEY_LMB"]				= "LMB" -- Left Mouse Button, Short version
 L["KEY_RMB"]				= "RMB" -- Right Mouse Button, Short version
 
-L["MISC_TEAM_NAME"]		= "TEAM: %s" -- TEAM PROPS, TEAM HUNTERS, but in 1 sentence.
-L["NOTIFY_HEADER_TITLE"]	= "Game Controls"
+L["MISC_TEAM_NAME"]		= "LAG: %s" -- TEAM PROPS, TEAM HUNTERS, but in 1 sentence.
+L["NOTIFY_HEADER_TITLE"]	= "Spelkontroller"
 
 -- Revision 14/09/2022
-L["PHXM_MV_CHANGEMAP_NOPLAYER"]	= "Force change the map after there are no players in the server?"
+L["PHXM_MV_CHANGEMAP_NOPLAYER"]	= "Tvinga ändring av kartan efter alla har lämnat servern?"
 
 PHX.LANGUAGES[L.code] = LANG
