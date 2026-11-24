@@ -1,6 +1,6 @@
 local cvar = {}
 
-math.randomseed(os.time())
+--math.randomseed(os.time())
 
 -- Public LPS Const
 LPS_WEAPON_UNARMED      = 0
@@ -19,9 +19,9 @@ PHX.LPS.DUMMYWEAPON     = "weapon_lps"  -- Never change this Constant. It will b
 
 cvar["lps_enable"]              = { CTYPE_BOOL,     "1",        CVAR_SERVER_ONLY, "Enable Last Prop Standing?" }
 cvar["lps_weapon"]              = { CTYPE_STRING,   "random",   CVAR_SERVER_ONLY, "If set, should the weapon given by 'random' or specific. See 'lps_weapon_list' for more info." }
-cvar["lps_show_weapon"]			= { CTYPE_BOOL,		"1",		CVAR_SERVER_ONLY, "Make Last Prop Standing's weapon visible or not" }
+cvar["lps_show_weapon"]			= { CTYPE_BOOL,		"1",		CVAR_SERVER_ONLY, "Make Last Prop Standing's weapon visible or holstered" }
 
-cvar["lps_start_random"]        = { CTYPE_BOOL,		"1",		CVAR_SERVER_ONLY, "Should LPS will begin Randomly? This will overrides 'lps_start_every_x_rounds' ConVar.",
+cvar["lps_start_random_round"]        = { CTYPE_BOOL,		"0",		CVAR_SERVER_ONLY, "Should LPS will begin Randomly? This will overrides 'lps_start_every_x_rounds' ConVar.",
 function(cvarname,value)
     cvars.AddChangeCallback(cvarname, function(_,_,new)
         if tonumber(new) and tonumber(new) == 0 then
@@ -119,7 +119,7 @@ if CLIENT then
             
             {"", "spacer", false,    "" },
             {"", "label", false,    "LPS_TRIGGER_CONDITION" },
-            {"lps_start_random", 	        "check", "SERVER",	"LPS_START_RANDOM"},
+            {"lps_start_random_round", 	"check", "SERVER",	"LPS_START_RANDOM"},
             {"lps_start_delayed_rounds", 	"check", "SERVER",	"LPS_START_DELAYED"},
             {"lps_start_every_x_rounds", 	"slider", {min=2,max=PHX:GetCVar( "ph_rounds_per_map" ), dec=0, kind="SERVER"},	"LPS_START_X_ROUNDS"},
             

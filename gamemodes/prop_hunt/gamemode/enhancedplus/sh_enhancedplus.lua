@@ -1,12 +1,12 @@
 -- ConVars
 
 local PHEPLUSCVAR = {}
-PHEPLUSCVAR["ph_enable_unstuck"]				= { CTYPE_BOOL, 	"1", CVAR_SERVER_ONLY, "Toggle Enable/Disable Built-in unstuck feature. If you use an Addon, disable this." }
+PHEPLUSCVAR["ph_use_unstuck"]					= { CTYPE_BOOL, 	"0", CVAR_SERVER_ONLY, "Toggle Enable/Disable Built-in unstuck feature. If you use an Addon, disable this." }
 PHEPLUSCVAR["ph_unstuckrange"] 					= { CTYPE_NUMBER, 	"250", CVAR_SERVER_ONLY_NO_NOTIFY, "Allowed range for the unstuck process (default = 250, should be a multiple of 5)" } --This is hidden by default.
 PHEPLUSCVAR["ph_disabletpunstuckinround"] 		= { CTYPE_BOOL, 	"0", CVAR_SERVER_ONLY, "Disable last-resort unstuck teleportations to spawnpoints outside of the hiding phase" }
 PHEPLUSCVAR["ph_unstuck_waittime"] 				= { CTYPE_NUMBER, 	"5", CVAR_SERVER_ONLY, "How much in seconds must pass between each unstuck attempt" }
 
-PHEPLUSCVAR["ph_originalteambalance"] 			= { CTYPE_BOOL, 	"0", CVAR_SERVER_ONLY, "Use default PH:X/E+ original auto-balancing (disables all following team-related options)", 
+PHEPLUSCVAR["ph_team_balance_classic"] 			= { CTYPE_BOOL, 	"1", CVAR_SERVER_ONLY, "Use default PH:X/E+ original auto-balancing (disables all following team-related options)", 
 function(cvarname, value)
 	cvars.AddChangeCallback( cvarname, function(cv, _, new)
 		
@@ -25,7 +25,7 @@ end }
 PHEPLUSCVAR["ph_rotateteams"] 					= { CTYPE_BOOL, 	"0", CVAR_SERVER_ONLY, "Disable shuffle mode and rotate players instead" }
 PHEPLUSCVAR["ph_huntercount"] 					= { CTYPE_NUMBER, 	"0", CVAR_SERVER_ONLY, "Hunter count (0 = automatic)" }
 PHEPLUSCVAR["ph_preventconsecutivehunting"] 	= { CTYPE_BOOL, 	"1", CVAR_SERVER_ONLY, "Prevent players from being a Hunter twice in a row (shuffle mode only)" }
-PHEPLUSCVAR["ph_forcespectatorstoplay"] 		= { CTYPE_BOOL, 	"0", CVAR_SERVER_ONLY, "Force spectators to play by including them when balancing teams" }
+PHEPLUSCVAR["ph_forcespectatorstoplay"] 		= { CTYPE_BOOL, 	"0", CVAR_SERVER_ONLY, "Force spectators to play by including them when balancing teams (This will also Set Players into Prop/Hunter Immediately after joining to a server!)" }
 
 for ConVar,data in pairs( PHEPLUSCVAR ) do
     PHX:AddCVar( data[1], ConVar, data[2], data[3], data[4], data[5] )
@@ -76,7 +76,7 @@ function GM:GetHunterCount(playerCount)
 end
 
 function GM:CustomTeamHasEnoughPlayers(teamid, pl)
-	if PHX:GetCVar( "ph_originalteambalance" ) then
+	if PHX:GetCVar( "ph_team_balance_classic" ) then
 		return GAMEMODE:TeamHasEnoughPlayers(teamid)
 	end
 
@@ -86,6 +86,9 @@ function GM:CustomTeamHasEnoughPlayers(teamid, pl)
 		local hunterCount = GAMEMODE:GetHunterCount(playerCount)
 
 		if teamid == TEAM_HUNTERS then
+			if !PHX:GetCVar("ph_enable_teambalance") then
+				return GAMEMODE:TeamHasEnoughPlayers(teamid)
+			end
 			return hunterCount <= teamPlayerCount
 		elseif teamid == TEAM_PROPS then
 			return (playerCount - hunterCount) <= teamPlayerCount

@@ -89,7 +89,7 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 				surface.DrawRect(0,0,w,h)
 			end
 			
-			draw.DrawText( text, font ,w*0.22,h*0.4, color, TEXT_ALIGN_LEFT )
+			draw.DrawText( text, font ,w*0.24,h*0.4, color, TEXT_ALIGN_LEFT )
 		end
         
         item.Button:SetToolTip( text )
@@ -180,7 +180,7 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 		btnKf:SetSize(240,24)
 		btnKf:SetText("Donate via Buy Ko-Fi")
 		btnKf.DoClick = function()
-			gui.OpenURL("https://ko-fi.com/wolvindra")
+			gui.OpenURL(GAMEMODE.DONATEURL)
 		end
 		
 		local PanelModify = PHX.UI.PnlTab:AddSheet("", panel, "vgui/ph_iconmenu/m_donate.png")
@@ -649,11 +649,16 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 				end
 			end}
 			}, grid ,"")
+			
+		PHX.UI:CreateVGUIType("ph_include_default_taunt", "check", "SERVER", grid, "PHXM_TAUNT_INCLUDE_DEF")
+		PHX.UI:CreateVGUIType("ph_overlap_taunt", "check", "SERVER", grid, "PHXM_TAUNT_DOOVERLAP")
+		PHX.UI:CreateVGUIType("ph_taunt_soundlevel", "slider", {min = 1, max = 6, init = PHX:GetCVar( "ph_taunt_soundlevel" ), dec = 0, kind = "SERVER"}, grid, "PHXM_TAUNT_SNDLVL")
 		
         PHX.UI:CreateVGUIType("","spacer",nil,grid,"" )
 		PHX.UI:CreateVGUIType("", "label", "PHX.MenuCategoryLabel", grid, "PHXM_TAUNT_PITCH_SETTINGS")
 		PHX.UI:CreateVGUIType("ph_taunt_pitch_enable", "check", "SERVER", grid, "PHXM_TAUNT_PITCH_ENABLE")
-        -- these two below are intentionally set without float.
+        
+		-- these two below are intentionally set without float.
 		PHX.UI:CreateVGUIType("ph_taunt_pitch_range_min", "slider", {min = 1, max = 99, init = PHX:GetCVar( "ph_taunt_pitch_range_min" ), dec = 0, kind = "SERVER"}, grid, "PHXM_TAUNT_PITCH_RANGE_MIN")
 		PHX.UI:CreateVGUIType("ph_taunt_pitch_range_max", "slider", {min = 100, max = 255, init = PHX:GetCVar( "ph_taunt_pitch_range_max" ), dec = 0, kind = "SERVER"}, grid, "PHXM_TAUNT_PITCH_RANGE_MAX")
 		
@@ -704,13 +709,7 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 		
 		PHX.UI:CreateVGUIType("devspacer","spacer",nil,grid,"" )
 		PHX.UI:CreateVGUIType("", "label", "PHX.MenuCategoryLabel", grid, "PHXM_ADMIN_DEVSECTION")
-        
-        PHX.UI:CreateVGUIType("ph_print_verbose", "combobox", { kind="SERVER", data=
-            {
-                ["0"] = { name="PHXM_DROP_VBS_DISABLE", icon="icon16/application_delete.png" },
-                ["1"] = { name="PHXM_DROP_VBS_ENABLE",  icon="icon16/application_xp_terminal.png" },
-            }
-        }, grid, "PHXM_ADMIN_BEVERBOSE")
+
 		PHX.UI:CreateVGUIType("ph_prop_viewoffset_mult", "slider", {min=0.6,max=1.2,dec=1,float=true,kind="SERVER"}, grid, "PHXM_ADMIN_PROPOFFSET")
 		PHX.UI:CreateVGUIType("ph_prop_must_standing", "check", "SERVER", grid, "PHXM_ADMIN_REPL_MUST_STAND")
 		PHX.UI:CreateVGUIType("ph_check_for_rooms", "check", "SERVER", grid, "PHXM_ADMIN_ROOMCHECK")
@@ -750,6 +749,9 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 
 		PHX.UI:CreateVGUIType("", "label", "PHX.MenuCategoryLabel", grid, "PHXM_ADMIN_HUNTERBLIND")
 		PHX.UI:CreateVGUIType("ph_allow_respawnonblind", "check", "SERVER", grid, "PHXM_ADMIN_RESPAWNONBLIND")
+		PHX.UI:CreateVGUIType("ph_blindtime_respawn_percent", "slider", {min = 0, max = 1, init = PHX:GetCVar( "ph_blindtime_respawn_percent" ), dec = 2, float = true, kind = "SERVER"}, grid, "PHXM_ADMIN_REWSPANTIMEPERCENT")
+		PHX.UI:CreateVGUIType("ph_allow_respawn_from_spectator", "check", "SERVER", grid, "PHXM_ADMIN_ALLOWRESPAWN_SPECTATOR")
+		PHX.UI:CreateVGUIType("ph_allow_respawnonblind_teamchange", "check", "SERVER", grid, "PHXM_ADMIN_ALLOWRESPAWN_TEAMCHANGE")
         PHX.UI:CreateVGUIType("ph_allow_respawnonblind_team_only", "combobox", { kind="SERVER", data=
             {
                 ["0"] = { name="PHXM_DROP_RESPAWNBLIND_BOTH" },
@@ -757,8 +759,6 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
                 ["2"] = { name="PHX_TEAM_PROPS" },
             }
         }, grid, "PHXM_ADMIN_RESPAWNONBLIND_TEAM")
-		PHX.UI:CreateVGUIType("ph_allow_respawn_from_spectator", "check", "SERVER", grid, "PHXM_ADMIN_ALLOWRESPAWN_SPECTATOR")
-		PHX.UI:CreateVGUIType("ph_blindtime_respawn_percent", "slider", {min = 0, max = 1, init = PHX:GetCVar( "ph_blindtime_respawn_percent" ), dec = 2, float = true, kind = "SERVER"}, grid, "PHXM_ADMIN_REWSPANTIMEPERCENT")
 		
 		PHX.UI:CreateVGUIType("","spacer",nil,grid,"" )
 		
@@ -766,7 +766,6 @@ function PHX.UI.BaseMainMenu(ply, cmd, args)
 		PHX.UI:CreateVGUIType("ph_enable_teambalance", "check", "SERVER", grid, "PHXM_ADMIN_ENABLETEAMBALANCE")
 		PHX.UI:CreateVGUIType("ph_force_join_balanced_teams", "check", "SERVER", grid, "PHXM_ADMIN_FORCEJOINBALANCE")
 		PHX.UI:CreateVGUIType("ph_max_teamchange_limit", "slider", {min = 3, max = 50, init = PHX:GetCVar( "ph_max_teamchange_limit" ), dec = 0, kind = "SERVER"}, grid, "PHXM_ADMIN_CHANGETEAM_LIMIT")
-		PHX.UI:CreateVGUIType("ph_allow_respawnonblind_teamchange", "check", "SERVER", grid, "PHXM_ADMIN_ALLOWRESPAWN_TEAMCHANGE")
 		
 		PHX.UI:CreateVGUIType("", "label", false, grid, "PHXM_ADMIN_PICKUP_PROPS")
 		PHX.UI:CreateVGUIType("", "btn", {

@@ -27,6 +27,12 @@ local function AutoTauntThink()
 				local rand_taunt 		= table.Random(PHX.CachedTaunts[TEAM_PROPS])
 				
 				if !isstring(rand_taunt) then rand_taunt = tostring(rand_taunt); end
+
+				-- Play random HL2 cheer sound because taunt is empty.
+				if (TAUNT_FALLBACK) then
+					PHX:PlayTaunt( ply, "vo/coast/odessa/male01/nlo_cheer0"..math.random(1,4)..".wav", 0, 100, 0, "LastTauntTime" )
+					return;
+				end
 				
 				PHX:PlayTaunt( ply, rand_taunt, pitchRandEnabled, pitchlevel, isRandomized, "LastTauntTime" )
 
@@ -77,6 +83,9 @@ net.Receive("CL2SV_PlayThisTaunt", function(len, ply)
 	
 		if !isDelay then
 			if bool then --if it's Fake Taunt
+				-- dont play if taunt is empty
+				if (TAUNT_FALLBACK) then MsgN("warning: supressing fake taunt: taunt table is empty"); return; end
+
 				if PHX:GetCVar( "ph_randtaunt_map_prop_enable" ) then
 					local Count = ply:GetTauntRandMapPropCount()
                     
@@ -115,8 +124,15 @@ net.Receive("CL2SV_PlayThisTaunt", function(len, ply)
 					end
 				end
 			else	-- if it's Player Taunt
+				-- Play random HL2 cheer sound because taunt is empty.
+				if (TAUNT_FALLBACK) then
+					PHX:PlayTaunt( ply, "vo/coast/odessa/male01/nlo_cheer0"..math.random(1,4)..".wav", 0, 100, 0, "CLastTauntTime" )
+					ply:SetLastTauntTime( "LastTauntTime", CurTime() )
+					return
+				end
+
 				if CheckValidity( name, snd, playerTeam ) then
-				
+
 					PHX:PlayTaunt( ply, snd, plPitchOn, desiredPitch, plPitchRandomized, "CLastTauntTime" )
 					ply:SetLastTauntTime( "LastTauntTime", CurTime() )
 					

@@ -70,11 +70,12 @@ local function outElastic(t, b, c, d, a, p)
 	return a * math.pow(2, - 10 * t) * math.sin((t * d - s) * (2 * pi) / p) + c + b
 end
 
+local xElastic = 0
 local function AutoTauntPaint()
 	if !isEnabled || !isProp || !started then return; end
 
 	if tweenTime < 1 then
-		x = outElastic(tweenTime, xStart, xEnd - xStart, 1, 1, 0.5)
+		xElastic = outElastic(tweenTime, xStart, xEnd - xStart, 1, 1, 0.5)
 		local cTime = CurTime()
 		tweenTime = tweenTime + (cTime - previousTime)
 		previousTime = cTime
@@ -85,9 +86,9 @@ local function AutoTauntPaint()
 
 	local txt = PHX:FTranslate("HUD_AUTOTAUNT_ALT", timeLeft)
 
-	draw.RoundedBox(5, x, y, w, h, Color(0, 0, 0, 200))
-	draw.RoundedBox(5, x + 5, y + 5, (w - 10) * percentage, h - 10, Color(200, 0, 0, 200))
-	draw.DrawText(txt, "HunterBlindLockFont", x + 70, ScrH() - 57, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER)
+	draw.RoundedBox(5, xElastic, y, w, h, Color(0, 0, 0, 200))
+	draw.RoundedBox(5, xElastic + 5, y + 5, (w - 10) * percentage, h - 10, Color(200, 0, 0, 200))
+	draw.DrawText(txt, "HunterBlindLockFont", xElastic + 70, ScrH() - 57, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER)
 end
 
 local matw          = Material("vgui/phehud/res_wep")
@@ -117,7 +118,7 @@ local delayC = PHX:GetCVar( "ph_customtaunts_delay" )
 local colText = color_white -- decoy
 local function AutoTauntPaint_phx()
 
-	if IsValid(LocalPlayer()) && LocalPlayer():Alive() && isProp && started then
+	if IsValid(LocalPlayer()) && LocalPlayer():Alive() && LocalPlayer():Team()==TEAM_PROPS && started then
 		local timeLeft = math.ceil(TimeLeft())
 		local percentage = timeLeft / delay
 		local taunttext = ""
@@ -239,7 +240,7 @@ local function CheckAutoTaunt()
 	if !ply:Alive() || ply:Team() != TEAM_PROPS then
 		started = false
 		RemoveTimer()
-		PHX.VerboseMsg("[PHX AutoTaunt] Blocked!")
+		PHX:VerboseMsg("[AutoTaunt] Blocked!")
 		return
 	end
 end

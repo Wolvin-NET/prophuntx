@@ -48,7 +48,7 @@ lps_start_delayed_rounds	0
 lps_start_every_x_rounds	2
 
 // Should LPS will begin Randomly? This will overrides 'lps_start_every_x_rounds' ConVar.
-lps_start_random	1
+lps_start_random_round	1
 
 // Trail Color (use hex code)
 lps_trail_color	#FFFFFF

@@ -67,7 +67,7 @@ PHX.UNSTUCK_COMMANDS = {
 }
 
 hook.Add("PlayerSay", "PH_UnstuckCommand", function(pl, text)
-	if PHX:GetCVar( "ph_enable_unstuck" ) and PHX.UNSTUCK_COMMANDS[string.lower(text)] then
+	if PHX:GetCVar( "ph_use_unstuck" ) and PHX.UNSTUCK_COMMANDS[string.lower(text)] then
 		GAMEMODE:UnstuckPlayer(pl)
 		return ""
 	end
@@ -144,7 +144,7 @@ function GM:PosOnGround(pl)
 end
 
 function GM:UnstuckPlayer(pl)
-	if (not PHX:GetCVar( "ph_enable_unstuck" )) then return end
+	if (not PHX:GetCVar( "ph_use_unstuck" )) then return end
 
 	if pl:Team() ~= TEAM_PROPS then return end
 	
@@ -280,7 +280,7 @@ function GM:TryNormalUnstuck(pl)
 	]]
 	
 	if PHX:GetCVar( "ph_disabletpunstuckinround" ) then
-		if !GetGlobalBool("BlindStatus", false) then -- same as above, don't allow when hunter is released
+		if !PHX:IsBlindStatus() then -- same as above, don't allow when hunter is released
 			pl:PHXChatInfo("WARNING", "UNSTUCK_SPAWNPOINTS_DISABLED")
 			return
 		end
@@ -376,8 +376,9 @@ function GM:CheckTeamBalance( bDontKillPlayer )
 					local ply = GAMEMODE:FindLeastCommittedPlayerOnTeam( highest )
 					
 					if !bDontKillPlayer then ply:Kill() end
-					
+					-- :SetTeam() bug where ply.PHXHasLoadout still true, OnPreRoundRestart will handles it.
 					ply:SetTeam( id )
+					PHX:VerboseMsg( "[TeamBalance] Player "..ply:Nick().." was swapped by team balance." )
 					
 					for _, listener in ipairs(player.GetAll()) do
 						if listener == ply then
@@ -403,7 +404,7 @@ function GM:AutoTeam(pl)
 		return
 	end
 	
-	if PHX:GetCVar( "ph_originalteambalance" ) then
+	if PHX:GetCVar( "ph_team_balance_classic" ) then
 		GAMEMODE:PlayerRequestTeam(pl, team.BestAutoJoinTeam())
 	else
 		local playerCount = GAMEMODE:GetPlayingCount(pl)

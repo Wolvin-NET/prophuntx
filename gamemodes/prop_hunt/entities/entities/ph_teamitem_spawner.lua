@@ -4,11 +4,21 @@ ENT.Base = "base_point"
 ENT.Items 		= { "ph_luckyball", "ph_devilball", "ph_ultpointball" }
 ENT.MsgPrefix 	= "[PH:X Item Spawner] "
 
+local cvEnableTeamSpawner --temp cvar because we dont want to mess sh_convars.lua due to new upcoming PHX update
+if !ConVarExists( "ph_enable_team_itemspawner" ) then
+	cvEnableTeamSpawner = CreateConVar( "ph_enable_team_itemspawner", "1", FCVAR_SERVER_CAN_EXECUTE+FCVAR_ARCHIVE+FCVAR_REPLICATED, "Enable or Disable Team Item Spawner, this is where Lucky Balls and Devil Crystals are spawned.", 0, 1 )
+end
+
 if SERVER then
 	ENT.RemoveAfterSpawn = false
 end
 
-function ENT:Initialize() 
+function ENT:Initialize()
+	if not cvEnableTeamSpawner:GetBool() then
+		if SERVER then self:Remove(); end
+		return
+	end
+	
 	if SERVER then
 		self.RemoveAfterSpawn = self:HasSpawnFlags(128)
 	end
@@ -46,11 +56,11 @@ function ENT:CreateBall( entToSpawn, amt, targEnt, pos, ang )
 				return
 			end
 		
-			-- Don't spawn entity nearby 32-units if they're exist in that radius.
-			local findEnt = ents.FindInSphere( pos, 32 )
+			-- Don't spawn entity nearby 16-units if they're exist in that radius.
+			local findEnt = ents.FindInSphere( pos, 16 )
 			for _,v in pairs(findEnt) do
 				if IsValid(v) and v:GetClass() == entToSpawn then
-					MsgC(Color(240,72,86), self.MsgPrefix .. "I was trying to spawn item but I Found entity " .. entToSpawn .. " near me. Surpressing!\n")
+					MsgC(Color(240,72,86), self.MsgPrefix .. "I was trying to spawn item but I Found item(s) " .. entToSpawn .. " near ".. tostring(v:GetPos())..", Surpressing!\n")
 					return
 				end
 			end
@@ -102,11 +112,11 @@ function ENT:makeEntity()
         local ent = ents.FindByName(SpawnOn)		
         on = ent[math.random(1, #ent)]
 		
-		local findEnt = ents.FindInSphere( on:GetPos(), 32 )
+		local findEnt = ents.FindInSphere( on:GetPos(), 16 )
 		for _,v in pairs(findEnt) do
 			-- don't spawn if an entity is there.
 			if IsValid(v) and v:GetClass() == entToSpawn then
-				MsgC(Color(240,72,86), self.MsgPrefix .. "Attempting to spawn an item on position ("..tostring(on:GetPos())..") but there was an existing entity around me. Surpressing!\n")
+				MsgC(Color(240,72,86), self.MsgPrefix .. "Attempting to spawn an item on position ("..tostring(on:GetPos())..") but there was an existing item(s) near me. Surpressing!\n")
 				return
 			end
 		end

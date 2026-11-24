@@ -84,8 +84,12 @@ local ConVarTranslate = {
 CreateConVar( "ph_kick_non_admin_access", "0", {FCVAR_SERVER_CAN_EXECUTE,FCVAR_ARCHIVE}, "Should Kick Non-Admin user when trying to access Admin Commands? If Not, Throw a message instead.", 0, 1 )
 
 local CVAR = {}
-CVAR["ph_print_verbose"]			    =	{ CTYPE_BOOL,	"0", CVAR_SERVER_ONLY_NO_NOTIFY, "Developer Verbose. Some printed messages will only appear if this is enabled." }
 CVAR["ph_show_splash_screen"]           =   { CTYPE_BOOL,   "1", CVAR_SERVER_ONLY, "Show Splash Screen upon joining." }
+CVAR["ph_tmp_accurate_hull"]            =   { CTYPE_BOOL,   "1", CVAR_SERVER_ONLY, "(Experimental) Enable accurate hull size instead of rounding them.\nNote: You may able to stick on walls but it may cause some problems, use with caution." }
+
+CVAR["ph_include_default_taunt"]        =   { CTYPE_BOOL,   "1", CVAR_SERVER_ONLY, "Should we Include default stock PH:X taunt from the gamemode?" }
+CVAR["ph_taunt_soundlevel"]        		=   { CTYPE_NUMBER, "6", CVAR_SERVER_ONLY, "Taunt SoundLevel to use, value must from 1 to 6.\n1=75dB\n2=80dB\n3=85dB\n4=90dB\n5=95dB\n6=100dB - this is default.", { min = 1, max = 6 } }
+CVAR["ph_overlap_taunt"]				=	{ CTYPE_BOOL,   "0", CVAR_SERVER_ONLY, "Should any played taunts overlap with newly played taunt? Disabling this mean to stop and plays new one. Enable to keep classic behaviour." }
 
 CVAR["ph_banned_models"]				=	{ CTYPE_BOOL,	"1", CVAR_SERVER_ONLY, "Ban/Unban the use of Restricted Models. This does not include from Prohibitted Models!"}
 
@@ -147,7 +151,7 @@ CVAR["ph_fc_cue_path"]					=	{ CTYPE_STRING, "misc/freeze_cam.wav", CVAR_SERVER_
 		-- override default callback because this is important part.
 		cvars.AddChangeCallback( cvarname, function(_,_,new)
 			if string.find(new, "\\") then
-				print("[!] Warning: Detected Backslash (\\) character! Please use \"/\" instead!")
+				print("[ConVar:FreezeCam] Warning: Detected Backslash (\\) character! Please use \"/\" instead!")
 			end
 			-- replace escaped backslash char, if any.
 			local ReplaceIllegalPath = string.Replace(new, "\\", "/")
@@ -188,7 +192,7 @@ function(cvarname, value)
         if tonumber(new) < 1 then
             RunConsoleCommand("ph_min_waitforplayers", "1")
             SetGlobalInt( cvarname, tonumber(new) )
-            print("[PHX] Warning: "..cvarname.." value cannot contain less than 0. Use 'ph_waitforplayers' 0 to disable!")
+            print("[ConVar:WaitForPlayers] Warning: "..cvarname.." value cannot contain less than 0. Use 'ph_waitforplayers' 0 to disable!")
         end
     end, "phx.cvnum_" .. cvarname)
 end }
@@ -219,10 +223,11 @@ CVAR["ph_give_grenade_roundend_before_time"] =   { CTYPE_FLOAT, "15", CVAR_SERVE
 CVAR["ph_use_new_chat"]						=	{ CTYPE_BOOL, 	"0", CVAR_SERVER_ONLY, "!!REQUIRE MAP RESTART!\nUse new (temporary) chat box? This will replace default chatbox and prevent new HUD overlap.", 
 function(cvarname, value)	
 	cvars.AddChangeCallback( cvarname, function(cv, _, new)
-		print(cv .. " -> has changed. Please be sure to Restart the map to take effect!")
+		print(cv .. " -> was changed. Please be sure to change/restart map to take effect!")
 		for _,v in pairs(player.GetHumans()) do
 			if v:CheckUserGroup() then
 				v:ChatPrint("NOTICE: Map restart required, a ConVar '"..cv.."' has been changed therefore a map change is needed.")
+				v:ChatPrint("WARNING: Deprecated: eChat will be replaced/removed in future update!")
 			end
 		end
 		SetGlobalBool(cvarname, tobool(new))
@@ -241,8 +246,8 @@ CVAR["ph_allow_pickup_object"]				=	{ CTYPE_NUMBER, "3", CVAR_SERVER_ONLY, "Allo
 CVAR["ph_enable_mapvote"]					=	{ CTYPE_BOOL, 	"1", CVAR_SERVER_ONLY, "Enable/Disable Built-in PH:X Map votes system? Set this 0 to disable this and use from map vote addon and will call 'PH_OverrideMapVote' Hooks.\nIf 'ph_use_custom_mapvote' and 'ph_use_custom_mapvote_cmd' set to 1 they are still called however." }
 CVAR["ph_use_custom_mapvote"]				=	{ CTYPE_BOOL, 	"0", CVAR_SERVER_ONLY_NO_NOTIFY, "Use custom external Map votes system? This will override built-in mapvote. See help 'ph_custom_mv_func' for more info." }
 CVAR["ph_use_custom_mapvote_cmd"]			=	{ CTYPE_BOOL, 	"0", CVAR_SERVER_ONLY_NO_NOTIFY, "Use custom external Map votes by calling from Console Command instead? This will override built-in mapvote AND 'ph_use_custom_mapvote'. See help 'ph_custom_mv_concmd' for more info." }
-CVAR["ph_custom_mv_func"]					=	{ CTYPE_STRING, "MapVote.PHXStart()", CVAR_SERVER_ONLY_NO_NOTIFY, "If 'ph_use_custom_mapvote' is set, Use a function to call non-built-in Map Vote system (e.g: From Addons).\nNOTE: 'Case Sensitive' & Local variable will not passed to the given code!" }
-CVAR["ph_custom_mv_concmd"]					=	{ CTYPE_STRING, "mv_start", 		  CVAR_SERVER_ONLY_NO_NOTIFY, "If 'ph_use_custom_mapvote_cmd' is set, use this to call mapvote by using from their console command instead. Overrides 'ph_use_custom_mapvote'. If it has arguments, supply them as well. (e.g: start_mapvote 15 (15 by meaning in seconds))" }
+CVAR["ph_custom_mv_func"]					=	{ CTYPE_STRING, "PHX.StartMapVote()", CVAR_SERVER_ONLY_NO_NOTIFY, "If 'ph_use_custom_mapvote' is set, Use a function to call non-built-in Map Vote system (e.g: From Addons).\nNOTE: 'Case Sensitive' & Local variable will not passed to the given code!" }
+CVAR["ph_custom_mv_concmd"]					=	{ CTYPE_STRING, "mv_start", CVAR_SERVER_ONLY_NO_NOTIFY, "If 'ph_use_custom_mapvote_cmd' is set, use this to call mapvote by using from their console command instead. Overrides 'ph_use_custom_mapvote'. If it has arguments, supply them as well. (e.g: start_mapvote 15 (15 by meaning in seconds))" }
 -- End of MapVotes
 
 CVAR["ph_exp_rot_pitch"]					=	{ CTYPE_BOOL, 	"0", 	CVAR_SERVER_ONLY_NO_NOTIFY, "[Experimental!] Allow use of pitch rotation on props." }
@@ -322,7 +327,7 @@ end
 	-- > GM:Pre/On/PostGamemodeLoaded
 	-- > Any Early Hooks before Config (*.cfg) Files are Loaded
 	-- > PlayerInitSpawn or InitPostEntity ARE NOT NEEDED. Use PHX:GetCVar() instead!
--- See Example of how PHX:GetCVar() can get bugged on PHX.VerboseMsg()
+-- See Example of how PHX:GetCVar() can get bugged on PHX:VerboseMsg()
 function PHX:QCVar( cvar )
 	if CVAR[cvar] and CVAR[cvar] ~= nil then
 		local isType = CVAR[cvar][1]

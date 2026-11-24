@@ -68,7 +68,7 @@ function PHX:NotifyUpdate(result)
 		return false,false,false
 	end
 	
-	self.VerboseMsg("[*PH: X Update] Incoming update result data, parsing infos...")
+	self:VerboseMsg("[*PH: X Update] Incoming update result data, parsing infos...")
 	local data = util.JSONToTable(result)
 	
 	if !data or data == nil then
@@ -115,7 +115,7 @@ function PHX:NotifyUpdate(result)
 end
 
 function PHX:CheckUpdate()
-	PHX.VerboseMsg("[PHX] - Checking Update Notification... Please Wait!")
+	PHX:VerboseMsg("[Update] Checking Update Notification... Please Wait!")
 	UPDATE_DO_FETCH()
 end
 
@@ -129,12 +129,12 @@ timer.Simple(3, function()
 	local time		 = os.time()
 	
 	if time < nextUpdate then
-		print("[PHX] Skipping update check. Will recheck on "..os.date("%Y/%m/%d - %H:%M:%S", nextUpdate))
+		print("[Update] Skipping update check. Will recheck on "..os.date("%Y/%m/%d - %H:%M:%S", nextUpdate))
 	else	
-		print("[PHX] Checking Update...")
+		print("[Update] Checking Update...")
 		PHX:CheckUpdate()
 		cookie.Set("phxNextUpdateInfo", time + cooldown)
-		print("[PHX] Update has been checked. Your next update notice will be displayed on "..os.date("%Y/%m/%d - %H:%M:%S", cookie.GetNumber("phxNextUpdateInfo",0)) )
+		print("[Update] Update has been checked. Your next update notice will be displayed on "..os.date("%Y/%m/%d - %H:%M:%S", cookie.GetNumber("phxNextUpdateInfo",0)) )
 	end
 end)
 	

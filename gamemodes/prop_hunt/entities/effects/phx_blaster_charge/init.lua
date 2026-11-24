@@ -24,10 +24,12 @@ function EFFECT:Init(data)
     self.SpriteSize     = 55
     self.BeamWidth      = 8
 	
-	if not self.WeaponEnt:IsValid() then return end	
+	if not IsValid(self.WeaponEnt) then return end	
 	
 	local Muzzle        = self.WeaponEnt:GetAttachment( self.Attachment )
 	local hitpos        = self.Shooter:GetEyeTrace().HitPos
+	
+	if not Muzzle then return end
 	self:SetRenderBoundsWS(Muzzle.Pos + Vector() * self.RefractSize, hitpos - Vector() * self.RefractSize)
 	
 	self.KillTime = CurTime() + 1.35

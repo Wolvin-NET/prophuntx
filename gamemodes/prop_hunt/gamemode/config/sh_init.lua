@@ -14,7 +14,7 @@ if SERVER then
 	
 	local map	= game.GetMap()
 	if file.Exists(engine.ActiveGamemode() .. "/gamemode/config/maps/"..map..".lua", "LUA") then
-		PHX.VerboseMsg("[PHX Map Config] Adding map config of " .. map)
+		PHX:VerboseMsg("[Map Config] Adding map config: " .. map)
 		include("maps/"..map..".lua")
 	end
 	

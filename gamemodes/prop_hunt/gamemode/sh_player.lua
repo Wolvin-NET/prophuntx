@@ -177,7 +177,7 @@ function Player:PHSetColor( ColOverride )
 end
 
 function Player:SetLastTauntTime( idStringID, int )
-	if !idStringID or idStringID == nil then print("[:SetLastTauntTime] Error: idStringID is empty!"); return end
+	if !idStringID or idStringID == nil then print("[Taunt:SetLastTauntTime] Error: idStringID is empty!"); return end
 	if !int or int == nil or !isnumber(int) then int = 0 end
 	
 	if SERVER then --make this only available on serverside. in clientside, this can be unreliable.

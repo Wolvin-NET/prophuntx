@@ -22,7 +22,7 @@ function PCR:AddToGroup( strGroup )
 	if !strGroup then return end
 	
 	if self.ConfigGroup[strGroup] then
-		PHX.VerboseMsg("[PCR] The usergroup you entered '" .. strGroup .. "' was exist.")
+		PHX:VerboseMsg("[Prop Menu:User] The usergroup you entered '" .. strGroup .. "' was exist.")
 	else
 		self.ConfigGroup[strGroup]	= true
 	end

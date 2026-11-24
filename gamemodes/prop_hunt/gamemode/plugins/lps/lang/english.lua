@@ -1,7 +1,7 @@
-local LANG = {}
+local L = {}
 
 -- English Section
-LANG["en_us"]   = {
+L["en_us"]   = {
     -- Header Text Group
     ["LPS_GENERAL_SETTINGS"]    = "General Settings",
     ["LPS_APPEARANCES"]         = "Appearances",
@@ -69,4 +69,4 @@ LANG["en_us"]   = {
     ["WEAPON_AMMO_UNLI"]        = "Unlimited"
 }
 
-list.Set("PHX.LanguageInsertion", "[LastPropStanding] English", LANG)
+list.Set("PHX.LanguageInsertion", "[LastPropStanding] English", L)

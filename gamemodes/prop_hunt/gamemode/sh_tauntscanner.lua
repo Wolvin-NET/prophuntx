@@ -29,7 +29,7 @@ local TeamName = {
 
 if SERVER then	
 	local function AddToTable( idTeam, tauntCat, data )
-		PHX.VerboseMsg("[PHX Taunt Scanner] Adding to Taunt Table: Team[" .. TeamName[idTeam] .. "], Category:" .. tauntCat .. ", Total Taunt Data: " .. tostring(table.Count(data)))
+		PHX:VerboseMsg("[TauntScanner] Adding to Taunt Table: Team[" .. TeamName[idTeam] .. "], Category:" .. tauntCat .. ", Total Taunt Data: " .. tostring(table.Count(data)))
 		Taunts[tauntCat] = {}
 		Taunts[tauntCat][idTeam] = data
 	end
@@ -85,12 +85,12 @@ if SERVER then
 		  else
 			
 			err = err + 1
-			PHX.VerboseMsg("[PHX Taunt Scanner] " .. TeamName[TEAM_ID] .. "'s taunt seems to be empty, nothing to add.")
+			PHX:VerboseMsg("[TauntScanner] " .. TeamName[TEAM_ID] .. "'s taunt seems to be empty, nothing to add.")
 			
 		  end
 		  
 		  if err == 2 then
-			print("[PHX Taunt Scanner] Both Teams have no taunts detected in folder '".. tauntPath .."'. Are you trying to add empty folder?")
+			print("[TauntScanner] Both Teams have no taunts detected in folder '".. tauntPath .."'. Are you trying to add empty folder?")
 		  end
 		
 		end
@@ -159,10 +159,12 @@ if SERVER then
 	hook.Add("Initialize", "PHX.InitScannedTauntData", function()
 		if PHX:QCVar( "ph_enable_taunt_scanner" ) then	-- Disabled = no operation will be done. You also need to restart map to enable this feature!
 			-- Scan default taunts
-			PHX:TauntScanFolder( DefaultPath )
+			if PHX:QCVar( "ph_include_default_taunt" ) then
+				PHX:TauntScanFolder( DefaultPath )
+			end
 			-- And then, add external taunts directories, if any.
 			for tauntName, tauntFolder in SortedPairs( list.Get("PHX.TauntScanFolder") ) do	-- please sort.
-				PHX.VerboseMsg("[PHX] [Addon: ".. tauntName .."] Scanning custom Taunt folder: 'sound/"..tauntFolder.."'...")
+				PHX:VerboseMsg("[TauntScanner:Addon][".. tauntName .."] Scanning custom Taunt folder: 'sound/"..tauntFolder.."'...")
 				PHX:TauntScanFolder( tauntFolder )
 			end
 			
@@ -171,12 +173,17 @@ if SERVER then
 				PHX:ManageTaunt( category, data )
 			end
 			
+			if table.IsEmpty( Taunts ) then
+				MsgN("!! WARNING: Taunt Scanner List is EMPTY, this may due to `ph_include_default_taunt` convar is set to 0 or you don't have any custom taunts installed!")
+				MsgN("!! Not Broacasting Taunt Scanner List because the list is EMPTY...")
+				
+				return
+			end
 			-- Prepare data and compress tables to clients. This is only available after the map is fully loaded.
 			-- Do Not Re-broadcast!
-			
 			CompressedTaunt,CompressedTauntSize = util.PHXQuickCompress( Taunts )
 		else
-			print("[PHX] Taunt Scanner Status: Disabled.")
+			print("[TauntScanner] Taunt Scanner is Disabled.")
 		end		
 	end)
 	
@@ -191,9 +198,16 @@ if SERVER then
 			ply:PrintMessage(HUD_PRINTCONSOLE, "[PHX] Taunt Scanner is Disabled.")
 			return
 		end
+
+		local plName = ply:Nick()
+
+		if table.IsEmpty( Taunts ) then
+			MsgN("!! Not sending Taunt Scanner List to " .. plName .. " because the list is EMPTY!")
+			return
+		end
 	
 		if !ply.HasTauntScannedData then
-			PHX.VerboseMsg("[PHX] Sending Taunt Scanner Data to player: " .. ply:Nick() .. ", Size: " .. tostring(CompressedTauntSize) .. " Bytes")
+			PHX:VerboseMsg("[TauntScanner] Sending Taunt Scanner Data to player: " .. plName .. ", Size: " .. tostring(CompressedTauntSize) .. " Bytes")
 		    timer.Simple(0.1, function()
 				net.Start(netRecv)
 				net.WriteUInt(CompressedTauntSize, 16)
@@ -225,7 +239,9 @@ if CLIENT then
 	end )
 	
 	net.Receive(netRecv, function()
-		PHX.VerboseMsg("[PHX] Received taunt scanner data, Processing...")
+		PHX:VerboseMsg("[TauntScanner] Received taunt scanner data, Processing...")
+
+		-- Set TAUNT_FALLBACK to nil
 		local size = net.ReadUInt(16)
 		local taunts = net.ReadData(size)
 		local Conv = util.PHXQuickDecompress( taunts )
@@ -235,7 +251,10 @@ if CLIENT then
 				PHX:ManageTaunt(cat, data)
 			end
 		end
+
+		-- Mark TAUNT_FALLBACK to nil to make sure taunt window is working.
+		TAUNT_FALLBACK = nil
 		
-		PHX.VerboseMsg("[PHX] Taunts successfully added! - Have Fun and Enjoy!")
+		PHX:VerboseMsg("[TauntScanner] Taunts successfully added! - Have Fun and Enjoy!")
 	end)
 end

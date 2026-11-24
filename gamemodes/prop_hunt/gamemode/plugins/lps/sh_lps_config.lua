@@ -541,11 +541,11 @@ hook.Add("Initialize", "LPS.Init_or_ExternalWeaponEntry", function()
     ]]
     for name,data in pairs(list.Get("LPS.XCustomWeapon")) do
         if (!data or data == nil) or (istable(data) and table.IsEmpty(data)) then
-            PHX.VerboseMsg("[LPS] Weapon data entry of [".. name .."] is empty! Skipping...")
+            PHX:VerboseMsg("[LPS] Weapon data entry of [".. name .."] is empty! Skipping...")
 		elseif (PHX.LPS.WEAPON_NEW[name]) ~= nil then
-			PHX.VerboseMsg("[LPS] Found Duplication of Weapon data entry: [".. name .."], Rejecting!")
+			PHX:VerboseMsg("[LPS] Found Duplication of Weapon data entry: [".. name .."], Rejecting!")
         else
-            PHX.VerboseMsg("[LPS] Adding custom weapon entry of: " .. name)
+            PHX:VerboseMsg("[LPS] Adding custom weapon entry of: " .. name)
             PHX.LPS.WEAPON_NEW[name] = data
         end
     end
@@ -554,11 +554,11 @@ end)
 concommand.Add("lps_weapon_list", function(ply)
     if (SERVER and util.IsStaff( ply )) or (CLIENT and ply:PHXIsStaff()) then
 		local weps = table.GetKeys( PHX.LPS.WEAPON_NEW )
-		print("[PHX LPS] Showing all available LPS weapons:")
+		print("[LPS] Showing all available LPS weapons:")
 		for _,v in pairs(weps) do
 			print("- name: ".. v .. ", type: ".. PHX.LPS.WEAPON_NEW[v].Type)
 		end	
 	else
-        print("[PHX LPS] Sorry, you can't access this command.")
+        print("[LPS] Sorry, you can't access this command.")
     end
 end, nil, "List Weapon Info for Last Prop Standing.")
