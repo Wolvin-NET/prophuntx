@@ -4,7 +4,7 @@
 
 local L = {}
 
-L.code = "en_us"
+L.code = "sv_se"
 
 L.Name 		 	= "Svenska" -- example: "Bahasa Indonesia"
 L.NameEnglish	= "Swedish" -- Your Language but spoken in English, example: "Indonesian"
@@ -27,7 +27,7 @@ L.SUICIDEMSG = {  -- Fix me: there was addition text here but feel free to add m
 	"dog av kraften.",
 	"dog. Tryck F tack.",
 	"ångrar sig efter att ha dödat några oskyldiga föremål.",
-	"är noclippad till bakrummen.",
+	"föll genom till bakrummen.",
 	"försöker dö ut.",
 	"dogog.",
 	"är panikslagen och försöker döda alla föremål istället.",
@@ -69,7 +69,7 @@ L["DERMA_TEAMSELECT"]		= "Välj lag"
 
 -- FRETTA: F1 screeen
 L["DERMA_RTV"] 				= "Rösta på ändring (RTV)"
-L["DERMA_PHMENU"] 			= "Prop Hunt meny"
+L["DERMA_PHMENU"] 			= "Prop Hunt-meny"
 L["DERMA_CHANGETEAM"]		= "Ändra lag"
 
 -- FRETTA: Scoreboard
@@ -102,7 +102,7 @@ Ett projekt skapat för att göra Prop Hunt mer modernt och anpassningsbart.
 Mer information kan hittas genom länken:
 https://www.buymeacoffee.com/wolvindra
 
-För att få mer information, hjälp, och vägvisning, tryck på [F1] och sedan på [Prop Hunt Meny] knappen.
+För att få mer information, hjälp, och vägvisning, tryck på [F1] och sedan på [Prop Hunt-meny] knappen.
 
 Version: ]].. PHX.VERSION ..[[ Revision: ]].. PHX.REVISION ..[[
 
@@ -129,18 +129,18 @@ L["TEAM_PROPS"]				= L["PHX_TEAM_PROPS"]
 L["TEAM_HUNTERS"]			= L["PHX_TEAM_HUNTERS"]
 
 L["HUD_ROTLOCK"]				= "Föremålsrotation: Låst"
-L["HUD_ROTFREE"]				= "Föremålsrotation: Fri"
+L["HUD_ROTFREE"]				= "Föremålsrotation: Olåst"
 L["HUD_KILLEDBY"]			= "Du dödades av %s"
 
-L["HUD_AUTOTAUNT"]			= "Hånar automatiskt i %d sekund(er)"
-L["HUD_AUTOTAUNT_ALT"]		= "Hånar automatiskt i %d"
+L["HUD_AUTOTAUNT"]			= "Hånar automatiskt om %d sekund(er)"
+L["HUD_AUTOTAUNT_ALT"]		= "Hånar automatiskt om %d"
 
 L["HUD_TargetID"]			= "Spelare: %s (%d%%)"
 
-L["HUD_BLINDED"]				= "%s kommer vara avblindad och släppt i %s"
-L["HUD_UNBLINDED"]			= "Redo eller inte, här kommer vi!"
+L["HUD_BLINDED"]				= "%s kommer avblindas och släppas loss om %s"
+L["HUD_UNBLINDED"]			= "Redo eller ej, här kommer vi!"
 
-L["BLIND_RESPAWN_TEAM"]		= "Du återupplivades endast på %ss lag %d sekund(er) in i bindeltiden"
+L["BLIND_RESPAWN_TEAM"]		= "Du återupplivades endast på lag %s, %d sekund(er) in i bindeltiden"
 L["BLIND_RESPAWN"]			= "Du återupplivades %d sekund(er) in i bindeltiden"
 
 L["MISC_ACCEPT"]				= "Acceptera"
@@ -148,11 +148,11 @@ L["MISC_OK"]					= "OK"
 L["MISC_CLOSE"]				= "Stäng"
 L["MISC_PREV"]				= "< FÖREGÅENDE"
 L["MISC_NEXT"]				= "NÄSTA >"
-L["MISC_ACCESSDENIED"]		= "Tillkomst Nekad"
+L["MISC_ACCESSDENIED"]		= "Åtkomst nekad"
 
 -- Chat messages
 L["CHAT_NOPLAYERS"]			= "Det finns inte nog med spelare för att påbörja spelet!"
-L["CHAT_SWAP"]				= "Lagen har bytt!"
+L["CHAT_SWAP"]				= "Lagen har bytt plats!"
 
 L["CHAT_SWAPTEAM_WARNING"]   = "Du har bytt lag %dx (%dx MAX). Efter det kan du inte längre byta lag."
 L["CHAT_SWAPTEAM_REVERT"]	= "Du kan inte längre byta till %s, då du har överskridit antalet lagbyten."
@@ -161,23 +161,23 @@ L["CHAT_PROP_NO_ROOM"] 		= "Det finns inget utrymme att ändra till det föremå
 
 -- Notification
 L["NOTIFY_IN_PROP_TEAM"]		= "Du är i föremålslaget och kan rotera! Du roterar föremålet genom att röra på musen."
-L["NOTIFY_ROTATE_NOTICE"]	= "Dessutom kan du växla rotationslås genom att trycka på [R] knappen (vanliga nyckelbindningar)"
+L["NOTIFY_ROTATE_NOTICE"]	= "Dessutom kan du växla rotationslås genom att trycka på [R] knappen (vanliga tangentbindningar)"
 
 -- Custom Taunt Window
-L["TM_WARNING_CT_DISABLE"]	= "[PHX - Hån] Varning: Denna server har stängt av anpassade hån." -- Fix me anpassade hån?
+L["TM_WARNING_CT_DISABLE"]	= "[PHX - Hån] Varning: Denna server har stängt av anpassade hån."
 L["TM_NO_TAUNTS"]			= "Varning: Inga hån hittades i denna kategori."
-L["TM_PLAY_ONLY_ALIVE"] 		= "Du får endast spela anpassade hån när du lever."
+L["TM_PLAY_ONLY_ALIVE"] 		= "Du får endast spela anpassade hån medan du lever."
 
-L["TM_WINDOW_TITLE"]			= "Prop Hunt Fönstret för anpassade hån"
-L["TM_NOTICE_PLSWAIT"]		= "Please wait in %s sec(s) before random taunt ends!" "Var snäll vänta %s sekund(er) tills slumpmässigt hån avslutas!"
-L["TM_NOTICE_PLAYPREVIEW"]	= "Förhandsvisar Hån: %s"
+L["TM_WINDOW_TITLE"]			= "Prop Hunt-fönstret för anpassade hån"
+L["TM_NOTICE_PLSWAIT"]		= "Var snäll vänta %s sekund(er) tills slumpmässigt hån har spelat klart!"
+L["TM_NOTICE_PLAYPREVIEW"]	= "Förhandsvisar hån: %s"
 
-L["TM_TOOLTIP_PLAYTAUNT"] 	= "Spela Upp Hån"
-L["TM_TOOLTIP_PREVIEW"]		= "Förhandsvisa Hån"
-L["TM_TOOLTIP_PLAYCLOSE"]	= "Spela Upp Hån och Stäng"
-L["TM_TOOLTIP_PLAYRANDOM"]	= "Spela Upp Slumpmässigt Hån"
+L["TM_TOOLTIP_PLAYTAUNT"] 	= "Spela upp hån"
+L["TM_TOOLTIP_PREVIEW"]		= "Förhandsvisa hån"
+L["TM_TOOLTIP_PLAYCLOSE"]	= "Spela upp hån och stäng"
+L["TM_TOOLTIP_PLAYRANDOM"]	= "Spela upp slumpmässigt hån"
 L["TM_TOOLTIP_CLOSE"]		= "Stäng"
-L["TM_MENU_CLOSE"]			= "Stäng Meny"
+L["TM_MENU_CLOSE"]			= "Stäng meny"
 
 L["TM_DELAYTAUNT_NOT_EXIST"] = "Hånet du valde hittades inte på servern!"
 L["TM_DELAYTAUNT_PLSWAIT"]	= "Var snäll vänta %s sekund(er) till!"
@@ -186,13 +186,13 @@ L["TM_DELAYTAUNT_PLSWAIT"]	= "Var snäll vänta %s sekund(er) till!"
 	PHX Menu window
 ]]
 L["PHXM_WINDOW_TITLE"]		= "Prop Hunt X - Avancerade Alternativ & Meny"
-L["SERVER_INFO_MOTD"]		= "SERVER INFORMATION & REGLER [MOTD]"
+L["SERVER_INFO_MOTD"]		= "SERVERINFORMATION & REGLER [MOTD]"
 
-L["PHXM_TAB_HELP"]			= "Hjälp & Vägledning"
-L["PHXM_TAB_MUTE"]			= "Tysta Spelare"
+L["PHXM_TAB_HELP"]			= "Hjälp & vägledning"
+L["PHXM_TAB_MUTE"]			= "Tysta spelare"
 L["PHXM_TAB_PLAYER"]			= "Spelarinställningar"
-L["PHXM_TAB_MODEL"] 			= "Bläddra Modeller"
-L["PHXM_TAB_MODEL_DISABLED"]	= "Bläddra Modeller (Avstängd)"
+L["PHXM_TAB_MODEL"] 			= "Bläddra modeller"
+L["PHXM_TAB_MODEL_DISABLED"]	= "Bläddra modeller (avstängd)"
 L["PHXM_TAB_ADMIN"]			= "Administratörsinställningar"
 L["PHXM_TAB_ABOUT"]			= "Om PH:X"
 L["PHXM_TAB_MAPVOTE"]		= "Kartröstning"
@@ -210,25 +210,25 @@ L["PHXM_MUTE_SELECT"]		= "Välj spelare som du vill tysta."
 ]]
 L["PHXM_PLAYER_OPTIONS"]		= "Alternativ för spelare"
 L["PHXM_PLAYER_LANG"]		= "Språk"
-L["PHXM_PLAYER_BIND"]		= "Tangentbindningar"
+L["PHXM_PLAYER_BIND"]		= "Tangenter"
 L["PHXM_PLAYER_HUDSETTINGS"]	= "HUD-inställningar"
 
-L["PHXM_PLAYER_TAUNT_KEY"]			= "Knapp för Slumpmässigt Hån"
-L["PHXM_PLAYER_TAUNTWINDOW_KEY"]		= "Knapp för Hånmeny"
-L["PHXM_PLAYER_ROTATLOCK_KEY"]		= "Knapp för Rotationslås"
+L["PHXM_PLAYER_TAUNT_KEY"]			= "Knapp för slumpmässigt hån"
+L["PHXM_PLAYER_TAUNTWINDOW_KEY"]		= "Knapp för hånmeny"
+L["PHXM_PLAYER_ROTATLOCK_KEY"]		= "Knapp för rotationslås"
 
-L["PHXM_PLAYER_TOGGLE_HALOS"]		= "Växla ljusringseffekt när du väljer föremål"
-L["PHXM_PLAYER_IDNAMES"]				= "Visa lagspelares namn ovanför deras huvuden istället (och visa även genom väggen)"
+L["PHXM_PLAYER_TOGGLE_HALOS"]		= "Växla ljusskenseffekt när du väljer föremål"
+L["PHXM_PLAYER_IDNAMES"]				= "Visa lagspelares namn ovanför deras huvuden istället (och visa även genom väggar)"
 L["PHXM_PLAYER_ENDROUND_CUE"]		= "Spela upp ljud för rundavslut"
 L["PHXM_PLAYER_TAUNTMENU_AUTOCLOSE"]	= "Alternativ for att stänga hånmeny automatiskt när man dubbelklickar."
 L["PHXM_PLAYER_SEE_HUNTER_LINE"]		= "Rita en linje på jägare så man kan se deras synriktning i åskådarläge."
-L["PHXM_PLAYER_SEE_LBALL_ICONS"]		= "Aktivera 'Lyckoboll' ikon för visning när de väl upplivas"
-L["PHXM_PLAYER_SEE_CRYSTAL_ICONS"]	= "Aktivera 'Djävulsboll' ikon för visning när de väl skapas"
+L["PHXM_PLAYER_SEE_LBALL_ICONS"]		= "Aktivera 'Lyckoboll' ikon för visning när dem upplivas"
+L["PHXM_PLAYER_SEE_CRYSTAL_ICONS"]	= "Aktivera 'Djävulsboll' ikon för visning när dem skapas"
 
 L["PHXM_PLAYER_USE_NEW_HUD"]			= "Använd Nya PH: Enhanced HUD"
-L["PHXM_PLAYER_SHOW_TUTOR"]			= "Visa genomgångsruta (Visas endast 2x för varje föremål som skapas)"
-L["PHXM_PLAYER_USE_NEW_CROSSHAIR"]	= "Aktivera Anpassat Hårkors"
-L["PHXM_PLAYER_SHOW_TEAM_TOPBAR"]	= "Visa antal levande lagmedlemmar längst upp til vänster (åtminstone 4 spelare kommer visas)"
+L["PHXM_PLAYER_SHOW_TUTOR"]			= "Visa handledningsruta (Visas endast 2x för varje föremål som skapas)"
+L["PHXM_PLAYER_USE_NEW_CROSSHAIR"]	= "Aktivera anpassat hårkors"
+L["PHXM_PLAYER_SHOW_TEAM_TOPBAR"]	= "Visa antal levande lagmedlemmar längst upp til vänster (minst 4 spelare kommer visas)"
 
 --[[
 	Player model Browser Section
@@ -236,12 +236,12 @@ L["PHXM_PLAYER_SHOW_TEAM_TOPBAR"]	= "Visa antal levande lagmedlemmar längst upp
 L["QUERY_MODEL_SELECTED"]	= "Modell %s har valts och den kommer tillämpas efter återupplivelsen!"
 L["QUERY_MODEL_INFO"]		= "Modellnamn: %s - Tillgänglig för: Alla"
 
-L["MDL_MENU_REFRESH"] 		= "Uppdatera Ikon"
-L["MDL_MENU_PREVIEW"] 		= "Förhandsvisa Modell"
+L["MDL_MENU_REFRESH"] 		= "Uppdatera ikon"
+L["MDL_MENU_PREVIEW"] 		= "Förhandsvisa modell"
 L["MDL_MENU_MODELINFO"] 		= "Modellinformation"
 
 
-L["MISC_APPLYMDL"] 			= "Tillämpa Modell"
+L["MISC_APPLYMDL"] 			= "Tillämpa modell"
 
 L["PHXM_MODEL_DISABLED"] 	= "Förlåt, men anpassade modeller har stängts av på denna server!"
 L["PHXM_PLAYERMODEL_SETFOV"]	= "  Anpassa Modellsynfält"
@@ -249,31 +249,31 @@ L["PHXM_PLAYERMODEL_SETFOV"]	= "  Anpassa Modellsynfält"
 --[[
 	Server Settings
 ]]
-L["PHXM_ADMIN_OPTIONS"]		= "Inställningar för spelläge på serversidan (Endast synlig för Administratörer/Ägare)"
-L["PHXM_ADMIN_MUSTALIVE"]	= "Du måsta vara levande för att utföra denna handling."
+L["PHXM_ADMIN_OPTIONS"]		= "Inställningar för spelläge på serversidan (Endast synlig för administratörer/ägare)"
+L["PHXM_ADMIN_MUSTALIVE"]	= "Du måsta vara vid liv för att utföra denna handling."
 
 --[[
 	Language Override
 ]]
-L["PHXM_ADMIN_LANGOVERRIDE"]	= "Språksöverstyrning"
+L["PHXM_ADMIN_LANGOVERRIDE"]	= "Språköverstyrning"
 
-L["PHXM_ADMIN_FORCELANG"] 				= "Använd specifikt språk? Detta överstyr klientspråket till att använda serverns valda språk." -- Fix me
+L["PHXM_ADMIN_FORCELANG"] 				= "Använd specifikt språk? Detta tvingar klienten att använda serverns valda språk."
 L["PHXM_ADMIN_LANGTOUSE"]				= "Tvingat språk som ska användas."
 L["PHXM_ADMIN_PLAYERDEFAULTLANG"] 		= "Standardspråk för förstagångsspelare."
 
 -- Gameplay settings
-L["PHXM_ADMIN_CUSTOM_MODEL"]				= "Använd anpassade modeller för jägare. Detta tillämpar [Modellbläddrare] -fliken."
-L["PHXM_ADMIN_CUSTOM_MODEL_PROP"]		= "Använd tillämpade modeller för föremål (Kräver att anpassade jägarmodeller är aktiverat)"
-L["PHXM_ADMIN_TAUNT_DELAY_CUSTOM"]		= "Anpassad hånfördröjning (Sekunder)"
-L["PHXM_ADMIN_TAUNT_DELAY_RANDOM"]		= "Normal hånfördröjning (Sekunder)"
-L["PHXM_ADMIN_TAUNT_DELAY_AUTO"]			= "Automatisk hånfördröjning (Sekunder)" -- fix all pls
-L["PHXM_ADMIN_AUTOTAUNT_ENABLE"]			= "Använd automatiska hånfunktioner (Timer fixas nästa runda)"
+L["PHXM_ADMIN_CUSTOM_MODEL"]				= "Använd anpassade modeller för jägare. Detta tillämpar [Modellbläddrare]-fliken."
+L["PHXM_ADMIN_CUSTOM_MODEL_PROP"]		= "Använd tillämpade modeller för föremål (anpassade jägarmodeller måste vara på)"
+L["PHXM_ADMIN_TAUNT_DELAY_CUSTOM"]		= "Anpassad hånfördröjning (sekunder)"
+L["PHXM_ADMIN_TAUNT_DELAY_RANDOM"]		= "Normal hånfördröjning (sekunder)"
+L["PHXM_ADMIN_TAUNT_DELAY_AUTO"]			= "Automatisk hånfördröjning (sekunder)"
+L["PHXM_ADMIN_AUTOTAUNT_ENABLE"]			= "Använd automatiska hånfunktioner (tidur fixas nästa runda)"
 
-L["PHXM_ADMIN_NOTICE_ROTATION"]			= "Visa 'Föremålsrotation' notis för varje föremålsskapande"
-L["PHXM_ADMIN_CAMERA_COLLIDE"]			= "Låt Föremålskamera kollidera med väggar"
+L["PHXM_ADMIN_NOTICE_ROTATION"]			= "Visa notis om 'föremålsrotation' vid varje föremålsskapande"
+L["PHXM_ADMIN_CAMERA_COLLIDE"]			= "Låt föremålskamera kollidera med väggar"
 L["PHXM_ADMIN_FREEZECAM"]				= "Slå på kamerafrysningsfunktioner för föremålslaget"
 L["PHXM_ADMIN_FREEZECAM_HUNTER"]			= "Slå på kamerafrysningsfunktioner för jägarlaget"
-L["PHXM_ADMIN_PROP_COLLIDE"]				= "Låt föremål kollidera med andra föremålsspelare"
+L["PHXM_ADMIN_PROP_COLLIDE"]				= "Låt föremålspelare kollidera med varandra"
 L["PHXM_ADMIN_SWAP_TEAM"] 				= "Byt lag varje runda - lagen förblir på varsin sida om denna är av."
 L["PHXM_ADMIN_HUNTER_PENALTY"]			= "Hälsostraff för jägare"
 L["PHXM_ADMIN_HUNTER_KILL_BONUS"]		= "Jägardråpsbonus"
@@ -281,7 +281,7 @@ L["PHXM_ADMIN_HUNTER_SMG_GRENADES"]		= "SMG granater till jägarna"
 L["PHXM_ADMIN_GAME_TIME"]				= "(Kräver omstart av karta) Total speltid (minuter)"
 L["PHXM_ADMIN_BLINDLOCK_TIME"]			= "Jägares blindtid (sekunder)"
 L["PHXM_ADMIN_ROUND_TIME"]				= "(Kräver omstart av karta) Omgångstid (sekunder)"
-L["PHXM_ADMIN_ROUNDS_PER_MAP"]			= "(Kräver omstart av karta) Totalt antal rundor per karta"
+L["PHXM_ADMIN_ROUNDS_PER_MAP"]			= "(Kräver omstart av karta) Totala antal rundor per karta"
 L["PHXM_ADMIN_ENABLE_LUCKYBALL"]			= "Tillåt Lyckobollar att skapas på förstörbara objekt (Chans är 8%)"
 L["PHXM_ADMIN_ENABLE_CRYSTAL"]			= "Tillåt Djävulsbollar att skapas när jägare dör (Alltid)"
 L["PHXM_ADMIN_WAIT_PLAYERS"]				= "Vänta på spelare att påbörja spelet"
@@ -322,7 +322,7 @@ L["PHXM_ADMIN_RELOAD_OBB"]		= "Utvecklare: ladda om data för OBB modifierare va
 --[[
 	Experimental & PH:X Features
 ]]
-L["PHXM_ADMIN_EXPERIMENTALPHX"]			= "Prop Hunt: X Experimentella grejer"
+L["PHXM_ADMIN_EXPERIMENTALPHX"]			= "Prop Hunt: X experimentella grejer"
 
 L["PHXM_ADMIN_HLA_COMBINE"]				= "Lägg till stöd för HL: Alyx Combine modeller"
 L["PHXM_ADMIN_TEAMBALANCE"]				= "Enkla laginställningar"
@@ -475,7 +475,7 @@ L["PCR_WINDOW_GUIDE_TTL"]	= "Snabbguide: Föremålsmeny A och O"
 L["PCR_BTN_HELP_MENU"]		= "Föremålsmeny Hjälp"
 
 L["PCR_CL_CMDUSEULX"]		= " Detta kommando är avstängt. Använd 'ulx propmenu' istället!"
-L["PCR_CMD_ULX_DISABLED"]	= "Kommandot ulx propmenu är avstängt. Tryck [tangentbindning för föremålsmenyn] för att öppna."
+L["PCR_CMD_ULX_DISABLED"]	= "Kommandot ulx propmenu är avstängt. Tryck [tangentg för föremålsmenyn] för att öppna."
 
 L["PCR_EDT_IN_USE"]			= "En administrator redigerar fortfarande föremålsdatan. Vänligen vänta!"
 L["PCR_EDT_ERROR_DISABLED"]	= "[Föremålsmeny] Fel: Tillägg av anpassade föremål är avstängt!"
@@ -611,7 +611,7 @@ L["PHXM_PLAYER_SHOW_DECOY_MARKER"]   = "Dölj/Visa lockfågelsmarkör?"
 L["PCR_MODEL_DONT_EXISTS"]   = "Tyvärr, denna modell är för närvarande inte tillgänglig!"
 
 L["PCR_PLUG_WARN_MSG"]		= "Varning: Tillägg av anpassade föremål (pcr_allow_custom) är satt till 0.\nDu måste slå på denna funktion för att redigera ditt anpassade föremål!\nEn kartändring behövs för att byta denna inställning."
-L["PCR_PLUG_LBL_BINDKEY"]	= "För att ändra tangentbindning, byt till '[Spelare] fliken."
+L["PCR_PLUG_LBL_BINDKEY"]	= "För att ändra tangentg, byt till '[Spelare] fliken."
 L["PCR_PLUG_LBL_EDITOR"]		= "Redigerare för anpassade-föremålsmenyn"
 L["PCR_PLUG_BTN_OPEN_EDT"]	= "Öppna redigerare"
 L["PCR_PLUG_LBL_COMSET"]		= "Vanliga inställningar"
