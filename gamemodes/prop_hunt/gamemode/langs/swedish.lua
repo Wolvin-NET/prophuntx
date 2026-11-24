@@ -6,8 +6,8 @@ local L = {}
 
 L.code = "sv_se"
 
-L.Name 		 	= "Svenska" -- example: "Bahasa Indonesia"
-L.NameEnglish	= "Swedish" -- Your Language but spoken in English, example: "Indonesian"
+L.Name 		 	= "Svenska"
+L.NameEnglish	= "Swedish"
 L.Author			= "Torktumlaren" -- Only accept STRINGS.
 -- Can Accept: String, and Table.
 L.AuthorURL		= {	
@@ -532,14 +532,18 @@ L["PHXM_FAKE_TAUNT_MAXUSAGE"]		= "Max antal användningar för låtsashån; -1 �
 L["PHXM_TAUNT_RIGHT_CLICK"]		    = "Högerklicka för att håna. Detta stänger av högerklick i den anpassade menyn!"
 
 L["PHXM_TAUNT_PITCH_SETTINGS"]		= "Tonhöjdsinställningar för hån"
-L["PHXM_TAUNT_PITCH_ENABLE"]			= "Slå på tönhäjd för hån"
+L["PHXM_TAUNT_PITCH_ENABLE"]		= "Slå på tönhäjd för hån"
 L["PHXM_TAUNT_PITCH_RANGE_MIN"]		= "Minsta tillåtna tonhöjd hör hån. 1 till 99."
 L["PHXM_TAUNT_PITCH_RANGE_MAX"]		= "Högsta tillåtna tonhöjd hör hån. 100 till 255."
 
-L["PHXM_DECOY_SETTINGS"]				= "Lockfågelsinställningar"
+L["PHXM_TAUNT_INCLUDE_DEF"]			= "Inkludera medföljande PH:X & hånskanner mapp?\nOm denna är avstängd, använder vi samtliga tillgängliga anpassade hån. Om inga sådana är installerade använder vi reservhån. (KRÄVER OMSTART AV KARTA)"
+L["PHXM_TAUNT_DOOVERLAP"]			= "Bör uppspelade hån överlappa med nyligen uppspelade hån?\nOm denna är avstängd stoppas uppspelningen av det förra hånet och spelar upp det nya istället. Slå på för att behålla det klassiska beteendet."
+L["PHXM_TAUNT_SNDLVL"]				= "Ljudnivå att använda för hån\n1=75dB 2=80dB 3=85dB 4=90dB 5=95dB 6=100dB (standard är 6)"
+
+L["PHXM_DECOY_SETTINGS"]			= "Lockfågelsinställningar"
 L["PHXM_DECOY_ENABLE"]				= "Slå på låckfågelsbelöningar? Alla levande föremål belönas ENDAST EN GÅNG tills rundan slutar. De är inte additiva och subtraherar endast när dem placeras."
 
-L["PHXM_DISABLE_FOOTSTEP"]           = "Växla tysta fotsteg för föremålslaget"
+L["PHXM_DISABLE_FOOTSTEP"]          = "Växla tysta fotsteg för föremålslaget"
 
 L["PHXM_ADMIN_CHATSETTING"]			= "Chattfönsterinställningar"
 L["PHXM_ADMIN_HUNTERBLIND"]			= "Jägarblindhetskontroller"
@@ -772,7 +776,7 @@ L["PHXM_ADMIN_NOTPUNSTUCKINROUND"]	= "Stäng av frigivningsteleportering som sis
 L["PHXM_ADMIN_UNSTUCK_WAITTIME"]		= "Hur många sekunder måste passera mellan varje frigivningsförsök" --ph_unstuck_waittime
 L["PHXM_ADMIN_TEAMBAL_ORIG"] 		= "Använd PH:Xs urspungliga lagutjämning (stänger av alla lagrelaterade inställningar nedan)" --ph_originalteambalance
 L["PHXM_ADMIN_TEAMBAL_UNCHECK"] 		= "Avmarkera den förra markeringsrutan för att komma åt avancerade lagutjämningsinställningar." --ph_originalteambalance_uncheck [UNUSED]
-L["PHXM_ADMIN_FORCESPECTOPLAY"]		= "Tvinga åskådare att spela genom att inkludera dem i lagutjämningen" --ph_forcespectatorstoplay
+L["PHXM_ADMIN_FORCESPECTOPLAY"]		= "Tvinga åskådare att spela genom att inkludera dem i lagutjämningen (Detta delar också ut spelare till föremål/jägare direkt när dem går med i servern!)" --ph_forcespectatorstoplay
 L["PHXM_ADMIN_NO_H_CONSECUTIVE"]		= "Förhindra spelare att bli jägare två gånger i rad (fungerar endast i blandingsläge)" --ph_preventconsecutivehunting
 L["PHXM_ADMIN_HUNTER_COUNT"] 		= "Antal jägare (0 = automatisk)" --ph_huntercount
 L["PHXM_ADMIN_ROTATETEAM"] 			= "Stäng av blandningsläge och rotera spelare istället" --ph_rotateteams
@@ -851,7 +855,13 @@ L["KEY_RMB"]				= "RMB" -- Right Mouse Button, Short version
 L["MISC_TEAM_NAME"]		= "LAG: %s" -- TEAM PROPS, TEAM HUNTERS, but in 1 sentence.
 L["NOTIFY_HEADER_TITLE"]	= "Spelkontroller"
 
--- Revision 14/09/2022
+-- Revision 14/09/2022 + 14/01/2024
 L["PHXM_MV_CHANGEMAP_NOPLAYER"]	= "Tvinga ändring av kartan efter alla har lämnat servern?"
 
-PHX.LANGUAGES[L.code] = LANG
+L["KEY_MIDCLICK"]		= "MMB"
+
+L["LD_MIDCLICK"]			= "MITTENKLICK"
+L["LD_RIGHTCLICK"]		= "HÖGERKLICK"
+L["LD_PRESS2SHOOT"]		= "Tryck [%s] för att skjuta %s!"
+
+PHX.LANGUAGES[L.code] = L
