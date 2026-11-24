@@ -262,7 +262,7 @@ L["PHXM_ADMIN_LANGTOUSE"]				= "Tvingat språk som ska användas."
 L["PHXM_ADMIN_PLAYERDEFAULTLANG"] 		= "Standardspråk för förstagångsspelare."
 
 -- Gameplay settings
-L["PHXM_ADMIN_CUSTOM_MODEL"]				= "Använd anpassade modeller för jägare. Detta tillämpar [Modellbläddrare]-fliken."
+L["PHXM_ADMIN_CUSTOM_MODEL"]				= "Använd anpassade modeller för jägare. Detta tillämpar [Bläddra modeller]-fliken."
 L["PHXM_ADMIN_CUSTOM_MODEL_PROP"]		= "Använd tillämpade modeller för föremål (anpassade jägarmodeller måste vara på)"
 L["PHXM_ADMIN_TAUNT_DELAY_CUSTOM"]		= "Anpassad hånfördröjning (sekunder)"
 L["PHXM_ADMIN_TAUNT_DELAY_RANDOM"]		= "Normal hånfördröjning (sekunder)"
@@ -484,7 +484,7 @@ L["PCR_EDT_NO_RIGHTS"]		= "Du har inte rättigheterna att komma åt denna funkti
 --[[
 	Admin Section, Revision: 16.09.21/X2Z
 ]]
-L["PHXM_PLAYER_PROP_CHOOSER_KEY"]	= "Standardtangent för att öppna föremålsmeny (Föremålsväljare)."
+L["PHXM_PLAYER_PROP_CHOOSER_KEY"]	= "Standardtangent för att öppna föremålsmeny (föremålsväljare)."
 L["PHXM_PROP_FREEZE_MIDAIR"]			= "Standardtangent för att frysa rörelser mitt i luften som ett föremål."
 L["PHXM_ADMIN_TAUNT_SCANNER"]		= "(Kräver omstart av karta) Slå på hånskanner?"
 L["PHXM_ADMLBL_USABLE_ENTS"]			= "Användbara föremålstyper"
@@ -703,7 +703,7 @@ L["FORCE_JOIN_TEAM_IS_DISABLED"]	= "Lagutjämning är avstängt (lagrotation är
 L["PHX_TM_MNBAR_OPTIONS"]		= "Inställningar"
 L["PHX_TM_MNBAR_SAVEFAV"]		= "Spara favoriter"
 L["PHX_TM_MNBAR_LOADFAV"]		= "Ladda om favoriter"
-L["PHX_TM_MNBAR_SETTINGS"]		= "Andra"
+L["PHX_TM_MNBAR_SETTINGS"]		= "Övrigt"
 L["PHX_TM_MNBAR_RESET"]			= "Återställ favoriter"
 
 L["PHX_TM_WARN_CLEARFAV"]		= "VARNING: Detta kommer RENSA ALLA dina sparade favorithån. Är du säker på att du vill fortsätta?"
@@ -728,21 +728,21 @@ L["PHXM_ADMIN_REPL_MUST_STAND"]	= "[Experimentellt] Begränsa imitation av före
 L["PHXM_DROP_VBS_DISABLE"]       = "Stäng av detaljrikt"
 L["PHXM_DROP_VBS_ENABLE"]        = "Slå på detaljrikt"
 L["PHXM_DROP_MDL_INCLUDEALL"]    = "Inkludera allt ( %d )"
-L["PHXM_DROP_MDL_CUSTOMLIST"]    = "Separat/Anpassas lista ( %d )"
+L["PHXM_DROP_MDL_CUSTOMLIST"]    = "Separat/Anpassad lista ( %d )"
 L["PHXM_DROP_MDLTYPE_PROP"]      = "Endast fysik ( %d )"
 L["PHXM_DROP_MDLTYPE_PROPDYN"]   = "Fysik & dynamiska föremål ( %d )"
 L["PHXM_DROP_MDLTYPE_ANYENTS"]   = "Valfria kompatibla enheter ( %d )"
 L["PHXM_DROP_MDLTYPE_CUSTOM"]    = "Anpassade enheter ( %d )"
 L["PHXM_DROP_RESPAWNBLIND_BOTH"] = "Båda lag"
 
-L["PHXM_TAB_ADMINGROUPS"]        = "grupp- & åtkomstinställningar"
+L["PHXM_TAB_ADMINGROUPS"]        = "Grupp- & åtkomstinställningar"
 L["PHXM_TAB_PHEPLUS"]			= "Enhanced Plus-inställningnar"
 
 L["PHXM_ADMIN_ACCESS_GROUP"]     = "Välj grupper som får åtkomst till administrativa PH:X inställningar, Enhanced Plus & Plugin-inställningssidan."
-L["PHXM_ADMIN_ACCESS_GROUP_HINT"] = "Vänligen notera att \"superadmins\" inte kan upphävas."
+L["PHXM_ADMIN_ACCESS_GROUP_HINT"] = "Vänligen notera att rollen \"superadmins\" inte kan upphävas."
 L["PHXM_ADMIN_ACCESS_GROUP_NOULX"] = "Fel: ULib & ULX är inte installerade på din server."
 L["PHXM_ADMIN_ACCESS_NOREVOKE"]  = " (Kan inte upphävas)"
-L["PHXM_ADMIN_GROUP_WHOCANACC"]	= "Välj grupper som får åtkomst till [Admin Settings]."
+L["PHXM_ADMIN_GROUP_WHOCANACC"]	= "Välj grupper som får åtkomst till [Administratörsinställningar]."
 L["PHXM_ADMIN_GROUP_MUTEABLE"]	= "Välj grupper imuna mot att tystas ner i [Tysta Spelare]. (Användare kan alltid tystas)."
 
 L["PHXM_ADMIN_ACCESS_CHATINFO"]  = "Det var en konfigurationsuppdatering för Prop Hunt-menyn. Öppnar igen..."
