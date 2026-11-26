@@ -1,72 +1,72 @@
 local L = {}
 
 -- English Section
-L["en_us"]   = {
+L["sv_se"]   = {
     -- Header Text Group
-    ["LPS_GENERAL_SETTINGS"]    = "General Settings",
-    ["LPS_APPEARANCES"]         = "Appearances",
-    ["LPS_WEAPON_SETTINGS"]     = "Last Stands Weapon Setting",
-    ["LPS_WEAPON_DMG_SETTINGS"] = "Last Stands Weapon Damage",
-    ["LPS_HEALTH_ARMOR"]        = "Health & Armor Options",
-    ["LPS_TRIGGER_CONDITION"]   = "LPS Event Trigger Condition",
+    ["LPS_GENERAL_SETTINGS"]    = "Almänna inställningar",
+    ["LPS_APPEARANCES"]         = "Utseenden",
+    ["LPS_WEAPON_SETTINGS"]     = "Vapeninställningar för Sista Levande",
+    ["LPS_WEAPON_DMG_SETTINGS"] = "Vapenskada för Sista Levande",
+    ["LPS_HEALTH_ARMOR"]        = "Inställningar för hälsa & pansar",
+    ["LPS_TRIGGER_CONDITION"]   = "Förutsättning för aktivering av LPS händelse",
     
     -- Appearances & General Settings
-    ["LPS_MENU_ENABLE"]         = "Enable Last Prop Standing",
-	["LPS_ENABLE_MUSIC"]		= "Enable Music when LPS occurs. Require Round Restart to take effect.",
-    ["LPS_WEAPON_SELECT"]       = "Weapon to give ('random' or 'name'). See Weapon List below.",
-    ["LPS_BTN_WEPLIST"]         = "Available Weapons List",
-    ["LPS_MINIMUM_PROPS_TEAM"]  = "Minimum number of props on Team before LPS can be triggered. Minium: 2.",
+    ["LPS_MENU_ENABLE"]         = "Slå på Sista Föremålet Levande",
+	["LPS_ENABLE_MUSIC"]		= "Slå på musik när SFL är aktivt. Kräver omstart av runda för att ta effekt.",
+    ["LPS_WEAPON_SELECT"]       = "Vapen som ges ('random' eller 'namn'). Se vapenlista nedan.",
+    ["LPS_BTN_WEPLIST"]         = "Lista över tillgängliga vapen",
+    ["LPS_MINIMUM_PROPS_TEAM"]  = "Minsta antal föremål som krävs för att SFL ska kunna aktiveras. Minium: 2.",
     
-    ["LPS_START_RANDOM"]        = "Whether LPS should be started randomly. (Delayed Start will be overriden)",
-    ["LPS_START_DELAYED"]       = "Should LPS be Delayed-Start after X rounds?",
-    ["LPS_START_X_ROUNDS"]      = "If Delayed-Start enabled, increment to X rounds to trigger LPS.",
-    ["LPS_SET_USEHEALTH"]       = "Should LPS Players STARTS with 100 HP? Changing to other prop doesn't keep the health!",
-    ["LPS_SET_USEARMOR"]        = "Should Give LPS Players an Armor? Starts with 100 AP.",
-	["LPS_ALLOW_HOLSTER"]		= "Allow Weapon Holstering. This will hide Halo and Trails effect when enabled.",
+    ["LPS_START_RANDOM"]        = "Bör SFL aktiveras slumpmässigt? (Fördröjd start kommer ignoreras)",
+    ["LPS_START_DELAYED"]       = "Bör aktiveringen av SFL fördröjas efter X antal rundor?",
+    ["LPS_START_X_ROUNDS"]      = "Om SFL fördröjs, lägg till X rundor innan SFL aktiveras.",
+    ["LPS_SET_USEHEALTH"]       = "Bör SFL spelare BÖRJA med 100 hälsa? Hälsan bevaras inte när man byter föremål!",
+    ["LPS_SET_USEARMOR"]        = "Bör SFL spelare få pansar? Börjar med 100 pansar.",
+	["LPS_ALLOW_HOLSTER"]		= "Tillåt spelare att sätta vapen i hölster. Detta döljer kontur- och spåreffekter.",
     
-    ["LPS_WEPLIST"]             = "Available Weapons list:\n%s\nYou can use 'lps_weapon_list' in the console.",
+    ["LPS_WEPLIST"]             = "Lista över tillgängliga vapen:\n%s\nDu kan skriva 'lps_weapon_list' i konsolen.",
     
-	["LPS_SHOW_WEAPON"]			= "Show Last Prop Standing's Weapon?",
-    ["LPS_HALO_ENABLE"]         = "Draw a halo effect around the last prop?",
-    ["LPS_HALO_SEETHROUGHWALL"] = "Draw the halo effect through walls?",
-    ["LPS_HALO_COLOUR"]         = "Colour for Last Prop Standing's Halo effect ('rainbow' or hex code)",
-    ["LPS_TRAILS_ENABLE"]       = "Draw a trail behind Last Prop player?",
-    ["LPS_TRAILS_COLOUR"]       = "Colour for the Last Prop's trail (hex code)",
-    ["LPS_TRAIL_TEXTURE"]       = "Trail colour texture for Last Prop's player",
-    ["LPS_LASER_COLOUR"]        = "Colour for Last Prop Standing's Laser Gun ('rainbow' or hex code)",
+	["LPS_SHOW_WEAPON"]			= "Visa Sista Föremålet Levandes vapen?",
+    ["LPS_HALO_ENABLE"]         = "Rita en kontur runt det sista föremålet?",
+    ["LPS_HALO_SEETHROUGHWALL"] = "Rita konturen genom väggar?",
+    ["LPS_HALO_COLOUR"]         = "Färg på konturen för Sista Föremålet Levande ('rainbow' eller hexkod)",
+    ["LPS_TRAILS_ENABLE"]       = "Rita ett spår bakom det sista föremålet?",
+    ["LPS_TRAILS_COLOUR"]       = "Färg på det sista föremålets spår (hexkod)",
+    ["LPS_TRAIL_TEXTURE"]       = "Färgtextur på spåret för det sista föremålet",
+    ["LPS_LASER_COLOUR"]        = "Färg på Sista Föremålet Levandes laserpistol ('rainbow' eller hexkod)",
     
-    ["LPS_PLAY_MUSIC"]          = "Play Background Music when LPS Event begin. (Only applies on next music)",
-    ["LPS_CL_DRAW_HALO"]        = "(Client side) Show/Hide Halo, even server sets it.",
+    ["LPS_PLAY_MUSIC"]          = "Spela upp bakgrundsmusik när SFL aktiveras. (Appliceras först vid nästa tillfälle)",
+    ["LPS_CL_DRAW_HALO"]        = "(Klient) Visa/Dölj konturer, oberoende av servern.",
     
     -- Weapon Settings
-    ["LPS_WEPSET_REV_AMMO"]     = "LPS Revolver Ammo. -1=Unlimited.",
-    ["LPS_WEPSET_SMG_AMMO"]     = "LPS SMG Ammo. -1=Unlimited.",
-    ["LPS_WEPSET_AIR_AMMO"]     = "LPS Airboat Gun Ammo. -1=Unlimited",
-    ["LPS_WEPSET_SHOT_AMMO"]    = "LPS Shotgun Ammo. -1=Unlimited",
-    ["LPS_WEPSET_RPG_AMMO"]     = "LPS RPG Ammo. -1=Unlimited",
+    ["LPS_WEPSET_REV_AMMO"]     = "SFL revolverammunition. -1=Oändligt.",
+    ["LPS_WEPSET_SMG_AMMO"]     = "SFL kpistammunition. -1=Oändligt.",
+    ["LPS_WEPSET_AIR_AMMO"]     = "SFL ammunition för luftbåtskanon. -1=Oändligt",
+    ["LPS_WEPSET_SHOT_AMMO"]    = "SFL hagelgevärsammunition. -1=Oändligt",
+    ["LPS_WEPSET_RPG_AMMO"]     = "SFL RPG-ammunition. -1=Oändligt",
     
-    ["LPS_WEPSET_DAMAGE_REV"]   = "LPS Damage for Revolver",
-    ["LPS_WEPSET_DAMAGE_SMG"]   = "LPS Damage for SMG",
-    ["LPS_WEPSET_DAMAGE_BLAST"] = "LPS Damage for Blaster",
-    ["LPS_WEPSET_DAMAGE_AIR"]   = "LPS Damage for Airboat Gun",
-    ["LPS_WEPSET_DAMAGE_SHOT"]  = "LPS Damage for Shotgun per 1 Pellet",
-    ["LPS_WEPSET_DAMAGE_RPG"]   = "LPS Damage for RPG",
-    ["LPS_WEPSET_DAMAGE_LASER"] = "LPS Damage for Laser per 0.1s",
+    ["LPS_WEPSET_DAMAGE_REV"]   = "SFL skada för revolver",
+    ["LPS_WEPSET_DAMAGE_SMG"]   = "SFL skada för kpist",
+    ["LPS_WEPSET_DAMAGE_BLAST"] = "SFL skada för sprängare",
+    ["LPS_WEPSET_DAMAGE_AIR"]   = "SFL skada för luftbåtskanon",
+    ["LPS_WEPSET_DAMAGE_SHOT"]  = "SFL skada för hagelgevär per kula",
+    ["LPS_WEPSET_DAMAGE_RPG"]   = "SFL skada för RPG",
+    ["LPS_WEPSET_DAMAGE_LASER"] = "SFL skada för laser varje 0,1s",
     
     -- More into stuff now.
-    ["LASTPROP_ANNOUNCE"]       = "You are the Last Prop Standing!",
-    ["LASTPROP_ANNOUNCE_ALL"]   = "The Last Prop is Resisting!",
+    ["LASTPROP_ANNOUNCE"]       = "Du är Sista Föremålet Levande!",
+    ["LASTPROP_ANNOUNCE_ALL"]   = "Det sista föremålet kämpar emot!",
     
     -- Weapon State
-    ["WEAPON_STATE_READY"]      = "Ready",
-    ["WEAPON_STATE_RELOAD"]     = "Reloading...",
-    ["WEAPON_STATE_OUTOFAMMO"]  = "Out of Ammo",
-    ["WEAPON_STATE_UNARMED"]    = "No Weapon",
-	["WEAPON_STATE_HOLSTER"]	= "<HOLSTERED>",
+    ["WEAPON_STATE_READY"]      = "Redo",
+    ["WEAPON_STATE_RELOAD"]     = "Laddar om...",
+    ["WEAPON_STATE_OUTOFAMMO"]  = "Ingen ammunition",
+    ["WEAPON_STATE_UNARMED"]    = "Inget vapen",
+	["WEAPON_STATE_HOLSTER"]	= "<I HÖLSTER>",
 	
-	["LPS_HOLSTER_HELPER_TEXT"] = "[CLICK] to Fire - [R-CLICK] to Holster weapon",
+	["LPS_HOLSTER_HELPER_TEXT"] = "[KLICKA] för att skjuta - H.KLICKA] för att sätta vapen i hölster",
     
-    ["WEAPON_AMMO_UNLI"]        = "Unlimited"
+    ["WEAPON_AMMO_UNLI"]        = "Oändligt"
 }
 
-list.Set("PHX.LanguageInsertion", "[LastPropStanding] English", L)
+list.Set("PHX.LanguageInsertion", "[SistaFöremåletLevande] Svenska", L)
