@@ -1,6 +1,6 @@
 local L = {}
 
--- English Section
+-- Swedish Section
 L["sv_se"]   = {
     -- Header Text Group
     ["LPS_GENERAL_SETTINGS"]    = "Almänna inställningar",
@@ -8,7 +8,7 @@ L["sv_se"]   = {
     ["LPS_WEAPON_SETTINGS"]     = "Vapeninställningar för Sista Levande",
     ["LPS_WEAPON_DMG_SETTINGS"] = "Vapenskada för Sista Levande",
     ["LPS_HEALTH_ARMOR"]        = "Inställningar för hälsa & pansar",
-    ["LPS_TRIGGER_CONDITION"]   = "Förutsättning för aktivering av LPS händelse",
+    ["LPS_TRIGGER_CONDITION"]   = "Förutsättning för aktivering av SFL-händelse",
     
     -- Appearances & General Settings
     ["LPS_MENU_ENABLE"]         = "Slå på Sista Föremålet Levande",

@@ -438,7 +438,7 @@ L["PHXM_MV_NEED_MORE_PLY"]			= "Du behöver fler spelare innan du kan utföra Ro
 --[[
 	Late Addition: Revision: 16.09.21/X2Z
 ]]
-L["PROP_PLAYERMDL_BANNED"]	= "Din anpassade modell för föremål blev bannlyst från servern."
+L["PROP_PLAYERMDL_BANNED"]	= "Din anpassade föremålsmodell blev bannlyst från servern."
 
 --[[
 	Prop Menu/Prop Chooser, Revision: 16.09.21/X2Z
@@ -623,7 +623,7 @@ L["PCR_PLUG_LBL_TECHSET"]	= "Tekniska inställningar"
 L["PCR_PLUG_LBL_EXPSET"]		= "Experimentellt"
 L["PCR_PLUG_LBL_PLAYERSET"]	= "Spelarinställningar"
 
-L["PCR_PLUG_ENABLE"]			= "Slå på 'Föremålsmeny' funktion"
+L["PCR_PLUG_ENABLE"]			= "Slå på funktionen 'Föremålsmeny'"
 L["PCR_PLUG_ALLOW_CUSTOM"]	= "(Kräver omstart av karta) Tillåt tillägg av anpassade föremål in i föremålsmenyns lista?"
 L["PCR_PLUG_PROP_BAN"]		= "(Kräver omstart av karta) Inkludera inte bannlysta föremål i föremålsmenyns lista?"
 L["PCR_PLUG_USAGE_LIMIT"]	= "Max användingar för spelare. -1 är öbegränsat."
