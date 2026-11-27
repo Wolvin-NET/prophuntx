@@ -379,7 +379,14 @@ GM.PHXContributors			= {
 	"Clã | BR | The Fire Fuchs (Portuguese/Brazil Translation)",
 	"Talha Berkay Akbulut aka Matt (Turkish Translation)",
 	"Ryo567, Kurayashi (Spannish Translation)",
-	"Dralga (Discord Helper)","@yttoxictripz", "Pascual","Yam","adk","Jonpopnycorn","Thundernerd"
+	"Dralga (Discord Helper)",
+	"@yttoxictripz",
+	"Pascual",
+	"Yam",
+	"adk",
+	"Jonpopnycorn",
+	"Thundernerd",
+	"Torktumlaren (Swedish Translation)"
 }
 
 -- Called on gamemdoe initialization to create teams
