@@ -42,8 +42,8 @@ L.RANDOM_SPECTATORS = {
 }
 
 L["PHX_TEAM_CONNECTING"] = "Ansluter"
-L["PHX_TEAM_PROPS"]		= "Föremålen"
-L["PHX_TEAM_HUNTERS"] 	= "Jägarna"
+L["PHX_TEAM_PROPS"]		= "Föremål"
+L["PHX_TEAM_HUNTERS"] 	= "Jägare"
 L["PHX_TEAM_UNASSIGNED"]	= "Otilldelad"
 L["PHX_TEAM_SPECTATOR"] 	= "Åskådare"
 
@@ -83,7 +83,7 @@ L["DERMA_SERVER_TAG"]		= "SV"	-- Fix me
 L["DERMA_BOT_TAG"]			= "BOT"	-- Fix me
 L["DERMA_GAMEMODE_CREDITS"]	= "%s | Version: %s - Rev. %s"
 
-L["CHAT_JOINED"]				= " gick med "
+L["CHAT_JOINED"]				= " gick med i "
 L["CHAT_JOINEDTHE"]			= " gick med i "
 
 L["CHAT_SWAPBALANCE"]		= "%s har överförts till %s for lagbalans."
@@ -157,7 +157,7 @@ L["CHAT_SWAP"]				= "Lagen har bytt plats!"
 L["CHAT_SWAPTEAM_WARNING"]   = "Du har bytt lag %dx (%dx MAX). Efter det kan du inte längre byta lag."
 L["CHAT_SWAPTEAM_REVERT"]	= "Du kan inte längre byta till %s, då du har överskridit antalet lagbyten."
 
-L["CHAT_PROP_NO_ROOM"] 		= "Det finns inget utrymme att ändra till det föremålet!"
+L["CHAT_PROP_NO_ROOM"] 		= "Det finns inte tillräckligt med utrymme att ändra till det föremålet!"
 
 -- Notification
 L["NOTIFY_IN_PROP_TEAM"]		= "Du är i föremålslaget och kan rotera! Du roterar föremålet genom att röra på musen."
@@ -466,13 +466,13 @@ L["PCR_CL_LIMIT"]			= " Du har nått gränsen!"
 L["PCR_UNLIMIT_TEXT"]		= "Obegränsad"
 L["PCR_WINDOW_TITLE"]		= "PH:X Föremålsmeny"
 L["PCR_HEADER_TOP"]			= "Välj det föremål du vill använda. Du har"
-L["PCR_HEADER_MID"]			= "%s användningsgräns"
-L["PCR_HEADER_BOTTOM"]		= "för att använda denna föremålsväljare!"
+L["PCR_HEADER_MID"]			= "%s användningar"
+L["PCR_HEADER_BOTTOM"]		= "kvar till ditt förfogande!"
 L["PCR_CL_TOOLTIP_BANNED"]	= "Du kan inte använda denna modell."
 L["PCR_CL_TOOLTIP_MODEL"]	= "Modell: %s"
 L["PCR_CL_MENU_NOTREADY"]	= " Denna funktion är inte tillgänglig just nu."
 L["PCR_WINDOW_GUIDE_TTL"]	= "Snabbguide: Föremålsmeny A och O"
-L["PCR_BTN_HELP_MENU"]		= "Föremålsmeny Hjälp"
+L["PCR_BTN_HELP_MENU"]		= "Genomgång av föremålsmeny"
 
 L["PCR_CL_CMDUSEULX"]		= " Detta kommando är avstängt. Använd 'ulx propmenu' istället!"
 L["PCR_CMD_ULX_DISABLED"]	= "Kommandot ulx propmenu är avstängt. Tryck [tangentg för föremålsmenyn] för att öppna."
@@ -504,7 +504,7 @@ L["PHXM_MSG_INPUT_IS_EMPTY"]			= "textfält är tomt eller har du inte tryckt RE
 --============= LATE ADDITION OF 10.06.2022/X2Z. =============--
 
 --goto line: @132
-L["MISC_SET"]						= "Ange"
+L["MISC_SET"]						= "Tillämpa"
 L["MISC_APPLY"]						= "Tillämpa"
 L["MISC_NO"]							= "Nej"
 L["MISC_YES"]						= "Ja"
